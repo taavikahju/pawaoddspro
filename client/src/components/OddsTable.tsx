@@ -33,9 +33,14 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
   const isKenyaFilterActive = useMemo(() => {
     // Check if Kenya bookmakers are selected (betPawa KE and Betika KE)
     return selectedBookmakers.includes('betPawa KE') && 
-           selectedBookmakers.includes('Betika KE') &&
+           selectedBookmakers.includes('betika KE') &&
            selectedBookmakers.length === 2;
   }, [selectedBookmakers]);
+  
+  // Debug logging to check selected bookmakers
+  console.log('Selected Bookmakers:', selectedBookmakers);
+  console.log('Ghana filter active:', isGhanaFilterActive);
+  console.log('Kenya filter active:', isKenyaFilterActive);
   
   // Either Ghana or Kenya filter is active
   const isQuickFilterActive = isGhanaFilterActive || isKenyaFilterActive;
@@ -125,7 +130,8 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
     const betPawaCode = isGhanaFilterActive ? 'betPawa GH' : isKenyaFilterActive ? 'betPawa KE' : null;
     
     // Get the appropriate competitor code based on the active filter
-    const competitorCode = isGhanaFilterActive ? 'Sportybet' : isKenyaFilterActive ? 'Betika KE' : null;
+    const competitorCode = isGhanaFilterActive ? 'Sportybet' : isKenyaFilterActive ? 'betika KE' : null;
+    console.log('Selected betPawa code:', betPawaCode, 'Selected competitor code:', competitorCode);
     
     if (!betPawaCode || !competitorCode) return { comparison: null, isBetter: null, favorite: null };
     
