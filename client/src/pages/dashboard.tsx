@@ -6,6 +6,7 @@ import OddsTable from '@/components/OddsTable';
 import { useBookmakerContext } from '@/contexts/BookmakerContext';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Separator } from '@/components/ui/separator';
 import { 
   Trophy,
   X,
@@ -451,7 +452,12 @@ export default function Dashboard() {
                     <span>All Countries</span>
                   </div>
                 </SelectItem>
-                {availableCountries.map((country) => (
+                
+                {/* Top shortcut countries */}
+                <div className="px-2 py-1.5 text-xs font-semibold text-gray-500 dark:text-gray-400">
+                  Popular Countries
+                </div>
+                {['England', 'France', 'Germany', 'Italy', 'Spain'].map((country) => (
                   <SelectItem key={country} value={country}>
                     <div className="flex items-center">
                       <CountryFlag 
@@ -464,6 +470,27 @@ export default function Dashboard() {
                     </div>
                   </SelectItem>
                 ))}
+                
+                <Separator className="my-1" />
+                <div className="px-2 py-1.5 text-xs font-semibold text-gray-500 dark:text-gray-400">
+                  All Countries
+                </div>
+                
+                {availableCountries
+                  .filter(country => !['England', 'France', 'Germany', 'Italy', 'Spain'].includes(country))
+                  .map((country) => (
+                    <SelectItem key={country} value={country}>
+                      <div className="flex items-center">
+                        <CountryFlag 
+                          countryCode={getCountryCode(country)} 
+                          countryName={country}
+                          size="md"
+                          className="mr-2"
+                        />
+                        <span>{country}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
               </SelectContent>
             </Select>
             
