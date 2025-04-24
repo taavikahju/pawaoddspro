@@ -1,5 +1,8 @@
 import { 
   users, 
+  bookmakers,
+  sports,
+  events,
   type User, 
   type InsertUser, 
   type Bookmaker, 
@@ -14,6 +17,8 @@ import {
 import * as fs from 'fs';
 import * as path from 'path';
 import * as util from 'util';
+import { db } from "./db";
+import { eq, sql } from "drizzle-orm";
 
 const mkdir = util.promisify(fs.mkdir);
 const writeFile = util.promisify(fs.writeFile);
@@ -379,4 +384,326 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+export class DatabaseStorage implements IStorage {
+  private dataDir: string;
+  private lastStats: StatsData | null;
+
+  constructor() {
+    this.dataDir = path.join(process.cwd(), 'data');
+    this.lastStats = null;
+    
+    // Ensure data directory exists
+    if (!fs.existsSync(this.dataDir)) {
+      fs.mkdirSync(this.dataDir, { recursive: true });
+    }
+    
+    this.initializeData();
+  }
+
+  private async initializeData() {
+    try {
+      // Check if bookmakers already exist
+      const existingBookmakers = await this.getBookmakers();
+      if (existingBookmakers.length === 0) {
+        // Create some initial bookmakers
+        await this.createBookmaker({ name: 'Bet365', code: 'bet365', active: true });
+        await this.createBookmaker({ name: 'William Hill', code: 'williamhill', active: true });
+        await this.createBookmaker({ name: 'Betfair', code: 'betfair', active: true });
+        await this.createBookmaker({ name: 'Paddy Power', code: 'paddypower', active: true });
+      }
+
+      // Check if sports already exist
+      const existingSports = await this.getSports();
+      if (existingSports.length === 0) {
+        // Create some initial sports
+        await this.createSport({ name: 'Football', code: 'football', active: true });
+        await this.createSport({ name: 'Basketball', code: 'basketball', active: true });
+        await this.createSport({ name: 'Tennis', code: 'tennis', active: true });
+        await this.createSport({ name: 'Horse Racing', code: 'horseracing', active: true });
+      }
+    } catch (error) {
+      console.error('Error initializing data:', error);
+    }
+  }
+
+  private formatTime(date: Date): string {
+    return date.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    });
+  }
+
+  // User methods
+  async getUser(id: number): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user;
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user;
+  }
+
+  async createUser(insertUser: InsertUser): Promise<User> {
+    const [user] = await db.insert(users).values(insertUser).returning();
+    return user;
+  }
+
+  // Bookmaker methods
+  async getBookmakers(): Promise<Bookmaker[]> {
+    return db.select().from(bookmakers);
+  }
+
+  async getBookmaker(id: number): Promise<Bookmaker | undefined> {
+    const [bookmaker] = await db.select().from(bookmakers).where(eq(bookmakers.id, id));
+    return bookmaker;
+  }
+
+  async getBookmakerByCode(code: string): Promise<Bookmaker | undefined> {
+    const [bookmaker] = await db.select().from(bookmakers).where(eq(bookmakers.code, code));
+    return bookmaker;
+  }
+
+  async createBookmaker(insertBookmaker: InsertBookmaker): Promise<Bookmaker> {
+    const now = new Date();
+    const nextScrape = new Date(now.getTime() + 15 * 60 * 1000);
+    
+    // Make sure to set active if it's not provided
+    const bookmakerData = {
+      ...insertBookmaker,
+      active: insertBookmaker.active === undefined ? true : insertBookmaker.active,
+      lastScrape: now,
+      nextScrape: nextScrape,
+      eventsScraped: 0,
+      fileSize: '0 KB'
+    };
+    
+    const [bookmaker] = await db.insert(bookmakers).values(bookmakerData).returning();
+    return bookmaker;
+  }
+
+  async updateBookmaker(id: number, data: Partial<Bookmaker>): Promise<Bookmaker | undefined> {
+    const [updatedBookmaker] = await db
+      .update(bookmakers)
+      .set(data)
+      .where(eq(bookmakers.id, id))
+      .returning();
+    return updatedBookmaker;
+  }
+
+  // Sport methods
+  async getSports(): Promise<Sport[]> {
+    return db.select().from(sports);
+  }
+
+  async getSport(id: number): Promise<Sport | undefined> {
+    const [sport] = await db.select().from(sports).where(eq(sports.id, id));
+    return sport;
+  }
+
+  async createSport(insertSport: InsertSport): Promise<Sport> {
+    const sportData = {
+      ...insertSport,
+      active: insertSport.active === undefined ? true : insertSport.active
+    };
+    
+    const [sport] = await db.insert(sports).values(sportData).returning();
+    return sport;
+  }
+
+  async updateSport(id: number, data: Partial<Sport>): Promise<Sport | undefined> {
+    const [updatedSport] = await db
+      .update(sports)
+      .set(data)
+      .where(eq(sports.id, id))
+      .returning();
+    return updatedSport;
+  }
+
+  // Event methods
+  async getEvents(): Promise<Event[]> {
+    return db.select().from(events);
+  }
+
+  async getEventsByIds(ids: number[]): Promise<Event[]> {
+    return db.select().from(events).where(sql`${events.id} = ANY(${ids})`);
+  }
+
+  async getEventsBySportId(sportId: number): Promise<Event[]> {
+    return db.select().from(events).where(eq(events.sportId, sportId));
+  }
+
+  async getEvent(id: number): Promise<Event | undefined> {
+    const [event] = await db.select().from(events).where(eq(events.id, id));
+    return event;
+  }
+
+  async getEventByExternalId(externalId: string): Promise<Event | undefined> {
+    const [event] = await db.select().from(events).where(eq(events.externalId, externalId));
+    return event;
+  }
+
+  async createEvent(insertEvent: InsertEvent): Promise<Event> {
+    const [event] = await db.insert(events).values({
+      ...insertEvent,
+      lastUpdated: new Date()
+    }).returning();
+    return event;
+  }
+
+  async updateEvent(id: number, data: Partial<Event>): Promise<Event | undefined> {
+    const [updatedEvent] = await db
+      .update(events)
+      .set({ ...data, lastUpdated: new Date() })
+      .where(eq(events.id, id))
+      .returning();
+    return updatedEvent;
+  }
+
+  // Storage methods for scraped data
+  async saveBookmakerData(bookmakerCode: string, data: any): Promise<void> {
+    try {
+      const filePath = path.join(this.dataDir, `${bookmakerCode}.json`);
+      await writeFile(filePath, JSON.stringify(data, null, 2), 'utf8');
+      
+      // Update bookmaker stats
+      const bookmaker = await this.getBookmakerByCode(bookmakerCode);
+      if (bookmaker) {
+        const stats = await stat(filePath);
+        const fileSize = `${Math.round(stats.size / 1024)} KB`;
+        const eventsCount = Array.isArray(data) ? data.length : 0;
+        
+        const now = new Date();
+        const nextScrape = new Date(now.getTime() + 15 * 60 * 1000);
+        
+        await this.updateBookmaker(bookmaker.id, {
+          lastScrape: now,
+          nextScrape,
+          eventsScraped: eventsCount,
+          fileSize
+        });
+      }
+    } catch (error) {
+      console.error(`Error saving ${bookmakerCode} data:`, error);
+      throw error;
+    }
+  }
+
+  async getBookmakerData(bookmakerCode: string): Promise<any> {
+    try {
+      const filePath = path.join(this.dataDir, `${bookmakerCode}.json`);
+      if (!fs.existsSync(filePath)) return [];
+      
+      const data = await readFile(filePath, 'utf8');
+      return JSON.parse(data);
+    } catch (error) {
+      console.error(`Error reading ${bookmakerCode} data:`, error);
+      return [];
+    }
+  }
+
+  async getAllBookmakersData(): Promise<Record<string, any>> {
+    const result: Record<string, any> = {};
+    const bookmakerList = await this.getBookmakers();
+    
+    for (const bookmaker of bookmakerList) {
+      result[bookmaker.code] = await this.getBookmakerData(bookmaker.code);
+    }
+    
+    return result;
+  }
+
+  // Stats methods
+  async getStats(): Promise<StatsData> {
+    try {
+      const [eventCount] = await db.select({ count: sql`count(*)` }).from(events);
+      const bookmakerList = await this.getBookmakers();
+      const activeBookmakers = bookmakerList.filter(b => b.active).length;
+      
+      // Get last scrape time from the latest bookmaker scrape
+      let lastScrapeTime = this.formatTime(new Date());
+      let latestBookmaker = null;
+      
+      for (const bookmaker of bookmakerList) {
+        if (bookmaker.lastScrape && (!latestBookmaker || !latestBookmaker.lastScrape ||
+            bookmaker.lastScrape > latestBookmaker.lastScrape)) {
+          latestBookmaker = bookmaker;
+        }
+      }
+      
+      if (latestBookmaker && latestBookmaker.lastScrape) {
+        lastScrapeTime = this.formatTime(latestBookmaker.lastScrape);
+      }
+      
+      // Calculate time to next update
+      const now = new Date();
+      let nextScrapeTime = now.getTime() + 15 * 60 * 1000;
+      
+      for (const bookmaker of bookmakerList) {
+        if (bookmaker.nextScrape && bookmaker.nextScrape.getTime() < nextScrapeTime) {
+          nextScrapeTime = bookmaker.nextScrape.getTime();
+        }
+      }
+      
+      const timeToNextUpdate = Math.max(1, Math.round((nextScrapeTime - now.getTime()) / 60000));
+      
+      // Count best odds
+      const allEvents = await this.getEvents();
+      const bestOddsCount = allEvents.reduce((count, event) => {
+        const bestOdds = event.bestOdds as any;
+        if (bestOdds && Object.keys(bestOdds).length > 0) {
+          return count + 1;
+        }
+        return count;
+      }, 0);
+      
+      const totalEvents = Number(eventCount.count);
+      const eventsChange = this.lastStats ? totalEvents - this.lastStats.totalEvents : 0;
+      const bestOddsChange = this.lastStats ? bestOddsCount - this.lastStats.bestOddsCount : 0;
+      
+      const stats: StatsData = {
+        totalEvents,
+        eventsChange,
+        bookmarkersActive: `${activeBookmakers}/${bookmakerList.length}`,
+        bestOddsCount,
+        bestOddsChange,
+        lastScrapeTime,
+        timeToNextUpdate
+      };
+      
+      this.lastStats = stats;
+      return stats;
+    } catch (error) {
+      console.error('Error getting stats:', error);
+      
+      // Return default stats if error
+      return {
+        totalEvents: 0,
+        eventsChange: 0,
+        bookmarkersActive: '0/0',
+        bestOddsCount: 0,
+        bestOddsChange: 0,
+        lastScrapeTime: this.formatTime(new Date()),
+        timeToNextUpdate: 15
+      };
+    }
+  }
+
+  // Get scraper statuses
+  async getScraperStatuses(): Promise<ScraperStatus[]> {
+    const bookmakerList = await this.getBookmakers();
+    
+    return bookmakerList.map(bookmaker => ({
+      name: `${bookmaker.name} Scraper`,
+      status: bookmaker.active ? 'Running' : 'Stopped',
+      lastRun: bookmaker.lastScrape ? this.formatTime(bookmaker.lastScrape) : 'N/A',
+      nextRun: bookmaker.nextScrape ? this.formatTime(bookmaker.nextScrape) : 'N/A',
+      eventCount: bookmaker.eventsScraped ?? 0,
+      fileSize: bookmaker.fileSize ?? '0 KB'
+    }));
+  }
+}
+
+// Switch to using database storage
+export const storage = new DatabaseStorage();
