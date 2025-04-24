@@ -2,6 +2,7 @@ import { IStorage } from '../storage';
 import { insertEventSchema, type InsertEvent, events } from '@shared/schema';
 import { db } from '../db';
 import { eq } from 'drizzle-orm';
+import { saveOddsHistory } from './oddsHistory';
 
 /**
  * Maps events from different bookmakers by matching exact eventIds
@@ -171,6 +172,37 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
         }
         
         if (existingEvent) {
+          // Save historical odds data for each bookmaker
+          const newOdds = eventData.oddsData;
+          const existingOdds = existingEvent.oddsData as Record<string, any>;
+          
+          // Track odds history for each bookmaker
+          for (const bookmakerCode of Object.keys(newOdds)) {
+            const bookieOdds = newOdds[bookmakerCode];
+            
+            // Only save history if odds exist
+            if (bookieOdds && (bookieOdds.home || bookieOdds.draw || bookieOdds.away)) {
+              // Check if odds have changed before saving history
+              const existingBookieOdds = existingOdds?.[bookmakerCode];
+              const oddsChanged = !existingBookieOdds || 
+                bookieOdds.home !== existingBookieOdds.home || 
+                bookieOdds.draw !== existingBookieOdds.draw ||
+                bookieOdds.away !== existingBookieOdds.away;
+              
+              // Only save to history if odds have changed
+              if (oddsChanged) {
+                await saveOddsHistory(
+                  eventData.eventId,
+                  eventData.externalId,
+                  bookmakerCode,
+                  bookieOdds.home,
+                  bookieOdds.draw,
+                  bookieOdds.away
+                );
+              }
+            }
+          }
+          
           // Update existing event
           await storage.updateEvent(existingEvent.id, {
             oddsData: eventData.oddsData,
@@ -204,8 +236,26 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
           const validatedData = insertEventSchema.parse(insertData);
           
           // Insert new event
-          await storage.createEvent(validatedData);
+          const createdEvent = await storage.createEvent(validatedData);
           console.log(`Created new event with eventId ${eventData.eventId}`);
+          
+          // Save initial historical odds data for each bookmaker for new events too
+          const newOdds = eventData.oddsData;
+          for (const bookmakerCode of Object.keys(newOdds)) {
+            const bookieOdds = newOdds[bookmakerCode];
+            
+            // Only save history if odds exist
+            if (bookieOdds && (bookieOdds.home || bookieOdds.draw || bookieOdds.away)) {
+              await saveOddsHistory(
+                eventData.eventId,
+                eventData.externalId,
+                bookmakerCode,
+                bookieOdds.home,
+                bookieOdds.draw,
+                bookieOdds.away
+              );
+            }
+          }
         }
       } catch (error) {
         console.error(`Error processing event ${eventKey}:`, error);
