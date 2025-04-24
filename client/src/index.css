@@ -54,7 +54,44 @@
   }
 
   body {
-    @apply font-sans antialiased bg-background text-foreground;
+    @apply font-sans antialiased bg-background text-foreground text-sm;
+  }
+  
+  /* Make all text smaller */
+  h1 {
+    @apply text-lg font-bold;
+  }
+  
+  h2 {
+    @apply text-base font-bold;
+  }
+  
+  h3 {
+    @apply text-sm font-bold;
+  }
+  
+  p, span, div, a, button, td, th {
+    @apply text-xs;
+  }
+  
+  .text-xs {
+    font-size: 0.7rem !important;
+    line-height: 1rem !important;
+  }
+  
+  .text-sm {
+    font-size: 0.8rem !important;
+    line-height: 1.25rem !important;
+  }
+  
+  .text-base {
+    font-size: 0.9rem !important;
+    line-height: 1.5rem !important;
+  }
+  
+  .text-lg {
+    font-size: 1rem !important;
+    line-height: 1.75rem !important;
   }
 }
 

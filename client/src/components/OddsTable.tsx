@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Table,
   TableBody,
@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table";
 import { useBookmakerContext } from '@/contexts/BookmakerContext';
 import { cn } from '@/lib/utils';
-import { Trophy } from 'lucide-react';
+import { Clock, Globe, Trophy } from 'lucide-react';
 
 interface OddsTableProps {
   events: any[];
@@ -19,7 +19,6 @@ interface OddsTableProps {
 
 export default function OddsTable({ events, isLoading, className }: OddsTableProps) {
   const { bookmakers, selectedBookmakers } = useBookmakerContext();
-  const [selectedMarket, setSelectedMarket] = useState('all');
   
   const filteredBookmakers = bookmakers.filter(b => selectedBookmakers.includes(b.code));
   
@@ -35,174 +34,198 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
     return currentOdd === bestOdd;
   };
   
-  // Get bookmaker logo or icon
-  const getBookmakerLogo = (bookmakerCode: string) => {
-    const logoMap: Record<string, JSX.Element> = {
-      'bet365': <span className="bookmaker-logo text-blue-600 dark:text-blue-400 font-bold">B365</span>,
-      'williamhill': <span className="bookmaker-logo text-green-600 dark:text-green-400 font-bold">WH</span>,
-      'betfair': <span className="bookmaker-logo text-orange-600 dark:text-orange-400 font-bold">BF</span>,
-      'paddypower': <span className="bookmaker-logo text-red-600 dark:text-red-400 font-bold">PP</span>,
+  // Get bookmaker abbreviation
+  const getBookmakerAbbr = (bookmakerCode: string) => {
+    const abbrMap: Record<string, string> = {
+      'bet365': 'B365',
+      'williamhill': 'WH',
+      'betfair': 'BF',
+      'paddypower': 'PP',
     };
     
-    return logoMap[bookmakerCode] || '';
+    return abbrMap[bookmakerCode] || '';
+  };
+  
+  // Get bookmaker color class
+  const getBookmakerColorClass = (bookmakerCode: string) => {
+    const colorMap: Record<string, string> = {
+      'bet365': 'text-blue-600 dark:text-blue-400',
+      'williamhill': 'text-green-600 dark:text-green-400',
+      'betfair': 'text-orange-600 dark:text-orange-400',
+      'paddypower': 'text-red-600 dark:text-red-400',
+    };
+    
+    return colorMap[bookmakerCode] || '';
   };
   
   if (isLoading) {
     return (
-      <div className="h-64 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      <div className="h-48 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
       </div>
     );
   }
   
   if (events.length === 0) {
     return (
-      <div className="h-64 flex items-center justify-center bg-white dark:bg-slate-800 rounded-lg shadow-sm">
+      <div className="h-32 flex items-center justify-center bg-white dark:bg-slate-800 rounded-lg shadow-sm">
         <p className="text-gray-500 dark:text-gray-400">No events found</p>
       </div>
     );
   }
-  
+
   return (
     <div className={cn("overflow-x-auto bg-white dark:bg-slate-800 rounded-lg shadow", className)}>
-      <Table>
+      <Table className="w-full border-collapse">
         <TableHeader className="bg-gray-100 dark:bg-slate-700/50">
-          <TableRow>
-            <TableHead className="sticky top-0 w-64 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
-              Event
-            </TableHead>
-            <TableHead className="sticky top-0 w-32 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
-              Time
-            </TableHead>
-            
-            {filteredBookmakers.map((bookmaker) => (
-              <TableHead 
-                key={bookmaker.id}
-                className={cn(
-                  "sticky top-0 px-3 py-3 text-center text-xs font-medium uppercase tracking-wider",
-                  `bg-${bookmaker.code}`,
-                  bookmaker.code === 'bet365' ? 'text-blue-700 dark:text-blue-300' : '',
-                  bookmaker.code === 'williamhill' ? 'text-green-700 dark:text-green-300' : '',
-                  bookmaker.code === 'betfair' ? 'text-orange-700 dark:text-orange-300' : '',
-                  bookmaker.code === 'paddypower' ? 'text-red-700 dark:text-red-300' : ''
-                )}
-              >
-                <div className="bookmaker-header">
-                  {getBookmakerLogo(bookmaker.code)}
-                  {bookmaker.name}
-                </div>
-              </TableHead>
-            ))}
-            
-            <TableHead className="sticky top-0 px-3 py-3 text-center text-xs font-medium bg-green-50 text-green-700 uppercase tracking-wider dark:bg-green-900/20 dark:text-green-300">
-              <div className="bookmaker-header">
-                <Trophy className="bookmaker-logo" />
-                Best Odds
+          <TableRow className="border-b border-gray-200 dark:border-gray-700">
+            <TableHead className="sticky top-0 w-24 px-2 py-2 text-left text-[10px] font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+              <div className="flex items-center">
+                <Globe className="w-3 h-3 mr-1" />
+                Country
               </div>
+            </TableHead>
+            <TableHead className="sticky top-0 w-28 px-2 py-2 text-left text-[10px] font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+              <div className="flex items-center">
+                <Trophy className="w-3 h-3 mr-1" />
+                Tournament
+              </div>
+            </TableHead>
+            <TableHead className="sticky top-0 w-24 px-2 py-2 text-left text-[10px] font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+              <div className="flex items-center">
+                <Clock className="w-3 h-3 mr-1" />
+                Start (UTC)
+              </div>
+            </TableHead>
+            <TableHead className="sticky top-0 w-48 px-2 py-2 text-left text-[10px] font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+              Fixture
+            </TableHead>
+            <TableHead className="sticky top-0 w-20 px-2 py-2 text-left text-[10px] font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+              Market
+            </TableHead>
+            <TableHead className="sticky top-0 w-20 px-2 py-2 text-left text-[10px] font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+              Source
+            </TableHead>
+            <TableHead className="sticky top-0 w-16 px-2 py-2 text-center text-[10px] font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+              Home
+            </TableHead>
+            <TableHead className="sticky top-0 w-16 px-2 py-2 text-center text-[10px] font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+              Draw
+            </TableHead>
+            <TableHead className="sticky top-0 w-16 px-2 py-2 text-center text-[10px] font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+              Away
             </TableHead>
           </TableRow>
         </TableHeader>
         
         <TableBody>
-          {events.map((event) => (
-            <TableRow key={event.id} className="hover:bg-gray-50 dark:hover:bg-slate-700/50 border-b">
-              <TableCell className="px-6 py-4 whitespace-nowrap">
-                <div className="flex flex-col">
-                  <div className="text-sm font-medium text-gray-900 dark:text-white mb-1 flex items-center">
-                    <span className="inline-block w-4 h-4 bg-primary/10 rounded-full mr-2"></span>
-                    {event.teams}
-                  </div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400 flex items-center ml-6">
-                    <span className="bg-gray-100 dark:bg-slate-700 px-2 py-0.5 rounded text-gray-600 dark:text-gray-300">
-                      {event.league}
-                    </span>
-                  </div>
-                </div>
-              </TableCell>
-              
-              <TableCell className="px-6 py-4 whitespace-nowrap">
-                <div className="flex flex-col">
-                  <div className="text-sm text-gray-900 dark:text-white font-medium">{event.date}</div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400 mt-1 bg-gray-100 dark:bg-slate-700 px-2 py-0.5 rounded inline-block">
-                    {event.time}
-                  </div>
-                </div>
-              </TableCell>
-              
-              {filteredBookmakers.map((bookmaker) => (
-                <TableCell 
-                  key={`${event.id}-${bookmaker.code}`}
-                  className={cn(
-                    "px-3 py-3 whitespace-nowrap text-center",
-                    `bg-${bookmaker.code}`
-                  )}
-                >
-                  <div className="space-x-2 text-sm">
-                    <span 
-                      className={cn(
-                        "odds-cell bg-white dark:bg-slate-700 text-gray-900 dark:text-white border-gray-200 dark:border-slate-600",
-                        isBestOdd(event, 'home', bookmaker.code) && "odd-highlight"
-                      )}
-                      title="Home win"
-                    >
-                      <span className="odds-value">
-                        {event.oddsData?.[bookmaker.code]?.home?.toFixed(2) || '-'}
-                      </span>
-                    </span>
-                    
-                    {event.oddsData?.[bookmaker.code]?.draw !== undefined && (
-                      <span 
-                        className={cn(
-                          "odds-cell bg-white dark:bg-slate-700 text-gray-900 dark:text-white border-gray-200 dark:border-slate-600",
-                          isBestOdd(event, 'draw', bookmaker.code) && "odd-highlight"
-                        )}
-                        title="Draw"
-                      >
-                        <span className="odds-value">
-                          {event.oddsData?.[bookmaker.code]?.draw?.toFixed(2) || '-'}
-                        </span>
-                      </span>
+          {events.map((event, eventIndex) => (
+            <React.Fragment key={eventIndex}>
+              {filteredBookmakers.map((bookmaker, bookmakerIndex) => {
+                const isFirstBookmaker = bookmakerIndex === 0;
+                return (
+                  <TableRow 
+                    key={`${eventIndex}-${bookmakerIndex}`} 
+                    className="hover:bg-gray-50 dark:hover:bg-slate-700/20 border-b border-gray-200 dark:border-gray-700"
+                  >
+                    {isFirstBookmaker && (
+                      <>
+                        <TableCell 
+                          className="px-2 py-1 whitespace-nowrap align-top border-r border-gray-200 dark:border-gray-700" 
+                          rowSpan={filteredBookmakers.length}
+                        >
+                          <span className="text-[10px] text-gray-600 dark:text-gray-300">
+                            {event.league?.split(' ')[0] || 'Unknown'}
+                          </span>
+                        </TableCell>
+                        
+                        <TableCell 
+                          className="px-2 py-1 whitespace-nowrap align-top border-r border-gray-200 dark:border-gray-700" 
+                          rowSpan={filteredBookmakers.length}
+                        >
+                          <span className="text-[10px] text-gray-600 dark:text-gray-300">
+                            {event.league?.split(' ').slice(1).join(' ') || event.league || 'Unknown'}
+                          </span>
+                        </TableCell>
+                        
+                        <TableCell 
+                          className="px-2 py-1 whitespace-nowrap align-top border-r border-gray-200 dark:border-gray-700" 
+                          rowSpan={filteredBookmakers.length}
+                        >
+                          <div className="flex flex-col">
+                            <span className="text-[10px] font-medium text-gray-800 dark:text-gray-200">{event.date}</span>
+                            <span className="text-[9px] text-gray-500 dark:text-gray-400">{event.time}</span>
+                          </div>
+                        </TableCell>
+                        
+                        <TableCell 
+                          className="px-2 py-1 whitespace-nowrap align-top border-r border-gray-200 dark:border-gray-700" 
+                          rowSpan={filteredBookmakers.length}
+                        >
+                          <span className="text-[10px] font-medium text-gray-800 dark:text-gray-200">
+                            {event.teams}
+                          </span>
+                        </TableCell>
+                        
+                        <TableCell 
+                          className="px-2 py-1 whitespace-nowrap align-top border-r border-gray-200 dark:border-gray-700" 
+                          rowSpan={filteredBookmakers.length}
+                        >
+                          <span className="text-[10px] text-gray-600 dark:text-gray-300">
+                            Match Result
+                          </span>
+                        </TableCell>
+                      </>
                     )}
                     
-                    <span 
-                      className={cn(
-                        "odds-cell bg-white dark:bg-slate-700 text-gray-900 dark:text-white border-gray-200 dark:border-slate-600",
-                        isBestOdd(event, 'away', bookmaker.code) && "odd-highlight"
-                      )}
-                      title="Away win"
-                    >
-                      <span className="odds-value">
+                    <TableCell className="px-2 py-1 whitespace-nowrap border-r border-gray-200 dark:border-gray-700">
+                      <span className={`text-[10px] font-bold ${getBookmakerColorClass(bookmaker.code)}`}>
+                        {getBookmakerAbbr(bookmaker.code)}
+                      </span>
+                    </TableCell>
+                    
+                    <TableCell className="px-2 py-1 whitespace-nowrap text-center border-r border-gray-200 dark:border-gray-700">
+                      <span 
+                        className={cn(
+                          "text-[10px] font-medium px-1 py-0.5 rounded",
+                          isBestOdd(event, 'home', bookmaker.code) 
+                            ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300" 
+                            : "bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300"
+                        )}
+                      >
+                        {event.oddsData?.[bookmaker.code]?.home?.toFixed(2) || '-'}
+                      </span>
+                    </TableCell>
+                    
+                    <TableCell className="px-2 py-1 whitespace-nowrap text-center border-r border-gray-200 dark:border-gray-700">
+                      <span 
+                        className={cn(
+                          "text-[10px] font-medium px-1 py-0.5 rounded",
+                          isBestOdd(event, 'draw', bookmaker.code) 
+                            ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300" 
+                            : "bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300"
+                        )}
+                      >
+                        {event.oddsData?.[bookmaker.code]?.draw?.toFixed(2) || '-'}
+                      </span>
+                    </TableCell>
+                    
+                    <TableCell className="px-2 py-1 whitespace-nowrap text-center">
+                      <span 
+                        className={cn(
+                          "text-[10px] font-medium px-1 py-0.5 rounded",
+                          isBestOdd(event, 'away', bookmaker.code) 
+                            ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300" 
+                            : "bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300"
+                        )}
+                      >
                         {event.oddsData?.[bookmaker.code]?.away?.toFixed(2) || '-'}
                       </span>
-                    </span>
-                  </div>
-                </TableCell>
-              ))}
-              
-              <TableCell className="px-3 py-3 whitespace-nowrap text-center bg-green-50 dark:bg-green-900/10">
-                <div className="space-x-2 text-sm">
-                  <span className="odds-cell font-medium text-green-800 bg-green-100 border-green-200 dark:text-green-200 dark:bg-green-900/40 dark:border-green-900/50">
-                    <span className="odds-value">
-                      {event.bestOdds?.home?.toFixed(2) || '-'}
-                    </span>
-                  </span>
-                  
-                  {event.bestOdds?.draw !== undefined && (
-                    <span className="odds-cell font-medium text-green-800 bg-green-100 border-green-200 dark:text-green-200 dark:bg-green-900/40 dark:border-green-900/50">
-                      <span className="odds-value">
-                        {event.bestOdds?.draw?.toFixed(2) || '-'}
-                      </span>
-                    </span>
-                  )}
-                  
-                  <span className="odds-cell font-medium text-green-800 bg-green-100 border-green-200 dark:text-green-200 dark:bg-green-900/40 dark:border-green-900/50">
-                    <span className="odds-value">
-                      {event.bestOdds?.away?.toFixed(2) || '-'}
-                    </span>
-                  </span>
-                </div>
-              </TableCell>
-            </TableRow>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </React.Fragment>
           ))}
         </TableBody>
       </Table>
