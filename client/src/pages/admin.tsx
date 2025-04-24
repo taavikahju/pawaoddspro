@@ -296,19 +296,44 @@ export default function AdminPage() {
       // Create the FormData object
       const formData = new FormData();
       formData.append('file', selectedFile);
+      
+      // Add bookmaker code in multiple ways to ensure it's received
       formData.append('bookmaker', selectedBookmakerForUpload);
       
       // Log the form data for debugging
       console.log('Uploading file:', selectedFile.name);
       console.log('For bookmaker:', selectedBookmakerForUpload);
+      console.log('FormData contents logged');
       
-      // Pass the form data to the mutation
-      uploadScraperMutation.mutate(formData);
+      // Create a direct fetch instead of using the mutation
+      const url = `/api/scrapers/upload?bookmaker=${encodeURIComponent(selectedBookmakerForUpload)}`;
+      
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'X-Bookmaker-Code': selectedBookmakerForUpload
+        },
+        body: formData
+      });
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || response.statusText);
+      }
+      
+      const result = await response.json();
+      
+      setSelectedFile(null);
+      setSelectedBookmakerForUpload('');
+      toast({
+        title: 'Success',
+        description: 'Scraper script uploaded successfully',
+      });
     } catch (error) {
-      console.error('Error preparing upload:', error);
+      console.error('Error uploading script:', error);
       toast({
         title: 'Error',
-        description: `Upload preparation failed: ${error instanceof Error ? error.message : String(error)}`,
+        description: `Upload failed: ${error instanceof Error ? error.message : String(error)}`,
         variant: 'destructive',
       });
     }
