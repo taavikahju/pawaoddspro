@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import CountryFlag from '@/components/CountryFlag';
 import { 
   RefreshCw, 
   XIcon, 
@@ -20,7 +21,8 @@ import {
   Timer,
   Settings,
   SunIcon,
-  MoonIcon
+  MoonIcon,
+  Filter
 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { cn } from '@/lib/utils';
@@ -48,13 +50,16 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
   } = useBookmakerContext();
 
   // Fetch stats
-  const { data: stats } = useQuery({
+  const { data: stats = { lastScrapeTime: 'N/A', timeToNextUpdate: 15 } } = useQuery<{ 
+    lastScrapeTime: string; 
+    timeToNextUpdate: number;
+  }>({
     queryKey: ['/api/stats'],
     refetchInterval: autoRefresh ? 60000 : false, // Refresh every minute if autoRefresh is enabled
   });
 
-  const lastUpdate = stats?.lastScrapeTime || 'N/A';
-  const timeToNextUpdate = stats?.timeToNextUpdate || 15;
+  const lastUpdate = stats.lastScrapeTime;
+  const timeToNextUpdate = stats.timeToNextUpdate;
   const nextUpdate = new Date();
   nextUpdate.setMinutes(nextUpdate.getMinutes() + timeToNextUpdate);
   const nextUpdateStr = nextUpdate.toLocaleTimeString('en-US', {
@@ -174,6 +179,59 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
         </div>
         
         <div>
+          <p className="px-2 mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+            Quick Filters
+          </p>
+          <div className="flex justify-between space-x-2 mb-4">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="flex-1 py-1 px-2 h-auto text-xs font-medium bg-white dark:bg-slate-800"
+              onClick={() => {
+                // Find bookmaker IDs for Ghana
+                const ghanaBookmakers = bookmakers
+                  .filter(b => b.code === 'bp GH' || b.code === 'sporty')
+                  .map(b => b.code);
+                
+                // Deselect all bookmakers
+                bookmakers.forEach(b => {
+                  if (selectedBookmakers.includes(b.code) && !ghanaBookmakers.includes(b.code)) {
+                    toggleBookmaker(b.code);
+                  } else if (!selectedBookmakers.includes(b.code) && ghanaBookmakers.includes(b.code)) {
+                    toggleBookmaker(b.code);
+                  }
+                });
+              }}
+            >
+              <CountryFlag countryCode="GH" countryName="Ghana" size="sm" className="mr-1.5" />
+              Ghana
+            </Button>
+            
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="flex-1 py-1 px-2 h-auto text-xs font-medium bg-white dark:bg-slate-800"
+              onClick={() => {
+                // Find bookmaker IDs for Kenya
+                const kenyaBookmakers = bookmakers
+                  .filter(b => b.code === 'bp KE' || b.code === 'betika KE')
+                  .map(b => b.code);
+                
+                // Deselect all bookmakers
+                bookmakers.forEach(b => {
+                  if (selectedBookmakers.includes(b.code) && !kenyaBookmakers.includes(b.code)) {
+                    toggleBookmaker(b.code);
+                  } else if (!selectedBookmakers.includes(b.code) && kenyaBookmakers.includes(b.code)) {
+                    toggleBookmaker(b.code);
+                  }
+                });
+              }}
+            >
+              <CountryFlag countryCode="KE" countryName="Kenya" size="sm" className="mr-1.5" />
+              Kenya
+            </Button>
+          </div>
+          
           <p className="px-2 mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
             Bookmakers
           </p>
