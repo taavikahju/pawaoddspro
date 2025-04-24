@@ -58,9 +58,16 @@ export default function Dashboard() {
       
       // Extract tournaments from the selected country or all tournaments if no country is selected
       if (countryFilter !== 'all') {
+        // First, normalize the country filter for case-insensitive comparison
+        const normalizedCountryFilter = countryFilter.toLowerCase();
+        
         const tournaments = Array.from(new Set(
           events
-            .filter((event: any) => event.country === countryFilter)
+            // Match country case-insensitively
+            .filter((event: any) => 
+              event.country && 
+              event.country.toLowerCase() === normalizedCountryFilter
+            )
             .map((event: any) => event.tournament)
             .filter((tournament): tournament is string => Boolean(tournament))
         )).sort();
@@ -104,20 +111,14 @@ export default function Dashboard() {
       if (!sportMatches) return false;
       
       // Filter by country
-      const eventCountry = event.country ? event.country.toString().toLowerCase() : '';
-      const selectedCountry = countryFilter.toLowerCase();
-      
       const countryMatches = countryFilter === 'all' || 
-        (eventCountry !== '' && eventCountry === selectedCountry);
+        (event.country && event.country === countryFilter);
       
       if (!countryMatches) return false;
       
       // Filter by tournament only if country is selected
       if (countryFilter !== 'all' && tournamentFilter !== 'all') {
-        const eventTournament = event.tournament ? event.tournament.toString().toLowerCase() : '';
-        const selectedTournament = tournamentFilter.toLowerCase();
-        
-        return eventTournament !== '' && eventTournament === selectedTournament;
+        return event.tournament === tournamentFilter;
       }
       
       return true;
@@ -164,7 +165,7 @@ export default function Dashboard() {
                 <SelectContent>
                   <SelectItem value="all">All Countries</SelectItem>
                   {availableCountries.map((country) => (
-                    <SelectItem key={country} value={country.toLowerCase()}>
+                    <SelectItem key={country} value={country}>
                       {country}
                     </SelectItem>
                   ))}
@@ -186,7 +187,7 @@ export default function Dashboard() {
                 <SelectContent>
                   <SelectItem value="all">All Tournaments</SelectItem>
                   {availableTournaments.map((tournament) => (
-                    <SelectItem key={tournament} value={tournament.toLowerCase()}>
+                    <SelectItem key={tournament} value={tournament}>
                       {tournament}
                     </SelectItem>
                   ))}
