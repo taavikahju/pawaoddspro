@@ -1,5 +1,7 @@
 import { IStorage } from '../storage';
-import { insertEventSchema, type InsertEvent } from '@shared/schema';
+import { insertEventSchema, type InsertEvent, events } from '@shared/schema';
+import { db } from '../db';
+import { eq } from 'drizzle-orm';
 
 /**
  * Maps events from different bookmakers by matching exact eventIds
@@ -38,9 +40,9 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     let eventsWith4Bookmakers = 0;
     
     // Second pass: Process each bookmaker's data and group by eventId
-    for (const eventId of allEventIds) {
+    for (const eventId of Array.from(allEventIds)) {
       let firstMatch = null;
-      const bookmakerOdds = {};
+      const bookmakerOdds: Record<string, any> = {};
       let bookmakerCount = 0; // Counter to track how many bookmakers have odds for this event
       
       // Look for this eventId in all bookmakers
@@ -133,7 +135,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     }
     
     // Calculate best odds for each event
-    for (const [eventKey, eventData] of eventMap.entries()) {
+    for (const [eventKey, eventData] of Array.from(eventMap.entries())) {
       const bestOdds: any = {};
       const allOdds = eventData.oddsData;
       
@@ -158,7 +160,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     }
     
     // Store or update events in database
-    for (const [eventKey, eventData] of eventMap.entries()) {
+    for (const [eventKey, eventData] of Array.from(eventMap.entries())) {
       try {
         // Check if event already exists by eventId first (this is more reliable than externalId)
         let existingEvent = await storage.getEventByEventId(eventData.eventId);
@@ -221,17 +223,18 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     // Get all events and delete any that don't meet our criteria anymore
     // This ensures events that previously had 3+ bookmakers but now have fewer are removed
     const allEvents = await storage.getEvents();
-    const currentEventIds = new Set([...eventMap.keys()]);
+    const currentEventIds = new Set(Array.from(eventMap.keys()));
     
     let deletedCount = 0;
     
-    console.log(`Checking ${allEvents.length} existing events against ${currentEventIds.size} mapped events`);
+    console.log(`Checking ${allEvents.length} existing events against ${currentEventIds.size} mapped events that meet criteria (3+ bookmakers)`);
     
     // Remove events that don't meet criteria anymore
     for (const event of allEvents) {
       // If this event is not in our current map and has an eventId, it should be removed
       if (event.eventId && !currentEventIds.has(event.eventId)) {
         try {
+          console.log(`Event ${event.id} (${event.eventId}: ${event.teams}) no longer meets criteria - removing from database`);
           // Delete the event from the database
           await db.delete(events).where(eq(events.id, event.id));
           deletedCount++;
@@ -241,7 +244,13 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       }
     }
     
-    console.log(`Deleted ${deletedCount} events that no longer meet the criteria`);
+    // Log summary of cleanup
+    console.log(`========== EVENTS CLEANUP SUMMARY ==========`);
+    console.log(`Starting events count: ${allEvents.length}`);
+    console.log(`Events meeting criteria (3+ bookmakers): ${currentEventIds.size}`);
+    console.log(`Events removed: ${deletedCount}`);
+    console.log(`Final events count: ${allEvents.length - deletedCount}`);
+    console.log(`===========================================`);
   } catch (error) {
     console.error('Error processing and mapping events:', error);
     throw error;
