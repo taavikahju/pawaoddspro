@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import ReactCountryFlag from 'react-country-flag';
+import CountryFlag from '@/components/CountryFlag';
 import Layout from '@/components/Layout';
 import OddsTable from '@/components/OddsTable';
 import { useBookmakerContext } from '@/contexts/BookmakerContext';
@@ -24,9 +24,9 @@ export default function Dashboard() {
   
   // Fetch stats data
   const { 
-    data: stats,
+    data: stats = { lastScrapeTime: 'N/A' },
     isLoading: isLoadingStats 
-  } = useQuery({ 
+  } = useQuery<{ lastScrapeTime: string }>({ 
     queryKey: ['/api/stats'],
     refetchInterval: 60000, // Refresh every minute
   });
@@ -148,68 +148,264 @@ export default function Dashboard() {
   
   // Get country code for flag display
   const getCountryCode = (countryName: string): string => {
+    // Standardize country name (remove any special characters and convert to lowercase)
+    const normalizedName = countryName
+      .toLowerCase()
+      .replace(/[^a-z0-9\s]/g, '')
+      .trim();
+    
     // Map to standard ISO country codes
     const countryCodeMap: Record<string, string> = {
-      'Kenya': 'KE',
-      'Ghana': 'GH',
-      'Nigeria': 'NG',
-      'England': 'GB',
-      'Spain': 'ES',
-      'Germany': 'DE',
-      'Italy': 'IT',
-      'France': 'FR',
-      'Portugal': 'PT',
-      'Netherlands': 'NL',
-      'Belgium': 'BE',
-      'Brazil': 'BR',
-      'Argentina': 'AR',
-      'Mexico': 'MX',
-      'USA': 'US',
-      'United States': 'US',
-      'Canada': 'CA',
-      'Australia': 'AU',
-      'Japan': 'JP',
-      'China': 'CN',
-      'India': 'IN',
-      'South Africa': 'ZA',
-      'Egypt': 'EG',
-      'Morocco': 'MA',
-      'Tunisia': 'TN',
-      'Algeria': 'DZ',
-      'Senegal': 'SN',
-      'Cameroon': 'CM',
-      'Ivory Coast': 'CI',
-      'Tanzania': 'TZ',
-      'Uganda': 'UG',
-      'South Korea': 'KR',
-      'Turkey': 'TR',
-      'Russia': 'RU',
-      'Ukraine': 'UA',
-      'Poland': 'PL',
-      'Sweden': 'SE',
-      'Norway': 'NO',
-      'Denmark': 'DK',
-      'Finland': 'FI',
-      'Switzerland': 'CH',
-      'Austria': 'AT',
-      'Czech Republic': 'CZ',
-      'Croatia': 'HR',
-      'Serbia': 'RS',
-      'Greece': 'GR',
-      'Romania': 'RO',
-      'Bulgaria': 'BG',
-      'Hungary': 'HU',
-      'Scotland': 'GB-SCT',
-      'Wales': 'GB-WLS',
-      'Northern Ireland': 'GB-NIR',
-      'Ireland': 'IE',
-      'Saudi Arabia': 'SA',
-      'Qatar': 'QA',
-      'UAE': 'AE',
-      'United Arab Emirates': 'AE'
+      // African countries
+      'algeria': 'DZ',
+      'angola': 'AO',
+      'benin': 'BJ',
+      'botswana': 'BW',
+      'burkina': 'BF',
+      'burkinafaso': 'BF',
+      'burundi': 'BI',
+      'cameroon': 'CM',
+      'cape verde': 'CV',
+      'capeverde': 'CV',
+      'central african republic': 'CF',
+      'chad': 'TD',
+      'comoros': 'KM',
+      'congo': 'CG',
+      'democratic republic of congo': 'CD',
+      'djibouti': 'DJ',
+      'egypt': 'EG',
+      'equatorial guinea': 'GQ',
+      'eritrea': 'ER',
+      'ethiopia': 'ET',
+      'gabon': 'GA',
+      'gambia': 'GM',
+      'ghana': 'GH',
+      'guinea': 'GN',
+      'guinea bissau': 'GW',
+      'ivory coast': 'CI',
+      'ivorycoast': 'CI',
+      'cote divoire': 'CI',
+      'cotedivoire': 'CI',
+      'kenya': 'KE',
+      'lesotho': 'LS',
+      'liberia': 'LR',
+      'libya': 'LY',
+      'madagascar': 'MG',
+      'malawi': 'MW',
+      'mali': 'ML',
+      'mauritania': 'MR',
+      'mauritius': 'MU',
+      'morocco': 'MA',
+      'mozambique': 'MZ',
+      'namibia': 'NA',
+      'niger': 'NE',
+      'nigeria': 'NG',
+      'rwanda': 'RW',
+      'sao tome and principe': 'ST',
+      'senegal': 'SN',
+      'seychelles': 'SC',
+      'sierra leone': 'SL',
+      'somalia': 'SO',
+      'south africa': 'ZA',
+      'southafrica': 'ZA',
+      'south sudan': 'SS',
+      'sudan': 'SD',
+      'swaziland': 'SZ',
+      'tanzania': 'TZ',
+      'togo': 'TG',
+      'tunisia': 'TN',
+      'uganda': 'UG',
+      'zambia': 'ZM',
+      'zimbabwe': 'ZW',
+      
+      // European countries
+      'albania': 'AL',
+      'andorra': 'AD',
+      'armenia': 'AM',
+      'austria': 'AT',
+      'azerbaijan': 'AZ',
+      'belarus': 'BY',
+      'belgium': 'BE',
+      'bosnia': 'BA',
+      'bosnia and herzegovina': 'BA',
+      'bulgaria': 'BG',
+      'croatia': 'HR',
+      'cyprus': 'CY',
+      'czech republic': 'CZ',
+      'czechrepublic': 'CZ',
+      'denmark': 'DK',
+      'estonia': 'EE',
+      'finland': 'FI',
+      'france': 'FR',
+      'georgia': 'GE',
+      'germany': 'DE',
+      'greece': 'GR',
+      'hungary': 'HU',
+      'iceland': 'IS',
+      'ireland': 'IE',
+      'italy': 'IT',
+      'kazakhstan': 'KZ',
+      'kosovo': 'XK',
+      'latvia': 'LV',
+      'liechtenstein': 'LI',
+      'lithuania': 'LT',
+      'luxembourg': 'LU',
+      'malta': 'MT',
+      'moldova': 'MD',
+      'monaco': 'MC',
+      'montenegro': 'ME',
+      'netherlands': 'NL',
+      'north macedonia': 'MK',
+      'macedonia': 'MK',
+      'norway': 'NO',
+      'poland': 'PL',
+      'portugal': 'PT',
+      'romania': 'RO',
+      'russia': 'RU',
+      'san marino': 'SM',
+      'serbia': 'RS',
+      'slovakia': 'SK',
+      'slovenia': 'SI',
+      'spain': 'ES',
+      'sweden': 'SE',
+      'switzerland': 'CH',
+      'turkey': 'TR',
+      'ukraine': 'UA',
+      'united kingdom': 'GB',
+      'uk': 'GB',
+      'england': 'GB-ENG',
+      'scotland': 'GB-SCT',
+      'wales': 'GB-WLS',
+      'northern ireland': 'GB-NIR',
+      'vatican city': 'VA',
+      
+      // Americas
+      'argentina': 'AR',
+      'bahamas': 'BS',
+      'barbados': 'BB',
+      'belize': 'BZ',
+      'bolivia': 'BO',
+      'brazil': 'BR',
+      'canada': 'CA',
+      'chile': 'CL',
+      'colombia': 'CO',
+      'costa rica': 'CR',
+      'costarica': 'CR',
+      'cuba': 'CU',
+      'dominica': 'DM',
+      'dominican republic': 'DO',
+      'dominicanrepublic': 'DO',
+      'ecuador': 'EC',
+      'el salvador': 'SV',
+      'elsalvador': 'SV',
+      'grenada': 'GD',
+      'guatemala': 'GT',
+      'guyana': 'GY',
+      'haiti': 'HT',
+      'honduras': 'HN',
+      'jamaica': 'JM',
+      'mexico': 'MX',
+      'nicaragua': 'NI',
+      'panama': 'PA',
+      'paraguay': 'PY',
+      'peru': 'PE',
+      'saint kitts and nevis': 'KN',
+      'saint lucia': 'LC',
+      'saint vincent': 'VC',
+      'suriname': 'SR',
+      'trinidad and tobago': 'TT',
+      'united states': 'US',
+      'unitedstates': 'US',
+      'usa': 'US',
+      'uruguay': 'UY',
+      'venezuela': 'VE',
+      
+      // Asian countries
+      'afghanistan': 'AF',
+      'bahrain': 'BH',
+      'bangladesh': 'BD',
+      'bhutan': 'BT',
+      'brunei': 'BN',
+      'cambodia': 'KH',
+      'china': 'CN',
+      'india': 'IN',
+      'indonesia': 'ID',
+      'iran': 'IR',
+      'iraq': 'IQ',
+      'israel': 'IL',
+      'japan': 'JP',
+      'jordan': 'JO',
+      'kuwait': 'KW',
+      'kyrgyzstan': 'KG',
+      'laos': 'LA',
+      'lebanon': 'LB',
+      'malaysia': 'MY',
+      'maldives': 'MV',
+      'mongolia': 'MN',
+      'myanmar': 'MM',
+      'nepal': 'NP',
+      'north korea': 'KP',
+      'northkorea': 'KP',
+      'oman': 'OM',
+      'pakistan': 'PK',
+      'palestine': 'PS',
+      'philippines': 'PH',
+      'qatar': 'QA',
+      'saudi arabia': 'SA',
+      'saudiarabia': 'SA',
+      'singapore': 'SG',
+      'south korea': 'KR',
+      'southkorea': 'KR',
+      'sri lanka': 'LK',
+      'srilanka': 'LK',
+      'syria': 'SY',
+      'taiwan': 'TW',
+      'tajikistan': 'TJ',
+      'thailand': 'TH',
+      'timor leste': 'TL',
+      'timorleste': 'TL',
+      'east timor': 'TL',
+      'easttimor': 'TL',
+      'turkmenistan': 'TM',
+      'united arab emirates': 'AE',
+      'unitedarabemirates': 'AE',
+      'uae': 'AE',
+      'uzbekistan': 'UZ',
+      'vietnam': 'VN',
+      'yemen': 'YE',
+      
+      // Oceania
+      'australia': 'AU',
+      'fiji': 'FJ',
+      'kiribati': 'KI',
+      'marshall islands': 'MH',
+      'marshallislands': 'MH',
+      'micronesia': 'FM',
+      'nauru': 'NR',
+      'new zealand': 'NZ',
+      'newzealand': 'NZ',
+      'palau': 'PW',
+      'papua new guinea': 'PG',
+      'papuanewguinea': 'PG',
+      'samoa': 'WS',
+      'solomon islands': 'SB',
+      'solomonislands': 'SB',
+      'tonga': 'TO',
+      'tuvalu': 'TV',
+      'vanuatu': 'VU'
     };
     
-    return countryCodeMap[countryName] || 'XX'; // XX is used for unknown
+    // Try to find the country code - try multiple variations
+    const code = countryCodeMap[normalizedName] || 
+                 countryCodeMap[normalizedName.replace(/\s/g, '')] || // Try without spaces
+                 'XX'; // XX for unknown
+    
+    // Log country code mapping issues to help with troubleshooting
+    if (code === 'XX' && countryName) {
+      console.debug(`No country code found for: "${countryName}" (normalized: "${normalizedName}")`);
+    }
+    
+    return code;
   };
   
   // Get the sport name based on the first event in filtered list
@@ -238,15 +434,11 @@ export default function Dashboard() {
                   </div>
                 ) : (
                   <div className="flex items-center">
-                    <ReactCountryFlag 
+                    <CountryFlag 
                       countryCode={getCountryCode(countryFilter)} 
-                      svg 
-                      style={{
-                        width: '1em',
-                        height: '1em',
-                        marginRight: '0.3rem'
-                      }}
-                      title={countryFilter}
+                      countryName={countryFilter}
+                      size="sm"
+                      className="mr-1.5"
                     />
                     <span>{countryFilter}</span>
                   </div>
@@ -262,15 +454,11 @@ export default function Dashboard() {
                 {availableCountries.map((country) => (
                   <SelectItem key={country} value={country}>
                     <div className="flex items-center">
-                      <ReactCountryFlag 
+                      <CountryFlag 
                         countryCode={getCountryCode(country)} 
-                        svg 
-                        style={{
-                          width: '1.2em',
-                          height: '1.2em',
-                          marginRight: '0.5rem'
-                        }}
-                        title={country}
+                        countryName={country}
+                        size="md"
+                        className="mr-2"
                       />
                       <span>{country}</span>
                     </div>
