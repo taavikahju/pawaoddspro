@@ -17,7 +17,7 @@ import {
 export default function Dashboard() {
   const [countryFilter, setCountryFilter] = useState('all');
   const [tournamentFilter, setTournamentFilter] = useState('all');
-  const { selectedSports, marginFilter, selectedBookmakers } = useBookmakerContext();
+  const { selectedSports, minMarginFilter, maxMarginFilter, selectedBookmakers } = useBookmakerContext();
   
   // Available countries and tournaments (will be populated from data)
   const [availableCountries, setAvailableCountries] = useState<string[]>([]);
@@ -132,12 +132,13 @@ export default function Dashboard() {
       }
       
       // Filter by margin based on selected bookmakers
-      if (marginFilter < 15) { // Only apply filter if it's not at the maximum
+      // If min is 0 and max is 15, don't apply the filter (default state)
+      if (!(minMarginFilter === 0 && maxMarginFilter === 15)) {
         // If no bookmakers are selected, don't apply margin filter
         if (selectedBookmakers.length === 0) return true;
         
-        // Check if this event has any of the selected bookmakers with margins below threshold
-        let hasBookmakerWithinMargin = false;
+        // Check if this event has any of the selected bookmakers with margins in range
+        let hasBookmakerWithinMarginRange = false;
         
         // Only check margins for selected bookmakers
         for (const code of selectedBookmakers) {
@@ -148,17 +149,17 @@ export default function Dashboard() {
           const margin = calculateMargin(event, code);
           if (margin === null) continue;
           
-          // Convert to percentage and check against threshold
+          // Convert to percentage and check against thresholds
           const marginPercent = (margin - 1) * 100;
           
-          if (marginPercent <= marginFilter) {
-            hasBookmakerWithinMargin = true;
-            break; // We found at least one bookmaker within margin threshold
+          if (marginPercent >= minMarginFilter && marginPercent <= maxMarginFilter) {
+            hasBookmakerWithinMarginRange = true;
+            break; // We found at least one bookmaker within margin range
           }
         }
         
-        // If none of the selected bookmakers have margins below threshold, exclude event
-        if (!hasBookmakerWithinMargin) return false;
+        // If none of the selected bookmakers have margins within range, exclude event
+        if (!hasBookmakerWithinMarginRange) return false;
       }
       
       return true;
@@ -175,7 +176,7 @@ export default function Dashboard() {
       // If dates are the same, sort by time
       return a.time.localeCompare(b.time);
     });
-  }, [events, selectedSports, selectedBookmakers, countryFilter, tournamentFilter, marginFilter]);
+  }, [events, selectedSports, selectedBookmakers, countryFilter, tournamentFilter, minMarginFilter, maxMarginFilter]);
   
   // Get sport name by ID
   const getSportName = (sportId: number): string => {
