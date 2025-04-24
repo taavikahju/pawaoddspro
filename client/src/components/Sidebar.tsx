@@ -376,7 +376,7 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
                 <span>15%</span>
               </div>
               <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-                Only show events where at least one bookmaker has a margin of {marginFilter}% or less
+                Only show events where at least one of your selected bookmakers has a margin of {marginFilter}% or less
               </div>
             </div>
           </div>
