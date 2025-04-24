@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   Table,
   TableBody,
@@ -10,6 +10,7 @@ import {
 import { useBookmakerContext } from '@/contexts/BookmakerContext';
 import { cn } from '@/lib/utils';
 import { ArrowDownIcon, ArrowUpIcon, Clock, Globe, Trophy } from 'lucide-react';
+import MarginHistoryPopup from './MarginHistoryPopup';
 
 interface OddsTableProps {
   events: any[];
@@ -19,6 +20,11 @@ interface OddsTableProps {
 
 export default function OddsTable({ events, isLoading, className }: OddsTableProps) {
   const { bookmakers, selectedBookmakers } = useBookmakerContext();
+  const [selectedEvent, setSelectedEvent] = useState<{
+    eventId: string;
+    eventName: string;
+    isOpen: boolean;
+  }>({ eventId: '', eventName: '', isOpen: false });
   
   const filteredBookmakers = bookmakers.filter(b => selectedBookmakers.includes(b.code));
   
