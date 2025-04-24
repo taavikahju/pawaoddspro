@@ -537,11 +537,19 @@ export default function Dashboard() {
           </div>
           
           {/* Bookmaker Average Margins */}
-          <div className="flex flex-col items-end text-[10px] text-gray-500 dark:text-gray-400">
+          <div className="flex flex-col items-end bg-slate-100 dark:bg-slate-700 p-2 rounded-md border border-slate-200 dark:border-slate-600 shadow-sm">
+            <div className="text-xs font-medium mb-1 text-slate-600 dark:text-slate-300">Average Bookmaker Margins</div>
+            
             {(() => {
               // Calculate average margins for each selected bookmaker based on filtered events
               const bookmakerMargins: Record<string, { total: number, count: number }> = {};
-              const { selectedBookmakers } = useBookmakerContext();
+              const { selectedBookmakers, bookmakers } = useBookmakerContext();
+              
+              // Create lookup for bookmaker names
+              const bookmakerNames: Record<string, string> = {};
+              bookmakers.forEach(b => {
+                bookmakerNames[b.code] = b.name;
+              });
               
               // Only calculate for selected bookmakers
               if (filteredEvents.length > 0 && selectedBookmakers.length > 0) {
@@ -574,10 +582,14 @@ export default function Dashboard() {
                 .map(([code, data]) => {
                   const avgMargin = data.total / data.count;
                   const marginPercentage = ((avgMargin - 1) * 100).toFixed(2);
+                  const bookmakerName = bookmakerNames[code] || code;
                   
                   return (
-                    <div key={code} className="font-mono">
-                      <span className="font-medium">{code}:</span> {marginPercentage}%
+                    <div key={code} className="font-mono text-xs flex justify-between w-full">
+                      <span className="font-medium text-slate-700 dark:text-slate-200 mr-2">{bookmakerName}:</span>
+                      <span className="text-slate-800 dark:text-slate-100 font-bold bg-slate-200 dark:bg-slate-600 px-1 rounded">
+                        {marginPercentage}%
+                      </span>
                     </div>
                   );
                 });
