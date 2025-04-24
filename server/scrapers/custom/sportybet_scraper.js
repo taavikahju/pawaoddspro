@@ -92,8 +92,10 @@ const run = async () => {
     }))
   );
 
-  fs.writeFileSync('Cleaned_SportyBet_Data.json', JSON.stringify(flatEvents, null, 2));
-  console.log(`✅ Saved ${flatEvents.length} events to Cleaned_SportyBet_Data.json`);
+  // Output to stdout for the integration system
+  console.log(JSON.stringify(flatEvents));
 };
 
-run();
+run().catch(error => {
+  console.error('Error fetching SportyBet data:', error.message);
+});

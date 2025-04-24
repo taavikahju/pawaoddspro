@@ -56,6 +56,8 @@ async function fetchPage(page) {
     currentPage++;
   }
 
-  fs.writeFileSync('Cleaned_Betika_Data.json', JSON.stringify(allEvents, null, 2));
-  console.log(`💾 Saved ${allEvents.length} events to Cleaned_Betika_Data.json`);
-})();
+  // Output to stdout for the integration system
+  console.log(JSON.stringify(allEvents));
+})().catch(error => {
+  console.error('Error fetching Betika data:', error.message);
+});
