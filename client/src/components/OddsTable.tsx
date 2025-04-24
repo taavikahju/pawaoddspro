@@ -251,7 +251,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
             <TableHead className="w-24 px-2 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               <div className="flex items-center">
                 <Clock className="w-3 h-3 mr-1" />
-                Start (UTC)
+                Start
               </div>
             </TableHead>
             <TableHead className="w-48 px-2 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
@@ -341,7 +341,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                         >
                           <div className="flex flex-col">
                             <span className="text-sm font-medium text-gray-800 dark:text-gray-200">{event.date}</span>
-                            <span className="text-sm text-gray-500 dark:text-gray-400">{event.time} <span className="text-xs">UTC</span></span>
+                            <span className="text-sm text-gray-500 dark:text-gray-400">{event.time}</span>
                           </div>
                         </TableCell>
                         
