@@ -1,0 +1,66 @@
+[
+  {
+    "id": "betfair_3001",
+    "teams": "Manchester City vs Arsenal",
+    "league": "Premier League",
+    "sport": "football",
+    "date": "Today",
+    "time": "19:45",
+    "odds": {
+      "home": 2.09,
+      "draw": 3.39,
+      "away": 3.64
+    }
+  },
+  {
+    "id": "betfair_3002",
+    "teams": "Liverpool vs Chelsea",
+    "league": "Premier League",
+    "sport": "football",
+    "date": "Tomorrow",
+    "time": "17:30",
+    "odds": {
+      "home": 1.77,
+      "draw": 3.89,
+      "away": 4.39
+    }
+  },
+  {
+    "id": "betfair_3003",
+    "teams": "Tottenham vs Newcastle",
+    "league": "Premier League",
+    "sport": "football",
+    "date": "Tomorrow",
+    "time": "15:00",
+    "odds": {
+      "home": 1.99,
+      "draw": 3.49,
+      "away": 4.19
+    }
+  },
+  {
+    "id": "betfair_3004",
+    "teams": "Bayern Munich vs Dortmund",
+    "league": "Bundesliga",
+    "sport": "football",
+    "date": "Saturday",
+    "time": "17:30",
+    "odds": {
+      "home": 1.59,
+      "draw": 4.19,
+      "away": 4.99
+    }
+  },
+  {
+    "id": "betfair_3005",
+    "teams": "Chicago Bulls vs LA Lakers",
+    "league": "NBA",
+    "sport": "basketball",
+    "date": "Today",
+    "time": "01:30",
+    "odds": {
+      "home": 2.29,
+      "away": 1.59
+    }
+  }
+]

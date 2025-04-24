@@ -1,0 +1,53 @@
+[
+  {
+    "id": "bet365_1001",
+    "teams": "Manchester City vs Arsenal",
+    "league": "Premier League",
+    "sport": "football",
+    "date": "Today",
+    "time": "19:45",
+    "odds": {
+      "home": 2.03,
+      "draw": 3.38,
+      "away": 3.58
+    }
+  },
+  {
+    "id": "bet365_1002",
+    "teams": "Liverpool vs Chelsea",
+    "league": "Premier League",
+    "sport": "football",
+    "date": "Tomorrow",
+    "time": "17:30",
+    "odds": {
+      "home": 1.78,
+      "draw": 3.73,
+      "away": 4.31
+    }
+  },
+  {
+    "id": "bet365_1003",
+    "teams": "Tottenham vs Newcastle",
+    "league": "Premier League",
+    "sport": "football",
+    "date": "Tomorrow",
+    "time": "15:00",
+    "odds": {
+      "home": 1.88,
+      "draw": 3.58,
+      "away": 3.98
+    }
+  },
+  {
+    "id": "bet365_1004",
+    "teams": "Chicago Bulls vs LA Lakers",
+    "league": "NBA",
+    "sport": "basketball",
+    "date": "Today",
+    "time": "01:30",
+    "odds": {
+      "home": 2.23,
+      "away": 1.63
+    }
+  }
+]

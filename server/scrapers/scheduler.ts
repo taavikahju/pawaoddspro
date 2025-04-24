@@ -1,0 +1,118 @@
+import cron from 'node-cron';
+import { IStorage } from '../storage';
+import * as bet365Scraper from './bet365';
+import * as williamHillScraper from './williamhill';
+import * as betfairScraper from './betfair';
+import * as paddyPowerScraper from './paddypower';
+import { processAndMapEvents } from '../utils/dataMapper';
+
+// Schedule to run every 15 minutes
+const SCRAPE_SCHEDULE = '*/15 * * * *';
+
+// Keep track of running jobs
+let scheduledJob: cron.ScheduledTask | null = null;
+
+/**
+ * Setup all scrapers and schedule them to run
+ */
+export function setupScrapers(storage: IStorage): void {
+  console.log('Setting up scrapers...');
+  
+  // Run scrapers immediately on startup
+  runAllScrapers(storage)
+    .then(() => console.log('Initial scraping completed'))
+    .catch(err => console.error('Error during initial scraping:', err));
+  
+  // Schedule regular runs
+  if (scheduledJob) {
+    scheduledJob.stop();
+  }
+  
+  scheduledJob = cron.schedule(SCRAPE_SCHEDULE, async () => {
+    try {
+      console.log(`Running scheduled scrape at ${new Date().toLocaleTimeString()}`);
+      await runAllScrapers(storage);
+      console.log('Scheduled scraping completed');
+    } catch (error) {
+      console.error('Error during scheduled scraping:', error);
+    }
+  });
+  
+  console.log(`Scrapers scheduled to run every 15 minutes (cron: ${SCRAPE_SCHEDULE})`);
+}
+
+/**
+ * Run all scrapers in sequence
+ */
+export async function runAllScrapers(storage: IStorage): Promise<void> {
+  try {
+    console.log('Starting scraper runs...');
+    
+    // Get all bookmakers
+    const bookmakers = await storage.getBookmakers();
+    
+    // Run scrapers in parallel
+    const scraperPromises = bookmakers
+      .filter(bookmaker => bookmaker.active)
+      .map(async (bookmaker) => {
+        try {
+          console.log(`Running scraper for ${bookmaker.name}...`);
+          let data: any = null;
+          
+          // Select appropriate scraper based on bookmaker code
+          switch (bookmaker.code) {
+            case 'bet365':
+              data = await bet365Scraper.scrape();
+              break;
+            case 'williamhill':
+              data = await williamHillScraper.scrape();
+              break;
+            case 'betfair':
+              data = await betfairScraper.scrape();
+              break;
+            case 'paddypower':
+              data = await paddyPowerScraper.scrape();
+              break;
+            default:
+              console.warn(`No scraper found for bookmaker ${bookmaker.code}`);
+              return null;
+          }
+          
+          if (data) {
+            await storage.saveBookmakerData(bookmaker.code, data);
+            console.log(`Saved data for ${bookmaker.name}`);
+          }
+          
+          return { bookmaker: bookmaker.code, data };
+        } catch (error) {
+          console.error(`Error scraping ${bookmaker.name}:`, error);
+          return { bookmaker: bookmaker.code, error, data: null };
+        }
+      });
+    
+    // Wait for all scrapers to complete
+    const results = await Promise.all(scraperPromises);
+    console.log('All scrapers completed');
+    
+    // Process and map events
+    await processAndMapEvents(storage);
+    
+    // Update stats
+    await storage.getStats();
+    
+  } catch (error) {
+    console.error('Error running scrapers:', error);
+    throw error;
+  }
+}
+
+/**
+ * Stop all scheduled jobs
+ */
+export function stopScrapers(): void {
+  if (scheduledJob) {
+    scheduledJob.stop();
+    scheduledJob = null;
+    console.log('Scrapers stopped');
+  }
+}
