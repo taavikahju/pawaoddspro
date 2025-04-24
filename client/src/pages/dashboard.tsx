@@ -3,19 +3,23 @@ import { useQuery } from '@tanstack/react-query';
 import Layout from '@/components/Layout';
 import OddsTable from '@/components/OddsTable';
 import { useBookmakerContext } from '@/contexts/BookmakerContext';
+import { useThemeToggle } from '@/hooks/use-theme';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { 
   Trophy,
   X,
   GlobeIcon,
-  Clock
+  Clock,
+  SunIcon, 
+  MoonIcon
 } from 'lucide-react';
 
 export default function Dashboard() {
   const [countryFilter, setCountryFilter] = useState('all');
   const [tournamentFilter, setTournamentFilter] = useState('all');
   const { selectedSports } = useBookmakerContext();
+  const { toggleTheme, isDarkMode } = useThemeToggle();
   
   // Available countries and tournaments (will be populated from data)
   const [availableCountries, setAvailableCountries] = useState<string[]>([]);
@@ -217,6 +221,20 @@ export default function Dashboard() {
               Clear
             </Button>
             
+            {/* Dark mode toggle */}
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={toggleTheme}
+              className="h-9 flex items-center"
+            >
+              {isDarkMode ? (
+                <><SunIcon className="h-4 w-4 mr-1" /> Light</>
+              ) : (
+                <><MoonIcon className="h-4 w-4 mr-1" /> Dark</>
+              )}
+            </Button>
+            
             {/* Events count */}
             <div className="flex items-center">
               <div className="text-sm font-semibold text-gray-800 dark:text-white">
@@ -228,8 +246,8 @@ export default function Dashboard() {
             </div>
           </div>
           
-          {/* Right side - Just the last updated indicator */}
-          <div className="flex items-center gap-2 text-sm">
+          {/* Right side - Last updated indicator and theme toggle */}
+          <div className="flex items-center gap-3 text-sm">
             {/* Last updated indicator */}
             <div className="text-xs text-gray-500 dark:text-gray-400 flex items-center">
               <Clock className="h-3 w-3 mr-1" />

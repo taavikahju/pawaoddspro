@@ -84,20 +84,6 @@ export default function Layout({ children, title, subtitle }: LayoutProps) {
               >
                 <RefreshCw className={`h-5 w-5 ${isRefreshing ? 'animate-spin' : ''}`} />
               </Button>
-              
-              {/* Dark mode toggle */}
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                onClick={toggleTheme}
-                className="p-1.5 text-white hover:bg-blue-700/50 rounded-full"
-              >
-                {isDarkMode ? (
-                  <SunIcon className="h-5 w-5" />
-                ) : (
-                  <MoonIcon className="h-5 w-5" />
-                )}
-              </Button>
             </div>
           </div>
           {/* Sub header with title */}
