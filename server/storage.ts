@@ -38,6 +38,7 @@ export interface IStorage {
   getBookmakerByCode(code: string): Promise<Bookmaker | undefined>;
   createBookmaker(bookmaker: InsertBookmaker): Promise<Bookmaker>;
   updateBookmaker(id: number, data: Partial<Bookmaker>): Promise<Bookmaker | undefined>;
+  deleteBookmaker(id: number): Promise<boolean>;
   
   // Sport methods
   getSports(): Promise<Sport[]>;
