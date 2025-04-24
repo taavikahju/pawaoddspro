@@ -139,25 +139,42 @@ export default function AdminPage() {
   const uploadScraperMutation = useMutation({
     mutationFn: async (formData: FormData) => {
       const bookmakerCode = formData.get('bookmaker') as string;
+      console.log('Uploading script for bookmaker:', bookmakerCode);
       
-      // Create a URL with query parameter as backup
-      const url = `/api/scrapers/upload${bookmakerCode ? `?bookmaker=${bookmakerCode}` : ''}`;
-      
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          // Add custom header for bookmaker code to handle multer issues
-          'X-Bookmaker-Code': bookmakerCode || ''
-        },
-        body: formData,
-      });
-      
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(errorText);
+      if (!bookmakerCode) {
+        throw new Error('Bookmaker code is required');
       }
       
-      return response.json();
+      // Create a URL with query parameter as backup
+      const url = `/api/scrapers/upload?bookmaker=${encodeURIComponent(bookmakerCode)}`;
+      
+      // Debug formData contents
+      console.log('FormData contents:');
+      for (const pair of formData.entries()) {
+        console.log(`${pair[0]}: ${pair[1]}`);
+      }
+      
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            // Add custom header for bookmaker code to handle multer issues
+            'X-Bookmaker-Code': bookmakerCode
+          },
+          body: formData,
+        });
+        
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('Upload response error:', errorText);
+          throw new Error(errorText || `HTTP error ${response.status}`);
+        }
+        
+        return response.json();
+      } catch (error) {
+        console.error('Upload error:', error);
+        throw error;
+      }
     },
     onSuccess: () => {
       setSelectedFile(null);
@@ -196,8 +213,30 @@ export default function AdminPage() {
   
   // Mutation for testing a scraper
   const testScraperMutation = useMutation({
-    mutationFn: (bookmakerCode: string) => 
-      apiRequest(`/api/scrapers/test/${bookmakerCode}`, 'POST'),
+    mutationFn: async (bookmakerCode: string) => {
+      console.log('Testing scraper for bookmaker:', bookmakerCode);
+      
+      // Use a more controlled approach to avoid issues with special characters
+      try {
+        const response = await fetch(`/api/scrapers/test/${encodeURIComponent(bookmakerCode)}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('Test scraper response error:', errorText);
+          throw new Error(errorText || `HTTP error ${response.status}`);
+        }
+        
+        return response.json();
+      } catch (error) {
+        console.error('Test scraper error:', error);
+        throw error;
+      }
+    },
     onSuccess: (data) => {
       setTestResults(data);
       setIsTestDialogOpen(true);
@@ -207,9 +246,10 @@ export default function AdminPage() {
       });
     },
     onError: (error: any) => {
+      console.error('Test scraper mutation error:', error);
       toast({
         title: 'Error',
-        description: `Failed to test scraper: ${error.message}`,
+        description: `Failed to test scraper: ${error.message || 'Unknown error'}`,
         variant: 'destructive',
       });
     },
