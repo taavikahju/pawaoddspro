@@ -13,7 +13,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 // Import only the components we need to reduce bundle size
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 interface MarginHistoryPopupProps {
   isOpen: boolean;
@@ -147,6 +147,10 @@ export default function MarginHistoryPopup({
                   <Tooltip 
                     formatter={(value: any) => [`${Number(value).toFixed(2)}%`, '']}
                     labelFormatter={(label) => `Time: ${label}`}
+                  />
+                  <Legend 
+                    iconSize={8}
+                    wrapperStyle={{ fontSize: '10px', marginTop: '5px' }}
                   />
                   {bookmakers.map((bookmakerCode) => (
                     <Line
