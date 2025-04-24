@@ -6,18 +6,13 @@ import { useBookmakerContext } from '@/contexts/BookmakerContext';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { 
-  LayoutGrid, 
-  List, 
   Trophy,
   X,
-  Filter,
   GlobeIcon,
   Clock
 } from 'lucide-react';
 
 export default function Dashboard() {
-  const [viewMode, setViewMode] = useState<'table' | 'grid'>('table');
-  const [marketFilter, setMarketFilter] = useState('all');
   const [countryFilter, setCountryFilter] = useState('all');
   const [tournamentFilter, setTournamentFilter] = useState('all');
   const { selectedSports } = useBookmakerContext();
@@ -158,7 +153,7 @@ export default function Dashboard() {
                 value={countryFilter}
                 onValueChange={setCountryFilter}
               >
-                <SelectTrigger className="h-9 w-[140px]">
+                <SelectTrigger className="h-9 w-[180px]">
                   <GlobeIcon className="h-4 w-4 mr-2 text-gray-500" />
                   <SelectValue placeholder="Country" />
                 </SelectTrigger>
@@ -180,7 +175,7 @@ export default function Dashboard() {
                 onValueChange={setTournamentFilter}
                 disabled={countryFilter === 'all'}
               >
-                <SelectTrigger className={`h-9 w-[150px] ${countryFilter === 'all' ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                <SelectTrigger className={`h-9 w-[200px] ${countryFilter === 'all' ? 'opacity-50 cursor-not-allowed' : ''}`}>
                   <Trophy className="h-4 w-4 mr-2 text-gray-500" />
                   <SelectValue placeholder={countryFilter === 'all' ? 'Select Country First' : 'Tournament'} />
                 </SelectTrigger>
@@ -220,49 +215,8 @@ export default function Dashboard() {
             </div>
           </div>
           
-          {/* Right side - View options */}
+          {/* Right side - Just the last updated indicator */}
           <div className="flex items-center gap-2 text-sm">
-            <div className="inline-flex rounded-md shadow-sm" role="group">
-              <Button
-                variant={viewMode === 'grid' ? 'default' : 'outline'}
-                className={viewMode === 'grid' 
-                  ? "h-9 rounded-l-md text-white" 
-                  : "h-9 rounded-l-md text-gray-700 dark:text-gray-200"}
-                onClick={() => setViewMode('grid')}
-                size="sm"
-              >
-                <LayoutGrid className="h-4 w-4 mr-1" />
-                Grid
-              </Button>
-              
-              <Button
-                variant={viewMode === 'table' ? 'default' : 'outline'}
-                className={viewMode === 'table' 
-                  ? "h-9 rounded-r-md text-white" 
-                  : "h-9 rounded-r-md text-gray-700 dark:text-gray-200"}
-                onClick={() => setViewMode('table')}
-                size="sm"
-              >
-                <List className="h-4 w-4 mr-1" />
-                Table
-              </Button>
-            </div>
-            
-            <Select
-              value={marketFilter}
-              onValueChange={setMarketFilter}
-            >
-              <SelectTrigger className="h-9 w-[140px]">
-                <SelectValue placeholder="Market" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Markets</SelectItem>
-                <SelectItem value="match-result">Match Result</SelectItem>
-                <SelectItem value="over-under">Over/Under</SelectItem>
-                <SelectItem value="btts">Both Teams to Score</SelectItem>
-              </SelectContent>
-            </Select>
-            
             {/* Last updated indicator */}
             <div className="text-xs text-gray-500 dark:text-gray-400 flex items-center">
               <Clock className="h-3 w-3 mr-1" />
