@@ -16,7 +16,8 @@ import {
   TrendingUp,
   Dumbbell,
   Trophy,
-  Timer
+  Timer,
+  Settings
 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { cn } from '@/lib/utils';
@@ -152,6 +153,17 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
               )}>
                 <Database className="h-4 w-4 mr-2" />
                 Scraper Status
+              </a>
+            </Link>
+            <Link href="/admin">
+              <a className={cn(
+                "flex items-center px-2 py-2 rounded-md",
+                location === "/admin" 
+                  ? "bg-blue-50 dark:bg-blue-900/30 text-primary dark:text-blue-400 font-medium" 
+                  : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700"
+              )}>
+                <Settings className="h-4 w-4 mr-2" />
+                Admin Panel
               </a>
             </Link>
           </div>
