@@ -23,10 +23,11 @@ import { cn } from '@/lib/utils';
 
 interface SidebarProps {
   isOpen: boolean;
+  isHovering: boolean;
   onClose: () => void;
 }
 
-export default function Sidebar({ isOpen, onClose }: SidebarProps) {
+export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
   const [location] = useLocation();
   const { 
     bookmakers, 
@@ -84,8 +85,8 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   return (
     <div
       className={cn(
-        "fixed z-20 inset-0 lg:relative lg:translate-x-0 transition duration-200 transform bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 w-64 flex-shrink-0 lg:block",
-        isOpen ? "translate-x-0" : "-translate-x-full"
+        "fixed z-20 inset-0 transition duration-200 transform bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 w-64 flex-shrink-0 shadow-lg",
+        (isOpen || isHovering) ? "translate-x-0" : "-translate-x-[calc(100%-12px)]"
       )}
     >
       {/* Sidebar header - blue gradient background */}
@@ -112,6 +113,16 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
             <Repeat className="h-3 w-3 mr-1 opacity-70" />
             <span>Next update: <span className="text-white">{nextUpdateStr}</span></span>
           </div>
+        </div>
+      </div>
+      
+      {/* Handle to grab sidebar when collapsed */}
+      <div className={cn(
+        "absolute right-0 top-1/2 transform -translate-y-1/2 h-16 w-3 bg-blue-600 dark:bg-blue-800 rounded-r-md transition-opacity duration-200",
+        (isOpen || isHovering) ? "opacity-0" : "opacity-100"
+      )}>
+        <div className="h-full flex items-center justify-center">
+          <div className="w-0.5 h-6 bg-blue-300 dark:bg-blue-500 rounded"></div>
         </div>
       </div>
       

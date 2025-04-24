@@ -14,7 +14,8 @@ interface LayoutProps {
 }
 
 export default function Layout({ children, title, subtitle }: LayoutProps) {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isHoveringSidebar, setIsHoveringSidebar] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const { toggleTheme, isDarkMode, mounted } = useThemeToggle();
   const { refreshData, isRefreshing } = useBookmakerContext();
@@ -22,16 +23,35 @@ export default function Layout({ children, title, subtitle }: LayoutProps) {
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
+  
+  // Handle mouse hover for sidebar
+  const handleMouseEnter = () => {
+    setIsHoveringSidebar(true);
+  };
+  
+  const handleMouseLeave = () => {
+    setIsHoveringSidebar(false);
+  };
 
   if (!mounted) return null;
 
   return (
     <div className="flex h-screen overflow-hidden">
-      {/* Sidebar */}
-      <Sidebar 
-        isOpen={sidebarOpen} 
-        onClose={() => setSidebarOpen(false)} 
+      {/* Left hover zone */}
+      <div 
+        className="fixed top-0 left-0 w-4 h-full z-20"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       />
+      
+      {/* Sidebar */}
+      <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+        <Sidebar 
+          isOpen={sidebarOpen}
+          isHovering={isHoveringSidebar}
+          onClose={() => setSidebarOpen(false)} 
+        />
+      </div>
 
       {/* Main Content */}
       <div className="flex-1 overflow-auto">
