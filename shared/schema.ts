@@ -23,8 +23,8 @@ export const bookmakers = pgTable("bookmakers", {
   name: text("name").notNull(),
   code: text("code").notNull().unique(),
   active: boolean("active").notNull().default(true),
-  lastScrape: timestamp("last_scrape"),
-  nextScrape: timestamp("next_scrape"),
+  lastScrape: timestamp("last_scrape").default(null),
+  nextScrape: timestamp("next_scrape").default(null),
   eventsScraped: integer("events_scraped").default(0),
   fileSize: text("file_size").default("0 KB"),
 });

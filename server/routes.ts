@@ -149,6 +149,68 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: 'Internal server error' });
     }
   });
+  
+  // Endpoint to check if a custom scraper exists for a bookmaker
+  app.get('/api/scrapers/custom/:bookmakerCode', async (req, res) => {
+    try {
+      const { bookmakerCode } = req.params;
+      if (!bookmakerCode) {
+        return res.status(400).json({ 
+          success: false, 
+          message: 'No bookmaker code provided' 
+        });
+      }
+      
+      // Check if the bookmaker exists first
+      const bookmaker = await storage.getBookmakerByCode(bookmakerCode);
+      if (!bookmaker) {
+        return res.status(404).json({ 
+          success: false, 
+          message: `Bookmaker with code '${bookmakerCode}' not found` 
+        });
+      }
+      
+      // Check for custom scraper
+      const hasCustomScraper = customScrapers.hasCustomScraper(bookmakerCode);
+      
+      // Find the actual file
+      const customScraperDir = path.join(process.cwd(), 'server', 'scrapers', 'custom');
+      const files = fs.readdirSync(customScraperDir);
+      const scraperFiles = files.filter(file => file.startsWith(`${bookmakerCode}_scraper`));
+      
+      let fileInfo = null;
+      if (scraperFiles.length > 0) {
+        const filePath = path.join(customScraperDir, scraperFiles[0]);
+        const stats = fs.statSync(filePath);
+        fileInfo = {
+          filename: scraperFiles[0],
+          path: filePath,
+          size: stats.size,
+          created: stats.birthtime,
+          modified: stats.mtime
+        };
+      }
+      
+      res.json({
+        success: true,
+        bookmaker: {
+          id: bookmaker.id,
+          code: bookmaker.code,
+          name: bookmaker.name,
+          active: bookmaker.active
+        },
+        hasCustomScraper,
+        file: fileInfo
+      });
+    } catch (error) {
+      console.error('Error checking custom scraper:', error);
+      res.status(500).json({ 
+        success: false, 
+        message: 'Failed to check custom scraper', 
+        error: error instanceof Error ? error.message : String(error) 
+      });
+    }
+  });
 
   app.post('/api/scrapers/refresh', async (req, res) => {
     try {
@@ -182,6 +244,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Endpoint to upload a scraper script
   app.post('/api/scrapers/upload', upload.single('file'), async (req, res) => {
     try {
+      // Check for file validation errors
+      if (req.fileValidationError) {
+        return res.status(400).json({ 
+          success: false, 
+          message: req.fileValidationError 
+        });
+      }
+      
       if (!req.file) {
         return res.status(400).json({ 
           success: false, 
@@ -206,8 +276,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
         // Continue anyway, as this might be platform-specific
       }
 
-      // Update the SCRIPT_CONFIG in integration.ts
-      const integrationPath = path.join(process.cwd(), 'server', 'scrapers', 'custom', 'integration.ts');
+      // Get the bookmaker from the database to confirm it exists
+      const bookmaker = await storage.getBookmakerByCode(bookmakerCode);
+      if (!bookmaker) {
+        // If the bookmaker doesn't exist, delete the uploaded file
+        try {
+          fs.unlinkSync(filePath);
+        } catch (unlinkError) {
+          console.error('Error deleting file:', unlinkError);
+        }
+        
+        return res.status(404).json({ 
+          success: false, 
+          message: `Bookmaker with code '${bookmakerCode}' not found` 
+        });
+      }
+
+      // If the bookmaker was found, mark it as having a custom scraper
+      if (!bookmaker.active) {
+        await storage.updateBookmaker(bookmaker.id, { active: true });
+      }
+      
+      // File extension used to determine execution method
+      const fileExt = path.extname(req.file.filename).toLowerCase();
+      let scriptType = 'js'; // Default to JavaScript
+      
+      if (fileExt === '.py') {
+        scriptType = 'python';
+      } else if (fileExt === '.sh') {
+        scriptType = 'shell';
+      } else if (fileExt === '.ts') {
+        scriptType = 'typescript';
+      }
       
       res.json({ 
         success: true, 
@@ -215,7 +315,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         file: {
           filename: req.file.filename,
           path: req.file.path,
-          size: req.file.size
+          size: req.file.size,
+          type: scriptType
+        },
+        bookmaker: {
+          id: bookmaker.id,
+          code: bookmaker.code,
+          name: bookmaker.name
         }
       });
     } catch (error) {
