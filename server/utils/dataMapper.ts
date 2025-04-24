@@ -217,6 +217,31 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     console.log(`- Events with 3 bookmakers: ${eventsWith3Bookmakers}`);
     console.log(`- Events with 4 bookmakers: ${eventsWith4Bookmakers}`);
     console.log(`Processed and mapped ${eventMap.size} events with at least 3 bookmakers`);
+    
+    // Get all events and delete any that don't meet our criteria anymore
+    // This ensures events that previously had 3+ bookmakers but now have fewer are removed
+    const allEvents = await storage.getEvents();
+    const currentEventIds = new Set([...eventMap.keys()]);
+    
+    let deletedCount = 0;
+    
+    console.log(`Checking ${allEvents.length} existing events against ${currentEventIds.size} mapped events`);
+    
+    // Remove events that don't meet criteria anymore
+    for (const event of allEvents) {
+      // If this event is not in our current map and has an eventId, it should be removed
+      if (event.eventId && !currentEventIds.has(event.eventId)) {
+        try {
+          // Delete the event from the database
+          await db.delete(events).where(eq(events.id, event.id));
+          deletedCount++;
+        } catch (error) {
+          console.error(`Error deleting event ${event.id}:`, error);
+        }
+      }
+    }
+    
+    console.log(`Deleted ${deletedCount} events that no longer meet the criteria`);
   } catch (error) {
     console.error('Error processing and mapping events:', error);
     throw error;
