@@ -147,7 +147,7 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
       {/* Sidebar header */}
       <div className="p-2.5 border-b border-gray-200 dark:border-slate-700">
         <div className="flex items-center justify-between">
-          <h1 className="text-base font-bold text-[#00BCFF]">pawaodds.pro</h1>
+          <h1 className="text-base font-bold text-gray-800 dark:text-white">pawa<span className="text-[#00BCFF]">odds</span>.pro</h1>
           <Button
             variant="ghost"
             size="icon"
@@ -181,7 +181,7 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
         </div>
       </div>
       
-      <div className="p-2 space-y-3">
+      <div className="p-3 space-y-4">
         <div>
           <p className="px-2 mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
             Main
@@ -321,7 +321,7 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
           <p className="px-2 mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
             Bookmakers
           </p>
-          <div className="space-y-0.5 bg-gray-50 dark:bg-slate-900/50 rounded-md p-2 border border-gray-100 dark:border-slate-700">
+          <div className="space-y-1 bg-gray-50 dark:bg-slate-900/50 rounded-md p-2 border border-gray-100 dark:border-slate-700">
             {bookmakers.map((bookmaker) => (
               <div key={bookmaker.id} className="flex items-center py-1">
                 <Checkbox
