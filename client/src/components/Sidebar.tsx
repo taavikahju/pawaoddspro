@@ -137,32 +137,32 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
   return (
     <div
       className={cn(
-        "fixed z-20 inset-0 transition duration-200 transform bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 w-64 flex-shrink-0 shadow-lg",
+        "fixed z-20 inset-0 transition duration-200 transform bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 w-56 flex-shrink-0 shadow-lg",
         (isOpen || isHovering) ? "translate-x-0" : "-translate-x-[calc(100%-12px)]"
       )}
     >
       {/* Sidebar header */}
-      <div className="p-4 border-b border-gray-200 dark:border-slate-700">
+      <div className="p-2.5 border-b border-gray-200 dark:border-slate-700">
         <div className="flex items-center justify-between">
-          <h1 className="text-lg font-bold text-gray-800 dark:text-white">pawaodds.pro</h1>
+          <h1 className="text-base font-bold text-gray-800 dark:text-white">pawaodds.pro</h1>
           <Button
             variant="ghost"
             size="icon"
             onClick={onClose}
-            className="lg:hidden rounded-md p-1 hover:bg-gray-100 dark:hover:bg-slate-700"
+            className="lg:hidden rounded-md p-0.5 hover:bg-gray-100 dark:hover:bg-slate-700"
           >
-            <XIcon className="h-5 w-5" />
+            <XIcon className="h-4 w-4" />
           </Button>
         </div>
         
         {/* Last update info */}
-        <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+        <div className="mt-1 text-[10px] text-gray-500 dark:text-gray-400">
           <div className="flex items-center">
-            <Clock className="h-3 w-3 mr-1" />
+            <Clock className="h-2.5 w-2.5 mr-1" />
             <span>Last update: <span className="text-gray-700 dark:text-gray-300">{lastUpdate}</span></span>
           </div>
-          <div className="flex items-center mt-1">
-            <Repeat className="h-3 w-3 mr-1" />
+          <div className="flex items-center mt-0.5">
+            <Repeat className="h-2.5 w-2.5 mr-1" />
             <span>Next update: <span className="text-gray-700 dark:text-gray-300">{nextUpdateStr}</span></span>
           </div>
         </div>
@@ -178,7 +178,7 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
         </div>
       </div>
       
-      <div className="p-4 space-y-6">
+      <div className="p-2 space-y-3">
         <div>
           <p className="px-2 mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
             Main
@@ -186,34 +186,34 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
           <div className="space-y-1">
             <Link href="/">
               <a className={cn(
-                "flex items-center px-2 py-2 rounded-md",
+                "flex items-center px-2 py-1 rounded-md text-sm",
                 location === "/" 
                   ? "bg-blue-50 dark:bg-blue-900/30 text-primary dark:text-blue-400 font-medium" 
                   : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700"
               )}>
-                <LayoutDashboard className="h-4 w-4 mr-2" />
+                <LayoutDashboard className="h-3.5 w-3.5 mr-1.5" />
                 Dashboard
               </a>
             </Link>
             <Link href="/scraper-status">
               <a className={cn(
-                "flex items-center px-2 py-2 rounded-md",
+                "flex items-center px-2 py-1 rounded-md text-sm",
                 location === "/scraper-status" 
                   ? "bg-blue-50 dark:bg-blue-900/30 text-primary dark:text-blue-400 font-medium" 
                   : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700"
               )}>
-                <Database className="h-4 w-4 mr-2" />
+                <Database className="h-3.5 w-3.5 mr-1.5" />
                 Scraper Status
               </a>
             </Link>
             <Link href="/admin">
               <a className={cn(
-                "flex items-center px-2 py-2 rounded-md",
+                "flex items-center px-2 py-1 rounded-md text-sm",
                 location === "/admin" 
                   ? "bg-blue-50 dark:bg-blue-900/30 text-primary dark:text-blue-400 font-medium" 
                   : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700"
               )}>
-                <Settings className="h-4 w-4 mr-2" />
+                <Settings className="h-3.5 w-3.5 mr-1.5" />
                 Admin Panel
               </a>
             </Link>
@@ -224,12 +224,12 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
           <p className="px-2 mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
             Quick Filters
           </p>
-          <div className="flex flex-col space-y-2 mb-4">
+          <div className="flex flex-col space-y-1 mb-2">
             <Button 
               variant={activeFilter === 'ghana' ? 'default' : 'outline'} 
               size="sm" 
               className={cn(
-                "py-2 px-3 h-auto text-sm font-medium justify-start",
+                "py-1 px-2 h-auto text-xs font-medium justify-start",
                 activeFilter === 'ghana' 
                   ? "bg-primary text-white hover:bg-primary/90" 
                   : "bg-white dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700"
@@ -239,8 +239,6 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
                 const ghanaBookmakers = bookmakers
                   .filter(b => b.code === 'bp GH' || b.code === 'sporty')
                   .map(b => b.code);
-                
-                console.log('Ghana bookmakers:', ghanaBookmakers);
                 
                 // Deselect all bookmakers
                 bookmakers.forEach(b => {
@@ -255,7 +253,7 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
                 setActiveFilter('ghana');
               }}
             >
-              <CountryFlag countryCode="GH" countryName="Ghana" size="md" className="mr-2" />
+              <CountryFlag countryCode="GH" countryName="Ghana" size="sm" className="mr-1.5" />
               Ghana
             </Button>
             
@@ -263,7 +261,7 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
               variant={activeFilter === 'kenya' ? 'default' : 'outline'} 
               size="sm" 
               className={cn(
-                "py-2 px-3 h-auto text-sm font-medium justify-start",
+                "py-1 px-2 h-auto text-xs font-medium justify-start",
                 activeFilter === 'kenya' 
                   ? "bg-primary text-white hover:bg-primary/90" 
                   : "bg-white dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700"
@@ -273,8 +271,6 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
                 const kenyaBookmakers = bookmakers
                   .filter(b => b.code === 'bp KE' || b.code === 'betika KE')
                   .map(b => b.code);
-                
-                console.log('Kenya bookmakers:', kenyaBookmakers);
                 
                 // Deselect all bookmakers
                 bookmakers.forEach(b => {
@@ -289,7 +285,7 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
                 setActiveFilter('kenya');
               }}
             >
-              <CountryFlag countryCode="KE" countryName="Kenya" size="md" className="mr-2" />
+              <CountryFlag countryCode="KE" countryName="Kenya" size="sm" className="mr-1.5" />
               Kenya
             </Button>
             
@@ -297,7 +293,7 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
               variant={activeFilter === 'all' ? 'default' : 'outline'} 
               size="sm" 
               className={cn(
-                "py-2 px-3 h-auto text-sm font-medium justify-start",
+                "py-1 px-2 h-auto text-xs font-medium justify-start",
                 activeFilter === 'all' 
                   ? "bg-primary text-white hover:bg-primary/90" 
                   : "bg-white dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700"
@@ -314,7 +310,7 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
                 setActiveFilter('all');
               }}
             >
-              <Filter className="h-4 w-4 mr-2" />
+              <Filter className="h-3.5 w-3.5 mr-1.5" />
               All Bookmakers
             </Button>
           </div>
@@ -322,9 +318,9 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
           <p className="px-2 mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
             Bookmakers
           </p>
-          <div className="space-y-1 bg-gray-50 dark:bg-slate-900/50 rounded-md p-2 border border-gray-100 dark:border-slate-700">
+          <div className="space-y-0.5 bg-gray-50 dark:bg-slate-900/50 rounded-md p-2 border border-gray-100 dark:border-slate-700">
             {bookmakers.map((bookmaker) => (
-              <div key={bookmaker.id} className="flex items-center py-1.5">
+              <div key={bookmaker.id} className="flex items-center py-1">
                 <Checkbox
                   id={`bookmaker-${bookmaker.id}`}
                   checked={selectedBookmakers.includes(bookmaker.code)}
@@ -332,11 +328,11 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
                     toggleBookmaker(bookmaker.code);
                     // Active filter will be automatically updated via the useEffect
                   }}
-                  className="h-4 w-4 rounded text-blue-500"
+                  className="h-3.5 w-3.5 rounded text-blue-500"
                 />
                 <Label
                   htmlFor={`bookmaker-${bookmaker.id}`}
-                  className={cn("ml-2 text-sm font-medium", getBookmakerColor(bookmaker.code))}
+                  className={cn("ml-1.5 text-xs font-medium", getBookmakerColor(bookmaker.code))}
                 >
                   {bookmaker.name}
                 </Label>
@@ -349,13 +345,13 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
         
         {/* Margin Filter Section */}
         <div>
-          <p className="px-2 mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+          <p className="px-2 mb-1 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
             Margin Filter
           </p>
-          <div className="space-y-3 bg-gray-50 dark:bg-slate-900/50 rounded-md p-3 border border-gray-100 dark:border-slate-700">
-            <div className="mb-1">
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+          <div className="space-y-2 bg-gray-50 dark:bg-slate-900/50 rounded-md p-2 border border-gray-100 dark:border-slate-700">
+            <div>
+              <div className="flex justify-between items-center mb-1">
+                <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
                   Max Margin: {marginFilter}%
                 </span>
               </div>
@@ -366,34 +362,35 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
                 max={15}
                 step={1}
                 onValueChange={(value) => setMarginFilter(value[0])}
-                className="mb-2"
+                className="mb-1"
               />
               
-              <div className="flex justify-between items-center text-xs text-gray-500 dark:text-gray-400">
+              <div className="flex justify-between items-center text-[10px] text-gray-500 dark:text-gray-400">
                 <span>0%</span>
                 <span>5%</span>
                 <span>10%</span>
                 <span>15%</span>
               </div>
-              <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+              <div className="mt-1 text-[10px] text-gray-500 dark:text-gray-400">
                 Only show events where at least one of your selected bookmakers has a margin of {marginFilter}% or less
               </div>
             </div>
           </div>
         </div>
         
-        <Separator className="border-gray-200 dark:border-slate-700" />
+        <Separator className="border-gray-200 dark:border-slate-700 my-1" />
         
-        <div className="bg-gray-50 dark:bg-slate-900/50 rounded-md p-3 border border-gray-100 dark:border-slate-700">
+        <div className="bg-gray-50 dark:bg-slate-900/50 rounded-md p-2 border border-gray-100 dark:border-slate-700">
           {/* Theme toggle */}
-          <div className="flex justify-between items-center mb-3">
-            <span className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center">
-              {isDarkMode ? <MoonIcon className="h-4 w-4 mr-2 text-primary" /> : <SunIcon className="h-4 w-4 mr-2 text-primary" />}
+          <div className="flex justify-between items-center">
+            <span className="text-xs font-medium text-gray-700 dark:text-gray-300 flex items-center">
+              {isDarkMode ? <MoonIcon className="h-3.5 w-3.5 mr-1" /> : <SunIcon className="h-3.5 w-3.5 mr-1" />}
               {isDarkMode ? 'Dark Mode' : 'Light Mode'}
             </span>
             <Switch
               checked={isDarkMode}
               onCheckedChange={toggleTheme}
+              className="scale-75 origin-right"
             />
           </div>
           

@@ -373,9 +373,9 @@
     "date": "2025-04-24",
     "time": "19:30",
     "odds": {
-      "home": 1.55,
-      "draw": 4.41,
-      "away": 6.8
+      "home": 1.54,
+      "draw": 4.43,
+      "away": 6.89
     },
     "raw": {
       "eventId": "50852723",
@@ -383,9 +383,9 @@
       "tournament": "LaLiga",
       "event": "Atletico Madrid - Rayo Vallecano",
       "market": "1X2",
-      "home_odds": "1.55",
-      "draw_odds": "4.41",
-      "away_odds": "6.80",
+      "home_odds": "1.54",
+      "draw_odds": "4.43",
+      "away_odds": "6.89",
       "start_time": "2025-04-24 19:30"
     }
   },
@@ -581,9 +581,9 @@
     "date": "2025-04-25",
     "time": "18:30",
     "odds": {
-      "home": 1.5,
-      "draw": 5.15,
-      "away": 6.37
+      "home": 1.49,
+      "draw": 5.18,
+      "away": 6.46
     },
     "raw": {
       "eventId": "51269553",
@@ -591,9 +591,9 @@
       "tournament": "Bundesliga",
       "event": "Stuttgart - Heidenheim",
       "market": "1X2",
-      "home_odds": "1.50",
-      "draw_odds": "5.15",
-      "away_odds": "6.37",
+      "home_odds": "1.49",
+      "draw_odds": "5.18",
+      "away_odds": "6.46",
       "start_time": "2025-04-25 18:30"
     }
   },
@@ -737,9 +737,9 @@
     "date": "2025-04-26",
     "time": "16:30",
     "odds": {
-      "home": 2.24,
+      "home": 2.23,
       "draw": 3.86,
-      "away": 2.99
+      "away": 3.01
     },
     "raw": {
       "eventId": "51269557",
@@ -747,9 +747,9 @@
       "tournament": "Bundesliga",
       "event": "Eintracht Frankfurt - Leipzig",
       "market": "1X2",
-      "home_odds": "2.24",
+      "home_odds": "2.23",
       "draw_odds": "3.86",
-      "away_odds": "2.99",
+      "away_odds": "3.01",
       "start_time": "2025-04-26 16:30"
     }
   },
@@ -1751,9 +1751,9 @@
     "date": "2025-05-04",
     "time": "15:00",
     "odds": {
-      "home": 3.26,
-      "draw": 3.89,
-      "away": 2.06
+      "home": 3.29,
+      "draw": 3.85,
+      "away": 2.05
     },
     "raw": {
       "eventId": "50955917",
@@ -1761,9 +1761,9 @@
       "tournament": "Ligue 1",
       "event": "Strasbourg - PSG",
       "market": "1X2",
-      "home_odds": "3.26",
-      "draw_odds": "3.89",
-      "away_odds": "2.06",
+      "home_odds": "3.29",
+      "draw_odds": "3.85",
+      "away_odds": "2.05",
       "start_time": "2025-05-04 15:00"
     }
   },
@@ -2687,9 +2687,9 @@
     "date": "2025-04-24",
     "time": "19:00",
     "odds": {
-      "home": 4.44,
-      "draw": 4.58,
-      "away": 1.7
+      "home": 4.59,
+      "draw": 4.61,
+      "away": 1.68
     },
     "raw": {
       "eventId": "50868501",
@@ -2697,9 +2697,9 @@
       "tournament": "Eredivisie",
       "event": "FC Twente Enschede - PSV Eindhoven",
       "market": "1X2",
-      "home_odds": "4.44",
-      "draw_odds": "4.58",
-      "away_odds": "1.70",
+      "home_odds": "4.59",
+      "draw_odds": "4.61",
+      "away_odds": "1.68",
       "start_time": "2025-04-24 19:00"
     }
   },
@@ -3692,6 +3692,84 @@
     }
   },
   {
+    "id": "59010467",
+    "eventId": "59010467",
+    "teams": "Carabobo FC - Botafogo FR RJ",
+    "league": "CONMEBOL Libertadores",
+    "sport": "football",
+    "country": "International Clubs",
+    "date": "2025-05-06",
+    "time": "22:00",
+    "odds": {
+      "home": 6.75,
+      "draw": 4.9,
+      "away": 1.39
+    },
+    "raw": {
+      "eventId": "59010467",
+      "country": "International Clubs",
+      "tournament": "CONMEBOL Libertadores",
+      "event": "Carabobo FC - Botafogo FR RJ",
+      "market": "1X2",
+      "home_odds": "6.75",
+      "draw_odds": "4.90",
+      "away_odds": "1.39",
+      "start_time": "2025-05-06 22:00"
+    }
+  },
+  {
+    "id": "59010965",
+    "eventId": "59010965",
+    "teams": "Fortaleza EC CE - Colo-Colo",
+    "league": "CONMEBOL Libertadores",
+    "sport": "football",
+    "country": "International Clubs",
+    "date": "2025-05-07",
+    "time": "00:30",
+    "odds": {
+      "home": 1.82,
+      "draw": 3.4,
+      "away": 4.5
+    },
+    "raw": {
+      "eventId": "59010965",
+      "country": "International Clubs",
+      "tournament": "CONMEBOL Libertadores",
+      "event": "Fortaleza EC CE - Colo-Colo",
+      "market": "1X2",
+      "home_odds": "1.82",
+      "draw_odds": "3.40",
+      "away_odds": "4.50",
+      "start_time": "2025-05-07 00:30"
+    }
+  },
+  {
+    "id": "59011685",
+    "eventId": "59011685",
+    "teams": "Velez Sarsfield - Club Olimpia",
+    "league": "CONMEBOL Libertadores",
+    "sport": "football",
+    "country": "International Clubs",
+    "date": "2025-05-07",
+    "time": "00:30",
+    "odds": {
+      "home": 1.57,
+      "draw": 3.7,
+      "away": 6.2
+    },
+    "raw": {
+      "eventId": "59011685",
+      "country": "International Clubs",
+      "tournament": "CONMEBOL Libertadores",
+      "event": "Velez Sarsfield - Club Olimpia",
+      "market": "1X2",
+      "home_odds": "1.57",
+      "draw_odds": "3.70",
+      "away_odds": "6.20",
+      "start_time": "2025-05-07 00:30"
+    }
+  },
+  {
     "id": "59011763",
     "eventId": "59011763",
     "teams": "San Antonio Bulo Bulo - CA Penarol Montevideo",
@@ -3715,84 +3793,6 @@
       "draw_odds": "3.10",
       "away_odds": "2.30",
       "start_time": "2025-05-07 02:00"
-    }
-  },
-  {
-    "id": "59011143",
-    "eventId": "59011143",
-    "teams": "EC Bahia BA - Club Nacional de Football",
-    "league": "CONMEBOL Libertadores",
-    "sport": "football",
-    "country": "International Clubs",
-    "date": "2025-05-07",
-    "time": "22:00",
-    "odds": {
-      "home": 1.53,
-      "draw": 4,
-      "away": 6.1
-    },
-    "raw": {
-      "eventId": "59011143",
-      "country": "International Clubs",
-      "tournament": "CONMEBOL Libertadores",
-      "event": "EC Bahia BA - Club Nacional de Football",
-      "market": "1X2",
-      "home_odds": "1.53",
-      "draw_odds": "4.00",
-      "away_odds": "6.10",
-      "start_time": "2025-05-07 22:00"
-    }
-  },
-  {
-    "id": "59010761",
-    "eventId": "59010761",
-    "teams": "CA Central Cordoba SE - CR Flamengo RJ",
-    "league": "CONMEBOL Libertadores",
-    "sport": "football",
-    "country": "International Clubs",
-    "date": "2025-05-08",
-    "time": "00:30",
-    "odds": {
-      "home": 5.5,
-      "draw": 3.5,
-      "away": 1.66
-    },
-    "raw": {
-      "eventId": "59010761",
-      "country": "International Clubs",
-      "tournament": "CONMEBOL Libertadores",
-      "event": "CA Central Cordoba SE - CR Flamengo RJ",
-      "market": "1X2",
-      "home_odds": "5.50",
-      "draw_odds": "3.50",
-      "away_odds": "1.66",
-      "start_time": "2025-05-08 00:30"
-    }
-  },
-  {
-    "id": "59011141",
-    "eventId": "59011141",
-    "teams": "Atletico Nacional Medellin - SC Internacional RS",
-    "league": "CONMEBOL Libertadores",
-    "sport": "football",
-    "country": "International Clubs",
-    "date": "2025-05-09",
-    "time": "00:30",
-    "odds": {
-      "home": 3.75,
-      "draw": 3.25,
-      "away": 2
-    },
-    "raw": {
-      "eventId": "59011141",
-      "country": "International Clubs",
-      "tournament": "CONMEBOL Libertadores",
-      "event": "Atletico Nacional Medellin - SC Internacional RS",
-      "market": "1X2",
-      "home_odds": "3.75",
-      "draw_odds": "3.25",
-      "away_odds": "2.00",
-      "start_time": "2025-05-09 00:30"
     }
   },
   {
@@ -9135,9 +9135,9 @@
     "date": "2025-04-26",
     "time": "05:00",
     "odds": {
-      "home": 2.05,
-      "draw": 3.1,
-      "away": 3.75
+      "home": 2.1,
+      "draw": 3,
+      "away": 3.7
     },
     "raw": {
       "eventId": "57584757",
@@ -9145,9 +9145,9 @@
       "tournament": "J.League 2",
       "event": "Tokushima Vortis - Kataller Toyama",
       "market": "1X2",
-      "home_odds": "2.05",
-      "draw_odds": "3.10",
-      "away_odds": "3.75",
+      "home_odds": "2.10",
+      "draw_odds": "3.00",
+      "away_odds": "3.70",
       "start_time": "2025-04-26 05:00"
     }
   },
@@ -9487,6 +9487,32 @@
       "draw_odds": "4.25",
       "away_odds": "1.46",
       "start_time": "2025-04-30 16:00"
+    }
+  },
+  {
+    "id": "58683039",
+    "eventId": "58683039",
+    "teams": "Ceramica Cleopatra - National Bank of Egypt SC",
+    "league": "Premier League",
+    "sport": "football",
+    "country": "Egypt",
+    "date": "2025-05-01",
+    "time": "13:00",
+    "odds": {
+      "home": 2.3,
+      "draw": 3.1,
+      "away": 3.25
+    },
+    "raw": {
+      "eventId": "58683039",
+      "country": "Egypt",
+      "tournament": "Premier League",
+      "event": "Ceramica Cleopatra - National Bank of Egypt SC",
+      "market": "1X2",
+      "home_odds": "2.30",
+      "draw_odds": "3.10",
+      "away_odds": "3.25",
+      "start_time": "2025-05-01 13:00"
     }
   },
   {
@@ -11047,32 +11073,6 @@
       "draw_odds": "4.25",
       "away_odds": "1.43",
       "start_time": "2025-05-17 17:00"
-    }
-  },
-  {
-    "id": "59719672",
-    "eventId": "59719672",
-    "teams": "Jamshedpur FC - Hyderabad FC",
-    "league": "Indian Super Cup",
-    "sport": "football",
-    "country": "India",
-    "date": "2025-04-24",
-    "time": "14:30",
-    "odds": {
-      "home": 1.73,
-      "draw": 3.9,
-      "away": 4.1
-    },
-    "raw": {
-      "eventId": "59719672",
-      "country": "India",
-      "tournament": "Indian Super Cup",
-      "event": "Jamshedpur FC - Hyderabad FC",
-      "market": "1X2",
-      "home_odds": "1.73",
-      "draw_odds": "3.90",
-      "away_odds": "4.10",
-      "start_time": "2025-04-24 14:30"
     }
   },
   {
@@ -12749,9 +12749,9 @@
     "date": "2025-04-26",
     "time": "14:00",
     "odds": {
-      "home": 2.6,
-      "draw": 3.33,
-      "away": 2.65
+      "home": 2.65,
+      "draw": 3.4,
+      "away": 2.55
     },
     "raw": {
       "eventId": "51099861",
@@ -12759,9 +12759,9 @@
       "tournament": "League Two",
       "event": "Gillingham FC - Swindon Town",
       "market": "1X2",
-      "home_odds": "2.60",
-      "draw_odds": "3.33",
-      "away_odds": "2.65",
+      "home_odds": "2.65",
+      "draw_odds": "3.40",
+      "away_odds": "2.55",
       "start_time": "2025-04-26 14:00"
     }
   },
@@ -13581,8 +13581,8 @@
     "date": "2025-04-27",
     "time": "05:00",
     "odds": {
-      "home": 1.67,
-      "draw": 4,
+      "home": 1.64,
+      "draw": 4.1,
       "away": 4
     },
     "raw": {
@@ -13591,8 +13591,8 @@
       "tournament": "NSW NPL 1",
       "event": "Blacktown City FC - Sydney United",
       "market": "1X2",
-      "home_odds": "1.67",
-      "draw_odds": "4.00",
+      "home_odds": "1.64",
+      "draw_odds": "4.10",
       "away_odds": "4.00",
       "start_time": "2025-04-27 05:00"
     }
@@ -14205,9 +14205,9 @@
     "date": "2025-04-26",
     "time": "06:45",
     "odds": {
-      "home": 1.33,
-      "draw": 5.4,
-      "away": 6.1
+      "home": 1.41,
+      "draw": 5.1,
+      "away": 5.2
     },
     "raw": {
       "eventId": "58064283",
@@ -14215,9 +14215,9 @@
       "tournament": "Tasmania NPL",
       "event": "Launceston City FC - Kingborough Lions United FC",
       "market": "1X2",
-      "home_odds": "1.33",
-      "draw_odds": "5.40",
-      "away_odds": "6.10",
+      "home_odds": "1.41",
+      "draw_odds": "5.10",
+      "away_odds": "5.20",
       "start_time": "2025-04-26 06:45"
     }
   },
@@ -14976,6 +14976,58 @@
     }
   },
   {
+    "id": "51446327",
+    "eventId": "51446327",
+    "teams": "York City FC - Solihull Moors FC",
+    "league": "National League",
+    "sport": "football",
+    "country": "England",
+    "date": "2025-04-26",
+    "time": "14:00",
+    "odds": {
+      "home": 1.44,
+      "draw": 4.5,
+      "away": 6.1
+    },
+    "raw": {
+      "eventId": "51446327",
+      "country": "England",
+      "tournament": "National League",
+      "event": "York City FC - Solihull Moors FC",
+      "market": "1X2",
+      "home_odds": "1.44",
+      "draw_odds": "4.50",
+      "away_odds": "6.10",
+      "start_time": "2025-04-26 14:00"
+    }
+  },
+  {
+    "id": "51446333",
+    "eventId": "51446333",
+    "teams": "Southend United - Wealdstone FC",
+    "league": "National League",
+    "sport": "football",
+    "country": "England",
+    "date": "2025-04-26",
+    "time": "16:30",
+    "odds": {
+      "home": 1.61,
+      "draw": 3.9,
+      "away": 5
+    },
+    "raw": {
+      "eventId": "51446333",
+      "country": "England",
+      "tournament": "National League",
+      "event": "Southend United - Wealdstone FC",
+      "market": "1X2",
+      "home_odds": "1.61",
+      "draw_odds": "3.90",
+      "away_odds": "5.00",
+      "start_time": "2025-04-26 16:30"
+    }
+  },
+  {
     "id": "56674287",
     "eventId": "56674287",
     "teams": "IK Oddevold - GIF Sundsvall",
@@ -15531,9 +15583,9 @@
     "date": "2025-04-25",
     "time": "13:00",
     "odds": {
-      "home": 1.99,
+      "home": 1.95,
       "draw": 3.6,
-      "away": 3.1
+      "away": 3.2
     },
     "raw": {
       "eventId": "51923773",
@@ -15541,9 +15593,9 @@
       "tournament": "Primavera 2",
       "event": "Pescara Calcio - Ternana Calcio U19",
       "market": "1X2",
-      "home_odds": "1.99",
+      "home_odds": "1.95",
       "draw_odds": "3.60",
-      "away_odds": "3.10",
+      "away_odds": "3.20",
       "start_time": "2025-04-25 13:00"
     }
   },
@@ -17212,6 +17264,110 @@
     }
   },
   {
+    "id": "51869581",
+    "eventId": "51869581",
+    "teams": "Colonia Moscardo - UD Melilla",
+    "league": "Segunda Federacion",
+    "sport": "football",
+    "country": "Spain",
+    "date": "2025-04-27",
+    "time": "10:00",
+    "odds": {
+      "home": 2.6,
+      "draw": 2.8,
+      "away": 2.6
+    },
+    "raw": {
+      "eventId": "51869581",
+      "country": "Spain",
+      "tournament": "Segunda Federacion",
+      "event": "Colonia Moscardo - UD Melilla",
+      "market": "1X2",
+      "home_odds": "2.60",
+      "draw_odds": "2.80",
+      "away_odds": "2.60",
+      "start_time": "2025-04-27 10:00"
+    }
+  },
+  {
+    "id": "51865821",
+    "eventId": "51865821",
+    "teams": "Coruxo FC - Rayo Cantabria",
+    "league": "Segunda Federacion",
+    "sport": "football",
+    "country": "Spain",
+    "date": "2025-04-27",
+    "time": "10:00",
+    "odds": {
+      "home": 2.15,
+      "draw": 2.85,
+      "away": 3.2
+    },
+    "raw": {
+      "eventId": "51865821",
+      "country": "Spain",
+      "tournament": "Segunda Federacion",
+      "event": "Coruxo FC - Rayo Cantabria",
+      "market": "1X2",
+      "home_odds": "2.15",
+      "draw_odds": "2.85",
+      "away_odds": "3.20",
+      "start_time": "2025-04-27 10:00"
+    }
+  },
+  {
+    "id": "51868481",
+    "eventId": "51868481",
+    "teams": "CR Granada - Real Balompedica Linense",
+    "league": "Segunda Federacion",
+    "sport": "football",
+    "country": "Spain",
+    "date": "2025-04-27",
+    "time": "10:00",
+    "odds": {
+      "home": 2.45,
+      "draw": 2.9,
+      "away": 2.65
+    },
+    "raw": {
+      "eventId": "51868481",
+      "country": "Spain",
+      "tournament": "Segunda Federacion",
+      "event": "CR Granada - Real Balompedica Linense",
+      "market": "1X2",
+      "home_odds": "2.45",
+      "draw_odds": "2.90",
+      "away_odds": "2.65",
+      "start_time": "2025-04-27 10:00"
+    }
+  },
+  {
+    "id": "51866505",
+    "eventId": "51866505",
+    "teams": "Deportivo Aragon - CD Teruel",
+    "league": "Segunda Federacion",
+    "sport": "football",
+    "country": "Spain",
+    "date": "2025-04-27",
+    "time": "10:00",
+    "odds": {
+      "home": 2.55,
+      "draw": 3,
+      "away": 2.45
+    },
+    "raw": {
+      "eventId": "51866505",
+      "country": "Spain",
+      "tournament": "Segunda Federacion",
+      "event": "Deportivo Aragon - CD Teruel",
+      "market": "1X2",
+      "home_odds": "2.55",
+      "draw_odds": "3.00",
+      "away_odds": "2.45",
+      "start_time": "2025-04-27 10:00"
+    }
+  },
+  {
     "id": "51867119",
     "eventId": "51867119",
     "teams": "Elche B - CE Europa",
@@ -17364,110 +17520,6 @@
       "home_odds": "2.30",
       "draw_odds": "2.75",
       "away_odds": "3.00",
-      "start_time": "2025-04-27 10:00"
-    }
-  },
-  {
-    "id": "51865823",
-    "eventId": "51865823",
-    "teams": "Real Aviles CF - CD Guijuelo",
-    "league": "Segunda Federacion",
-    "sport": "football",
-    "country": "Spain",
-    "date": "2025-04-27",
-    "time": "10:00",
-    "odds": {
-      "home": 1.36,
-      "draw": 4,
-      "away": 7
-    },
-    "raw": {
-      "eventId": "51865823",
-      "country": "Spain",
-      "tournament": "Segunda Federacion",
-      "event": "Real Aviles CF - CD Guijuelo",
-      "market": "1X2",
-      "home_odds": "1.36",
-      "draw_odds": "4.00",
-      "away_odds": "7.00",
-      "start_time": "2025-04-27 10:00"
-    }
-  },
-  {
-    "id": "51866509",
-    "eventId": "51866509",
-    "teams": "Real Sociedad C - UD Logrones",
-    "league": "Segunda Federacion",
-    "sport": "football",
-    "country": "Spain",
-    "date": "2025-04-27",
-    "time": "10:00",
-    "odds": {
-      "home": 4.5,
-      "draw": 3.1,
-      "away": 1.71
-    },
-    "raw": {
-      "eventId": "51866509",
-      "country": "Spain",
-      "tournament": "Segunda Federacion",
-      "event": "Real Sociedad C - UD Logrones",
-      "market": "1X2",
-      "home_odds": "4.50",
-      "draw_odds": "3.10",
-      "away_odds": "1.71",
-      "start_time": "2025-04-27 10:00"
-    }
-  },
-  {
-    "id": "51865807",
-    "eventId": "51865807",
-    "teams": "Real Valladolid Promesas - Numancia CD",
-    "league": "Segunda Federacion",
-    "sport": "football",
-    "country": "Spain",
-    "date": "2025-04-27",
-    "time": "10:00",
-    "odds": {
-      "home": 3.4,
-      "draw": 2.85,
-      "away": 2.05
-    },
-    "raw": {
-      "eventId": "51865807",
-      "country": "Spain",
-      "tournament": "Segunda Federacion",
-      "event": "Real Valladolid Promesas - Numancia CD",
-      "market": "1X2",
-      "home_odds": "3.40",
-      "draw_odds": "2.85",
-      "away_odds": "2.05",
-      "start_time": "2025-04-27 10:00"
-    }
-  },
-  {
-    "id": "51865811",
-    "eventId": "51865811",
-    "teams": "RS Gimnastica de Torrelavega - Pontevedra CF",
-    "league": "Segunda Federacion",
-    "sport": "football",
-    "country": "Spain",
-    "date": "2025-04-27",
-    "time": "10:00",
-    "odds": {
-      "home": 3.8,
-      "draw": 3.33,
-      "away": 1.77
-    },
-    "raw": {
-      "eventId": "51865811",
-      "country": "Spain",
-      "tournament": "Segunda Federacion",
-      "event": "RS Gimnastica de Torrelavega - Pontevedra CF",
-      "market": "1X2",
-      "home_odds": "3.80",
-      "draw_odds": "3.33",
-      "away_odds": "1.77",
       "start_time": "2025-04-27 10:00"
     }
   },
@@ -17663,9 +17715,9 @@
     "date": "2025-04-27",
     "time": "13:00",
     "odds": {
-      "home": 1.87,
+      "home": 1.84,
       "draw": 3.7,
-      "away": 3.6
+      "away": 3.75
     },
     "raw": {
       "eventId": "51857237",
@@ -17673,9 +17725,9 @@
       "tournament": "1. Lig",
       "event": "MKE Ankaragucu - Corum FK",
       "market": "1X2",
-      "home_odds": "1.87",
+      "home_odds": "1.84",
       "draw_odds": "3.70",
-      "away_odds": "3.60",
+      "away_odds": "3.75",
       "start_time": "2025-04-27 13:00"
     }
   },
@@ -17923,9 +17975,9 @@
     "date": "2025-04-26",
     "time": "11:15",
     "odds": {
-      "home": 2.2,
-      "draw": 3.6,
-      "away": 2.9
+      "home": 2.25,
+      "draw": 3.7,
+      "away": 2.75
     },
     "raw": {
       "eventId": "60046653",
@@ -17933,9 +17985,9 @@
       "tournament": "Cymru Premier",
       "event": "Caernarfon Town FC - Barry Town United FC",
       "market": "1X2",
-      "home_odds": "2.20",
-      "draw_odds": "3.60",
-      "away_odds": "2.90",
+      "home_odds": "2.25",
+      "draw_odds": "3.70",
+      "away_odds": "2.75",
       "start_time": "2025-04-26 11:15"
     }
   },
@@ -19067,9 +19119,9 @@
     "date": "2025-04-26",
     "time": "14:00",
     "odds": {
-      "home": 6.9,
-      "draw": 4.6,
-      "away": 1.37
+      "home": 7.2,
+      "draw": 4.8,
+      "away": 1.35
     },
     "raw": {
       "eventId": "51448595",
@@ -19077,9 +19129,9 @@
       "tournament": "National League North",
       "event": "Rushall Olympic - Chorley FC",
       "market": "1X2",
-      "home_odds": "6.90",
-      "draw_odds": "4.60",
-      "away_odds": "1.37",
+      "home_odds": "7.20",
+      "draw_odds": "4.80",
+      "away_odds": "1.35",
       "start_time": "2025-04-26 14:00"
     }
   },
@@ -19405,9 +19457,9 @@
     "date": "2025-04-24",
     "time": "15:30",
     "odds": {
-      "home": 3.1,
-      "draw": 3.33,
-      "away": 2.3
+      "home": 2.95,
+      "draw": 3.3,
+      "away": 2.45
     },
     "raw": {
       "eventId": "59902906",
@@ -19415,9 +19467,9 @@
       "tournament": "NM Cup",
       "event": "Grorud IL - Hoedd IL",
       "market": "1X2",
-      "home_odds": "3.10",
-      "draw_odds": "3.33",
-      "away_odds": "2.30",
+      "home_odds": "2.95",
+      "draw_odds": "3.30",
+      "away_odds": "2.45",
       "start_time": "2025-04-24 15:30"
     }
   },
@@ -19457,8 +19509,8 @@
     "date": "2025-04-24",
     "time": "16:00",
     "odds": {
-      "home": 31,
-      "draw": 13.5,
+      "home": 30,
+      "draw": 13,
       "away": 1.06
     },
     "raw": {
@@ -19467,8 +19519,8 @@
       "tournament": "NM Cup",
       "event": "Bjarg - SK Brann",
       "market": "1X2",
-      "home_odds": "31.00",
-      "draw_odds": "13.50",
+      "home_odds": "30.00",
+      "draw_odds": "13.00",
       "away_odds": "1.06",
       "start_time": "2025-04-24 16:00"
     }
@@ -19588,7 +19640,7 @@
     "time": "16:00",
     "odds": {
       "home": 16,
-      "draw": 9.6,
+      "draw": 9.8,
       "away": 1.13
     },
     "raw": {
@@ -19598,7 +19650,7 @@
       "event": "Flekkeroy IL - Viking FK",
       "market": "1X2",
       "home_odds": "16.00",
-      "draw_odds": "9.60",
+      "draw_odds": "9.80",
       "away_odds": "1.13",
       "start_time": "2025-04-24 16:00"
     }
@@ -19652,110 +19704,6 @@
       "home_odds": "11.00",
       "draw_odds": "6.80",
       "away_odds": "1.23",
-      "start_time": "2025-04-24 16:00"
-    }
-  },
-  {
-    "id": "59902902",
-    "eventId": "59902902",
-    "teams": "Gamle Oslo FK - Sarpsborg 08",
-    "league": "NM Cup",
-    "sport": "football",
-    "country": "Norway",
-    "date": "2025-04-24",
-    "time": "16:00",
-    "odds": {
-      "home": 13.5,
-      "draw": 7.4,
-      "away": 1.19
-    },
-    "raw": {
-      "eventId": "59902902",
-      "country": "Norway",
-      "tournament": "NM Cup",
-      "event": "Gamle Oslo FK - Sarpsborg 08",
-      "market": "1X2",
-      "home_odds": "13.50",
-      "draw_odds": "7.40",
-      "away_odds": "1.19",
-      "start_time": "2025-04-24 16:00"
-    }
-  },
-  {
-    "id": "59902950",
-    "eventId": "59902950",
-    "teams": "IK Junkeren - Bodoe/Glimt",
-    "league": "NM Cup",
-    "sport": "football",
-    "country": "Norway",
-    "date": "2025-04-24",
-    "time": "16:00",
-    "odds": {
-      "home": 44,
-      "draw": 19,
-      "away": 1.03
-    },
-    "raw": {
-      "eventId": "59902950",
-      "country": "Norway",
-      "tournament": "NM Cup",
-      "event": "IK Junkeren - Bodoe/Glimt",
-      "market": "1X2",
-      "home_odds": "44.00",
-      "draw_odds": "19.00",
-      "away_odds": "1.03",
-      "start_time": "2025-04-24 16:00"
-    }
-  },
-  {
-    "id": "59949595",
-    "eventId": "59949595",
-    "teams": "IL Flint - Fredrikstad FK",
-    "league": "NM Cup",
-    "sport": "football",
-    "country": "Norway",
-    "date": "2025-04-24",
-    "time": "16:00",
-    "odds": {
-      "home": 32,
-      "draw": 13.5,
-      "away": 1.06
-    },
-    "raw": {
-      "eventId": "59949595",
-      "country": "Norway",
-      "tournament": "NM Cup",
-      "event": "IL Flint - Fredrikstad FK",
-      "market": "1X2",
-      "home_odds": "32.00",
-      "draw_odds": "13.50",
-      "away_odds": "1.06",
-      "start_time": "2025-04-24 16:00"
-    }
-  },
-  {
-    "id": "59902934",
-    "eventId": "59902934",
-    "teams": "IL Sandviken - Sogndal Fotball",
-    "league": "NM Cup",
-    "sport": "football",
-    "country": "Norway",
-    "date": "2025-04-24",
-    "time": "16:00",
-    "odds": {
-      "home": 6.5,
-      "draw": 4.9,
-      "away": 1.45
-    },
-    "raw": {
-      "eventId": "59902934",
-      "country": "Norway",
-      "tournament": "NM Cup",
-      "event": "IL Sandviken - Sogndal Fotball",
-      "market": "1X2",
-      "home_odds": "6.50",
-      "draw_odds": "4.90",
-      "away_odds": "1.45",
       "start_time": "2025-04-24 16:00"
     }
   },
@@ -20783,9 +20731,9 @@
     "date": "2025-04-24",
     "time": "16:00",
     "odds": {
-      "home": 2.05,
+      "home": 2,
       "draw": 2.85,
-      "away": 3.8
+      "away": 4
     },
     "raw": {
       "eventId": "59686921",
@@ -20793,9 +20741,9 @@
       "tournament": "Prva Liga",
       "event": "FK Javor Ivanjica - FK Macva Sabac",
       "market": "1X2",
-      "home_odds": "2.05",
+      "home_odds": "2.00",
       "draw_odds": "2.85",
-      "away_odds": "3.80",
+      "away_odds": "4.00",
       "start_time": "2025-04-24 16:00"
     }
   },
@@ -21160,6 +21108,32 @@
       "home_odds": "2.60",
       "draw_odds": "3.40",
       "away_odds": "2.40",
+      "start_time": "2025-04-26 14:00"
+    }
+  },
+  {
+    "id": "51796739",
+    "eventId": "51796739",
+    "teams": "Stamford AFC - Halesowen Town FC",
+    "league": "Southern League Premier Central",
+    "sport": "football",
+    "country": "England Amateur",
+    "date": "2025-04-26",
+    "time": "14:00",
+    "odds": {
+      "home": 2.65,
+      "draw": 3.7,
+      "away": 2.25
+    },
+    "raw": {
+      "eventId": "51796739",
+      "country": "England Amateur",
+      "tournament": "Southern League Premier Central",
+      "event": "Stamford AFC - Halesowen Town FC",
+      "market": "1X2",
+      "home_odds": "2.65",
+      "draw_odds": "3.70",
+      "away_odds": "2.25",
       "start_time": "2025-04-26 14:00"
     }
   },
@@ -22005,9 +21979,9 @@
     "date": "2025-04-24",
     "time": "15:00",
     "odds": {
-      "home": 1.19,
+      "home": 1.2,
       "draw": 6.3,
-      "away": 12
+      "away": 11.5
     },
     "raw": {
       "eventId": "58023707",
@@ -22015,9 +21989,9 @@
       "tournament": "Virsliga",
       "event": "FK Auda - Grobinas SC",
       "market": "1X2",
-      "home_odds": "1.19",
+      "home_odds": "1.20",
       "draw_odds": "6.30",
-      "away_odds": "12.00",
+      "away_odds": "11.50",
       "start_time": "2025-04-24 15:00"
     }
   },
@@ -22473,9 +22447,9 @@
     "date": "2025-04-24",
     "time": "19:00",
     "odds": {
-      "home": 2.1,
+      "home": 2.15,
       "draw": 2.75,
-      "away": 3.8
+      "away": 3.7
     },
     "raw": {
       "eventId": "59921999",
@@ -22483,9 +22457,9 @@
       "tournament": "Botola Pro D2",
       "event": "KAC Kenitra - CA Youssoufia Berrechid",
       "market": "1X2",
-      "home_odds": "2.10",
+      "home_odds": "2.15",
       "draw_odds": "2.75",
-      "away_odds": "3.80",
+      "away_odds": "3.70",
       "start_time": "2025-04-24 19:00"
     }
   },
@@ -22499,9 +22473,9 @@
     "date": "2025-04-24",
     "time": "15:00",
     "odds": {
-      "home": 6.5,
-      "draw": 4,
-      "away": 1.44
+      "home": 6.3,
+      "draw": 3.9,
+      "away": 1.46
     },
     "raw": {
       "eventId": "57274055",
@@ -22509,9 +22483,9 @@
       "tournament": "Erovnuli Liga",
       "event": "FC Telavi - FC Saburtalo Tbilisi",
       "market": "1X2",
-      "home_odds": "6.50",
-      "draw_odds": "4.00",
-      "away_odds": "1.44",
+      "home_odds": "6.30",
+      "draw_odds": "3.90",
+      "away_odds": "1.46",
       "start_time": "2025-04-24 15:00"
     }
   },
@@ -23565,9 +23539,9 @@
     "date": "2025-04-25",
     "time": "14:00",
     "odds": {
-      "home": 2.55,
+      "home": 2.45,
       "draw": 3.33,
-      "away": 2.45
+      "away": 2.55
     },
     "raw": {
       "eventId": "57679845",
@@ -23575,9 +23549,9 @@
       "tournament": "Liga Portugal 3",
       "event": "Caldas SC - Academica de Coimbra",
       "market": "1X2",
-      "home_odds": "2.55",
+      "home_odds": "2.45",
       "draw_odds": "3.33",
-      "away_odds": "2.45",
+      "away_odds": "2.55",
       "start_time": "2025-04-25 14:00"
     }
   },
@@ -23825,9 +23799,9 @@
     "date": "2025-04-25",
     "time": "11:45",
     "odds": {
-      "home": 8,
-      "draw": 6.4,
-      "away": 1.25
+      "home": 11,
+      "draw": 7.6,
+      "away": 1.17
     },
     "raw": {
       "eventId": "49405487",
@@ -23835,9 +23809,9 @@
       "tournament": "Premier League",
       "event": "Albirex Niigata Singapore FC - Lion City Sailors FC",
       "market": "1X2",
-      "home_odds": "8.00",
-      "draw_odds": "6.40",
-      "away_odds": "1.25",
+      "home_odds": "11.00",
+      "draw_odds": "7.60",
+      "away_odds": "1.17",
       "start_time": "2025-04-25 11:45"
     }
   },
@@ -25272,6 +25246,32 @@
     }
   },
   {
+    "id": "57442083",
+    "eventId": "57442083",
+    "teams": "FC Jarfalla - IFK Osteraaker FK",
+    "league": "Division 2, Norra Svealand",
+    "sport": "football",
+    "country": "Sweden",
+    "date": "2025-04-27",
+    "time": "14:00",
+    "odds": {
+      "home": 1.47,
+      "draw": 4.5,
+      "away": 5.1
+    },
+    "raw": {
+      "eventId": "57442083",
+      "country": "Sweden",
+      "tournament": "Division 2, Norra Svealand",
+      "event": "FC Jarfalla - IFK Osteraaker FK",
+      "market": "1X2",
+      "home_odds": "1.47",
+      "draw_odds": "4.50",
+      "away_odds": "5.10",
+      "start_time": "2025-04-27 14:00"
+    }
+  },
+  {
     "id": "57443383",
     "eventId": "57443383",
     "teams": "Linero IF - IFK Hassleholm",
@@ -25853,9 +25853,9 @@
     "date": "2025-04-26",
     "time": "16:00",
     "odds": {
-      "home": 1.19,
-      "draw": 6.1,
-      "away": 12
+      "home": 1.23,
+      "draw": 5.6,
+      "away": 9.8
     },
     "raw": {
       "eventId": "50913315",
@@ -25863,9 +25863,9 @@
       "tournament": "II Liga",
       "event": "KS Polonia Bytom SA - KS Wisla Pulawy",
       "market": "1X2",
-      "home_odds": "1.19",
-      "draw_odds": "6.10",
-      "away_odds": "12.00",
+      "home_odds": "1.23",
+      "draw_odds": "5.60",
+      "away_odds": "9.80",
       "start_time": "2025-04-26 16:00"
     }
   },
@@ -26312,6 +26312,32 @@
     }
   },
   {
+    "id": "51798845",
+    "eventId": "51798845",
+    "teams": "Wingate & Finchley - Canvey Island",
+    "league": "Isthmian League, Pr. Div",
+    "sport": "football",
+    "country": "England Amateur",
+    "date": "2025-04-26",
+    "time": "14:00",
+    "odds": {
+      "home": 1.9,
+      "draw": 3.75,
+      "away": 3.25
+    },
+    "raw": {
+      "eventId": "51798845",
+      "country": "England Amateur",
+      "tournament": "Isthmian League, Pr. Div",
+      "event": "Wingate & Finchley - Canvey Island",
+      "market": "1X2",
+      "home_odds": "1.90",
+      "draw_odds": "3.75",
+      "away_odds": "3.25",
+      "start_time": "2025-04-26 14:00"
+    }
+  },
+  {
     "id": "111111112110205",
     "eventId": "111111112110205",
     "teams": "Usher Celtic - Kilbarrack United",
@@ -26364,32 +26390,6 @@
     }
   },
   {
-    "id": "58954875",
-    "eventId": "58954875",
-    "teams": "ACS Champions FC Arges - Csa Steaua Bucuresti",
-    "league": "Liga 2",
-    "sport": "football",
-    "country": "Romania",
-    "date": "2025-04-24",
-    "time": "14:30",
-    "odds": {
-      "home": 2.4,
-      "draw": 2.75,
-      "away": 3.2
-    },
-    "raw": {
-      "eventId": "58954875",
-      "country": "Romania",
-      "tournament": "Liga 2",
-      "event": "ACS Champions FC Arges - Csa Steaua Bucuresti",
-      "market": "1X2",
-      "home_odds": "2.40",
-      "draw_odds": "2.75",
-      "away_odds": "3.20",
-      "start_time": "2025-04-24 14:30"
-    }
-  },
-  {
     "id": "58954873",
     "eventId": "58954873",
     "teams": "CSM Resita - Metaloglobus Bucuresti",
@@ -26399,9 +26399,9 @@
     "date": "2025-04-25",
     "time": "13:30",
     "odds": {
-      "home": 2.05,
+      "home": 2,
       "draw": 3.1,
-      "away": 3.4
+      "away": 3.6
     },
     "raw": {
       "eventId": "58954873",
@@ -26409,9 +26409,9 @@
       "tournament": "Liga 2",
       "event": "CSM Resita - Metaloglobus Bucuresti",
       "market": "1X2",
-      "home_odds": "2.05",
+      "home_odds": "2.00",
       "draw_odds": "3.10",
-      "away_odds": "3.40",
+      "away_odds": "3.60",
       "start_time": "2025-04-25 13:30"
     }
   },
@@ -27430,6 +27430,58 @@
     }
   },
   {
+    "id": "51171169",
+    "eventId": "51171169",
+    "teams": "NK Rudar Velenje - Krka Novo Mesto",
+    "league": "2. Liga",
+    "sport": "football",
+    "country": "Slovenia",
+    "date": "2025-04-25",
+    "time": "15:00",
+    "odds": {
+      "home": 3.1,
+      "draw": 3.25,
+      "away": 2.1
+    },
+    "raw": {
+      "eventId": "51171169",
+      "country": "Slovenia",
+      "tournament": "2. Liga",
+      "event": "NK Rudar Velenje - Krka Novo Mesto",
+      "market": "1X2",
+      "home_odds": "3.10",
+      "draw_odds": "3.25",
+      "away_odds": "2.10",
+      "start_time": "2025-04-25 15:00"
+    }
+  },
+  {
+    "id": "51171171",
+    "eventId": "51171171",
+    "teams": "NK Brinje Grosuplje - NK Tolmin",
+    "league": "2. Liga",
+    "sport": "football",
+    "country": "Slovenia",
+    "date": "2025-04-25",
+    "time": "17:00",
+    "odds": {
+      "home": 1.34,
+      "draw": 4.6,
+      "away": 7.3
+    },
+    "raw": {
+      "eventId": "51171171",
+      "country": "Slovenia",
+      "tournament": "2. Liga",
+      "event": "NK Brinje Grosuplje - NK Tolmin",
+      "market": "1X2",
+      "home_odds": "1.34",
+      "draw_odds": "4.60",
+      "away_odds": "7.30",
+      "start_time": "2025-04-25 17:00"
+    }
+  },
+  {
     "id": "51447325",
     "eventId": "51447325",
     "teams": "Hansa Rostock - TSV 1860 Munich",
@@ -28141,9 +28193,9 @@
     "date": "2025-04-25",
     "time": "14:00",
     "odds": {
-      "home": 1.63,
+      "home": 1.68,
       "draw": 3.8,
-      "away": 4.4
+      "away": 4.2
     },
     "raw": {
       "eventId": "60045653",
@@ -28151,9 +28203,9 @@
       "tournament": "Liga Prom",
       "event": "CD Plaza Amador - San Martin FC",
       "market": "1X2",
-      "home_odds": "1.63",
+      "home_odds": "1.68",
       "draw_odds": "3.80",
-      "away_odds": "4.40",
+      "away_odds": "4.20",
       "start_time": "2025-04-25 14:00"
     }
   },
@@ -29257,11 +29309,11 @@
     "sport": "football",
     "country": "Bolivia",
     "date": "2025-04-26",
-    "time": "21:15",
+    "time": "21:30",
     "odds": {
-      "home": 1.75,
+      "home": 1.74,
       "draw": 3.9,
-      "away": 3.8
+      "away": 3.9
     },
     "raw": {
       "eventId": "59722606",
@@ -29269,10 +29321,10 @@
       "tournament": "Division Profesional",
       "event": "Oriente Petrolero - San Antonio Bulo Bulo",
       "market": "1X2",
-      "home_odds": "1.75",
+      "home_odds": "1.74",
       "draw_odds": "3.90",
-      "away_odds": "3.80",
-      "start_time": "2025-04-26 21:15"
+      "away_odds": "3.90",
+      "start_time": "2025-04-26 21:30"
     }
   },
   {
@@ -29365,7 +29417,7 @@
     "odds": {
       "home": 1.15,
       "draw": 7.25,
-      "away": 12.5
+      "away": 12
     },
     "raw": {
       "eventId": "59722620",
@@ -29375,7 +29427,7 @@
       "market": "1X2",
       "home_odds": "1.15",
       "draw_odds": "7.25",
-      "away_odds": "12.50",
+      "away_odds": "12.00",
       "start_time": "2025-04-27 23:30"
     }
   },
@@ -29429,32 +29481,6 @@
       "draw_odds": "3.40",
       "away_odds": "3.25",
       "start_time": "2025-04-24 16:20"
-    }
-  },
-  {
-    "id": "59967525",
-    "eventId": "59967525",
-    "teams": "Sportive de Douala - AS Fortuna",
-    "league": "Elite One",
-    "sport": "football",
-    "country": "Cameroon",
-    "date": "2025-04-24",
-    "time": "14:30",
-    "odds": {
-      "home": 2.7,
-      "draw": 2.85,
-      "away": 2.65
-    },
-    "raw": {
-      "eventId": "59967525",
-      "country": "Cameroon",
-      "tournament": "Elite One",
-      "event": "Sportive de Douala - AS Fortuna",
-      "market": "1X2",
-      "home_odds": "2.70",
-      "draw_odds": "2.85",
-      "away_odds": "2.65",
-      "start_time": "2025-04-24 14:30"
     }
   },
   {
@@ -29519,9 +29545,9 @@
     "date": "2025-04-24",
     "time": "17:00",
     "odds": {
-      "home": 2.5,
+      "home": 2.45,
       "draw": 2.7,
-      "away": 3.25
+      "away": 3.33
     },
     "raw": {
       "eventId": "59845496",
@@ -29529,9 +29555,9 @@
       "tournament": "Ligue 1",
       "event": "Paradou AC - ES Setif",
       "market": "1X2",
-      "home_odds": "2.50",
+      "home_odds": "2.45",
       "draw_odds": "2.70",
-      "away_odds": "3.25",
+      "away_odds": "3.33",
       "start_time": "2025-04-24 17:00"
     }
   },
@@ -32292,32 +32318,6 @@
     }
   },
   {
-    "id": "59970239",
-    "eventId": "59970239",
-    "teams": "Al-Fahaheel - Al-Arabi (KW)",
-    "league": "Crown Prince Cup",
-    "sport": "football",
-    "country": "Kuwait",
-    "date": "2025-04-24",
-    "time": "14:30",
-    "odds": {
-      "home": 4,
-      "draw": 3.5,
-      "away": 1.78
-    },
-    "raw": {
-      "eventId": "59970239",
-      "country": "Kuwait",
-      "tournament": "Crown Prince Cup",
-      "event": "Al-Fahaheel - Al-Arabi (KW)",
-      "market": "1X2",
-      "home_odds": "4.00",
-      "draw_odds": "3.50",
-      "away_odds": "1.78",
-      "start_time": "2025-04-24 14:30"
-    }
-  },
-  {
     "id": "59970175",
     "eventId": "59970175",
     "teams": "Qadsia SC - Al-Salmiya SC",
@@ -32327,8 +32327,8 @@
     "date": "2025-04-24",
     "time": "17:45",
     "odds": {
-      "home": 2.05,
-      "draw": 3.5,
+      "home": 2.1,
+      "draw": 3.4,
       "away": 3
     },
     "raw": {
@@ -32337,8 +32337,8 @@
       "tournament": "Crown Prince Cup",
       "event": "Qadsia SC - Al-Salmiya SC",
       "market": "1X2",
-      "home_odds": "2.05",
-      "draw_odds": "3.50",
+      "home_odds": "2.10",
+      "draw_odds": "3.40",
       "away_odds": "3.00",
       "start_time": "2025-04-24 17:45"
     }
@@ -32925,9 +32925,9 @@
     "date": "2025-04-24",
     "time": "16:30",
     "odds": {
-      "home": 1.37,
-      "draw": 5.5,
-      "away": 5.25
+      "home": 1.31,
+      "draw": 5.9,
+      "away": 6
     },
     "raw": {
       "eventId": "111111112137754",
@@ -32935,9 +32935,9 @@
       "tournament": "U19 Leagues",
       "event": "Bærum SK U19 - Nordstrand U19",
       "market": "1X2",
-      "home_odds": "1.37",
-      "draw_odds": "5.50",
-      "away_odds": "5.25",
+      "home_odds": "1.31",
+      "draw_odds": "5.90",
+      "away_odds": "6.00",
       "start_time": "2025-04-24 16:30"
     }
   },
@@ -33263,9 +33263,9 @@
     "date": "2025-04-25",
     "time": "14:00",
     "odds": {
-      "home": 3.5,
-      "draw": 3.6,
-      "away": 1.96
+      "home": 3.4,
+      "draw": 3.7,
+      "away": 1.94
     },
     "raw": {
       "eventId": "58062631",
@@ -33273,9 +33273,9 @@
       "tournament": "Serie A, Women",
       "event": "AC Milan - Inter Milano",
       "market": "1X2",
-      "home_odds": "3.50",
-      "draw_odds": "3.60",
-      "away_odds": "1.96",
+      "home_odds": "3.40",
+      "draw_odds": "3.70",
+      "away_odds": "1.94",
       "start_time": "2025-04-25 14:00"
     }
   },
@@ -33368,7 +33368,7 @@
     "time": "16:30",
     "odds": {
       "home": 16,
-      "draw": 9.6,
+      "draw": 9.9,
       "away": 1.07
     },
     "raw": {
@@ -33378,7 +33378,7 @@
       "event": "1. FFC Turbine Potsdam 71 - Bayer Leverkusen",
       "market": "1X2",
       "home_odds": "16.00",
-      "draw_odds": "9.60",
+      "draw_odds": "9.90",
       "away_odds": "1.07",
       "start_time": "2025-04-25 16:30"
     }
@@ -33705,9 +33705,9 @@
     "date": "2025-04-26",
     "time": "00:00",
     "odds": {
-      "home": 1.41,
-      "draw": 4.25,
-      "away": 6.5
+      "home": 1.37,
+      "draw": 4.4,
+      "away": 7
     },
     "raw": {
       "eventId": "57639703",
@@ -33715,9 +33715,9 @@
       "tournament": "National Womens Soccer League",
       "event": "Orlando Pride - Angel City FC",
       "market": "1X2",
-      "home_odds": "1.41",
-      "draw_odds": "4.25",
-      "away_odds": "6.50",
+      "home_odds": "1.37",
+      "draw_odds": "4.40",
+      "away_odds": "7.00",
       "start_time": "2025-04-26 00:00"
     }
   },
@@ -34057,110 +34057,6 @@
       "draw_odds": "3.25",
       "away_odds": "2.10",
       "start_time": "2025-04-27 13:00"
-    }
-  },
-  {
-    "id": "51825603",
-    "eventId": "51825603",
-    "teams": "Leicester City WFC - Manchester City WFC",
-    "league": "Super League Women",
-    "sport": "football",
-    "country": "England Amateur",
-    "date": "2025-04-27",
-    "time": "14:00",
-    "odds": {
-      "home": 5.3,
-      "draw": 5,
-      "away": 1.4
-    },
-    "raw": {
-      "eventId": "51825603",
-      "country": "England Amateur",
-      "tournament": "Super League Women",
-      "event": "Leicester City WFC - Manchester City WFC",
-      "market": "1X2",
-      "home_odds": "5.30",
-      "draw_odds": "5.00",
-      "away_odds": "1.40",
-      "start_time": "2025-04-27 14:00"
-    }
-  },
-  {
-    "id": "51825609",
-    "eventId": "51825609",
-    "teams": "Aston Villa WFC - Arsenal WFC",
-    "league": "Super League Women",
-    "sport": "football",
-    "country": "England Amateur",
-    "date": "2025-04-30",
-    "time": "17:00",
-    "odds": {
-      "home": 8.5,
-      "draw": 5.4,
-      "away": 1.24
-    },
-    "raw": {
-      "eventId": "51825609",
-      "country": "England Amateur",
-      "tournament": "Super League Women",
-      "event": "Aston Villa WFC - Arsenal WFC",
-      "market": "1X2",
-      "home_odds": "8.50",
-      "draw_odds": "5.40",
-      "away_odds": "1.24",
-      "start_time": "2025-04-30 17:00"
-    }
-  },
-  {
-    "id": "51825599",
-    "eventId": "51825599",
-    "teams": "Manchester United WFC - Chelsea FC W",
-    "league": "Super League Women",
-    "sport": "football",
-    "country": "England Amateur",
-    "date": "2025-04-30",
-    "time": "19:15",
-    "odds": {
-      "home": 3.3,
-      "draw": 3.2,
-      "away": 2
-    },
-    "raw": {
-      "eventId": "51825599",
-      "country": "England Amateur",
-      "tournament": "Super League Women",
-      "event": "Manchester United WFC - Chelsea FC W",
-      "market": "1X2",
-      "home_odds": "3.30",
-      "draw_odds": "3.20",
-      "away_odds": "2.00",
-      "start_time": "2025-04-30 19:15"
-    }
-  },
-  {
-    "id": "58071375",
-    "eventId": "58071375",
-    "teams": "Preston Lions - Bentleigh Greens SC",
-    "league": "Victoria NPL, Women",
-    "sport": "football",
-    "country": "Australia",
-    "date": "2025-04-25",
-    "time": "08:15",
-    "odds": {
-      "home": 1.36,
-      "draw": 5.1,
-      "away": 5.9
-    },
-    "raw": {
-      "eventId": "58071375",
-      "country": "Australia",
-      "tournament": "Victoria NPL, Women",
-      "event": "Preston Lions - Bentleigh Greens SC",
-      "market": "1X2",
-      "home_odds": "1.36",
-      "draw_odds": "5.10",
-      "away_odds": "5.90",
-      "start_time": "2025-04-25 08:15"
     }
   }
 ]
