@@ -34,8 +34,9 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
   // Kenya filter active if betPawa KE and Betika KE are selected
   const isKenyaFilterActive = hasBetPawaKE && hasBetikaKE;
   
-  // Always show the comparison column if we have a betPawa vs competitor comparison available
-  const isComparisonAvailable = isGhanaFilterActive || isKenyaFilterActive;
+  // Show the comparison column only if we have a specific Ghana or Kenya filter active
+  // Specifically dont show for "All Bookmakers" filter
+  const isComparisonAvailable = (isGhanaFilterActive || isKenyaFilterActive) && !(selectedBookmakers.length >= 4);
   
   console.log('Selected Bookmakers:', selectedBookmakers);
   console.log('betPawa GH present:', hasBetPawaGH, 'Sportybet present:', hasSportybet);
@@ -418,9 +419,13 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                     </TableCell>
                     
                     {isComparisonAvailable && (
-                      <TableCell className="px-2 py-1 whitespace-nowrap text-center">
-                        {isFirstBookmaker && (() => {
-                          // Only calculate and show this in the first row for each event
+                      <TableCell 
+                        className="px-2 py-1 whitespace-nowrap text-center" 
+                        rowSpan={filteredBookmakers.length}
+                        style={{ display: isFirstBookmaker ? 'table-cell' : 'none' }}
+                      >
+                        {(() => {
+                          // Calculation happens in first row only
                           const { comparison, isBetter, favorite } = calculateFavoriteComparison(event);
                           
                           if (comparison === null) {
@@ -452,12 +457,6 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                             </span>
                           );
                         })()}
-                        
-                        {!isFirstBookmaker && (
-                          <span className="text-sm font-medium px-1 py-0.5 rounded bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300">
-                            -
-                          </span>
-                        )}
                       </TableCell>
                     )}
                   </TableRow>
