@@ -58,9 +58,18 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       
       // If we found at least one match and it has the required data
       if (firstMatch) {
-        // Store country and tournament directly
-        const country = firstMatch.country || '';
-        const tournament = firstMatch.tournament || '';
+        // Extract country and tournament, checking raw data first
+        let country = '';
+        let tournament = '';
+        
+        // First check if we have raw data from scrapers
+        if (firstMatch.raw && typeof firstMatch.raw === 'object') {
+          country = firstMatch.raw.country || firstMatch.country || '';
+          tournament = firstMatch.raw.tournament || firstMatch.tournament || '';
+        } else {
+          country = firstMatch.country || '';
+          tournament = firstMatch.tournament || '';
+        }
         
         // For backward compatibility, also set league field
         let league = `${country} ${tournament}`.trim();
@@ -82,8 +91,8 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
           eventId: eventId,
           teams: teams || 'Unknown',
           league: league || 'Unknown',
-          country: firstMatch.country || null,
-          tournament: firstMatch.tournament || null,
+          country: country || null,
+          tournament: tournament || null,
           sportId: getSportId(firstMatch.sport || 'football'),
           date: firstMatch.date || firstMatch.start_time?.split(' ')[0] || 'Unknown',
           time: firstMatch.time || firstMatch.start_time?.split(' ')[1] || 'Unknown',
