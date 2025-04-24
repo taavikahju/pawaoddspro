@@ -169,11 +169,13 @@ export function loadAllCustomScrapers(): void {
       // Skip this integration file
       if (file === 'integration.ts' || file === 'integration.js') return;
       
-      // Expected format: bookmakercode_scraper.ext
-      const match = file.match(/^([a-zA-Z0-9_-]+)_scraper\.(js|py|sh|ts)$/);
+      // Expected format: bookmakercode_scraper.ext (allowing spaces)
+      const match = file.match(/^(.+)_scraper\.(js|py|sh|ts)$/);
       if (match) {
         const bookmakerCode = match[1];
         const filePath = path.join(customScraperDir, file);
+        
+        console.log(`Detected scraper file ${file} for bookmaker code: ${bookmakerCode}`);
         
         // Register this scraper
         registerCustomScraper(bookmakerCode, filePath);
