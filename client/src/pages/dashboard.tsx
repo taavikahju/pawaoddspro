@@ -17,7 +17,7 @@ import {
 export default function Dashboard() {
   const [countryFilter, setCountryFilter] = useState('all');
   const [tournamentFilter, setTournamentFilter] = useState('all');
-  const { selectedSports } = useBookmakerContext();
+  const { selectedSports, marginFilter } = useBookmakerContext();
   
   // Available countries and tournaments (will be populated from data)
   const [availableCountries, setAvailableCountries] = useState<string[]>([]);
@@ -87,7 +87,19 @@ export default function Dashboard() {
     setTournamentFilter('all');
   }, [countryFilter]);
 
-  // Filter events by selected sports, country, and tournament
+  // Function to calculate margin for an event and bookmaker
+  const calculateMargin = (event: any, bookmakerCode: string): number | null => {
+    const odds = event.oddsData?.[bookmakerCode];
+    if (!odds) return null;
+    
+    const { home, draw, away } = odds;
+    if (!home || !draw || !away) return null;
+    
+    // Calculate margin = (1/home + 1/draw + 1/away) - 1
+    return (1/home + 1/draw + 1/away);
+  };
+  
+  // Filter events by selected sports, country, tournament, and margin
   const filteredEvents = useMemo(() => {
     if (!Array.isArray(events)) return [];
     
@@ -116,7 +128,28 @@ export default function Dashboard() {
       
       // Filter by tournament only if country is selected
       if (countryFilter !== 'all' && tournamentFilter !== 'all') {
-        return event.tournament === tournamentFilter;
+        if (event.tournament !== tournamentFilter) return false;
+      }
+      
+      // Filter by margin - check if any bookmaker has margin below threshold
+      if (marginFilter < 15) { // Only apply filter if it's not at the maximum
+        // Check each bookmaker
+        const bookmakerCodes = Object.keys(event.oddsData || {});
+        
+        // If no bookmakers have odds data, exclude the event
+        if (bookmakerCodes.length === 0) return false;
+        
+        // Check if any bookmaker has margin below threshold
+        const anyBelowThreshold = bookmakerCodes.some(code => {
+          const margin = calculateMargin(event, code);
+          if (margin === null) return false;
+          
+          // Convert to percentage and check against threshold
+          const marginPercent = (margin - 1) * 100;
+          return marginPercent <= marginFilter;
+        });
+        
+        if (!anyBelowThreshold) return false;
       }
       
       return true;
@@ -133,7 +166,7 @@ export default function Dashboard() {
       // If dates are the same, sort by time
       return a.time.localeCompare(b.time);
     });
-  }, [events, selectedSports, countryFilter, tournamentFilter]);
+  }, [events, selectedSports, countryFilter, tournamentFilter, marginFilter]);
   
   // Get sport name by ID
   const getSportName = (sportId: number): string => {
