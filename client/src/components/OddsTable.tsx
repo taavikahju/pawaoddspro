@@ -408,7 +408,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                         const awayOdds = event.oddsData?.[bookmaker.code]?.away;
                         const margin = calculateMargin(homeOdds, drawOdds, awayOdds);
                         
-                        const marginPercentage = margin ? ((margin - 1) * 100).toFixed(1) : '-';
+                        const marginPercentage = margin ? ((margin - 1) * 100).toFixed(2) : '-';
                         
                         return (
                           <span className="text-sm font-medium px-1 py-0.5 rounded bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300">

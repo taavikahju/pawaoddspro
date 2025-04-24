@@ -538,7 +538,7 @@ export default function Dashboard() {
           
           {/* Bookmaker Average Margins */}
           <div className="flex flex-col items-end bg-slate-100 dark:bg-slate-700 p-2 rounded-md border border-slate-200 dark:border-slate-600 shadow-sm">
-            <div className="text-xs font-medium mb-1 text-slate-600 dark:text-slate-300">Average Bookmaker Margins (Lower is Better)</div>
+            <div className="text-xs font-medium mb-1 text-slate-600 dark:text-slate-300">Average Bookmaker Margins</div>
             
             {(() => {
               // Calculate average margins for each selected bookmaker based on filtered events
