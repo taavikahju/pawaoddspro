@@ -131,7 +131,7 @@ export default function Dashboard() {
         if (event.tournament !== tournamentFilter) return false;
       }
       
-      // Filter by margin - check if any bookmaker has margin below threshold
+      // Filter by margin - check all displayed bookmaker margins
       if (marginFilter < 15) { // Only apply filter if it's not at the maximum
         // Check each bookmaker
         const bookmakerCodes = Object.keys(event.oddsData || {});
@@ -139,17 +139,20 @@ export default function Dashboard() {
         // If no bookmakers have odds data, exclude the event
         if (bookmakerCodes.length === 0) return false;
         
-        // Check if any bookmaker has margin below threshold
-        const anyBelowThreshold = bookmakerCodes.some(code => {
+        // Check ALL bookmaker margins against the threshold
+        // For each event, calculate the minimum margin across all bookmakers
+        let minMargin = Infinity;
+        
+        bookmakerCodes.forEach(code => {
           const margin = calculateMargin(event, code);
-          if (margin === null) return false;
-          
-          // Convert to percentage and check against threshold
-          const marginPercent = (margin - 1) * 100;
-          return marginPercent <= marginFilter;
+          if (margin !== null) {
+            const marginPercent = (margin - 1) * 100;
+            minMargin = Math.min(minMargin, marginPercent);
+          }
         });
         
-        if (!anyBelowThreshold) return false;
+        // If the minimum margin is greater than the filter value, exclude the event
+        if (minMargin === Infinity || minMargin > marginFilter) return false;
       }
       
       return true;
