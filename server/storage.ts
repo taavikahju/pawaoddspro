@@ -200,6 +200,14 @@ export class MemStorage implements IStorage {
     return updatedBookmaker;
   }
   
+  async deleteBookmaker(id: number): Promise<boolean> {
+    const exists = this.bookmakers.has(id);
+    if (!exists) return false;
+    
+    this.bookmakers.delete(id);
+    return true;
+  }
+  
   // Sport methods
   async getSports(): Promise<Sport[]> {
     return Array.from(this.sports.values());
@@ -502,6 +510,13 @@ export class DatabaseStorage implements IStorage {
       .where(eq(bookmakers.id, id))
       .returning();
     return updatedBookmaker;
+  }
+  
+  async deleteBookmaker(id: number): Promise<boolean> {
+    const result = await db
+      .delete(bookmakers)
+      .where(eq(bookmakers.id, id));
+    return result.rowCount > 0;
   }
 
   // Sport methods
