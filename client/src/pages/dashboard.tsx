@@ -16,12 +16,18 @@ import {
   BookOpen,
   CalendarDays,
   Trophy,
-  ShieldAlert
+  ShieldAlert,
+  X,
+  Filter,
+  GlobeIcon
 } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
 
 export default function Dashboard() {
   const [viewMode, setViewMode] = useState<'table' | 'grid'>('table');
   const [marketFilter, setMarketFilter] = useState('all');
+  const [countryFilter, setCountryFilter] = useState('all');
+  const [tournamentFilter, setTournamentFilter] = useState('all');
   const { selectedSports } = useBookmakerContext();
   
   // Fetch stats data
@@ -82,7 +88,7 @@ export default function Dashboard() {
       subtitle="Compare odds across multiple bookmakers"
     >
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <StatsCard
           title="Total Events"
           value={stats?.totalEvents || 0}
@@ -112,6 +118,79 @@ export default function Dashboard() {
           iconColor="text-primary"
           changeColor="text-gray-500 dark:text-gray-400"
         />
+      </div>
+      
+      {/* Control Panel */}
+      <div className="bg-white dark:bg-slate-800 rounded-lg p-4 mb-4 shadow">
+        <div className="flex items-center mb-3">
+          <Filter className="h-5 w-5 mr-2 text-primary" />
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-white">Filter Events</h3>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Country Filter */}
+          <div className="space-y-1">
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center">
+              <GlobeIcon className="h-4 w-4 mr-1.5 text-gray-500" />
+              Country
+            </label>
+            <Select
+              value={countryFilter}
+              onValueChange={setCountryFilter}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select Country" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Countries</SelectItem>
+                <SelectItem value="england">England</SelectItem>
+                <SelectItem value="spain">Spain</SelectItem>
+                <SelectItem value="germany">Germany</SelectItem>
+                <SelectItem value="italy">Italy</SelectItem>
+                <SelectItem value="france">France</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          {/* Tournament Filter */}
+          <div className="space-y-1">
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center">
+              <Trophy className="h-4 w-4 mr-1.5 text-gray-500" />
+              Tournament
+            </label>
+            <Select
+              value={tournamentFilter}
+              onValueChange={setTournamentFilter}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select Tournament" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Tournaments</SelectItem>
+                <SelectItem value="premier-league">Premier League</SelectItem>
+                <SelectItem value="la-liga">La Liga</SelectItem>
+                <SelectItem value="bundesliga">Bundesliga</SelectItem>
+                <SelectItem value="serie-a">Serie A</SelectItem>
+                <SelectItem value="ligue-1">Ligue 1</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          {/* Clear Filters Button */}
+          <div className="flex items-end">
+            <Button 
+              variant="outline" 
+              className="flex items-center" 
+              onClick={() => {
+                setCountryFilter('all');
+                setTournamentFilter('all');
+              }}
+            >
+              <X className="h-4 w-4 mr-1.5" /> 
+              Clear Filters
+            </Button>
+          </div>
+        </div>
       </div>
 
       {/* View Options */}

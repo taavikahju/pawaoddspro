@@ -107,28 +107,33 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
           {events.map((event) => (
             <TableRow key={event.id} className="hover:bg-gray-50 dark:hover:bg-slate-700/50 border-b">
               <TableCell className="px-6 py-4 whitespace-nowrap">
-                <div className="flex items-center">
-                  <div>
-                    <div className="text-sm font-medium text-gray-900 dark:text-white">
-                      {event.teams}
-                    </div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">
+                <div className="flex flex-col">
+                  <div className="text-sm font-medium text-gray-900 dark:text-white mb-1 flex items-center">
+                    <span className="inline-block w-4 h-4 bg-primary/10 rounded-full mr-2"></span>
+                    {event.teams}
+                  </div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400 flex items-center ml-6">
+                    <span className="bg-gray-100 dark:bg-slate-700 px-2 py-0.5 rounded text-gray-600 dark:text-gray-300">
                       {event.league}
-                    </div>
+                    </span>
                   </div>
                 </div>
               </TableCell>
               
               <TableCell className="px-6 py-4 whitespace-nowrap">
-                <div className="text-sm text-gray-900 dark:text-white">{event.date}</div>
-                <div className="text-sm text-gray-500 dark:text-gray-400">{event.time}</div>
+                <div className="flex flex-col">
+                  <div className="text-sm text-gray-900 dark:text-white font-medium">{event.date}</div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400 mt-1 bg-gray-100 dark:bg-slate-700 px-2 py-0.5 rounded inline-block">
+                    {event.time}
+                  </div>
+                </div>
               </TableCell>
               
               {filteredBookmakers.map((bookmaker) => (
                 <TableCell 
                   key={`${event.id}-${bookmaker.code}`}
                   className={cn(
-                    "px-3 py-4 whitespace-nowrap text-center",
+                    "px-3 py-3 whitespace-nowrap text-center",
                     `bg-${bookmaker.code}`
                   )}
                 >
@@ -138,6 +143,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                         "odds-cell bg-white dark:bg-slate-700 text-gray-900 dark:text-white border-gray-200 dark:border-slate-600",
                         isBestOdd(event, 'home', bookmaker.code) && "odd-highlight"
                       )}
+                      title="Home win"
                     >
                       <span className="odds-value">
                         {event.oddsData?.[bookmaker.code]?.home?.toFixed(2) || '-'}
@@ -150,6 +156,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                           "odds-cell bg-white dark:bg-slate-700 text-gray-900 dark:text-white border-gray-200 dark:border-slate-600",
                           isBestOdd(event, 'draw', bookmaker.code) && "odd-highlight"
                         )}
+                        title="Draw"
                       >
                         <span className="odds-value">
                           {event.oddsData?.[bookmaker.code]?.draw?.toFixed(2) || '-'}
@@ -162,6 +169,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                         "odds-cell bg-white dark:bg-slate-700 text-gray-900 dark:text-white border-gray-200 dark:border-slate-600",
                         isBestOdd(event, 'away', bookmaker.code) && "odd-highlight"
                       )}
+                      title="Away win"
                     >
                       <span className="odds-value">
                         {event.oddsData?.[bookmaker.code]?.away?.toFixed(2) || '-'}
@@ -171,7 +179,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                 </TableCell>
               ))}
               
-              <TableCell className="px-3 py-4 whitespace-nowrap text-center bg-green-50 dark:bg-green-900/10">
+              <TableCell className="px-3 py-3 whitespace-nowrap text-center bg-green-50 dark:bg-green-900/10">
                 <div className="space-x-2 text-sm">
                   <span className="odds-cell font-medium text-green-800 bg-green-100 border-green-200 dark:text-green-200 dark:bg-green-900/40 dark:border-green-900/50">
                     <span className="odds-value">
