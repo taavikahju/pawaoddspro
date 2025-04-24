@@ -1075,9 +1075,9 @@
     "date": "2025-04-24",
     "time": "19:00",
     "odds": {
-      "home": 5.4,
-      "draw": 4.5,
-      "away": 1.54
+      "home": 5.6,
+      "draw": 4.6,
+      "away": 1.51
     },
     "raw": {
       "eventId": "59902934",
@@ -1085,9 +1085,9 @@
       "tournament": "NM Cup",
       "event": "IL Sandviken - Sogndal Fotball",
       "market": "1X2",
-      "home_odds": "5.40",
-      "draw_odds": "4.50",
-      "away_odds": "1.54",
+      "home_odds": "5.60",
+      "draw_odds": "4.60",
+      "away_odds": "1.51",
       "start_time": "2025-04-24 19:00"
     }
   },
@@ -1284,7 +1284,7 @@
     "time": "19:00",
     "odds": {
       "home": 35,
-      "draw": 13,
+      "draw": 14,
       "away": 1.05
     },
     "raw": {
@@ -1294,7 +1294,7 @@
       "event": "Strindheim TF - Rosenborg BK",
       "market": "1X2",
       "home_odds": "35.00",
-      "draw_odds": "13.00",
+      "draw_odds": "14.00",
       "away_odds": "1.05",
       "start_time": "2025-04-24 19:00"
     }
@@ -7055,8 +7055,8 @@
     "date": "2025-04-25",
     "time": "19:30",
     "odds": {
-      "home": 21,
-      "draw": 13,
+      "home": 23,
+      "draw": 12,
       "away": 1.02
     },
     "raw": {
@@ -7065,8 +7065,8 @@
       "tournament": "Women Bundesliga",
       "event": "Potsdam Women  - Leverkusen Women ",
       "market": "1X2",
-      "home_odds": "21.00",
-      "draw_odds": "13.00",
+      "home_odds": "23.00",
+      "draw_odds": "12.00",
       "away_odds": "1.02",
       "start_time": "2025-04-25 19:30"
     }
@@ -9369,9 +9369,9 @@
     "date": "2025-04-25",
     "time": "21:30",
     "odds": {
-      "home": 2.8,
-      "draw": 2.95,
-      "away": 2.46
+      "home": 2.75,
+      "draw": 3,
+      "away": 2.48
     },
     "raw": {
       "eventId": "51830333",
@@ -9379,9 +9379,9 @@
       "tournament": "Primera Federacion",
       "event": "Marbella - Atletico Madrid B",
       "market": "1X2",
-      "home_odds": "2.80",
-      "draw_odds": "2.95",
-      "away_odds": "2.46",
+      "home_odds": "2.75",
+      "draw_odds": "3.00",
+      "away_odds": "2.48",
       "start_time": "2025-04-25 21:30"
     }
   },
@@ -10400,54 +10400,54 @@
     }
   },
   {
-    "id": "57308791",
-    "eventId": "57308791",
-    "teams": "Leones - Cucuta",
-    "league": "Primera B",
+    "id": "58697907",
+    "eventId": "58697907",
+    "teams": "Western Suburbs FC - Waterside Karori",
+    "league": "National League",
     "sport": "football",
-    "country": "Colombia",
+    "country": "New Zealand",
     "date": "2025-04-26",
     "time": "03:30",
     "odds": {
-      "home": 3.6,
-      "draw": 3.25,
-      "away": 1.94
+      "home": 1.47,
+      "draw": 4.9,
+      "away": 4.4
     },
     "raw": {
-      "eventId": "57308791",
-      "country": "Colombia",
-      "tournament": "Primera B",
-      "event": "Leones - Cucuta",
+      "eventId": "58697907",
+      "country": "New Zealand",
+      "tournament": "National League",
+      "event": "Western Suburbs FC - Waterside Karori",
       "market": "1X2",
-      "home_odds": "3.60",
-      "draw_odds": "3.25",
-      "away_odds": "1.94",
+      "home_odds": "1.47",
+      "draw_odds": "4.90",
+      "away_odds": "4.40",
       "start_time": "2025-04-26 03:30"
     }
   },
   {
-    "id": "59722592",
-    "eventId": "59722592",
-    "teams": "Guabira Montero - CD Real Tomayapo",
-    "league": "Division Profesional",
+    "id": "58699277",
+    "eventId": "58699277",
+    "teams": "Nelson Suburbs FC - Cashmere Technical",
+    "league": "National League",
     "sport": "football",
-    "country": "Bolivia",
+    "country": "New Zealand",
     "date": "2025-04-26",
     "time": "03:30",
     "odds": {
-      "home": 1.87,
-      "draw": 3.6,
-      "away": 3.75
+      "home": 4.8,
+      "draw": 5.6,
+      "away": 1.38
     },
     "raw": {
-      "eventId": "59722592",
-      "country": "Bolivia",
-      "tournament": "Division Profesional",
-      "event": "Guabira Montero - CD Real Tomayapo",
+      "eventId": "58699277",
+      "country": "New Zealand",
+      "tournament": "National League",
+      "event": "Nelson Suburbs FC - Cashmere Technical",
       "market": "1X2",
-      "home_odds": "1.87",
-      "draw_odds": "3.60",
-      "away_odds": "3.75",
+      "home_odds": "4.80",
+      "draw_odds": "5.60",
+      "away_odds": "1.38",
       "start_time": "2025-04-26 03:30"
     }
   },
@@ -10608,6 +10608,110 @@
     }
   },
   {
+    "id": "52130755",
+    "eventId": "52130755",
+    "teams": "Brisbane Roar FC - Wellington Phoenix FC",
+    "league": "A-League",
+    "sport": "football",
+    "country": "Australia",
+    "date": "2025-04-26",
+    "time": "08:00",
+    "odds": {
+      "home": 1.92,
+      "draw": 3.7,
+      "away": 3.6
+    },
+    "raw": {
+      "eventId": "52130755",
+      "country": "Australia",
+      "tournament": "A-League",
+      "event": "Brisbane Roar FC - Wellington Phoenix FC",
+      "market": "1X2",
+      "home_odds": "1.92",
+      "draw_odds": "3.70",
+      "away_odds": "3.60",
+      "start_time": "2025-04-26 08:00"
+    }
+  },
+  {
+    "id": "57353127",
+    "eventId": "57353127",
+    "teams": "Cheonan City - Chungbuk Cheongju FC",
+    "league": "K-League 2",
+    "sport": "football",
+    "country": "Republic of Korea",
+    "date": "2025-04-26",
+    "time": "08:00",
+    "odds": {
+      "home": 2.44,
+      "draw": 3.35,
+      "away": 2.7
+    },
+    "raw": {
+      "eventId": "57353127",
+      "country": "Republic of Korea",
+      "tournament": "K-League 2",
+      "event": "Cheonan City - Chungbuk Cheongju FC",
+      "market": "1X2",
+      "home_odds": "2.44",
+      "draw_odds": "3.35",
+      "away_odds": "2.70",
+      "start_time": "2025-04-26 08:00"
+    }
+  },
+  {
+    "id": "57584757",
+    "eventId": "57584757",
+    "teams": "Tokushima V - Kataller T",
+    "league": "J.League 2",
+    "sport": "football",
+    "country": "Japan",
+    "date": "2025-04-26",
+    "time": "08:00",
+    "odds": {
+      "home": 2.05,
+      "draw": 3.1,
+      "away": 3.75
+    },
+    "raw": {
+      "eventId": "57584757",
+      "country": "Japan",
+      "tournament": "J.League 2",
+      "event": "Tokushima V - Kataller T",
+      "market": "1X2",
+      "home_odds": "2.05",
+      "draw_odds": "3.10",
+      "away_odds": "3.75",
+      "start_time": "2025-04-26 08:00"
+    }
+  },
+  {
+    "id": "57584755",
+    "eventId": "57584755",
+    "teams": "Renofa Y - Imabari",
+    "league": "J.League 2",
+    "sport": "football",
+    "country": "Japan",
+    "date": "2025-04-26",
+    "time": "08:00",
+    "odds": {
+      "home": 3.2,
+      "draw": 3.15,
+      "away": 2.21
+    },
+    "raw": {
+      "eventId": "57584755",
+      "country": "Japan",
+      "tournament": "J.League 2",
+      "event": "Renofa Y - Imabari",
+      "market": "1X2",
+      "home_odds": "3.20",
+      "draw_odds": "3.15",
+      "away_odds": "2.21",
+      "start_time": "2025-04-26 08:00"
+    }
+  },
+  {
     "id": "57436675",
     "eventId": "57436675",
     "teams": "Kashiwa - Albirex Niigata",
@@ -10630,6 +10734,84 @@
       "home_odds": "2.19",
       "draw_odds": "3.15",
       "away_odds": "3.40",
+      "start_time": "2025-04-26 08:00"
+    }
+  },
+  {
+    "id": "57353125",
+    "eventId": "57353125",
+    "teams": "Seoul E-Land - Gyeongnam",
+    "league": "K-League 2",
+    "sport": "football",
+    "country": "Republic of Korea",
+    "date": "2025-04-26",
+    "time": "08:00",
+    "odds": {
+      "home": 1.68,
+      "draw": 3.8,
+      "away": 4.5
+    },
+    "raw": {
+      "eventId": "57353125",
+      "country": "Republic of Korea",
+      "tournament": "K-League 2",
+      "event": "Seoul E-Land - Gyeongnam",
+      "market": "1X2",
+      "home_odds": "1.68",
+      "draw_odds": "3.80",
+      "away_odds": "4.50",
+      "start_time": "2025-04-26 08:00"
+    }
+  },
+  {
+    "id": "57130669",
+    "eventId": "57130669",
+    "teams": "Suwon City - Jeonbuk Hyundai Motors FC",
+    "league": "K-League 1",
+    "sport": "football",
+    "country": "Republic of Korea",
+    "date": "2025-04-26",
+    "time": "08:00",
+    "odds": {
+      "home": 3.3,
+      "draw": 3.35,
+      "away": 2.14
+    },
+    "raw": {
+      "eventId": "57130669",
+      "country": "Republic of Korea",
+      "tournament": "K-League 1",
+      "event": "Suwon City - Jeonbuk Hyundai Motors FC",
+      "market": "1X2",
+      "home_odds": "3.30",
+      "draw_odds": "3.35",
+      "away_odds": "2.14",
+      "start_time": "2025-04-26 08:00"
+    }
+  },
+  {
+    "id": "51241131",
+    "eventId": "51241131",
+    "teams": "FC Ska-Khabarovsk - FC Yenisey Krasnoyarsk",
+    "league": "1. Liga",
+    "sport": "football",
+    "country": "Russia",
+    "date": "2025-04-26",
+    "time": "08:00",
+    "odds": {
+      "home": 1.88,
+      "draw": 3.3,
+      "away": 4.1
+    },
+    "raw": {
+      "eventId": "51241131",
+      "country": "Russia",
+      "tournament": "1. Liga",
+      "event": "FC Ska-Khabarovsk - FC Yenisey Krasnoyarsk",
+      "market": "1X2",
+      "home_odds": "1.88",
+      "draw_odds": "3.30",
+      "away_odds": "4.10",
       "start_time": "2025-04-26 08:00"
     }
   },
@@ -10816,84 +10998,6 @@
     }
   },
   {
-    "id": "51241131",
-    "eventId": "51241131",
-    "teams": "FC Ska-Khabarovsk - FC Yenisey Krasnoyarsk",
-    "league": "1. Liga",
-    "sport": "football",
-    "country": "Russia",
-    "date": "2025-04-26",
-    "time": "08:00",
-    "odds": {
-      "home": 1.88,
-      "draw": 3.3,
-      "away": 4.1
-    },
-    "raw": {
-      "eventId": "51241131",
-      "country": "Russia",
-      "tournament": "1. Liga",
-      "event": "FC Ska-Khabarovsk - FC Yenisey Krasnoyarsk",
-      "market": "1X2",
-      "home_odds": "1.88",
-      "draw_odds": "3.30",
-      "away_odds": "4.10",
-      "start_time": "2025-04-26 08:00"
-    }
-  },
-  {
-    "id": "57584757",
-    "eventId": "57584757",
-    "teams": "Tokushima V - Kataller T",
-    "league": "J.League 2",
-    "sport": "football",
-    "country": "Japan",
-    "date": "2025-04-26",
-    "time": "08:00",
-    "odds": {
-      "home": 2.05,
-      "draw": 3.1,
-      "away": 3.75
-    },
-    "raw": {
-      "eventId": "57584757",
-      "country": "Japan",
-      "tournament": "J.League 2",
-      "event": "Tokushima V - Kataller T",
-      "market": "1X2",
-      "home_odds": "2.05",
-      "draw_odds": "3.10",
-      "away_odds": "3.75",
-      "start_time": "2025-04-26 08:00"
-    }
-  },
-  {
-    "id": "57584755",
-    "eventId": "57584755",
-    "teams": "Renofa Y - Imabari",
-    "league": "J.League 2",
-    "sport": "football",
-    "country": "Japan",
-    "date": "2025-04-26",
-    "time": "08:00",
-    "odds": {
-      "home": 3.2,
-      "draw": 3.15,
-      "away": 2.21
-    },
-    "raw": {
-      "eventId": "57584755",
-      "country": "Japan",
-      "tournament": "J.League 2",
-      "event": "Renofa Y - Imabari",
-      "market": "1X2",
-      "home_odds": "3.20",
-      "draw_odds": "3.15",
-      "away_odds": "2.21",
-      "start_time": "2025-04-26 08:00"
-    }
-  },
-  {
     "id": "58071383",
     "eventId": "58071383",
     "teams": "Essendon Royals SC - Alamein United Women",
@@ -10946,58 +11050,6 @@
     }
   },
   {
-    "id": "57353125",
-    "eventId": "57353125",
-    "teams": "Seoul E-Land - Gyeongnam",
-    "league": "K-League 2",
-    "sport": "football",
-    "country": "Republic of Korea",
-    "date": "2025-04-26",
-    "time": "08:00",
-    "odds": {
-      "home": 1.68,
-      "draw": 3.8,
-      "away": 4.5
-    },
-    "raw": {
-      "eventId": "57353125",
-      "country": "Republic of Korea",
-      "tournament": "K-League 2",
-      "event": "Seoul E-Land - Gyeongnam",
-      "market": "1X2",
-      "home_odds": "1.68",
-      "draw_odds": "3.80",
-      "away_odds": "4.50",
-      "start_time": "2025-04-26 08:00"
-    }
-  },
-  {
-    "id": "57130669",
-    "eventId": "57130669",
-    "teams": "Suwon City - Jeonbuk Hyundai Motors FC",
-    "league": "K-League 1",
-    "sport": "football",
-    "country": "Republic of Korea",
-    "date": "2025-04-26",
-    "time": "08:00",
-    "odds": {
-      "home": 3.3,
-      "draw": 3.35,
-      "away": 2.14
-    },
-    "raw": {
-      "eventId": "57130669",
-      "country": "Republic of Korea",
-      "tournament": "K-League 1",
-      "event": "Suwon City - Jeonbuk Hyundai Motors FC",
-      "market": "1X2",
-      "home_odds": "3.30",
-      "draw_odds": "3.35",
-      "away_odds": "2.14",
-      "start_time": "2025-04-26 08:00"
-    }
-  },
-  {
     "id": "59291435",
     "eventId": "59291435",
     "teams": "Cooma Tigers - Gungahlin United FC",
@@ -11020,58 +11072,6 @@
       "home_odds": "2.11",
       "draw_odds": "3.70",
       "away_odds": "2.75",
-      "start_time": "2025-04-26 08:00"
-    }
-  },
-  {
-    "id": "52130755",
-    "eventId": "52130755",
-    "teams": "Brisbane Roar FC - Wellington Phoenix FC",
-    "league": "A-League",
-    "sport": "football",
-    "country": "Australia",
-    "date": "2025-04-26",
-    "time": "08:00",
-    "odds": {
-      "home": 1.92,
-      "draw": 3.7,
-      "away": 3.6
-    },
-    "raw": {
-      "eventId": "52130755",
-      "country": "Australia",
-      "tournament": "A-League",
-      "event": "Brisbane Roar FC - Wellington Phoenix FC",
-      "market": "1X2",
-      "home_odds": "1.92",
-      "draw_odds": "3.70",
-      "away_odds": "3.60",
-      "start_time": "2025-04-26 08:00"
-    }
-  },
-  {
-    "id": "57353127",
-    "eventId": "57353127",
-    "teams": "Cheonan City - Chungbuk Cheongju FC",
-    "league": "K-League 2",
-    "sport": "football",
-    "country": "Republic of Korea",
-    "date": "2025-04-26",
-    "time": "08:00",
-    "odds": {
-      "home": 2.44,
-      "draw": 3.35,
-      "away": 2.7
-    },
-    "raw": {
-      "eventId": "57353127",
-      "country": "Republic of Korea",
-      "tournament": "K-League 2",
-      "event": "Cheonan City - Chungbuk Cheongju FC",
-      "market": "1X2",
-      "home_odds": "2.44",
-      "draw_odds": "3.35",
-      "away_odds": "2.70",
       "start_time": "2025-04-26 08:00"
     }
   },
@@ -11154,32 +11154,6 @@
     }
   },
   {
-    "id": "59745718",
-    "eventId": "59745718",
-    "teams": "Hakoah - Bonnyrigg",
-    "league": "NSW League One",
-    "sport": "football",
-    "country": "Australia",
-    "date": "2025-04-26",
-    "time": "09:30",
-    "odds": {
-      "home": 2.95,
-      "draw": 3.65,
-      "away": 2
-    },
-    "raw": {
-      "eventId": "59745718",
-      "country": "Australia",
-      "tournament": "NSW League One",
-      "event": "Hakoah - Bonnyrigg",
-      "market": "1X2",
-      "home_odds": "2.95",
-      "draw_odds": "3.65",
-      "away_odds": "2.00",
-      "start_time": "2025-04-26 09:30"
-    }
-  },
-  {
     "id": "57274809",
     "eventId": "57274809",
     "teams": "Cooks Hill United - Charlestown Azzurri FC",
@@ -11232,29 +11206,29 @@
     }
   },
   {
-    "id": "56926607",
-    "eventId": "56926607",
-    "teams": "Ipswich FC - Redlands United FC",
-    "league": "Queensland Premier League 1",
+    "id": "59745718",
+    "eventId": "59745718",
+    "teams": "Hakoah - Bonnyrigg",
+    "league": "NSW League One",
     "sport": "football",
     "country": "Australia",
     "date": "2025-04-26",
-    "time": "09:45",
+    "time": "09:30",
     "odds": {
-      "home": 3.5,
-      "draw": 4.4,
-      "away": 1.67
+      "home": 2.95,
+      "draw": 3.65,
+      "away": 2
     },
     "raw": {
-      "eventId": "56926607",
+      "eventId": "59745718",
       "country": "Australia",
-      "tournament": "Queensland Premier League 1",
-      "event": "Ipswich FC - Redlands United FC",
+      "tournament": "NSW League One",
+      "event": "Hakoah - Bonnyrigg",
       "market": "1X2",
-      "home_odds": "3.50",
-      "draw_odds": "4.40",
-      "away_odds": "1.67",
-      "start_time": "2025-04-26 09:45"
+      "home_odds": "2.95",
+      "draw_odds": "3.65",
+      "away_odds": "2.00",
+      "start_time": "2025-04-26 09:30"
     }
   },
   {
@@ -11281,6 +11255,162 @@
       "draw_odds": "4.70",
       "away_odds": "4.40",
       "start_time": "2025-04-26 09:45"
+    }
+  },
+  {
+    "id": "56926607",
+    "eventId": "56926607",
+    "teams": "Ipswich FC - Redlands United FC",
+    "league": "Queensland Premier League 1",
+    "sport": "football",
+    "country": "Australia",
+    "date": "2025-04-26",
+    "time": "09:45",
+    "odds": {
+      "home": 3.5,
+      "draw": 4.4,
+      "away": 1.67
+    },
+    "raw": {
+      "eventId": "56926607",
+      "country": "Australia",
+      "tournament": "Queensland Premier League 1",
+      "event": "Ipswich FC - Redlands United FC",
+      "market": "1X2",
+      "home_odds": "3.50",
+      "draw_odds": "4.40",
+      "away_odds": "1.67",
+      "start_time": "2025-04-26 09:45"
+    }
+  },
+  {
+    "id": "52130757",
+    "eventId": "52130757",
+    "teams": "Newcastle United Jets FC - Western Sydney Wanderers",
+    "league": "A-League",
+    "sport": "football",
+    "country": "Australia",
+    "date": "2025-04-26",
+    "time": "10:00",
+    "odds": {
+      "home": 3,
+      "draw": 4,
+      "away": 2.05
+    },
+    "raw": {
+      "eventId": "52130757",
+      "country": "Australia",
+      "tournament": "A-League",
+      "event": "Newcastle United Jets FC - Western Sydney Wanderers",
+      "market": "1X2",
+      "home_odds": "3.00",
+      "draw_odds": "4.00",
+      "away_odds": "2.05",
+      "start_time": "2025-04-26 10:00"
+    }
+  },
+  {
+    "id": "58063905",
+    "eventId": "58063905",
+    "teams": "Perth Redstar FC - Perth SC",
+    "league": "Western Australia NPL",
+    "sport": "football",
+    "country": "Australia",
+    "date": "2025-04-26",
+    "time": "10:00",
+    "odds": {
+      "home": 2.35,
+      "draw": 3.8,
+      "away": 2.38
+    },
+    "raw": {
+      "eventId": "58063905",
+      "country": "Australia",
+      "tournament": "Western Australia NPL",
+      "event": "Perth Redstar FC - Perth SC",
+      "market": "1X2",
+      "home_odds": "2.35",
+      "draw_odds": "3.80",
+      "away_odds": "2.38",
+      "start_time": "2025-04-26 10:00"
+    }
+  },
+  {
+    "id": "58063907",
+    "eventId": "58063907",
+    "teams": "Floreat Athena - Fremantle City",
+    "league": "Western Australia NPL",
+    "sport": "football",
+    "country": "Australia",
+    "date": "2025-04-26",
+    "time": "10:00",
+    "odds": {
+      "home": 2.31,
+      "draw": 3.8,
+      "away": 2.4
+    },
+    "raw": {
+      "eventId": "58063907",
+      "country": "Australia",
+      "tournament": "Western Australia NPL",
+      "event": "Floreat Athena - Fremantle City",
+      "market": "1X2",
+      "home_odds": "2.31",
+      "draw_odds": "3.80",
+      "away_odds": "2.40",
+      "start_time": "2025-04-26 10:00"
+    }
+  },
+  {
+    "id": "58063909",
+    "eventId": "58063909",
+    "teams": "Sorrento - Stirling Macedonia FC",
+    "league": "Western Australia NPL",
+    "sport": "football",
+    "country": "Australia",
+    "date": "2025-04-26",
+    "time": "10:00",
+    "odds": {
+      "home": 3.55,
+      "draw": 4.3,
+      "away": 1.68
+    },
+    "raw": {
+      "eventId": "58063909",
+      "country": "Australia",
+      "tournament": "Western Australia NPL",
+      "event": "Sorrento - Stirling Macedonia FC",
+      "market": "1X2",
+      "home_odds": "3.55",
+      "draw_odds": "4.30",
+      "away_odds": "1.68",
+      "start_time": "2025-04-26 10:00"
+    }
+  },
+  {
+    "id": "58063911",
+    "eventId": "58063911",
+    "teams": "Armadale SC - Olympic Kingsway SC",
+    "league": "Western Australia NPL",
+    "sport": "football",
+    "country": "Australia",
+    "date": "2025-04-26",
+    "time": "10:00",
+    "odds": {
+      "home": 4.2,
+      "draw": 4.2,
+      "away": 1.58
+    },
+    "raw": {
+      "eventId": "58063911",
+      "country": "Australia",
+      "tournament": "Western Australia NPL",
+      "event": "Armadale SC - Olympic Kingsway SC",
+      "market": "1X2",
+      "home_odds": "4.20",
+      "draw_odds": "4.20",
+      "away_odds": "1.58",
+      "start_time": "2025-04-26 10:00"
     }
   },
   {
@@ -11362,32 +11492,6 @@
     }
   },
   {
-    "id": "58063905",
-    "eventId": "58063905",
-    "teams": "Perth Redstar FC - Perth SC",
-    "league": "Western Australia NPL",
-    "sport": "football",
-    "country": "Australia",
-    "date": "2025-04-26",
-    "time": "10:00",
-    "odds": {
-      "home": 2.35,
-      "draw": 3.8,
-      "away": 2.38
-    },
-    "raw": {
-      "eventId": "58063905",
-      "country": "Australia",
-      "tournament": "Western Australia NPL",
-      "event": "Perth Redstar FC - Perth SC",
-      "market": "1X2",
-      "home_odds": "2.35",
-      "draw_odds": "3.80",
-      "away_odds": "2.38",
-      "start_time": "2025-04-26 10:00"
-    }
-  },
-  {
     "id": "59745726",
     "eventId": "59745726",
     "teams": "Bankstown City - Newcastle Jets",
@@ -11414,80 +11518,54 @@
     }
   },
   {
-    "id": "58063907",
-    "eventId": "58063907",
-    "teams": "Floreat Athena - Fremantle City",
-    "league": "Western Australia NPL",
+    "id": "56926609",
+    "eventId": "56926609",
+    "teams": "Southside Eagles - Broadbeach United",
+    "league": "Queensland Premier League 1",
     "sport": "football",
     "country": "Australia",
     "date": "2025-04-26",
     "time": "10:00",
     "odds": {
-      "home": 2.31,
-      "draw": 3.8,
-      "away": 2.4
+      "home": 6,
+      "draw": 5.6,
+      "away": 1.31
     },
     "raw": {
-      "eventId": "58063907",
+      "eventId": "56926609",
       "country": "Australia",
-      "tournament": "Western Australia NPL",
-      "event": "Floreat Athena - Fremantle City",
+      "tournament": "Queensland Premier League 1",
+      "event": "Southside Eagles - Broadbeach United",
       "market": "1X2",
-      "home_odds": "2.31",
-      "draw_odds": "3.80",
-      "away_odds": "2.40",
+      "home_odds": "6.00",
+      "draw_odds": "5.60",
+      "away_odds": "1.31",
       "start_time": "2025-04-26 10:00"
     }
   },
   {
-    "id": "58063909",
-    "eventId": "58063909",
-    "teams": "Sorrento - Stirling Macedonia FC",
+    "id": "58063913",
+    "eventId": "58063913",
+    "teams": "Western Knights SC - Perth Glory Youth",
     "league": "Western Australia NPL",
     "sport": "football",
     "country": "Australia",
     "date": "2025-04-26",
     "time": "10:00",
     "odds": {
-      "home": 3.55,
-      "draw": 4.3,
-      "away": 1.68
+      "home": 4.1,
+      "draw": 4.4,
+      "away": 1.57
     },
     "raw": {
-      "eventId": "58063909",
+      "eventId": "58063913",
       "country": "Australia",
       "tournament": "Western Australia NPL",
-      "event": "Sorrento - Stirling Macedonia FC",
+      "event": "Western Knights SC - Perth Glory Youth",
       "market": "1X2",
-      "home_odds": "3.55",
-      "draw_odds": "4.30",
-      "away_odds": "1.68",
-      "start_time": "2025-04-26 10:00"
-    }
-  },
-  {
-    "id": "58063911",
-    "eventId": "58063911",
-    "teams": "Armadale SC - Olympic Kingsway SC",
-    "league": "Western Australia NPL",
-    "sport": "football",
-    "country": "Australia",
-    "date": "2025-04-26",
-    "time": "10:00",
-    "odds": {
-      "home": 4.2,
-      "draw": 4.2,
-      "away": 1.58
-    },
-    "raw": {
-      "eventId": "58063911",
-      "country": "Australia",
-      "tournament": "Western Australia NPL",
-      "event": "Armadale SC - Olympic Kingsway SC",
-      "market": "1X2",
-      "home_odds": "4.20",
-      "draw_odds": "4.20",
-      "away_odds": "1.58",
+      "home_odds": "4.10",
+      "draw_odds": "4.40",
+      "away_odds": "1.57",
       "start_time": "2025-04-26 10:00"
     }
   },
@@ -11618,84 +11696,6 @@
       "home_odds": "2.22",
       "draw_odds": "3.50",
       "away_odds": "2.65",
-      "start_time": "2025-04-26 10:00"
-    }
-  },
-  {
-    "id": "56926609",
-    "eventId": "56926609",
-    "teams": "Southside Eagles - Broadbeach United",
-    "league": "Queensland Premier League 1",
-    "sport": "football",
-    "country": "Australia",
-    "date": "2025-04-26",
-    "time": "10:00",
-    "odds": {
-      "home": 6,
-      "draw": 5.6,
-      "away": 1.31
-    },
-    "raw": {
-      "eventId": "56926609",
-      "country": "Australia",
-      "tournament": "Queensland Premier League 1",
-      "event": "Southside Eagles - Broadbeach United",
-      "market": "1X2",
-      "home_odds": "6.00",
-      "draw_odds": "5.60",
-      "away_odds": "1.31",
-      "start_time": "2025-04-26 10:00"
-    }
-  },
-  {
-    "id": "59762986",
-    "eventId": "59762986",
-    "teams": "Subiaco - Mandurah City",
-    "league": "Western Australia State League 1",
-    "sport": "football",
-    "country": "Australia",
-    "date": "2025-04-26",
-    "time": "10:00",
-    "odds": {
-      "home": 2.22,
-      "draw": 3.5,
-      "away": 2.65
-    },
-    "raw": {
-      "eventId": "59762986",
-      "country": "Australia",
-      "tournament": "Western Australia State League 1",
-      "event": "Subiaco - Mandurah City",
-      "market": "1X2",
-      "home_odds": "2.22",
-      "draw_odds": "3.50",
-      "away_odds": "2.65",
-      "start_time": "2025-04-26 10:00"
-    }
-  },
-  {
-    "id": "58063913",
-    "eventId": "58063913",
-    "teams": "Western Knights SC - Perth Glory Youth",
-    "league": "Western Australia NPL",
-    "sport": "football",
-    "country": "Australia",
-    "date": "2025-04-26",
-    "time": "10:00",
-    "odds": {
-      "home": 4.1,
-      "draw": 4.4,
-      "away": 1.57
-    },
-    "raw": {
-      "eventId": "58063913",
-      "country": "Australia",
-      "tournament": "Western Australia NPL",
-      "event": "Western Knights SC - Perth Glory Youth",
-      "market": "1X2",
-      "home_odds": "4.10",
-      "draw_odds": "4.40",
-      "away_odds": "1.57",
       "start_time": "2025-04-26 10:00"
     }
   },
@@ -14647,7 +14647,7 @@
     "date": "2025-04-26",
     "time": "15:45",
     "odds": {
-      "home": 2.42,
+      "home": 2.44,
       "draw": 3.25,
       "away": 2.8
     },
@@ -14657,7 +14657,7 @@
       "tournament": "Ekstraklasa",
       "event": "KS Lechia Gdansk - GKS Piast Gliwice",
       "market": "1X2",
-      "home_odds": "2.42",
+      "home_odds": "2.44",
       "draw_odds": "3.25",
       "away_odds": "2.80",
       "start_time": "2025-04-26 15:45"
@@ -22681,9 +22681,9 @@
     "date": "2025-04-27",
     "time": "00:30",
     "odds": {
-      "home": 2.04,
-      "draw": 3.05,
-      "away": 3.55
+      "home": 1.99,
+      "draw": 3.1,
+      "away": 3.65
     },
     "raw": {
       "eventId": "57250097",
@@ -22691,9 +22691,9 @@
       "tournament": "Primera Division",
       "event": "Monagas SC - Academia Anzoategui FC",
       "market": "1X2",
-      "home_odds": "2.04",
-      "draw_odds": "3.05",
-      "away_odds": "3.55",
+      "home_odds": "1.99",
+      "draw_odds": "3.10",
+      "away_odds": "3.65",
       "start_time": "2025-04-27 00:30"
     }
   },
@@ -27985,9 +27985,9 @@
     "date": "2025-04-27",
     "time": "16:00",
     "odds": {
-      "home": 1.73,
+      "home": 1.72,
       "draw": 4.2,
-      "away": 4.7
+      "away": 4.8
     },
     "raw": {
       "eventId": "50850635",
@@ -27995,9 +27995,9 @@
       "tournament": "Premier League",
       "event": "Bournemouth - Manchester United",
       "market": "1X2",
-      "home_odds": "1.73",
+      "home_odds": "1.72",
       "draw_odds": "4.20",
-      "away_odds": "4.70",
+      "away_odds": "4.80",
       "start_time": "2025-04-27 16:00"
     }
   },
@@ -35292,8 +35292,8 @@
     "time": "01:00",
     "odds": {
       "home": 1.09,
-      "draw": 8.6,
-      "away": 23
+      "draw": 8.8,
+      "away": 20
     },
     "raw": {
       "eventId": "59752810",
@@ -35302,8 +35302,8 @@
       "event": "Botafogo RJ - Capital CF DF",
       "market": "1X2",
       "home_odds": "1.09",
-      "draw_odds": "8.60",
-      "away_odds": "23.00",
+      "draw_odds": "8.80",
+      "away_odds": "20.00",
       "start_time": "2025-05-01 01:00"
     }
   },
@@ -35343,9 +35343,9 @@
     "date": "2025-05-01",
     "time": "03:30",
     "odds": {
-      "home": 3.5,
-      "draw": 3.1,
-      "away": 2.12
+      "home": 3.2,
+      "draw": 2.95,
+      "away": 2.31
     },
     "raw": {
       "eventId": "59752976",
@@ -35353,9 +35353,9 @@
       "tournament": "Copa do Brasil",
       "event": "Novorizontino - SC Corinthians",
       "market": "1X2",
-      "home_odds": "3.50",
-      "draw_odds": "3.10",
-      "away_odds": "2.12",
+      "home_odds": "3.20",
+      "draw_odds": "2.95",
+      "away_odds": "2.31",
       "start_time": "2025-05-01 03:30"
     }
   },
@@ -35395,9 +35395,9 @@
     "date": "2025-05-01",
     "time": "03:30",
     "odds": {
-      "home": 3.25,
-      "draw": 3.15,
-      "away": 2.2
+      "home": 3.6,
+      "draw": 3.05,
+      "away": 2.1
     },
     "raw": {
       "eventId": "59752782",
@@ -35405,9 +35405,9 @@
       "tournament": "Copa do Brasil",
       "event": "Paysandu - EC Bahia",
       "market": "1X2",
-      "home_odds": "3.25",
-      "draw_odds": "3.15",
-      "away_odds": "2.20",
+      "home_odds": "3.60",
+      "draw_odds": "3.05",
+      "away_odds": "2.10",
       "start_time": "2025-05-01 03:30"
     }
   },
@@ -36305,9 +36305,9 @@
     "date": "2025-05-03",
     "time": "19:30",
     "odds": {
-      "home": 1.91,
+      "home": 1.92,
       "draw": 3.75,
-      "away": 4
+      "away": 3.95
     },
     "raw": {
       "eventId": "50850655",
@@ -36315,9 +36315,9 @@
       "tournament": "Premier League",
       "event": "Arsenal - Bournemouth",
       "market": "1X2",
-      "home_odds": "1.91",
+      "home_odds": "1.92",
       "draw_odds": "3.75",
-      "away_odds": "4.00",
+      "away_odds": "3.95",
       "start_time": "2025-05-03 19:30"
     }
   },
@@ -37789,7 +37789,7 @@
     "odds": {
       "home": 2.55,
       "draw": 3.1,
-      "away": 3.05
+      "away": 3
     },
     "raw": {
       "eventId": "50852749",
@@ -37799,7 +37799,7 @@
       "market": "1X2",
       "home_odds": "2.55",
       "draw_odds": "3.10",
-      "away_odds": "3.05",
+      "away_odds": "3.00",
       "start_time": "2025-05-04 22:00"
     }
   },

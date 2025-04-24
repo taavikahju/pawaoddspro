@@ -1,112 +1,126 @@
 #!/usr/bin/env node
 const axios = require('axios');
 
-// Configure multiple API endpoints for faster and more robust data retrieval
-// SportyBet has different endpoints for its main categories of events
-const ENDPOINTS = [
-  // Main football/soccer upcoming events endpoint 
-  {
-    url: 'https://www.sportybet.com/api/gh/factsCenter/pcUpcomingEvents',
-    params: {
-      sportId: 'sr:sport:1',
-      marketId: '1',         // Just get 1X2 markets for efficiency
-      pageSize: '100',       // Max page size for more data
-      option: '1'
-    },
-    maxPages: 10             // Fetch up to 10 pages (1000 events)
-  },
-  // Popular leagues endpoint
-  {
-    url: 'https://www.sportybet.com/api/gh/factsCenter/pcPopularLeague',
-    params: {
-      sportId: 'sr:sport:1', 
-      marketId: '1',
-      option: '1'
-    },
-    maxPages: 3              // Fetch up to 3 pages
-  },
-  // Live now endpoint - gets currently active matches
-  {
-    url: 'https://www.sportybet.com/api/gh/factsCenter/pcLiveNow',
-    params: {
-      sportId: 'sr:sport:1',
-      marketId: '1',
-      option: '1'
-    },
-    maxPages: 1              // Usually just 1 page
+// ==== CONFIGURATION ====
+// Primary Sportybet API country code - trying multiple regions/countries
+const REGIONS = ['gh', 'ke', 'ng', 'ug', 'tz'];
+
+// Configure multiple API endpoints from different Sportybet regional APIs
+const buildEndpoints = () => {
+  const endpoints = [];
+  
+  // Generate endpoints for each regional API to maximize data collection
+  for (const region of REGIONS) {
+    // Main API endpoints that work across all regions
+    endpoints.push(
+      // Main upcoming events - best source for all matches
+      {
+        url: `https://www.sportybet.com/api/${region}/factsCenter/pcUpcomingEvents`,
+        params: {
+          sportId: 'sr:sport:1',
+          marketId: '1',
+          pageSize: '100',
+          option: '1'
+        },
+        region,
+        maxPages: 10
+      },
+      // Today's matches - has most immediate matches with good data
+      {
+        url: `https://www.sportybet.com/api/${region}/factsCenter/pcToday`,
+        params: {
+          sportId: 'sr:sport:1',
+          marketId: '1',
+          pageSize: '100',
+          option: '1'
+        },
+        region,
+        maxPages: 5
+      }
+    );
   }
-];
+  
+  // Use the Ghana API (most complete) for specific regional data
+  const majorCountryCategories = [
+    { id: 'sr:category:1', name: 'England' },   // England
+    { id: 'sr:category:27', name: 'Italy' },    // Italy
+    { id: 'sr:category:31', name: 'France' },   // France
+    { id: 'sr:category:32', name: 'Spain' },    // Spain
+    { id: 'sr:category:30', name: 'Germany' },  // Germany
+    { id: 'sr:category:13', name: 'Ghana' },    // Ghana
+    { id: 'sr:category:14', name: 'Nigeria' },  // Nigeria
+    { id: 'sr:category:45', name: 'Kenya' },    // Kenya
+    { id: 'sr:category:48', name: 'South Africa' } // South Africa
+  ];
+  
+  // Add country-specific endpoints (separate from regional APIs)
+  majorCountryCategories.forEach(country => {
+    endpoints.push({
+      url: 'https://www.sportybet.com/api/gh/factsCenter/pcCategory',
+      params: {
+        sportId: 'sr:sport:1',
+        categoryId: country.id,
+        marketId: '1',
+        pageSize: '100',
+        option: '1'
+      },
+      region: 'gh',
+      name: country.name,
+      maxPages: 3
+    });
+  });
+  
+  // Add major tournament endpoints which often have detailed data
+  const majorTournaments = [
+    { id: 'sr:tournament:8', name: 'UEFA Champions League' },
+    { id: 'sr:tournament:679', name: 'UEFA Europa League' },
+    { id: 'sr:tournament:17', name: 'English Premier League' },
+    { id: 'sr:tournament:23', name: 'Spanish La Liga' },
+    { id: 'sr:tournament:34', name: 'Italian Serie A' },
+    { id: 'sr:tournament:35', name: 'German Bundesliga' },
+    { id: 'sr:tournament:47', name: 'French Ligue 1' }
+  ];
+  
+  majorTournaments.forEach(tournament => {
+    endpoints.push({
+      url: 'https://www.sportybet.com/api/gh/factsCenter/pcTournament',
+      params: {
+        sportId: 'sr:sport:1',
+        tournamentId: tournament.id,
+        marketId: '1',
+        pageSize: '100',
+        option: '1'
+      },
+      region: 'gh',
+      name: tournament.name,
+      maxPages: 2
+    });
+  });
+  
+  return endpoints;
+};
 
-// More countries to query specifically - each can have hundreds of events
-const COUNTRY_ENDPOINTS = [
-  // English football - highly popular
-  {
-    url: 'https://www.sportybet.com/api/gh/factsCenter/pcCategory',
-    params: {
-      sportId: 'sr:sport:1',
-      categoryId: 'sr:category:1',  // England
-      marketId: '1',
-      pageSize: '100',
-      option: '1'
-    },
-    maxPages: 3
-  },
-  // Spanish football
-  {
-    url: 'https://www.sportybet.com/api/gh/factsCenter/pcCategory',
-    params: {
-      sportId: 'sr:sport:1',
-      categoryId: 'sr:category:32', // Spain
-      marketId: '1',
-      pageSize: '100',
-      option: '1'
-    },
-    maxPages: 3
-  },
-  // German football
-  {
-    url: 'https://www.sportybet.com/api/gh/factsCenter/pcCategory',
-    params: {
-      sportId: 'sr:sport:1',
-      categoryId: 'sr:category:30', // Germany
-      marketId: '1',
-      pageSize: '100',
-      option: '1'
-    },
-    maxPages: 3
-  },
-  // African football
-  {
-    url: 'https://www.sportybet.com/api/gh/factsCenter/pcCategory',
-    params: {
-      sportId: 'sr:sport:1',
-      categoryId: 'sr:category:13', // Ghana
-      marketId: '1',
-      pageSize: '100',
-      option: '1'
-    },
-    maxPages: 2
-  }
-];
+// Generate all endpoints
+const ALL_ENDPOINTS = buildEndpoints();
 
-// Combine all endpoints
-const ALL_ENDPOINTS = [...ENDPOINTS, ...COUNTRY_ENDPOINTS];
-
-// Use browser-like headers to avoid API blocks
-const HEADERS = {
+// Browser-like headers with country-specific variants for different regions
+const getHeaders = (region = 'gh') => ({
   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
   'Accept': 'application/json',
   'Accept-Language': 'en-US,en;q=0.9',
-  'Referer': 'https://www.sportybet.com/gh/sports/soccer',
-  'Origin': 'https://www.sportybet.com'
-};
+  'Referer': `https://www.sportybet.com/${region}/sports/soccer`,
+  'Origin': 'https://www.sportybet.com',
+  'sec-ch-ua': '"Not A(Brand";v="99", "Google Chrome";v="121", "Chromium";v="121"',
+  'sec-ch-ua-mobile': '?0',
+  'sec-ch-ua-platform': '"Windows"'
+});
 
-// More efficient timeout implementation
-const fetchWithTimeout = async (url, options, timeout = 5000) => {
+// Efficient fetch implementation with cancelable requests
+const fetchWithTimeout = async (url, options, timeout = 7000) => {
   try {
     const source = axios.CancelToken.source();
     const id = setTimeout(() => {
-      source.cancel('Request timeout');
+      source.cancel('Operation timeout');
     }, timeout);
     
     const response = await axios({
@@ -124,9 +138,102 @@ const fetchWithTimeout = async (url, options, timeout = 5000) => {
   }
 };
 
-// Fetch data from all endpoints in parallel with improved batch processing
+// Process a single API endpoint with retry logic for reliability
+const processEndpoint = async (endpoint, endpointIndex) => {
+  try {
+    const displayName = endpoint.name ? 
+      `${endpoint.name} (${endpointIndex + 1})` : 
+      `source ${endpointIndex + 1}`;
+    
+    // Construct query string for endpoint
+    const queryString = Object.entries(endpoint.params)
+      .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+      .join('&');
+    
+    // Fetch first page to get metadata and first batch of results
+    const firstPageUrl = `${endpoint.url}?${queryString}&pageNum=1&_t=${Date.now()}`;
+    console.error(`📥 Fetching ${displayName}, page 1...`);
+    
+    // Use region-specific headers
+    const headers = getHeaders(endpoint.region);
+    
+    // Try up to 2 times with increasing timeouts
+    let firstPageRes;
+    let retries = 0;
+    
+    while (retries < 2) {
+      try {
+        firstPageRes = await fetchWithTimeout(
+          firstPageUrl, 
+          { headers }, 
+          7000 + (retries * 2000)
+        );
+        break; // Success, exit retry loop
+      } catch (err) {
+        retries++;
+        if (retries >= 2) throw err; // Max retries reached, rethrow
+        console.error(`⚠️ Retry ${retries} for ${displayName}, page 1...`);
+        await new Promise(r => setTimeout(r, 500)); // Wait before retry
+      }
+    }
+    
+    const firstPageData = firstPageRes.data?.data;
+    
+    if (!firstPageData || !firstPageData.tournaments || !Array.isArray(firstPageData.tournaments)) {
+      console.error(`❌ No data from ${displayName}`);
+      return [];
+    }
+    
+    // Calculate total pages with endpoint-specific limits
+    const totalEvents = firstPageData.totalNum || 0;
+    const pageSize = parseInt(endpoint.params.pageSize || '50');
+    let totalPages = Math.ceil(totalEvents / pageSize);
+    
+    // Hard limit on pages to prevent timeout - use the endpoint-specific maxPages
+    totalPages = Math.min(totalPages, endpoint.maxPages || 3);
+    
+    console.error(`📊 ${displayName}: Found ${totalEvents} events across ${totalPages} pages (using ${Math.min(totalPages, endpoint.maxPages)} pages)`);
+    
+    // Store first page results
+    let endpointTournaments = firstPageData.tournaments || [];
+    
+    // Only fetch additional pages if needed
+    if (totalPages > 1) {
+      // Fetch remaining pages sequentially
+      for (let pageNum = 2; pageNum <= totalPages; pageNum++) {
+        const url = `${endpoint.url}?${queryString}&pageNum=${pageNum}&_t=${Date.now()}`;
+        console.error(`📥 Fetching ${displayName}, page ${pageNum}...`);
+        
+        try {
+          const response = await fetchWithTimeout(url, { headers }, 7000);
+          const data = response.data?.data;
+          
+          if (data && data.tournaments && data.tournaments.length > 0) {
+            console.error(`✅ ${displayName}, page ${pageNum}: ${data.tournaments.length} tournaments`);
+            endpointTournaments = endpointTournaments.concat(data.tournaments);
+          } else {
+            console.error(`⚠️ ${displayName}, page ${pageNum}: No tournaments`);
+          }
+        } catch (pageError) {
+          console.error(`❌ Failed to fetch ${displayName}, page ${pageNum}: ${pageError.message}`);
+        }
+        
+        // Small delay between requests to avoid rate limiting
+        await new Promise(resolve => setTimeout(resolve, 150));
+      }
+    }
+    
+    console.error(`📊 ${displayName}: Collected ${endpointTournaments.length} tournaments`);
+    return endpointTournaments;
+  } catch (error) {
+    console.error(`❌ Error processing endpoint ${endpointIndex + 1}: ${error.message}`);
+    return [];
+  }
+};
+
+// Improved batch processing with guaranteed progress
 const fetchFromAllEndpoints = async () => {
-  console.error(`📊 Starting Sportybet data collection from ${ALL_ENDPOINTS.length} sources...`);
+  console.error(`📊 Starting Sportybet data collection from ${ALL_ENDPOINTS.length} endpoints...`);
   
   // Total number of tournaments collected
   let tournamentCount = 0;
@@ -134,99 +241,54 @@ const fetchFromAllEndpoints = async () => {
   // To store all tournaments
   let allTournaments = [];
   
+  // Create a pool with all endpoints and randomize order for better distribution
+  const endpointPool = [...ALL_ENDPOINTS]
+    .map(endpoint => ({ endpoint, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(item => item.endpoint);
+  
   // Process endpoints in batches to avoid hitting rate limits
-  const BATCH_SIZE = 2;
-  const batches = Math.ceil(ALL_ENDPOINTS.length / BATCH_SIZE);
+  const BATCH_SIZE = 3;
+  const batches = Math.ceil(endpointPool.length / BATCH_SIZE);
   
   for (let batchIndex = 0; batchIndex < batches; batchIndex++) {
     const startIdx = batchIndex * BATCH_SIZE;
-    const endIdx = Math.min(startIdx + BATCH_SIZE, ALL_ENDPOINTS.length);
-    const currentBatch = ALL_ENDPOINTS.slice(startIdx, endIdx);
+    const endIdx = Math.min(startIdx + BATCH_SIZE, endpointPool.length);
+    const currentBatch = endpointPool.slice(startIdx, endIdx);
     
     console.error(`📊 Processing batch ${batchIndex + 1}/${batches} (endpoints ${startIdx + 1}-${endIdx})...`);
     
-    const batchPromises = currentBatch.map(async (endpoint, localIndex) => {
-      const endpointIndex = startIdx + localIndex;
-      try {
-        // Construct query string for this endpoint
-        const queryString = Object.entries(endpoint.params)
-          .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-          .join('&');
-        
-        // Fetch first page to get metadata and first batch of results
-        const firstPageUrl = `${endpoint.url}?${queryString}&pageNum=1&_t=${Date.now()}`;
-        console.error(`📥 Fetching source ${endpointIndex + 1}, page 1...`);
-        
-        const firstPageRes = await fetchWithTimeout(firstPageUrl, { headers: HEADERS }, 8000);
-        const firstPageData = firstPageRes.data?.data;
-        
-        if (!firstPageData || !firstPageData.tournaments || !Array.isArray(firstPageData.tournaments)) {
-          console.error(`❌ No data from source ${endpointIndex + 1}`);
-          return [];
-        }
-        
-        // Calculate total pages, but limit to a reasonable number
-        const totalEvents = firstPageData.totalNum || 0;
-        const pageSize = parseInt(endpoint.params.pageSize || '50');
-        let totalPages = Math.ceil(totalEvents / pageSize);
-        
-        // Hard limit on pages to prevent timeout - use the endpoint-specific maxPages
-        totalPages = Math.min(totalPages, endpoint.maxPages || 3);
-        
-        console.error(`📊 Source ${endpointIndex + 1}: Found ${totalEvents} events across ${totalPages} pages (using ${Math.min(totalPages, endpoint.maxPages)} pages)`);
-        
-        // Store first page results
-        let endpointTournaments = firstPageData.tournaments || [];
-        
-        // Only fetch additional pages if needed
-        if (totalPages > 1) {
-          // Fetch remaining pages one by one to avoid timeouts
-          for (let pageNum = 2; pageNum <= totalPages; pageNum++) {
-            const url = `${endpoint.url}?${queryString}&pageNum=${pageNum}&_t=${Date.now()}`;
-            console.error(`📥 Fetching source ${endpointIndex + 1}, page ${pageNum}...`);
-            
-            try {
-              const response = await fetchWithTimeout(url, { headers: HEADERS }, 8000);
-              const data = response.data?.data;
-              
-              if (data && data.tournaments && data.tournaments.length > 0) {
-                console.error(`✅ Source ${endpointIndex + 1}, page ${pageNum}: ${data.tournaments.length} tournaments`);
-                endpointTournaments = endpointTournaments.concat(data.tournaments);
-              } else {
-                console.error(`⚠️ Source ${endpointIndex + 1}, page ${pageNum}: No tournaments`);
-              }
-            } catch (pageError) {
-              console.error(`❌ Failed to fetch source ${endpointIndex + 1}, page ${pageNum}: ${pageError.message}`);
-            }
-            
-            // Small delay between requests to avoid rate limiting
-            await new Promise(resolve => setTimeout(resolve, 200));
-          }
-        }
-        
-        console.error(`📊 Source ${endpointIndex + 1}: Collected ${endpointTournaments.length} tournaments`);
-        return endpointTournaments;
-      } catch (error) {
-        console.error(`❌ Error in source ${endpointIndex + 1}: ${error.message}`);
-        return [];
-      }
-    });
+    // Process batch in parallel for speed
+    const batchPromises = currentBatch.map((endpoint, localIndex) => 
+      processEndpoint(endpoint, startIdx + localIndex)
+    );
     
     // Wait for current batch to complete
     const batchResults = await Promise.all(batchPromises);
     
     // Process batch results
+    let batchTournaments = 0;
     for (const tournaments of batchResults) {
       allTournaments = allTournaments.concat(tournaments);
+      batchTournaments += tournaments.length;
       tournamentCount += tournaments.length;
     }
     
-    console.error(`📊 After batch ${batchIndex + 1}: Collected ${tournamentCount} tournaments total`);
+    console.error(`📊 Batch ${batchIndex + 1} collected ${batchTournaments} tournaments (total: ${tournamentCount})`);
     
     // Brief pause between batches to avoid rate limiting
     if (batchIndex < batches - 1) {
       console.error('Pausing briefly before next batch...');
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 800));
+    }
+    
+    // Early exit if we have enough data already
+    if (tournamentCount > 100) {
+      const estimatedEvents = tournamentCount * 10; // Each tournament has ~10 events on average
+      if (estimatedEvents >= 1000) {
+        console.error(`📊 Collected enough data (${tournamentCount} tournaments, ~${estimatedEvents} events). Proceeding to processing...`);
+        break;
+      }
     }
   }
   
@@ -234,7 +296,7 @@ const fetchFromAllEndpoints = async () => {
   return allTournaments;
 };
 
-// Process tournaments to extract events 
+// Enhanced event processing for better data quality
 const processEvents = (tournaments) => {
   // Initialize a map to track unique events by ID
   const eventMap = new Map();
@@ -242,7 +304,7 @@ const processEvents = (tournaments) => {
   
   console.error(`⚙️ Processing tournaments data...`);
   
-  // Process each tournament
+  // First pass: process all tournaments to collect events
   for (const tournament of tournaments) {
     try {
       if (!tournament || !tournament.events) continue;
@@ -262,31 +324,54 @@ const processEvents = (tournaments) => {
             continue;
           }
           
-          // Find the 1X2 market (standard football betting market)
-          const market = event.markets?.find(m => m.id === "1" || m.name === "1X2");
+          // Check for different market formats
+          const market = 
+            event.markets?.find(m => m.id === "1" || m.name === "1X2") || 
+            event.markets?.find(m => m.id === "18" || m.name === "Match Result");
+          
           if (!market || !market.outcomes) {
             processed.skipped++;
             continue;
           }
           
-          // Extract odds values
+          // Extract odds values with flexible matching
           let homeOdds = null;
           let drawOdds = null;
           let awayOdds = null;
           
-          // Process outcomes differently based on format
+          // Try multiple formats and patterns for outcome identification
           for (const outcome of market.outcomes) {
             if (!outcome) continue;
             
-            // Handle missing desc by trying alternative properties
+            // Convert outcome descriptor to lowercase string for comparison
             const desc = (outcome.desc || outcome.name || outcome.outcome || "").toString().toLowerCase();
+            const outcomeName = (outcome.outcomeName || "").toString().toLowerCase();
             
-            if (desc.includes('home') || desc === '1') {
+            // Match home team odds
+            if (desc.includes('home') || desc === '1' || desc.includes('1 ') || 
+                outcomeName.includes('home') || desc.includes(event.homeTeamName.toLowerCase())) {
               homeOdds = outcome.odds;
-            } else if (desc.includes('draw') || desc === 'x') {
+            } 
+            // Match draw odds
+            else if (desc.includes('draw') || desc === 'x' || desc.includes('x ') || 
+                    outcomeName.includes('draw')) {
               drawOdds = outcome.odds;
-            } else if (desc.includes('away') || desc === '2') {
+            } 
+            // Match away team odds
+            else if (desc.includes('away') || desc === '2' || desc.includes('2 ') || 
+                    outcomeName.includes('away') || desc.includes(event.awayTeamName.toLowerCase())) {
               awayOdds = outcome.odds;
+            }
+          }
+          
+          // If we're still missing odds, try using position-based detection
+          // (Some API responses just use positions instead of labels)
+          if (!homeOdds || !drawOdds || !awayOdds) {
+            const outcomes = market.outcomes;
+            if (outcomes?.length === 3) {
+              homeOdds = homeOdds || outcomes[0]?.odds;
+              drawOdds = drawOdds || outcomes[1]?.odds;
+              awayOdds = awayOdds || outcomes[2]?.odds;
             }
           }
           
@@ -297,9 +382,13 @@ const processEvents = (tournaments) => {
           }
           
           // Format the start time 
-          const startTime = event.estimateStartTime
-            ? new Date(event.estimateStartTime).toISOString().slice(0, 16).replace('T', ' ')
-            : null;
+          let startTime = null;
+          
+          if (event.estimateStartTime) {
+            startTime = new Date(event.estimateStartTime).toISOString().slice(0, 16).replace('T', ' ');
+          } else if (event.startTime) {
+            startTime = new Date(event.startTime).toISOString().slice(0, 16).replace('T', ' ');
+          }
             
           if (!startTime) {
             processed.skipped++;
@@ -314,7 +403,11 @@ const processEvents = (tournaments) => {
           }
           
           // Use eventId as key to avoid duplicates from different sources
-          if (!eventMap.has(eventId)) {
+          // If we already have this eventId, keep the record with the most recent data
+          const existingEvent = eventMap.get(eventId);
+          
+          if (!existingEvent) {
+            // New event, add it
             eventMap.set(eventId, {
               eventId,
               country,
@@ -343,15 +436,15 @@ const processEvents = (tournaments) => {
     }
   }
   
-  console.error(`✅ Processed ${processed.count} valid events (skipped ${processed.skipped})`);
+  console.error(`✅ Successfully processed ${processed.count} valid events (skipped ${processed.skipped})`);
   return Array.from(eventMap.values());
 };
 
 const run = async () => {
   try {
-    // Set a reasonable timeout for the entire operation (50 seconds)
+    // Set a reasonable timeout for the entire operation (57 seconds)
     const timeoutPromise = new Promise((_, reject) => {
-      setTimeout(() => reject(new Error("Global timeout after 50 seconds")), 50000);
+      setTimeout(() => reject(new Error("Global timeout after 57 seconds")), 57000);
     });
 
     const tournamentPromise = fetchFromAllEndpoints();
@@ -363,7 +456,7 @@ const run = async () => {
         return [];
       });
 
-    // Process tournaments into events
+    // Process tournaments into events with enhanced parsing
     const events = processEvents(tournaments);
     
     if (events.length === 0) {
