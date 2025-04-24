@@ -436,9 +436,20 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                             );
                           }
                           
-                          // Format the comparison percentage with sign
-                          const formattedComparison = comparison.toFixed(1);
+                          // Format the comparison percentage with sign and 2 decimal places
+                          const formattedComparison = comparison.toFixed(2);
                           const displayValue = `${formattedComparison}%`;
+                          
+                          // Check if the comparison is effectively zero (accounting for floating point rounding)
+                          const isEffectivelyZero = Math.abs(comparison) < 0.005;
+                          
+                          if (isEffectivelyZero) {
+                            return (
+                              <span className="text-sm font-medium px-1 py-0.5 rounded bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300 flex items-center justify-center">
+                                {displayValue}
+                              </span>
+                            );
+                          }
                           
                           // Add an icon to indicate if betPawa's price is better or worse
                           const icon = isBetter ? 
