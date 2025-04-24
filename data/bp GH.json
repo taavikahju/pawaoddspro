@@ -35,9 +35,9 @@
     "date": "2025-04-24",
     "time": "17:30",
     "odds": {
-      "home": 1.38,
-      "draw": 4.25,
-      "away": 7
+      "home": 1.36,
+      "draw": 4.35,
+      "away": 7.25
     },
     "raw": {
       "eventId": "59560323",
@@ -45,9 +45,9 @@
       "tournament": "Romania Cup",
       "event": "FC CFR 1907 Cluj - FC Farul Constanta",
       "market": "1X2 - FT",
-      "home_odds": "1.38",
-      "draw_odds": "4.25",
-      "away_odds": "7.0",
+      "home_odds": "1.36",
+      "draw_odds": "4.35",
+      "away_odds": "7.25",
       "start_time": "2025-04-24 17:30"
     }
   },
@@ -139,9 +139,9 @@
     "date": "2025-04-24",
     "time": "18:00",
     "odds": {
-      "home": 2.35,
+      "home": 2.3,
       "draw": 3.05,
-      "away": 2.9
+      "away": 2.95
     },
     "raw": {
       "eventId": "58281073",
@@ -149,9 +149,9 @@
       "tournament": "Argentina Liga Profesional de Fútbol Reserves",
       "event": "Gimnasia y Esgrima La Plata Reserves - CA Sarmiento Reserves",
       "market": "1X2 - FT",
-      "home_odds": "2.35",
+      "home_odds": "2.3",
       "draw_odds": "3.05",
-      "away_odds": "2.9",
+      "away_odds": "2.95",
       "start_time": "2025-04-24 18:00"
     }
   },
@@ -439,32 +439,6 @@
       "draw_odds": "3.45",
       "away_odds": "1.77",
       "start_time": "2025-04-24 18:45"
-    }
-  },
-  {
-    "id": "50868501",
-    "eventId": "50868501",
-    "teams": "FC Twente Enschede - PSV Eindhoven",
-    "league": "Eredivisie",
-    "sport": "football",
-    "country": "Netherlands",
-    "date": "2025-04-24",
-    "time": "19:00",
-    "odds": {
-      "home": 4.6,
-      "draw": 4.7,
-      "away": 1.58
-    },
-    "raw": {
-      "eventId": "50868501",
-      "country": "Netherlands",
-      "tournament": "Eredivisie",
-      "event": "FC Twente Enschede - PSV Eindhoven",
-      "market": "1X2 - FT",
-      "home_odds": "4.6",
-      "draw_odds": "4.7",
-      "away_odds": "1.58",
-      "start_time": "2025-04-24 19:00"
     }
   },
   {
@@ -962,6 +936,32 @@
     }
   },
   {
+    "id": "58314783",
+    "eventId": "58314783",
+    "teams": "Gremio Novorizontino SP - CA Paranaense PR",
+    "league": "Brasileiro Serie B",
+    "sport": "football",
+    "country": "Brazil",
+    "date": "2025-04-25",
+    "time": "00:35",
+    "odds": {
+      "home": 2.3,
+      "draw": 2.85,
+      "away": 3.2
+    },
+    "raw": {
+      "eventId": "58314783",
+      "country": "Brazil",
+      "tournament": "Brasileiro Serie B",
+      "event": "Gremio Novorizontino SP - CA Paranaense PR",
+      "market": "1X2 - FT",
+      "home_odds": "2.3",
+      "draw_odds": "2.85",
+      "away_odds": "3.2",
+      "start_time": "2025-04-25 00:35"
+    }
+  },
+  {
     "id": "60084193",
     "eventId": "60084193",
     "teams": "Guadalajara Women - Pumas UNAM Women",
@@ -1049,9 +1049,9 @@
     "date": "2025-04-25",
     "time": "02:05",
     "odds": {
-      "home": 2.35,
-      "draw": 3.3,
-      "away": 2.75
+      "home": 2.4,
+      "draw": 3.25,
+      "away": 2.65
     },
     "raw": {
       "eventId": "60022121",
@@ -1059,9 +1059,9 @@
       "tournament": "Liga de Expansion MX, Clausura",
       "event": "Tepatitlan FC - Leones Negros UDEG",
       "market": "1X2 - FT",
-      "home_odds": "2.35",
-      "draw_odds": "3.3",
-      "away_odds": "2.75",
+      "home_odds": "2.4",
+      "draw_odds": "3.25",
+      "away_odds": "2.65",
       "start_time": "2025-04-25 02:05"
     }
   },
@@ -13832,32 +13832,6 @@
     }
   },
   {
-    "id": "59886242",
-    "eventId": "59886242",
-    "teams": "Kilmarnock FC - Ross County FC",
-    "league": "Premiership",
-    "sport": "football",
-    "country": "Scotland",
-    "date": "2025-04-26",
-    "time": "14:00",
-    "odds": {
-      "home": 1.59,
-      "draw": 3.95,
-      "away": 5.5
-    },
-    "raw": {
-      "eventId": "59886242",
-      "country": "Scotland",
-      "tournament": "Premiership",
-      "event": "Kilmarnock FC - Ross County FC",
-      "market": "1X2 - FT",
-      "home_odds": "1.59",
-      "draw_odds": "3.95",
-      "away_odds": "5.5",
-      "start_time": "2025-04-26 14:00"
-    }
-  },
-  {
     "id": "59886244",
     "eventId": "59886244",
     "teams": "Motherwell FC - St. Johnstone FC",
@@ -15739,9 +15713,9 @@
     "date": "2025-04-26",
     "time": "16:00",
     "odds": {
-      "home": 1.17,
+      "home": 1.18,
       "draw": 6,
-      "away": 12
+      "away": 11
     },
     "raw": {
       "eventId": "50913315",
@@ -15749,9 +15723,9 @@
       "tournament": "II Liga",
       "event": "KS Polonia Bytom SA - KS Wisla Pulawy",
       "market": "1X2 - FT",
-      "home_odds": "1.17",
+      "home_odds": "1.18",
       "draw_odds": "6.0",
-      "away_odds": "12.0",
+      "away_odds": "11.0",
       "start_time": "2025-04-26 16:00"
     }
   },

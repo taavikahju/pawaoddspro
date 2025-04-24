@@ -416,6 +416,39 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                         
                         const marginPercentage = margin ? ((margin - 1) * 100).toFixed(2) : '-';
                         
+                        // Determine margin color based on value
+                        let marginColorClass = 'text-gray-800 dark:text-gray-300';
+                        if (marginPercentage !== '-') {
+                          const marginValue = parseFloat(marginPercentage);
+                          if (marginValue < 5) {
+                            marginColorClass = 'text-green-600';
+                          } else if (marginValue < 7.5) {
+                            marginColorClass = 'text-lime-600';
+                          } else if (marginValue < 10) {
+                            marginColorClass = 'text-amber-600';
+                          } else if (marginValue < 12.5) {
+                            marginColorClass = 'text-orange-600';
+                          } else {
+                            marginColorClass = 'text-red-600';
+                          }
+                        }
+                        
+                        // Add clickable functionality if margin is available
+                        if (marginPercentage !== '-' && event.eventId) {
+                          return (
+                            <button 
+                              onClick={() => setSelectedEvent({
+                                eventId: event.eventId,
+                                eventName: event.teams,
+                                isOpen: true
+                              })}
+                              className={`text-sm font-medium px-2 py-1 rounded bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 ${marginColorClass} cursor-pointer transition-colors duration-150 ease-in-out`}
+                            >
+                              {marginPercentage}%
+                            </button>
+                          );
+                        }
+                        
                         return (
                           <span className="text-sm font-medium px-1 py-0.5 rounded bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300">
                             {marginPercentage !== '-' ? `${marginPercentage}%` : '-'}
@@ -483,6 +516,15 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
           ))}
         </TableBody>
       </Table>
+      
+      {/* Render the MarginHistoryPopup */}
+      <MarginHistoryPopup
+        isOpen={selectedEvent.isOpen}
+        onClose={() => setSelectedEvent(prev => ({ ...prev, isOpen: false }))}
+        eventId={selectedEvent.eventId}
+        eventName={selectedEvent.eventName}
+        bookmakers={selectedBookmakers}
+      />
     </div>
   );
 }

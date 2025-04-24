@@ -575,6 +575,53 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Endpoint to test a custom scraper
+  // Test endpoint for adding some sample odds history
+  app.get('/api/test/history', async (req, res) => {
+    try {
+      const { saveOddsHistory } = await import('./utils/oddsHistory');
+      const sampleEvents = ['59902914', '51116539', '50868503'];
+      const sampleBookmakers = ['bp GH', 'bp KE', 'sporty', 'betika KE'];
+      
+      const timestamp = new Date();
+      // Go back 3 days
+      timestamp.setDate(timestamp.getDate() - 3);
+      
+      for (const eventId of sampleEvents) {
+        // Create 3 days of data, 4 entries per day
+        for (let day = 0; day < 3; day++) {
+          // Set time to this day at midnight
+          timestamp.setDate(timestamp.getDate() + 1);
+          timestamp.setHours(0, 0, 0, 0);
+          
+          for (let hour = 6; hour <= 18; hour += 4) {
+            timestamp.setHours(hour);
+            
+            for (const bookmaker of sampleBookmakers) {
+              // Create some random fluctuating odds
+              const baseHome = 1.8 + Math.random() * 0.3;
+              const baseDraw = 3.2 + Math.random() * 0.5;
+              const baseAway = 3.8 + Math.random() * 0.6;
+              
+              await saveOddsHistory(
+                eventId,
+                eventId, // Using eventId as externalId for simplicity
+                bookmaker,
+                baseHome,
+                baseDraw,
+                baseAway
+              );
+            }
+          }
+        }
+      }
+      
+      res.json({ success: true, message: 'Sample history data created' });
+    } catch (error) {
+      console.error('Error creating sample history:', error);
+      res.status(500).json({ error: 'Failed to create sample history data' });
+    }
+  });
+  
   app.post('/api/scrapers/test/:bookmakerCode', async (req, res) => {
     try {
       const { bookmakerCode } = req.params;

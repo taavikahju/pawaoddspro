@@ -35,9 +35,9 @@
     "date": "2025-04-24",
     "time": "17:30",
     "odds": {
-      "home": 1.38,
-      "draw": 4.25,
-      "away": 7
+      "home": 1.36,
+      "draw": 4.35,
+      "away": 7.25
     },
     "raw": {
       "eventId": "59560323",
@@ -45,9 +45,9 @@
       "tournament": "Romania Cup",
       "event": "FC CFR 1907 Cluj - FC Farul Constanta",
       "market": "1X2 - FT",
-      "home_odds": "1.38",
-      "draw_odds": "4.25",
-      "away_odds": "7.0",
+      "home_odds": "1.36",
+      "draw_odds": "4.35",
+      "away_odds": "7.25",
       "start_time": "2025-04-24 17:30"
     }
   },
@@ -139,9 +139,9 @@
     "date": "2025-04-24",
     "time": "18:00",
     "odds": {
-      "home": 2.35,
+      "home": 2.3,
       "draw": 3.05,
-      "away": 2.9
+      "away": 2.95
     },
     "raw": {
       "eventId": "58281073",
@@ -149,9 +149,9 @@
       "tournament": "Argentina Liga Profesional de Fútbol Reserves",
       "event": "Gimnasia y Esgrima La Plata Reserves - CA Sarmiento Reserves",
       "market": "1X2 - FT",
-      "home_odds": "2.35",
+      "home_odds": "2.3",
       "draw_odds": "3.05",
-      "away_odds": "2.9",
+      "away_odds": "2.95",
       "start_time": "2025-04-24 18:00"
     }
   },
@@ -1049,9 +1049,9 @@
     "date": "2025-04-25",
     "time": "02:05",
     "odds": {
-      "home": 2.35,
-      "draw": 3.3,
-      "away": 2.75
+      "home": 2.4,
+      "draw": 3.25,
+      "away": 2.65
     },
     "raw": {
       "eventId": "60022121",
@@ -1059,9 +1059,9 @@
       "tournament": "Liga de Expansion MX, Clausura",
       "event": "Tepatitlan FC - Leones Negros UDEG",
       "market": "1X2 - FT",
-      "home_odds": "2.35",
-      "draw_odds": "3.3",
-      "away_odds": "2.75",
+      "home_odds": "2.4",
+      "draw_odds": "3.25",
+      "away_odds": "2.65",
       "start_time": "2025-04-25 02:05"
     }
   },
@@ -12792,32 +12792,6 @@
     }
   },
   {
-    "id": "51116905",
-    "eventId": "51116905",
-    "teams": "Dumbarton - Annan Athletic",
-    "league": "Scotland League One",
-    "sport": "football",
-    "country": "Scotland",
-    "date": "2025-04-26",
-    "time": "14:00",
-    "odds": {
-      "home": 2.9,
-      "draw": 3.6,
-      "away": 2.08
-    },
-    "raw": {
-      "eventId": "51116905",
-      "country": "Scotland",
-      "tournament": "Scotland League One",
-      "event": "Dumbarton - Annan Athletic",
-      "market": "1X2 - FT",
-      "home_odds": "2.9",
-      "draw_odds": "3.6",
-      "away_odds": "2.08",
-      "start_time": "2025-04-26 14:00"
-    }
-  },
-  {
     "id": "51096909",
     "eventId": "51096909",
     "teams": "Cardiff City - West Bromwich Albion",
@@ -15739,9 +15713,9 @@
     "date": "2025-04-26",
     "time": "16:00",
     "odds": {
-      "home": 1.17,
+      "home": 1.18,
       "draw": 6,
-      "away": 12
+      "away": 11
     },
     "raw": {
       "eventId": "50913315",
@@ -15749,9 +15723,9 @@
       "tournament": "II Liga",
       "event": "KS Polonia Bytom SA - KS Wisla Pulawy",
       "market": "1X2 - FT",
-      "home_odds": "1.17",
+      "home_odds": "1.18",
       "draw_odds": "6.0",
-      "away_odds": "12.0",
+      "away_odds": "11.0",
       "start_time": "2025-04-26 16:00"
     }
   },
@@ -16978,6 +16952,32 @@
     }
   },
   {
+    "id": "50743943",
+    "eventId": "50743943",
+    "teams": "Pogon Siedlce - MKS Arka Gdynia",
+    "league": "I Liga",
+    "sport": "football",
+    "country": "Poland",
+    "date": "2025-04-26",
+    "time": "17:30",
+    "odds": {
+      "home": 5.25,
+      "draw": 3.75,
+      "away": 1.56
+    },
+    "raw": {
+      "eventId": "50743943",
+      "country": "Poland",
+      "tournament": "I Liga",
+      "event": "Pogon Siedlce - MKS Arka Gdynia",
+      "market": "1X2 - FT",
+      "home_odds": "5.25",
+      "draw_odds": "3.75",
+      "away_odds": "1.56",
+      "start_time": "2025-04-26 17:30"
+    }
+  },
+  {
     "id": "58220765",
     "eventId": "58220765",
     "teams": "FC Neman Grodno - FC Brest",
@@ -17468,32 +17468,6 @@
       "home_odds": "1.87",
       "draw_odds": "2.9",
       "away_odds": "4.45",
-      "start_time": "2025-04-26 18:30"
-    }
-  },
-  {
-    "id": "57251309",
-    "eventId": "57251309",
-    "teams": "CA Defensores Unidos - CA Talleres de Remedios",
-    "league": "Primera Nacional",
-    "sport": "football",
-    "country": "Argentina",
-    "date": "2025-04-26",
-    "time": "18:30",
-    "odds": {
-      "home": 2.3,
-      "draw": 2.9,
-      "away": 3.15
-    },
-    "raw": {
-      "eventId": "57251309",
-      "country": "Argentina",
-      "tournament": "Primera Nacional",
-      "event": "CA Defensores Unidos - CA Talleres de Remedios",
-      "market": "1X2 - FT",
-      "home_odds": "2.3",
-      "draw_odds": "2.9",
-      "away_odds": "3.15",
       "start_time": "2025-04-26 18:30"
     }
   },
