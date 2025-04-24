@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { Slider } from '@/components/ui/slider';
 import CountryFlag from '@/components/CountryFlag';
 import { 
   RefreshCw, 
@@ -43,9 +44,11 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
     selectedBookmakers,
     selectedSports,
     autoRefresh,
+    marginFilter,
     toggleBookmaker,
     toggleSport,
     toggleAutoRefresh,
+    setMarginFilter,
     refreshData,
     isRefreshing
   } = useBookmakerContext();
@@ -344,6 +347,41 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
         
 
         
+        {/* Margin Filter Section */}
+        <div>
+          <p className="px-2 mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+            Margin Filter
+          </p>
+          <div className="space-y-3 bg-gray-50 dark:bg-slate-900/50 rounded-md p-3 border border-gray-100 dark:border-slate-700">
+            <div className="mb-1">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Max Margin: {marginFilter}%
+                </span>
+              </div>
+              
+              <Slider
+                value={[marginFilter]}
+                min={0}
+                max={15}
+                step={1}
+                onValueChange={(value) => setMarginFilter(value[0])}
+                className="mb-2"
+              />
+              
+              <div className="flex justify-between items-center text-xs text-gray-500 dark:text-gray-400">
+                <span>0%</span>
+                <span>5%</span>
+                <span>10%</span>
+                <span>15%</span>
+              </div>
+              <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                Only show events with bookmakers' margins below {marginFilter}%
+              </div>
+            </div>
+          </div>
+        </div>
+        
         <Separator className="border-gray-200 dark:border-slate-700" />
         
         <div className="bg-gray-50 dark:bg-slate-900/50 rounded-md p-3 border border-gray-100 dark:border-slate-700">
@@ -359,7 +397,6 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
             />
           </div>
           
-
         </div>
       </div>
     </div>
