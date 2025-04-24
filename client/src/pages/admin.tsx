@@ -12,7 +12,8 @@ import {
   Plus, 
   RefreshCw, 
   Save, 
-  Trash, 
+  Trash,
+  Trash2, 
   Upload, 
   PlayCircle,
   AlertCircle,
@@ -264,6 +265,12 @@ export default function AdminPage() {
   const handleUpdateBookmaker = (bookmaker: any) => {
     updateBookmakerMutation.mutate(bookmaker);
   };
+  
+  const handleDeleteBookmaker = (id: number, name: string) => {
+    if (window.confirm(`Are you sure you want to delete "${name}"? This cannot be undone.`)) {
+      deleteBookmakerMutation.mutate(id);
+    }
+  };
 
   const handleAddSport = (e: React.FormEvent) => {
     e.preventDefault();
@@ -488,15 +495,25 @@ export default function AdminPage() {
                             <span className="text-sm font-medium">Code: </span>
                             <span className="text-sm">{bookmaker.code}</span>
                           </div>
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            className="w-full mt-2"
-                            onClick={() => setEditingBookmaker(bookmaker.id)}
-                          >
-                            <Edit className="mr-1 h-4 w-4" />
-                            Edit
-                          </Button>
+                          <div className="flex space-x-2">
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="flex-1 mt-2"
+                              onClick={() => setEditingBookmaker(bookmaker.id)}
+                            >
+                              <Edit className="mr-1 h-4 w-4" />
+                              Edit
+                            </Button>
+                            <Button 
+                              variant="destructive" 
+                              size="sm" 
+                              className="mt-2"
+                              onClick={() => handleDeleteBookmaker(bookmaker.id, bookmaker.name)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
                         </div>
                       )}
                     </CardContent>
