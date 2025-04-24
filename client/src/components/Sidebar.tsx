@@ -62,11 +62,11 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
   // Function to detect if a specific filter is active based on selected bookmakers
   React.useEffect(() => {
     const ghanaBookmakers = bookmakers
-      .filter(b => b.code === 'betPawa GH' || b.code === 'Sportybet')
+      .filter(b => b.code === 'bp GH' || b.code === 'sporty')
       .map(b => b.code);
       
     const kenyaBookmakers = bookmakers
-      .filter(b => b.code === 'betPawa KE' || b.code === 'betika KE')
+      .filter(b => b.code === 'bp KE' || b.code === 'betika KE')
       .map(b => b.code);
     
     console.log('Effect - Selected bookmakers:', selectedBookmakers);
@@ -234,7 +234,7 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
               onClick={() => {
                 // Find bookmaker IDs for Ghana
                 const ghanaBookmakers = bookmakers
-                  .filter(b => b.code === 'betPawa GH' || b.code === 'Sportybet')
+                  .filter(b => b.code === 'bp GH' || b.code === 'sporty')
                   .map(b => b.code);
                 
                 console.log('Ghana bookmakers:', ghanaBookmakers);
@@ -268,7 +268,7 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
               onClick={() => {
                 // Find bookmaker IDs for Kenya
                 const kenyaBookmakers = bookmakers
-                  .filter(b => b.code === 'betPawa KE' || b.code === 'betika KE')
+                  .filter(b => b.code === 'bp KE' || b.code === 'betika KE')
                   .map(b => b.code);
                 
                 console.log('Kenya bookmakers:', kenyaBookmakers);

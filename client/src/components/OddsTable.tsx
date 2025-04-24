@@ -23,9 +23,9 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
   const filteredBookmakers = bookmakers.filter(b => selectedBookmakers.includes(b.code));
   
   // Always show the comparison column if betPawa is selected along with either Sportybet or Betika KE
-  const hasBetPawaGH = selectedBookmakers.includes('betPawa GH');
-  const hasBetPawaKE = selectedBookmakers.includes('betPawa KE');
-  const hasSportybet = selectedBookmakers.includes('Sportybet');
+  const hasBetPawaGH = selectedBookmakers.includes('bp GH');
+  const hasBetPawaKE = selectedBookmakers.includes('bp KE');
+  const hasSportybet = selectedBookmakers.includes('sporty');
   const hasBetikaKE = selectedBookmakers.includes('betika KE');
   
   // Ghana filter active if betPawa GH and Sportybet are selected
@@ -80,8 +80,8 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
     if (currentOdd === highestOdd) {
       // Special case: if exactly 2 bookmakers have the same highest value and they are both betPawa variants
       if (bookiesWithHighest.length === 2 && 
-          bookiesWithHighest.includes('betPawa GH') && 
-          bookiesWithHighest.includes('betPawa KE')) {
+          bookiesWithHighest.includes('bp GH') && 
+          bookiesWithHighest.includes('bp KE')) {
         return 'highest';
       }
       
@@ -95,8 +95,8 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
     if (currentOdd === lowestOdd) {
       // Special case: if exactly 2 bookmakers have the same lowest value and they are both betPawa variants
       if (bookiesWithLowest.length === 2 && 
-          bookiesWithLowest.includes('betPawa GH') && 
-          bookiesWithLowest.includes('betPawa KE')) {
+          bookiesWithLowest.includes('bp GH') && 
+          bookiesWithLowest.includes('bp KE')) {
         return 'lowest';
       }
       
@@ -126,10 +126,10 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
     if (!event.oddsData) return { comparison: null, isBetter: null, favorite: null };
     
     // Get the appropriate betPawa code based on the active filter
-    const betPawaCode = isGhanaFilterActive ? 'betPawa GH' : isKenyaFilterActive ? 'betPawa KE' : null;
+    const betPawaCode = isGhanaFilterActive ? 'bp GH' : isKenyaFilterActive ? 'bp KE' : null;
     
     // Get the appropriate competitor code based on the active filter
-    const competitorCode = isGhanaFilterActive ? 'Sportybet' : isKenyaFilterActive ? 'betika KE' : null;
+    const competitorCode = isGhanaFilterActive ? 'sporty' : isKenyaFilterActive ? 'betika KE' : null;
     console.log('Selected betPawa code:', betPawaCode, 'Selected competitor code:', competitorCode);
     
     if (!betPawaCode || !competitorCode) return { comparison: null, isBetter: null, favorite: null };
@@ -261,7 +261,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
             </TableHead>
             {isComparisonAvailable && (
               <TableHead className="w-20 px-2 py-2 text-center text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
-                {isGhanaFilterActive ? 'betPawa GH vs Sporty' : 'betPawa KE vs Betika'}
+                {isGhanaFilterActive ? 'bp GH vs sporty' : 'bp KE vs betika KE'}
               </TableHead>
             )}
           </TableRow>
