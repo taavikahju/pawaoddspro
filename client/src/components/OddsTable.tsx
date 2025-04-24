@@ -341,7 +341,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                         >
                           <div className="flex flex-col">
                             <span className="text-sm font-medium text-gray-800 dark:text-gray-200">{event.date}</span>
-                            <span className="text-sm text-gray-500 dark:text-gray-400">{event.time}</span>
+                            <span className="text-sm text-gray-500 dark:text-gray-400">{event.time} <span className="text-xs">UTC</span></span>
                           </div>
                         </TableCell>
                         

@@ -6,6 +6,47 @@ import util from 'util';
 
 const execPromise = util.promisify(exec);
 
+// Function to convert Estonian time to UTC
+// Estonia is UTC+2 (standard time) or UTC+3 (daylight saving time)
+function convertEstonianToUTC(dateStr: string, timeStr: string): { date: string, time: string } {
+  if (!dateStr || !timeStr) {
+    return { date: dateStr, time: timeStr };
+  }
+  
+  try {
+    // Parse the date and time
+    const [year, month, day] = dateStr.split('-').map(Number);
+    const [hour, minute] = timeStr.split(':').map(Number);
+    
+    // Create Date object in Estonian time
+    const estonianDate = new Date(year, month - 1, day, hour, minute);
+    
+    // Check if Estonia is in daylight saving time
+    // DST in Estonia generally runs from the last Sunday in March to the last Sunday in October
+    const isDST = (function() {
+      const jan = new Date(year, 0, 1);
+      const jul = new Date(year, 6, 1);
+      const standardTimezoneOffset = Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
+      return estonianDate.getTimezoneOffset() < standardTimezoneOffset;
+    })();
+    
+    // Estonia is either UTC+2 (standard) or UTC+3 (DST)
+    const hoursToSubtract = isDST ? 3 : 2;
+    
+    // Subtract hours to get UTC time
+    estonianDate.setHours(estonianDate.getHours() - hoursToSubtract);
+    
+    // Format the UTC date and time
+    const utcDate = `${estonianDate.getFullYear()}-${String(estonianDate.getMonth() + 1).padStart(2, '0')}-${String(estonianDate.getDate()).padStart(2, '0')}`;
+    const utcTime = `${String(estonianDate.getHours()).padStart(2, '0')}:${String(estonianDate.getMinutes()).padStart(2, '0')}`;
+    
+    return { date: utcDate, time: utcTime };
+  } catch (error) {
+    console.error('Error converting time:', error);
+    return { date: dateStr, time: timeStr };
+  }
+}
+
 // Define the configuration type
 interface ScraperConfig {
   scriptPath: string;
@@ -68,6 +109,15 @@ export async function runCustomScraper(bookmakerCode: string): Promise<any[]> {
         return data.map(item => {
           // Check if this is the user's custom format
           if (item.eventId && item.event && item.home_odds && item.draw_odds && item.away_odds) {
+            // Extract date and time from start_time
+            const originalDate = item.start_time ? item.start_time.split(' ')[0] : '';
+            const originalTime = item.start_time ? item.start_time.split(' ')[1] : '';
+            
+            // Convert Estonian time to UTC
+            const { date: utcDate, time: utcTime } = convertEstonianToUTC(originalDate, originalTime);
+            
+            console.log(`Converting time for ${item.event}: Estonian ${originalDate} ${originalTime} -> UTC ${utcDate} ${utcTime}`);
+            
             // Map from the user's custom format to our expected format
             return {
               id: item.eventId,
@@ -76,8 +126,8 @@ export async function runCustomScraper(bookmakerCode: string): Promise<any[]> {
               league: item.tournament || '',
               sport: item.sport || 'football', // Default to football if not specified
               country: item.country || '',
-              date: item.start_time ? item.start_time.split(' ')[0] : '',
-              time: item.start_time ? item.start_time.split(' ')[1] : '',
+              date: utcDate,
+              time: utcTime,
               odds: {
                 home: parseFloat(item.home_odds),
                 draw: parseFloat(item.draw_odds),
