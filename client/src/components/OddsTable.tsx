@@ -63,9 +63,9 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
   }
 
   return (
-    <div className={cn("overflow-x-auto bg-white dark:bg-slate-800 rounded-lg shadow", className)}>
+    <div className={cn("overflow-x-auto bg-white dark:bg-slate-800 rounded-b-lg shadow", className)}>
       <Table className="w-full border-collapse">
-        <TableHeader className="bg-gray-100 dark:bg-slate-700/50 sticky top-[61px] z-10">
+        <TableHeader className="bg-gray-100 dark:bg-slate-700/50 sticky top-[58px] z-10">
           <TableRow className="border-b border-gray-200 dark:border-gray-700">
             <TableHead className="w-24 px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               <div className="flex items-center">
