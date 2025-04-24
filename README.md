@@ -1,94 +1,101 @@
-# pawaodds.pro - Bookmaker Scraper and Odds Comparison Tool
+# pawaodds.pro - Sports Betting Odds Comparison Platform
 
-A comprehensive odds comparison platform that allows you to track betting opportunities across multiple bookmakers in real-time.
+A sophisticated sports betting odds comparison platform that provides real-time tracking of odds across multiple bookmakers. The platform automatically scrapes data at regular intervals, maps events by ID, and presents the information in a clean, user-friendly interface.
 
 ## Features
 
-- Multi-bookmaker odds scraping every 15 minutes
-- Dynamic odds comparison with margin calculations
-- Real-time bookmaker selection and filtering
-- Historical odds tracking and visualization
-- Responsive design for mobile and desktop
-- Role-based access control for admin features
-- Interactive odds visualization with price movement history
+- **Automatic Data Collection**: Scrapes data from multiple bookmakers every 15 minutes
+- **Event Mapping**: Intelligently maps events across bookmakers by ID
+- **PostgreSQL Storage**: Stores all data in a robust PostgreSQL database
+- **Odds History**: Tracks and visualizes historical odds movements
+- **Interactive Interface**: Filter by country, tournament, and margin range
+- **WebSocket Updates**: Real-time updates when new data is available
+- **Admin Interface**: Protected admin section for managing scrapers and bookmakers
+- **Responsive Design**: Mobile-friendly interface
 
-## System Requirements
+## Tech Stack
 
-- Node.js 18+ 
+- **Frontend**: React, TailwindCSS, Recharts, Tanstack Query
+- **Backend**: Node.js, Express, WebSockets
+- **Database**: PostgreSQL with Drizzle ORM
+- **Scrapers**: Custom scrapers in JavaScript and Python
+- **Automation**: Cron jobs for regular scraping
+- **Deployment**: PM2, Nginx, GitHub Actions
+
+## Project Structure
+
+```
+├── client/              # Frontend React application
+├── server/              # Backend Express application
+│   ├── scrapers/        # Scraper modules for different bookmakers
+│   ├── utils/           # Utility functions for data processing
+│   └── middleware/      # Express middleware
+├── shared/              # Shared code between client and server
+├── scripts/             # Deployment and utility scripts
+└── data/                # Data storage directory
+```
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 20.x or higher
+- Python 3.8 or higher
 - PostgreSQL database
-- Python 3.8+ (for some custom scrapers)
 
-## Installation
+### Installation
 
-1. Clone the repository
-2. Install dependencies: `npm install`
-3. Set up environment variables (see below)
-4. Set up the database: `npm run db:push`
-5. Create an admin user: `npx tsx scripts/create-admin-user.ts`
-6. Start the application: `npm run dev`
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/pawaodds.git
+   cd pawaodds
+   ```
 
-## Environment Variables
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-Create a `.env` file in the root directory with the following variables:
+3. Set up environment variables:
+   ```bash
+   cp .env.example .env
+   # Edit .env with your PostgreSQL connection details and admin key
+   ```
 
-```
-DATABASE_URL=postgresql://username:password@localhost:5432/pawaodds
-SESSION_SECRET=your-session-secret-here
-```
+4. Push the database schema:
+   ```bash
+   npm run db:push
+   ```
 
-## Security Considerations
-
-### Simple Admin Protection
-
-The application uses a lightweight approach to protect admin functionality without requiring user registration or login. This is done through a simple API key-based protection:
-
-1. Admin routes are protected by the `simpleAdminAuth` middleware
-2. The middleware checks for the presence of an `x-admin-key` HTTP header
-3. The value in this header must match the `ADMIN_KEY` environment variable
-
-### Setting Up Admin Protection
-
-Add the following to your `.env` file:
-
-```
-ADMIN_KEY=your-secure-admin-key-here
-```
-
-Without this key, access to admin routes will be denied.
-
-### Securing Admin Routes
-
-All admin-related API endpoints are protected with the `simpleAdminAuth` middleware that:
-1. Extracts the `x-admin-key` HTTP header from the request
-2. Compares it with the `ADMIN_KEY` environment variable
-3. Allows or denies access based on the comparison
-
-### Frontend Protection
-
-When accessing the admin section of the frontend, you'll need to ensure your API client sends the correct `x-admin-key` header with every admin API request. This can be accomplished through browser extensions or within your frontend code.
+5. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
 ## Deployment
 
-When deploying to production:
+For detailed deployment instructions, see [DEPLOYMENT.md](DEPLOYMENT.md).
 
-1. Update `SESSION_SECRET` to a strong, unique value
-2. Set up HTTPS using your hosting provider's tools or a reverse proxy
-3. Change the default admin password
-4. Configure database backups
+The repository includes:
+- GitHub Actions workflow for CI/CD
+- PM2 ecosystem configuration
+- Nginx configuration template
+- Server setup script
 
-## Customizing Bookmakers
+## Custom Bookmakers
 
-The system supports adding custom scrapers for different bookmakers:
+The system currently supports the following custom bookmaker scrapers:
+- betPawa Ghana (bp GH)
+- betPawa Kenya (bp KE)
+- Sportybet (sporty)
+- Betika Kenya (betika KE)
 
-1. Go to the Admin interface after logging in as admin
-2. Add a new bookmaker with a unique code
-3. Upload a custom scraper script (JavaScript/TypeScript/Python)
-4. The system will automatically use your custom scraper for that bookmaker
-
-## Support
-
-For support, please contact the development team.
+To add a new bookmaker, create a scraper in the server/scrapers/custom directory and register it in the admin interface.
 
 ## License
 
-All rights reserved. Unauthorized use, reproduction, or distribution of this software is prohibited.
+This project is proprietary and confidential.
+
+## Contact
+
+For support or inquiries, please contact the project maintainer.
