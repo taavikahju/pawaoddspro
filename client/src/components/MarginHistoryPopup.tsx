@@ -43,14 +43,18 @@ export default function MarginHistoryPopup({
 }: MarginHistoryPopupProps) {
   const [activeTab, setActiveTab] = useState<string>('chart');
   
-  // Fetch odds history for this event
+  // Fetch odds history for this event - optimized for lightweight loading
   const { data, isLoading, error } = useQuery({
     queryKey: ['/api/events', eventId, 'history'],
     queryFn: async () => {
-      const response = await axios.get(`/api/events/${eventId}/history`);
+      // Only get last 20 entries to improve performance
+      const response = await axios.get(`/api/events/${eventId}/history?limit=20`);
       return response.data as OddsHistoryEntry[];
     },
     enabled: isOpen, // Only fetch when dialog is open
+    // Add caching for performance
+    staleTime: 60000, // Cache for 1 minute
+    gcTime: 300000 // Keep in cache for 5 minutes (v5 uses gcTime instead of cacheTime)
   });
   
   // Pre-process data for chart
@@ -76,8 +80,8 @@ export default function MarginHistoryPopup({
         };
       }
       
-      // Add margin for each bookmaker
-      acc[timeKey][entry.bookmakerCode] = entry.margin;
+      // Add margin for each bookmaker (parse to float since it may be stored as string)
+      acc[timeKey][entry.bookmakerCode] = parseFloat(entry.margin);
       
       return acc;
     }, {});
@@ -207,20 +211,8 @@ export default function MarginHistoryPopup({
                         <td className="p-2 text-right">{entry.homeOdds.toFixed(2)}</td>
                         <td className="p-2 text-right">{entry.drawOdds.toFixed(2)}</td>
                         <td className="p-2 text-right">{entry.awayOdds.toFixed(2)}</td>
-                        <td 
-                          className={`p-2 text-right font-medium ${
-                            entry.margin < 5 
-                              ? 'text-green-600' 
-                              : entry.margin < 7.5 
-                              ? 'text-lime-600' 
-                              : entry.margin < 10 
-                              ? 'text-amber-600'
-                              : entry.margin < 12.5
-                              ? 'text-orange-600'
-                              : 'text-red-600'
-                          }`}
-                        >
-                          {entry.margin.toFixed(2)}%
+                        <td className="p-2 text-right font-medium">
+                          {parseFloat(entry.margin).toFixed(2)}%
                         </td>
                       </tr>
                     ))}
