@@ -151,92 +151,78 @@ export default function Dashboard() {
     : 'All Sports';
   
   return (
-    <Layout 
-      title="Bookmaker Odds Comparison"
-      subtitle="Compare odds across multiple bookmakers"
+    <Layout
     >
-      {/* Compact Control Panel */}
-      <div className="bg-white dark:bg-slate-800 rounded-lg p-3 shadow mb-4 border-b border-gray-200 dark:border-gray-700">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          {/* Left side - Filters */}
-          <div className="flex flex-wrap items-center gap-3">
+      {/* Minimal Control Panel */}
+      <div className="bg-white dark:bg-slate-800 rounded-t-lg p-2 shadow border-b border-gray-200 dark:border-gray-700">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          {/* Filters */}
+          <div className="flex flex-wrap items-center gap-2">
             {/* Country Filter */}
-            <div>
-              <Select
-                value={countryFilter}
-                onValueChange={setCountryFilter}
-              >
-                <SelectTrigger className="h-9 w-[180px]">
-                  <GlobeIcon className="h-4 w-4 mr-2 text-gray-500" />
-                  <SelectValue placeholder="Country" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Countries</SelectItem>
-                  {availableCountries.map((country) => (
-                    <SelectItem key={country} value={country}>
-                      {country}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            <Select
+              value={countryFilter}
+              onValueChange={setCountryFilter}
+            >
+              <SelectTrigger className="h-8 w-[150px] text-xs">
+                <GlobeIcon className="h-3 w-3 mr-1 text-gray-500" />
+                <SelectValue placeholder="Country" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Countries</SelectItem>
+                {availableCountries.map((country) => (
+                  <SelectItem key={country} value={country}>
+                    {country}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             
             {/* Tournament Filter */}
-            <div>
-              <Select
-                value={tournamentFilter}
-                onValueChange={setTournamentFilter}
-                disabled={countryFilter === 'all'}
-              >
-                <SelectTrigger className={`h-9 w-[200px] ${countryFilter === 'all' ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                  <Trophy className="h-4 w-4 mr-2 text-gray-500" />
-                  <SelectValue placeholder={countryFilter === 'all' ? 'Select Country First' : 'Tournament'} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Tournaments</SelectItem>
-                  {availableTournaments.map((tournament) => (
-                    <SelectItem key={tournament} value={tournament}>
-                      {tournament}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            <Select
+              value={tournamentFilter}
+              onValueChange={setTournamentFilter}
+              disabled={countryFilter === 'all'}
+            >
+              <SelectTrigger className={`h-8 w-[160px] text-xs ${countryFilter === 'all' ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                <Trophy className="h-3 w-3 mr-1 text-gray-500" />
+                <SelectValue placeholder={countryFilter === 'all' ? 'Select Country First' : 'Tournament'} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Tournaments</SelectItem>
+                {availableTournaments.map((tournament) => (
+                  <SelectItem key={tournament} value={tournament}>
+                    {tournament}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             
             {/* Clear Filters Button */}
             <Button 
               variant="outline" 
-              className="h-9 flex items-center" 
+              className="h-8 flex items-center px-2 text-xs" 
               onClick={() => {
                 setCountryFilter('all');
                 setTournamentFilter('all');
               }}
               size="sm"
             >
-              <X className="h-4 w-4 mr-1" /> 
+              <X className="h-3 w-3 mr-1" /> 
               Clear
             </Button>
-            
-
-            
+              
             {/* Events count */}
             <div className="flex items-center">
-              <div className="text-sm font-semibold text-gray-800 dark:text-white">
-                {sportTitle}
-              </div>
-              <span className="ml-2 text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium">
+              <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium">
                 {filteredEvents.length} events
               </span>
             </div>
           </div>
           
-          {/* Right side - Last updated indicator and theme toggle */}
-          <div className="flex items-center gap-3 text-sm">
-            {/* Last updated indicator */}
-            <div className="text-xs text-gray-500 dark:text-gray-400 flex items-center">
-              <Clock className="h-3 w-3 mr-1" />
-              Updated: {stats?.lastScrapeTime || 'N/A'}
-            </div>
+          {/* Updated indicator */}
+          <div className="text-[10px] text-gray-500 dark:text-gray-400 flex items-center">
+            <Clock className="h-3 w-3 mr-1" />
+            Updated: {stats?.lastScrapeTime || 'N/A'}
           </div>
         </div>
       </div>
