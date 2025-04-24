@@ -94,40 +94,40 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
         (isOpen || isHovering) ? "translate-x-0" : "-translate-x-[calc(100%-12px)]"
       )}
     >
-      {/* Sidebar header - blue gradient background */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 dark:from-blue-800 dark:to-blue-900 p-4">
+      {/* Sidebar header */}
+      <div className="p-4 border-b border-gray-200 dark:border-slate-700">
         <div className="flex items-center justify-between">
-          <h1 className="text-lg font-bold text-white">OddsCompare</h1>
+          <h1 className="text-lg font-bold text-gray-800 dark:text-white">OddsCompare</h1>
           <Button
             variant="ghost"
             size="icon"
             onClick={onClose}
-            className="lg:hidden rounded-md p-1 text-white hover:bg-blue-700/50"
+            className="lg:hidden rounded-md p-1 hover:bg-gray-100 dark:hover:bg-slate-700"
           >
             <XIcon className="h-5 w-5" />
           </Button>
         </div>
         
         {/* Last update info */}
-        <div className="mt-2 text-xs text-blue-100">
+        <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">
           <div className="flex items-center">
-            <Clock className="h-3 w-3 mr-1 opacity-70" />
-            <span>Last update: <span className="text-white">{lastUpdate}</span></span>
+            <Clock className="h-3 w-3 mr-1" />
+            <span>Last update: <span className="text-gray-700 dark:text-gray-300">{lastUpdate}</span></span>
           </div>
           <div className="flex items-center mt-1">
-            <Repeat className="h-3 w-3 mr-1 opacity-70" />
-            <span>Next update: <span className="text-white">{nextUpdateStr}</span></span>
+            <Repeat className="h-3 w-3 mr-1" />
+            <span>Next update: <span className="text-gray-700 dark:text-gray-300">{nextUpdateStr}</span></span>
           </div>
         </div>
       </div>
       
       {/* Handle to grab sidebar when collapsed */}
       <div className={cn(
-        "absolute right-0 top-1/2 transform -translate-y-1/2 h-16 w-3 bg-blue-600 dark:bg-blue-800 rounded-r-md transition-opacity duration-200",
+        "absolute right-0 top-1/2 transform -translate-y-1/2 h-16 w-3 bg-gray-200 dark:bg-slate-700 rounded-r-md transition-opacity duration-200",
         (isOpen || isHovering) ? "opacity-0" : "opacity-100"
       )}>
         <div className="h-full flex items-center justify-center">
-          <div className="w-0.5 h-6 bg-blue-300 dark:bg-blue-500 rounded"></div>
+          <div className="w-0.5 h-6 bg-gray-400 dark:bg-slate-500 rounded"></div>
         </div>
       </div>
       
@@ -214,16 +214,7 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
             />
           </div>
           
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => refreshData()}
-            disabled={isRefreshing}
-            className="w-full flex items-center justify-center"
-          >
-            <RefreshCw className={cn("h-4 w-4 mr-1.5", isRefreshing && "animate-spin")} />
-            Refresh Now
-          </Button>
+
         </div>
       </div>
     </div>

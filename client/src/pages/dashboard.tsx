@@ -155,8 +155,8 @@ export default function Dashboard() {
       title="Bookmaker Odds Comparison"
       subtitle="Compare odds across multiple bookmakers"
     >
-      {/* Compact Control Panel - Sticky */}
-      <div className="bg-white dark:bg-slate-800 rounded-lg p-3 shadow sticky top-0 z-20 border-b border-gray-200 dark:border-gray-700">
+      {/* Compact Control Panel */}
+      <div className="bg-white dark:bg-slate-800 rounded-lg p-3 shadow mb-4 border-b border-gray-200 dark:border-gray-700">
         <div className="flex flex-wrap items-center justify-between gap-3">
           {/* Left side - Filters */}
           <div className="flex flex-wrap items-center gap-3">
