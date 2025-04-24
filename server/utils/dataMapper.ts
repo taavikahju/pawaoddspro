@@ -182,6 +182,9 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
             
             // Only save history if odds exist
             if (bookieOdds && (bookieOdds.home || bookieOdds.draw || bookieOdds.away)) {
+              // Get the current hour
+              const currentHour = new Date().getHours();
+              
               // Check if odds have changed before saving history
               const existingBookieOdds = existingOdds?.[bookmakerCode];
               const oddsChanged = !existingBookieOdds || 
@@ -189,8 +192,9 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
                 bookieOdds.draw !== existingBookieOdds.draw ||
                 bookieOdds.away !== existingBookieOdds.away;
               
-              // Only save to history if odds have changed
-              if (oddsChanged) {
+              // Save to history if odds have changed OR if we're on a new hour (hourly snapshots)
+              // This ensures we have at least one data point per hour for trending
+              if (oddsChanged || currentHour % 2 === 0) { // Save every 2 hours regardless of changes
                 await saveOddsHistory(
                   eventData.eventId,
                   eventData.externalId,
