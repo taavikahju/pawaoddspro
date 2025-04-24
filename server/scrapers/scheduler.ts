@@ -4,6 +4,7 @@ import * as bet365Scraper from './bet365';
 import * as williamHillScraper from './williamhill';
 import * as betfairScraper from './betfair';
 import * as paddyPowerScraper from './paddypower';
+import * as customScrapers from './custom/integration';
 import { processAndMapEvents } from '../utils/dataMapper';
 
 // Schedule to run every 15 minutes
@@ -59,23 +60,58 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
           console.log(`Running scraper for ${bookmaker.name}...`);
           let data: any = null;
           
-          // Select appropriate scraper based on bookmaker code
-          switch (bookmaker.code) {
-            case 'bet365':
-              data = await bet365Scraper.scrape();
-              break;
-            case 'williamhill':
-              data = await williamHillScraper.scrape();
-              break;
-            case 'betfair':
-              data = await betfairScraper.scrape();
-              break;
-            case 'paddypower':
-              data = await paddyPowerScraper.scrape();
-              break;
-            default:
-              console.warn(`No scraper found for bookmaker ${bookmaker.code}`);
-              return null;
+          // Check if custom scraper exists
+          const hasCustom = customScrapers.hasCustomScraper(bookmaker.code);
+          
+          // Try to use custom scraper first, fall back to mock scraper
+          if (hasCustom) {
+            try {
+              // Use the custom scraper
+              console.log(`Using custom scraper for ${bookmaker.name}...`);
+              
+              switch (bookmaker.code) {
+                case 'bet365':
+                  data = await customScrapers.scrapeBet365();
+                  break;
+                case 'williamhill':
+                  data = await customScrapers.scrapeWilliamHill();
+                  break;
+                case 'betfair':
+                  data = await customScrapers.scrapeBetfair();
+                  break;
+                case 'paddypower':
+                  data = await customScrapers.scrapePaddyPower();
+                  break;
+                default:
+                  data = await customScrapers.runCustomScraper(bookmaker.code);
+              }
+            } catch (customError) {
+              console.error(`Error in custom scraper for ${bookmaker.name}:`, customError);
+              console.log(`Falling back to mock scraper for ${bookmaker.name}...`);
+              data = null; // Will trigger fallback below
+            }
+          }
+          
+          // If custom scraper didn't work or doesn't exist, use mock scraper
+          if (!data) {
+            // Select appropriate mock scraper based on bookmaker code
+            switch (bookmaker.code) {
+              case 'bet365':
+                data = await bet365Scraper.scrape();
+                break;
+              case 'williamhill':
+                data = await williamHillScraper.scrape();
+                break;
+              case 'betfair':
+                data = await betfairScraper.scrape();
+                break;
+              case 'paddypower':
+                data = await paddyPowerScraper.scrape();
+                break;
+              default:
+                console.warn(`No scraper found for bookmaker ${bookmaker.code}`);
+                return null;
+            }
           }
           
           if (data) {
