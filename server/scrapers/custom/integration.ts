@@ -180,7 +180,7 @@ export function loadAllCustomScrapers(): void {
       if (file === 'integration.ts' || file === 'integration.js') return;
       
       // Expected format: bookmakercode_scraper.ext (allowing spaces)
-      const match = file.match(/^(.+)_scraper\.(js|py|sh|ts)$/);
+      const match = file.match(/^(.+)_scraper\.(js|py|sh|ts|cjs)$/);
       if (match) {
         const bookmakerCode = match[1];
         const filePath = path.join(customScraperDir, file);
