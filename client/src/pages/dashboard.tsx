@@ -536,10 +536,52 @@ export default function Dashboard() {
             </div>
           </div>
           
-          {/* Updated indicator */}
-          <div className="text-[10px] text-gray-500 dark:text-gray-400 flex items-center">
-            <Clock className="h-3 w-3 mr-1" />
-            Updated: {stats?.lastScrapeTime || 'N/A'}
+          {/* Bookmaker Average Margins */}
+          <div className="flex flex-col items-end text-[10px] text-gray-500 dark:text-gray-400">
+            {(() => {
+              // Calculate average margins for each selected bookmaker based on filtered events
+              const bookmakerMargins: Record<string, { total: number, count: number }> = {};
+              const { selectedBookmakers } = useBookmakerContext();
+              
+              // Only calculate for selected bookmakers
+              if (filteredEvents.length > 0 && selectedBookmakers.length > 0) {
+                filteredEvents.forEach(event => {
+                  selectedBookmakers.forEach(code => {
+                    if (event.oddsData?.[code]) {
+                      const homeOdds = event.oddsData[code].home;
+                      const drawOdds = event.oddsData[code].draw;
+                      const awayOdds = event.oddsData[code].away;
+                      
+                      if (homeOdds && drawOdds && awayOdds) {
+                        // Calculate margin = (1/home + 1/draw + 1/away) - 1
+                        const margin = (1/homeOdds + 1/drawOdds + 1/awayOdds);
+                        
+                        if (!bookmakerMargins[code]) {
+                          bookmakerMargins[code] = { total: 0, count: 0 };
+                        }
+                        
+                        bookmakerMargins[code].total += margin;
+                        bookmakerMargins[code].count++;
+                      }
+                    }
+                  });
+                });
+              }
+              
+              // Return margin displays for each bookmaker
+              return Object.entries(bookmakerMargins)
+                .filter(([_, data]) => data.count > 0) // Only show bookmakers with data
+                .map(([code, data]) => {
+                  const avgMargin = data.total / data.count;
+                  const marginPercentage = ((avgMargin - 1) * 100).toFixed(2);
+                  
+                  return (
+                    <div key={code} className="font-mono">
+                      <span className="font-medium">{code}:</span> {marginPercentage}%
+                    </div>
+                  );
+                });
+            })()}
           </div>
         </div>
       </div>
