@@ -35,6 +35,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     for (const eventId of allEventIds) {
       let firstMatch = null;
       const bookmakerOdds = {};
+      let hasBetPawaData = false; // Flag to track if betPawa Ghana or Kenya has odds for this event
       
       // Look for this eventId in all bookmakers
       for (const bookmakerCode of bookmakerCodes) {
@@ -50,14 +51,32 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
           firstMatch = event;
         }
         
-        // Store odds from this bookmaker
+        // Store odds from this bookmaker - handling different formats
+        // Some scrapers use the odds field, others use home_odds, draw_odds, away_odds directly
         if (event.odds) {
           bookmakerOdds[bookmakerCode] = event.odds;
+          
+          // Check if this is betPawa Ghana or Kenya
+          if (bookmakerCode === 'bp GH' || bookmakerCode === 'bp KE') {
+            hasBetPawaData = true;
+          }
+        } else if (event.home_odds && event.draw_odds && event.away_odds) {
+          // Format for scrapers that provide odds directly
+          bookmakerOdds[bookmakerCode] = {
+            home: parseFloat(event.home_odds),
+            draw: parseFloat(event.draw_odds),
+            away: parseFloat(event.away_odds)
+          };
+          
+          // Check if this is betPawa Ghana or Kenya
+          if (bookmakerCode === 'bp GH' || bookmakerCode === 'bp KE') {
+            hasBetPawaData = true;
+          }
         }
       }
       
-      // If we found at least one match and it has the required data
-      if (firstMatch) {
+      // Only process events where at least one betPawa bookmaker has odds
+      if (firstMatch && hasBetPawaData) {
         // Extract country and tournament, checking raw data first
         let country = '';
         let tournament = '';
