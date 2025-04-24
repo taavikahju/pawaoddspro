@@ -535,11 +535,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                             );
                           }
                           
-                          // Add an icon to indicate if betPawa's price is better or worse
-                          const icon = isBetter ? 
-                            <ArrowUpIcon className="w-3 h-3 inline mr-1 text-green-600 dark:text-green-400" /> : 
-                            <ArrowDownIcon className="w-3 h-3 inline mr-1 text-red-600 dark:text-red-400" />;
-                          
+                          // No icon, just color coding
                           return (
                             <span className={cn(
                               "text-sm font-medium px-1 py-0.5 rounded flex items-center justify-center",
@@ -547,7 +543,6 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                                 ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300" 
                                 : "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300"
                             )}>
-                              {icon}
                               {displayValue}
                             </span>
                           );

@@ -35,9 +35,9 @@
     "date": "2025-04-24",
     "time": "17:30",
     "odds": {
-      "home": 1.22,
-      "draw": 8,
-      "away": 15
+      "home": 1.21,
+      "draw": 8.25,
+      "away": 16
     },
     "raw": {
       "eventId": "50852727",
@@ -45,9 +45,9 @@
       "tournament": "LaLiga",
       "event": "Real Betis Seville - Real Valladolid",
       "market": "1X2 - FT",
-      "home_odds": "1.22",
-      "draw_odds": "8.0",
-      "away_odds": "15.0",
+      "home_odds": "1.21",
+      "draw_odds": "8.25",
+      "away_odds": "16.0",
       "start_time": "2025-04-24 19:30"
     }
   },
@@ -2938,32 +2938,6 @@
     }
   },
   {
-    "id": "51391729",
-    "eventId": "51391729",
-    "teams": "UD Oliveirense - Academico de Viseu FC",
-    "league": "Liga Portugal 2",
-    "sport": "football",
-    "country": "Portugal",
-    "date": "2025-04-25",
-    "time": "12:30",
-    "odds": {
-      "home": 2.6,
-      "draw": 3.3,
-      "away": 2.45
-    },
-    "raw": {
-      "eventId": "51391729",
-      "country": "Portugal",
-      "tournament": "Liga Portugal 2",
-      "event": "UD Oliveirense - Academico de Viseu FC",
-      "market": "1X2 - FT",
-      "home_odds": "2.6",
-      "draw_odds": "3.3",
-      "away_odds": "2.45",
-      "start_time": "2025-04-25 14:30"
-    }
-  },
-  {
     "id": "56806895",
     "eventId": "56806895",
     "teams": "Raya Sporting FC - Suez Montakhab",
@@ -2986,6 +2960,32 @@
       "home_odds": "2.08",
       "draw_odds": "2.8",
       "away_odds": "3.8",
+      "start_time": "2025-04-25 14:30"
+    }
+  },
+  {
+    "id": "51391729",
+    "eventId": "51391729",
+    "teams": "UD Oliveirense - Academico de Viseu FC",
+    "league": "Liga Portugal 2",
+    "sport": "football",
+    "country": "Portugal",
+    "date": "2025-04-25",
+    "time": "12:30",
+    "odds": {
+      "home": 2.6,
+      "draw": 3.3,
+      "away": 2.45
+    },
+    "raw": {
+      "eventId": "51391729",
+      "country": "Portugal",
+      "tournament": "Liga Portugal 2",
+      "event": "UD Oliveirense - Academico de Viseu FC",
+      "market": "1X2 - FT",
+      "home_odds": "2.6",
+      "draw_odds": "3.3",
+      "away_odds": "2.45",
       "start_time": "2025-04-25 14:30"
     }
   },
@@ -9395,9 +9395,9 @@
     "date": "2025-04-26",
     "time": "07:30",
     "odds": {
-      "home": 6.5,
+      "home": 6,
       "draw": 5.25,
-      "away": 1.34
+      "away": 1.37
     },
     "raw": {
       "eventId": "56926303",
@@ -9405,9 +9405,9 @@
       "tournament": "Queensland NPL",
       "event": "Sunshine Coast Wanderers - Gold Coast Knights",
       "market": "1X2 - FT",
-      "home_odds": "6.5",
+      "home_odds": "6.0",
       "draw_odds": "5.25",
-      "away_odds": "1.34",
+      "away_odds": "1.37",
       "start_time": "2025-04-26 09:30"
     }
   },
@@ -11397,9 +11397,9 @@
     "date": "2025-04-26",
     "time": "11:00",
     "odds": {
-      "home": 1.83,
-      "draw": 3.3,
-      "away": 4.7
+      "home": 1.78,
+      "draw": 3.35,
+      "away": 4.95
     },
     "raw": {
       "eventId": "52371883",
@@ -11407,9 +11407,9 @@
       "tournament": "South Africa Premier Soccer League",
       "event": "Kaizer Chiefs - Marumo Gallants FC",
       "market": "1X2 - FT",
-      "home_odds": "1.83",
-      "draw_odds": "3.3",
-      "away_odds": "4.7",
+      "home_odds": "1.78",
+      "draw_odds": "3.35",
+      "away_odds": "4.95",
       "start_time": "2025-04-26 13:00"
     }
   },
@@ -13841,9 +13841,9 @@
     "date": "2025-04-26",
     "time": "12:00",
     "odds": {
-      "home": 2.3,
+      "home": 2.23,
       "draw": 3.1,
-      "away": 2.95
+      "away": 3.05
     },
     "raw": {
       "eventId": "51448603",
@@ -13851,9 +13851,9 @@
       "tournament": "England National League North",
       "event": "King's Lynn Town - Chester FC",
       "market": "1X2 - FT",
-      "home_odds": "2.3",
+      "home_odds": "2.23",
       "draw_odds": "3.1",
-      "away_odds": "2.95",
+      "away_odds": "3.05",
       "start_time": "2025-04-26 14:00"
     }
   },
@@ -17247,9 +17247,9 @@
     "date": "2025-04-26",
     "time": "16:30",
     "odds": {
-      "home": 2.55,
-      "draw": 2.8,
-      "away": 2.9
+      "home": 2.6,
+      "draw": 2.75,
+      "away": 2.8
     },
     "raw": {
       "eventId": "57250683",
@@ -17257,9 +17257,9 @@
       "tournament": "Primera Nacional",
       "event": "CA Colegiales - CA Guemes",
       "market": "1X2 - FT",
-      "home_odds": "2.55",
-      "draw_odds": "2.8",
-      "away_odds": "2.9",
+      "home_odds": "2.6",
+      "draw_odds": "2.75",
+      "away_odds": "2.8",
       "start_time": "2025-04-26 18:30"
     }
   },
