@@ -1,6 +1,6 @@
 import { db } from "../db";
 import { oddsHistory, type InsertOddsHistory } from "@shared/schema";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 
 /**
  * Calculate margin based on the formula: (1/homeOdds) + (1/drawOdds) + (1/awayOdds) - 1
@@ -62,4 +62,31 @@ export async function getOddsHistory(eventId: string): Promise<any[]> {
  */
 export async function getBookmakerOddsHistory(bookmakerCode: string): Promise<any[]> {
   return db.select().from(oddsHistory).where(eq(oddsHistory.bookmakerCode, bookmakerCode));
+}
+
+/**
+ * Delete odds history older than the specified number of days
+ * @param days Number of days to keep (default: 7)
+ */
+export async function cleanupOldOddsHistory(days: number = 7): Promise<number> {
+  try {
+    // Calculate the cutoff date (days ago from now)
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - days);
+    
+    // Get timestamp in database format
+    const cutoffTimestamp = cutoffDate.toISOString();
+    
+    // Delete records older than the cutoff date
+    const deleteResult = await db.delete(oddsHistory)
+      .where(sql`timestamp < ${cutoffTimestamp}`);
+    
+    const deletedCount = deleteResult.count || 0;
+    console.log(`Deleted ${deletedCount} odds history records older than ${days} days (before ${cutoffTimestamp})`);
+    
+    return deletedCount;
+  } catch (error) {
+    console.error('Error cleaning up old odds history:', error);
+    throw error;
+  }
 }

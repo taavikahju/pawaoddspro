@@ -32,8 +32,12 @@ export const SCRAPER_EVENTS = {
 // Schedule to run every 15 minutes
 const SCRAPE_SCHEDULE = '*/15 * * * *';
 
+// Schedule to run history cleanup once a day at midnight
+const CLEANUP_SCHEDULE = '0 0 * * *';
+
 // Keep track of running jobs
 let scheduledJob: cron.ScheduledTask | null = null;
+let cleanupJob: cron.ScheduledTask | null = null;
 
 /**
  * Setup all scrapers and schedule them to run
@@ -46,7 +50,7 @@ export function setupScrapers(storage: IStorage): void {
     .then(() => console.log('Initial scraping completed'))
     .catch(err => console.error('Error during initial scraping:', err));
   
-  // Schedule regular runs
+  // Schedule regular scraper runs
   if (scheduledJob) {
     scheduledJob.stop();
   }
@@ -62,6 +66,24 @@ export function setupScrapers(storage: IStorage): void {
   });
   
   console.log(`Scrapers scheduled to run every 15 minutes (cron: ${SCRAPE_SCHEDULE})`);
+  
+  // Schedule daily cleanup job to remove old history data
+  if (cleanupJob) {
+    cleanupJob.stop();
+  }
+  
+  cleanupJob = cron.schedule(CLEANUP_SCHEDULE, async () => {
+    try {
+      console.log(`Running scheduled history cleanup at ${new Date().toLocaleTimeString()}`);
+      const { cleanupOldOddsHistory } = await import('../utils/oddsHistory');
+      const deletedCount = await cleanupOldOddsHistory(30); // Delete data older than 30 days (1 month)
+      console.log(`History cleanup complete: removed ${deletedCount} records`);
+    } catch (error) {
+      console.error('Error during history cleanup:', error);
+    }
+  });
+  
+  console.log(`History cleanup scheduled to run daily at midnight (cron: ${CLEANUP_SCHEDULE})`);
 }
 
 /**
