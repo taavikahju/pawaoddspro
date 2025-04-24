@@ -50,5 +50,31 @@
       "away_odds": "3.10",
       "start_time": "2025-04-25 11:40"
     }
+  },
+  {
+    "id": "BET123456",
+    "eventId": "BET123456",
+    "teams": "Gor Mahia vs AFC Leopards",
+    "league": "Kenya Premier League",
+    "sport": "football",
+    "country": "Kenya",
+    "date": "2025-04-24",
+    "time": "11:40",
+    "odds": {
+      "home": 1.9,
+      "draw": 3.3,
+      "away": 4.2
+    },
+    "raw": {
+      "eventId": "BET123456",
+      "country": "Kenya",
+      "tournament": "Kenya Premier League",
+      "event": "Gor Mahia vs AFC Leopards",
+      "market": "1X2",
+      "home_odds": "1.90",
+      "draw_odds": "3.30",
+      "away_odds": "4.20",
+      "start_time": "2025-04-24 11:40"
+    }
   }
 ]

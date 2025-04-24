@@ -56,6 +56,23 @@ try:
                             }
                         }
                     }
+                },
+                {
+                    "id": "BET123456",
+                    "home_team": "Gor Mahia",
+                    "away_team": "AFC Leopards",
+                    "country_name": "Kenya",
+                    "league_name": "Kenya Premier League",
+                    "kickoff_time": "1745494800000",
+                    "markets": {
+                        "1": {
+                            "selections": {
+                                "1": {"odds": "1.90"},
+                                "X": {"odds": "3.30"},
+                                "2": {"odds": "4.20"}
+                            }
+                        }
+                    }
                 }
             ]
         }
