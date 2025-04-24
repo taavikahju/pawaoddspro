@@ -13,29 +13,8 @@ interface ScraperConfig {
   outputFormat: string;
 }
 
-// Configuration - adjust these paths based on your actual script locations
-const SCRIPT_CONFIG: Record<string, ScraperConfig> = {
-  'bet365': {
-    scriptPath: './server/scrapers/custom/bet365_scraper.js', // Update this path
-    command: 'node', // or 'python', etc. depending on your script
-    outputFormat: 'json', // The format your script outputs
-  },
-  'williamhill': {
-    scriptPath: './server/scrapers/custom/williamhill_scraper.js',
-    command: 'node',
-    outputFormat: 'json',
-  },
-  'betfair': {
-    scriptPath: './server/scrapers/custom/betfair_scraper.js',
-    command: 'node',
-    outputFormat: 'json',
-  },
-  'paddypower': {
-    scriptPath: './server/scrapers/custom/paddypower_scraper.js',
-    command: 'node',
-    outputFormat: 'json',
-  }
-};
+// This will be a dynamic configuration that gets populated with custom scrapers
+const SCRIPT_CONFIG: Record<string, ScraperConfig> = {};
 
 /**
  * Generic function to run a custom scraper script for any bookmaker
@@ -142,6 +121,73 @@ export async function scrapeBetfair(): Promise<any[]> {
 export async function scrapePaddyPower(): Promise<any[]> {
   return runCustomScraper('paddypower');
 }
+
+// Function to register a custom scraper
+export function registerCustomScraper(bookmakerCode: string, filePath: string): void {
+  // Determine the file extension to choose the right command
+  const ext = path.extname(filePath).toLowerCase();
+  let command = 'node'; // Default to node
+  
+  if (ext === '.py') {
+    command = 'python';
+  } else if (ext === '.sh') {
+    command = 'sh';
+  } else if (ext === '.ts') {
+    command = 'npx tsx';
+  }
+  
+  // Register the scraper configuration
+  SCRIPT_CONFIG[bookmakerCode] = {
+    scriptPath: filePath,
+    command: command,
+    outputFormat: 'json'
+  };
+  
+  console.log(`Registered custom scraper for bookmaker: ${bookmakerCode}`);
+  console.log(`Script path: ${filePath}`);
+  console.log(`Command: ${command}`);
+}
+
+// Load all existing custom scrapers
+export function loadAllCustomScrapers(): void {
+  // Path to custom scrapers directory
+  const customScraperDir = path.join(process.cwd(), 'server', 'scrapers', 'custom');
+  
+  // Ensure directory exists
+  if (!fs.existsSync(customScraperDir)) {
+    console.log(`Creating custom scrapers directory: ${customScraperDir}`);
+    fs.mkdirSync(customScraperDir, { recursive: true });
+    return;
+  }
+  
+  try {
+    // Read all files in the directory
+    const files = fs.readdirSync(customScraperDir);
+    
+    // Filter for scraper files and register them
+    files.forEach(file => {
+      // Skip this integration file
+      if (file === 'integration.ts' || file === 'integration.js') return;
+      
+      // Expected format: bookmakercode_scraper.ext
+      const match = file.match(/^([a-zA-Z0-9_-]+)_scraper\.(js|py|sh|ts)$/);
+      if (match) {
+        const bookmakerCode = match[1];
+        const filePath = path.join(customScraperDir, file);
+        
+        // Register this scraper
+        registerCustomScraper(bookmakerCode, filePath);
+      }
+    });
+    
+    console.log(`Loaded ${Object.keys(SCRIPT_CONFIG).length} custom scrapers`);
+  } catch (error) {
+    console.error('Error loading custom scrapers:', error);
+  }
+}
+
+// Immediately load all custom scrapers when this module is imported
+loadAllCustomScrapers();
 
 // Export a function that checks if a custom scraper exists for a bookmaker
 export function hasCustomScraper(bookmakerCode: string): boolean {

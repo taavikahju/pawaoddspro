@@ -771,6 +771,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         scriptType = 'typescript';
       }
       
+      // Register the custom scraper
+      try {
+        const filePath = req.file.path;
+        customScrapers.registerCustomScraper(bookmakerCode, filePath);
+        console.log(`Registered custom scraper for ${bookmakerCode}`);
+      } catch (regError) {
+        console.error('Error registering custom scraper:', regError);
+        // Continue anyway, as this is not critical
+      }
+      
       res.json({ 
         success: true, 
         message: 'Scraper script uploaded successfully',
