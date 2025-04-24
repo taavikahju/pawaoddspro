@@ -19,55 +19,90 @@ export function useWebSocket() {
   useEffect(() => {
     let reconnectTimeout: ReturnType<typeof setTimeout>;
     let reconnectAttempts = 0;
-    const MAX_RECONNECT_ATTEMPTS = 10;
+    const MAX_RECONNECT_ATTEMPTS = 20;
     const INITIAL_RECONNECT_DELAY = 1000; // 1 second
     const MAX_RECONNECT_DELAY = 30000; // 30 seconds
     
     function connectWebSocket() {
-      const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-      const wsUrl = `${protocol}//${window.location.host}/ws`;
-      
-      const ws = new WebSocket(wsUrl);
-      
-      ws.onopen = () => {
-        console.log('WebSocket connected');
-        setIsConnected(true);
-        reconnectAttempts = 0; // Reset reconnect attempts on successful connection
-      };
-      
-      ws.onclose = (event) => {
-        console.log(`WebSocket disconnected (code: ${event.code})`);
-        setIsConnected(false);
+      try {
+        const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+        const wsUrl = `${protocol}//${window.location.host}/ws`;
         
-        // Only attempt to reconnect if the close was not clean (e.g., due to network failure)
-        // or if it was a normal closure but not due to page navigation
-        if (!event.wasClean || event.code === 1000) {
-          const delay = Math.min(
-            INITIAL_RECONNECT_DELAY * Math.pow(1.5, reconnectAttempts),
-            MAX_RECONNECT_DELAY
-          );
+        console.log(`Connecting to WebSocket at ${wsUrl}...`);
+        const ws = new WebSocket(wsUrl);
+        
+        ws.onopen = () => {
+          console.log('WebSocket connected successfully');
+          setIsConnected(true);
+          reconnectAttempts = 0; // Reset reconnect attempts on successful connection
           
-          reconnectAttempts++;
-          console.log(`Attempting to reconnect (attempt ${reconnectAttempts}) in ${delay}ms...`);
-          
-          if (reconnectAttempts <= MAX_RECONNECT_ATTEMPTS) {
-            reconnectTimeout = setTimeout(() => {
-              setSocket(null); // This will trigger a reconnect via the dependency array
-            }, delay);
-          } else {
-            console.error(`Max reconnection attempts (${MAX_RECONNECT_ATTEMPTS}) reached.`);
+          // Immediately request current data from server
+          try {
+            if (ws.readyState === WebSocket.OPEN) {
+              ws.send(JSON.stringify({ type: 'getEvents' }));
+              ws.send(JSON.stringify({ type: 'getStats' }));
+            }
+          } catch (sendError) {
+            console.error('Error sending initial requests:', sendError);
           }
-        }
-      };
-      
-      ws.onerror = (error) => {
-        console.error('WebSocket error:', error);
-      };
-      
-      return ws;
+        };
+        
+        ws.onclose = (event) => {
+          console.log(`WebSocket disconnected (code: ${event.code}, clean: ${event.wasClean})`);
+          setIsConnected(false);
+          
+          // Always attempt to reconnect except when the tab is being closed
+          if (document.visibilityState !== 'hidden') {
+            const delay = Math.min(
+              INITIAL_RECONNECT_DELAY * Math.pow(1.5, reconnectAttempts),
+              MAX_RECONNECT_DELAY
+            );
+            
+            reconnectAttempts++;
+            console.log(`Attempting to reconnect (attempt ${reconnectAttempts}) in ${delay}ms...`);
+            
+            if (reconnectAttempts <= MAX_RECONNECT_ATTEMPTS) {
+              reconnectTimeout = setTimeout(() => {
+                console.log('Reconnecting now...');
+                setSocket(null); // This will trigger a reconnect when this useEffect runs again
+              }, delay);
+            } else {
+              console.error(`Max reconnection attempts (${MAX_RECONNECT_ATTEMPTS}) reached.`);
+            }
+          }
+        };
+        
+        ws.onerror = (error) => {
+          console.error('WebSocket error:', error);
+          // Don't disconnect here - let the onclose handler handle reconnection
+        };
+        
+        return ws;
+      } catch (error) {
+        console.error('Error initializing WebSocket:', error);
+        return null;
+      }
     }
     
     const ws = connectWebSocket();
+    
+    // Handle the case where WebSocket connection fails to initialize
+    if (!ws) {
+      console.error('Failed to initialize WebSocket, will retry...');
+      
+      // Try to reconnect after a delay
+      const retryDelay = 3000;
+      reconnectAttempts++;
+      reconnectTimeout = setTimeout(() => {
+        setSocket(null); // Trigger reconnect
+      }, retryDelay);
+      
+      return () => {
+        if (reconnectTimeout) {
+          clearTimeout(reconnectTimeout);
+        }
+      };
+    }
     
     ws.onmessage = (event) => {
       try {
@@ -104,7 +139,14 @@ export function useWebSocket() {
     setSocket(ws);
 
     return () => {
-      ws.close();
+      if (ws) {
+        ws.close();
+      }
+      
+      // Clean up any reconnection timeouts
+      if (reconnectTimeout) {
+        clearTimeout(reconnectTimeout);
+      }
     };
   }, []);
 

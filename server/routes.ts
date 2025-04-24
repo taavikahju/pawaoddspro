@@ -29,6 +29,65 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   }
   
+  // Set up scraper event listeners
+  scraperEvents.on(SCRAPER_EVENTS.SCRAPER_STARTED, (bookmaker) => {
+    broadcast({
+      type: 'scraperEvent',
+      event: SCRAPER_EVENTS.SCRAPER_STARTED,
+      data: { bookmaker }
+    });
+    
+    broadcast({
+      type: 'notification',
+      data: {
+        message: `Started scraping ${bookmaker.name}`,
+        status: 'info'
+      }
+    });
+  });
+  
+  scraperEvents.on(SCRAPER_EVENTS.SCRAPER_COMPLETED, (data) => {
+    broadcast({
+      type: 'scraperEvent',
+      event: SCRAPER_EVENTS.SCRAPER_COMPLETED,
+      data
+    });
+    
+    broadcast({
+      type: 'notification',
+      data: {
+        message: `Completed scraping ${data.bookmaker.name} (${data.eventCount} events)`,
+        status: 'success'
+      }
+    });
+  });
+  
+  scraperEvents.on(SCRAPER_EVENTS.SCRAPER_FAILED, (data) => {
+    broadcast({
+      type: 'scraperEvent',
+      event: SCRAPER_EVENTS.SCRAPER_FAILED,
+      data
+    });
+    
+    broadcast({
+      type: 'notification',
+      data: {
+        message: `Failed scraping ${data.bookmaker.name}: ${data.error}`,
+        status: 'error'
+      }
+    });
+  });
+  
+  scraperEvents.on(SCRAPER_EVENTS.ALL_SCRAPERS_COMPLETED, () => {
+    broadcast({
+      type: 'notification',
+      data: {
+        message: 'All scrapers completed successfully',
+        status: 'success'
+      }
+    });
+  });
+
   // Handle WebSocket connections
   wss.on('connection', (ws) => {
     console.log('New WebSocket client connected');
@@ -39,6 +98,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         type: 'stats',
         data: stats
       }));
+    }).catch(error => {
+      console.error('Error sending initial stats:', error);
     });
     
     storage.getScraperStatuses().then(scraperStatuses => {
@@ -46,6 +107,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
         type: 'scraperStatuses',
         data: scraperStatuses
       }));
+    }).catch(error => {
+      console.error('Error sending initial scraper statuses:', error);
+    });
+    
+    // Send initial events data
+    storage.getEvents().then(events => {
+      ws.send(JSON.stringify({
+        type: 'events',
+        data: events
+      }));
+    }).catch(error => {
+      console.error('Error sending initial events:', error);
     });
     
     // Handle messages from client
