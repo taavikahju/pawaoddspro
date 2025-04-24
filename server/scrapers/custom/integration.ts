@@ -50,8 +50,9 @@ export async function runCustomScraper(bookmakerCode: string): Promise<any[]> {
       return [];
     }
     
-    // Run the script as a separate process
-    const { stdout, stderr } = await execPromise(`${config.command} ${config.scriptPath}`);
+    // Run the script as a separate process - quote the path to handle spaces
+    console.log(`Running command: ${config.command} "${config.scriptPath}"`);
+    const { stdout, stderr } = await execPromise(`${config.command} "${config.scriptPath}"`);
     
     if (stderr) {
       console.error(`Error running ${bookmakerCode} scraper:`, stderr);

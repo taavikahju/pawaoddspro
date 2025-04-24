@@ -83,6 +83,5 @@ while True:
     skip += take
     time.sleep(0.3)  # To avoid hitting rate limits
 
-# Save to file
-with open("Cleaned_betPawa_Data.json", "w") as f:
-    json.dump(all_events, f, indent=2)
+# Output as JSON to stdout for the integration
+print(json.dumps(all_events))
