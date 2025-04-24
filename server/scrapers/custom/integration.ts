@@ -71,6 +71,7 @@ export async function runCustomScraper(bookmakerCode: string): Promise<any[]> {
             // Map from the user's custom format to our expected format
             return {
               id: item.eventId,
+              eventId: item.eventId, // Explicitly add eventId at the top level
               teams: item.event,
               league: item.tournament || '',
               sport: item.sport || 'football', // Default to football if not specified
@@ -84,6 +85,14 @@ export async function runCustomScraper(bookmakerCode: string): Promise<any[]> {
               },
               // Keep the original data for reference
               raw: { ...item }
+            };
+          }
+          
+          // If it's already in our expected format but missing eventId, add it
+          if (item.raw && item.raw.eventId && !item.eventId) {
+            return {
+              ...item,
+              eventId: item.raw.eventId
             };
           }
           
