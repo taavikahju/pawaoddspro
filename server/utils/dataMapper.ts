@@ -31,6 +31,12 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     
     console.log(`Found ${allEventIds.size} unique eventIds across all bookmakers`);
     
+    // Stats counters to track filtering results
+    let eventsWith1Bookmaker = 0;
+    let eventsWith2Bookmakers = 0;
+    let eventsWith3Bookmakers = 0;
+    let eventsWith4Bookmakers = 0;
+    
     // Second pass: Process each bookmaker's data and group by eventId
     for (const eventId of allEventIds) {
       let firstMatch = null;
@@ -74,6 +80,12 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
         }
       }
       
+      // Track the number of bookmakers for each event
+      if (bookmakerCount === 1) eventsWith1Bookmaker++;
+      else if (bookmakerCount === 2) eventsWith2Bookmakers++;
+      else if (bookmakerCount === 3) eventsWith3Bookmakers++;
+      else if (bookmakerCount >= 4) eventsWith4Bookmakers++;
+
       // Only process events where at least 3 bookmakers have odds
       if (firstMatch && bookmakerCount >= 3) {
         // Extract country and tournament, checking raw data first
@@ -198,7 +210,13 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       }
     }
     
-    console.log(`Processed and mapped ${eventMap.size} events`);
+    // Log distribution of events by bookmaker count
+    console.log(`Event distribution by bookmaker count:`);
+    console.log(`- Events with 1 bookmaker: ${eventsWith1Bookmaker}`);
+    console.log(`- Events with 2 bookmakers: ${eventsWith2Bookmakers}`);
+    console.log(`- Events with 3 bookmakers: ${eventsWith3Bookmakers}`);
+    console.log(`- Events with 4 bookmakers: ${eventsWith4Bookmakers}`);
+    console.log(`Processed and mapped ${eventMap.size} events with at least 3 bookmakers`);
   } catch (error) {
     console.error('Error processing and mapping events:', error);
     throw error;
