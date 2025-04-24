@@ -78,7 +78,7 @@ export default function Layout({ children, title, subtitle }: LayoutProps) {
         </header>
 
         {/* Main Content Area */}
-        <main className="p-3 md:p-4 bg-gray-50 dark:bg-slate-900 min-h-[calc(100vh-36px)]">
+        <main className="p-3 md:p-4 bg-gray-50 dark:bg-slate-900 min-h-[calc(100vh-36px)] lg:ml-64">
           {children}
         </main>
       </div>

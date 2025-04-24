@@ -140,8 +140,8 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
   return (
     <div
       className={cn(
-        "fixed z-20 inset-0 transition duration-200 transform bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 w-56 flex-shrink-0 shadow-lg",
-        (isOpen || isHovering) ? "translate-x-0" : "-translate-x-[calc(100%-12px)]"
+        "fixed z-20 inset-0 transition duration-200 transform bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 w-64 flex-shrink-0 shadow-lg",
+        (isOpen || isHovering) ? "translate-x-0" : "-translate-x-[calc(100%-10px)]"
       )}
     >
       {/* Sidebar header */}
