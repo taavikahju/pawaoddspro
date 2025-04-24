@@ -7,10 +7,30 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
-import { Edit, Plus, RefreshCw, Save, Trash, Upload } from 'lucide-react';
+import { 
+  Edit, 
+  Plus, 
+  RefreshCw, 
+  Save, 
+  Trash, 
+  Upload, 
+  PlayCircle,
+  AlertCircle,
+  CheckCircle2
+} from 'lucide-react';
 import Layout from '@/components/Layout';
 import { queryClient, apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
 
 export default function AdminPage() {
   const { toast } = useToast();
@@ -23,6 +43,8 @@ export default function AdminPage() {
   const [isAddingSport, setIsAddingSport] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [selectedBookmakerForUpload, setSelectedBookmakerForUpload] = useState('');
+  const [testResults, setTestResults] = useState<any>(null);
+  const [isTestDialogOpen, setIsTestDialogOpen] = useState(false);
 
   // Fetch bookmakers and sports
   const { data: bookmakers = [], isLoading: isLoadingBookmakers } = useQuery({
@@ -158,6 +180,27 @@ export default function AdminPage() {
       toast({
         title: 'Error',
         description: `Failed to run scrapers: ${error.message}`,
+        variant: 'destructive',
+      });
+    },
+  });
+  
+  // Mutation for testing a scraper
+  const testScraperMutation = useMutation({
+    mutationFn: (bookmakerCode: string) => 
+      apiRequest(`/api/scrapers/test/${bookmakerCode}`, 'POST'),
+    onSuccess: (data) => {
+      setTestResults(data);
+      setIsTestDialogOpen(true);
+      toast({
+        title: 'Success',
+        description: 'Scraper test completed successfully',
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: 'Error',
+        description: `Failed to test scraper: ${error.message}`,
         variant: 'destructive',
       });
     },
@@ -595,7 +638,19 @@ export default function AdminPage() {
                     </div>
                   </div>
                   
-                  <div className="flex justify-end">
+                  <div className="flex justify-end space-x-2">
+                    {selectedBookmakerForUpload && (
+                      <Button 
+                        type="button"
+                        variant="outline"
+                        disabled={testScraperMutation.isPending}
+                        onClick={() => testScraperMutation.mutate(selectedBookmakerForUpload)}
+                        className="flex items-center"
+                      >
+                        <PlayCircle className="mr-1 h-4 w-4" />
+                        {testScraperMutation.isPending ? 'Testing...' : 'Test Script'}
+                      </Button>
+                    )}
                     <Button 
                       type="submit" 
                       className="flex items-center"
@@ -610,6 +665,91 @@ export default function AdminPage() {
             </Card>
           </TabsContent>
         </Tabs>
+        
+        {/* Test Results Dialog */}
+        <Dialog open={isTestDialogOpen} onOpenChange={setIsTestDialogOpen}>
+          <DialogContent className="max-w-3xl max-h-[80vh] overflow-auto">
+            <DialogHeader>
+              <DialogTitle className="flex items-center text-lg">
+                {testResults?.success ? (
+                  <CheckCircle2 className="w-5 h-5 mr-2 text-green-500" />
+                ) : (
+                  <AlertCircle className="w-5 h-5 mr-2 text-red-500" />
+                )}
+                {testResults?.success ? 'Scraper Test Successful' : 'Scraper Test Failed'}
+              </DialogTitle>
+              <DialogDescription>
+                {testResults?.message}
+              </DialogDescription>
+            </DialogHeader>
+            
+            {testResults?.success && (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-medium">
+                    Bookmaker: {testResults?.bookmaker?.name}
+                  </h3>
+                  <span className="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded dark:bg-blue-900 dark:text-blue-200">
+                    {testResults?.count} events found
+                  </span>
+                </div>
+                
+                <div className="border rounded-lg overflow-hidden">
+                  <div className="bg-muted px-4 py-2 text-sm font-medium">
+                    Sample Data (First 5 Events)
+                  </div>
+                  
+                  <div className="p-4 space-y-4 text-sm">
+                    {testResults?.events?.length > 0 ? (
+                      testResults.events.map((event: any, index: number) => (
+                        <div key={index} className="border-b pb-3 last:border-b-0 last:pb-0">
+                          <h4 className="font-semibold">{event.teams || event.event}</h4>
+                          <div className="grid grid-cols-2 gap-2 mt-1">
+                            <div className="space-y-1">
+                              <div><span className="font-medium">Country:</span> {event.country}</div>
+                              <div><span className="font-medium">Tournament:</span> {event.tournament}</div>
+                              <div><span className="font-medium">Start Time:</span> {event.start_time}</div>
+                            </div>
+                            <div className="space-y-1">
+                              <div><span className="font-medium">ID:</span> {event.eventId}</div>
+                              <div><span className="font-medium">Market:</span> {event.market}</div>
+                              <div className="font-medium">Odds:</div>
+                              <div className="pl-4 space-y-1">
+                                {Object.entries(event.odds || {}).map(([key, value]: [string, any]) => (
+                                  <div key={key} className="grid grid-cols-2">
+                                    <span>{key}:</span>
+                                    <span>{value}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <p>No events returned in test data</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            {!testResults?.success && (
+              <div className="bg-red-50 text-red-700 p-4 rounded dark:bg-red-900 dark:text-red-100">
+                <p className="font-semibold">Error:</p>
+                <p className="font-mono text-sm whitespace-pre-wrap break-words">
+                  {testResults?.error || 'Unknown error occurred when testing scraper.'}
+                </p>
+              </div>
+            )}
+            
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button>Close</Button>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </Layout>
   );
