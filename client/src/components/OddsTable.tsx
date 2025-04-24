@@ -67,43 +67,43 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
       <Table className="w-full border-collapse">
         <TableHeader className="bg-gray-100 dark:bg-slate-700/50">
           <TableRow className="border-b border-gray-200 dark:border-gray-700">
-            <TableHead className="w-24 px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+            <TableHead className="w-24 px-2 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               <div className="flex items-center">
                 <Globe className="w-3 h-3 mr-1" />
                 Country
               </div>
             </TableHead>
-            <TableHead className="w-28 px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+            <TableHead className="w-28 px-2 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               <div className="flex items-center">
                 <Trophy className="w-3 h-3 mr-1" />
                 Tournament
               </div>
             </TableHead>
-            <TableHead className="w-24 px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+            <TableHead className="w-24 px-2 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               <div className="flex items-center">
                 <Clock className="w-3 h-3 mr-1" />
                 Start (UTC)
               </div>
             </TableHead>
-            <TableHead className="w-48 px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+            <TableHead className="w-48 px-2 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               Fixture
             </TableHead>
-            <TableHead className="w-20 px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+            <TableHead className="w-20 px-2 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               Market
             </TableHead>
-            <TableHead className="w-20 px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+            <TableHead className="w-20 px-2 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               Source
             </TableHead>
-            <TableHead className="w-16 px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+            <TableHead className="w-16 px-2 py-2 text-center text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               Home
             </TableHead>
-            <TableHead className="w-16 px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+            <TableHead className="w-16 px-2 py-2 text-center text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               Draw
             </TableHead>
-            <TableHead className="w-16 px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+            <TableHead className="w-16 px-2 py-2 text-center text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               Away
             </TableHead>
-            <TableHead className="w-20 px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+            <TableHead className="w-20 px-2 py-2 text-center text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               Margin
             </TableHead>
           </TableRow>
@@ -132,7 +132,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                           className="px-2 py-1 whitespace-nowrap border-r border-gray-200 dark:border-gray-700" 
                           rowSpan={filteredBookmakers.length}
                         >
-                          <span className="text-xs text-gray-600 dark:text-gray-300">
+                          <span className="text-sm text-gray-600 dark:text-gray-300">
                             {event.country || event.league?.split(' ')[0] || 'Unknown'}
                           </span>
                         </TableCell>
@@ -141,7 +141,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                           className="px-2 py-1 whitespace-nowrap border-r border-gray-200 dark:border-gray-700" 
                           rowSpan={filteredBookmakers.length}
                         >
-                          <span className="text-xs text-gray-600 dark:text-gray-300">
+                          <span className="text-sm text-gray-600 dark:text-gray-300">
                             {(() => {
                               // First check if we have tournament data directly
                               if (event.tournament) {
@@ -166,8 +166,8 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                           rowSpan={filteredBookmakers.length}
                         >
                           <div className="flex flex-col">
-                            <span className="text-xs font-medium text-gray-800 dark:text-gray-200">{event.date}</span>
-                            <span className="text-[11px] text-gray-500 dark:text-gray-400">{event.time}</span>
+                            <span className="text-sm font-medium text-gray-800 dark:text-gray-200">{event.date}</span>
+                            <span className="text-sm text-gray-500 dark:text-gray-400">{event.time}</span>
                           </div>
                         </TableCell>
                         
@@ -175,7 +175,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                           className="px-2 py-1 whitespace-nowrap border-r border-gray-200 dark:border-gray-700" 
                           rowSpan={filteredBookmakers.length}
                         >
-                          <span className="text-xs font-medium text-gray-800 dark:text-gray-200">
+                          <span className="text-sm font-medium text-gray-800 dark:text-gray-200">
                             {event.teams}
                           </span>
                         </TableCell>
@@ -184,7 +184,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                           className="px-2 py-1 whitespace-nowrap border-r border-gray-200 dark:border-gray-700" 
                           rowSpan={filteredBookmakers.length}
                         >
-                          <span className="text-xs text-gray-600 dark:text-gray-300">
+                          <span className="text-sm text-gray-600 dark:text-gray-300">
                             Match Result
                           </span>
                         </TableCell>
@@ -192,7 +192,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                     )}
                     
                     <TableCell className="px-2 py-1 whitespace-nowrap border-r border-gray-200 dark:border-gray-700">
-                      <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                         {bookmaker.code}
                       </span>
                     </TableCell>
@@ -200,7 +200,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                     <TableCell className="px-2 py-1 whitespace-nowrap text-center border-r border-gray-200 dark:border-gray-700">
                       <span 
                         className={cn(
-                          "text-xs font-medium px-1 py-0.5 rounded",
+                          "text-sm font-medium px-1 py-0.5 rounded",
                           isBestOdd(event, 'home', bookmaker.code) 
                             ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300" 
                             : "bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300"
@@ -213,7 +213,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                     <TableCell className="px-2 py-1 whitespace-nowrap text-center border-r border-gray-200 dark:border-gray-700">
                       <span 
                         className={cn(
-                          "text-xs font-medium px-1 py-0.5 rounded",
+                          "text-sm font-medium px-1 py-0.5 rounded",
                           isBestOdd(event, 'draw', bookmaker.code) 
                             ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300" 
                             : "bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300"
@@ -226,7 +226,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                     <TableCell className="px-2 py-1 whitespace-nowrap text-center border-r border-gray-200 dark:border-gray-700">
                       <span 
                         className={cn(
-                          "text-xs font-medium px-1 py-0.5 rounded",
+                          "text-sm font-medium px-1 py-0.5 rounded",
                           isBestOdd(event, 'away', bookmaker.code) 
                             ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300" 
                             : "bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300"
@@ -254,7 +254,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                         
                         return (
                           <span 
-                            className={`text-xs font-medium px-1 py-0.5 rounded bg-gray-50 dark:bg-gray-800 ${colorClass}`}
+                            className={`text-sm font-medium px-1 py-0.5 rounded bg-gray-50 dark:bg-gray-800 ${colorClass}`}
                           >
                             {marginPercentage !== '-' ? `${marginPercentage}%` : '-'}
                           </span>
