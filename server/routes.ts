@@ -823,7 +823,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Endpoint to upload a scraper script
-  app.post('/api/scrapers/upload', isAdmin, (req, res, next) => {
+  app.post('/api/scrapers/upload', simpleAdminAuth, (req, res, next) => {
     console.log('Upload request received:', req.body);
     
     // Store the bookmaker code in req before multer processes the file
@@ -956,7 +956,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // CRUD endpoints for bookmakers
-  app.post('/api/bookmakers', isAdmin, async (req, res) => {
+  app.post('/api/bookmakers', simpleAdminAuth, async (req, res) => {
     try {
       const bookmaker = req.body;
       const createdBookmaker = await storage.createBookmaker(bookmaker);
@@ -967,7 +967,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.patch('/api/bookmakers/:id', isAdmin, async (req, res) => {
+  app.patch('/api/bookmakers/:id', simpleAdminAuth, async (req, res) => {
     try {
       const id = parseInt(req.params.id, 10);
       if (isNaN(id)) {
@@ -987,7 +987,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  app.delete('/api/bookmakers/:id', isAdmin, async (req, res) => {
+  app.delete('/api/bookmakers/:id', simpleAdminAuth, async (req, res) => {
     try {
       const id = parseInt(req.params.id, 10);
       if (isNaN(id)) {
@@ -1031,7 +1031,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // CRUD endpoints for sports
-  app.post('/api/sports', isAdmin, async (req, res) => {
+  app.post('/api/sports', simpleAdminAuth, async (req, res) => {
     try {
       const sport = req.body;
       const createdSport = await storage.createSport(sport);
@@ -1042,7 +1042,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.patch('/api/sports/:id', isAdmin, async (req, res) => {
+  app.patch('/api/sports/:id', simpleAdminAuth, async (req, res) => {
     try {
       const id = parseInt(req.params.id, 10);
       if (isNaN(id)) {

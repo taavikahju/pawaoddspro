@@ -20,6 +20,7 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import Layout from '@/components/Layout';
+import AdminKeyForm from '@/components/AdminKeyForm';
 import { queryClient, apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -58,7 +59,7 @@ export default function AdminPage() {
 
   // Mutations for adding/updating/deleting bookmakers
   const addBookmakerMutation = useMutation({
-    mutationFn: (bookmaker: any) => apiRequest('/api/bookmakers', 'POST', bookmaker),
+    mutationFn: (bookmaker: any) => apiRequest('POST', '/api/bookmakers', bookmaker, true),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/bookmakers'] });
       setNewBookmaker({ name: '', code: '', active: true });
@@ -78,7 +79,7 @@ export default function AdminPage() {
   });
 
   const updateBookmakerMutation = useMutation({
-    mutationFn: (bookmaker: any) => apiRequest(`/api/bookmakers/${bookmaker.id}`, 'PATCH', bookmaker),
+    mutationFn: (bookmaker: any) => apiRequest('PATCH', `/api/bookmakers/${bookmaker.id}`, bookmaker, true),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/bookmakers'] });
       setEditingBookmaker(null);
@@ -97,7 +98,7 @@ export default function AdminPage() {
   });
   
   const deleteBookmakerMutation = useMutation({
-    mutationFn: (bookmakerId: number) => apiRequest(`/api/bookmakers/${bookmakerId}`, 'DELETE'),
+    mutationFn: (bookmakerId: number) => apiRequest('DELETE', `/api/bookmakers/${bookmakerId}`, undefined, true),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/bookmakers'] });
       toast({
@@ -116,7 +117,7 @@ export default function AdminPage() {
 
   // Mutations for adding/updating/deleting sports
   const addSportMutation = useMutation({
-    mutationFn: (sport: any) => apiRequest('/api/sports', 'POST', sport),
+    mutationFn: (sport: any) => apiRequest('POST', '/api/sports', sport, true),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/sports'] });
       setNewSport({ name: '', code: '', active: true });
@@ -136,7 +137,7 @@ export default function AdminPage() {
   });
 
   const updateSportMutation = useMutation({
-    mutationFn: (sport: any) => apiRequest(`/api/sports/${sport.id}`, 'PATCH', sport),
+    mutationFn: (sport: any) => apiRequest('PATCH', `/api/sports/${sport.id}`, sport, true),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/sports'] });
       setEditingSport(null);
@@ -214,7 +215,7 @@ export default function AdminPage() {
 
   // Mutation for running scrapers manually
   const runScrapersMutation = useMutation({
-    mutationFn: () => apiRequest('/api/scrapers/run', 'POST'),
+    mutationFn: () => apiRequest('POST', '/api/scrapers/run', undefined, true),
     onSuccess: () => {
       toast({
         title: 'Success',
@@ -235,8 +236,8 @@ export default function AdminPage() {
     mutationFn: async (bookmakerCode: string) => {
       console.log('Testing scraper for bookmaker:', bookmakerCode);
       
-      const response = await apiRequest(`/api/scrapers/test/${encodeURIComponent(bookmakerCode)}`, 'POST');
-      return response.json();
+      const response = await apiRequest('POST', `/api/scrapers/test/${encodeURIComponent(bookmakerCode)}`, undefined, true);
+      return response;
     },
     onSuccess: (data) => {
       setTestResults(data);
@@ -315,10 +316,14 @@ export default function AdminPage() {
       // Create a direct fetch instead of using the mutation
       const url = `/api/scrapers/upload?bookmaker=${encodeURIComponent(selectedBookmakerForUpload)}`;
       
+      // Get admin key
+      const adminKey = localStorage.getItem('adminKey');
+      
       const response = await fetch(url, {
         method: 'POST',
         headers: {
-          'X-Bookmaker-Code': selectedBookmakerForUpload
+          'X-Bookmaker-Code': selectedBookmakerForUpload,
+          'X-Admin-Key': adminKey || ''
         },
         body: formData
       });
@@ -349,6 +354,10 @@ export default function AdminPage() {
   return (
     <Layout title="Admin Panel" subtitle="Manage bookmakers, sports, and scrapers">
       <div className="space-y-6">
+        <div className="mb-6">
+          <AdminKeyForm />
+        </div>
+        
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="mb-4">
             <TabsTrigger value="bookmakers">Bookmakers</TabsTrigger>

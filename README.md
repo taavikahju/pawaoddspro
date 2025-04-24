@@ -38,30 +38,34 @@ SESSION_SECRET=your-session-secret-here
 
 ## Security Considerations
 
-### Role-Based Access Control
+### Simple Admin Protection
 
-The application implements role-based access control with two user roles:
-- **User**: Can view odds and comparison data
-- **Admin**: Can manage bookmakers, run scrapers manually, upload scraper scripts, etc.
+The application uses a lightweight approach to protect admin functionality without requiring user registration or login. This is done through a simple API key-based protection:
 
-### Setting Up Admin User
+1. Admin routes are protected by the `simpleAdminAuth` middleware
+2. The middleware checks for the presence of an `x-admin-key` HTTP header
+3. The value in this header must match the `ADMIN_KEY` environment variable
 
-An admin user is automatically created when running the `create-admin-user.ts` script with the following default credentials:
+### Setting Up Admin Protection
 
-- Username: `admin`
-- Password: `adminpassword`
+Add the following to your `.env` file:
 
-**Important:** Change the admin password after the first login for security reasons.
+```
+ADMIN_KEY=your-secure-admin-key-here
+```
+
+Without this key, access to admin routes will be denied.
 
 ### Securing Admin Routes
 
-All admin-related API endpoints are protected with the `isAdmin` middleware that checks for:
-1. User authentication (valid session)
-2. Admin role assignment
+All admin-related API endpoints are protected with the `simpleAdminAuth` middleware that:
+1. Extracts the `x-admin-key` HTTP header from the request
+2. Compares it with the `ADMIN_KEY` environment variable
+3. Allows or denies access based on the comparison
 
 ### Frontend Protection
 
-The frontend implements protected routes that verify user roles before allowing access to admin pages. This provides an additional layer of security beyond the backend API restrictions.
+When accessing the admin section of the frontend, you'll need to ensure your API client sends the correct `x-admin-key` header with every admin API request. This can be accomplished through browser extensions or within your frontend code.
 
 ## Deployment
 

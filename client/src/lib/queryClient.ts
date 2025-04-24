@@ -1,5 +1,20 @@
 import { QueryClient, QueryFunction } from "@tanstack/react-query";
 
+// Get the admin key from localStorage, or null if not present
+export function getAdminKey(): string | null {
+  return localStorage.getItem('adminKey');
+}
+
+// Set the admin key in localStorage
+export function setAdminKey(key: string): void {
+  localStorage.setItem('adminKey', key);
+}
+
+// Clear the admin key from localStorage
+export function clearAdminKey(): void {
+  localStorage.removeItem('adminKey');
+}
+
 async function throwIfResNotOk(res: Response) {
   if (!res.ok) {
     const text = (await res.text()) || res.statusText;
@@ -8,13 +23,29 @@ async function throwIfResNotOk(res: Response) {
 }
 
 export async function apiRequest(
+  method: string,
   url: string,
-  method: string = 'GET',
   data?: unknown | undefined,
+  isAdmin: boolean = false,
 ): Promise<Response> {
+  const headers: Record<string, string> = {};
+  
+  // Add Content-Type header if we have data
+  if (data) {
+    headers["Content-Type"] = "application/json";
+  }
+  
+  // Add admin key header if this is an admin request and we have a key
+  if (isAdmin) {
+    const adminKey = getAdminKey();
+    if (adminKey) {
+      headers["x-admin-key"] = adminKey;
+    }
+  }
+  
   const res = await fetch(url, {
     method,
-    headers: data ? { "Content-Type": "application/json" } : {},
+    headers,
     body: data ? JSON.stringify(data) : undefined,
     credentials: "include",
   });
