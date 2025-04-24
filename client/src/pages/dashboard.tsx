@@ -85,6 +85,8 @@ export default function Dashboard() {
 
   // Filter events by selected sports, country, and tournament
   const filteredEvents = useMemo(() => {
+    if (!Array.isArray(events)) return [];
+    
     return events.filter((event: any) => {
       // Filter by sport
       const sportMatches = selectedSports.some((selectedSport) => {
@@ -102,15 +104,20 @@ export default function Dashboard() {
       if (!sportMatches) return false;
       
       // Filter by country
+      const eventCountry = event.country ? event.country.toString().toLowerCase() : '';
+      const selectedCountry = countryFilter.toLowerCase();
+      
       const countryMatches = countryFilter === 'all' || 
-        (event.country && event.country.toLowerCase() === countryFilter.toLowerCase());
+        (eventCountry !== '' && eventCountry === selectedCountry);
       
       if (!countryMatches) return false;
       
       // Filter by tournament only if country is selected
       if (countryFilter !== 'all' && tournamentFilter !== 'all') {
-        return event.tournament && 
-          event.tournament.toLowerCase() === tournamentFilter.toLowerCase();
+        const eventTournament = event.tournament ? event.tournament.toString().toLowerCase() : '';
+        const selectedTournament = tournamentFilter.toLowerCase();
+        
+        return eventTournament !== '' && eventTournament === selectedTournament;
       }
       
       return true;
