@@ -1,31 +1,33 @@
 import { db } from "../server/db";
 import { users } from "../shared/schema";
-import { eq, isNull } from "drizzle-orm";
+import { eq, isNull, count } from "drizzle-orm";
 
 async function main() {
   try {
     console.log("Adding roles to existing users...");
     
     // Count users with no role
-    const [{ count }] = await db
+    const result = await db
       .select({ count: count() })
       .from(users)
       .where(isNull(users.role));
+    
+    const userCount = result[0].count;
       
-    if (count === 0) {
+    if (userCount === 0) {
       console.log("All users already have roles assigned!");
       return;
     }
     
-    console.log(`Found ${count} users without roles. Updating...`);
+    console.log(`Found ${userCount} users without roles. Updating...`);
     
     // Update all users without roles to 'user' role
-    const result = await db
+    const updateResult = await db
       .update(users)
       .set({ role: "user" })
       .where(isNull(users.role));
     
-    console.log(`Updated ${result.rowCount} users with 'user' role.`);
+    console.log(`Updated ${userCount} users with 'user' role.`);
     
     // List all admin users
     const admins = await db.select().from(users).where(eq(users.role, "admin"));

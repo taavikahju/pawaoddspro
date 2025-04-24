@@ -11,6 +11,7 @@ import { WebSocketServer, WebSocket } from 'ws';
 import { processAndMapEvents } from "./utils/dataMapper";
 import { setupAuth } from "./auth";
 import { isAuthenticated, isAdmin } from "./middleware/auth";
+import { simpleAdminAuth } from "./middleware/simpleAdminAuth";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Setup authentication
@@ -626,7 +627,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  app.post('/api/scrapers/test/:bookmakerCode', isAdmin, async (req, res) => {
+  app.post('/api/scrapers/test/:bookmakerCode', simpleAdminAuth, async (req, res) => {
     try {
       const { bookmakerCode } = req.params;
       
@@ -705,7 +706,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/scrapers/refresh', isAdmin, async (req, res) => {
+  app.post('/api/scrapers/refresh', simpleAdminAuth, async (req, res) => {
     try {
       // Send immediate response that scraper job has been triggered
       res.json({ success: true, message: 'Scrapers triggered manually' });
@@ -744,7 +745,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Endpoint to manually process event data (for debugging)
-  app.post('/api/events/process', isAdmin, async (req, res) => {
+  app.post('/api/events/process', simpleAdminAuth, async (req, res) => {
     try {
       // Process and map events
       await processAndMapEvents(storage);
@@ -772,7 +773,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Endpoint to run all scrapers manually
-  app.post('/api/scrapers/run', isAdmin, async (req, res) => {
+  app.post('/api/scrapers/run', simpleAdminAuth, async (req, res) => {
     try {
       // Send immediate response
       res.json({ 

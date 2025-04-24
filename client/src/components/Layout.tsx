@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import Sidebar from './Sidebar';
+import Navbar from './Navbar';
 import { useThemeToggle } from '@/hooks/use-theme';
 import { useBookmakerContext } from '@/contexts/BookmakerContext';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Search, SunIcon, MoonIcon, Menu, RefreshCw } from 'lucide-react';
-import { Link } from 'wouter';
+import { Menu } from 'lucide-react';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -16,8 +15,7 @@ interface LayoutProps {
 export default function Layout({ children, title, subtitle }: LayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isHoveringSidebar, setIsHoveringSidebar] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const { toggleTheme, isDarkMode, mounted } = useThemeToggle();
+  const { mounted } = useThemeToggle();
   const { refreshData, isRefreshing } = useBookmakerContext();
 
   const toggleSidebar = () => {
@@ -36,51 +34,56 @@ export default function Layout({ children, title, subtitle }: LayoutProps) {
   if (!mounted) return null;
 
   return (
-    <div className="flex h-screen overflow-hidden">
-      {/* Left hover zone */}
-      <div 
-        className="fixed top-0 left-0 w-4 h-full z-20"
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      />
+    <div className="flex flex-col h-screen overflow-hidden">
+      {/* Navbar */}
+      <Navbar />
       
-      {/* Sidebar */}
-      <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-        <Sidebar 
-          isOpen={sidebarOpen}
-          isHovering={isHoveringSidebar}
-          onClose={() => setSidebarOpen(false)} 
+      <div className="flex flex-1 overflow-hidden">
+        {/* Left hover zone */}
+        <div 
+          className="fixed top-14 left-0 w-4 h-[calc(100%-3.5rem)] z-20"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
         />
-      </div>
+        
+        {/* Sidebar */}
+        <div 
+          onMouseEnter={handleMouseEnter} 
+          onMouseLeave={handleMouseLeave}
+          className="h-[calc(100vh-3.5rem)]"
+        >
+          <Sidebar 
+            isOpen={sidebarOpen}
+            isHovering={isHoveringSidebar}
+            onClose={() => setSidebarOpen(false)} 
+          />
+        </div>
 
-      {/* Main Content */}
-      <div className="flex-1 overflow-auto">
-        {/* Top Header - Minimal */}
-        <header className="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
-          <div className="flex items-center justify-between px-4 py-2">
-            <div className="flex items-center">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={toggleSidebar}
-                className="lg:hidden mr-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700"
-              >
-                <Menu className="h-4 w-4" />
-              </Button>
-              <Link href="/">
-                <a className="flex items-center">
-                  <span className="text-sm font-semibold text-gray-800 dark:text-white">pawa<span className="text-[#00BCFF] text-sm font-semibold">odds</span>.pro</span>
-                  <span className="ml-1 text-[10px] bg-yellow-400 text-black px-1 py-0.5 rounded">BETA</span>
-                </a>
-              </Link>
-            </div>
+        {/* Main Content */}
+        <div className="flex-1 overflow-auto">
+          {/* Mobile menu button */}
+          <div className="lg:hidden p-2 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleSidebar}
+              className="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700"
+            >
+              <Menu className="h-4 w-4" />
+            </Button>
           </div>
-        </header>
 
-        {/* Main Content Area */}
-        <main className="p-3 md:p-4 bg-gray-50 dark:bg-slate-900 min-h-[calc(100vh-36px)]">
-          {children}
-        </main>
+          {/* Main Content Area */}
+          <main className="p-3 md:p-4 bg-gray-50 dark:bg-slate-900 min-h-[calc(100vh-3.5rem)]">
+            {title && (
+              <div className="mb-4">
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{title}</h1>
+                {subtitle && <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{subtitle}</p>}
+              </div>
+            )}
+            {children}
+          </main>
+        </div>
       </div>
     </div>
   );

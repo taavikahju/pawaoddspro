@@ -10,13 +10,17 @@ import ScraperStatus from "@/pages/scraper-status";
 import AdminPage from "@/pages/admin";
 import NotificationListener from "@/components/NotificationListener";
 import { BookmakerProvider } from "@/contexts/BookmakerContext";
+import { AuthProvider } from "./hooks/use-auth";
+import { ProtectedRoute } from "./lib/protected-route";
+import AuthPage from "@/pages/auth-page";
 
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={Dashboard} />
-      <Route path="/scraper-status" component={ScraperStatus} />
-      <Route path="/admin" component={AdminPage} />
+      <ProtectedRoute path="/" component={Dashboard} />
+      <ProtectedRoute path="/scraper-status" component={ScraperStatus} />
+      <ProtectedRoute path="/admin" component={AdminPage} requireAdmin={true} />
+      <Route path="/auth" component={AuthPage} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -27,11 +31,13 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class">
         <TooltipProvider>
-          <BookmakerProvider>
-            <Toaster />
-            <NotificationListener />
-            <Router />
-          </BookmakerProvider>
+          <AuthProvider>
+            <BookmakerProvider>
+              <Toaster />
+              <NotificationListener />
+              <Router />
+            </BookmakerProvider>
+          </AuthProvider>
         </TooltipProvider>
       </ThemeProvider>
     </QueryClientProvider>
