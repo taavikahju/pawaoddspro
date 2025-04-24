@@ -8,7 +8,7 @@ import {
   DialogClose
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
@@ -42,7 +42,6 @@ export default function MarginHistoryPopup({
   eventName,
   bookmakers
 }: MarginHistoryPopupProps) {
-  const [activeTab, setActiveTab] = useState<string>('chart');
   
   // Fetch odds history for this event - optimized for lightweight loading
   const { data, isLoading, error } = useQuery({
@@ -108,124 +107,61 @@ export default function MarginHistoryPopup({
           </DialogTitle>
         </DialogHeader>
         
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="w-full justify-start mb-1 h-8">
-            <TabsTrigger value="chart" className="text-xs h-7 px-3">Chart</TabsTrigger>
-            <TabsTrigger value="table" className="text-xs h-7 px-3">Table</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="chart" className="min-h-[350px]">
-            {isLoading ? (
-              <div className="flex items-center justify-center h-[350px]">
-                <Skeleton className="h-[300px] w-full" />
-              </div>
-            ) : error ? (
-              <div className="text-red-500 p-2 text-center text-sm">
-                Failed to load margin history data
-              </div>
-            ) : chartData.length === 0 ? (
-              <div className="text-gray-500 p-2 text-center text-sm">
-                No margin history available for this event
-              </div>
-            ) : (
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={chartData} margin={{ top: 5, right: 20, left: 15, bottom: 20 }}>
-                  <XAxis 
-                    dataKey="timestamp" 
-                    tick={{ fontSize: 11 }}
-                    angle={-45}
-                    textAnchor="end"
-                    height={70}
-                    tickFormatter={(tick) => tick.split(' ')[1]} // Show only time for brevity
+        <div className="w-full min-h-[350px]">
+          {isLoading ? (
+            <div className="flex items-center justify-center h-[350px]">
+              <Skeleton className="h-[300px] w-full" />
+            </div>
+          ) : error ? (
+            <div className="text-red-500 p-2 text-center text-sm">
+              Failed to load margin history data
+            </div>
+          ) : chartData.length === 0 ? (
+            <div className="text-gray-500 p-2 text-center text-sm">
+              No margin history available for this event
+            </div>
+          ) : (
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={chartData} margin={{ top: 5, right: 20, left: 15, bottom: 20 }}>
+                <XAxis 
+                  dataKey="timestamp" 
+                  tick={{ fontSize: 11 }}
+                  angle={-45}
+                  textAnchor="end"
+                  height={70}
+                  tickFormatter={(tick) => tick.split(' ')[1]} // Show only time for brevity
+                />
+                <YAxis 
+                  label={{ value: '%', angle: -90, position: 'insideLeft' }}
+                  domain={[0, 'dataMax + 1']}
+                  width={30}
+                  tick={{ fontSize: 10 }}
+                />
+                <Tooltip 
+                  formatter={(value: any, name: string) => [`${Number(value).toFixed(2)}%`, name]}
+                  labelFormatter={(label) => `Time: ${label}`}
+                />
+                <Legend 
+                  iconSize={8}
+                  wrapperStyle={{ fontSize: '10px', marginTop: '5px' }}
+                />
+                {bookmakers.map((bookmakerCode) => (
+                  <Line
+                    key={bookmakerCode}
+                    type="monotone"
+                    dataKey={bookmakerCode}
+                    name={bookmakerCode}
+                    stroke={bookmakerColors[bookmakerCode] || '#888888'}
+                    strokeWidth={2}
+                    dot={false} // Remove dots for better performance
+                    activeDot={{ r: 4 }} // Smaller dots
+                    connectNulls
                   />
-                  <YAxis 
-                    label={{ value: '%', angle: -90, position: 'insideLeft' }}
-                    domain={[0, 'dataMax + 1']}
-                    width={30}
-                    tick={{ fontSize: 10 }}
-                  />
-                  <Tooltip 
-                    formatter={(value: any, name: string) => [`${Number(value).toFixed(2)}%`, name]}
-                    labelFormatter={(label) => `Time: ${label}`}
-                  />
-                  <Legend 
-                    iconSize={8}
-                    wrapperStyle={{ fontSize: '10px', marginTop: '5px' }}
-                  />
-                  {bookmakers.map((bookmakerCode) => (
-                    <Line
-                      key={bookmakerCode}
-                      type="monotone"
-                      dataKey={bookmakerCode}
-                      name={bookmakerCode}
-                      stroke={bookmakerColors[bookmakerCode] || '#888888'}
-                      strokeWidth={2}
-                      dot={false} // Remove dots for better performance
-                      activeDot={{ r: 4 }} // Smaller dots
-                      connectNulls
-                    />
-                  ))}
-                </LineChart>
-              </ResponsiveContainer>
-            )}
-          </TabsContent>
-          
-          <TabsContent value="table" className="min-h-[350px]">
-            {isLoading ? (
-              <div className="flex flex-col gap-1.5">
-                <Skeleton className="h-6 w-full" />
-                <Skeleton className="h-6 w-full" />
-                <Skeleton className="h-6 w-full" />
-                <Skeleton className="h-6 w-full" />
-              </div>
-            ) : error ? (
-              <div className="text-red-500 p-2 text-center text-sm">
-                Failed to load margin history data
-              </div>
-            ) : !data || data.length === 0 ? (
-              <div className="text-gray-500 p-2 text-center text-sm">
-                No margin history available for this event
-              </div>
-            ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full border-collapse">
-                  <thead>
-                    <tr className="bg-muted">
-                      <th className="p-2 text-left text-sm">Time</th>
-                      <th className="p-2 text-left text-sm">Bookmaker</th>
-                      <th className="p-2 text-right text-sm">Home</th>
-                      <th className="p-2 text-right text-sm">Draw</th>
-                      <th className="p-2 text-right text-sm">Away</th>
-                      <th className="p-2 text-right text-sm">Margin</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data.slice(0, 10).map((entry) => ( // Limit to 10 rows for faster rendering
-                      <tr key={entry.id} className="border-b border-gray-200 hover:bg-muted/50">
-                        <td className="p-1.5 text-left text-xs">
-                          {new Date(entry.timestamp).toLocaleString('en-US', {
-                            month: '2-digit',
-                            day: '2-digit',
-                            hour: '2-digit',
-                            minute: '2-digit',
-                            hour12: false
-                          })}
-                        </td>
-                        <td className="p-1.5 text-left text-xs font-medium">{entry.bookmakerCode}</td>
-                        <td className="p-1.5 text-right text-xs">{parseFloat(entry.homeOdds.toString()).toFixed(2)}</td>
-                        <td className="p-1.5 text-right text-xs">{parseFloat(entry.drawOdds.toString()).toFixed(2)}</td>
-                        <td className="p-1.5 text-right text-xs">{parseFloat(entry.awayOdds.toString()).toFixed(2)}</td>
-                        <td className="p-1.5 text-right text-xs font-medium">
-                          {parseFloat(entry.margin.toString()).toFixed(2)}%
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </TabsContent>
-        </Tabs>
+                ))}
+              </LineChart>
+            </ResponsiveContainer>
+          )}
+        </div>
         
         <DialogFooter className="pt-1">
           <DialogClose asChild>

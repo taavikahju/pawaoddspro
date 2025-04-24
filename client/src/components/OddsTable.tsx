@@ -11,6 +11,7 @@ import { useBookmakerContext } from '@/contexts/BookmakerContext';
 import { cn } from '@/lib/utils';
 import { ArrowDownIcon, ArrowUpIcon, Clock, Globe, Trophy } from 'lucide-react';
 import MarginHistoryPopup from './MarginHistoryPopup';
+import OddsHistoryPopup from './OddsHistoryPopup';
 
 interface OddsTableProps {
   events: any[];
