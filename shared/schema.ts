@@ -140,3 +140,29 @@ export const scraperStatusSchema = z.object({
 });
 
 export type ScraperStatus = z.infer<typeof scraperStatusSchema>;
+
+// Odds history table to track odds changes over time
+export const oddsHistory = pgTable("odds_history", {
+  id: serial("id").primaryKey(),
+  eventId: text("event_id").notNull(), // The eventId field from events table
+  externalId: text("external_id").notNull(), // The externalId field from events table
+  bookmakerCode: text("bookmaker_code").notNull(),
+  homeOdds: text("home_odds"),
+  drawOdds: text("draw_odds"),
+  awayOdds: text("away_odds"),
+  margin: text("margin").notNull(), // Calculated margin percentage for these odds
+  timestamp: timestamp("timestamp").notNull().defaultNow(),
+});
+
+export const insertOddsHistorySchema = createInsertSchema(oddsHistory).pick({
+  eventId: true,
+  externalId: true,
+  bookmakerCode: true,
+  homeOdds: true,
+  drawOdds: true,
+  awayOdds: true,
+  margin: true,
+});
+
+export type InsertOddsHistory = z.infer<typeof insertOddsHistorySchema>;
+export type OddsHistory = typeof oddsHistory.$inferSelect;
