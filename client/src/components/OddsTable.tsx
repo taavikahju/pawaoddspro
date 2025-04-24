@@ -30,10 +30,11 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
     
     const currentOdd = event.oddsData[bookmakerCode][market];
     
-    // Get all available odds for this market
+    // Get all available odds ONLY FROM SELECTED BOOKMAKERS for this market
     const allOdds: {code: string, value: number}[] = [];
-    for (const code of Object.keys(event.oddsData)) {
-      if (event.oddsData[code][market]) {
+    for (const bookie of filteredBookmakers) {
+      const code = bookie.code;
+      if (event.oddsData[code] && event.oddsData[code][market]) {
         allOdds.push({
           code,
           value: event.oddsData[code][market]
