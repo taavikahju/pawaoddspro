@@ -102,16 +102,16 @@ export default function MarginHistoryPopup({
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-[650px] max-h-[80vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-base font-semibold">
-            Margin History: {eventName}
+        <DialogHeader className="pb-2">
+          <DialogTitle className="text-sm font-medium">
+            {eventName}
           </DialogTitle>
         </DialogHeader>
         
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="w-full justify-start mb-2">
-            <TabsTrigger value="chart">Chart</TabsTrigger>
-            <TabsTrigger value="table">Table</TabsTrigger>
+          <TabsList className="w-full justify-start mb-1 h-8">
+            <TabsTrigger value="chart" className="text-xs h-7 px-3">Chart</TabsTrigger>
+            <TabsTrigger value="table" className="text-xs h-7 px-3">Table</TabsTrigger>
           </TabsList>
           
           <TabsContent value="chart" className="min-h-[350px]">
@@ -128,8 +128,8 @@ export default function MarginHistoryPopup({
                 No margin history available for this event
               </div>
             ) : (
-              <ResponsiveContainer width="100%" height={400}>
-                <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 25 }}>
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={chartData} margin={{ top: 5, right: 20, left: 15, bottom: 20 }}>
                   <XAxis 
                     dataKey="timestamp" 
                     tick={{ fontSize: 11 }}
@@ -139,8 +139,10 @@ export default function MarginHistoryPopup({
                     tickFormatter={(tick) => tick.split(' ')[1]} // Show only time for brevity
                   />
                   <YAxis 
-                    label={{ value: 'Margin %', angle: -90, position: 'insideLeft' }}
+                    label={{ value: '%', angle: -90, position: 'insideLeft' }}
                     domain={[0, 'dataMax + 1']}
+                    width={30}
+                    tick={{ fontSize: 10 }}
                   />
                   <Tooltip 
                     formatter={(value: any) => [`${Number(value).toFixed(2)}%`, '']}
@@ -221,9 +223,9 @@ export default function MarginHistoryPopup({
           </TabsContent>
         </Tabs>
         
-        <DialogFooter>
+        <DialogFooter className="pt-1">
           <DialogClose asChild>
-            <Button>Close</Button>
+            <Button variant="outline" size="sm" className="h-7 text-xs px-3">Close</Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>
