@@ -135,7 +135,7 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
       {/* Sidebar header */}
       <div className="p-4 border-b border-gray-200 dark:border-slate-700">
         <div className="flex items-center justify-between">
-          <h1 className="text-lg font-bold text-gray-800 dark:text-white">OddsCompare</h1>
+          <h1 className="text-lg font-bold text-gray-800 dark:text-white">pawaodds.pro</h1>
           <Button
             variant="ghost"
             size="icon"

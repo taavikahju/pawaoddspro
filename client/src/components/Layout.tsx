@@ -69,7 +69,7 @@ export default function Layout({ children, title, subtitle }: LayoutProps) {
               </Button>
               <Link href="/">
                 <a className="flex items-center">
-                  <span className="text-sm font-semibold text-gray-800 dark:text-white">OddsCompare</span>
+                  <span className="text-sm font-semibold text-gray-800 dark:text-white">pawaodds.pro</span>
                   <span className="ml-1 text-[10px] bg-yellow-400 text-black px-1 py-0.5 rounded">BETA</span>
                 </a>
               </Link>
