@@ -147,7 +147,7 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
       {/* Sidebar header */}
       <div className="p-2.5 border-b border-gray-200 dark:border-slate-700">
         <div className="flex items-center justify-between">
-          <h1 className="text-base font-bold text-gray-800 dark:text-white">pawaodds.pro</h1>
+          <h1 className="text-base font-bold text-[#00BCFF]">pawaodds.pro</h1>
           <Button
             variant="ghost"
             size="icon"

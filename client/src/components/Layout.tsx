@@ -69,7 +69,7 @@ export default function Layout({ children, title, subtitle }: LayoutProps) {
               </Button>
               <Link href="/">
                 <a className="flex items-center">
-                  <span className="text-sm font-semibold text-gray-800 dark:text-white">pawaodds.pro</span>
+                  <span className="text-sm font-semibold text-[#00BCFF]">pawaodds.pro</span>
                   <span className="ml-1 text-[10px] bg-yellow-400 text-black px-1 py-0.5 rounded">BETA</span>
                 </a>
               </Link>
@@ -78,7 +78,7 @@ export default function Layout({ children, title, subtitle }: LayoutProps) {
         </header>
 
         {/* Main Content Area */}
-        <main className="p-3 md:p-4 bg-gray-50 dark:bg-slate-900 min-h-[calc(100vh-36px)] lg:ml-64">
+        <main className="p-3 md:p-4 bg-gray-50 dark:bg-slate-900 min-h-[calc(100vh-36px)]">
           {children}
         </main>
       </div>
