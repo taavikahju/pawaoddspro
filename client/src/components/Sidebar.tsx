@@ -44,11 +44,14 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
     selectedBookmakers,
     selectedSports,
     autoRefresh,
-    marginFilter,
+    minMarginFilter,
+    maxMarginFilter,
     toggleBookmaker,
     toggleSport,
     toggleAutoRefresh,
-    setMarginFilter,
+    setMinMarginFilter,
+    setMaxMarginFilter,
+    resetMarginFilters,
     refreshData,
     isRefreshing
   } = useBookmakerContext();
@@ -352,16 +355,27 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
             <div>
               <div className="flex justify-between items-center mb-1">
                 <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
-                  Max Margin: {marginFilter}%
+                  Margin: {minMarginFilter}% - {maxMarginFilter}%
                 </span>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={resetMarginFilters}
+                  className="h-5 text-[10px] px-1 py-0"
+                >
+                  Reset
+                </Button>
               </div>
               
               <Slider
-                value={[marginFilter]}
+                value={[minMarginFilter, maxMarginFilter]}
                 min={0}
                 max={15}
                 step={1}
-                onValueChange={(value) => setMarginFilter(value[0])}
+                onValueChange={(values) => {
+                  setMinMarginFilter(values[0]);
+                  setMaxMarginFilter(values[1]);
+                }}
                 className="mb-1"
               />
               
@@ -370,9 +384,6 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
                 <span>5%</span>
                 <span>10%</span>
                 <span>15%</span>
-              </div>
-              <div className="mt-1 text-[10px] text-gray-500 dark:text-gray-400">
-                Only show events where at least one of your selected bookmakers has a margin of {marginFilter}% or less
               </div>
             </div>
           </div>

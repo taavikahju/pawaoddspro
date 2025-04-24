@@ -23,13 +23,16 @@ interface BookmakerContextType {
   selectedBookmakers: string[];
   selectedSports: string[];
   autoRefresh: boolean;
-  marginFilter: number;
+  minMarginFilter: number;
+  maxMarginFilter: number;
   isLoadingBookmakers: boolean;
   isLoadingSports: boolean;
   toggleBookmaker: (code: string) => void;
   toggleSport: (code: string) => void;
   toggleAutoRefresh: () => void;
-  setMarginFilter: (value: number) => void;
+  setMinMarginFilter: (value: number) => void;
+  setMaxMarginFilter: (value: number) => void;
+  resetMarginFilters: () => void;
   refreshData: () => Promise<void>;
   isRefreshing: boolean;
 }
@@ -41,7 +44,8 @@ export function BookmakerProvider({ children }: { children: ReactNode }) {
   const [selectedBookmakers, setSelectedBookmakers] = useState<string[]>([]);
   const [selectedSports, setSelectedSports] = useState<string[]>([]);
   const [autoRefresh, setAutoRefresh] = useState(true);
-  const [marginFilter, setMarginFilter] = useState<number>(15); // Default to max value (no filtering)
+  const [minMarginFilter, setMinMarginFilter] = useState<number>(0); // Default to min value
+  const [maxMarginFilter, setMaxMarginFilter] = useState<number>(15); // Default to max value (no filtering)
 
   // Fetch bookmakers
   const { 
@@ -131,6 +135,11 @@ export function BookmakerProvider({ children }: { children: ReactNode }) {
     setAutoRefresh(prev => !prev);
   };
 
+  const resetMarginFilters = () => {
+    setMinMarginFilter(0);
+    setMaxMarginFilter(15);
+  };
+
   const refreshData = async () => {
     await refreshMutation();
   };
@@ -141,13 +150,16 @@ export function BookmakerProvider({ children }: { children: ReactNode }) {
     selectedBookmakers,
     selectedSports,
     autoRefresh,
-    marginFilter,
+    minMarginFilter,
+    maxMarginFilter,
     isLoadingBookmakers,
     isLoadingSports,
     toggleBookmaker,
     toggleSport,
     toggleAutoRefresh,
-    setMarginFilter,
+    setMinMarginFilter,
+    setMaxMarginFilter,
+    resetMarginFilters,
     refreshData,
     isRefreshing
   };
