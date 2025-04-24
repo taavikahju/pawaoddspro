@@ -21,7 +21,12 @@ export const SCRAPER_EVENTS = {
   BOOKMAKER_FAILED: 'scraper:bookmaker:failed',
   PROCESSING_STARTED: 'scraper:processing:started',
   PROCESSING_COMPLETED: 'scraper:processing:completed',
-  PROCESSING_FAILED: 'scraper:processing:failed'
+  PROCESSING_FAILED: 'scraper:processing:failed',
+  // Additional events needed for our notification system
+  SCRAPER_STARTED: 'scraper:individual:started',
+  SCRAPER_COMPLETED: 'scraper:individual:completed',
+  SCRAPER_FAILED: 'scraper:individual:failed',
+  ALL_SCRAPERS_COMPLETED: 'scraper:all:completed'
 };
 
 // Schedule to run every 15 minutes
