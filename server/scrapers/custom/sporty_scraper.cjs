@@ -2,58 +2,81 @@
 const axios = require('axios');
 
 // ==== CONFIGURATION ====
-// Primary Sportybet API country code - trying multiple regions/countries
-const REGIONS = ['gh', 'ke', 'ng', 'ug', 'tz'];
+// Primary Sportybet API country code - focusing on the most reliable regions 
+// Based on testing, Ghana (gh) and Kenya (ke) are most reliable
+const REGIONS = ['gh', 'ke'];
 
-// Configure multiple API endpoints from different Sportybet regional APIs
+// Configure endpoints focusing on reliability and responsiveness
 const buildEndpoints = () => {
   const endpoints = [];
   
-  // Generate endpoints for each regional API to maximize data collection
-  for (const region of REGIONS) {
-    // Main API endpoints that work across all regions
-    endpoints.push(
-      // Main upcoming events - best source for all matches
-      {
-        url: `https://www.sportybet.com/api/${region}/factsCenter/pcUpcomingEvents`,
-        params: {
-          sportId: 'sr:sport:1',
-          marketId: '1',
-          pageSize: '100',
-          option: '1'
-        },
-        region,
-        maxPages: 10
+  // Only use the most reliable endpoints to avoid rate limiting and timeouts
+  // Ghana API is the most stable and provides most of the data
+  endpoints.push(
+    // Main upcoming events - most comprehensive source
+    {
+      url: 'https://www.sportybet.com/api/gh/factsCenter/pcUpcomingEvents',
+      params: {
+        sportId: 'sr:sport:1',
+        marketId: '1',
+        pageSize: '100',
+        option: '1'
       },
-      // Today's matches - has most immediate matches with good data
-      {
-        url: `https://www.sportybet.com/api/${region}/factsCenter/pcToday`,
-        params: {
-          sportId: 'sr:sport:1',
-          marketId: '1',
-          pageSize: '100',
-          option: '1'
-        },
-        region,
-        maxPages: 5
-      }
-    );
-  }
+      region: 'gh',
+      maxPages: 15, // Increase page limit to get more events
+      priority: 1   // Highest priority - critical endpoint
+    },
+    // Today's matches - has most immediate matches
+    {
+      url: 'https://www.sportybet.com/api/gh/factsCenter/pcToday',
+      params: {
+        sportId: 'sr:sport:1',
+        marketId: '1',
+        pageSize: '100',
+        option: '1'
+      },
+      region: 'gh',
+      maxPages: 5,
+      priority: 1
+    },
+    // Popular leagues - has key matches that people bet on most
+    {
+      url: 'https://www.sportybet.com/api/gh/factsCenter/pcPopularLeague',
+      params: {
+        sportId: 'sr:sport:1',
+        marketId: '1', 
+        option: '1'
+      },
+      region: 'gh',
+      maxPages: 3,
+      priority: 1
+    }
+  );
   
-  // Use the Ghana API (most complete) for specific regional data
+  // Add Kenya API as backup source - often has different events
+  endpoints.push(
+    {
+      url: 'https://www.sportybet.com/api/ke/factsCenter/pcUpcomingEvents',
+      params: {
+        sportId: 'sr:sport:1',
+        marketId: '1',
+        pageSize: '100',
+        option: '1'
+      },
+      region: 'ke',
+      maxPages: 10,
+      priority: 2
+    }
+  );
+  
+  // Only include the most important countries to avoid too many API calls
   const majorCountryCategories = [
-    { id: 'sr:category:1', name: 'England' },   // England
-    { id: 'sr:category:27', name: 'Italy' },    // Italy
-    { id: 'sr:category:31', name: 'France' },   // France
-    { id: 'sr:category:32', name: 'Spain' },    // Spain
-    { id: 'sr:category:30', name: 'Germany' },  // Germany
-    { id: 'sr:category:13', name: 'Ghana' },    // Ghana
-    { id: 'sr:category:14', name: 'Nigeria' },  // Nigeria
-    { id: 'sr:category:45', name: 'Kenya' },    // Kenya
-    { id: 'sr:category:48', name: 'South Africa' } // South Africa
+    { id: 'sr:category:1', name: 'England' },    // England (most popular)
+    { id: 'sr:category:13', name: 'Ghana' },     // Ghana (local focus)
+    { id: 'sr:category:45', name: 'Kenya' }      // Kenya (local focus)
   ];
   
-  // Add country-specific endpoints (separate from regional APIs)
+  // Add these key country endpoints
   majorCountryCategories.forEach(country => {
     endpoints.push({
       url: 'https://www.sportybet.com/api/gh/factsCenter/pcCategory',
@@ -66,34 +89,8 @@ const buildEndpoints = () => {
       },
       region: 'gh',
       name: country.name,
-      maxPages: 3
-    });
-  });
-  
-  // Add major tournament endpoints which often have detailed data
-  const majorTournaments = [
-    { id: 'sr:tournament:8', name: 'UEFA Champions League' },
-    { id: 'sr:tournament:679', name: 'UEFA Europa League' },
-    { id: 'sr:tournament:17', name: 'English Premier League' },
-    { id: 'sr:tournament:23', name: 'Spanish La Liga' },
-    { id: 'sr:tournament:34', name: 'Italian Serie A' },
-    { id: 'sr:tournament:35', name: 'German Bundesliga' },
-    { id: 'sr:tournament:47', name: 'French Ligue 1' }
-  ];
-  
-  majorTournaments.forEach(tournament => {
-    endpoints.push({
-      url: 'https://www.sportybet.com/api/gh/factsCenter/pcTournament',
-      params: {
-        sportId: 'sr:sport:1',
-        tournamentId: tournament.id,
-        marketId: '1',
-        pageSize: '100',
-        option: '1'
-      },
-      region: 'gh',
-      name: tournament.name,
-      maxPages: 2
+      maxPages: 3,
+      priority: 3
     });
   });
   
@@ -231,7 +228,7 @@ const processEndpoint = async (endpoint, endpointIndex) => {
   }
 };
 
-// Improved batch processing with guaranteed progress
+// Prioritized data collection with resilience
 const fetchFromAllEndpoints = async () => {
   console.error(`📊 Starting Sportybet data collection from ${ALL_ENDPOINTS.length} endpoints...`);
   
@@ -241,53 +238,92 @@ const fetchFromAllEndpoints = async () => {
   // To store all tournaments
   let allTournaments = [];
   
-  // Create a pool with all endpoints and randomize order for better distribution
-  const endpointPool = [...ALL_ENDPOINTS]
-    .map(endpoint => ({ endpoint, sort: Math.random() }))
-    .sort((a, b) => a.sort - b.sort)
-    .map(item => item.endpoint);
+  // Sort endpoints by priority to ensure critical ones are processed first
+  const sortedEndpoints = [...ALL_ENDPOINTS].sort((a, b) => {
+    // Sort by priority first (lower number = higher priority)
+    const priorityDiff = (a.priority || 999) - (b.priority || 999);
+    if (priorityDiff !== 0) return priorityDiff;
+    
+    // If same priority, sort by region to group related endpoints
+    return (a.region || '').localeCompare(b.region || '');
+  });
   
-  // Process endpoints in batches to avoid hitting rate limits
-  const BATCH_SIZE = 3;
-  const batches = Math.ceil(endpointPool.length / BATCH_SIZE);
+  // Process high priority endpoints first (priority 1) - these are critical
+  // These are processed one at a time for maximum reliability
+  const highPriorityEndpoints = sortedEndpoints.filter(e => (e.priority || 999) === 1);
+  console.error(`📊 Processing ${highPriorityEndpoints.length} high-priority endpoints first...`);
   
-  for (let batchIndex = 0; batchIndex < batches; batchIndex++) {
-    const startIdx = batchIndex * BATCH_SIZE;
-    const endIdx = Math.min(startIdx + BATCH_SIZE, endpointPool.length);
-    const currentBatch = endpointPool.slice(startIdx, endIdx);
+  for (let i = 0; i < highPriorityEndpoints.length; i++) {
+    const endpoint = highPriorityEndpoints[i];
+    const displayName = endpoint.name || `high-priority source ${i+1}`;
     
-    console.error(`📊 Processing batch ${batchIndex + 1}/${batches} (endpoints ${startIdx + 1}-${endIdx})...`);
-    
-    // Process batch in parallel for speed
-    const batchPromises = currentBatch.map((endpoint, localIndex) => 
-      processEndpoint(endpoint, startIdx + localIndex)
-    );
-    
-    // Wait for current batch to complete
-    const batchResults = await Promise.all(batchPromises);
-    
-    // Process batch results
-    let batchTournaments = 0;
-    for (const tournaments of batchResults) {
+    console.error(`📊 Processing critical endpoint: ${displayName}...`);
+    try {
+      // Process each high priority endpoint with robust error handling
+      const tournaments = await processEndpoint(endpoint, i);
       allTournaments = allTournaments.concat(tournaments);
-      batchTournaments += tournaments.length;
       tournamentCount += tournaments.length;
+      
+      console.error(`📊 Critical endpoint ${displayName} collected ${tournaments.length} tournaments (total: ${tournamentCount})`);
+      
+      // Brief pause between high priority endpoints
+      if (i < highPriorityEndpoints.length - 1) {
+        await new Promise(resolve => setTimeout(resolve, 600));
+      }
+    } catch (error) {
+      console.error(`❌ Failed to process critical endpoint ${displayName}: ${error.message}`);
     }
+  }
+  
+  // If high priority endpoints provided enough data, we can skip the rest
+  if (tournamentCount > 50) {
+    const estimatedEvents = tournamentCount * 10; // Each tournament has ~10 events on average
+    console.error(`📊 High priority endpoints collected ${tournamentCount} tournaments (~${estimatedEvents} events)`);
+  }
+  
+  // Process remaining endpoints in small batches
+  const remainingEndpoints = sortedEndpoints.filter(e => (e.priority || 999) > 1);
+  if (remainingEndpoints.length > 0) {
+    console.error(`📊 Processing ${remainingEndpoints.length} remaining endpoints in batches...`);
     
-    console.error(`📊 Batch ${batchIndex + 1} collected ${batchTournaments} tournaments (total: ${tournamentCount})`);
+    // Process endpoints in smaller batches to avoid rate limits
+    const BATCH_SIZE = 2; // Reduce batch size for better reliability
+    const batches = Math.ceil(remainingEndpoints.length / BATCH_SIZE);
     
-    // Brief pause between batches to avoid rate limiting
-    if (batchIndex < batches - 1) {
-      console.error('Pausing briefly before next batch...');
-      await new Promise(resolve => setTimeout(resolve, 800));
-    }
-    
-    // Early exit if we have enough data already
-    if (tournamentCount > 100) {
-      const estimatedEvents = tournamentCount * 10; // Each tournament has ~10 events on average
-      if (estimatedEvents >= 1000) {
-        console.error(`📊 Collected enough data (${tournamentCount} tournaments, ~${estimatedEvents} events). Proceeding to processing...`);
-        break;
+    for (let batchIndex = 0; batchIndex < batches; batchIndex++) {
+      const startIdx = batchIndex * BATCH_SIZE;
+      const endIdx = Math.min(startIdx + BATCH_SIZE, remainingEndpoints.length);
+      const currentBatch = remainingEndpoints.slice(startIdx, endIdx);
+      
+      console.error(`📊 Processing batch ${batchIndex + 1}/${batches} (endpoints ${startIdx + 1}-${endIdx})...`);
+      
+      // Process batch sequentially for better reliability
+      for (let i = 0; i < currentBatch.length; i++) {
+        const endpoint = currentBatch[i];
+        const endpointIdx = startIdx + i;
+        const displayName = endpoint.name || `source ${endpointIdx + 1}`;
+        
+        try {
+          // Process each endpoint sequentially
+          const tournaments = await processEndpoint(endpoint, endpointIdx);
+          allTournaments = allTournaments.concat(tournaments);
+          tournamentCount += tournaments.length;
+          
+          console.error(`📊 Endpoint ${displayName} collected ${tournaments.length} tournaments (total: ${tournamentCount})`);
+          
+          // Brief pause between endpoints in the same batch
+          if (i < currentBatch.length - 1) {
+            await new Promise(resolve => setTimeout(resolve, 400));
+          }
+        } catch (error) {
+          console.error(`❌ Failed to process endpoint ${displayName}: ${error.message}`);
+        }
+      }
+      
+      // Brief pause between batches
+      if (batchIndex < batches - 1) {
+        console.error('Pausing briefly before next batch...');
+        await new Promise(resolve => setTimeout(resolve, 1000));
       }
     }
   }
