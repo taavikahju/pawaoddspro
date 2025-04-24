@@ -159,7 +159,7 @@ export default function OddsHistoryPopup({
                 />
                 <Tooltip 
                   formatter={(value: any, name: string) => [`${Number(value).toFixed(2)}`, name]}
-                  labelFormatter={(label) => `Time: ${label}`}
+                  labelFormatter={(label) => `Date/Time: ${label}`}
                 />
                 <Legend 
                   iconSize={8}
