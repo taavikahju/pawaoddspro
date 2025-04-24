@@ -138,15 +138,22 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
             <React.Fragment key={eventIndex}>
               {filteredBookmakers.map((bookmaker, bookmakerIndex) => {
                 const isFirstBookmaker = bookmakerIndex === 0;
+                const isLastBookmaker = bookmakerIndex === filteredBookmakers.length - 1;
+                // Use alternating background colors for events
+                const isEvenEvent = eventIndex % 2 === 0;
+                // If this is the last bookmaker for an event, add a thicker bottom border
+                const bottomBorderClass = isLastBookmaker ? 'border-b-2 border-gray-300 dark:border-gray-600' : 'border-b border-gray-200 dark:border-gray-700';
+                
                 return (
                   <TableRow 
                     key={`${eventIndex}-${bookmakerIndex}`} 
-                    className="hover:bg-gray-50 dark:hover:bg-slate-700/20 border-b border-gray-200 dark:border-gray-700"
+                    className={`hover:bg-gray-100 dark:hover:bg-slate-700/40 ${bottomBorderClass}
+                      ${isEvenEvent ? 'bg-white dark:bg-slate-800' : 'bg-gray-50 dark:bg-slate-800/60'}`}
                   >
                     {isFirstBookmaker && (
                       <>
                         <TableCell 
-                          className="px-2 py-1 whitespace-nowrap align-top border-r border-gray-200 dark:border-gray-700" 
+                          className="px-2 py-1 whitespace-nowrap align-middle text-center border-r border-gray-200 dark:border-gray-700" 
                           rowSpan={filteredBookmakers.length}
                         >
                           <span className="text-[10px] text-gray-600 dark:text-gray-300">
@@ -155,7 +162,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                         </TableCell>
                         
                         <TableCell 
-                          className="px-2 py-1 whitespace-nowrap align-top border-r border-gray-200 dark:border-gray-700" 
+                          className="px-2 py-1 whitespace-nowrap align-middle text-center border-r border-gray-200 dark:border-gray-700" 
                           rowSpan={filteredBookmakers.length}
                         >
                           <span className="text-[10px] text-gray-600 dark:text-gray-300">
@@ -164,17 +171,17 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                         </TableCell>
                         
                         <TableCell 
-                          className="px-2 py-1 whitespace-nowrap align-top border-r border-gray-200 dark:border-gray-700" 
+                          className="px-2 py-1 whitespace-nowrap align-middle text-center border-r border-gray-200 dark:border-gray-700" 
                           rowSpan={filteredBookmakers.length}
                         >
-                          <div className="flex flex-col">
+                          <div className="flex flex-col items-center">
                             <span className="text-[10px] font-medium text-gray-800 dark:text-gray-200">{event.date}</span>
                             <span className="text-[9px] text-gray-500 dark:text-gray-400">{event.time}</span>
                           </div>
                         </TableCell>
                         
                         <TableCell 
-                          className="px-2 py-1 whitespace-nowrap align-top border-r border-gray-200 dark:border-gray-700" 
+                          className="px-2 py-1 whitespace-nowrap align-middle text-center border-r border-gray-200 dark:border-gray-700" 
                           rowSpan={filteredBookmakers.length}
                         >
                           <span className="text-[10px] font-medium text-gray-800 dark:text-gray-200">
@@ -183,7 +190,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                         </TableCell>
                         
                         <TableCell 
-                          className="px-2 py-1 whitespace-nowrap align-top border-r border-gray-200 dark:border-gray-700" 
+                          className="px-2 py-1 whitespace-nowrap align-middle text-center border-r border-gray-200 dark:border-gray-700" 
                           rowSpan={filteredBookmakers.length}
                         >
                           <span className="text-[10px] text-gray-600 dark:text-gray-300">
