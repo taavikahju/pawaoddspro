@@ -10010,32 +10010,6 @@
     }
   },
   {
-    "id": "60019073",
-    "eventId": "60019073",
-    "teams": "Al-Taawoun FC - Al-Raed Club",
-    "league": "Saudi Pro League",
-    "sport": "football",
-    "country": "Saudi Arabia",
-    "date": "2025-04-24",
-    "time": "18:00",
-    "odds": {
-      "home": 1.95,
-      "draw": 3.6,
-      "away": 3.9
-    },
-    "raw": {
-      "eventId": "60019073",
-      "country": "Saudi Arabia",
-      "tournament": "Saudi Pro League",
-      "event": "Al-Taawoun FC - Al-Raed Club",
-      "market": "1X2",
-      "home_odds": "1.95",
-      "draw_odds": "3.60",
-      "away_odds": "3.90",
-      "start_time": "2025-04-24 18:00"
-    }
-  },
-  {
     "id": "52034809",
     "eventId": "52034809",
     "teams": "Al-Akhdoud Club - Al-Wehda FC",
@@ -11215,9 +11189,9 @@
     "date": "2025-04-24",
     "time": "18:45",
     "odds": {
-      "home": 4.3,
-      "draw": 3.5,
-      "away": 1.88
+      "home": 4.25,
+      "draw": 3.4,
+      "away": 1.93
     },
     "raw": {
       "eventId": "59130385",
@@ -11225,9 +11199,9 @@
       "tournament": "League One",
       "event": "Stevenage FC - Birmingham City",
       "market": "1X2",
-      "home_odds": "4.30",
-      "draw_odds": "3.50",
-      "away_odds": "1.88",
+      "home_odds": "4.25",
+      "draw_odds": "3.40",
+      "away_odds": "1.93",
       "start_time": "2025-04-24 18:45"
     }
   },
@@ -12087,32 +12061,6 @@
       "draw_odds": "3.70",
       "away_odds": "2.60",
       "start_time": "2025-04-27 05:00"
-    }
-  },
-  {
-    "id": "50869681",
-    "eventId": "50869681",
-    "teams": "Roda JC Kerkrade - ADO Den Haag",
-    "league": "Eerste Divisie",
-    "sport": "football",
-    "country": "Netherlands",
-    "date": "2025-04-24",
-    "time": "18:00",
-    "odds": {
-      "home": 3.25,
-      "draw": 3.75,
-      "away": 2.05
-    },
-    "raw": {
-      "eventId": "50869681",
-      "country": "Netherlands",
-      "tournament": "Eerste Divisie",
-      "event": "Roda JC Kerkrade - ADO Den Haag",
-      "market": "1X2",
-      "home_odds": "3.25",
-      "draw_odds": "3.75",
-      "away_odds": "2.05",
-      "start_time": "2025-04-24 18:00"
     }
   },
   {
@@ -17238,58 +17186,6 @@
     }
   },
   {
-    "id": "51865821",
-    "eventId": "51865821",
-    "teams": "Coruxo FC - Rayo Cantabria",
-    "league": "Segunda Federacion",
-    "sport": "football",
-    "country": "Spain",
-    "date": "2025-04-27",
-    "time": "10:00",
-    "odds": {
-      "home": 2.05,
-      "draw": 2.95,
-      "away": 3.25
-    },
-    "raw": {
-      "eventId": "51865821",
-      "country": "Spain",
-      "tournament": "Segunda Federacion",
-      "event": "Coruxo FC - Rayo Cantabria",
-      "market": "1X2",
-      "home_odds": "2.05",
-      "draw_odds": "2.95",
-      "away_odds": "3.25",
-      "start_time": "2025-04-27 10:00"
-    }
-  },
-  {
-    "id": "51868481",
-    "eventId": "51868481",
-    "teams": "CR Granada - Real Balompedica Linense",
-    "league": "Segunda Federacion",
-    "sport": "football",
-    "country": "Spain",
-    "date": "2025-04-27",
-    "time": "10:00",
-    "odds": {
-      "home": 2.6,
-      "draw": 2.95,
-      "away": 2.45
-    },
-    "raw": {
-      "eventId": "51868481",
-      "country": "Spain",
-      "tournament": "Segunda Federacion",
-      "event": "CR Granada - Real Balompedica Linense",
-      "market": "1X2",
-      "home_odds": "2.60",
-      "draw_odds": "2.95",
-      "away_odds": "2.45",
-      "start_time": "2025-04-27 10:00"
-    }
-  },
-  {
     "id": "51866505",
     "eventId": "51866505",
     "teams": "Deportivo Aragon - CD Teruel",
@@ -17494,6 +17390,58 @@
       "home_odds": "1.38",
       "draw_odds": "4.00",
       "away_odds": "6.50",
+      "start_time": "2025-04-27 10:00"
+    }
+  },
+  {
+    "id": "51866509",
+    "eventId": "51866509",
+    "teams": "Real Sociedad C - UD Logrones",
+    "league": "Segunda Federacion",
+    "sport": "football",
+    "country": "Spain",
+    "date": "2025-04-27",
+    "time": "10:00",
+    "odds": {
+      "home": 4.3,
+      "draw": 3.3,
+      "away": 1.68
+    },
+    "raw": {
+      "eventId": "51866509",
+      "country": "Spain",
+      "tournament": "Segunda Federacion",
+      "event": "Real Sociedad C - UD Logrones",
+      "market": "1X2",
+      "home_odds": "4.30",
+      "draw_odds": "3.30",
+      "away_odds": "1.68",
+      "start_time": "2025-04-27 10:00"
+    }
+  },
+  {
+    "id": "51865807",
+    "eventId": "51865807",
+    "teams": "Real Valladolid Promesas - Numancia CD",
+    "league": "Segunda Federacion",
+    "sport": "football",
+    "country": "Spain",
+    "date": "2025-04-27",
+    "time": "10:00",
+    "odds": {
+      "home": 3.4,
+      "draw": 2.9,
+      "away": 2.05
+    },
+    "raw": {
+      "eventId": "51865807",
+      "country": "Spain",
+      "tournament": "Segunda Federacion",
+      "event": "Real Valladolid Promesas - Numancia CD",
+      "market": "1X2",
+      "home_odds": "3.40",
+      "draw_odds": "2.90",
+      "away_odds": "2.05",
       "start_time": "2025-04-27 10:00"
     }
   },
@@ -27716,162 +27664,6 @@
     }
   },
   {
-    "id": "58281061",
-    "eventId": "58281061",
-    "teams": "CA Aldosivi Reserve - CA Union Santa Fe Reserve",
-    "league": "Primera LPF, Reserves",
-    "sport": "football",
-    "country": "Argentina",
-    "date": "2025-04-24",
-    "time": "18:00",
-    "odds": {
-      "home": 2.9,
-      "draw": 3,
-      "away": 2.35
-    },
-    "raw": {
-      "eventId": "58281061",
-      "country": "Argentina",
-      "tournament": "Primera LPF, Reserves",
-      "event": "CA Aldosivi Reserve - CA Union Santa Fe Reserve",
-      "market": "1X2",
-      "home_odds": "2.90",
-      "draw_odds": "3.00",
-      "away_odds": "2.35",
-      "start_time": "2025-04-24 18:00"
-    }
-  },
-  {
-    "id": "58281065",
-    "eventId": "58281065",
-    "teams": "CA Barracas Central Reserve - Estudiantes de LP Reserve",
-    "league": "Primera LPF, Reserves",
-    "sport": "football",
-    "country": "Argentina",
-    "date": "2025-04-24",
-    "time": "18:00",
-    "odds": {
-      "home": 6.1,
-      "draw": 3,
-      "away": 1.65
-    },
-    "raw": {
-      "eventId": "58281065",
-      "country": "Argentina",
-      "tournament": "Primera LPF, Reserves",
-      "event": "CA Barracas Central Reserve - Estudiantes de LP Reserve",
-      "market": "1X2",
-      "home_odds": "6.10",
-      "draw_odds": "3.00",
-      "away_odds": "1.65",
-      "start_time": "2025-04-24 18:00"
-    }
-  },
-  {
-    "id": "58281067",
-    "eventId": "58281067",
-    "teams": "CA Belgrano - CA Talleres de Cordoba Reserve",
-    "league": "Primera LPF, Reserves",
-    "sport": "football",
-    "country": "Argentina",
-    "date": "2025-04-24",
-    "time": "18:00",
-    "odds": {
-      "home": 1.59,
-      "draw": 3.8,
-      "away": 4.8
-    },
-    "raw": {
-      "eventId": "58281067",
-      "country": "Argentina",
-      "tournament": "Primera LPF, Reserves",
-      "event": "CA Belgrano - CA Talleres de Cordoba Reserve",
-      "market": "1X2",
-      "home_odds": "1.59",
-      "draw_odds": "3.80",
-      "away_odds": "4.80",
-      "start_time": "2025-04-24 18:00"
-    }
-  },
-  {
-    "id": "58281073",
-    "eventId": "58281073",
-    "teams": "Gimnasia de la Plata Reserve - CA Sarmiento de Junin",
-    "league": "Primera LPF, Reserves",
-    "sport": "football",
-    "country": "Argentina",
-    "date": "2025-04-24",
-    "time": "18:00",
-    "odds": {
-      "home": 2.25,
-      "draw": 3,
-      "away": 3.1
-    },
-    "raw": {
-      "eventId": "58281073",
-      "country": "Argentina",
-      "tournament": "Primera LPF, Reserves",
-      "event": "Gimnasia de la Plata Reserve - CA Sarmiento de Junin",
-      "market": "1X2",
-      "home_odds": "2.25",
-      "draw_odds": "3.00",
-      "away_odds": "3.10",
-      "start_time": "2025-04-24 18:00"
-    }
-  },
-  {
-    "id": "58281079",
-    "eventId": "58281079",
-    "teams": "Instituto AC Cordoba Reserves - San Martin de San Juan Reserve",
-    "league": "Primera LPF, Reserves",
-    "sport": "football",
-    "country": "Argentina",
-    "date": "2025-04-24",
-    "time": "18:00",
-    "odds": {
-      "home": 1.72,
-      "draw": 3.1,
-      "away": 5.1
-    },
-    "raw": {
-      "eventId": "58281079",
-      "country": "Argentina",
-      "tournament": "Primera LPF, Reserves",
-      "event": "Instituto AC Cordoba Reserves - San Martin de San Juan Reserve",
-      "market": "1X2",
-      "home_odds": "1.72",
-      "draw_odds": "3.10",
-      "away_odds": "5.10",
-      "start_time": "2025-04-24 18:00"
-    }
-  },
-  {
-    "id": "58281087",
-    "eventId": "58281087",
-    "teams": "San Lorenzo de Almagro Res. - CA Lanus",
-    "league": "Primera LPF, Reserves",
-    "sport": "football",
-    "country": "Argentina",
-    "date": "2025-04-24",
-    "time": "18:00",
-    "odds": {
-      "home": 1.74,
-      "draw": 3.33,
-      "away": 4.4
-    },
-    "raw": {
-      "eventId": "58281087",
-      "country": "Argentina",
-      "tournament": "Primera LPF, Reserves",
-      "event": "San Lorenzo de Almagro Res. - CA Lanus",
-      "market": "1X2",
-      "home_odds": "1.74",
-      "draw_odds": "3.33",
-      "away_odds": "4.40",
-      "start_time": "2025-04-24 18:00"
-    }
-  },
-  {
     "id": "58141961",
     "eventId": "58141961",
     "teams": "Vilnius FK Zalgiris - FK Panevezys",
@@ -28155,32 +27947,6 @@
       "draw_odds": "3.10",
       "away_odds": "3.60",
       "start_time": "2025-04-27 16:00"
-    }
-  },
-  {
-    "id": "111111112147814",
-    "eventId": "111111112147814",
-    "teams": "San Benito FC - CF Universidad",
-    "league": "Primera Division",
-    "sport": "football",
-    "country": "Guatemala",
-    "date": "2025-04-24",
-    "time": "18:00",
-    "odds": {
-      "home": 1.79,
-      "draw": 3.25,
-      "away": 4.3
-    },
-    "raw": {
-      "eventId": "111111112147814",
-      "country": "Guatemala",
-      "tournament": "Primera Division",
-      "event": "San Benito FC - CF Universidad",
-      "market": "1X2",
-      "home_odds": "1.79",
-      "draw_odds": "3.25",
-      "away_odds": "4.30",
-      "start_time": "2025-04-24 18:00"
     }
   },
   {
@@ -29325,6 +29091,240 @@
       "draw_odds": "2.95",
       "away_odds": "2.70",
       "start_time": "2025-04-27 18:00"
+    }
+  },
+  {
+    "id": "51549085",
+    "eventId": "51549085",
+    "teams": "Potenza Calcio - Calcio Catania",
+    "league": "Serie C, Group C",
+    "sport": "football",
+    "country": "Italy",
+    "date": "2025-04-27",
+    "time": "18:00",
+    "odds": {
+      "home": 2.6,
+      "draw": 2.85,
+      "away": 2.8
+    },
+    "raw": {
+      "eventId": "51549085",
+      "country": "Italy",
+      "tournament": "Serie C, Group C",
+      "event": "Potenza Calcio - Calcio Catania",
+      "market": "1X2",
+      "home_odds": "2.60",
+      "draw_odds": "2.85",
+      "away_odds": "2.80",
+      "start_time": "2025-04-27 18:00"
+    }
+  },
+  {
+    "id": "51549083",
+    "eventId": "51549083",
+    "teams": "Trapani Calcio - Casertana FC",
+    "league": "Serie C, Group C",
+    "sport": "football",
+    "country": "Italy",
+    "date": "2025-04-27",
+    "time": "18:00",
+    "odds": {
+      "home": 1.83,
+      "draw": 3.7,
+      "away": 3.7
+    },
+    "raw": {
+      "eventId": "51549083",
+      "country": "Italy",
+      "tournament": "Serie C, Group C",
+      "event": "Trapani Calcio - Casertana FC",
+      "market": "1X2",
+      "home_odds": "1.83",
+      "draw_odds": "3.70",
+      "away_odds": "3.70",
+      "start_time": "2025-04-27 18:00"
+    }
+  },
+  {
+    "id": "51549099",
+    "eventId": "51549099",
+    "teams": "US Avellino - Asd Team Altamura",
+    "league": "Serie C, Group C",
+    "sport": "football",
+    "country": "Italy",
+    "date": "2025-04-27",
+    "time": "18:00",
+    "odds": {
+      "home": 1.5,
+      "draw": 4.2,
+      "away": 5.5
+    },
+    "raw": {
+      "eventId": "51549099",
+      "country": "Italy",
+      "tournament": "Serie C, Group C",
+      "event": "US Avellino - Asd Team Altamura",
+      "market": "1X2",
+      "home_odds": "1.50",
+      "draw_odds": "4.20",
+      "away_odds": "5.50",
+      "start_time": "2025-04-27 18:00"
+    }
+  },
+  {
+    "id": "59972517",
+    "eventId": "59972517",
+    "teams": "Herentals FC - Greenfuel FC",
+    "league": "Premier Soccer League",
+    "sport": "football",
+    "country": "Zimbabwe",
+    "date": "2025-04-25",
+    "time": "13:00",
+    "odds": {
+      "home": 2.35,
+      "draw": 2.65,
+      "away": 3.4
+    },
+    "raw": {
+      "eventId": "59972517",
+      "country": "Zimbabwe",
+      "tournament": "Premier Soccer League",
+      "event": "Herentals FC - Greenfuel FC",
+      "market": "1X2",
+      "home_odds": "2.35",
+      "draw_odds": "2.65",
+      "away_odds": "3.40",
+      "start_time": "2025-04-25 13:00"
+    }
+  },
+  {
+    "id": "57513641",
+    "eventId": "57513641",
+    "teams": "Vision FC (Rwa) - SC Kiyovu ",
+    "league": "Premier League",
+    "sport": "football",
+    "country": "Rwanda",
+    "date": "2025-04-25",
+    "time": "13:00",
+    "odds": {
+      "home": 2.3,
+      "draw": 3.1,
+      "away": 2.75
+    },
+    "raw": {
+      "eventId": "57513641",
+      "country": "Rwanda",
+      "tournament": "Premier League",
+      "event": "Vision FC (Rwa) - SC Kiyovu ",
+      "market": "1X2",
+      "home_odds": "2.30",
+      "draw_odds": "3.10",
+      "away_odds": "2.75",
+      "start_time": "2025-04-25 13:00"
+    }
+  },
+  {
+    "id": "60090403",
+    "eventId": "60090403",
+    "teams": "Greater Tomorrow FC - Gambia Armed Forces",
+    "league": "GFA League First Division",
+    "sport": "football",
+    "country": "Gambia",
+    "date": "2025-04-25",
+    "time": "16:00",
+    "odds": {
+      "home": 4.6,
+      "draw": 2.9,
+      "away": 1.86
+    },
+    "raw": {
+      "eventId": "60090403",
+      "country": "Gambia",
+      "tournament": "GFA League First Division",
+      "event": "Greater Tomorrow FC - Gambia Armed Forces",
+      "market": "1X2",
+      "home_odds": "4.60",
+      "draw_odds": "2.90",
+      "away_odds": "1.86",
+      "start_time": "2025-04-25 16:00"
+    }
+  },
+  {
+    "id": "60090405",
+    "eventId": "60090405",
+    "teams": "Tmt - Team Rhino",
+    "league": "GFA League First Division",
+    "sport": "football",
+    "country": "Gambia",
+    "date": "2025-04-25",
+    "time": "16:00",
+    "odds": {
+      "home": 2.35,
+      "draw": 2.85,
+      "away": 3.1
+    },
+    "raw": {
+      "eventId": "60090405",
+      "country": "Gambia",
+      "tournament": "GFA League First Division",
+      "event": "Tmt - Team Rhino",
+      "market": "1X2",
+      "home_odds": "2.35",
+      "draw_odds": "2.85",
+      "away_odds": "3.10",
+      "start_time": "2025-04-25 16:00"
+    }
+  },
+  {
+    "id": "52123371",
+    "eventId": "52123371",
+    "teams": "Somaspor - Ankara Demirspor",
+    "league": "2. Lig",
+    "sport": "football",
+    "country": "Turkiye Amateur",
+    "date": "2025-04-26",
+    "time": "12:00",
+    "odds": {
+      "home": 3,
+      "draw": 3.25,
+      "away": 2.2
+    },
+    "raw": {
+      "eventId": "52123371",
+      "country": "Turkiye Amateur",
+      "tournament": "2. Lig",
+      "event": "Somaspor - Ankara Demirspor",
+      "market": "1X2",
+      "home_odds": "3.00",
+      "draw_odds": "3.25",
+      "away_odds": "2.20",
+      "start_time": "2025-04-26 12:00"
+    }
+  },
+  {
+    "id": "52123381",
+    "eventId": "52123381",
+    "teams": "Belediye Derincespor - Giresunspor",
+    "league": "2. Lig",
+    "sport": "football",
+    "country": "Turkiye Amateur",
+    "date": "2025-04-27",
+    "time": "12:00",
+    "odds": {
+      "home": 1.18,
+      "draw": 5.4,
+      "away": 15.5
+    },
+    "raw": {
+      "eventId": "52123381",
+      "country": "Turkiye Amateur",
+      "tournament": "2. Lig",
+      "event": "Belediye Derincespor - Giresunspor",
+      "market": "1X2",
+      "home_odds": "1.18",
+      "draw_odds": "5.40",
+      "away_odds": "15.50",
+      "start_time": "2025-04-27 12:00"
     }
   },
   {

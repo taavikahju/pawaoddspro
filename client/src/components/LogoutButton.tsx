@@ -1,6 +1,7 @@
 import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/hooks/use-auth";
+import { clearAdminKey } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 
 export default function LogoutButton({ 
   variant = "default", 
@@ -9,10 +10,18 @@ export default function LogoutButton({
   variant?: "default" | "outline" | "ghost"; 
   className?: string;
 }) {
-  const { logoutMutation } = useAuth();
+  const { toast } = useToast();
   
   const handleLogout = () => {
-    logoutMutation.mutate();
+    clearAdminKey();
+    
+    toast({
+      title: "Logged out",
+      description: "Admin key has been cleared successfully",
+    });
+    
+    // Refresh the page to update UI state
+    window.location.href = "/";
   };
   
   return (
@@ -20,10 +29,9 @@ export default function LogoutButton({
       variant={variant} 
       className={className}
       onClick={handleLogout}
-      disabled={logoutMutation.isPending}
     >
       <LogOut className="h-4 w-4 mr-2" />
-      {logoutMutation.isPending ? "Logging out..." : "Logout"}
+      Clear Admin Access
     </Button>
   );
 }

@@ -1,24 +1,17 @@
 import { Link, useLocation } from "wouter";
-import { useAuth } from "@/hooks/use-auth";
-import LogoutButton from "./LogoutButton";
 import { Button } from "@/components/ui/button";
-import { UserCircle, Settings, ChevronDown, BarChart2 } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Settings, BarChart2 } from "lucide-react";
+import { getAdminKey } from "@/lib/queryClient";
 
 export default function Navbar() {
-  const { user } = useAuth();
   const [location] = useLocation();
-
+  
   const isActive = (path: string) => {
     return location === path ? "bg-accent text-accent-foreground" : "";
   };
+
+  // Check if admin key exists
+  const hasAdminKey = !!getAdminKey();
 
   const renderNavLinks = () => {
     return (
@@ -33,13 +26,11 @@ export default function Navbar() {
             Scraper Status
           </Button>
         </Link>
-        {user?.role === "admin" && (
-          <Link href="/admin">
-            <Button variant="ghost" className={`${isActive("/admin")}`}>
-              Admin
-            </Button>
-          </Link>
-        )}
+        <Link href="/admin">
+          <Button variant="ghost" className={`${isActive("/admin")}`}>
+            Admin
+          </Button>
+        </Link>
       </div>
     );
   };
@@ -60,52 +51,20 @@ export default function Navbar() {
         {renderNavLinks()}
         
         <div className="flex flex-1 items-center justify-end space-x-4">
-          {user ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                  <UserCircle className="h-5 w-5" />
-                  <ChevronDown className="h-3 w-3 ml-1" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>
-                  <div className="flex flex-col">
-                    <span>{user.username}</span>
-                    <span className="text-xs text-muted-foreground">{user.role}</span>
-                  </div>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link href="/">
-                    <BarChart2 className="mr-2 h-4 w-4" />
-                    <span>Dashboard</span>
-                  </Link>
-                </DropdownMenuItem>
-                {user.role === "admin" && (
-                  <DropdownMenuItem asChild>
-                    <Link href="/admin">
-                      <Settings className="mr-2 h-4 w-4" />
-                      <span>Admin Settings</span>
-                    </Link>
-                  </DropdownMenuItem>
-                )}
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  onClick={() => {}}
-                  className="cursor-pointer"
-                >
-                  <LogoutButton variant="ghost" className="w-full justify-start p-0 font-normal" />
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : (
-            <Link href="/auth">
-              <Button variant="default" size="sm">
-                Login
+          {hasAdminKey && (
+            <Link href="/admin">
+              <Button variant="outline" size="sm" className="flex items-center gap-1">
+                <Settings className="h-4 w-4" />
+                <span>Admin</span>
               </Button>
             </Link>
           )}
+          <Link href="/">
+            <Button variant="ghost" size="sm" className="flex items-center gap-1">
+              <BarChart2 className="h-4 w-4" />
+              <span>Dashboard</span>
+            </Button>
+          </Link>
         </div>
       </div>
     </header>
