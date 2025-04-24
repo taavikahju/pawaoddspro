@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   Dialog, 
   DialogContent, 
@@ -12,7 +12,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+// Import only the components we need to reduce bundle size
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 interface MarginHistoryPopupProps {
   isOpen: boolean;
@@ -47,14 +48,12 @@ export default function MarginHistoryPopup({
   const { data, isLoading, error } = useQuery({
     queryKey: ['/api/events', eventId, 'history'],
     queryFn: async () => {
-      // Only get last 20 entries to improve performance
-      const response = await axios.get(`/api/events/${eventId}/history?limit=20`);
+      // Only get last 10 entries to improve performance
+      const response = await axios.get(`/api/events/${eventId}/history?limit=10`);
       return response.data as OddsHistoryEntry[];
     },
     enabled: isOpen, // Only fetch when dialog is open
-    // Add caching for performance
-    staleTime: 60000, // Cache for 1 minute
-    gcTime: 300000 // Keep in cache for 5 minutes (v5 uses gcTime instead of cacheTime)
+    staleTime: 60000 // Cache for 1 minute
   });
   
   // Pre-process data for chart
@@ -81,7 +80,7 @@ export default function MarginHistoryPopup({
       }
       
       // Add margin for each bookmaker (parse to float since it may be stored as string)
-      acc[timeKey][entry.bookmakerCode] = parseFloat(entry.margin);
+      acc[timeKey][entry.bookmakerCode] = parseFloat(entry.margin.toString());
       
       return acc;
     }, {});
@@ -102,42 +101,42 @@ export default function MarginHistoryPopup({
   
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-[650px] max-h-[80vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-lg font-semibold">
-            Margin History for: {eventName}
+          <DialogTitle className="text-base font-semibold">
+            Margin History: {eventName}
           </DialogTitle>
         </DialogHeader>
         
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="w-full justify-start mb-4">
+          <TabsList className="w-full justify-start mb-2">
             <TabsTrigger value="chart">Chart</TabsTrigger>
             <TabsTrigger value="table">Table</TabsTrigger>
           </TabsList>
           
-          <TabsContent value="chart" className="min-h-[400px]">
+          <TabsContent value="chart" className="min-h-[350px]">
             {isLoading ? (
-              <div className="flex items-center justify-center h-[400px]">
-                <Skeleton className="h-[350px] w-full" />
+              <div className="flex items-center justify-center h-[350px]">
+                <Skeleton className="h-[300px] w-full" />
               </div>
             ) : error ? (
-              <div className="text-red-500 p-4 text-center">
+              <div className="text-red-500 p-2 text-center text-sm">
                 Failed to load margin history data
               </div>
             ) : chartData.length === 0 ? (
-              <div className="text-gray-500 p-4 text-center">
+              <div className="text-gray-500 p-2 text-center text-sm">
                 No margin history available for this event
               </div>
             ) : (
               <ResponsiveContainer width="100%" height={400}>
-                <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                  <CartesianGrid strokeDasharray="3 3" />
+                <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 25 }}>
                   <XAxis 
                     dataKey="timestamp" 
-                    tick={{ fontSize: 12 }}
+                    tick={{ fontSize: 11 }}
                     angle={-45}
                     textAnchor="end"
-                    height={80}
+                    height={70}
+                    tickFormatter={(tick) => tick.split(' ')[1]} // Show only time for brevity
                   />
                   <YAxis 
                     label={{ value: 'Margin %', angle: -90, position: 'insideLeft' }}
@@ -147,15 +146,16 @@ export default function MarginHistoryPopup({
                     formatter={(value: any) => [`${Number(value).toFixed(2)}%`, '']}
                     labelFormatter={(label) => `Time: ${label}`}
                   />
-                  <Legend />
                   {bookmakers.map((bookmakerCode) => (
                     <Line
                       key={bookmakerCode}
                       type="monotone"
                       dataKey={bookmakerCode}
                       name={bookmakerCode}
-                      stroke={bookmakerColors[bookmakerCode] || '#' + Math.floor(Math.random() * 16777215).toString(16)}
-                      activeDot={{ r: 8 }}
+                      stroke={bookmakerColors[bookmakerCode] || '#888888'}
+                      strokeWidth={2}
+                      dot={false} // Remove dots for better performance
+                      activeDot={{ r: 4 }} // Smaller dots
                       connectNulls
                     />
                   ))}
@@ -164,21 +164,20 @@ export default function MarginHistoryPopup({
             )}
           </TabsContent>
           
-          <TabsContent value="table" className="min-h-[400px]">
+          <TabsContent value="table" className="min-h-[350px]">
             {isLoading ? (
-              <div className="flex flex-col gap-2">
-                <Skeleton className="h-8 w-full" />
-                <Skeleton className="h-8 w-full" />
-                <Skeleton className="h-8 w-full" />
-                <Skeleton className="h-8 w-full" />
-                <Skeleton className="h-8 w-full" />
+              <div className="flex flex-col gap-1.5">
+                <Skeleton className="h-6 w-full" />
+                <Skeleton className="h-6 w-full" />
+                <Skeleton className="h-6 w-full" />
+                <Skeleton className="h-6 w-full" />
               </div>
             ) : error ? (
-              <div className="text-red-500 p-4 text-center">
+              <div className="text-red-500 p-2 text-center text-sm">
                 Failed to load margin history data
               </div>
             ) : !data || data.length === 0 ? (
-              <div className="text-gray-500 p-4 text-center">
+              <div className="text-gray-500 p-2 text-center text-sm">
                 No margin history available for this event
               </div>
             ) : (
@@ -186,20 +185,19 @@ export default function MarginHistoryPopup({
                 <table className="w-full border-collapse">
                   <thead>
                     <tr className="bg-muted">
-                      <th className="p-2 text-left">Time</th>
-                      <th className="p-2 text-left">Bookmaker</th>
-                      <th className="p-2 text-right">Home</th>
-                      <th className="p-2 text-right">Draw</th>
-                      <th className="p-2 text-right">Away</th>
-                      <th className="p-2 text-right">Margin %</th>
+                      <th className="p-2 text-left text-sm">Time</th>
+                      <th className="p-2 text-left text-sm">Bookmaker</th>
+                      <th className="p-2 text-right text-sm">Home</th>
+                      <th className="p-2 text-right text-sm">Draw</th>
+                      <th className="p-2 text-right text-sm">Away</th>
+                      <th className="p-2 text-right text-sm">Margin</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {data.map((entry) => (
+                    {data.slice(0, 10).map((entry) => ( // Limit to 10 rows for faster rendering
                       <tr key={entry.id} className="border-b border-gray-200 hover:bg-muted/50">
-                        <td className="p-2 text-left">
+                        <td className="p-1.5 text-left text-xs">
                           {new Date(entry.timestamp).toLocaleString('en-US', {
-                            year: 'numeric',
                             month: '2-digit',
                             day: '2-digit',
                             hour: '2-digit',
@@ -207,12 +205,12 @@ export default function MarginHistoryPopup({
                             hour12: false
                           })}
                         </td>
-                        <td className="p-2 text-left font-medium">{entry.bookmakerCode}</td>
-                        <td className="p-2 text-right">{entry.homeOdds.toFixed(2)}</td>
-                        <td className="p-2 text-right">{entry.drawOdds.toFixed(2)}</td>
-                        <td className="p-2 text-right">{entry.awayOdds.toFixed(2)}</td>
-                        <td className="p-2 text-right font-medium">
-                          {parseFloat(entry.margin).toFixed(2)}%
+                        <td className="p-1.5 text-left text-xs font-medium">{entry.bookmakerCode}</td>
+                        <td className="p-1.5 text-right text-xs">{parseFloat(entry.homeOdds.toString()).toFixed(2)}</td>
+                        <td className="p-1.5 text-right text-xs">{parseFloat(entry.drawOdds.toString()).toFixed(2)}</td>
+                        <td className="p-1.5 text-right text-xs">{parseFloat(entry.awayOdds.toString()).toFixed(2)}</td>
+                        <td className="p-1.5 text-right text-xs font-medium">
+                          {parseFloat(entry.margin.toString()).toFixed(2)}%
                         </td>
                       </tr>
                     ))}
