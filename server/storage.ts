@@ -52,6 +52,7 @@ export interface IStorage {
   getEventsBySportId(sportId: number): Promise<Event[]>;
   getEvent(id: number): Promise<Event | undefined>;
   getEventByExternalId(externalId: string): Promise<Event | undefined>;
+  getEventByEventId(eventId: string): Promise<Event | undefined>; // New method to find events by eventId
   createEvent(event: InsertEvent): Promise<Event>;
   updateEvent(id: number, data: Partial<Event>): Promise<Event | undefined>;
   
@@ -264,6 +265,12 @@ export class MemStorage implements IStorage {
   async getEventByExternalId(externalId: string): Promise<Event | undefined> {
     return Array.from(this.events.values()).find(
       (event) => event.externalId === externalId
+    );
+  }
+  
+  async getEventByEventId(eventId: string): Promise<Event | undefined> {
+    return Array.from(this.events.values()).find(
+      (event) => event.eventId === eventId
     );
   }
   
@@ -575,6 +582,11 @@ export class DatabaseStorage implements IStorage {
 
   async getEventByExternalId(externalId: string): Promise<Event | undefined> {
     const [event] = await db.select().from(events).where(eq(events.externalId, externalId));
+    return event;
+  }
+  
+  async getEventByEventId(eventId: string): Promise<Event | undefined> {
+    const [event] = await db.select().from(events).where(eq(events.eventId, eventId));
     return event;
   }
 

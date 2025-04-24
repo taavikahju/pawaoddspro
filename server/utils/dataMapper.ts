@@ -2,7 +2,7 @@ import { IStorage } from '../storage';
 import { insertEventSchema, type InsertEvent } from '@shared/schema';
 
 /**
- * Maps events from different bookmakers by matching teams and times
+ * Maps events from different bookmakers by matching exact eventIds
  */
 export async function processAndMapEvents(storage: IStorage): Promise<void> {
   try {
@@ -12,41 +12,64 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     const allBookmakerData = await storage.getAllBookmakersData();
     const bookmakerCodes = Object.keys(allBookmakerData);
     
-    // Use maps to track events by their normalized name (for matching across bookmakers)
+    // Use maps to track events by their eventId (for exact matching across bookmakers)
     const eventMap = new Map<string, any>();
-    const eventKeyMap = new Map<string, string>();
+    const processedEvents = new Set<string>(); // Track which eventIds we've processed
     
-    // Process each bookmaker's data
+    // First pass: collect all eventIds from all bookmakers
+    const allEventIds = new Set<string>();
     for (const bookmakerCode of bookmakerCodes) {
       const bookmakerData = allBookmakerData[bookmakerCode];
       if (!bookmakerData || !Array.isArray(bookmakerData)) continue;
       
       for (const event of bookmakerData) {
-        if (!event.teams || !event.league) continue;
+        if (event.eventId) {
+          allEventIds.add(event.eventId);
+        }
+      }
+    }
+    
+    console.log(`Found ${allEventIds.size} unique eventIds across all bookmakers`);
+    
+    // Second pass: Process each bookmaker's data and group by eventId
+    for (const eventId of allEventIds) {
+      let firstMatch = null;
+      const bookmakerOdds = {};
+      
+      // Look for this eventId in all bookmakers
+      for (const bookmakerCode of bookmakerCodes) {
+        const bookmakerData = allBookmakerData[bookmakerCode];
+        if (!bookmakerData || !Array.isArray(bookmakerData)) continue;
         
-        // Normalize event name for matching (remove vs, spaces, convert to lowercase)
-        const eventKey = normalizeEventName(event.teams);
-        eventKeyMap.set(event.id, eventKey);
+        // Find event with this ID in current bookmaker
+        const event = bookmakerData.find(e => e.eventId === eventId);
+        if (!event) continue;
         
-        // Create or update event in our map
-        if (!eventMap.has(eventKey)) {
-          eventMap.set(eventKey, {
-            externalId: event.id,
-            teams: event.teams,
-            league: event.league,
-            sportId: getSportId(event.sport || 'football'),
-            date: event.date || 'Unknown',
-            time: event.time || 'Unknown',
-            oddsData: {},
-            bestOdds: {}
-          });
+        // Use first match as the base event data
+        if (!firstMatch) {
+          firstMatch = event;
         }
         
-        // Add this bookmaker's odds to the event
-        const mappedEvent = eventMap.get(eventKey);
+        // Store odds from this bookmaker
         if (event.odds) {
-          mappedEvent.oddsData[bookmakerCode] = event.odds;
+          bookmakerOdds[bookmakerCode] = event.odds;
         }
+      }
+      
+      // If we found at least one match and it has the required data
+      if (firstMatch && firstMatch.teams && firstMatch.league) {
+        // Create event in our map
+        eventMap.set(eventId, {
+          externalId: firstMatch.id || eventId,
+          eventId: eventId,
+          teams: firstMatch.teams,
+          league: firstMatch.league,
+          sportId: getSportId(firstMatch.sport || 'football'),
+          date: firstMatch.date || 'Unknown',
+          time: firstMatch.time || 'Unknown',
+          oddsData: bookmakerOdds,
+          bestOdds: {}
+        });
       }
     }
     
@@ -91,6 +114,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
           // Create new event
           const insertData: InsertEvent = {
             externalId: eventData.externalId,
+            eventId: eventData.eventId,
             teams: eventData.teams,
             league: eventData.league,
             sportId: eventData.sportId,

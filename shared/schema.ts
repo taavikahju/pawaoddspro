@@ -59,6 +59,7 @@ export type Sport = typeof sports.$inferSelect;
 export const events = pgTable("events", {
   id: serial("id").primaryKey(),
   externalId: text("external_id").notNull().unique(),
+  eventId: text("event_id").notNull().unique(), // Added field for consistent eventId across bookmakers
   teams: text("teams").notNull(),
   league: text("league").notNull(),
   sportId: integer("sport_id").notNull(),
@@ -71,6 +72,7 @@ export const events = pgTable("events", {
 
 export const insertEventSchema = createInsertSchema(events).pick({
   externalId: true,
+  eventId: true,   // Added to schema
   teams: true,
   league: true,
   sportId: true,
@@ -109,6 +111,7 @@ export const bookmakerOddsSchema = z.record(z.string(), oddsSchema);
 export const eventDataSchema = z.object({
   id: z.number(),
   externalId: z.string(),
+  eventId: z.string(),  // Added field
   teams: z.string(),
   league: z.string(),
   sportId: z.number(),
