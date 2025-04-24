@@ -35,6 +35,7 @@ interface SidebarProps {
 
 export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
   const [location] = useLocation();
+  const [activeFilter, setActiveFilter] = React.useState<'all' | 'ghana' | 'kenya' | null>(null);
   const { toggleTheme, isDarkMode } = useThemeToggle();
   const { 
     bookmakers, 
@@ -57,6 +58,38 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
     queryKey: ['/api/stats'],
     refetchInterval: autoRefresh ? 60000 : false, // Refresh every minute if autoRefresh is enabled
   });
+  
+  // Function to detect if a specific filter is active based on selected bookmakers
+  React.useEffect(() => {
+    const ghanaBookmakers = bookmakers
+      .filter(b => b.code === 'bp GH' || b.code === 'sporty')
+      .map(b => b.code);
+      
+    const kenyaBookmakers = bookmakers
+      .filter(b => b.code === 'bp KE' || b.code === 'betika KE')
+      .map(b => b.code);
+    
+    // Check if Ghana filter is active
+    const isGhanaActive = ghanaBookmakers.every(code => selectedBookmakers.includes(code)) && 
+      selectedBookmakers.length === ghanaBookmakers.length;
+      
+    // Check if Kenya filter is active  
+    const isKenyaActive = kenyaBookmakers.every(code => selectedBookmakers.includes(code)) && 
+      selectedBookmakers.length === kenyaBookmakers.length;
+      
+    // Check if all bookmakers are selected
+    const isAllActive = bookmakers.every(b => selectedBookmakers.includes(b.code));
+    
+    if (isGhanaActive) {
+      setActiveFilter('ghana');
+    } else if (isKenyaActive) {
+      setActiveFilter('kenya');
+    } else if (isAllActive) {
+      setActiveFilter('all');
+    } else {
+      setActiveFilter(null);
+    }
+  }, [selectedBookmakers, bookmakers]);
 
   const lastUpdate = stats.lastScrapeTime;
   const timeToNextUpdate = stats.timeToNextUpdate;
@@ -184,9 +217,14 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
           </p>
           <div className="flex flex-col space-y-2 mb-4">
             <Button 
-              variant="outline" 
+              variant={activeFilter === 'ghana' ? 'default' : 'outline'} 
               size="sm" 
-              className="py-2 px-3 h-auto text-sm font-medium bg-white dark:bg-slate-800 justify-start"
+              className={cn(
+                "py-2 px-3 h-auto text-sm font-medium justify-start",
+                activeFilter === 'ghana' 
+                  ? "bg-primary text-white hover:bg-primary/90" 
+                  : "bg-white dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700"
+              )}
               onClick={() => {
                 // Find bookmaker IDs for Ghana
                 const ghanaBookmakers = bookmakers
@@ -201,6 +239,9 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
                     toggleBookmaker(b.code);
                   }
                 });
+                
+                // Set active filter
+                setActiveFilter('ghana');
               }}
             >
               <CountryFlag countryCode="GH" countryName="Ghana" size="md" className="mr-2" />
@@ -208,9 +249,14 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
             </Button>
             
             <Button 
-              variant="outline" 
+              variant={activeFilter === 'kenya' ? 'default' : 'outline'} 
               size="sm" 
-              className="py-2 px-3 h-auto text-sm font-medium bg-white dark:bg-slate-800 justify-start"
+              className={cn(
+                "py-2 px-3 h-auto text-sm font-medium justify-start",
+                activeFilter === 'kenya' 
+                  ? "bg-primary text-white hover:bg-primary/90" 
+                  : "bg-white dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700"
+              )}
               onClick={() => {
                 // Find bookmaker IDs for Kenya
                 const kenyaBookmakers = bookmakers
@@ -225,6 +271,9 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
                     toggleBookmaker(b.code);
                   }
                 });
+                
+                // Set active filter
+                setActiveFilter('kenya');
               }}
             >
               <CountryFlag countryCode="KE" countryName="Kenya" size="md" className="mr-2" />
@@ -232,9 +281,14 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
             </Button>
             
             <Button 
-              variant="outline" 
+              variant={activeFilter === 'all' ? 'default' : 'outline'} 
               size="sm" 
-              className="py-2 px-3 h-auto text-sm font-medium bg-white dark:bg-slate-800 justify-start"
+              className={cn(
+                "py-2 px-3 h-auto text-sm font-medium justify-start",
+                activeFilter === 'all' 
+                  ? "bg-primary text-white hover:bg-primary/90" 
+                  : "bg-white dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700"
+              )}
               onClick={() => {
                 // Select all bookmakers that aren't already selected
                 bookmakers.forEach(b => {
@@ -242,6 +296,9 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
                     toggleBookmaker(b.code);
                   }
                 });
+                
+                // Set active filter
+                setActiveFilter('all');
               }}
             >
               <Filter className="h-4 w-4 mr-2" />
@@ -258,7 +315,10 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
                 <Checkbox
                   id={`bookmaker-${bookmaker.id}`}
                   checked={selectedBookmakers.includes(bookmaker.code)}
-                  onCheckedChange={() => toggleBookmaker(bookmaker.code)}
+                  onCheckedChange={() => {
+                    toggleBookmaker(bookmaker.code);
+                    // Active filter will be automatically updated via the useEffect
+                  }}
                   className="h-4 w-4 rounded text-blue-500"
                 />
                 <Label
