@@ -6,6 +6,23 @@ import * as betfairScraper from './betfair';
 import * as paddyPowerScraper from './paddypower';
 import * as customScrapers from './custom/integration';
 import { processAndMapEvents } from '../utils/dataMapper';
+import { EventEmitter } from 'events';
+
+// Create event emitter for scraper events
+export const scraperEvents = new EventEmitter();
+
+// Define event types
+export const SCRAPER_EVENTS = {
+  STARTED: 'scraper:started',
+  COMPLETED: 'scraper:completed',
+  FAILED: 'scraper:failed',
+  BOOKMAKER_STARTED: 'scraper:bookmaker:started',
+  BOOKMAKER_COMPLETED: 'scraper:bookmaker:completed',
+  BOOKMAKER_FAILED: 'scraper:bookmaker:failed',
+  PROCESSING_STARTED: 'scraper:processing:started',
+  PROCESSING_COMPLETED: 'scraper:processing:completed',
+  PROCESSING_FAILED: 'scraper:processing:failed'
+};
 
 // Schedule to run every 15 minutes
 const SCRAPE_SCHEDULE = '*/15 * * * *';

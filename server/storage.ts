@@ -173,9 +173,13 @@ export class MemStorage implements IStorage {
     const now = new Date();
     const nextScrape = new Date(now.getTime() + 15 * 60 * 1000);
     
+    // Ensure active is defined
+    const active = insertBookmaker.active === undefined ? true : insertBookmaker.active;
+    
     const bookmaker: Bookmaker = { 
       ...insertBookmaker, 
       id,
+      active, // Make sure active is explicitly set
       lastScrape: now,
       nextScrape,
       eventsScraped: 0,
@@ -206,7 +210,14 @@ export class MemStorage implements IStorage {
   
   async createSport(insertSport: InsertSport): Promise<Sport> {
     const id = this.currentSportId++;
-    const sport: Sport = { ...insertSport, id };
+    // Ensure active is defined
+    const active = insertSport.active === undefined ? true : insertSport.active;
+    
+    const sport: Sport = { 
+      ...insertSport, 
+      id,
+      active // Make sure active is explicitly set
+    };
     this.sports.set(id, sport);
     return sport;
   }

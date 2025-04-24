@@ -1,4 +1,4 @@
-import type { Express, Request, Response } from "express";
+import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { z } from "zod";
@@ -7,10 +7,106 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 import * as customScrapers from "./scrapers/custom/integration";
+import { WebSocketServer, WebSocket } from 'ws';
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Create HTTP server
   const httpServer = createServer(app);
+  
+  // Setup WebSocket server
+  const wss = new WebSocketServer({ 
+    server: httpServer, 
+    path: '/ws' 
+  });
+  
+  // Broadcast to all clients
+  function broadcast(data: any) {
+    const message = JSON.stringify(data);
+    wss.clients.forEach(client => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(message);
+      }
+    });
+  }
+  
+  // Handle WebSocket connections
+  wss.on('connection', (ws) => {
+    console.log('New WebSocket client connected');
+    
+    // Send initial data
+    storage.getStats().then(stats => {
+      ws.send(JSON.stringify({
+        type: 'stats',
+        data: stats
+      }));
+    });
+    
+    storage.getScraperStatuses().then(scraperStatuses => {
+      ws.send(JSON.stringify({
+        type: 'scraperStatuses',
+        data: scraperStatuses
+      }));
+    });
+    
+    // Handle messages from client
+    ws.on('message', async (message) => {
+      try {
+        const data = JSON.parse(message.toString());
+        
+        // Handle client requests
+        if (data.type === 'getEvents') {
+          const events = await storage.getEvents();
+          ws.send(JSON.stringify({
+            type: 'events',
+            data: events
+          }));
+        }
+        
+        if (data.type === 'runScrapers') {
+          // Trigger scraper run
+          runAllScrapers(storage).then(() => {
+            // After scrapers run, broadcast updated stats
+            storage.getStats().then(stats => {
+              broadcast({
+                type: 'stats',
+                data: stats
+              });
+            });
+            
+            storage.getScraperStatuses().then(scraperStatuses => {
+              broadcast({
+                type: 'scraperStatuses',
+                data: scraperStatuses
+              });
+            });
+            
+            storage.getEvents().then(events => {
+              broadcast({
+                type: 'events',
+                data: events
+              });
+            });
+          });
+          
+          // Immediately respond that scraper was triggered
+          ws.send(JSON.stringify({
+            type: 'notification',
+            data: {
+              message: 'Scrapers triggered',
+              status: 'info'
+            }
+          }));
+        }
+      } catch (error) {
+        console.error('Error handling WebSocket message:', error);
+      }
+    });
+    
+    // Handle disconnection
+    ws.on('close', () => {
+      console.log('WebSocket client disconnected');
+    });
+  });
 
   // Setup multer for file uploads
   const customScraperDir = path.join(process.cwd(), 'server', 'scrapers', 'custom');
@@ -214,29 +310,88 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/scrapers/refresh', async (req, res) => {
     try {
-      const scraperModule = await import('./scrapers/scheduler');
-      await scraperModule.runAllScrapers(storage);
+      // Send immediate response that scraper job has been triggered
       res.json({ success: true, message: 'Scrapers triggered manually' });
+      
+      // Run scrapers
+      await runAllScrapers(storage);
+      
+      // Broadcast updates to all connected WebSocket clients
+      const stats = await storage.getStats();
+      broadcast({
+        type: 'stats',
+        data: stats
+      });
+      
+      const scraperStatuses = await storage.getScraperStatuses();
+      broadcast({
+        type: 'scraperStatuses',
+        data: scraperStatuses
+      });
+      
+      const events = await storage.getEvents();
+      broadcast({
+        type: 'events',
+        data: events
+      });
     } catch (error) {
       console.error('Error triggering scrapers:', error);
-      res.status(500).json({ message: 'Failed to trigger scrapers' });
+      broadcast({
+        type: 'notification',
+        data: {
+          message: 'Failed to run scrapers: ' + (error instanceof Error ? error.message : String(error)),
+          status: 'error'
+        }
+      });
     }
   });
 
   // Endpoint to run all scrapers manually
   app.post('/api/scrapers/run', async (req, res) => {
     try {
-      await runAllScrapers(storage);
+      // Send immediate response
       res.json({ 
         success: true, 
-        message: 'Manual scraper run completed' 
+        message: 'Manual scraper run initiated' 
+      });
+      
+      // Run scrapers
+      await runAllScrapers(storage);
+      
+      // Broadcast updates to all connected WebSocket clients
+      const stats = await storage.getStats();
+      broadcast({
+        type: 'stats',
+        data: stats
+      });
+      
+      const scraperStatuses = await storage.getScraperStatuses();
+      broadcast({
+        type: 'scraperStatuses',
+        data: scraperStatuses
+      });
+      
+      const events = await storage.getEvents();
+      broadcast({
+        type: 'events',
+        data: events
+      });
+      
+      broadcast({
+        type: 'notification',
+        data: {
+          message: 'Scrapers completed successfully',
+          status: 'success'
+        }
       });
     } catch (error) {
       console.error('Error running scrapers manually:', error);
-      res.status(500).json({ 
-        success: false,
-        message: 'Failed to run scrapers', 
-        error: error instanceof Error ? error.message : String(error) 
+      broadcast({
+        type: 'notification',
+        data: {
+          message: 'Failed to run scrapers: ' + (error instanceof Error ? error.message : String(error)),
+          status: 'error'
+        }
       });
     }
   });
