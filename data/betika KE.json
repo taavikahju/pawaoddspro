@@ -1,1 +1,52 @@
-[]
+[
+  {
+    "id": "BET123456",
+    "teams": "Gor Mahia vs AFC Leopards",
+    "league": "Kenya Premier League",
+    "sport": "football",
+    "country": "Kenya",
+    "date": "2025-04-24",
+    "time": "09:41",
+    "odds": {
+      "home": 1.85,
+      "draw": 3.4,
+      "away": 4.5
+    },
+    "raw": {
+      "eventId": "BET123456",
+      "country": "Kenya",
+      "tournament": "Kenya Premier League",
+      "event": "Gor Mahia vs AFC Leopards",
+      "market": "1X2",
+      "home_odds": "1.85",
+      "draw_odds": "3.40",
+      "away_odds": "4.50",
+      "start_time": "2025-04-24 09:41"
+    }
+  },
+  {
+    "id": "BET123457",
+    "teams": "Tusker FC vs Kakamega Homeboyz",
+    "league": "Kenya Premier League",
+    "sport": "football",
+    "country": "Kenya",
+    "date": "2025-04-24",
+    "time": "10:41",
+    "odds": {
+      "home": 2.1,
+      "draw": 3.2,
+      "away": 3.6
+    },
+    "raw": {
+      "eventId": "BET123457",
+      "country": "Kenya",
+      "tournament": "Kenya Premier League",
+      "event": "Tusker FC vs Kakamega Homeboyz",
+      "market": "1X2",
+      "home_odds": "2.10",
+      "draw_odds": "3.20",
+      "away_odds": "3.60",
+      "start_time": "2025-04-24 10:41"
+    }
+  }
+]

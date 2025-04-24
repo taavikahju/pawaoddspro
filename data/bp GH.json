@@ -275,6 +275,31 @@
     }
   },
   {
+    "id": "53802719",
+    "teams": "AE Kifisia Wfc - PAOK Thessaloniki",
+    "league": "Super League, Women",
+    "sport": "football",
+    "country": "Greece",
+    "date": "2025-04-24",
+    "time": "12:00",
+    "odds": {
+      "home": 12,
+      "draw": 6.5,
+      "away": 1.16
+    },
+    "raw": {
+      "eventId": "53802719",
+      "country": "Greece",
+      "tournament": "Super League, Women",
+      "event": "AE Kifisia Wfc - PAOK Thessaloniki",
+      "market": "1X2 - FT",
+      "home_odds": "12.0",
+      "draw_odds": "6.5",
+      "away_odds": "1.16",
+      "start_time": "2025-04-24 12:00"
+    }
+  },
+  {
     "id": "60088947",
     "teams": "Danubio FC - Miramar Misiones",
     "league": "Tercera Division, Reserves",
@@ -308,9 +333,9 @@
     "date": "2025-04-24",
     "time": "12:30",
     "odds": {
-      "home": 3.45,
-      "draw": 3.05,
-      "away": 2.08
+      "home": 3.4,
+      "draw": 2.95,
+      "away": 2.14
     },
     "raw": {
       "eventId": "59909306",
@@ -318,9 +343,9 @@
       "tournament": "Premier League",
       "event": "Shabab AL Ghazieh SC - Bourj FC",
       "market": "1X2 - FT",
-      "home_odds": "3.45",
-      "draw_odds": "3.05",
-      "away_odds": "2.08",
+      "home_odds": "3.4",
+      "draw_odds": "2.95",
+      "away_odds": "2.14",
       "start_time": "2025-04-24 12:30"
     }
   },
@@ -422,31 +447,6 @@
       "draw_odds": "5.25",
       "away_odds": "1.21",
       "start_time": "2025-04-24 13:00"
-    }
-  },
-  {
-    "id": "59955245",
-    "teams": "Khorfakkan U23 - Shabab Al Ahli U23",
-    "league": "UAE Pro League U23",
-    "sport": "football",
-    "country": "United Arab Emirates",
-    "date": "2025-04-24",
-    "time": "13:55",
-    "odds": {
-      "home": 3.5,
-      "draw": 3.9,
-      "away": 1.78
-    },
-    "raw": {
-      "eventId": "59955245",
-      "country": "United Arab Emirates",
-      "tournament": "UAE Pro League U23",
-      "event": "Khorfakkan U23 - Shabab Al Ahli U23",
-      "market": "1X2 - FT",
-      "home_odds": "3.5",
-      "draw_odds": "3.9",
-      "away_odds": "1.78",
-      "start_time": "2025-04-24 13:55"
     }
   }
 ]
