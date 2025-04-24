@@ -58,20 +58,17 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       
       // If we found at least one match and it has the required data
       if (firstMatch) {
-        // Construct the league field as "Country Tournament" if both are available
-        let league = firstMatch.league;
-        if (firstMatch.country && firstMatch.tournament) {
-          league = `${firstMatch.country} ${firstMatch.tournament}`;
-          console.log(`Using country [${firstMatch.country}] and tournament [${firstMatch.tournament}]`);
-        } else if (firstMatch.country) {
-          league = firstMatch.country;
-          console.log(`Using only country [${firstMatch.country}]`);
-        } else if (firstMatch.tournament) {
-          league = firstMatch.tournament;
-          console.log(`Using only tournament [${firstMatch.tournament}]`);
-        } else {
-          console.log(`No country or tournament found, using league [${league}]`);
+        // Store country and tournament directly
+        const country = firstMatch.country || '';
+        const tournament = firstMatch.tournament || '';
+        
+        // For backward compatibility, also set league field
+        let league = `${country} ${tournament}`.trim();
+        if (!league) {
+          league = firstMatch.league || 'Unknown';
         }
+        
+        console.log(`Event ${eventId} - Country: [${country}], Tournament: [${tournament}], League: [${league}]`);
         
         // Create the teams field if not already available
         let teams = firstMatch.teams;
@@ -85,6 +82,8 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
           eventId: eventId,
           teams: teams || 'Unknown',
           league: league || 'Unknown',
+          country: firstMatch.country || null,
+          tournament: firstMatch.tournament || null,
           sportId: getSportId(firstMatch.sport || 'football'),
           date: firstMatch.date || firstMatch.start_time?.split(' ')[0] || 'Unknown',
           time: firstMatch.time || firstMatch.start_time?.split(' ')[1] || 'Unknown',
@@ -138,6 +137,8 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
             // Also update other fields that might have changed
             teams: eventData.teams,
             league: eventData.league,
+            country: eventData.country,
+            tournament: eventData.tournament,
             date: eventData.date,
             time: eventData.time
           });
@@ -149,6 +150,8 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
             eventId: eventData.eventId,
             teams: eventData.teams,
             league: eventData.league,
+            country: eventData.country,
+            tournament: eventData.tournament,
             sportId: eventData.sportId,
             date: eventData.date,
             time: eventData.time,

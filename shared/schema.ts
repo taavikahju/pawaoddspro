@@ -62,6 +62,8 @@ export const events = pgTable("events", {
   eventId: text("event_id").notNull().unique(), // Added field for consistent eventId across bookmakers
   teams: text("teams").notNull(),
   league: text("league").notNull(),
+  country: text("country"),
+  tournament: text("tournament"),
   sportId: integer("sport_id").notNull(),
   date: text("date").notNull(),
   time: text("time").notNull(),
@@ -75,6 +77,8 @@ export const insertEventSchema = createInsertSchema(events).pick({
   eventId: true,   // Added to schema
   teams: true,
   league: true,
+  country: true,   // Added country field
+  tournament: true, // Added tournament field
   sportId: true,
   date: true,
   time: true,
