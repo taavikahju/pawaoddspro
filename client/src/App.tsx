@@ -8,6 +8,7 @@ import NotFound from "@/pages/not-found";
 import Dashboard from "@/pages/dashboard";
 import ScraperStatus from "@/pages/scraper-status";
 import AdminPage from "@/pages/admin";
+import NotificationListener from "@/components/NotificationListener";
 import { BookmakerProvider } from "@/contexts/BookmakerContext";
 
 function Router() {
@@ -28,6 +29,7 @@ function App() {
         <TooltipProvider>
           <BookmakerProvider>
             <Toaster />
+            <NotificationListener />
             <Router />
           </BookmakerProvider>
         </TooltipProvider>

@@ -15,10 +15,21 @@ import { formatDistanceToNow } from 'date-fns';
 interface ActivityItem {
   id: string;
   timestamp: string;
-  event: string;
+  event: string; // This is required
   message: string;
   status: 'info' | 'success' | 'warning' | 'error';
-  data?: any;
+  data?: {
+    timestamp?: string;
+    message?: string;
+    bookmaker?: {
+      code: string;
+      name: string;
+    };
+    eventCount?: number;
+    error?: string;
+    stats?: Record<string, any>;
+    [key: string]: any;
+  };
 }
 
 export default function ScraperActivityFeed() {
@@ -26,15 +37,15 @@ export default function ScraperActivityFeed() {
   const [activities, setActivities] = useState<ActivityItem[]>([]);
 
   useEffect(() => {
-    if (lastMessage && lastMessage.type === 'scraperEvent') {
+    if (lastMessage && lastMessage.type === 'scraperEvent' && lastMessage.event) {
       const { event, data } = lastMessage;
       
       const newActivity: ActivityItem = {
         id: `${event}-${Date.now()}`,
         timestamp: data.timestamp || new Date().toISOString(),
-        event,
+        event: event || 'unknown-event',
         message: data.message || 'Activity update',
-        status: getStatusFromEvent(event),
+        status: getStatusFromEvent(event || ''),
         data
       };
       
