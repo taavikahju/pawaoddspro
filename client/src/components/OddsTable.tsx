@@ -22,16 +22,68 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
   
   const filteredBookmakers = bookmakers.filter(b => selectedBookmakers.includes(b.code));
   
-  // Function to determine if an odd is the best available (keeping this for future use)
-  const isBestOdd = (event: any, market: string, bookmakerCode: string) => {
+  // Helper function to determine if odds should be highlighted
+  const getOddsHighlightType = (event: any, market: string, bookmakerCode: string): 'highest' | 'lowest' | 'none' => {
     if (!event.oddsData || !event.oddsData[bookmakerCode] || !event.oddsData[bookmakerCode][market]) {
-      return false;
+      return 'none';
     }
     
     const currentOdd = event.oddsData[bookmakerCode][market];
-    const bestOdd = event.bestOdds && event.bestOdds[market];
     
-    return currentOdd === bestOdd;
+    // Get all available odds for this market
+    const allOdds: {code: string, value: number}[] = [];
+    for (const code of Object.keys(event.oddsData)) {
+      if (event.oddsData[code][market]) {
+        allOdds.push({
+          code,
+          value: event.oddsData[code][market]
+        });
+      }
+    }
+    
+    if (allOdds.length === 0) return 'none';
+    
+    // Find the highest and lowest values
+    const highestOdd = Math.max(...allOdds.map(odd => odd.value));
+    const lowestOdd = Math.min(...allOdds.map(odd => odd.value));
+    
+    // Count how many bookmakers have the highest value
+    const bookiesWithHighest = allOdds.filter(odd => odd.value === highestOdd).map(odd => odd.code);
+    
+    // Count how many bookmakers have the lowest value
+    const bookiesWithLowest = allOdds.filter(odd => odd.value === lowestOdd).map(odd => odd.code);
+    
+    // Check if this is the highest
+    if (currentOdd === highestOdd) {
+      // Special case: if exactly 2 bookmakers have the same highest value and they are both betPawa variants
+      if (bookiesWithHighest.length === 2 && 
+          bookiesWithHighest.includes('betPawa GH') && 
+          bookiesWithHighest.includes('betPawa KE')) {
+        return 'highest';
+      }
+      
+      // If only 1 bookmaker has the highest value, highlight it
+      if (bookiesWithHighest.length === 1) {
+        return 'highest';
+      }
+    }
+    
+    // Check if this is the lowest
+    if (currentOdd === lowestOdd) {
+      // Special case: if exactly 2 bookmakers have the same lowest value and they are both betPawa variants
+      if (bookiesWithLowest.length === 2 && 
+          bookiesWithLowest.includes('betPawa GH') && 
+          bookiesWithLowest.includes('betPawa KE')) {
+        return 'lowest';
+      }
+      
+      // If only 1 bookmaker has the lowest value, highlight it
+      if (bookiesWithLowest.length === 1) {
+        return 'lowest';
+      }
+    }
+    
+    return 'none';
   };
   
   // Calculate margin for a bookmaker's odds
@@ -198,19 +250,46 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                     </TableCell>
                     
                     <TableCell className="px-2 py-1 whitespace-nowrap text-center border-r border-gray-200 dark:border-gray-700">
-                      <span className="text-sm font-medium px-1 py-0.5 rounded bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300">
+                      <span 
+                        className={cn(
+                          "text-sm font-medium px-1 py-0.5 rounded",
+                          getOddsHighlightType(event, 'home', bookmaker.code) === 'highest' 
+                            ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300" 
+                            : getOddsHighlightType(event, 'home', bookmaker.code) === 'lowest'
+                              ? "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300"
+                              : "bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300"
+                        )}
+                      >
                         {event.oddsData?.[bookmaker.code]?.home?.toFixed(2) || '-'}
                       </span>
                     </TableCell>
                     
                     <TableCell className="px-2 py-1 whitespace-nowrap text-center border-r border-gray-200 dark:border-gray-700">
-                      <span className="text-sm font-medium px-1 py-0.5 rounded bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300">
+                      <span 
+                        className={cn(
+                          "text-sm font-medium px-1 py-0.5 rounded",
+                          getOddsHighlightType(event, 'draw', bookmaker.code) === 'highest' 
+                            ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300" 
+                            : getOddsHighlightType(event, 'draw', bookmaker.code) === 'lowest'
+                              ? "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300"
+                              : "bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300"
+                        )}
+                      >
                         {event.oddsData?.[bookmaker.code]?.draw?.toFixed(2) || '-'}
                       </span>
                     </TableCell>
                     
                     <TableCell className="px-2 py-1 whitespace-nowrap text-center border-r border-gray-200 dark:border-gray-700">
-                      <span className="text-sm font-medium px-1 py-0.5 rounded bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300">
+                      <span 
+                        className={cn(
+                          "text-sm font-medium px-1 py-0.5 rounded",
+                          getOddsHighlightType(event, 'away', bookmaker.code) === 'highest' 
+                            ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300" 
+                            : getOddsHighlightType(event, 'away', bookmaker.code) === 'lowest'
+                              ? "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300"
+                              : "bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300"
+                        )}
+                      >
                         {event.oddsData?.[bookmaker.code]?.away?.toFixed(2) || '-'}
                       </span>
                     </TableCell>
