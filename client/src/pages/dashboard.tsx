@@ -538,7 +538,7 @@ export default function Dashboard() {
           
           {/* Bookmaker Average Margins */}
           <div className="flex flex-col items-end bg-slate-100 dark:bg-slate-700 p-2 rounded-md border border-slate-200 dark:border-slate-600 shadow-sm">
-            <div className="text-xs font-medium mb-1 text-slate-600 dark:text-slate-300">Average Bookmaker Margins</div>
+            <div className="text-xs font-medium mb-1 text-slate-600 dark:text-slate-300">Average Bookmaker Margins (Lower is Better)</div>
             
             {(() => {
               // Calculate average margins for each selected bookmaker based on filtered events
@@ -584,10 +584,22 @@ export default function Dashboard() {
                   const marginPercentage = ((avgMargin - 1) * 100).toFixed(2);
                   const bookmakerName = bookmakerNames[code] || code;
                   
+                  // Get color coding based on the margin percentage
+                  const getMarginColor = (value: number) => {
+                    if (value < 5.0) return "bg-green-200 text-green-800 dark:bg-green-900/30 dark:text-green-300"; // Great margins (<5%)
+                    if (value < 7.5) return "bg-lime-200 text-lime-800 dark:bg-lime-900/30 dark:text-lime-300";    // Good margins (<7.5%)
+                    if (value < 10.0) return "bg-amber-200 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300"; // Average margins (<10%)
+                    if (value < 12.5) return "bg-orange-200 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300"; // High margins (<12.5%)
+                    return "bg-red-200 text-red-800 dark:bg-red-900/30 dark:text-red-300"; // Very high margins (>=12.5%)
+                  };
+                  
+                  const marginValue = parseFloat(marginPercentage);
+                  const colorClass = getMarginColor(marginValue);
+                  
                   return (
-                    <div key={code} className="font-mono text-xs flex justify-between w-full">
+                    <div key={code} className="font-mono text-xs flex justify-between w-full mb-1 last:mb-0">
                       <span className="font-medium text-slate-700 dark:text-slate-200 mr-2">{bookmakerName}:</span>
-                      <span className="text-slate-800 dark:text-slate-100 font-bold bg-slate-200 dark:bg-slate-600 px-1 rounded">
+                      <span className={`font-bold px-1.5 py-0.5 rounded ${colorClass}`}>
                         {marginPercentage}%
                       </span>
                     </div>
