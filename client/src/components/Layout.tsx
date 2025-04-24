@@ -35,13 +35,10 @@ export default function Layout({ children, title, subtitle }: LayoutProps) {
 
   return (
     <div className="flex flex-col h-screen overflow-hidden">
-      {/* Navbar */}
-      <Navbar />
-      
       <div className="flex flex-1 overflow-hidden">
         {/* Left hover zone */}
         <div 
-          className="fixed top-14 left-0 w-4 h-[calc(100%-3.5rem)] z-20"
+          className="fixed top-0 left-0 w-4 h-full z-20"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         />
@@ -50,7 +47,7 @@ export default function Layout({ children, title, subtitle }: LayoutProps) {
         <div 
           onMouseEnter={handleMouseEnter} 
           onMouseLeave={handleMouseLeave}
-          className="h-[calc(100vh-3.5rem)]"
+          className="h-full"
         >
           <Sidebar 
             isOpen={sidebarOpen}
@@ -74,7 +71,7 @@ export default function Layout({ children, title, subtitle }: LayoutProps) {
           </div>
 
           {/* Main Content Area */}
-          <main className="p-3 md:p-4 bg-gray-50 dark:bg-slate-900 min-h-[calc(100vh-3.5rem)]">
+          <main className="p-3 md:p-4 bg-gray-50 dark:bg-slate-900 min-h-screen">
             {title && (
               <div className="mb-4">
                 <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{title}</h1>
