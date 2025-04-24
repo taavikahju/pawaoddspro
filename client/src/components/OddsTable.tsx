@@ -27,6 +27,14 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
     isOpen: boolean;
   }>({ eventId: '', eventName: '', isOpen: false });
   
+  // State for odds history popup
+  const [oddsHistoryPopup, setOddsHistoryPopup] = useState<{
+    eventId: string;
+    eventName: string;
+    oddsType: 'home' | 'draw' | 'away';
+    isOpen: boolean;
+  }>({ eventId: '', eventName: '', oddsType: 'home', isOpen: false });
+  
   const filteredBookmakers = bookmakers.filter(b => selectedBookmakers.includes(b.code));
   
   // Always show the comparison column if betPawa is selected along with either Sportybet or Betika KE
@@ -374,7 +382,19 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                               : "bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300"
                         )}
                       >
-                        {event.oddsData?.[bookmaker.code]?.home?.toFixed(2) || '-'}
+                        {event.oddsData?.[bookmaker.code]?.home ? (
+                          <button 
+                            className="hover:underline focus:outline-none"
+                            onClick={() => setOddsHistoryPopup({
+                              eventId: event.eventId,
+                              eventName: event.fixture,
+                              oddsType: 'home',
+                              isOpen: true
+                            })}
+                          >
+                            {event.oddsData[bookmaker.code].home.toFixed(2)}
+                          </button>
+                        ) : '-'}
                       </span>
                     </TableCell>
                     
@@ -389,7 +409,19 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                               : "bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300"
                         )}
                       >
-                        {event.oddsData?.[bookmaker.code]?.draw?.toFixed(2) || '-'}
+                        {event.oddsData?.[bookmaker.code]?.draw ? (
+                          <button 
+                            className="hover:underline focus:outline-none"
+                            onClick={() => setOddsHistoryPopup({
+                              eventId: event.eventId,
+                              eventName: event.fixture,
+                              oddsType: 'draw',
+                              isOpen: true
+                            })}
+                          >
+                            {event.oddsData[bookmaker.code].draw.toFixed(2)}
+                          </button>
+                        ) : '-'}
                       </span>
                     </TableCell>
                     
@@ -404,7 +436,19 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                               : "bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300"
                         )}
                       >
-                        {event.oddsData?.[bookmaker.code]?.away?.toFixed(2) || '-'}
+                        {event.oddsData?.[bookmaker.code]?.away ? (
+                          <button 
+                            className="hover:underline focus:outline-none"
+                            onClick={() => setOddsHistoryPopup({
+                              eventId: event.eventId,
+                              eventName: event.fixture,
+                              oddsType: 'away',
+                              isOpen: true
+                            })}
+                          >
+                            {event.oddsData[bookmaker.code].away.toFixed(2)}
+                          </button>
+                        ) : '-'}
                       </span>
                     </TableCell>
                     
@@ -525,6 +569,16 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
         eventId={selectedEvent.eventId}
         eventName={selectedEvent.eventName}
         bookmakers={selectedBookmakers}
+      />
+      
+      {/* Render the OddsHistoryPopup */}
+      <OddsHistoryPopup
+        isOpen={oddsHistoryPopup.isOpen}
+        onClose={() => setOddsHistoryPopup(prev => ({ ...prev, isOpen: false }))}
+        eventId={oddsHistoryPopup.eventId}
+        eventName={oddsHistoryPopup.eventName}
+        bookmakers={selectedBookmakers}
+        oddsType={oddsHistoryPopup.oddsType}
       />
     </div>
   );
