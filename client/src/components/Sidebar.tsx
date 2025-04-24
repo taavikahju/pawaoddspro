@@ -157,18 +157,6 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
             <XIcon className="h-4 w-4" />
           </Button>
         </div>
-        
-        {/* Last update info */}
-        <div className="mt-1 text-[10px] text-gray-500 dark:text-gray-400">
-          <div className="flex items-center">
-            <Clock className="h-2.5 w-2.5 mr-1" />
-            <span>Last update: <span className="text-gray-700 dark:text-gray-300">{lastUpdate}</span></span>
-          </div>
-          <div className="flex items-center mt-0.5">
-            <Repeat className="h-2.5 w-2.5 mr-1" />
-            <span>Next update: <span className="text-gray-700 dark:text-gray-300">{nextUpdateStr}</span></span>
-          </div>
-        </div>
       </div>
       
       {/* Handle to grab sidebar when collapsed */}
@@ -405,6 +393,17 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
             />
           </div>
           
+          {/* Last update info - moved to bottom of sidebar */}
+          <div className="mt-3 text-[10px] text-gray-500 dark:text-gray-400 pt-2 border-t border-gray-200 dark:border-slate-700">
+            <div className="flex items-center">
+              <Clock className="h-2.5 w-2.5 mr-1" />
+              <span>Last update: <span className="text-gray-700 dark:text-gray-300">{lastUpdate}</span></span>
+            </div>
+            <div className="flex items-center mt-0.5">
+              <Repeat className="h-2.5 w-2.5 mr-1" />
+              <span>Next update: <span className="text-gray-700 dark:text-gray-300">{nextUpdateStr}</span></span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
