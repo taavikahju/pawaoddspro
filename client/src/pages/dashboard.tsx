@@ -89,7 +89,8 @@ export default function Dashboard() {
   const filteredEvents = useMemo(() => {
     if (!Array.isArray(events)) return [];
     
-    return events.filter((event: any) => {
+    // First filter the events based on criteria
+    const filtered = events.filter((event: any) => {
       // Filter by sport
       const sportMatches = selectedSports.some((selectedSport) => {
         // Map sport codes to IDs
@@ -117,6 +118,18 @@ export default function Dashboard() {
       }
       
       return true;
+    });
+    
+    // Then sort by date and time (in ascending order)
+    return filtered.sort((a, b) => {
+      // First sort by date
+      const dateComparison = a.date.localeCompare(b.date);
+      if (dateComparison !== 0) {
+        return dateComparison;
+      }
+      
+      // If dates are the same, sort by time
+      return a.time.localeCompare(b.time);
     });
   }, [events, selectedSports, countryFilter, tournamentFilter]);
   
