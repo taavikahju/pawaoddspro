@@ -182,11 +182,11 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
           <p className="px-2 mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
             Quick Filters
           </p>
-          <div className="flex justify-between space-x-2 mb-4">
+          <div className="grid grid-cols-3 gap-2 mb-4">
             <Button 
               variant="outline" 
               size="sm" 
-              className="flex-1 py-1 px-2 h-auto text-xs font-medium bg-white dark:bg-slate-800"
+              className="py-1 px-2 h-auto text-xs font-medium bg-white dark:bg-slate-800"
               onClick={() => {
                 // Find bookmaker IDs for Ghana
                 const ghanaBookmakers = bookmakers
@@ -210,7 +210,7 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
             <Button 
               variant="outline" 
               size="sm" 
-              className="flex-1 py-1 px-2 h-auto text-xs font-medium bg-white dark:bg-slate-800"
+              className="py-1 px-2 h-auto text-xs font-medium bg-white dark:bg-slate-800"
               onClick={() => {
                 // Find bookmaker IDs for Kenya
                 const kenyaBookmakers = bookmakers
@@ -229,6 +229,23 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
             >
               <CountryFlag countryCode="KE" countryName="Kenya" size="sm" className="mr-1.5" />
               Kenya
+            </Button>
+            
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="py-1 px-2 h-auto text-xs font-medium bg-white dark:bg-slate-800"
+              onClick={() => {
+                // Select all bookmakers that aren't already selected
+                bookmakers.forEach(b => {
+                  if (!selectedBookmakers.includes(b.code)) {
+                    toggleBookmaker(b.code);
+                  }
+                });
+              }}
+            >
+              <Filter className="h-3 w-3 mr-1.5" />
+              All
             </Button>
           </div>
           

@@ -426,7 +426,7 @@ export default function Dashboard() {
               value={countryFilter}
               onValueChange={setCountryFilter}
             >
-              <SelectTrigger className="h-8 w-[160px] text-xs">
+              <SelectTrigger className="h-8 w-[200px] text-xs">
                 {countryFilter === 'all' ? (
                   <div className="flex items-center">
                     <GlobeIcon className="h-3 w-3 mr-1 text-gray-500" />
@@ -473,7 +473,7 @@ export default function Dashboard() {
               onValueChange={setTournamentFilter}
               disabled={countryFilter === 'all'}
             >
-              <SelectTrigger className={`h-8 w-[160px] text-xs ${countryFilter === 'all' ? 'opacity-50 cursor-not-allowed' : ''}`}>
+              <SelectTrigger className={`h-8 w-[200px] text-xs ${countryFilter === 'all' ? 'opacity-50 cursor-not-allowed' : ''}`}>
                 <Trophy className="h-3 w-3 mr-1 text-gray-500" />
                 <SelectValue placeholder={countryFilter === 'all' ? 'Select Country First' : 'Tournament'} />
               </SelectTrigger>
