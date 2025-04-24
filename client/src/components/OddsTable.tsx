@@ -22,28 +22,27 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
   
   const filteredBookmakers = bookmakers.filter(b => selectedBookmakers.includes(b.code));
   
-  // Check if either Ghana or Kenya quick filter is active
-  const isGhanaFilterActive = useMemo(() => {
-    // Check if Ghana bookmakers are selected (betPawa GH and Sportybet)
-    return selectedBookmakers.includes('betPawa GH') && 
-           selectedBookmakers.includes('Sportybet') &&
-           selectedBookmakers.length === 2;
-  }, [selectedBookmakers]);
+  // Always show the comparison column if betPawa is selected along with either Sportybet or Betika KE
+  const hasBetPawaGH = selectedBookmakers.includes('betPawa GH');
+  const hasBetPawaKE = selectedBookmakers.includes('betPawa KE');
+  const hasSportybet = selectedBookmakers.includes('Sportybet');
+  const hasBetikaKE = selectedBookmakers.includes('betika KE');
   
-  const isKenyaFilterActive = useMemo(() => {
-    // Check if Kenya bookmakers are selected (betPawa KE and Betika KE)
-    return selectedBookmakers.includes('betPawa KE') && 
-           selectedBookmakers.includes('betika KE') &&
-           selectedBookmakers.length === 2;
-  }, [selectedBookmakers]);
+  // Ghana filter active if betPawa GH and Sportybet are selected
+  const isGhanaFilterActive = hasBetPawaGH && hasSportybet;
   
-  // Debug logging to check selected bookmakers
+  // Kenya filter active if betPawa KE and Betika KE are selected
+  const isKenyaFilterActive = hasBetPawaKE && hasBetikaKE;
+  
+  // Always show the comparison column if we have a betPawa vs competitor comparison available
+  const isComparisonAvailable = isGhanaFilterActive || isKenyaFilterActive;
+  
   console.log('Selected Bookmakers:', selectedBookmakers);
+  console.log('betPawa GH present:', hasBetPawaGH, 'Sportybet present:', hasSportybet);
+  console.log('betPawa KE present:', hasBetPawaKE, 'Betika KE present:', hasBetikaKE);
   console.log('Ghana filter active:', isGhanaFilterActive);
   console.log('Kenya filter active:', isKenyaFilterActive);
-  
-  // Either Ghana or Kenya filter is active
-  const isQuickFilterActive = isGhanaFilterActive || isKenyaFilterActive;
+  console.log('Comparison available:', isComparisonAvailable);
   
   // Helper function to determine if odds should be highlighted
   const getOddsHighlightType = (event: any, market: string, bookmakerCode: string): 'highest' | 'lowest' | 'none' => {
@@ -260,7 +259,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
             <TableHead className="w-20 px-2 py-2 text-center text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               Margin
             </TableHead>
-            {isQuickFilterActive && (
+            {isComparisonAvailable && (
               <TableHead className="w-20 px-2 py-2 text-center text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
                 {isGhanaFilterActive ? 'betPawa GH vs Sporty' : 'betPawa KE vs Betika'}
               </TableHead>
@@ -418,7 +417,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                       })()}
                     </TableCell>
                     
-                    {isQuickFilterActive && (
+                    {isComparisonAvailable && (
                       <TableCell className="px-2 py-1 whitespace-nowrap text-center">
                         {isFirstBookmaker && (() => {
                           // Only calculate and show this in the first row for each event
