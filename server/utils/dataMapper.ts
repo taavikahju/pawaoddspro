@@ -57,16 +57,32 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       }
       
       // If we found at least one match and it has the required data
-      if (firstMatch && firstMatch.teams && firstMatch.league) {
+      if (firstMatch) {
+        // Construct the league field as "Country Tournament" if both are available
+        let league = firstMatch.league;
+        if (firstMatch.country && firstMatch.tournament) {
+          league = `${firstMatch.country} ${firstMatch.tournament}`;
+        } else if (firstMatch.country) {
+          league = firstMatch.country;
+        } else if (firstMatch.tournament) {
+          league = firstMatch.tournament;
+        }
+        
+        // Create the teams field if not already available
+        let teams = firstMatch.teams;
+        if (!teams && firstMatch.event) {
+          teams = firstMatch.event;
+        }
+        
         // Create event in our map
         eventMap.set(eventId, {
           externalId: firstMatch.id || eventId,
           eventId: eventId,
-          teams: firstMatch.teams,
-          league: firstMatch.league,
+          teams: teams || 'Unknown',
+          league: league || 'Unknown',
           sportId: getSportId(firstMatch.sport || 'football'),
-          date: firstMatch.date || 'Unknown',
-          time: firstMatch.time || 'Unknown',
+          date: firstMatch.date || firstMatch.start_time?.split(' ')[0] || 'Unknown',
+          time: firstMatch.time || firstMatch.start_time?.split(' ')[1] || 'Unknown',
           oddsData: bookmakerOdds,
           bestOdds: {}
         });

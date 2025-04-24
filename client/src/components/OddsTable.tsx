@@ -142,7 +142,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                           rowSpan={filteredBookmakers.length}
                         >
                           <span className="text-xs text-gray-600 dark:text-gray-300">
-                            {event.league?.split(' ').slice(1).join(' ') || event.league || 'Unknown'}
+                            {event.league?.includes(' ') ? event.league?.split(' ').slice(1).join(' ') : 'Unknown'}
                           </span>
                         </TableCell>
                         
