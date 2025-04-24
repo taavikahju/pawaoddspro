@@ -216,26 +216,8 @@ export default function AdminPage() {
     mutationFn: async (bookmakerCode: string) => {
       console.log('Testing scraper for bookmaker:', bookmakerCode);
       
-      // Use a more controlled approach to avoid issues with special characters
-      try {
-        const response = await fetch(`/api/scrapers/test/${encodeURIComponent(bookmakerCode)}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
-        
-        if (!response.ok) {
-          const errorText = await response.text();
-          console.error('Test scraper response error:', errorText);
-          throw new Error(errorText || `HTTP error ${response.status}`);
-        }
-        
-        return response.json();
-      } catch (error) {
-        console.error('Test scraper error:', error);
-        throw error;
-      }
+      const response = await apiRequest(`/api/scrapers/test/${encodeURIComponent(bookmakerCode)}`, 'POST');
+      return response.json();
     },
     onSuccess: (data) => {
       setTestResults(data);
