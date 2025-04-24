@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import ReactCountryFlag from 'react-country-flag';
 import Layout from '@/components/Layout';
 import OddsTable from '@/components/OddsTable';
 import { useBookmakerContext } from '@/contexts/BookmakerContext';
@@ -145,6 +146,72 @@ export default function Dashboard() {
     return sportMap[sportId] || 'Unknown';
   };
   
+  // Get country code for flag display
+  const getCountryCode = (countryName: string): string => {
+    // Map to standard ISO country codes
+    const countryCodeMap: Record<string, string> = {
+      'Kenya': 'KE',
+      'Ghana': 'GH',
+      'Nigeria': 'NG',
+      'England': 'GB',
+      'Spain': 'ES',
+      'Germany': 'DE',
+      'Italy': 'IT',
+      'France': 'FR',
+      'Portugal': 'PT',
+      'Netherlands': 'NL',
+      'Belgium': 'BE',
+      'Brazil': 'BR',
+      'Argentina': 'AR',
+      'Mexico': 'MX',
+      'USA': 'US',
+      'United States': 'US',
+      'Canada': 'CA',
+      'Australia': 'AU',
+      'Japan': 'JP',
+      'China': 'CN',
+      'India': 'IN',
+      'South Africa': 'ZA',
+      'Egypt': 'EG',
+      'Morocco': 'MA',
+      'Tunisia': 'TN',
+      'Algeria': 'DZ',
+      'Senegal': 'SN',
+      'Cameroon': 'CM',
+      'Ivory Coast': 'CI',
+      'Tanzania': 'TZ',
+      'Uganda': 'UG',
+      'South Korea': 'KR',
+      'Turkey': 'TR',
+      'Russia': 'RU',
+      'Ukraine': 'UA',
+      'Poland': 'PL',
+      'Sweden': 'SE',
+      'Norway': 'NO',
+      'Denmark': 'DK',
+      'Finland': 'FI',
+      'Switzerland': 'CH',
+      'Austria': 'AT',
+      'Czech Republic': 'CZ',
+      'Croatia': 'HR',
+      'Serbia': 'RS',
+      'Greece': 'GR',
+      'Romania': 'RO',
+      'Bulgaria': 'BG',
+      'Hungary': 'HU',
+      'Scotland': 'GB-SCT',
+      'Wales': 'GB-WLS',
+      'Northern Ireland': 'GB-NIR',
+      'Ireland': 'IE',
+      'Saudi Arabia': 'SA',
+      'Qatar': 'QA',
+      'UAE': 'AE',
+      'United Arab Emirates': 'AE'
+    };
+    
+    return countryCodeMap[countryName] || 'XX'; // XX is used for unknown
+  };
+  
   // Get the sport name based on the first event in filtered list
   const sportTitle = filteredEvents.length > 0 
     ? getSportName(filteredEvents[0].sportId) 
@@ -163,15 +230,50 @@ export default function Dashboard() {
               value={countryFilter}
               onValueChange={setCountryFilter}
             >
-              <SelectTrigger className="h-8 w-[150px] text-xs">
-                <GlobeIcon className="h-3 w-3 mr-1 text-gray-500" />
-                <SelectValue placeholder="Country" />
+              <SelectTrigger className="h-8 w-[160px] text-xs">
+                {countryFilter === 'all' ? (
+                  <div className="flex items-center">
+                    <GlobeIcon className="h-3 w-3 mr-1 text-gray-500" />
+                    <span>Country</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center">
+                    <ReactCountryFlag 
+                      countryCode={getCountryCode(countryFilter)} 
+                      svg 
+                      style={{
+                        width: '1em',
+                        height: '1em',
+                        marginRight: '0.3rem'
+                      }}
+                      title={countryFilter}
+                    />
+                    <span>{countryFilter}</span>
+                  </div>
+                )}
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Countries</SelectItem>
+                <SelectItem value="all">
+                  <div className="flex items-center">
+                    <GlobeIcon className="h-4 w-4 mr-2 text-gray-500" />
+                    <span>All Countries</span>
+                  </div>
+                </SelectItem>
                 {availableCountries.map((country) => (
                   <SelectItem key={country} value={country}>
-                    {country}
+                    <div className="flex items-center">
+                      <ReactCountryFlag 
+                        countryCode={getCountryCode(country)} 
+                        svg 
+                        style={{
+                          width: '1.2em',
+                          height: '1.2em',
+                          marginRight: '0.5rem'
+                        }}
+                        title={country}
+                      />
+                      <span>{country}</span>
+                    </div>
                   </SelectItem>
                 ))}
               </SelectContent>
