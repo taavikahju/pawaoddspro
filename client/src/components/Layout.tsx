@@ -75,23 +75,6 @@ export default function Layout({ children, title, subtitle }: LayoutProps) {
               </Link>
             </div>
             <div className="flex items-center space-x-4">
-              <div className="relative hidden md:block">
-                <Input
-                  type="text"
-                  placeholder="Search events..."
-                  className="px-3 py-2 pr-10 block w-full bg-blue-700/30 border-blue-500/50 text-white placeholder:text-blue-200"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                <Button 
-                  variant="ghost" 
-                  size="icon"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-blue-200 hover:text-white"
-                >
-                  <Search className="h-5 w-5" />
-                </Button>
-              </div>
-              
               <Button
                 variant="ghost"
                 size="icon"
