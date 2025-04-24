@@ -1,31 +1,5 @@
 [
   {
-    "id": "59902956",
-    "eventId": "59902956",
-    "teams": "Mjoendalen IF - Stroemsgodset IF",
-    "league": "NM Cup",
-    "sport": "football",
-    "country": "Norway",
-    "date": "2025-04-24",
-    "time": "17:05",
-    "odds": {
-      "home": 9,
-      "draw": 5.5,
-      "away": 1.23
-    },
-    "raw": {
-      "eventId": "59902956",
-      "country": "Norway",
-      "tournament": "NM Cup",
-      "event": "Mjoendalen IF - Stroemsgodset IF",
-      "market": "1X2 - FT",
-      "home_odds": "9.0",
-      "draw_odds": "5.5",
-      "away_odds": "1.23",
-      "start_time": "2025-04-24 17:05"
-    }
-  },
-  {
     "id": "59560323",
     "eventId": "59560323",
     "teams": "FC CFR 1907 Cluj - FC Farul Constanta",
@@ -269,9 +243,9 @@
     "date": "2025-04-24",
     "time": "18:00",
     "odds": {
-      "home": 5.5,
-      "draw": 3.2,
-      "away": 1.65
+      "home": 5,
+      "draw": 3.15,
+      "away": 1.7
     },
     "raw": {
       "eventId": "58281065",
@@ -279,9 +253,9 @@
       "tournament": "Argentina Liga Profesional de Fútbol Reserves",
       "event": "Barracas Central Reserves - Estudiantes de La Plata Reserves",
       "market": "1X2 - FT",
-      "home_odds": "5.5",
-      "draw_odds": "3.2",
-      "away_odds": "1.65",
+      "home_odds": "5.0",
+      "draw_odds": "3.15",
+      "away_odds": "1.7",
       "start_time": "2025-04-24 18:00"
     }
   },
@@ -4039,9 +4013,9 @@
     "date": "2025-04-25",
     "time": "16:00",
     "odds": {
-      "home": 5.25,
-      "draw": 3.9,
-      "away": 1.54
+      "home": 5.75,
+      "draw": 4.1,
+      "away": 1.46
     },
     "raw": {
       "eventId": "58435703",
@@ -4049,9 +4023,9 @@
       "tournament": "Jordan Pro League",
       "event": "Al-Sareeh - Al Faisaly SC",
       "market": "1X2 - FT",
-      "home_odds": "5.25",
-      "draw_odds": "3.9",
-      "away_odds": "1.54",
+      "home_odds": "5.75",
+      "draw_odds": "4.1",
+      "away_odds": "1.46",
       "start_time": "2025-04-25 16:00"
     }
   },
@@ -5183,9 +5157,9 @@
     "date": "2025-04-25",
     "time": "17:00",
     "odds": {
-      "home": 4.35,
-      "draw": 3.95,
-      "away": 1.61
+      "home": 4.25,
+      "draw": 4.15,
+      "away": 1.59
     },
     "raw": {
       "eventId": "51470191",
@@ -5193,9 +5167,9 @@
       "tournament": "Regionalliga Southwest",
       "event": "FC 08 Villingen - FSV Frankfurt 1899",
       "market": "1X2 - FT",
-      "home_odds": "4.35",
-      "draw_odds": "3.95",
-      "away_odds": "1.61",
+      "home_odds": "4.25",
+      "draw_odds": "4.15",
+      "away_odds": "1.59",
       "start_time": "2025-04-25 17:00"
     }
   },
@@ -13828,6 +13802,32 @@
       "home_odds": "1.49",
       "draw_odds": "4.5",
       "away_odds": "6.0",
+      "start_time": "2025-04-26 14:00"
+    }
+  },
+  {
+    "id": "59886242",
+    "eventId": "59886242",
+    "teams": "Kilmarnock FC - Ross County FC",
+    "league": "Premiership",
+    "sport": "football",
+    "country": "Scotland",
+    "date": "2025-04-26",
+    "time": "14:00",
+    "odds": {
+      "home": 1.59,
+      "draw": 3.95,
+      "away": 5.5
+    },
+    "raw": {
+      "eventId": "59886242",
+      "country": "Scotland",
+      "tournament": "Premiership",
+      "event": "Kilmarnock FC - Ross County FC",
+      "market": "1X2 - FT",
+      "home_odds": "1.59",
+      "draw_odds": "3.95",
+      "away_odds": "5.5",
       "start_time": "2025-04-26 14:00"
     }
   },
