@@ -772,7 +772,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Endpoint to run all scrapers manually
-  app.post('/api/scrapers/run', async (req, res) => {
+  app.post('/api/scrapers/run', isAdmin, async (req, res) => {
     try {
       // Send immediate response
       res.json({ 
@@ -822,7 +822,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Endpoint to upload a scraper script
-  app.post('/api/scrapers/upload', (req, res, next) => {
+  app.post('/api/scrapers/upload', isAdmin, (req, res, next) => {
     console.log('Upload request received:', req.body);
     
     // Store the bookmaker code in req before multer processes the file
@@ -955,7 +955,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // CRUD endpoints for bookmakers
-  app.post('/api/bookmakers', async (req, res) => {
+  app.post('/api/bookmakers', isAdmin, async (req, res) => {
     try {
       const bookmaker = req.body;
       const createdBookmaker = await storage.createBookmaker(bookmaker);
@@ -966,7 +966,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.patch('/api/bookmakers/:id', async (req, res) => {
+  app.patch('/api/bookmakers/:id', isAdmin, async (req, res) => {
     try {
       const id = parseInt(req.params.id, 10);
       if (isNaN(id)) {
@@ -986,7 +986,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  app.delete('/api/bookmakers/:id', async (req, res) => {
+  app.delete('/api/bookmakers/:id', isAdmin, async (req, res) => {
     try {
       const id = parseInt(req.params.id, 10);
       if (isNaN(id)) {
@@ -1030,7 +1030,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // CRUD endpoints for sports
-  app.post('/api/sports', async (req, res) => {
+  app.post('/api/sports', isAdmin, async (req, res) => {
     try {
       const sport = req.body;
       const createdSport = await storage.createSport(sport);
@@ -1041,7 +1041,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.patch('/api/sports/:id', async (req, res) => {
+  app.patch('/api/sports/:id', isAdmin, async (req, res) => {
     try {
       const id = parseInt(req.params.id, 10);
       if (isNaN(id)) {

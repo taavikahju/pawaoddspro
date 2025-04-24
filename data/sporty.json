@@ -8407,9 +8407,9 @@
     "date": "2025-04-29",
     "time": "22:00",
     "odds": {
-      "home": 3.9,
+      "home": 3.7,
       "draw": 3.33,
-      "away": 1.98
+      "away": 2.05
     },
     "raw": {
       "eventId": "59752786",
@@ -8417,9 +8417,9 @@
       "tournament": "Copa do Brasil",
       "event": "Retro FC PE - Fortaleza EC CE",
       "market": "1X2",
-      "home_odds": "3.90",
+      "home_odds": "3.70",
       "draw_odds": "3.33",
-      "away_odds": "1.98",
+      "away_odds": "2.05",
       "start_time": "2025-04-29 22:00"
     }
   },
@@ -9993,9 +9993,9 @@
     "date": "2025-04-30",
     "time": "17:30",
     "odds": {
-      "home": 1.68,
-      "draw": 3.7,
-      "away": 5
+      "home": 1.64,
+      "draw": 3.8,
+      "away": 5.1
     },
     "raw": {
       "eventId": "59935415",
@@ -10003,9 +10003,9 @@
       "tournament": "Russian Cup",
       "event": "FK Zenit Saint Petersburg - CSKA Moscow",
       "market": "1X2",
-      "home_odds": "1.68",
-      "draw_odds": "3.70",
-      "away_odds": "5.00",
+      "home_odds": "1.64",
+      "draw_odds": "3.80",
+      "away_odds": "5.10",
       "start_time": "2025-04-30 17:30"
     }
   },
@@ -10929,9 +10929,9 @@
     "date": "2025-04-25",
     "time": "00:30",
     "odds": {
-      "home": 1.77,
+      "home": 1.8,
       "draw": 3.6,
-      "away": 4.6
+      "away": 4.4
     },
     "raw": {
       "eventId": "59009309",
@@ -10939,9 +10939,9 @@
       "tournament": "CONMEBOL Sudamericana",
       "event": "Deportes Iquique - CS Cienciano",
       "market": "1X2",
-      "home_odds": "1.77",
+      "home_odds": "1.80",
       "draw_odds": "3.60",
-      "away_odds": "4.60",
+      "away_odds": "4.40",
       "start_time": "2025-04-25 00:30"
     }
   },
@@ -26633,9 +26633,9 @@
     "date": "2025-04-25",
     "time": "17:45",
     "odds": {
-      "home": 1.81,
-      "draw": 3.4,
-      "away": 4.2
+      "home": 1.82,
+      "draw": 3.5,
+      "away": 4.25
     },
     "raw": {
       "eventId": "58220767",
@@ -26643,9 +26643,9 @@
       "tournament": "Vysshaya Liga",
       "event": "FC Slavia Mozyr - FK Arsenal Dzerzhinsk",
       "market": "1X2",
-      "home_odds": "1.81",
-      "draw_odds": "3.40",
-      "away_odds": "4.20",
+      "home_odds": "1.82",
+      "draw_odds": "3.50",
+      "away_odds": "4.25",
       "start_time": "2025-04-25 17:45"
     }
   },
@@ -29441,9 +29441,9 @@
     "date": "2025-04-26",
     "time": "12:00",
     "odds": {
-      "home": 2.95,
-      "draw": 3.5,
-      "away": 2.15
+      "home": 3,
+      "draw": 3.25,
+      "away": 2.2
     },
     "raw": {
       "eventId": "52123371",
@@ -29451,9 +29451,9 @@
       "tournament": "2. Lig",
       "event": "Somaspor - Ankara Demirspor",
       "market": "1X2",
-      "home_odds": "2.95",
-      "draw_odds": "3.50",
-      "away_odds": "2.15",
+      "home_odds": "3.00",
+      "draw_odds": "3.25",
+      "away_odds": "2.20",
       "start_time": "2025-04-26 12:00"
     }
   },
@@ -29597,9 +29597,9 @@
     "date": "2025-04-27",
     "time": "12:00",
     "odds": {
-      "home": 2.95,
-      "draw": 3.2,
-      "away": 2.2
+      "home": 2.65,
+      "draw": 3.1,
+      "away": 2.5
     },
     "raw": {
       "eventId": "52123377",
@@ -29607,9 +29607,9 @@
       "tournament": "2. Lig",
       "event": "Karacabey Belediyespor - Menemen Belediyespor",
       "market": "1X2",
-      "home_odds": "2.95",
-      "draw_odds": "3.20",
-      "away_odds": "2.20",
+      "home_odds": "2.65",
+      "draw_odds": "3.10",
+      "away_odds": "2.50",
       "start_time": "2025-04-27 12:00"
     }
   },
@@ -31226,6 +31226,58 @@
     }
   },
   {
+    "id": "58379769",
+    "eventId": "58379769",
+    "teams": "GBK Kokkola - Narpes Kraft",
+    "league": "Kakkonen, Group C",
+    "sport": "football",
+    "country": "Finland",
+    "date": "2025-04-26",
+    "time": "13:00",
+    "odds": {
+      "home": 1.43,
+      "draw": 5.4,
+      "away": 4.8
+    },
+    "raw": {
+      "eventId": "58379769",
+      "country": "Finland",
+      "tournament": "Kakkonen, Group C",
+      "event": "GBK Kokkola - Narpes Kraft",
+      "market": "1X2",
+      "home_odds": "1.43",
+      "draw_odds": "5.40",
+      "away_odds": "4.80",
+      "start_time": "2025-04-26 13:00"
+    }
+  },
+  {
+    "id": "58379771",
+    "eventId": "58379771",
+    "teams": "SJK Akatemia/2 - Tornion Pallo 47",
+    "league": "Kakkonen, Group C",
+    "sport": "football",
+    "country": "Finland",
+    "date": "2025-04-26",
+    "time": "16:00",
+    "odds": {
+      "home": 1.5,
+      "draw": 5.1,
+      "away": 4.4
+    },
+    "raw": {
+      "eventId": "58379771",
+      "country": "Finland",
+      "tournament": "Kakkonen, Group C",
+      "event": "SJK Akatemia/2 - Tornion Pallo 47",
+      "market": "1X2",
+      "home_odds": "1.50",
+      "draw_odds": "5.10",
+      "away_odds": "4.40",
+      "start_time": "2025-04-26 16:00"
+    }
+  },
+  {
     "id": "58436637",
     "eventId": "58436637",
     "teams": "FC Okzhetpes - Zhenis Nur-Sultan",
@@ -31431,32 +31483,6 @@
       "draw_odds": "4.25",
       "away_odds": "4.00",
       "start_time": "2025-04-25 17:30"
-    }
-  },
-  {
-    "id": "59970175",
-    "eventId": "59970175",
-    "teams": "Qadsia SC - Al-Salmiya SC",
-    "league": "Crown Prince Cup",
-    "sport": "football",
-    "country": "Kuwait",
-    "date": "2025-04-24",
-    "time": "17:45",
-    "odds": {
-      "home": 1.97,
-      "draw": 3.5,
-      "away": 3.25
-    },
-    "raw": {
-      "eventId": "59970175",
-      "country": "Kuwait",
-      "tournament": "Crown Prince Cup",
-      "event": "Qadsia SC - Al-Salmiya SC",
-      "market": "1X2",
-      "home_odds": "1.97",
-      "draw_odds": "3.50",
-      "away_odds": "3.25",
-      "start_time": "2025-04-24 17:45"
     }
   },
   {
