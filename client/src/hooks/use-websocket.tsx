@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 
 interface WebSocketMessage {
   type: string;
+  event?: string;
   data: any;
 }
 

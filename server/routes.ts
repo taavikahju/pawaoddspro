@@ -2,7 +2,7 @@ import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { z } from "zod";
-import { setupScrapers, runAllScrapers } from "./scrapers/scheduler";
+import { setupScrapers, runAllScrapers, scraperEvents, SCRAPER_EVENTS } from "./scrapers/scheduler";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
@@ -163,6 +163,113 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Initialize and setup scrapers
   setupScrapers(storage);
+  
+  // Set up event listeners for scraper events
+  // Scraper events
+  scraperEvents.on(SCRAPER_EVENTS.STARTED, (data) => {
+    broadcast({
+      type: 'scraperEvent',
+      event: SCRAPER_EVENTS.STARTED,
+      data
+    });
+  });
+  
+  scraperEvents.on(SCRAPER_EVENTS.COMPLETED, (data) => {
+    broadcast({
+      type: 'scraperEvent',
+      event: SCRAPER_EVENTS.COMPLETED,
+      data
+    });
+    
+    // Also broadcast updated stats and events
+    storage.getStats().then(stats => {
+      broadcast({
+        type: 'stats',
+        data: stats
+      });
+    });
+    
+    storage.getScraperStatuses().then(scraperStatuses => {
+      broadcast({
+        type: 'scraperStatuses',
+        data: scraperStatuses
+      });
+    });
+    
+    storage.getEvents().then(events => {
+      broadcast({
+        type: 'events',
+        data: events
+      });
+    });
+  });
+  
+  scraperEvents.on(SCRAPER_EVENTS.FAILED, (data) => {
+    broadcast({
+      type: 'scraperEvent',
+      event: SCRAPER_EVENTS.FAILED,
+      data
+    });
+    
+    // Also send notification
+    broadcast({
+      type: 'notification',
+      data: {
+        message: `Scraper failed: ${data.error}`,
+        status: 'error'
+      }
+    });
+  });
+  
+  // Bookmaker events
+  scraperEvents.on(SCRAPER_EVENTS.BOOKMAKER_STARTED, (data) => {
+    broadcast({
+      type: 'scraperEvent',
+      event: SCRAPER_EVENTS.BOOKMAKER_STARTED,
+      data
+    });
+  });
+  
+  scraperEvents.on(SCRAPER_EVENTS.BOOKMAKER_COMPLETED, (data) => {
+    broadcast({
+      type: 'scraperEvent',
+      event: SCRAPER_EVENTS.BOOKMAKER_COMPLETED,
+      data
+    });
+  });
+  
+  scraperEvents.on(SCRAPER_EVENTS.BOOKMAKER_FAILED, (data) => {
+    broadcast({
+      type: 'scraperEvent',
+      event: SCRAPER_EVENTS.BOOKMAKER_FAILED,
+      data
+    });
+  });
+  
+  // Processing events
+  scraperEvents.on(SCRAPER_EVENTS.PROCESSING_STARTED, (data) => {
+    broadcast({
+      type: 'scraperEvent',
+      event: SCRAPER_EVENTS.PROCESSING_STARTED,
+      data
+    });
+  });
+  
+  scraperEvents.on(SCRAPER_EVENTS.PROCESSING_COMPLETED, (data) => {
+    broadcast({
+      type: 'scraperEvent',
+      event: SCRAPER_EVENTS.PROCESSING_COMPLETED,
+      data
+    });
+  });
+  
+  scraperEvents.on(SCRAPER_EVENTS.PROCESSING_FAILED, (data) => {
+    broadcast({
+      type: 'scraperEvent',
+      event: SCRAPER_EVENTS.PROCESSING_FAILED,
+      data
+    });
+  });
 
   // API Routes
   app.get('/api/bookmakers', async (req, res) => {

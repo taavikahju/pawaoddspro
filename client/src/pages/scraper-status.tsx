@@ -2,9 +2,16 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Layout from '@/components/Layout';
 import ScraperStatusCard from '@/components/ScraperStatusCard';
-import { Database, Server, Clock, AlertCircle } from 'lucide-react';
+import ScraperActivityFeed from '@/components/ScraperActivityFeed';
+import { Database, Server, Clock, AlertCircle, Activity } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useWebSocket } from '@/hooks/use-websocket';
+import { useToast } from '@/hooks/use-toast';
 
 export default function ScraperStatus() {
+  const { toast } = useToast();
+  const { isConnected, runScrapers } = useWebSocket();
+  
   // Fetch scraper statuses
   const { 
     data: scraperStatuses = [],
@@ -19,6 +26,24 @@ export default function ScraperStatus() {
     scraper.status === 'Running'
   ).length;
   
+  // Handle manual trigger of scrapers
+  const handleRunScrapers = () => {
+    if (!isConnected) {
+      toast({
+        title: "WebSocket not connected",
+        description: "Cannot trigger scrapers. Please try again later.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    runScrapers();
+    toast({
+      title: "Scrapers triggered",
+      description: "Scrapers are now running. This may take a few minutes.",
+    });
+  };
+  
   return (
     <Layout 
       title="Scraper Status"
@@ -26,9 +51,19 @@ export default function ScraperStatus() {
     >
       {/* Header with stats */}
       <div className="bg-white dark:bg-slate-800 rounded-lg p-4 mb-6 shadow">
-        <div className="flex items-center mb-3">
-          <Database className="h-5 w-5 mr-2 text-primary" />
-          <h2 className="text-xl font-semibold text-gray-800 dark:text-white">Scrapers Overview</h2>
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center">
+            <Database className="h-5 w-5 mr-2 text-primary" />
+            <h2 className="text-xl font-semibold text-gray-800 dark:text-white">Scrapers Overview</h2>
+          </div>
+          
+          <Button 
+            onClick={handleRunScrapers}
+            disabled={!isConnected}
+            className="bg-primary"
+          >
+            Run Scrapers Now
+          </Button>
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-2">
@@ -57,41 +92,60 @@ export default function ScraperStatus() {
           </div>
         </div>
         
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
-          Scrapers run every 15 minutes to collect the latest odds data from bookmakers.
-        </p>
+        <div className="flex items-center mt-2">
+          <div className={`h-2.5 w-2.5 rounded-full mr-2 ${isConnected ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></div>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            {isConnected 
+              ? "WebSocket connected. Real-time updates active." 
+              : "WebSocket disconnected. Reconnecting..."}
+          </p>
+        </div>
       </div>
       
-      {/* Scraper Cards */}
-      <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
-        <Server className="h-4 w-4 mr-2 text-primary" />
-        Scraper Status
-      </h3>
-      
-      {isLoading ? (
-        <div className="h-64 flex items-center justify-center bg-white dark:bg-slate-800 rounded-lg shadow">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div>
+          {/* Scraper Cards */}
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
+            <Server className="h-4 w-4 mr-2 text-primary" />
+            Scraper Status
+          </h3>
+          
+          {isLoading ? (
+            <div className="h-64 flex items-center justify-center bg-white dark:bg-slate-800 rounded-lg shadow">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {scraperStatuses.map((scraper: any, index: number) => (
+                <ScraperStatusCard
+                  key={index}
+                  name={scraper.name}
+                  status={scraper.status}
+                  lastRun={scraper.lastRun}
+                  nextRun={scraper.nextRun}
+                  eventCount={scraper.eventCount}
+                  fileSize={scraper.fileSize}
+                />
+              ))}
+            </div>
+          )}
         </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          {scraperStatuses.map((scraper: any, index: number) => (
-            <ScraperStatusCard
-              key={index}
-              name={scraper.name}
-              status={scraper.status}
-              lastRun={scraper.lastRun}
-              nextRun={scraper.nextRun}
-              eventCount={scraper.eventCount}
-              fileSize={scraper.fileSize}
-            />
-          ))}
+        
+        <div>
+          {/* Activity Feed */}
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
+            <Activity className="h-4 w-4 mr-2 text-primary" />
+            Real-time Activity
+          </h3>
+          
+          <ScraperActivityFeed />
         </div>
-      )}
+      </div>
       
       {/* Footer Note */}
       <div className="text-center text-xs text-gray-500 dark:text-gray-400 mb-4">
         <p>Data is collected from bookmaker APIs every 15 minutes.</p>
-        <p className="mt-1">Log files are available in the data directory.</p>
+        <p className="mt-1">You can also trigger manual scraping using the button above.</p>
       </div>
     </Layout>
   );

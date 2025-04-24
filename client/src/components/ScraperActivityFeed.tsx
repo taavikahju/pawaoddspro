@@ -1,0 +1,139 @@
+import React, { useState, useEffect } from 'react';
+import { useWebSocket } from '@/hooks/use-websocket';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardFooter,
+} from "@/components/ui/card";
+import { Badge } from '@/components/ui/badge';
+import { formatDistanceToNow } from 'date-fns';
+
+interface ActivityItem {
+  id: string;
+  timestamp: string;
+  event: string;
+  message: string;
+  status: 'info' | 'success' | 'warning' | 'error';
+  data?: any;
+}
+
+export default function ScraperActivityFeed() {
+  const { lastMessage } = useWebSocket();
+  const [activities, setActivities] = useState<ActivityItem[]>([]);
+
+  useEffect(() => {
+    if (lastMessage && lastMessage.type === 'scraperEvent') {
+      const { event, data } = lastMessage;
+      
+      const newActivity: ActivityItem = {
+        id: `${event}-${Date.now()}`,
+        timestamp: data.timestamp || new Date().toISOString(),
+        event,
+        message: data.message || 'Activity update',
+        status: getStatusFromEvent(event),
+        data
+      };
+      
+      setActivities(prev => [newActivity, ...prev].slice(0, 50)); // Keep only last 50 activities
+    }
+  }, [lastMessage]);
+
+  // Map event types to status
+  const getStatusFromEvent = (event: string): 'info' | 'success' | 'warning' | 'error' => {
+    if (event.includes('COMPLETED')) {
+      return 'success';
+    } else if (event.includes('STARTED')) {
+      return 'info';
+    } else if (event.includes('FAILED')) {
+      return 'error';
+    } else {
+      return 'info';
+    }
+  };
+
+  // Get badge color based on status
+  const getBadgeColor = (status: string): string => {
+    switch (status) {
+      case 'success':
+        return 'bg-green-500 hover:bg-green-600';
+      case 'error':
+        return 'bg-red-500 hover:bg-red-600';
+      case 'warning':
+        return 'bg-yellow-500 hover:bg-yellow-600';
+      default:
+        return 'bg-blue-500 hover:bg-blue-600';
+    }
+  };
+
+  // Format event name for display
+  const formatEventName = (event: string): string => {
+    return event
+      .replace('scraper:', '')
+      .split(':')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
+  };
+
+  return (
+    <Card className="h-full">
+      <CardHeader>
+        <CardTitle className="text-lg">Scraper Activity</CardTitle>
+        <CardDescription>Real-time updates from scrapers</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <ScrollArea className="h-[500px] pr-4">
+          {activities.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              No activity yet. Activities will appear here when scrapers run.
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {activities.map((activity) => (
+                <div 
+                  key={activity.id} 
+                  className="border rounded-lg p-3 shadow-sm transition-all hover:shadow-md"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <Badge className={getBadgeColor(activity.status)}>
+                      {formatEventName(activity.event)}
+                    </Badge>
+                    <span className="text-xs text-muted-foreground">
+                      {formatDistanceToNow(new Date(activity.timestamp), { addSuffix: true })}
+                    </span>
+                  </div>
+                  <p className="text-sm mb-2">{activity.message}</p>
+                  
+                  {/* Render additional data if available */}
+                  {activity.data && activity.data.bookmaker && (
+                    <div className="text-xs text-muted-foreground mt-2">
+                      <span className="font-semibold">Bookmaker:</span> {activity.data.bookmaker.name}
+                    </div>
+                  )}
+                  
+                  {activity.data && activity.data.eventCount !== undefined && (
+                    <div className="text-xs text-muted-foreground">
+                      <span className="font-semibold">Events:</span> {activity.data.eventCount}
+                    </div>
+                  )}
+                  
+                  {activity.data && activity.data.error && (
+                    <div className="text-xs text-red-500 mt-1">
+                      <span className="font-semibold">Error:</span> {activity.data.error}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </ScrollArea>
+      </CardContent>
+      <CardFooter className="text-xs text-muted-foreground">
+        Showing the last {Math.min(activities.length, 50)} activities
+      </CardFooter>
+    </Card>
+  );
+}

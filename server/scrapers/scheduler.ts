@@ -66,6 +66,12 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
   try {
     console.log('Starting scraper runs...');
     
+    // Emit scraper started event
+    scraperEvents.emit(SCRAPER_EVENTS.STARTED, {
+      timestamp: new Date().toISOString(),
+      message: 'Starting scraper runs'
+    });
+    
     // Get all bookmakers
     const bookmakers = await storage.getBookmakers();
     
@@ -75,6 +81,17 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
       .map(async (bookmaker) => {
         try {
           console.log(`Running scraper for ${bookmaker.name}...`);
+          
+          // Emit bookmaker scraper started event
+          scraperEvents.emit(SCRAPER_EVENTS.BOOKMAKER_STARTED, {
+            timestamp: new Date().toISOString(),
+            bookmaker: {
+              code: bookmaker.code,
+              name: bookmaker.name
+            },
+            message: `Running scraper for ${bookmaker.name}`
+          });
+          
           let data: any = null;
           
           // Check if custom scraper exists
@@ -127,6 +144,18 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
                 break;
               default:
                 console.warn(`No scraper found for bookmaker ${bookmaker.code}`);
+                
+                // Emit bookmaker scraper failed event
+                scraperEvents.emit(SCRAPER_EVENTS.BOOKMAKER_FAILED, {
+                  timestamp: new Date().toISOString(),
+                  bookmaker: {
+                    code: bookmaker.code,
+                    name: bookmaker.name
+                  },
+                  message: `No scraper found for bookmaker ${bookmaker.code}`,
+                  error: 'No scraper available'
+                });
+                
                 return null;
             }
           }
@@ -134,11 +163,34 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
           if (data) {
             await storage.saveBookmakerData(bookmaker.code, data);
             console.log(`Saved data for ${bookmaker.name}`);
+            
+            // Emit bookmaker scraper completed event
+            scraperEvents.emit(SCRAPER_EVENTS.BOOKMAKER_COMPLETED, {
+              timestamp: new Date().toISOString(),
+              bookmaker: {
+                code: bookmaker.code,
+                name: bookmaker.name
+              },
+              message: `Completed scraping for ${bookmaker.name}`,
+              eventCount: Array.isArray(data) ? data.length : 0
+            });
           }
           
           return { bookmaker: bookmaker.code, data };
         } catch (error) {
           console.error(`Error scraping ${bookmaker.name}:`, error);
+          
+          // Emit bookmaker scraper failed event
+          scraperEvents.emit(SCRAPER_EVENTS.BOOKMAKER_FAILED, {
+            timestamp: new Date().toISOString(),
+            bookmaker: {
+              code: bookmaker.code,
+              name: bookmaker.name
+            },
+            message: `Error scraping ${bookmaker.name}`,
+            error: error instanceof Error ? error.message : String(error)
+          });
+          
           return { bookmaker: bookmaker.code, error, data: null };
         }
       });
@@ -147,14 +199,54 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
     const results = await Promise.all(scraperPromises);
     console.log('All scrapers completed');
     
-    // Process and map events
-    await processAndMapEvents(storage);
+    // Emit processing started event
+    scraperEvents.emit(SCRAPER_EVENTS.PROCESSING_STARTED, {
+      timestamp: new Date().toISOString(),
+      message: 'Processing and mapping events'
+    });
+    
+    try {
+      // Process and map events
+      await processAndMapEvents(storage);
+      
+      // Emit processing completed event
+      scraperEvents.emit(SCRAPER_EVENTS.PROCESSING_COMPLETED, {
+        timestamp: new Date().toISOString(),
+        message: 'Completed processing and mapping events'
+      });
+    } catch (processingError) {
+      console.error('Error processing events:', processingError);
+      
+      // Emit processing failed event
+      scraperEvents.emit(SCRAPER_EVENTS.PROCESSING_FAILED, {
+        timestamp: new Date().toISOString(),
+        message: 'Error processing and mapping events',
+        error: processingError instanceof Error ? processingError.message : String(processingError)
+      });
+      
+      throw processingError;
+    }
     
     // Update stats
-    await storage.getStats();
+    const stats = await storage.getStats();
+    
+    // Emit scraper completed event
+    scraperEvents.emit(SCRAPER_EVENTS.COMPLETED, {
+      timestamp: new Date().toISOString(),
+      message: 'All scrapers completed successfully',
+      stats
+    });
     
   } catch (error) {
     console.error('Error running scrapers:', error);
+    
+    // Emit scraper failed event
+    scraperEvents.emit(SCRAPER_EVENTS.FAILED, {
+      timestamp: new Date().toISOString(),
+      message: 'Error running scrapers',
+      error: error instanceof Error ? error.message : String(error)
+    });
+    
     throw error;
   }
 }
