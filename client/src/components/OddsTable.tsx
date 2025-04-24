@@ -58,6 +58,18 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
     return colorMap[bookmakerCode] || '';
   };
   
+  // Calculate margin for a bookmaker's odds
+  const calculateMargin = (homeOdds?: number, drawOdds?: number, awayOdds?: number): number | null => {
+    if (!homeOdds || !drawOdds || !awayOdds) return null;
+    
+    try {
+      const margin = (1 / homeOdds) + (1 / drawOdds) + (1 / awayOdds);
+      return margin;
+    } catch (error) {
+      return null;
+    }
+  };
+  
   if (isLoading) {
     return (
       <div className="h-48 flex items-center justify-center">
@@ -114,6 +126,9 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
             </TableHead>
             <TableHead className="sticky top-0 w-16 px-2 py-2 text-center text-[10px] font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               Away
+            </TableHead>
+            <TableHead className="sticky top-0 w-20 px-2 py-2 text-center text-[10px] font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+              Margin
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -210,7 +225,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                       </span>
                     </TableCell>
                     
-                    <TableCell className="px-2 py-1 whitespace-nowrap text-center">
+                    <TableCell className="px-2 py-1 whitespace-nowrap text-center border-r border-gray-200 dark:border-gray-700">
                       <span 
                         className={cn(
                           "text-[10px] font-medium px-1 py-0.5 rounded",
@@ -221,6 +236,32 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                       >
                         {event.oddsData?.[bookmaker.code]?.away?.toFixed(2) || '-'}
                       </span>
+                    </TableCell>
+                    
+                    <TableCell className="px-2 py-1 whitespace-nowrap text-center">
+                      {(() => {
+                        const homeOdds = event.oddsData?.[bookmaker.code]?.home;
+                        const drawOdds = event.oddsData?.[bookmaker.code]?.draw;
+                        const awayOdds = event.oddsData?.[bookmaker.code]?.away;
+                        const margin = calculateMargin(homeOdds, drawOdds, awayOdds);
+                        
+                        const marginPercentage = margin ? ((margin - 1) * 100).toFixed(1) : '-';
+                        
+                        let colorClass = "text-gray-600 dark:text-gray-400";
+                        if (margin) {
+                          if (margin < 1.05) colorClass = "text-green-600 dark:text-green-400";
+                          else if (margin >= 1.05 && margin < 1.1) colorClass = "text-yellow-600 dark:text-yellow-400";
+                          else colorClass = "text-red-600 dark:text-red-400";
+                        }
+                        
+                        return (
+                          <span 
+                            className={`text-[10px] font-medium px-1 py-0.5 rounded bg-gray-50 dark:bg-gray-800 ${colorClass}`}
+                          >
+                            {marginPercentage !== '-' ? `${marginPercentage}%` : '-'}
+                          </span>
+                        );
+                      })()}
                     </TableCell>
                   </TableRow>
                 );
