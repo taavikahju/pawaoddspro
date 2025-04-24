@@ -3,25 +3,42 @@ name: Deploy to Production
 on:
   push:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-      
-    - name: Deploy to Production Server
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.SSH_KEY }}
-        script: |
-          cd /var/www/pawaodds
-          git pull
-          npm install
-          npm run build
-          npm run db:push
-          pm2 restart pawaodds
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          
+      - name: Add host to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -t rsa ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+          
+      - name: Deploy to server
+        env:
+          SERVER_IP: ${{ secrets.SERVER_IP }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+          SERVER_DIR: ${{ secrets.SERVER_DIR }}
+        run: |
+          echo "Deploying to $SERVER_USER@$SERVER_IP:$SERVER_DIR"
+          ssh $SERVER_USER@$SERVER_IP "cd $SERVER_DIR && git pull"
+          ssh $SERVER_USER@$SERVER_IP "cd $SERVER_DIR && npm ci"
+          ssh $SERVER_USER@$SERVER_IP "cd $SERVER_DIR && npm run build"
+          ssh $SERVER_USER@$SERVER_IP "cd $SERVER_DIR && npm run db:push"
+          ssh $SERVER_USER@$SERVER_IP "cd $SERVER_DIR && pm2 restart pawaodds || pm2 start ecosystem.config.js"
+          
+      - name: Verify deployment
+        env:
+          SERVER_IP: ${{ secrets.SERVER_IP }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+        run: |
+          ssh $SERVER_USER@$SERVER_IP "pm2 status"
+          echo "Deployment completed successfully!"

@@ -1,215 +1,62 @@
-# Deployment Guide: pawaodds.pro to Hetzner Cloud
+# Deployment Guide for PawaOdds.pro
 
-This guide outlines the steps to deploy the pawaodds.pro application to a Hetzner Cloud server using GitHub for version control and automated deployments.
+This guide provides comprehensive instructions for deploying the PawaOdds application to a production environment. The application is designed to be deployed on a Hetzner Cloud server, but the instructions can be adapted for other hosting providers.
+
+## Table of Contents
+
+1. [Prerequisites](#prerequisites)
+2. [Deploy with GitHub Actions (Recommended)](#deploy-with-github-actions-recommended)
+3. [Manual Deployment](#manual-deployment)
+4. [Docker Deployment](#docker-deployment)
+5. [Environment Configuration](#environment-configuration)
+6. [Database Backups](#database-backups)
+7. [Troubleshooting](#troubleshooting)
 
 ## Prerequisites
 
-- A Hetzner Cloud account
-- A GitHub account
-- A domain name (optional, but recommended for production)
-- SSH access to your server
+- A GitHub account and repository for your code
+- A Hetzner Cloud account (or another cloud provider)
+- Basic knowledge of Linux, Git, and Node.js
+- Domain name (optional)
 
-## 1. Set Up GitHub Repository
+## Deploy with GitHub Actions (Recommended)
 
-1. Create a new repository on GitHub
-2. Initialize Git in your local project:
+This method provides continuous deployment through GitHub Actions.
 
-```bash
-git init
-git add .
-git commit -m "Initial commit"
-git branch -M main
-git remote add origin https://github.com/yourusername/pawaodds.git
-git push -u origin main
-```
+### Step 1: Set Up Server
 
-## 2. Set Up Hetzner Cloud Server
-
-1. Log in to your Hetzner Cloud account
-2. Create a new server:
-   - Choose Ubuntu 22.04 as the operating system
-   - Select a server plan with at least 2vCPU and 4GB RAM (CPX21 recommended)
-   - Add your SSH key for secure access
-   - Create the server
-
-## 3. Prepare Server Environment
-
-Connect to your server via SSH and set up the necessary environment:
+1. Create a Hetzner Cloud server (CPX11 or higher recommended - 2GB RAM, 1 vCPU)
+2. Choose Ubuntu 22.04 as the operating system
+3. Upload your SSH key during server creation or add it later
+4. Connect to your server via SSH: `ssh root@your-server-ip`
+5. Run the setup script:
 
 ```bash
-# Update system packages
-sudo apt update
-sudo apt upgrade -y
+# Download the setup script
+curl -O https://raw.githubusercontent.com/yourusername/pawaodds/main/scripts/setup-server.sh
 
-# Install Node.js 20.x
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-sudo apt install -y nodejs
+# Make it executable
+chmod +x setup-server.sh
 
-# Verify installation
-node -v
-npm -v
-
-# Install Python 3 (should be pre-installed on Ubuntu 22.04)
-sudo apt install -y python3 python3-pip
-
-# Install PostgreSQL
-sudo apt install -y postgresql postgresql-contrib
-
-# Install Git
-sudo apt install -y git
-
-# Install PM2 process manager
-sudo npm install -g pm2
+# Run the script
+./setup-server.sh
 ```
 
-## 4. Set Up PostgreSQL Database
+6. Follow the prompts to set up the deploy user and environment
+7. Save the generated credentials from the output
 
-```bash
-# Log in to PostgreSQL
-sudo -u postgres psql
+### Step 2: Configure GitHub Secrets
 
-# Create database and user
-CREATE DATABASE pawaodds;
-CREATE USER pawauser WITH ENCRYPTED PASSWORD 'your_strong_password';
-GRANT ALL PRIVILEGES ON DATABASE pawaodds TO pawauser;
-\q
+In your GitHub repository, go to Settings > Secrets and variables > Actions, and add the following secrets:
 
-# Update PostgreSQL to allow password authentication
-sudo nano /etc/postgresql/14/main/pg_hba.conf
-```
+- `SSH_PRIVATE_KEY`: Your SSH private key (content of ~/.ssh/id_rsa)
+- `SERVER_IP`: Your server IP address
+- `SERVER_USER`: Username to connect with (e.g., `deploy`)
+- `SERVER_DIR`: Application directory (e.g., `/var/www/pawaodds`)
 
-Edit the `pg_hba.conf` file, changing `peer` to `md5` for local connections.
+### Step 3: Configure GitHub Actions
 
-```bash
-# Restart PostgreSQL
-sudo systemctl restart postgresql
-```
-
-## 5. Clone Repository and Install Dependencies
-
-```bash
-# Create application directory
-mkdir -p /var/www/pawaodds
-cd /var/www/pawaodds
-
-# Clone your repository
-git clone https://github.com/yourusername/pawaodds.git .
-
-# Install dependencies
-npm install
-
-# Create .env file
-nano .env
-```
-
-Add the following environment variables to the `.env` file:
-
-```
-DATABASE_URL=postgres://pawauser:your_strong_password@localhost:5432/pawaodds
-ADMIN_KEY=your_admin_key
-NODE_ENV=production
-```
-
-## 6. Build and Initialize the Database
-
-```bash
-# Push database schema
-npm run db:push
-
-# Build the client
-npm run build
-```
-
-## 7. Set Up Process Manager (PM2)
-
-Create a PM2 configuration file:
-
-```bash
-nano ecosystem.config.js
-```
-
-Add this configuration:
-
-```javascript
-module.exports = {
-  apps: [
-    {
-      name: "pawaodds",
-      script: "tsx",
-      args: "server/index.ts",
-      env: {
-        NODE_ENV: "production",
-        PORT: "3000"
-      },
-      watch: false,
-      max_memory_restart: "1G"
-    }
-  ]
-}
-```
-
-Start the application:
-
-```bash
-# Start the application
-pm2 start ecosystem.config.js
-
-# Set up PM2 to start on system boot
-pm2 startup
-pm2 save
-```
-
-## 8. Set Up Nginx as Reverse Proxy
-
-```bash
-# Install Nginx
-sudo apt install -y nginx
-
-# Configure Nginx
-sudo nano /etc/nginx/sites-available/pawaodds
-```
-
-Add this configuration:
-
-```nginx
-server {
-    listen 80;
-    server_name your-domain.com;
-
-    location / {
-        proxy_pass http://localhost:3000;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;
-    }
-}
-```
-
-Enable the site:
-
-```bash
-sudo ln -s /etc/nginx/sites-available/pawaodds /etc/nginx/sites-enabled/
-sudo nginx -t
-sudo systemctl restart nginx
-```
-
-## 9. Set Up SSL with Let's Encrypt (Optional but Recommended)
-
-```bash
-# Install Certbot
-sudo apt install -y certbot python3-certbot-nginx
-
-# Obtain and install certificate
-sudo certbot --nginx -d your-domain.com
-
-# Auto-renewal is set up by default
-```
-
-## 10. Set Up GitHub Actions for Automated Deployment (Optional)
-
-Create a GitHub Actions workflow file in your repository at `.github/workflows/deploy.yml`:
+The workflow file should already be in your repository at `.github/workflows/deploy.yml`. If not, create it with this content:
 
 ```yaml
 name: Deploy to Production
@@ -217,48 +64,178 @@ name: Deploy to Production
 on:
   push:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
     steps:
-    - name: Deploy to Production Server
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.SSH_KEY }}
-        script: |
-          cd /var/www/pawaodds
-          git pull
-          npm install
-          npm run build
-          npm run db:push
-          pm2 restart pawaodds
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          
+      - name: Add host to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -t rsa ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+          
+      - name: Deploy to server
+        env:
+          SERVER_IP: ${{ secrets.SERVER_IP }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+          SERVER_DIR: ${{ secrets.SERVER_DIR }}
+        run: |
+          ssh $SERVER_USER@$SERVER_IP "cd $SERVER_DIR && git pull"
+          ssh $SERVER_USER@$SERVER_IP "cd $SERVER_DIR && npm ci"
+          ssh $SERVER_USER@$SERVER_IP "cd $SERVER_DIR && npm run build"
+          ssh $SERVER_USER@$SERVER_IP "cd $SERVER_DIR && npm run db:push"
+          ssh $SERVER_USER@$SERVER_IP "cd $SERVER_DIR && pm2 restart pawaodds || pm2 start ecosystem.config.js"
+          
+      - name: Verify deployment
+        env:
+          SERVER_IP: ${{ secrets.SERVER_IP }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+        run: |
+          ssh $SERVER_USER@$SERVER_IP "pm2 status"
 ```
 
-Add the secrets to your GitHub repository:
-- `HOST`: Your server's IP address
-- `USERNAME`: Your SSH username
-- `SSH_KEY`: Your SSH private key
+### Step 4: Initial Deployment
 
-## Maintaining the Application
+1. Clone your repository to the server:
 
-- **Updates**: Use GitHub for version control and updates
-- **Database Backups**: Set up regular PostgreSQL backups
-- **Monitoring**: Use PM2 for application monitoring
-- **Logs**: Check application logs with `pm2 logs pawaodds`
+```bash
+# If using deploy user
+su - deploy
+cd /var/www/pawaodds
+git clone https://github.com/yourusername/pawaodds.git .
+```
+
+2. Copy the environment file:
+
+```bash
+cp ~/pawaodds.env .env
+```
+
+3. Install dependencies and build:
+
+```bash
+npm ci
+npm run build
+npm run db:push
+```
+
+4. Start the application:
+
+```bash
+pm2 start ecosystem.config.js
+```
+
+### Step 5: Set Up SSL (Optional)
+
+```bash
+sudo certbot --nginx -d yourdomain.com
+```
+
+### Step 6: Push Changes to Deploy
+
+Now, whenever you push changes to the `main` branch, GitHub Actions will automatically deploy them to your server.
+
+## Manual Deployment
+
+If you prefer not to use GitHub Actions, you can deploy manually:
+
+1. Set up the server as described in Step 1 above
+2. Clone your repository directly to the server
+3. Set up environment variables
+4. Install dependencies and build
+5. Start with PM2
+
+Use the `scripts/fast-deploy.sh` script for quick manual deployments.
+
+## Docker Deployment
+
+For containerized deployment:
+
+1. SSH into your server
+2. Install Docker and Docker Compose:
+
+```bash
+curl -fsSL https://get.docker.com | sudo bash
+sudo apt install -y docker-compose
+```
+
+3. Clone your repository and navigate to it
+4. Create a `.env` file with your environment variables
+5. Build and start containers:
+
+```bash
+docker-compose up -d
+```
+
+## Environment Configuration
+
+The application requires the following environment variables:
+
+```
+# Database configuration
+DATABASE_URL=postgres://username:password@localhost:5432/dbname
+
+# Admin key for protected routes
+ADMIN_KEY=your-secure-admin-key
+
+# Node environment
+NODE_ENV=production
+```
+
+## Database Backups
+
+Set up automatic daily backups using the provided script:
+
+```bash
+# Download the backup script
+curl -O https://raw.githubusercontent.com/yourusername/pawaodds/main/scripts/backup-db.sh
+
+# Make it executable
+chmod +x backup-db.sh
+
+# Set up a daily cron job
+(crontab -l 2>/dev/null; echo "0 3 * * * /path/to/backup-db.sh") | crontab -
+```
 
 ## Troubleshooting
 
-- **Application doesn't start**: Check logs with `pm2 logs pawaodds`
-- **Database connection issues**: Verify DATABASE_URL in .env file
-- **Web server issues**: Check Nginx logs with `sudo journalctl -u nginx`
+### Application Not Starting
 
-## Security Considerations
+Check PM2 logs:
 
-1. Set up a firewall (UFW)
-2. Regularly update server packages
-3. Use strong passwords for database and ADMIN_KEY
-4. Consider setting up fail2ban to protect against brute force attacks
+```bash
+pm2 logs pawaodds
+```
+
+### Database Connection Issues
+
+Verify your database connection:
+
+```bash
+psql -U yourdbuser -d yourdbname -c "SELECT 1;"
+```
+
+### Server Issues
+
+Check nginx logs:
+
+```bash
+sudo tail -f /var/log/nginx/error.log
+```
+
+### Deploy Script Not Working
+
+Make sure your GitHub secrets are correctly set and that the deploy user has appropriate permissions.
+
+---
+
+For additional help or to report issues, please open an issue on the GitHub repository.
