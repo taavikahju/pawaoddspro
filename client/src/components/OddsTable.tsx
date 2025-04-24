@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   Table,
   TableBody,
@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table";
 import { useBookmakerContext } from '@/contexts/BookmakerContext';
 import { cn } from '@/lib/utils';
-import { Clock, Globe, Trophy } from 'lucide-react';
+import { ArrowDownIcon, ArrowUpIcon, Clock, Globe, Trophy } from 'lucide-react';
 
 interface OddsTableProps {
   events: any[];
@@ -21,6 +21,24 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
   const { bookmakers, selectedBookmakers } = useBookmakerContext();
   
   const filteredBookmakers = bookmakers.filter(b => selectedBookmakers.includes(b.code));
+  
+  // Check if either Ghana or Kenya quick filter is active
+  const isGhanaFilterActive = useMemo(() => {
+    // Check if Ghana bookmakers are selected (betPawa GH and Sportybet)
+    return selectedBookmakers.includes('betPawa GH') && 
+           selectedBookmakers.includes('Sportybet') &&
+           selectedBookmakers.length === 2;
+  }, [selectedBookmakers]);
+  
+  const isKenyaFilterActive = useMemo(() => {
+    // Check if Kenya bookmakers are selected (betPawa KE and Betika KE)
+    return selectedBookmakers.includes('betPawa KE') && 
+           selectedBookmakers.includes('Betika KE') &&
+           selectedBookmakers.length === 2;
+  }, [selectedBookmakers]);
+  
+  // Either Ghana or Kenya filter is active
+  const isQuickFilterActive = isGhanaFilterActive || isKenyaFilterActive;
   
   // Helper function to determine if odds should be highlighted
   const getOddsHighlightType = (event: any, market: string, bookmakerCode: string): 'highest' | 'lowest' | 'none' => {
@@ -99,6 +117,83 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
     }
   };
   
+  // Calculate the favorite price comparison for betPawa vs competitor
+  const calculateFavoriteComparison = (event: any): { comparison: number | null, isBetter: boolean | null, favorite: 'home' | 'draw' | 'away' | null } => {
+    if (!event.oddsData) return { comparison: null, isBetter: null, favorite: null };
+    
+    // Get the appropriate betPawa code based on the active filter
+    const betPawaCode = isGhanaFilterActive ? 'betPawa GH' : isKenyaFilterActive ? 'betPawa KE' : null;
+    
+    // Get the appropriate competitor code based on the active filter
+    const competitorCode = isGhanaFilterActive ? 'Sportybet' : isKenyaFilterActive ? 'Betika KE' : null;
+    
+    if (!betPawaCode || !competitorCode) return { comparison: null, isBetter: null, favorite: null };
+    
+    const betPawaOdds = event.oddsData[betPawaCode];
+    const competitorOdds = event.oddsData[competitorCode];
+    
+    if (!betPawaOdds || !competitorOdds) return { comparison: null, isBetter: null, favorite: null };
+    
+    // Find the lowest odds for betPawa (the favorite)
+    const betPawaHome = betPawaOdds.home || Number.MAX_VALUE;
+    const betPawaDraw = betPawaOdds.draw || Number.MAX_VALUE;
+    const betPawaAway = betPawaOdds.away || Number.MAX_VALUE;
+    
+    // Find the lowest odds for the competitor
+    const competitorHome = competitorOdds.home || Number.MAX_VALUE;
+    const competitorDraw = competitorOdds.draw || Number.MAX_VALUE;
+    const competitorAway = competitorOdds.away || Number.MAX_VALUE;
+    
+    // Determine the favorite selection for betPawa
+    let favorite: 'home' | 'draw' | 'away' | null = null;
+    let betPawaFavoritePrice = Number.MAX_VALUE;
+    
+    if (betPawaHome < betPawaDraw && betPawaHome < betPawaAway) {
+      favorite = 'home';
+      betPawaFavoritePrice = betPawaHome;
+    } else if (betPawaDraw < betPawaHome && betPawaDraw < betPawaAway) {
+      favorite = 'draw';
+      betPawaFavoritePrice = betPawaDraw;
+    } else if (betPawaAway < betPawaHome && betPawaAway < betPawaDraw) {
+      favorite = 'away';
+      betPawaFavoritePrice = betPawaAway;
+    } else {
+      // If there are ties, we'll prioritize in this order: home, draw, away
+      if (betPawaHome <= betPawaDraw && betPawaHome <= betPawaAway) {
+        favorite = 'home';
+        betPawaFavoritePrice = betPawaHome;
+      } else if (betPawaDraw <= betPawaHome && betPawaDraw <= betPawaAway) {
+        favorite = 'draw';
+        betPawaFavoritePrice = betPawaDraw;
+      } else {
+        favorite = 'away';
+        betPawaFavoritePrice = betPawaAway;
+      }
+    }
+    
+    // If we couldn't determine a favorite or the price
+    if (!favorite || betPawaFavoritePrice === Number.MAX_VALUE) {
+      return { comparison: null, isBetter: null, favorite: null };
+    }
+    
+    // Get the same selection's price from the competitor
+    let competitorPrice = Number.MAX_VALUE;
+    if (favorite === 'home') competitorPrice = competitorHome;
+    else if (favorite === 'draw') competitorPrice = competitorDraw;
+    else if (favorite === 'away') competitorPrice = competitorAway;
+    
+    if (competitorPrice === Number.MAX_VALUE) {
+      return { comparison: null, isBetter: null, favorite };
+    }
+    
+    // Calculate the percentage difference
+    // (betPawa / competitor - 1) * 100
+    const comparison = ((betPawaFavoritePrice / competitorPrice) - 1) * 100;
+    const isBetter = comparison > 0; // Better if betPawa offers higher odds
+    
+    return { comparison, isBetter, favorite };
+  };
+  
   if (isLoading) {
     return (
       <div className="h-48 flex items-center justify-center">
@@ -159,6 +254,11 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
             <TableHead className="w-20 px-2 py-2 text-center text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               Margin
             </TableHead>
+            {isQuickFilterActive && (
+              <TableHead className="w-20 px-2 py-2 text-center text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+                {isGhanaFilterActive ? 'betPawa GH vs Sporty' : 'betPawa KE vs Betika'}
+              </TableHead>
+            )}
           </TableRow>
         </TableHeader>
         
@@ -295,7 +395,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                       </span>
                     </TableCell>
                     
-                    <TableCell className="px-2 py-1 whitespace-nowrap text-center">
+                    <TableCell className="px-2 py-1 whitespace-nowrap text-center border-r border-gray-200 dark:border-gray-700">
                       {(() => {
                         const homeOdds = event.oddsData?.[bookmaker.code]?.home;
                         const drawOdds = event.oddsData?.[bookmaker.code]?.draw;
@@ -311,6 +411,50 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                         );
                       })()}
                     </TableCell>
+                    
+                    {isQuickFilterActive && (
+                      <TableCell className="px-2 py-1 whitespace-nowrap text-center">
+                        {isFirstBookmaker && (() => {
+                          // Only calculate and show this in the first row for each event
+                          const { comparison, isBetter, favorite } = calculateFavoriteComparison(event);
+                          
+                          if (comparison === null) {
+                            return (
+                              <span className="text-sm font-medium px-1 py-0.5 rounded bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300">
+                                -
+                              </span>
+                            );
+                          }
+                          
+                          // Format the comparison percentage with sign
+                          const formattedComparison = comparison.toFixed(1);
+                          const displayValue = `${formattedComparison}%`;
+                          
+                          // Add an icon to indicate if betPawa's price is better or worse
+                          const icon = isBetter ? 
+                            <ArrowUpIcon className="w-3 h-3 inline mr-1 text-green-600 dark:text-green-400" /> : 
+                            <ArrowDownIcon className="w-3 h-3 inline mr-1 text-red-600 dark:text-red-400" />;
+                          
+                          return (
+                            <span className={cn(
+                              "text-sm font-medium px-1 py-0.5 rounded flex items-center justify-center",
+                              isBetter
+                                ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300" 
+                                : "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300"
+                            )}>
+                              {icon}
+                              {displayValue} ({favorite?.charAt(0).toUpperCase()})
+                            </span>
+                          );
+                        })()}
+                        
+                        {!isFirstBookmaker && (
+                          <span className="text-sm font-medium px-1 py-0.5 rounded bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300">
+                            -
+                          </span>
+                        )}
+                      </TableCell>
+                    )}
                   </TableRow>
                 );
               })}
