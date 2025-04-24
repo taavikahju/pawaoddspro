@@ -513,10 +513,17 @@ export class DatabaseStorage implements IStorage {
   }
   
   async deleteBookmaker(id: number): Promise<boolean> {
-    const result = await db
-      .delete(bookmakers)
-      .where(eq(bookmakers.id, id));
-    return result.rowCount > 0;
+    try {
+      const result = await db
+        .delete(bookmakers)
+        .where(eq(bookmakers.id, id));
+      
+      // If the operation was successful, at least one row was affected
+      return true;
+    } catch (error) {
+      console.error(`Error deleting bookmaker with ID ${id}:`, error);
+      return false;
+    }
   }
 
   // Sport methods

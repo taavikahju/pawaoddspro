@@ -837,6 +837,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: 'Internal server error' });
     }
   });
+  
+  app.delete('/api/bookmakers/:id', async (req, res) => {
+    try {
+      const id = parseInt(req.params.id, 10);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: 'Invalid bookmaker ID' });
+      }
+      
+      const bookmaker = await storage.getBookmaker(id);
+      if (!bookmaker) {
+        return res.status(404).json({ message: 'Bookmaker not found' });
+      }
+      
+      // Delete the bookmaker and associated data file if exists
+      const success = await storage.deleteBookmaker(id);
+      
+      // Try to also delete the data file
+      try {
+        const filePath = path.join(process.cwd(), 'data', `${bookmaker.code}.json`);
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath);
+        }
+      } catch (fileError) {
+        console.error(`Error deleting data file for bookmaker ${bookmaker.code}:`, fileError);
+        // Continue even if file deletion fails
+      }
+      
+      if (success) {
+        // Broadcast the deletion to connected WebSocket clients
+        broadcast({
+          type: 'bookmakerDeleted',
+          data: { id, name: bookmaker.name, code: bookmaker.code }
+        });
+        
+        res.status(200).json({ message: 'Bookmaker deleted successfully' });
+      } else {
+        res.status(500).json({ message: 'Failed to delete bookmaker' });
+      }
+    } catch (error) {
+      console.error('Error deleting bookmaker:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  });
 
   // CRUD endpoints for sports
   app.post('/api/sports', async (req, res) => {

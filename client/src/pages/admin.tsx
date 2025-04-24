@@ -94,6 +94,24 @@ export default function AdminPage() {
       });
     },
   });
+  
+  const deleteBookmakerMutation = useMutation({
+    mutationFn: (bookmakerId: number) => apiRequest(`/api/bookmakers/${bookmakerId}`, 'DELETE'),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/bookmakers'] });
+      toast({
+        title: 'Success',
+        description: 'Bookmaker deleted successfully',
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: 'Error',
+        description: `Failed to delete bookmaker: ${error.message}`,
+        variant: 'destructive',
+      });
+    },
+  });
 
   // Mutations for adding/updating/deleting sports
   const addSportMutation = useMutation({
