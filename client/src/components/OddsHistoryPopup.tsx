@@ -134,14 +134,14 @@ export default function OddsHistoryPopup({
               No odds history available for this event
             </div>
           ) : (
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={350}>
               <LineChart data={chartData} margin={{ top: 5, right: 20, left: 15, bottom: 20 }}>
                 <XAxis 
                   dataKey="timestamp" 
                   tick={{ fontSize: 11 }}
                   angle={-45}
                   textAnchor="end"
-                  height={70}
+                  height={85} // Increase height to give more room for the date/time
                   tickFormatter={(tick) => {
                     // Show date and time
                     const parts = tick.split(' ');
@@ -163,7 +163,8 @@ export default function OddsHistoryPopup({
                 />
                 <Legend 
                   iconSize={8}
-                  wrapperStyle={{ fontSize: '10px', marginTop: '5px' }}
+                  wrapperStyle={{ fontSize: '10px', marginTop: '15px' }}
+                  verticalAlign="bottom"
                 />
                 {bookmakers.map((bookmakerCode) => (
                   <Line

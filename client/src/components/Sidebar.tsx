@@ -107,11 +107,13 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
   const timeToNextUpdate = stats.timeToNextUpdate;
   const nextUpdate = new Date();
   nextUpdate.setMinutes(nextUpdate.getMinutes() + timeToNextUpdate);
+  // Format as UTC time
   const nextUpdateStr = nextUpdate.toLocaleTimeString('en-US', {
     hour: 'numeric',
     minute: '2-digit',
-    hour12: true
-  });
+    hour12: true,
+    timeZone: 'UTC'
+  }) + ' UTC';
   
   // Get sport icon
   const getSportIcon = (sportCode: string) => {
