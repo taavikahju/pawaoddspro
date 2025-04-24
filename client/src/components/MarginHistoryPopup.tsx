@@ -62,7 +62,8 @@ export default function MarginHistoryPopup({
     // Group by timestamp (converts to YYYY-MM-DD HH:MM)
     const dataByTimestamp = data.reduce((acc: Record<string, any>, entry) => {
       const date = new Date(entry.timestamp);
-      const timeKey = date.toLocaleString('en-US', {
+      // Format the date using user's local timezone
+      const timeKey = date.toLocaleString(undefined, {
         year: 'numeric',
         month: '2-digit',
         day: '2-digit',
@@ -129,7 +130,14 @@ export default function MarginHistoryPopup({
                   angle={-45}
                   textAnchor="end"
                   height={70}
-                  tickFormatter={(tick) => tick.split(' ')[1]} // Show only time for brevity
+                  tickFormatter={(tick) => {
+                    // Show date and time
+                    const parts = tick.split(' ');
+                    if (parts.length >= 2) {
+                      return `${parts[0].slice(5)} ${parts[1]}`; // Format: MM/DD HH:MM (omit year for space)
+                    }
+                    return tick;
+                  }}
                 />
                 <YAxis 
                   label={{ value: '%', angle: -90, position: 'insideLeft' }}
@@ -139,7 +147,7 @@ export default function MarginHistoryPopup({
                 />
                 <Tooltip 
                   formatter={(value: any, name: string) => [`${Number(value).toFixed(2)}%`, name]}
-                  labelFormatter={(label) => `Time: ${label}`}
+                  labelFormatter={(label) => `Date/Time: ${label}`}
                 />
                 <Legend 
                   iconSize={8}

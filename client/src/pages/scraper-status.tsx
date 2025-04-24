@@ -49,18 +49,7 @@ export default function ScraperStatus() {
       title="Scraper Status"
       subtitle="Monitor bookmaker data collection"
     >
-      {/* Main action button */}
-      <div className="flex justify-end mb-4">
-        <Button 
-          onClick={handleRunScrapers}
-          disabled={!isConnected}
-          className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary hover:to-purple-700 text-white font-medium px-6 py-2 h-12 shadow-lg transition-all"
-          size="lg"
-        >
-          <Activity className="mr-2 h-5 w-5" />
-          Run Scrapers Now
-        </Button>
-      </div>
+      {/* Action buttons removed as per client request */}
 
       {/* Header with stats */}
       <div className="bg-white dark:bg-slate-800 rounded-lg p-4 mb-6 shadow">
@@ -156,8 +145,8 @@ export default function ScraperStatus() {
       
       {/* Footer Note */}
       <div className="text-center text-xs text-gray-500 dark:text-gray-400 mb-4">
-        <p>Data is collected from bookmaker APIs every 15 minutes.</p>
-        <p className="mt-1">You can also trigger manual scraping using the button above.</p>
+        <p>Data is collected from bookmaker APIs every 15 minutes automatically.</p>
+        <p className="mt-1">Admin users can trigger manual scraping from the Admin Panel.</p>
       </div>
     </Layout>
   );
