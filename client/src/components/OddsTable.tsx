@@ -262,7 +262,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
             </TableHead>
             {isComparisonAvailable && (
               <TableHead className="w-20 px-2 py-2 text-center text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
-                {isGhanaFilterActive ? 'bp GH vs sporty' : 'bp KE vs betika KE'}
+                Fav. Odds Δ%
               </TableHead>
             )}
           </TableRow>
@@ -453,7 +453,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                                 : "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300"
                             )}>
                               {icon}
-                              {displayValue} ({favorite?.charAt(0).toUpperCase()})
+                              {displayValue}
                             </span>
                           );
                         })()}
