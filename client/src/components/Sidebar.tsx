@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'wouter';
 import { useBookmakerContext } from '@/contexts/BookmakerContext';
+import { useThemeToggle } from '@/hooks/use-theme';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
@@ -17,7 +18,9 @@ import {
   Dumbbell,
   Trophy,
   Timer,
-  Settings
+  Settings,
+  SunIcon,
+  MoonIcon
 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { cn } from '@/lib/utils';
@@ -30,6 +33,7 @@ interface SidebarProps {
 
 export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
   const [location] = useLocation();
+  const { toggleTheme, isDarkMode } = useThemeToggle();
   const { 
     bookmakers, 
     sports, 
@@ -198,26 +202,24 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
         <Separator className="border-gray-200 dark:border-slate-700" />
         
         <div className="bg-gray-50 dark:bg-slate-900/50 rounded-md p-3 border border-gray-100 dark:border-slate-700">
-          <div className="flex justify-between items-center">
+          {/* Theme toggle */}
+          <div className="flex justify-between items-center mb-3">
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center">
-              <Repeat className="h-4 w-4 mr-2 text-primary" />
-              Auto Refresh
+              {isDarkMode ? <MoonIcon className="h-4 w-4 mr-2 text-primary" /> : <SunIcon className="h-4 w-4 mr-2 text-primary" />}
+              {isDarkMode ? 'Dark Mode' : 'Light Mode'}
             </span>
             <Switch
-              checked={autoRefresh}
-              onCheckedChange={toggleAutoRefresh}
+              checked={isDarkMode}
+              onCheckedChange={toggleTheme}
             />
           </div>
-          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400 ml-6">
-            Data refreshes every 15 minutes
-          </p>
           
           <Button
             variant="outline"
             size="sm"
             onClick={() => refreshData()}
             disabled={isRefreshing}
-            className="mt-3 w-full flex items-center justify-center"
+            className="w-full flex items-center justify-center"
           >
             <RefreshCw className={cn("h-4 w-4 mr-1.5", isRefreshing && "animate-spin")} />
             Refresh Now
