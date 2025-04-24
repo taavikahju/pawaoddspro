@@ -101,15 +101,26 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     // Store or update events in database
     for (const [eventKey, eventData] of eventMap.entries()) {
       try {
-        // Check if event already exists by externalId
-        const existingEvent = await storage.getEventByExternalId(eventData.externalId);
+        // Check if event already exists by eventId first (this is more reliable than externalId)
+        let existingEvent = await storage.getEventByEventId(eventData.eventId);
+        
+        // If not found by eventId, try by externalId as a fallback
+        if (!existingEvent) {
+          existingEvent = await storage.getEventByExternalId(eventData.externalId);
+        }
         
         if (existingEvent) {
           // Update existing event
           await storage.updateEvent(existingEvent.id, {
             oddsData: eventData.oddsData,
-            bestOdds: eventData.bestOdds
+            bestOdds: eventData.bestOdds,
+            // Also update other fields that might have changed
+            teams: eventData.teams,
+            league: eventData.league,
+            date: eventData.date,
+            time: eventData.time
           });
+          console.log(`Updated event ${existingEvent.id} with eventId ${eventData.eventId}`);
         } else {
           // Create new event
           const insertData: InsertEvent = {
@@ -129,6 +140,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
           
           // Insert new event
           await storage.createEvent(validatedData);
+          console.log(`Created new event with eventId ${eventData.eventId}`);
         }
       } catch (error) {
         console.error(`Error processing event ${eventKey}:`, error);
