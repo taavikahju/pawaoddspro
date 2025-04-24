@@ -10,7 +10,6 @@ import {
 import { useBookmakerContext } from '@/contexts/BookmakerContext';
 import { cn } from '@/lib/utils';
 import { Clock, Globe, Trophy } from 'lucide-react';
-import CountryFlag from './CountryFlag';
 
 interface OddsTableProps {
   events: any[];
@@ -23,7 +22,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
   
   const filteredBookmakers = bookmakers.filter(b => selectedBookmakers.includes(b.code));
   
-  // Function to determine if an odd is the best available
+  // Function to determine if an odd is the best available (keeping this for future use)
   const isBestOdd = (event: any, market: string, bookmakerCode: string) => {
     if (!event.oddsData || !event.oddsData[bookmakerCode] || !event.oddsData[bookmakerCode][market]) {
       return false;
@@ -133,77 +132,9 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                           className="px-2 py-1 whitespace-nowrap border-r border-gray-200 dark:border-gray-700" 
                           rowSpan={filteredBookmakers.length}
                         >
-                          <div className="flex items-center gap-1.5">
-                            <CountryFlag 
-                              countryCode={(() => {
-                                // Convert country name to ISO code
-                                const country = event.country || event.league?.split(' ')[0] || '';
-                                
-                                // Map of countries to their ISO codes
-                                const countryMap: Record<string, string> = {
-                                  'England': 'GB',
-                                  'Scotland': 'GB',
-                                  'Wales': 'GB',
-                                  'Northern Ireland': 'GB',
-                                  'UK': 'GB',
-                                  'United Kingdom': 'GB',
-                                  'Ireland': 'IE',
-                                  'France': 'FR',
-                                  'Germany': 'DE',
-                                  'Spain': 'ES',
-                                  'Italy': 'IT',
-                                  'Portugal': 'PT',
-                                  'Netherlands': 'NL',
-                                  'Belgium': 'BE',
-                                  'Switzerland': 'CH',
-                                  'Austria': 'AT',
-                                  'Poland': 'PL',
-                                  'Czech Republic': 'CZ',
-                                  'Sweden': 'SE',
-                                  'Norway': 'NO',
-                                  'Denmark': 'DK',
-                                  'Finland': 'FI',
-                                  'Greece': 'GR',
-                                  'Turkey': 'TR',
-                                  'Russia': 'RU',
-                                  'Ukraine': 'UA',
-                                  'Croatia': 'HR',
-                                  'Serbia': 'RS',
-                                  'Romania': 'RO',
-                                  'Bulgaria': 'BG',
-                                  'Hungary': 'HU',
-                                  'Brazil': 'BR',
-                                  'Argentina': 'AR',
-                                  'Uruguay': 'UY',
-                                  'Colombia': 'CO',
-                                  'Mexico': 'MX',
-                                  'USA': 'US',
-                                  'United States': 'US',
-                                  'Canada': 'CA',
-                                  'Australia': 'AU',
-                                  'New Zealand': 'NZ',
-                                  'Japan': 'JP',
-                                  'China': 'CN',
-                                  'South Korea': 'KR',
-                                  'Ghana': 'GH',
-                                  'Kenya': 'KE',
-                                  'South Africa': 'ZA',
-                                  'Nigeria': 'NG',
-                                  'Egypt': 'EG',
-                                  'Morocco': 'MA',
-                                  'International': 'XK',  // Using XK as generic international
-                                  'International Clubs': 'XK'
-                                };
-                                
-                                return countryMap[country] || 'XX';  // Default to XX for unknown
-                              })()}
-                              countryName={event.country || event.league?.split(' ')[0] || 'Unknown'}
-                              size="sm"
-                            />
-                            <span className="text-sm text-gray-600 dark:text-gray-300">
-                              {event.country || event.league?.split(' ')[0] || 'Unknown'}
-                            </span>
-                          </div>
+                          <span className="text-sm text-gray-600 dark:text-gray-300">
+                            {event.country || event.league?.split(' ')[0] || 'Unknown'}
+                          </span>
                         </TableCell>
                         
                         <TableCell 
@@ -267,40 +198,19 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                     </TableCell>
                     
                     <TableCell className="px-2 py-1 whitespace-nowrap text-center border-r border-gray-200 dark:border-gray-700">
-                      <span 
-                        className={cn(
-                          "text-sm font-medium px-1 py-0.5 rounded",
-                          isBestOdd(event, 'home', bookmaker.code) 
-                            ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300" 
-                            : "bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300"
-                        )}
-                      >
+                      <span className="text-sm font-medium px-1 py-0.5 rounded bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300">
                         {event.oddsData?.[bookmaker.code]?.home?.toFixed(2) || '-'}
                       </span>
                     </TableCell>
                     
                     <TableCell className="px-2 py-1 whitespace-nowrap text-center border-r border-gray-200 dark:border-gray-700">
-                      <span 
-                        className={cn(
-                          "text-sm font-medium px-1 py-0.5 rounded",
-                          isBestOdd(event, 'draw', bookmaker.code) 
-                            ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300" 
-                            : "bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300"
-                        )}
-                      >
+                      <span className="text-sm font-medium px-1 py-0.5 rounded bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300">
                         {event.oddsData?.[bookmaker.code]?.draw?.toFixed(2) || '-'}
                       </span>
                     </TableCell>
                     
                     <TableCell className="px-2 py-1 whitespace-nowrap text-center border-r border-gray-200 dark:border-gray-700">
-                      <span 
-                        className={cn(
-                          "text-sm font-medium px-1 py-0.5 rounded",
-                          isBestOdd(event, 'away', bookmaker.code) 
-                            ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300" 
-                            : "bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300"
-                        )}
-                      >
+                      <span className="text-sm font-medium px-1 py-0.5 rounded bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300">
                         {event.oddsData?.[bookmaker.code]?.away?.toFixed(2) || '-'}
                       </span>
                     </TableCell>
@@ -314,17 +224,8 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                         
                         const marginPercentage = margin ? ((margin - 1) * 100).toFixed(1) : '-';
                         
-                        let colorClass = "text-gray-600 dark:text-gray-400";
-                        if (margin) {
-                          if (margin < 1.05) colorClass = "text-green-600 dark:text-green-400";
-                          else if (margin >= 1.05 && margin < 1.1) colorClass = "text-yellow-600 dark:text-yellow-400";
-                          else colorClass = "text-red-600 dark:text-red-400";
-                        }
-                        
                         return (
-                          <span 
-                            className={`text-sm font-medium px-1 py-0.5 rounded bg-gray-50 dark:bg-gray-800 ${colorClass}`}
-                          >
+                          <span className="text-sm font-medium px-1 py-0.5 rounded bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300">
                             {marginPercentage !== '-' ? `${marginPercentage}%` : '-'}
                           </span>
                         );
