@@ -112,11 +112,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error('Error sending initial scraper statuses:', error);
     });
     
-    // Send initial events data
+    // Send initial events data - filtered to only include events with 3+ bookmakers
     storage.getEvents().then(events => {
+      // Apply the same filter as the API endpoint
+      const filteredEvents = events.filter(event => {
+        if (!event.oddsData) return false;
+        const bookmakerCount = Object.keys(event.oddsData).length;
+        return bookmakerCount >= 3;
+      });
+      
+      console.log(`WebSocket: Filtered ${events.length} events down to ${filteredEvents.length} with at least 3 bookmakers`);
+      
       ws.send(JSON.stringify({
         type: 'events',
-        data: events
+        data: filteredEvents
       }));
     }).catch(error => {
       console.error('Error sending initial events:', error);
@@ -130,9 +139,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
         // Handle client requests
         if (data.type === 'getEvents') {
           const events = await storage.getEvents();
+          
+          // Apply the same filter for consistency
+          const filteredEvents = events.filter(event => {
+            if (!event.oddsData) return false;
+            const bookmakerCount = Object.keys(event.oddsData).length;
+            return bookmakerCount >= 3;
+          });
+          
+          console.log(`WebSocket getEvents: Filtered ${events.length} events down to ${filteredEvents.length} with at least 3 bookmakers`);
+          
           ws.send(JSON.stringify({
             type: 'events',
-            data: events
+            data: filteredEvents
           }));
         }
         
@@ -288,9 +307,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
     
     storage.getEvents().then(events => {
+      // Apply the same filter to ensure consistency
+      const filteredEvents = events.filter(event => {
+        if (!event.oddsData) return false;
+        const bookmakerCount = Object.keys(event.oddsData).length;
+        return bookmakerCount >= 3;
+      });
+      
+      console.log(`Broadcast: Filtered ${events.length} events down to ${filteredEvents.length} with at least 3 bookmakers`);
+      
       broadcast({
         type: 'events',
-        data: events
+        data: filteredEvents
       });
     });
   });
@@ -386,6 +414,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/events', async (req, res) => {
     try {
       const sportIdParam = req.query.sportId as string | undefined;
+      const minBookmakers = req.query.minBookmakers ? parseInt(req.query.minBookmakers as string, 10) : 3;
       let events;
 
       if (sportIdParam) {
@@ -398,7 +427,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
         events = await storage.getEvents();
       }
 
-      res.json(events);
+      // Filter events to only include those with at least the minimum number of bookmakers
+      const filteredEvents = events.filter(event => {
+        // Count bookmakers with odds for this event
+        if (!event.oddsData) return false;
+        
+        const bookmakerCount = Object.keys(event.oddsData).length;
+        return bookmakerCount >= minBookmakers;
+      });
+
+      console.log(`Filtered ${events.length} events down to ${filteredEvents.length} with at least ${minBookmakers} bookmakers`);
+      
+      res.json(filteredEvents);
     } catch (error) {
       console.error('Error fetching events:', error);
       res.status(500).json({ message: 'Internal server error' });
