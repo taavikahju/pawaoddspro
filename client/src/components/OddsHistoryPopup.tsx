@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogHeader, 
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
   DialogTitle,
   DialogFooter,
   DialogClose
@@ -15,12 +15,13 @@ import axios from 'axios';
 // Import only the components we need to reduce bundle size
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-interface MarginHistoryPopupProps {
+interface OddsHistoryPopupProps {
   isOpen: boolean;
   onClose: () => void;
   eventId: string;
   eventName: string;
   bookmakers: string[];
+  oddsType: 'home' | 'draw' | 'away';
 }
 
 type OddsHistoryEntry = {
@@ -35,18 +36,22 @@ type OddsHistoryEntry = {
   timestamp: string;
 };
 
-export default function MarginHistoryPopup({
+export default function OddsHistoryPopup({
   isOpen,
   onClose,
   eventId,
   eventName,
-  bookmakers
-}: MarginHistoryPopupProps) {
+  bookmakers,
+  oddsType
+}: OddsHistoryPopupProps) {
   const [activeTab, setActiveTab] = useState<string>('chart');
+  
+  // Get the display name for the odds type
+  const oddsTypeDisplay = oddsType === 'home' ? 'Home' : oddsType === 'draw' ? 'Draw' : 'Away';
   
   // Fetch odds history for this event - optimized for lightweight loading
   const { data, isLoading, error } = useQuery({
-    queryKey: ['/api/events', eventId, 'history'],
+    queryKey: ['/api/events', eventId, 'history', oddsType],
     queryFn: async () => {
       // Only get last 10 entries to improve performance
       const response = await axios.get(`/api/events/${eventId}/history?limit=10`);
@@ -79,8 +84,15 @@ export default function MarginHistoryPopup({
         };
       }
       
-      // Add margin for each bookmaker (parse to float since it may be stored as string)
-      acc[timeKey][entry.bookmakerCode] = parseFloat(entry.margin.toString());
+      // Get the odds for the selected type
+      const odds = oddsType === 'home' 
+        ? entry.homeOdds 
+        : oddsType === 'draw' 
+          ? entry.drawOdds 
+          : entry.awayOdds;
+      
+      // Add odds for each bookmaker (parse to float since it may be stored as string)
+      acc[timeKey][entry.bookmakerCode] = parseFloat(odds.toString());
       
       return acc;
     }, {});
@@ -89,7 +101,7 @@ export default function MarginHistoryPopup({
     return Object.values(dataByTimestamp).sort((a: any, b: any) => 
       a.date.getTime() - b.date.getTime()
     );
-  }, [data]);
+  }, [data, oddsType]);
   
   // Generate colors for each bookmaker
   const bookmakerColors: Record<string, string> = {
@@ -104,7 +116,7 @@ export default function MarginHistoryPopup({
       <DialogContent className="sm:max-w-[650px] max-h-[80vh] overflow-y-auto">
         <DialogHeader className="pb-2">
           <DialogTitle className="text-sm font-medium">
-            {eventName}
+            {oddsTypeDisplay} Odds: {eventName}
           </DialogTitle>
         </DialogHeader>
         
@@ -121,11 +133,11 @@ export default function MarginHistoryPopup({
               </div>
             ) : error ? (
               <div className="text-red-500 p-2 text-center text-sm">
-                Failed to load margin history data
+                Failed to load odds history data
               </div>
             ) : chartData.length === 0 ? (
               <div className="text-gray-500 p-2 text-center text-sm">
-                No margin history available for this event
+                No odds history available for this event
               </div>
             ) : (
               <ResponsiveContainer width="100%" height={300}>
@@ -139,13 +151,13 @@ export default function MarginHistoryPopup({
                     tickFormatter={(tick) => tick.split(' ')[1]} // Show only time for brevity
                   />
                   <YAxis 
-                    label={{ value: '%', angle: -90, position: 'insideLeft' }}
-                    domain={[0, 'dataMax + 1']}
+                    label={{ value: '', angle: -90, position: 'insideLeft' }}
+                    domain={['dataMin - 0.1', 'dataMax + 0.1']}
                     width={30}
                     tick={{ fontSize: 10 }}
                   />
                   <Tooltip 
-                    formatter={(value: any, name: string) => [`${Number(value).toFixed(2)}%`, name]}
+                    formatter={(value: any, name: string) => [`${Number(value).toFixed(2)}`, name]}
                     labelFormatter={(label) => `Time: ${label}`}
                   />
                   <Legend 
@@ -180,11 +192,11 @@ export default function MarginHistoryPopup({
               </div>
             ) : error ? (
               <div className="text-red-500 p-2 text-center text-sm">
-                Failed to load margin history data
+                Failed to load odds history data
               </div>
             ) : !data || data.length === 0 ? (
               <div className="text-gray-500 p-2 text-center text-sm">
-                No margin history available for this event
+                No odds history available for this event
               </div>
             ) : (
               <div className="overflow-x-auto">
@@ -193,33 +205,54 @@ export default function MarginHistoryPopup({
                     <tr className="bg-muted">
                       <th className="p-2 text-left text-sm">Time</th>
                       <th className="p-2 text-left text-sm">Bookmaker</th>
-                      <th className="p-2 text-right text-sm">Home</th>
-                      <th className="p-2 text-right text-sm">Draw</th>
-                      <th className="p-2 text-right text-sm">Away</th>
-                      <th className="p-2 text-right text-sm">Margin</th>
+                      <th className="p-2 text-right text-sm">{oddsTypeDisplay} Odds</th>
+                      <th className="p-2 text-right text-sm">Change</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {data.slice(0, 10).map((entry) => ( // Limit to 10 rows for faster rendering
-                      <tr key={entry.id} className="border-b border-gray-200 hover:bg-muted/50">
-                        <td className="p-1.5 text-left text-xs">
-                          {new Date(entry.timestamp).toLocaleString('en-US', {
-                            month: '2-digit',
-                            day: '2-digit',
-                            hour: '2-digit',
-                            minute: '2-digit',
-                            hour12: false
-                          })}
-                        </td>
-                        <td className="p-1.5 text-left text-xs font-medium">{entry.bookmakerCode}</td>
-                        <td className="p-1.5 text-right text-xs">{parseFloat(entry.homeOdds.toString()).toFixed(2)}</td>
-                        <td className="p-1.5 text-right text-xs">{parseFloat(entry.drawOdds.toString()).toFixed(2)}</td>
-                        <td className="p-1.5 text-right text-xs">{parseFloat(entry.awayOdds.toString()).toFixed(2)}</td>
-                        <td className="p-1.5 text-right text-xs font-medium">
-                          {parseFloat(entry.margin.toString()).toFixed(2)}%
-                        </td>
-                      </tr>
-                    ))}
+                    {data.slice(0, 10).map((entry, index, array) => { // Limit to 10 rows for faster rendering
+                      // Get odds based on the type
+                      const odds = oddsType === 'home' 
+                        ? entry.homeOdds 
+                        : oddsType === 'draw' 
+                          ? entry.drawOdds 
+                          : entry.awayOdds;
+                      
+                      // Calculate change from previous odds for the same bookmaker
+                      let change = 0;
+                      let prevEntry;
+                      
+                      if (index < array.length - 1) {
+                        prevEntry = array.slice(index + 1).find(e => e.bookmakerCode === entry.bookmakerCode);
+                        if (prevEntry) {
+                          const prevOdds = oddsType === 'home' 
+                            ? prevEntry.homeOdds 
+                            : oddsType === 'draw' 
+                              ? prevEntry.drawOdds 
+                              : prevEntry.awayOdds;
+                          change = parseFloat(odds.toString()) - parseFloat(prevOdds.toString());
+                        }
+                      }
+                      
+                      return (
+                        <tr key={entry.id} className="border-b border-gray-200 hover:bg-muted/50">
+                          <td className="p-1.5 text-left text-xs">
+                            {new Date(entry.timestamp).toLocaleString('en-US', {
+                              month: '2-digit',
+                              day: '2-digit',
+                              hour: '2-digit',
+                              minute: '2-digit',
+                              hour12: false
+                            })}
+                          </td>
+                          <td className="p-1.5 text-left text-xs font-medium">{entry.bookmakerCode}</td>
+                          <td className="p-1.5 text-right text-xs">{parseFloat(odds.toString()).toFixed(2)}</td>
+                          <td className={`p-1.5 text-right text-xs ${change > 0 ? 'text-green-600' : change < 0 ? 'text-red-600' : ''}`}>
+                            {change !== 0 ? (change > 0 ? '+' : '') + change.toFixed(2) : ''}
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
