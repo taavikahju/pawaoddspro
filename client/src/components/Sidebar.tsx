@@ -6,7 +6,18 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { RefreshCw, XIcon } from 'lucide-react';
+import { 
+  RefreshCw, 
+  XIcon, 
+  LayoutDashboard, 
+  Database, 
+  Repeat, 
+  Clock,
+  TrendingUp,
+  Dumbbell,
+  Trophy,
+  Timer
+} from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { cn } from '@/lib/utils';
 
@@ -45,49 +56,90 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     minute: '2-digit',
     hour12: true
   });
+  
+  // Get sport icon
+  const getSportIcon = (sportCode: string) => {
+    const iconMap: Record<string, JSX.Element> = {
+      'football': <Trophy className="h-4 w-4 mr-2" />,
+      'basketball': <Dumbbell className="h-4 w-4 mr-2" />,
+      'tennis': <Timer className="h-4 w-4 mr-2" />,
+      'horseracing': <TrendingUp className="h-4 w-4 mr-2" />
+    };
+    
+    return iconMap[sportCode] || <TrendingUp className="h-4 w-4 mr-2" />;
+  };
+  
+  // Get bookmaker color
+  const getBookmakerColor = (bookmakerCode: string) => {
+    const colorMap: Record<string, string> = {
+      'bet365': 'text-blue-600 dark:text-blue-400',
+      'williamhill': 'text-green-600 dark:text-green-400',
+      'betfair': 'text-orange-600 dark:text-orange-400',
+      'paddypower': 'text-red-600 dark:text-red-400',
+    };
+    
+    return colorMap[bookmakerCode] || '';
+  };
 
   return (
     <div
       className={cn(
-        "fixed z-20 inset-0 lg:relative lg:translate-x-0 transition duration-200 transform bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 w-64 flex-shrink-0 p-4 lg:block",
+        "fixed z-20 inset-0 lg:relative lg:translate-x-0 transition duration-200 transform bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 w-64 flex-shrink-0 lg:block",
         isOpen ? "translate-x-0" : "-translate-x-full"
       )}
     >
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-lg font-semibold text-primary dark:text-blue-400">OddsCompare</h1>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={onClose}
-          className="lg:hidden rounded-md p-2 text-gray-500 hover:bg-gray-100 dark:hover:bg-slate-700"
-        >
-          <XIcon className="h-5 w-5" />
-        </Button>
+      {/* Sidebar header - blue gradient background */}
+      <div className="bg-gradient-to-r from-blue-600 to-blue-800 dark:from-blue-800 dark:to-blue-900 p-4">
+        <div className="flex items-center justify-between">
+          <h1 className="text-lg font-bold text-white">OddsCompare</h1>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onClose}
+            className="lg:hidden rounded-md p-1 text-white hover:bg-blue-700/50"
+          >
+            <XIcon className="h-5 w-5" />
+          </Button>
+        </div>
+        
+        {/* Last update info */}
+        <div className="mt-2 text-xs text-blue-100">
+          <div className="flex items-center">
+            <Clock className="h-3 w-3 mr-1 opacity-70" />
+            <span>Last update: <span className="text-white">{lastUpdate}</span></span>
+          </div>
+          <div className="flex items-center mt-1">
+            <Repeat className="h-3 w-3 mr-1 opacity-70" />
+            <span>Next update: <span className="text-white">{nextUpdateStr}</span></span>
+          </div>
+        </div>
       </div>
       
-      <div className="space-y-6">
+      <div className="p-4 space-y-6">
         <div>
-          <p className="px-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+          <p className="px-2 mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
             Main
           </p>
-          <div className="mt-2 space-y-1">
+          <div className="space-y-1">
             <Link href="/">
               <a className={cn(
-                "block px-2 py-2 rounded-md",
+                "flex items-center px-2 py-2 rounded-md",
                 location === "/" 
                   ? "bg-blue-50 dark:bg-blue-900/30 text-primary dark:text-blue-400 font-medium" 
                   : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700"
               )}>
+                <LayoutDashboard className="h-4 w-4 mr-2" />
                 Dashboard
               </a>
             </Link>
             <Link href="/scraper-status">
               <a className={cn(
-                "block px-2 py-2 rounded-md",
+                "flex items-center px-2 py-2 rounded-md",
                 location === "/scraper-status" 
                   ? "bg-blue-50 dark:bg-blue-900/30 text-primary dark:text-blue-400 font-medium" 
                   : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700"
               )}>
+                <Database className="h-4 w-4 mr-2" />
                 Scraper Status
               </a>
             </Link>
@@ -95,12 +147,12 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         </div>
         
         <div>
-          <p className="px-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+          <p className="px-2 mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
             Bookmakers
           </p>
-          <div className="mt-2 space-y-1">
+          <div className="space-y-1 bg-gray-50 dark:bg-slate-900/50 rounded-md p-2 border border-gray-100 dark:border-slate-700">
             {bookmakers.map((bookmaker) => (
-              <div key={bookmaker.id} className="flex items-center px-2 py-2">
+              <div key={bookmaker.id} className="flex items-center py-1.5">
                 <Checkbox
                   id={`bookmaker-${bookmaker.id}`}
                   checked={selectedBookmakers.includes(bookmaker.code)}
@@ -109,7 +161,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                 />
                 <Label
                   htmlFor={`bookmaker-${bookmaker.id}`}
-                  className="ml-2 text-sm text-gray-700 dark:text-gray-300"
+                  className={cn("ml-2 text-sm font-medium", getBookmakerColor(bookmaker.code))}
                 >
                   {bookmaker.name}
                 </Label>
@@ -119,12 +171,12 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         </div>
         
         <div>
-          <p className="px-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+          <p className="px-2 mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
             Sports
           </p>
-          <div className="mt-2 space-y-1">
+          <div className="space-y-1 bg-gray-50 dark:bg-slate-900/50 rounded-md p-2 border border-gray-100 dark:border-slate-700">
             {sports.map((sport) => (
-              <div key={sport.id} className="flex items-center px-2 py-2">
+              <div key={sport.id} className="flex items-center py-1.5">
                 <Checkbox
                   id={`sport-${sport.id}`}
                   checked={selectedSports.includes(sport.code)}
@@ -133,8 +185,9 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                 />
                 <Label
                   htmlFor={`sport-${sport.id}`}
-                  className="ml-2 text-sm text-gray-700 dark:text-gray-300"
+                  className="ml-2 text-sm flex items-center text-gray-700 dark:text-gray-300"
                 >
+                  {getSportIcon(sport.code)}
                   {sport.name}
                 </Label>
               </div>
@@ -144,32 +197,30 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         
         <Separator className="border-gray-200 dark:border-slate-700" />
         
-        <div>
+        <div className="bg-gray-50 dark:bg-slate-900/50 rounded-md p-3 border border-gray-100 dark:border-slate-700">
           <div className="flex justify-between items-center">
-            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Auto Refresh</span>
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center">
+              <Repeat className="h-4 w-4 mr-2 text-primary" />
+              Auto Refresh
+            </span>
             <Switch
               checked={autoRefresh}
               onCheckedChange={toggleAutoRefresh}
             />
           </div>
-          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400 ml-6">
             Data refreshes every 15 minutes
           </p>
-        </div>
-        
-        <div className="flex items-center justify-between">
-          <div className="flex flex-col text-xs text-gray-500 dark:text-gray-400">
-            <span>Last update: <span>{lastUpdate}</span></span>
-            <span>Next update: <span>{nextUpdateStr}</span></span>
-          </div>
+          
           <Button
             variant="outline"
-            size="icon"
+            size="sm"
             onClick={() => refreshData()}
             disabled={isRefreshing}
-            className="p-2 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-slate-700 dark:text-gray-300 dark:hover:bg-slate-600"
+            className="mt-3 w-full flex items-center justify-center"
           >
-            <RefreshCw className={cn("h-5 w-5", isRefreshing && "animate-spin")} />
+            <RefreshCw className={cn("h-4 w-4 mr-1.5", isRefreshing && "animate-spin")} />
+            Refresh Now
           </Button>
         </div>
       </div>

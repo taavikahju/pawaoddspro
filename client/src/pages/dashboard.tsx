@@ -6,7 +6,18 @@ import OddsTable from '@/components/OddsTable';
 import { useBookmakerContext } from '@/contexts/BookmakerContext';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { LayoutGrid, List, ChevronUp, Clock, CheckCircle, BarChart } from 'lucide-react';
+import { 
+  LayoutGrid, 
+  List, 
+  ChevronUp, 
+  Clock, 
+  CheckCircle, 
+  BarChart,
+  BookOpen,
+  CalendarDays,
+  Trophy,
+  ShieldAlert
+} from 'lucide-react';
 
 export default function Dashboard() {
   const [viewMode, setViewMode] = useState<'table' | 'grid'>('table');
@@ -71,42 +82,48 @@ export default function Dashboard() {
       subtitle="Compare odds across multiple bookmakers"
     >
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <StatsCard
           title="Total Events"
           value={stats?.totalEvents || 0}
           change={`${stats?.eventsChange > 0 ? '+' : ''}${stats?.eventsChange || 0} since last update`}
-          icon={<ChevronUp className="h-4 w-4 mr-1" />}
+          icon={<CalendarDays className="h-5 w-5 text-blue-500" />}
         />
         
         <StatsCard
           title="Bookmakers Active"
           value={stats?.bookmarkersActive || '0/0'}
           change="All systems operational"
-          icon={<CheckCircle className="h-4 w-4 mr-1" />}
+          icon={<BookOpen className="h-5 w-5 text-green-500" />}
         />
         
         <StatsCard
           title="Best Odds Found"
           value={stats?.bestOddsCount || 0}
           change={`${stats?.bestOddsChange > 0 ? '+' : ''}${stats?.bestOddsChange || 0} since last update`}
-          icon={<BarChart className="h-4 w-4 mr-1" />}
+          icon={<ShieldAlert className="h-5 w-5 text-orange-500" />}
         />
         
         <StatsCard
           title="Last Scrape Time"
           value={stats?.lastScrapeTime || 'N/A'}
           change={`Next update in ${stats?.timeToNextUpdate || 15} mins`}
-          icon={<Clock className="h-4 w-4 mr-1" />}
-          iconColor="text-gray-500 dark:text-gray-400"
+          icon={<Clock className="h-5 w-5 text-primary" />}
+          iconColor="text-primary"
           changeColor="text-gray-500 dark:text-gray-400"
         />
       </div>
 
       {/* View Options */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-3 sm:space-y-0">
-        <div className="text-xl font-semibold text-gray-800 dark:text-white">
-          {sportTitle} Events
+      <div className="bg-white dark:bg-slate-800 rounded-lg p-3 mb-6 shadow flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-3 sm:space-y-0">
+        <div className="flex items-center">
+          <Trophy className="h-5 w-5 mr-2 text-primary" />
+          <div className="text-lg font-semibold text-gray-800 dark:text-white">
+            {sportTitle} Events
+          </div>
+          <span className="ml-2 text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium">
+            {filteredEvents.length} events
+          </span>
         </div>
         
         <div className="flex items-center space-x-3 text-sm">
@@ -157,6 +174,12 @@ export default function Dashboard() {
         isLoading={isLoadingEvents}
         className="mb-8"
       />
+      
+      {/* Footer Note */}
+      <div className="text-center text-xs text-gray-500 dark:text-gray-400 mb-4">
+        <p>Odds are updated every 15 minutes from 4 major bookmakers.</p>
+        <p className="mt-1">Last updated: {stats?.lastScrapeTime || 'N/A'}</p>
+      </div>
     </Layout>
   );
 }

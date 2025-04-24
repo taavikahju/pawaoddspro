@@ -2,6 +2,7 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Layout from '@/components/Layout';
 import ScraperStatusCard from '@/components/ScraperStatusCard';
+import { Database, Server, Clock, AlertCircle } from 'lucide-react';
 
 export default function ScraperStatus() {
   // Fetch scraper statuses
@@ -13,15 +14,62 @@ export default function ScraperStatus() {
     refetchInterval: 30000, // Refresh every 30 seconds
   });
   
+  // Count the number of active scrapers
+  const activeScrapers = scraperStatuses.filter((scraper: any) => 
+    scraper.status === 'Running'
+  ).length;
+  
   return (
     <Layout 
       title="Scraper Status"
       subtitle="Monitor bookmaker data collection"
     >
-      <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Scraper Status</h2>
+      {/* Header with stats */}
+      <div className="bg-white dark:bg-slate-800 rounded-lg p-4 mb-6 shadow">
+        <div className="flex items-center mb-3">
+          <Database className="h-5 w-5 mr-2 text-primary" />
+          <h2 className="text-xl font-semibold text-gray-800 dark:text-white">Scrapers Overview</h2>
+        </div>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-2">
+          <div className="flex items-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+            <Server className="h-8 w-8 text-blue-500 dark:text-blue-400 mr-3" />
+            <div>
+              <p className="text-sm text-blue-700 dark:text-blue-300">Total Scrapers</p>
+              <p className="text-xl font-bold text-blue-800 dark:text-blue-200">{scraperStatuses.length}</p>
+            </div>
+          </div>
+          
+          <div className="flex items-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+            <Clock className="h-8 w-8 text-green-500 dark:text-green-400 mr-3" />
+            <div>
+              <p className="text-sm text-green-700 dark:text-green-300">Active Scrapers</p>
+              <p className="text-xl font-bold text-green-800 dark:text-green-200">{activeScrapers}</p>
+            </div>
+          </div>
+          
+          <div className="flex items-center p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
+            <AlertCircle className="h-8 w-8 text-red-500 dark:text-red-400 mr-3" />
+            <div>
+              <p className="text-sm text-red-700 dark:text-red-300">Inactive Scrapers</p>
+              <p className="text-xl font-bold text-red-800 dark:text-red-200">{scraperStatuses.length - activeScrapers}</p>
+            </div>
+          </div>
+        </div>
+        
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+          Scrapers run every 15 minutes to collect the latest odds data from bookmakers.
+        </p>
+      </div>
+      
+      {/* Scraper Cards */}
+      <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
+        <Server className="h-4 w-4 mr-2 text-primary" />
+        Scraper Status
+      </h3>
       
       {isLoading ? (
-        <div className="h-64 flex items-center justify-center">
+        <div className="h-64 flex items-center justify-center bg-white dark:bg-slate-800 rounded-lg shadow">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
         </div>
       ) : (
@@ -39,6 +87,12 @@ export default function ScraperStatus() {
           ))}
         </div>
       )}
+      
+      {/* Footer Note */}
+      <div className="text-center text-xs text-gray-500 dark:text-gray-400 mb-4">
+        <p>Data is collected from bookmaker APIs every 15 minutes.</p>
+        <p className="mt-1">Log files are available in the data directory.</p>
+      </div>
     </Layout>
   );
 }
