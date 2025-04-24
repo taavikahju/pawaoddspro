@@ -196,8 +196,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     },
     filename: function(req, file, cb) {
       // Use bookmaker code as part of the filename
-      const bookmakerCode = req.body.bookmaker;
-      if (!bookmakerCode) {
+      const bookmakerCode = req.body.bookmaker || req.query.bookmaker;
+      
+      console.log('Filename generator received bookmaker code:', bookmakerCode);
+      console.log('Request body:', req.body);
+      console.log('Request query:', req.query);
+      console.log('Headers:', req.headers);
+      
+      // Try to get bookmaker code from custom header if not in body
+      const headerBookmakerCode = req.headers['x-bookmaker-code'];
+      const finalBookmakerCode = bookmakerCode || 
+        (typeof headerBookmakerCode === 'string' ? headerBookmakerCode : '');
+      
+      if (!finalBookmakerCode) {
+        console.error('No bookmaker code found in request');
         return cb(new Error('No bookmaker code provided'), '');
       }
       
@@ -208,7 +220,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ext = '.js';
       }
       
-      cb(null, `${bookmakerCode}_scraper${ext}`);
+      const filename = `${finalBookmakerCode}_scraper${ext}`;
+      console.log('Generated filename:', filename);
+      
+      cb(null, filename);
     }
   });
   
@@ -217,6 +232,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     storage: storage_config,
     limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
     fileFilter: function(req, file, cb) {
+      console.log("Upload request received with body:", req.body);
+      
       // Accept only JavaScript, Python, and shell script files
       const allowedExts = ['.js', '.py', '.sh', '.ts'];
       const ext = path.extname(file.originalname).toLowerCase();
@@ -657,8 +674,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Endpoint to upload a scraper script
-  app.post('/api/scrapers/upload', upload.single('file'), async (req, res) => {
+  app.post('/api/scrapers/upload', (req, res, next) => {
+    console.log('Upload request received:', req.body);
+    
+    // Store the bookmaker code in req before multer processes the file
     try {
+      if (req.headers['content-type']?.includes('multipart/form-data')) {
+        // This is a workaround for multer middleware that needs 
+        // to access req.body.bookmaker before parsing the entire form
+        const bookmakerCode = req.headers['x-bookmaker-code'] || '';
+        if (bookmakerCode) {
+          req.body = req.body || {};
+          req.body.bookmaker = bookmakerCode;
+          console.log('Setting bookmaker code from header:', bookmakerCode);
+        }
+      }
+    } catch (err) {
+      console.error('Error processing upload request:', err);
+    }
+    
+    // Continue to multer middleware
+    next();
+  }, upload.single('file'), async (req, res) => {
+    try {
+      console.log('Upload request processed with body:', req.body);
+      
       // Check for file validation errors
       if (req.fileValidationError) {
         return res.status(400).json({ 
@@ -676,10 +716,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const bookmakerCode = req.body.bookmaker;
       if (!bookmakerCode) {
-        return res.status(400).json({ 
-          success: false, 
-          message: 'No bookmaker code provided' 
-        });
+        // Try to get bookmaker code from query parameter as a backup
+        const queryBookmaker = req.query.bookmaker;
+        if (queryBookmaker && typeof queryBookmaker === 'string') {
+          req.body.bookmaker = queryBookmaker;
+          console.log('Using bookmaker from query parameter:', queryBookmaker);
+        } else {
+          return res.status(400).json({ 
+            success: false, 
+            message: 'No bookmaker code provided' 
+          });
+        }
       }
 
       // Make file executable

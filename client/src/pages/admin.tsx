@@ -138,8 +138,17 @@ export default function AdminPage() {
   // Mutation for file upload
   const uploadScraperMutation = useMutation({
     mutationFn: async (formData: FormData) => {
-      const response = await fetch('/api/scrapers/upload', {
+      const bookmakerCode = formData.get('bookmaker') as string;
+      
+      // Create a URL with query parameter as backup
+      const url = `/api/scrapers/upload${bookmakerCode ? `?bookmaker=${bookmakerCode}` : ''}`;
+      
+      const response = await fetch(url, {
         method: 'POST',
+        headers: {
+          // Add custom header for bookmaker code to handle multer issues
+          'X-Bookmaker-Code': bookmakerCode || ''
+        },
         body: formData,
       });
       
@@ -231,7 +240,7 @@ export default function AdminPage() {
     }
   };
 
-  const handleScraperUpload = (e: React.FormEvent) => {
+  const handleScraperUpload = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!selectedFile || !selectedBookmakerForUpload) {
@@ -243,11 +252,26 @@ export default function AdminPage() {
       return;
     }
     
-    const formData = new FormData();
-    formData.append('file', selectedFile);
-    formData.append('bookmaker', selectedBookmakerForUpload);
-    
-    uploadScraperMutation.mutate(formData);
+    try {
+      // Create the FormData object
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+      formData.append('bookmaker', selectedBookmakerForUpload);
+      
+      // Log the form data for debugging
+      console.log('Uploading file:', selectedFile.name);
+      console.log('For bookmaker:', selectedBookmakerForUpload);
+      
+      // Pass the form data to the mutation
+      uploadScraperMutation.mutate(formData);
+    } catch (error) {
+      console.error('Error preparing upload:', error);
+      toast({
+        title: 'Error',
+        description: `Upload preparation failed: ${error instanceof Error ? error.message : String(error)}`,
+        variant: 'destructive',
+      });
+    }
   };
 
   return (
