@@ -133,7 +133,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                           rowSpan={filteredBookmakers.length}
                         >
                           <span className="text-xs text-gray-600 dark:text-gray-300">
-                            {event.league?.split(' ')[0] || 'Unknown'}
+                            {event.country || event.league?.split(' ')[0] || 'Unknown'}
                           </span>
                         </TableCell>
                         
@@ -143,12 +143,18 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                         >
                           <span className="text-xs text-gray-600 dark:text-gray-300">
                             {(() => {
-                              // If league contains a space, it means it's in "Country Tournament" format
+                              // First check if we have tournament data directly
+                              if (event.tournament) {
+                                return event.tournament;
+                              }
+                              
+                              // Fallback to legacy format where league contains both country and tournament
                               if (event.league?.includes(' ')) {
                                 const parts = event.league.split(' ');
                                 // Return everything except the first part (country)
                                 return parts.slice(1).join(' ');
                               }
+                              
                               // Otherwise, return the league as is (might be just the tournament name)
                               return event.league || 'Unknown';
                             })()}

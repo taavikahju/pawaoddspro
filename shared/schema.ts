@@ -118,6 +118,8 @@ export const eventDataSchema = z.object({
   eventId: z.string(),  // Added field
   teams: z.string(),
   league: z.string(),
+  country: z.string().nullish(),
+  tournament: z.string().nullish(),
   sportId: z.number(),
   date: z.string(),
   time: z.string(),
