@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Layout from '@/components/Layout';
 import OddsTable from '@/components/OddsTable';
@@ -22,6 +22,10 @@ export default function Dashboard() {
   const [tournamentFilter, setTournamentFilter] = useState('all');
   const { selectedSports } = useBookmakerContext();
   
+  // Available countries and tournaments (will be populated from data)
+  const [availableCountries, setAvailableCountries] = useState<string[]>([]);
+  const [availableTournaments, setAvailableTournaments] = useState<string[]>([]);
+  
   // Fetch stats data
   const { 
     data: stats,
@@ -40,22 +44,78 @@ export default function Dashboard() {
     refetchInterval: 60000, // Refresh every minute
   });
 
-  // Filter events by selected sports
-  const filteredEvents = events.filter((event: any) => {
-    const sport = event.sportId;
-    return selectedSports.some((selectedSport) => {
-      // Map sport codes to IDs 
-      // (in a real app, we'd have a more robust mapping)
-      const sportMap: Record<string, number> = {
-        'football': 1,
-        'basketball': 2,
-        'tennis': 3,
-        'horseracing': 4
-      };
+  // Extract available countries and tournaments from the data
+  useEffect(() => {
+    if (events && Array.isArray(events) && events.length > 0) {
+      // Extract unique countries
+      const countries = Array.from(new Set(
+        events
+          .map((event: any) => event.country)
+          .filter((country): country is string => Boolean(country))
+      )).sort();
       
-      return sportMap[selectedSport] === sport;
+      setAvailableCountries(countries);
+      
+      // Extract tournaments from the selected country or all tournaments if no country is selected
+      if (countryFilter !== 'all') {
+        const tournaments = Array.from(new Set(
+          events
+            .filter((event: any) => event.country === countryFilter)
+            .map((event: any) => event.tournament)
+            .filter((tournament): tournament is string => Boolean(tournament))
+        )).sort();
+        
+        setAvailableTournaments(tournaments);
+      } else {
+        const allTournaments = Array.from(new Set(
+          events
+            .map((event: any) => event.tournament)
+            .filter((tournament): tournament is string => Boolean(tournament))
+        )).sort();
+        
+        setAvailableTournaments(allTournaments);
+      }
+    }
+  }, [events, countryFilter]);
+  
+  // Reset tournament filter when country filter changes
+  useEffect(() => {
+    setTournamentFilter('all');
+  }, [countryFilter]);
+
+  // Filter events by selected sports, country, and tournament
+  const filteredEvents = useMemo(() => {
+    return events.filter((event: any) => {
+      // Filter by sport
+      const sportMatches = selectedSports.some((selectedSport) => {
+        // Map sport codes to IDs
+        const sportMap: Record<string, number> = {
+          'football': 1,
+          'basketball': 2,
+          'tennis': 3,
+          'horseracing': 4
+        };
+        
+        return sportMap[selectedSport] === event.sportId;
+      });
+      
+      if (!sportMatches) return false;
+      
+      // Filter by country
+      const countryMatches = countryFilter === 'all' || 
+        (event.country && event.country.toLowerCase() === countryFilter.toLowerCase());
+      
+      if (!countryMatches) return false;
+      
+      // Filter by tournament only if country is selected
+      if (countryFilter !== 'all' && tournamentFilter !== 'all') {
+        return event.tournament && 
+          event.tournament.toLowerCase() === tournamentFilter.toLowerCase();
+      }
+      
+      return true;
     });
-  });
+  }, [events, selectedSports, countryFilter, tournamentFilter]);
   
   // Get sport name by ID
   const getSportName = (sportId: number): string => {
@@ -96,11 +156,11 @@ export default function Dashboard() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Countries</SelectItem>
-                  <SelectItem value="england">England</SelectItem>
-                  <SelectItem value="spain">Spain</SelectItem>
-                  <SelectItem value="germany">Germany</SelectItem>
-                  <SelectItem value="italy">Italy</SelectItem>
-                  <SelectItem value="france">France</SelectItem>
+                  {availableCountries.map((country) => (
+                    <SelectItem key={country} value={country.toLowerCase()}>
+                      {country}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -110,18 +170,19 @@ export default function Dashboard() {
               <Select
                 value={tournamentFilter}
                 onValueChange={setTournamentFilter}
+                disabled={countryFilter === 'all'}
               >
-                <SelectTrigger className="h-9 w-[150px]">
+                <SelectTrigger className={`h-9 w-[150px] ${countryFilter === 'all' ? 'opacity-50 cursor-not-allowed' : ''}`}>
                   <Trophy className="h-4 w-4 mr-2 text-gray-500" />
-                  <SelectValue placeholder="Tournament" />
+                  <SelectValue placeholder={countryFilter === 'all' ? 'Select Country First' : 'Tournament'} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Tournaments</SelectItem>
-                  <SelectItem value="premier-league">Premier League</SelectItem>
-                  <SelectItem value="la-liga">La Liga</SelectItem>
-                  <SelectItem value="bundesliga">Bundesliga</SelectItem>
-                  <SelectItem value="serie-a">Serie A</SelectItem>
-                  <SelectItem value="ligue-1">Ligue 1</SelectItem>
+                  {availableTournaments.map((tournament) => (
+                    <SelectItem key={tournament} value={tournament.toLowerCase()}>
+                      {tournament}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
