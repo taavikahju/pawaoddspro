@@ -81,8 +81,35 @@ export async function runCustomScraper(bookmakerCode: string): Promise<any[]> {
     // Parse the output
     if (config.outputFormat === 'json') {
       try {
-        const data = JSON.parse(stdout.trim());
-        return Array.isArray(data) ? data : [];
+        const rawData = JSON.parse(stdout.trim());
+        const data = Array.isArray(rawData) ? rawData : [];
+        
+        // Map the data to the expected format
+        return data.map(item => {
+          // Check if this is the user's custom format
+          if (item.eventId && item.event && item.home_odds && item.draw_odds && item.away_odds) {
+            // Map from the user's custom format to our expected format
+            return {
+              id: item.eventId,
+              teams: item.event,
+              league: item.tournament || '',
+              sport: item.sport || 'football', // Default to football if not specified
+              country: item.country || '',
+              date: item.start_time ? item.start_time.split(' ')[0] : '',
+              time: item.start_time ? item.start_time.split(' ')[1] : '',
+              odds: {
+                home: parseFloat(item.home_odds),
+                draw: parseFloat(item.draw_odds),
+                away: parseFloat(item.away_odds)
+              },
+              // Keep the original data for reference
+              raw: { ...item }
+            };
+          }
+          
+          // If it's already in our expected format, return it as is
+          return item;
+        });
       } catch (e) {
         console.error(`Error parsing JSON output from ${bookmakerCode} scraper:`, e);
         console.error('Output was:', stdout.substring(0, 500) + '...');

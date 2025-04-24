@@ -488,6 +488,86 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Endpoint to test a custom scraper
+  app.post('/api/scrapers/test/:bookmakerCode', async (req, res) => {
+    try {
+      const { bookmakerCode } = req.params;
+      
+      if (!bookmakerCode) {
+        return res.status(400).json({ 
+          success: false, 
+          message: 'No bookmaker code provided' 
+        });
+      }
+      
+      // Check if the bookmaker exists
+      const bookmaker = await storage.getBookmakerByCode(bookmakerCode);
+      if (!bookmaker) {
+        return res.status(404).json({ 
+          success: false, 
+          message: `Bookmaker ${bookmakerCode} not found` 
+        });
+      }
+      
+      // Check if a custom scraper exists for this bookmaker
+      if (!customScrapers.hasCustomScraper(bookmakerCode)) {
+        return res.status(404).json({ 
+          success: false, 
+          message: `No custom scraper found for bookmaker ${bookmakerCode}` 
+        });
+      }
+      
+      // Run the custom scraper
+      let scrapedData: any[] = [];
+      
+      try {
+        // Select the appropriate scraper function
+        switch (bookmakerCode) {
+          case 'bet365':
+            scrapedData = await customScrapers.scrapeBet365();
+            break;
+          case 'williamhill':
+            scrapedData = await customScrapers.scrapeWilliamHill();
+            break;
+          case 'betfair':
+            scrapedData = await customScrapers.scrapeBetfair();
+            break;
+          case 'paddypower':
+            scrapedData = await customScrapers.scrapePaddyPower();
+            break;
+          default:
+            scrapedData = await customScrapers.runCustomScraper(bookmakerCode);
+        }
+        
+        // Return the scraped data
+        res.json({ 
+          success: true, 
+          message: `Test successful for ${bookmaker.name} scraper`,
+          events: scrapedData.slice(0, 5), // Return just the first 5 events for preview
+          count: scrapedData.length,
+          bookmaker: {
+            id: bookmaker.id,
+            code: bookmaker.code,
+            name: bookmaker.name
+          }
+        });
+      } catch (scraperError) {
+        return res.status(500).json({ 
+          success: false, 
+          message: `Error running ${bookmaker.name} scraper`, 
+          error: scraperError instanceof Error ? scraperError.message : String(scraperError)
+        });
+      }
+    } catch (error) {
+      console.error('Error testing custom scraper:', error);
+      res.status(500).json({ 
+        success: false, 
+        message: 'Failed to test custom scraper', 
+        error: error instanceof Error ? error.message : String(error)
+      });
+    }
+  });
+
   app.post('/api/scrapers/refresh', async (req, res) => {
     try {
       // Send immediate response that scraper job has been triggered
