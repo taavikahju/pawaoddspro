@@ -34,43 +34,6 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
     return currentOdd === bestOdd;
   };
   
-  // Get bookmaker abbreviation
-  const getBookmakerAbbr = (bookmakerCode: string) => {
-    const abbrMap: Record<string, string> = {
-      // Old bookmakers
-      'bet365': 'B365',
-      'williamhill': 'WH',
-      'betfair': 'BF',
-      'paddypower': 'PP',
-      // Custom bookmakers
-      'sporty': 'SPT',
-      'betika KE': 'BTK',
-      'bp KE': 'BPKE',
-      'bp GH': 'BPGH'
-    };
-    
-    // If we don't have a specific abbreviation, just return the code itself
-    return abbrMap[bookmakerCode] || bookmakerCode;
-  };
-  
-  // Get bookmaker color class
-  const getBookmakerColorClass = (bookmakerCode: string) => {
-    const colorMap: Record<string, string> = {
-      // Old bookmakers
-      'bet365': 'text-blue-600 dark:text-blue-400',
-      'williamhill': 'text-green-600 dark:text-green-400',
-      'betfair': 'text-orange-600 dark:text-orange-400',
-      'paddypower': 'text-red-600 dark:text-red-400',
-      // Custom bookmakers
-      'sporty': 'text-purple-600 dark:text-purple-400',
-      'betika KE': 'text-sky-600 dark:text-sky-400',
-      'bp KE': 'text-lime-600 dark:text-lime-400',
-      'bp GH': 'text-amber-600 dark:text-amber-400'
-    };
-    
-    return colorMap[bookmakerCode] || 'text-gray-600 dark:text-gray-400';
-  };
-  
   // Calculate margin for a bookmaker's odds
   const calculateMargin = (homeOdds?: number, drawOdds?: number, awayOdds?: number): number | null => {
     if (!homeOdds || !drawOdds || !awayOdds) return null;
@@ -214,8 +177,8 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                     )}
                     
                     <TableCell className="px-2 py-1 whitespace-nowrap border-r border-gray-200 dark:border-gray-700">
-                      <span className={`text-xs font-bold ${getBookmakerColorClass(bookmaker.code)}`}>
-                        {getBookmakerAbbr(bookmaker.code)}
+                      <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
+                        {bookmaker.code}
                       </span>
                     </TableCell>
                     
