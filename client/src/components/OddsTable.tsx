@@ -142,7 +142,16 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                           rowSpan={filteredBookmakers.length}
                         >
                           <span className="text-xs text-gray-600 dark:text-gray-300">
-                            {event.league?.includes(' ') ? event.league?.split(' ').slice(1).join(' ') : 'Unknown'}
+                            {(() => {
+                              // If league contains a space, it means it's in "Country Tournament" format
+                              if (event.league?.includes(' ')) {
+                                const parts = event.league.split(' ');
+                                // Return everything except the first part (country)
+                                return parts.slice(1).join(' ');
+                              }
+                              // Otherwise, return the league as is (might be just the tournament name)
+                              return event.league || 'Unknown';
+                            })()}
                           </span>
                         </TableCell>
                         

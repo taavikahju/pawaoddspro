@@ -62,10 +62,15 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
         let league = firstMatch.league;
         if (firstMatch.country && firstMatch.tournament) {
           league = `${firstMatch.country} ${firstMatch.tournament}`;
+          console.log(`Using country [${firstMatch.country}] and tournament [${firstMatch.tournament}]`);
         } else if (firstMatch.country) {
           league = firstMatch.country;
+          console.log(`Using only country [${firstMatch.country}]`);
         } else if (firstMatch.tournament) {
           league = firstMatch.tournament;
+          console.log(`Using only tournament [${firstMatch.tournament}]`);
+        } else {
+          console.log(`No country or tournament found, using league [${league}]`);
         }
         
         // Create the teams field if not already available
