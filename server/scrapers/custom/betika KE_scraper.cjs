@@ -1,4 +1,4 @@
-const fs = require('fs');
+#!/usr/bin/env node
 const axios = require('axios');
 
 const BASE_URL = 'https://api.betika.com/v1/uo/matches';
@@ -26,38 +26,47 @@ function formatDateTime(dateTimeStr) {
 }
 
 async function fetchPage(page) {
-  const url = `${BASE_URL}?page=${page}&${new URLSearchParams(QUERY_PARAMS).toString()}`;
-  const { data } = await axios.get(url);
-  return data.data;
+  try {
+    const url = `${BASE_URL}?page=${page}&${new URLSearchParams(QUERY_PARAMS).toString()}`;
+    const { data } = await axios.get(url);
+    return data.data;
+  } catch (error) {
+    console.error(`Error fetching page ${page}: ${error.message}`);
+    return [];
+  }
 }
 
 (async () => {
-  console.log('📡 Fetching Betika events...');
-  while (true) {
-    const events = await fetchPage(currentPage);
-    if (!events || events.length === 0) break;
+  try {
+    console.error('📡 Fetching Betika events...');
+    while (true) {
+      const events = await fetchPage(currentPage);
+      if (!events || events.length === 0) break;
 
-    const formattedEvents = events.map(event => {
-      return {
-        eventId: event.parent_match_id,
-        country: event.category,
-        tournament: event.competition_name,
-        event: `${event.home_team} - ${event.away_team}`,
-        market: "1X2",
-        home_odds: event.home_odd,
-        draw_odds: event.neutral_odd,
-        away_odds: event.away_odd,
-        start_time: formatDateTime(event.start_time)
-      };
-    });
+      const formattedEvents = events.map(event => {
+        return {
+          eventId: event.parent_match_id,
+          country: event.category,
+          tournament: event.competition_name,
+          event: `${event.home_team} - ${event.away_team}`,
+          market: "1X2",
+          home_odds: event.home_odd,
+          draw_odds: event.neutral_odd,
+          away_odds: event.away_odd,
+          start_time: formatDateTime(event.start_time)
+        };
+      });
 
-    allEvents.push(...formattedEvents);
-    console.log(`✅ Fetched page ${currentPage} with ${events.length} events`);
-    currentPage++;
+      allEvents.push(...formattedEvents);
+      console.error(`✅ Fetched page ${currentPage} with ${events.length} events`);
+      currentPage++;
+    }
+
+    // Output to stdout for the integration system
+    console.log(JSON.stringify(allEvents));
+  } catch (error) {
+    console.error('Error fetching Betika data:', error.message);
+    // Output empty array in case of error
+    console.log('[]');
   }
-
-  // Output to stdout for the integration system
-  console.log(JSON.stringify(allEvents));
-})().catch(error => {
-  console.error('Error fetching Betika data:', error.message);
-});
+})();
