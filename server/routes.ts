@@ -8,6 +8,7 @@ import path from "path";
 import fs from "fs";
 import * as customScrapers from "./scrapers/custom/integration";
 import { WebSocketServer, WebSocket } from 'ws';
+import { processAndMapEvents } from "./utils/dataMapper";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Create HTTP server
@@ -619,6 +620,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
           message: 'Failed to run scrapers: ' + (error instanceof Error ? error.message : String(error)),
           status: 'error'
         }
+      });
+    }
+  });
+
+  // Endpoint to manually process event data (for debugging)
+  app.post('/api/events/process', async (req, res) => {
+    try {
+      // Process and map events
+      await processAndMapEvents(storage);
+      
+      // Return success response
+      res.json({ 
+        success: true, 
+        message: 'Events processed successfully' 
+      });
+      
+      // Broadcast updates to all connected WebSocket clients
+      const events = await storage.getEvents();
+      broadcast({
+        type: 'events',
+        data: events
+      });
+    } catch (error) {
+      console.error('Error processing events:', error);
+      res.status(500).json({ 
+        success: false, 
+        message: 'Failed to process events',
+        error: error instanceof Error ? error.message : String(error)
       });
     }
   });
