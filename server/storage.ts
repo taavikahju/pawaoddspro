@@ -129,13 +129,18 @@ export class MemStorage implements IStorage {
     }
   }
   
-  private formatTime(date: Date): string {
-    return date.toLocaleTimeString('en-US', {
+    private formatTime(date: Date): string {
+    return date.toLocaleString('en-US', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
       hour: 'numeric',
       minute: '2-digit',
-      hour12: true
-    });
+      hour12: true,
+      timeZone: 'UTC'
+    }) + " UTC";
   }
+  
   
   // User methods
   async getUser(id: number): Promise<User | undefined> {
@@ -453,13 +458,18 @@ export class DatabaseStorage implements IStorage {
     }
   }
 
-  private formatTime(date: Date): string {
-    return date.toLocaleTimeString('en-US', {
+    private formatTime(date: Date): string {
+    return date.toLocaleString('en-US', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
       hour: 'numeric',
       minute: '2-digit',
-      hour12: true
-    });
+      hour12: true,
+      timeZone: 'UTC'
+    }) + " UTC";
   }
+  
 
   // User methods
   async getUser(id: number): Promise<User | undefined> {
