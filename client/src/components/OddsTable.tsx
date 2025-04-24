@@ -65,45 +65,45 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
   return (
     <div className={cn("overflow-x-auto bg-white dark:bg-slate-800 rounded-lg shadow", className)}>
       <Table className="w-full border-collapse">
-        <TableHeader className="bg-gray-100 dark:bg-slate-700/50">
+        <TableHeader className="bg-gray-100 dark:bg-slate-700/50 sticky top-[60px] z-10">
           <TableRow className="border-b border-gray-200 dark:border-gray-700">
-            <TableHead className="sticky top-0 w-24 px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+            <TableHead className="w-24 px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               <div className="flex items-center">
                 <Globe className="w-3 h-3 mr-1" />
                 Country
               </div>
             </TableHead>
-            <TableHead className="sticky top-0 w-28 px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+            <TableHead className="w-28 px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               <div className="flex items-center">
                 <Trophy className="w-3 h-3 mr-1" />
                 Tournament
               </div>
             </TableHead>
-            <TableHead className="sticky top-0 w-24 px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+            <TableHead className="w-24 px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               <div className="flex items-center">
                 <Clock className="w-3 h-3 mr-1" />
                 Start (UTC)
               </div>
             </TableHead>
-            <TableHead className="sticky top-0 w-48 px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+            <TableHead className="w-48 px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               Fixture
             </TableHead>
-            <TableHead className="sticky top-0 w-20 px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+            <TableHead className="w-20 px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               Market
             </TableHead>
-            <TableHead className="sticky top-0 w-20 px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+            <TableHead className="w-20 px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               Source
             </TableHead>
-            <TableHead className="sticky top-0 w-16 px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+            <TableHead className="w-16 px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               Home
             </TableHead>
-            <TableHead className="sticky top-0 w-16 px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+            <TableHead className="w-16 px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               Draw
             </TableHead>
-            <TableHead className="sticky top-0 w-16 px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+            <TableHead className="w-16 px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               Away
             </TableHead>
-            <TableHead className="sticky top-0 w-20 px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+            <TableHead className="w-20 px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               Margin
             </TableHead>
           </TableRow>

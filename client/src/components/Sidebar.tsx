@@ -193,30 +193,7 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
           </div>
         </div>
         
-        <div>
-          <p className="px-2 mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-            Sports
-          </p>
-          <div className="space-y-1 bg-gray-50 dark:bg-slate-900/50 rounded-md p-2 border border-gray-100 dark:border-slate-700">
-            {sports.map((sport) => (
-              <div key={sport.id} className="flex items-center py-1.5">
-                <Checkbox
-                  id={`sport-${sport.id}`}
-                  checked={selectedSports.includes(sport.code)}
-                  onCheckedChange={() => toggleSport(sport.code)}
-                  className="h-4 w-4 rounded text-blue-500"
-                />
-                <Label
-                  htmlFor={`sport-${sport.id}`}
-                  className="ml-2 text-sm flex items-center text-gray-700 dark:text-gray-300"
-                >
-                  {getSportIcon(sport.code)}
-                  {sport.name}
-                </Label>
-              </div>
-            ))}
-          </div>
-        </div>
+
         
         <Separator className="border-gray-200 dark:border-slate-700" />
         
