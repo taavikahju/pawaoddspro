@@ -9,8 +9,12 @@ import fs from "fs";
 import * as customScrapers from "./scrapers/custom/integration";
 import { WebSocketServer, WebSocket } from 'ws';
 import { processAndMapEvents } from "./utils/dataMapper";
+import { setupAuth } from "./auth";
+import { isAuthenticated, isAdmin } from "./middleware/auth";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Setup authentication
+  setupAuth(app);
   // Create HTTP server
   const httpServer = createServer(app);
   
@@ -622,7 +626,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  app.post('/api/scrapers/test/:bookmakerCode', async (req, res) => {
+  app.post('/api/scrapers/test/:bookmakerCode', isAdmin, async (req, res) => {
     try {
       const { bookmakerCode } = req.params;
       
@@ -701,7 +705,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/scrapers/refresh', async (req, res) => {
+  app.post('/api/scrapers/refresh', isAdmin, async (req, res) => {
     try {
       // Send immediate response that scraper job has been triggered
       res.json({ success: true, message: 'Scrapers triggered manually' });
@@ -740,7 +744,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Endpoint to manually process event data (for debugging)
-  app.post('/api/events/process', async (req, res) => {
+  app.post('/api/events/process', isAdmin, async (req, res) => {
     try {
       // Process and map events
       await processAndMapEvents(storage);

@@ -35,9 +35,9 @@
     "date": "2025-04-24",
     "time": "21:00",
     "odds": {
-      "home": 1.99,
-      "draw": 3.4,
-      "away": 3.55
+      "home": 1.94,
+      "draw": 3.45,
+      "away": 3.65
     },
     "raw": {
       "eventId": "60019073",
@@ -45,9 +45,9 @@
       "tournament": "Saudi Pro League",
       "event": "Al-Taawoun FC - Al-Raed Club",
       "market": "1X2",
-      "home_odds": "1.99",
-      "draw_odds": "3.40",
-      "away_odds": "3.55",
+      "home_odds": "1.94",
+      "draw_odds": "3.45",
+      "away_odds": "3.65",
       "start_time": "2025-04-24 21:00"
     }
   },
@@ -1153,9 +1153,9 @@
     "date": "2025-04-25",
     "time": "06:30",
     "odds": {
-      "home": 2.1,
+      "home": 2.19,
       "draw": 3.7,
-      "away": 2.85
+      "away": 2.7
     },
     "raw": {
       "eventId": "57273625",
@@ -1163,9 +1163,9 @@
       "tournament": "NSW NPL 1",
       "event": "Sydney FC Youth - Sutherland Sharks",
       "market": "1X2",
-      "home_odds": "2.10",
+      "home_odds": "2.19",
       "draw_odds": "3.70",
-      "away_odds": "2.85",
+      "away_odds": "2.70",
       "start_time": "2025-04-25 06:30"
     }
   },
@@ -3051,9 +3051,9 @@
     "date": "2025-04-25",
     "time": "16:00",
     "odds": {
-      "home": 1.54,
-      "draw": 4.3,
-      "away": 4.2
+      "home": 1.68,
+      "draw": 3.9,
+      "away": 3.75
     },
     "raw": {
       "eventId": "54641159",
@@ -3061,9 +3061,9 @@
       "tournament": "III Liga, Group 3",
       "event": "Miedz Legnica II - Warta Gorzow Wielkopolski",
       "market": "1X2",
-      "home_odds": "1.54",
-      "draw_odds": "4.30",
-      "away_odds": "4.20",
+      "home_odds": "1.68",
+      "draw_odds": "3.90",
+      "away_odds": "3.75",
       "start_time": "2025-04-25 16:00"
     }
   },
@@ -5027,9 +5027,9 @@
     "date": "2025-04-25",
     "time": "19:30",
     "odds": {
-      "home": 17,
-      "draw": 9.4,
-      "away": 1.06
+      "home": 15,
+      "draw": 9.2,
+      "away": 1.07
     },
     "raw": {
       "eventId": "51773609",
@@ -5037,9 +5037,9 @@
       "tournament": "Women Bundesliga",
       "event": "Potsdam Women  - Leverkusen Women ",
       "market": "1X2",
-      "home_odds": "17.00",
-      "draw_odds": "9.40",
-      "away_odds": "1.06",
+      "home_odds": "15.00",
+      "draw_odds": "9.20",
+      "away_odds": "1.07",
       "start_time": "2025-04-25 19:30"
     }
   },
@@ -7289,9 +7289,9 @@
     "date": "2025-04-25",
     "time": "21:30",
     "odds": {
-      "home": 1.5,
-      "draw": 4.9,
-      "away": 6
+      "home": 1.51,
+      "draw": 4.8,
+      "away": 5.8
     },
     "raw": {
       "eventId": "51269553",
@@ -7299,9 +7299,9 @@
       "tournament": "Bundesliga",
       "event": "VfB Stuttgart - Heidenheim",
       "market": "1X2",
-      "home_odds": "1.50",
-      "draw_odds": "4.90",
-      "away_odds": "6.00",
+      "home_odds": "1.51",
+      "draw_odds": "4.80",
+      "away_odds": "5.80",
       "start_time": "2025-04-25 21:30"
     }
   },
@@ -11518,6 +11518,32 @@
     }
   },
   {
+    "id": "58378587",
+    "eventId": "58378587",
+    "teams": "TPV Tampere - PPJ Helsinki",
+    "league": "Kakkonen, Group B",
+    "sport": "football",
+    "country": "Finland",
+    "date": "2025-04-26",
+    "time": "14:00",
+    "odds": {
+      "home": 1.82,
+      "draw": 4,
+      "away": 3.2
+    },
+    "raw": {
+      "eventId": "58378587",
+      "country": "Finland",
+      "tournament": "Kakkonen, Group B",
+      "event": "TPV Tampere - PPJ Helsinki",
+      "market": "1X2",
+      "home_odds": "1.82",
+      "draw_odds": "4.00",
+      "away_odds": "3.20",
+      "start_time": "2025-04-26 14:00"
+    }
+  },
+  {
     "id": "60046653",
     "eventId": "60046653",
     "teams": "Caernarfon Town FC - Barry Town United FC",
@@ -11674,28 +11700,28 @@
     }
   },
   {
-    "id": "51094133",
-    "eventId": "51094133",
-    "teams": "Bristol Rovers - Reading",
-    "league": "League One",
+    "id": "51096905",
+    "eventId": "51096905",
+    "teams": "Luton - Coventry",
+    "league": "Championship",
     "sport": "football",
     "country": "England",
     "date": "2025-04-26",
     "time": "14:30",
     "odds": {
-      "home": 2.95,
-      "draw": 3.5,
-      "away": 2.26
+      "home": 2.6,
+      "draw": 3.3,
+      "away": 2.8
     },
     "raw": {
-      "eventId": "51094133",
+      "eventId": "51096905",
       "country": "England",
-      "tournament": "League One",
-      "event": "Bristol Rovers - Reading",
+      "tournament": "Championship",
+      "event": "Luton - Coventry",
       "market": "1X2",
-      "home_odds": "2.95",
-      "draw_odds": "3.50",
-      "away_odds": "2.26",
+      "home_odds": "2.60",
+      "draw_odds": "3.30",
+      "away_odds": "2.80",
       "start_time": "2025-04-26 14:30"
     }
   },
@@ -16250,6 +16276,32 @@
     }
   },
   {
+    "id": "58378591",
+    "eventId": "58378591",
+    "teams": "HJS Akatemia - FC Kiffen",
+    "league": "Kakkonen, Group B",
+    "sport": "football",
+    "country": "Finland",
+    "date": "2025-04-26",
+    "time": "17:00",
+    "odds": {
+      "home": 2.01,
+      "draw": 3.8,
+      "away": 2.85
+    },
+    "raw": {
+      "eventId": "58378591",
+      "country": "Finland",
+      "tournament": "Kakkonen, Group B",
+      "event": "HJS Akatemia - FC Kiffen",
+      "market": "1X2",
+      "home_odds": "2.01",
+      "draw_odds": "3.80",
+      "away_odds": "2.85",
+      "start_time": "2025-04-26 17:00"
+    }
+  },
+  {
     "id": "51099861",
     "eventId": "51099861",
     "teams": "Gillingham - Swindon Town",
@@ -19431,9 +19483,9 @@
     "date": "2025-04-26",
     "time": "20:30",
     "odds": {
-      "home": 2.9,
+      "home": 3,
       "draw": 3.25,
-      "away": 2.33
+      "away": 2.28
     },
     "raw": {
       "eventId": "58839249",
@@ -19441,9 +19493,9 @@
       "tournament": "Premier League",
       "event": "Bnei Sakhnin FC - MS Ashdod",
       "market": "1X2",
-      "home_odds": "2.90",
+      "home_odds": "3.00",
       "draw_odds": "3.25",
-      "away_odds": "2.33",
+      "away_odds": "2.28",
       "start_time": "2025-04-26 20:30"
     }
   },
@@ -23331,9 +23383,9 @@
     "date": "2025-04-27",
     "time": "13:00",
     "odds": {
-      "home": 2.6,
+      "home": 2.5,
       "draw": 3.2,
-      "away": 2.5
+      "away": 2.6
     },
     "raw": {
       "eventId": "51866505",
@@ -23341,9 +23393,9 @@
       "tournament": "Segunda Federacion",
       "event": "Real Zaragoza Deportivo Aragon - CD Teruel",
       "market": "1X2",
-      "home_odds": "2.60",
+      "home_odds": "2.50",
       "draw_odds": "3.20",
-      "away_odds": "2.50",
+      "away_odds": "2.60",
       "start_time": "2025-04-27 13:00"
     }
   },
@@ -23461,9 +23513,9 @@
     "date": "2025-04-27",
     "time": "13:00",
     "odds": {
-      "home": 2.95,
-      "draw": 3,
-      "away": 2.33
+      "home": 2.65,
+      "draw": 2.95,
+      "away": 2.55
     },
     "raw": {
       "eventId": "51866507",
@@ -23471,9 +23523,9 @@
       "tournament": "Segunda Federacion",
       "event": "CD Alfaro - Deportivo Alaves B",
       "market": "1X2",
-      "home_odds": "2.95",
-      "draw_odds": "3.00",
-      "away_odds": "2.33",
+      "home_odds": "2.65",
+      "draw_odds": "2.95",
+      "away_odds": "2.55",
       "start_time": "2025-04-27 13:00"
     }
   },
@@ -23513,9 +23565,9 @@
     "date": "2025-04-27",
     "time": "13:00",
     "odds": {
-      "home": 2.03,
-      "draw": 3.15,
-      "away": 3.45
+      "home": 1.92,
+      "draw": 3.2,
+      "away": 3.75
     },
     "raw": {
       "eventId": "51866521",
@@ -23523,9 +23575,9 @@
       "tournament": "Segunda Federacion",
       "event": "CD Calahorra - Utebo",
       "market": "1X2",
-      "home_odds": "2.03",
-      "draw_odds": "3.15",
-      "away_odds": "3.45",
+      "home_odds": "1.92",
+      "draw_odds": "3.20",
+      "away_odds": "3.75",
       "start_time": "2025-04-27 13:00"
     }
   },
@@ -31564,6 +31616,32 @@
     }
   },
   {
+    "id": "58378595",
+    "eventId": "58378595",
+    "teams": "Tampereen Ilves 2 - Nurmijarven Jalkapalloseura",
+    "league": "Kakkonen, Group B",
+    "sport": "football",
+    "country": "Finland",
+    "date": "2025-04-28",
+    "time": "19:00",
+    "odds": {
+      "home": 1.25,
+      "draw": 6,
+      "away": 7.2
+    },
+    "raw": {
+      "eventId": "58378595",
+      "country": "Finland",
+      "tournament": "Kakkonen, Group B",
+      "event": "Tampereen Ilves 2 - Nurmijarven Jalkapalloseura",
+      "market": "1X2",
+      "home_odds": "1.25",
+      "draw_odds": "6.00",
+      "away_odds": "7.20",
+      "start_time": "2025-04-28 19:00"
+    }
+  },
+  {
     "id": "57159235",
     "eventId": "57159235",
     "teams": "Seinajoen JK - FC Haka Valkeakoski",
@@ -36099,7 +36177,7 @@
     "odds": {
       "home": 1.72,
       "draw": 3.6,
-      "away": 5.6
+      "away": 5.4
     },
     "raw": {
       "eventId": "50852759",
@@ -36109,7 +36187,7 @@
       "market": "1X2",
       "home_odds": "1.72",
       "draw_odds": "3.60",
-      "away_odds": "5.60",
+      "away_odds": "5.40",
       "start_time": "2025-05-04 17:15"
     }
   },
