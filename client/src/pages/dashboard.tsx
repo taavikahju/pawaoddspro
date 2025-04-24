@@ -460,8 +460,13 @@ export default function Dashboard() {
   return (
     <Layout
     >
+      {/* Logo at the top */}
+      <div className="bg-white dark:bg-slate-800 rounded-t-lg border-b border-gray-200 dark:border-gray-700 px-3 py-2">
+        <h1 className="text-xl font-bold text-gray-800 dark:text-white">pawa<span className="text-[#00BCFF] text-xl font-bold">odds</span>.pro</h1>
+      </div>
+
       {/* Minimal Control Panel */}
-      <div className="bg-white dark:bg-slate-800 rounded-t-lg p-2 shadow border-b border-gray-200 dark:border-gray-700">
+      <div className="bg-white dark:bg-slate-800 p-2 shadow border-b border-gray-200 dark:border-gray-700">
         <div className="flex flex-wrap items-center justify-between gap-2">
           {/* Filters */}
           <div className="flex flex-wrap items-center gap-2">

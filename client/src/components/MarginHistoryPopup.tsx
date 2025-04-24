@@ -62,15 +62,16 @@ export default function MarginHistoryPopup({
     // Group by timestamp (converts to YYYY-MM-DD HH:MM)
     const dataByTimestamp = data.reduce((acc: Record<string, any>, entry) => {
       const date = new Date(entry.timestamp);
-      // Format the date using user's local timezone
-      const timeKey = date.toLocaleString(undefined, {
+      // Format the date in UTC timezone
+      const timeKey = date.toLocaleString('en-US', {
         year: 'numeric',
         month: '2-digit',
         day: '2-digit',
         hour: '2-digit',
         minute: '2-digit',
-        hour12: false
-      });
+        hour12: false,
+        timeZone: 'UTC'
+      }) + ' UTC';
       
       if (!acc[timeKey]) {
         acc[timeKey] = { 
