@@ -130,9 +130,9 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     // Draw game minute labels
     drawMinuteLabels(ctx, width, height);
     
-    // Calculate spacing based on game minutes (1-90)
+    // Calculate spacing based on game minutes (1-120)
     // If game minutes are not available, use even spacing
-    const maxGameMinute = 90; // Football matches are typically 90 minutes
+    const maxGameMinute = 120; // Extended to 120 minutes as requested
     const pixelsPerMinute = width / maxGameMinute;
     
     // Setup heartbeat line style with thicker line
@@ -215,42 +215,42 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
       let y;
       
       if (isActive) {
-        // Create ECG pattern with VERY PRONOUNCED SPIKES as shown in the reference image
+        // Create ECG pattern with EXTREMELY PRONOUNCED SPIKES
         // Calculate spike pattern based on x position
-        const cycleLength = 100; // Length of one complete heartbeat cycle in pixels
+        const cycleLength = 80; // Shorter cycle length to fit more heartbeats
         const positionInCycle = x % cycleLength;
         
-        // Create a realistic ECG pattern with LARGE distinct spikes
+        // Create a dramatic ECG pattern with very large spikes
         if (positionInCycle < 5) {
           // Baseline
           y = height / 2;
         } else if (positionInCycle < 10) {
           // Initial P wave (small bump)
-          y = height / 2 - Math.sin(((positionInCycle - 5) / 5) * Math.PI) * 8;
+          y = height / 2 - Math.sin(((positionInCycle - 5) / 5) * Math.PI) * 10;
         } else if (positionInCycle < 15) {
           // Baseline before QRS complex
           y = height / 2;
-        } else if (positionInCycle < 18) {
-          // Q wave (small dip)
-          y = height / 2 + ((positionInCycle - 15) / 3) * 15;
-        } else if (positionInCycle < 20) {
-          // R wave (MAJOR SPIKE UP - very large)
-          y = height / 2 + 15 - ((positionInCycle - 18) / 2) * 60;
+        } else if (positionInCycle < 17) {
+          // Q wave (sharper dip)
+          y = height / 2 + ((positionInCycle - 15) / 2) * 20;
+        } else if (positionInCycle < 19) {
+          // R wave (EXTREME SPIKE UP - very dramatic)
+          y = height / 2 + 20 - ((positionInCycle - 17) / 2) * 80;
+        } else if (positionInCycle < 21) {
+          // Return from R spike (sharp drop)
+          y = height / 2 - 60 + ((positionInCycle - 19) / 2) * 70;
         } else if (positionInCycle < 23) {
-          // Return from R spike
-          y = height / 2 - 45 + ((positionInCycle - 20) / 3) * 50;
-        } else if (positionInCycle < 25) {
-          // S wave (dip down)
-          y = height / 2 + 5 + ((positionInCycle - 23) / 2) * 10;
-        } else if (positionInCycle < 30) {
-          // Return to baseline
-          y = height / 2 + 15 - ((positionInCycle - 25) / 5) * 15;
-        } else if (positionInCycle < 45) {
+          // S wave (deeper dip)
+          y = height / 2 + 10 + ((positionInCycle - 21) / 2) * 15;
+        } else if (positionInCycle < 28) {
+          // Return to baseline (faster)
+          y = height / 2 + 25 - ((positionInCycle - 23) / 5) * 25;
+        } else if (positionInCycle < 40) {
           // ST segment (flat)
           y = height / 2;
-        } else if (positionInCycle < 55) {
-          // T wave (medium hump)
-          y = height / 2 - Math.sin(((positionInCycle - 45) / 10) * Math.PI) * 15;
+        } else if (positionInCycle < 50) {
+          // T wave (more pronounced hump)
+          y = height / 2 - Math.sin(((positionInCycle - 40) / 10) * Math.PI) * 20;
         } else {
           // Baseline until next beat
           y = height / 2;
@@ -328,9 +328,9 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     ctx.moveTo(0, height / 2);
     ctx.lineTo(width, height / 2);
     
-    // Draw vertical grid lines every 15 minutes of game time
-    for (let minute = 15; minute < 90; minute += 15) {
-      const x = (minute / 90) * width;
+    // Draw vertical grid lines every 15 minutes of game time (up to 120 minutes)
+    for (let minute = 15; minute <= 120; minute += 15) {
+      const x = (minute / 120) * width;
       ctx.moveTo(x, 0);
       ctx.lineTo(x, height);
     }
@@ -348,9 +348,9 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
     ctx.textAlign = 'center';
     
-    // Draw minute labels every 15 minutes
-    for (let minute = 0; minute <= 90; minute += 15) {
-      const x = (minute / 90) * width;
+    // Draw minute labels every 15 minutes (up to 120 minutes)
+    for (let minute = 0; minute <= 120; minute += 15) {
+      const x = (minute / 120) * width;
       ctx.fillText(`${minute}'`, x, height - 5);
     }
   }

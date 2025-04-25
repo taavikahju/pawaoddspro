@@ -251,6 +251,11 @@ export default function LiveHeartbeat() {
                                 >
                                   {event.currentlyAvailable ? 'Available' : 'Suspended'}
                                 </Badge>
+                                {event.gameMinute && (
+                                  <Badge variant="secondary" className="text-[10px] h-5 ml-1">
+                                    {event.gameMinute}
+                                  </Badge>
+                                )}
                               </div>
                             </div>
                             <div className="font-medium text-sm w-full" style={{wordWrap: 'break-word'}}>
