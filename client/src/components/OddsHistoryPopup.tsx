@@ -9,23 +9,7 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import HistoricalOddsChart from './HistoricalOddsChart';
 import { useBookmakerContext } from '@/contexts/BookmakerContext';
-
-interface Event {
-  id: number;
-  externalId: string;
-  eventId: string;
-  name: string;
-  country: string;
-  tournament: string;
-  sportId: number;
-  startTime: string;
-  oddsData: Record<string, {
-    homeOdds: number;
-    drawOdds: number;
-    awayOdds: number;
-    margin: number;
-  }>;
-}
+import { Event } from '../types/event';
 
 interface OddsHistoryPopupProps {
   event: Event | null;
@@ -37,12 +21,20 @@ export default function OddsHistoryPopup({ event, open, onClose }: OddsHistoryPo
   // Get bookmaker context for filtering
   const { selectedBookmakers } = useBookmakerContext();
   
-  // Query to fetch odds history
+  // Define BookmakerOddsData type to match the HistoricalOddsChart component's expected input
+  interface BookmakerOddsData {
+    homeOdds: Array<{ x: number, y: number }>;
+    drawOdds: Array<{ x: number, y: number }>;
+    awayOdds: Array<{ x: number, y: number }>;
+    margins: Array<{ x: number, y: number }>;
+  }
+
+  // Query to fetch odds history - explicitly type the response
   const {
     data: historyData,
     isLoading,
     error
-  } = useQuery({
+  } = useQuery<Record<string, BookmakerOddsData> | null>({
     queryKey: ['/api/events', event?.eventId, 'history'],
     queryFn: async () => {
       if (!event?.eventId) return null;
@@ -51,7 +43,8 @@ export default function OddsHistoryPopup({ event, open, onClose }: OddsHistoryPo
       if (!response.ok) {
         throw new Error('Failed to fetch historical odds data');
       }
-      return await response.json();
+      // Cast the JSON response to our expected type
+      return await response.json() as Record<string, BookmakerOddsData>;
     },
     enabled: !!event?.eventId && open,
     refetchOnWindowFocus: false,

@@ -23,7 +23,8 @@ import {
   Settings,
   SunIcon,
   MoonIcon,
-  Filter
+  Filter,
+  History
 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { cn } from '@/lib/utils';
@@ -197,6 +198,17 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
               )}>
                 <Database className="h-3.5 w-3.5 mr-1.5" />
                 Scraper Status
+              </a>
+            </Link>
+            <Link href="/historical-odds">
+              <a className={cn(
+                "flex items-center px-2 py-1 rounded-md text-sm",
+                location === "/historical-odds" 
+                  ? "bg-blue-50 dark:bg-blue-900/30 text-primary dark:text-blue-400 font-medium" 
+                  : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700"
+              )}>
+                <History className="h-3.5 w-3.5 mr-1.5" />
+                Historical Odds
               </a>
             </Link>
             <Link href="/admin">
