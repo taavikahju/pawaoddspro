@@ -23,7 +23,8 @@ import {
   Settings,
   SunIcon,
   MoonIcon,
-  Filter
+  Filter,
+  Activity
 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { cn } from '@/lib/utils';
@@ -205,6 +206,17 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
               )}>
                 <Database className="h-3.5 w-3.5 mr-1.5" />
                 Scraper Status
+              </a>
+            </Link>
+            <Link href="/live-heartbeat">
+              <a className={cn(
+                "flex items-center px-2 py-1 rounded-md text-sm",
+                location === "/live-heartbeat" 
+                  ? "bg-blue-50 dark:bg-blue-900/30 text-primary dark:text-blue-400 font-medium" 
+                  : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700"
+              )}>
+                <Activity className="h-3.5 w-3.5 mr-1.5" />
+                Live Heartbeat
               </a>
             </Link>
             <Link href="/admin">
