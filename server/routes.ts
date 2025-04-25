@@ -34,26 +34,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Access Protected</title>
         <style>
+          html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+          }
           body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e, #16213e);
             color: #fff;
+            position: relative;
+          }
+          .background-iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            filter: blur(5px);
+            z-index: -1;
+          }
+          .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 0;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            margin: 0;
             padding: 20px;
           }
           .container {
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.6);
             backdrop-filter: blur(10px);
             border-radius: 10px;
             padding: 40px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
             max-width: 500px;
             width: 100%;
+            z-index: 1;
           }
           h1 {
             margin-top: 0;
@@ -112,17 +135,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
         </style>
       </head>
       <body>
-        <div class="container">
-          <h1>Access Protected</h1>
-          <p>This site is protected. Please answer the question below to continue:</p>
-          
-          ${req.query.error ? '<div class="error">Incorrect answer. Please try again.</div>' : ''}
-          
-          <form action="/api/verify-access" method="post">
-            <label for="answer">Who is the greatest football player of all time?</label>
-            <input type="text" id="answer" name="answer" required autocomplete="off" placeholder="Enter your answer...">
-            <button type="submit">Submit</button>
-          </form>
+        <!-- Background iframe showing the site -->
+        <iframe src="/?preview=true" class="background-iframe" title="Site Preview"></iframe>
+        
+        <div class="overlay">
+          <div class="container">
+            <h1>Access Protected</h1>
+            <p>This site is protected. Please answer the question below to continue:</p>
+            
+            ${req.query.error ? '<div class="error">Incorrect answer. Please try again.</div>' : ''}
+            
+            <form action="/api/verify-access" method="post">
+              <label for="answer">What is the mission? make betting...</label>
+              <input type="text" id="answer" name="answer" required autocomplete="off" placeholder="Enter your answer...">
+              <button type="submit">Submit</button>
+            </form>
+          </div>
         </div>
       </body>
       </html>
@@ -134,8 +162,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     const { answer } = req.body;
     
     // Check the answer (case-insensitive)
-    // The correct answer is Pele or Pelé or Messi or Lionel Messi
-    const correctAnswers = ['pele', 'pelé', 'messi', 'lionel messi'];
+    // The correct answer is "friendly"
+    const correctAnswers = ['friendly'];
     
     if (answer && correctAnswers.includes(answer.trim().toLowerCase())) {
       // Set the session as authenticated

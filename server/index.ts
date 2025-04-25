@@ -18,6 +18,11 @@ app.use((req, res, next) => {
     return next();
   }
 
+  // Skip protection if preview mode is enabled (for the iframe in the challenge page)
+  if (req.query.preview === 'true') {
+    return next();
+  }
+
   // Check session for auth 
   // Using type assertion here since we extended the SessionData interface
   const isAuthenticated = req.session && (req.session as any).siteAuthenticated === true;
