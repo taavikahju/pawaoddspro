@@ -50,13 +50,34 @@ export default function Dashboard() {
       if (tournamentFilter !== 'all') params.tournament = tournamentFilter;
       
       const queryString = new URLSearchParams(params).toString();
-      const response = await fetch(`/api/events?${queryString}`);
-      const data = await response.json();
-      console.log(`Dashboard: Loaded ${data.length} future events`);
-      
-      // Debug the first event if available
-      if (data.length > 0) {
-        console.log('Sample event:', data[0]);
+      console.log(`Fetching events with params: ${queryString}`);
+      try {
+        const response = await fetch(`/api/events?${queryString}`);
+        const responseText = await response.text();
+        
+        // Try to parse the response
+        let data = [];
+        try {
+          data = JSON.parse(responseText);
+          console.log(`Dashboard: Loaded ${data.length} future events`);
+          
+          // Debug the first event if available
+          if (data.length > 0) {
+            console.log('Sample event structure:', Object.keys(data[0]));
+            console.log('Sample event:', data[0]);
+          } else {
+            console.log('No events returned from API');
+          }
+        } catch (parseError) {
+          console.error('Error parsing JSON response:', parseError);
+          console.log('Raw response:', responseText);
+          return [];
+        }
+        
+        return data;
+      } catch (error) {
+        console.error('Error fetching events:', error);
+        return [];
       }
       
       return data;
