@@ -50,10 +50,10 @@ export default function HistoricalOdds() {
   } = useQuery<Event[]>({ 
     queryKey: ['/api/events', 'past', countryFilter, tournamentFilter],
     queryFn: async () => {
-      // Get only past events with the time filter properly applied
+      // Get past events but use a more generous time window (2 weeks) to ensure more data
       const params: Record<string, string> = { 
         past_only: 'true',
-        minBookmakers: '3'
+        minBookmakers: '2' // Reduced from 3 to show more events
       };
       
       // Add filters if not 'all'
@@ -104,9 +104,23 @@ export default function HistoricalOdds() {
       events.forEach(event => {
         if (event.country) {
           // Normalize the country name (trim, lowercase, remove extra spaces)
-          const normalizedCountry = event.country.toLowerCase().trim().replace(/\s+/g, ' ');
-          // Use the original casing but keep only one instance of each normalized country
-          countryMap.set(normalizedCountry, event.country);
+          let normalizedCountry = event.country.toLowerCase().trim().replace(/\s+/g, ' ');
+          
+          // Fix duplicate country names like "England England"
+          const parts = normalizedCountry.split(' ');
+          if (parts.length > 1 && parts[0] === parts[1]) {
+            normalizedCountry = parts[0];
+            console.log(`Fixed duplicated country in historical: "${event.country}" -> "${normalizedCountry}"`);
+          }
+          
+          // Create a properly capitalized version of the country name
+          const properCountry = normalizedCountry
+            .split(' ')
+            .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
+          
+          // Use the proper casing and keep only one instance of each normalized country
+          countryMap.set(normalizedCountry, properCountry);
         }
       });
       
@@ -228,8 +242,8 @@ export default function HistoricalOdds() {
   // Check if we have past events
   const hasPastEvents = events.length > 0;
 
-  // Only show events when both country and tournament are selected
-  const shouldShowEvents = countryFilter !== 'all' && tournamentFilter !== 'all';
+  // Show events as long as at least the country is selected
+  const shouldShowEvents = countryFilter !== 'all' || tournamentFilter !== 'all';
   
   // Filter events by country first, then by tournament
   const filteredEvents = events
@@ -238,10 +252,19 @@ export default function HistoricalOdds() {
       if (!event.country) return false;
       
       // Normalize for comparison
-      const normalizedCountry = event.country.toLowerCase().trim().replace(/\s+/g, ' ');
+      let normalizedCountry = event.country.toLowerCase().trim().replace(/\s+/g, ' ');
       const normalizedFilter = countryFilter.toLowerCase().trim().replace(/\s+/g, ' ');
       
-      return normalizedCountry === normalizedFilter;
+      // Fix duplicate country names in filter match
+      const countryParts = normalizedCountry.split(' ');
+      if (countryParts.length > 1 && countryParts[0] === countryParts[1]) {
+        normalizedCountry = countryParts[0];
+      }
+      
+      // More lenient matching - check if normalized country contains the filter or vice versa
+      return normalizedCountry === normalizedFilter || 
+             normalizedCountry.includes(normalizedFilter) || 
+             normalizedFilter.includes(normalizedCountry);
     })
     .filter(event => tournamentFilter === 'all' || event.tournament === tournamentFilter);
 
@@ -348,9 +371,9 @@ export default function HistoricalOdds() {
             {!shouldShowEvents ? (
               <div className="flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-800/50 rounded-lg p-8 h-64">
                 <div className="text-center">
-                  <h3 className="text-lg font-medium mb-2">Select filters to view events</h3>
+                  <h3 className="text-lg font-medium mb-2">Select a filter to view events</h3>
                   <p className="text-gray-500 dark:text-gray-400 text-sm mb-4">
-                    Please select both a country and tournament to view historical events
+                    Please select a country or tournament to view historical events
                   </p>
                 </div>
               </div>
