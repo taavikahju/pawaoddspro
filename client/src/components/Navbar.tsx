@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Settings, BarChart2 } from "lucide-react";
+import { Settings, BarChart2, History } from "lucide-react";
 import { getAdminKey } from "@/lib/queryClient";
 
 export default function Navbar() {
@@ -21,16 +21,23 @@ export default function Navbar() {
             Dashboard
           </Button>
         </Link>
+        <Link href="/historical-odds">
+          <Button variant="ghost" className={`${isActive("/historical-odds")}`}>
+            Historical Odds
+          </Button>
+        </Link>
         <Link href="/scraper-status">
           <Button variant="ghost" className={`${isActive("/scraper-status")}`}>
             Scraper Status
           </Button>
         </Link>
-        <Link href="/admin">
-          <Button variant="ghost" className={`${isActive("/admin")}`}>
-            Admin
-          </Button>
-        </Link>
+        {hasAdminKey && (
+          <Link href="/admin">
+            <Button variant="ghost" className={`${isActive("/admin")}`}>
+              Admin
+            </Button>
+          </Link>
+        )}
       </div>
     );
   };
@@ -50,7 +57,13 @@ export default function Navbar() {
         
         {renderNavLinks()}
         
-        <div className="flex flex-1 items-center justify-end space-x-4">
+        <div className="flex flex-1 items-center justify-end space-x-2">
+          <Link href="/historical-odds">
+            <Button variant="ghost" size="sm" className="flex md:hidden items-center gap-1">
+              <History className="h-4 w-4" />
+              <span className="sr-only md:not-sr-only">Historical</span>
+            </Button>
+          </Link>
           {hasAdminKey && (
             <Link href="/admin">
               <Button variant="outline" size="sm" className="flex items-center gap-1">
@@ -62,7 +75,7 @@ export default function Navbar() {
           <Link href="/">
             <Button variant="ghost" size="sm" className="flex items-center gap-1">
               <BarChart2 className="h-4 w-4" />
-              <span>Dashboard</span>
+              <span className="hidden sm:inline">Dashboard</span>
             </Button>
           </Link>
         </div>
