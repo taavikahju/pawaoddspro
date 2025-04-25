@@ -63,30 +63,43 @@ const COUNTRY_TO_CODE: Record<string, string> = {
 };
 
 interface CountryFlagProps {
-  country: string;
+  country?: string;
+  countryCode?: string;
+  countryName?: string;
+  size?: string;
   className?: string;
 }
 
-const CountryFlag: React.FC<CountryFlagProps> = ({ country, className = '' }) => {
-  // For Great Britain's countries, use the appropriate flag
-  const countryCode = COUNTRY_TO_CODE[country] || '';
+const CountryFlag: React.FC<CountryFlagProps> = ({ 
+  country, 
+  countryCode: propCountryCode, 
+  countryName,
+  size,
+  className = '' 
+}) => {
+  // Use provided country code or lookup from country name
+  const displayCountry = countryName || country || '';
+  const code = propCountryCode || (country && COUNTRY_TO_CODE[country] ? COUNTRY_TO_CODE[country] : '');
   
-  if (!countryCode) {
+  if (!code) {
     // If we don't have a mapping, just show the country name
-    return <span className={className}>{country}</span>;
+    return <span className={className}>{displayCountry}</span>;
   }
   
   // For Great Britain's countries, we need a special case
-  if (countryCode.startsWith('GB-')) {
-    return <span className={className}>{country}</span>;
+  if (code.startsWith('GB-')) {
+    return <span className={className}>{displayCountry}</span>;
   }
+  
+  const style = size === 'sm' ? { width: '16px', height: '16px' } : {};
   
   return (
     <ReactCountryFlag 
-      countryCode={countryCode} 
+      countryCode={code} 
       svg 
+      style={style}
       className={className}
-      title={country}
+      title={displayCountry}
     />
   );
 };
