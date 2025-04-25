@@ -1346,5 +1346,141 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Live Heartbeat API endpoints
+  
+  // Start the heartbeat tracker
+  app.post('/api/live-heartbeat/start', simpleAdminAuth, async (req, res) => {
+    try {
+      const url = req.body.url || 'https://www.betpawa.com.gh/api/sportsbook/v2/events/lists/by-queries?q=%7B%22queries%22%3A%5B%7B%22query%22%3A%7B%22eventType%22%3A%22LIVE%22%2C%22categories%22%3A%5B%222%22%5D%2C%22zones%22%3A%7B%7D%7D%2C%22view%22%3A%7B%22marketTypes%22%3A%5B%223743%22%5D%7D%2C%22skip%22%3A0%2C%22sort%22%3A%7B%22competitionPriority%22%3A%22DESC%22%7D%2C%22take%22%3A20%7D%5D%7D';
+      
+      startHeartbeatTracker(url, storage);
+      
+      res.json({ 
+        success: true, 
+        message: 'Heartbeat tracker started successfully' 
+      });
+      
+      broadcast({
+        type: 'notification',
+        data: {
+          message: 'Heartbeat tracker started successfully',
+          status: 'success'
+        }
+      });
+    } catch (error) {
+      console.error('Error starting heartbeat tracker:', error);
+      res.status(500).json({ 
+        success: false, 
+        message: 'Failed to start heartbeat tracker',
+        error: error instanceof Error ? error.message : String(error)
+      });
+    }
+  });
+  
+  // Stop the heartbeat tracker
+  app.post('/api/live-heartbeat/stop', simpleAdminAuth, async (req, res) => {
+    try {
+      stopHeartbeatTracker();
+      
+      res.json({ 
+        success: true, 
+        message: 'Heartbeat tracker stopped successfully' 
+      });
+      
+      broadcast({
+        type: 'notification',
+        data: {
+          message: 'Heartbeat tracker stopped successfully',
+          status: 'info'
+        }
+      });
+    } catch (error) {
+      console.error('Error stopping heartbeat tracker:', error);
+      res.status(500).json({ 
+        success: false, 
+        message: 'Failed to stop heartbeat tracker',
+        error: error instanceof Error ? error.message : String(error)
+      });
+    }
+  });
+  
+  // Get heartbeat status
+  app.get('/api/live-heartbeat/status', async (req, res) => {
+    try {
+      const status = getHeartbeatStatus();
+      res.json(status);
+    } catch (error) {
+      console.error('Error getting heartbeat status:', error);
+      res.status(500).json({ 
+        success: false, 
+        message: 'Failed to get heartbeat status',
+        error: error instanceof Error ? error.message : String(error)
+      });
+    }
+  });
+  
+  // Get event market history data
+  app.get('/api/live-heartbeat/data/:eventId', async (req, res) => {
+    try {
+      const eventId = req.params.eventId;
+      const history = getEventMarketHistory(eventId);
+      
+      if (!history) {
+        return res.status(404).json({ 
+          success: false, 
+          message: 'Event data not found' 
+        });
+      }
+      
+      res.json(history);
+    } catch (error) {
+      console.error('Error getting event market history:', error);
+      res.status(500).json({ 
+        success: false, 
+        message: 'Failed to get event market history',
+        error: error instanceof Error ? error.message : String(error)
+      });
+    }
+  });
+  
+  // Get historical event market data
+  app.get('/api/live-heartbeat/history/:eventId', async (req, res) => {
+    try {
+      const eventId = req.params.eventId;
+      const history = getEventMarketHistory(eventId);
+      
+      if (!history) {
+        return res.status(404).json({ 
+          success: false, 
+          message: 'Event history not found' 
+        });
+      }
+      
+      res.json(history);
+    } catch (error) {
+      console.error('Error getting event history:', error);
+      res.status(500).json({ 
+        success: false, 
+        message: 'Failed to get event history',
+        error: error instanceof Error ? error.message : String(error)
+      });
+    }
+  });
+
+  // Listen for heartbeat events and broadcast to WebSocket clients
+  heartbeatEvents.on(HEARTBEAT_EVENTS.STATUS_UPDATED, (data) => {
+    broadcast({
+      type: 'heartbeatStatusUpdate',
+      data
+    });
+  });
+
+  heartbeatEvents.on(HEARTBEAT_EVENTS.EVENT_UPDATED, (event) => {
+    broadcast({
+      type: 'heartbeatEventUpdate',
+      data: event
+    });
+  });
+
   return httpServer;
 }

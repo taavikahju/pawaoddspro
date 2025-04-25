@@ -11,6 +11,7 @@ export const heartbeatEvents = new EventEmitter();
 export const HEARTBEAT_EVENTS = {
   STATUS_UPDATED: 'heartbeat_status_updated',
   DATA_UPDATED: 'heartbeat_data_updated',
+  EVENT_UPDATED: 'heartbeat_event_updated',
   ERROR: 'heartbeat_error',
 };
 
@@ -24,6 +25,8 @@ interface HeartbeatEvent {
   currentlyAvailable: boolean;
   marketAvailability: string;
   recordCount: number;
+  gameMinute?: string;
+  widgetId?: string;
 }
 
 interface MarketHistory {
@@ -304,6 +307,9 @@ function updateMarketHistory(event: HeartbeatEvent): void {
     
     // Update record count
     event.recordCount = history.timestamps.length;
+    
+    // Emit event update
+    heartbeatEvents.emit(HEARTBEAT_EVENTS.EVENT_UPDATED, event);
   } else {
     event.recordCount = history.timestamps.length;
   }
