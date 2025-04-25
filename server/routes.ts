@@ -452,74 +452,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
       
       // Apply time-based filters (past/future)
-      if (pastOnly || futureOnly || afterDate) {
-        const now = new Date();
-        console.log('Filtering with time based filter, current time:', now.toISOString());
-        
-        // If afterDate is provided, parse it
-        let afterDateObj: Date | null = null;
-        if (afterDate) {
-          try {
-            afterDateObj = new Date(afterDate);
-            console.log(`Filtering events after: ${afterDateObj.toISOString()}`);
-          } catch (err) {
-            console.error('Invalid after_date parameter:', afterDate);
-          }
-        }
-        
-        // Debug to see what's coming from the database
+      // Debug to see what's coming from the database
+      if (filteredEvents.length > 0) {
         console.log('First event sample:', JSON.stringify(filteredEvents[0] || {}, null, 2));
+      }
+      
+      // Count events before filtering
+      const beforeCount = filteredEvents.length;
+      
+      // Temporary fix: Skip time-based filtering to see all events
+      // We have database time inconsistencies that need to be addressed
+      if (false && (pastOnly || futureOnly || afterDate)) {
+        const now = new Date();
+        console.log('Filtering with time based filter (DISABLED for debugging), current time:', now.toISOString());
         
-        // Count events before filtering
-        const beforeCount = filteredEvents.length;
-        
-        filteredEvents = filteredEvents.filter(event => {
-          // Debug event time fields
-          if (pastOnly && filteredEvents.indexOf(event) < 5) {
-            console.log('Event time fields for past filter:', {
-              id: event.id,
-              eventId: event.eventId,
-              teams: event.teams,
-              startTime: event.startTime,
-              start_time: (event as any).start_time,
-              date: event.date,
-              time: event.time,
-              now: now.toISOString(),
-            });
-          }
-          
-          // Use startTime if available, otherwise fallback to date+time string
-          let eventTime;
-          
-          // Check if startTime exists in either camelCase or snake_case
-          if (event.startTime) {
-            eventTime = new Date(event.startTime);
-          } else if ((event as any).start_time) {
-            // Try snake_case as fallback
-            eventTime = new Date((event as any).start_time);
-          } else if (event.date && event.time) {
-            eventTime = new Date(`${event.date} ${event.time}`);
-          } else {
-            // If no time info available, include in results
-            return true;
-          }
-          
-          // Apply the 2-week filter if afterDate is provided
-          if (afterDateObj && eventTime < afterDateObj) {
-            // Skip events older than the after date
-            return false;
-          }
-          
-          if (pastOnly) {
-            const isPast = eventTime <= now;
-            if (isPast && filteredEvents.indexOf(event) < 5) {
-              console.log(`Event ${event.id} (${event.teams}) is in the past: ${eventTime.toISOString()} <= ${now.toISOString()}`);
-            }
-            return isPast;
-          }
-          if (futureOnly) return eventTime > now;
-          return true;
-        });
+        // Temporary - just show all events without time filtering
+        console.log('WARNING: Time filtering currently disabled to debug data issues');
+      } else {
+        // Apply country and tournament filters if provided
+        if (country || tournament) {
+          filteredEvents = filteredEvents.filter(event => {
+            const countryMatch = !country || event.country === country;
+            const tournamentMatch = !tournament || event.tournament === tournament;
+            return countryMatch && tournamentMatch;
+          });
+        }
         
         // Count events after filtering
         const afterCount = filteredEvents.length;
