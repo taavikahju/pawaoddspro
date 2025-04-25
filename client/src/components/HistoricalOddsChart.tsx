@@ -33,6 +33,11 @@ interface HistoricalOddsChartProps {
   isPercentage?: boolean;
 }
 
+interface ChartDataPoint {
+  timestamp: string;
+  [key: string]: any; // For bookmaker codes as keys
+}
+
 // The defined colors for each bookmaker to maintain consistency
 const BOOKMAKER_COLORS: Record<string, string> = {
   'betika KE': '#1E88E5',
@@ -61,7 +66,7 @@ export default function HistoricalOddsChart({
     if (!historyData || historyData.length === 0) return [];
     
     // Group by timestamp and bookmaker for easy display
-    const groupedByTime: Record<string, Record<string, number>> = {};
+    const groupedByTime: Record<string, ChartDataPoint> = {};
     
     historyData.forEach(entry => {
       // Only process if the bookmaker is selected
@@ -81,7 +86,8 @@ export default function HistoricalOddsChart({
       if (!groupedByTime[timeKey]) {
         groupedByTime[timeKey] = { 
           timestamp: timeKey,
-          dateObj: timestamp 
+          // Store date object as a custom property for sorting later
+          _date: timestamp.getTime()
         };
       }
       
@@ -91,7 +97,7 @@ export default function HistoricalOddsChart({
     
     // Convert to array and sort by timestamp
     return Object.values(groupedByTime)
-      .sort((a, b) => a.dateObj.getTime() - b.dateObj.getTime());
+      .sort((a, b) => a._date - b._date);
   }, [historyData, selectedBookmakers, oddsType]);
   
   // Determine bookmakers to show in the chart
@@ -105,7 +111,7 @@ export default function HistoricalOddsChart({
       }
     });
     
-    return Array.from(availableBookmakers);
+    return [...availableBookmakers]; // Convert Set to Array using spread operator
   }, [historyData, selectedBookmakers]);
   
   // Get the color for a bookmaker
