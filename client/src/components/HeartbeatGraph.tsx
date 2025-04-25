@@ -135,8 +135,8 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     const maxGameMinute = 120; // Extended to 120 minutes as requested
     const pixelsPerMinute = width / maxGameMinute;
     
-    // Setup heartbeat line style with thicker line
-    ctx.lineWidth = 3; // Increased thickness for better visibility
+    // Setup heartbeat line style with much thicker line
+    ctx.lineWidth = 5; // Significantly increased thickness for better visibility
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     
@@ -185,30 +185,37 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     // Begin at the baseline (middle)
     ctx.moveTo(0, height / 2);
     
-    // Draw a straight line with small random variations to simulate ECG
-    const step = 5; // Draw points every 5 pixels
+    // Draw a straight line with dramatic ECG pattern
+    const step = 3; // Draw points every 3 pixels for smoother lines
     let lastX = 0;
     
     // We'll keep track of the last data point index used
     let lastDataIndex = 0;
     
+    // Create a map of availability changes by minute
+    const availabilityByMinute: Record<number, boolean> = {};
+    
+    // Process data to find availability status for each minute
+    data.forEach(point => {
+      const minute = getMinuteNumber(point.gameMinute);
+      if (minute > 0) {
+        availabilityByMinute[minute] = point.isAvailable;
+      }
+    });
+    
+    // Ensure we have data for minute 0
+    if (data.length > 0 && !availabilityByMinute[0]) {
+      availabilityByMinute[0] = data[0].isAvailable;
+    }
+    
     for (let x = 0; x <= endX; x += step) {
-      // Find the data point closest to this position
+      // Find the minute corresponding to this x position
       const gameMinuteAtX = Math.floor(x / pixelsPerMinute);
       
-      // Find the right data point based on game minute
-      let dataPointIndex = lastDataIndex;
-      for (let i = lastDataIndex; i < data.length; i++) {
-        const pointMinute = getMinuteNumber(data[i].gameMinute);
-        if (pointMinute >= gameMinuteAtX) {
-          dataPointIndex = i;
-          lastDataIndex = i;
-          break;
-        }
-      }
-      
-      const dataPoint = data[dataPointIndex];
-      const isActive = dataPoint ? dataPoint.isAvailable : true;
+      // Find the closest data point for this minute
+      const isActive = availabilityByMinute[gameMinuteAtX] !== undefined 
+        ? availabilityByMinute[gameMinuteAtX] 
+        : (data.length > 0 ? data[data.length - 1].isAvailable : true);
       
       // For active markets: small variations around center line
       // For inactive markets: flat line at bottom
@@ -217,7 +224,7 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
       if (isActive) {
         // Create ECG pattern with EXTREMELY PRONOUNCED SPIKES
         // Calculate spike pattern based on x position
-        const cycleLength = 80; // Shorter cycle length to fit more heartbeats
+        const cycleLength = 60; // Even shorter cycle length to fit more heartbeats
         const positionInCycle = x % cycleLength;
         
         // Create a dramatic ECG pattern with very large spikes
@@ -234,14 +241,14 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
           // Q wave (sharper dip)
           y = height / 2 + ((positionInCycle - 15) / 2) * 20;
         } else if (positionInCycle < 19) {
-          // R wave (EXTREME SPIKE UP - very dramatic)
-          y = height / 2 + 20 - ((positionInCycle - 17) / 2) * 80;
+          // R wave (EXTREME SPIKE UP - very dramatic) - made even taller!
+          y = height / 2 + 20 - ((positionInCycle - 17) / 2) * 110;
         } else if (positionInCycle < 21) {
-          // Return from R spike (sharp drop)
-          y = height / 2 - 60 + ((positionInCycle - 19) / 2) * 70;
+          // Return from R spike (sharp drop) - adjusted for even taller spike
+          y = height / 2 - 90 + ((positionInCycle - 19) / 2) * 100;
         } else if (positionInCycle < 23) {
           // S wave (deeper dip)
-          y = height / 2 + 10 + ((positionInCycle - 21) / 2) * 15;
+          y = height / 2 + 10 + ((positionInCycle - 21) / 2) * 20;
         } else if (positionInCycle < 28) {
           // Return to baseline (faster)
           y = height / 2 + 25 - ((positionInCycle - 23) / 5) * 25;
@@ -264,10 +271,8 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
       lastX = x;
     }
     
-    // If we haven't reached the end, draw to the end
-    if (lastX < width) {
-      ctx.lineTo(width, height / 2);
-    }
+    // DO NOT extend the line to the end of the graph
+    // The line should stop at the current game minute
     
     // Set line color and draw
     ctx.strokeStyle = lineColor;
