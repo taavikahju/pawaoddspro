@@ -163,94 +163,106 @@ async function runHeartbeatTracker(url: string, storage: IStorage): Promise<void
 
 // Generate mock events for testing when API is unavailable
 function generateMockEvents(): any[] {
-  const mockEvents = [
-    {
-      id: '12345678',
-      name: 'Manchester United vs Liverpool',
-      category: { name: 'England' },
-      competition: { name: 'Premier League' },
-      status: 'LIVE',
-      startTime: new Date().toISOString(),
-      markets: [
-        {
-          type: '3743',
-          name: '1X2',
-          status: 'ACTIVE',
-          prices: [
-            { name: '1', suspended: Math.random() > 0.7 },
-            { name: 'X', suspended: Math.random() > 0.7 },
-            { name: '2', suspended: Math.random() > 0.7 }
-          ]
-        }
-      ],
-      scoreboard: {
-        display: {
-          minute: `${Math.floor(Math.random() * 90)}'`
-        }
-      },
-      widget: {
-        id: 'SR1234'
-      }
-    },
-    {
-      id: '87654321',
-      name: 'Arsenal vs Chelsea',
-      category: { name: 'England' },
-      competition: { name: 'Premier League' },
-      status: 'LIVE',
-      startTime: new Date().toISOString(),
-      markets: [
-        {
-          type: '3743',
-          name: '1X2',
-          status: 'ACTIVE',
-          prices: [
-            { name: '1', suspended: Math.random() > 0.7 },
-            { name: 'X', suspended: Math.random() > 0.7 },
-            { name: '2', suspended: Math.random() > 0.7 }
-          ]
-        }
-      ],
-      scoreboard: {
-        display: {
-          minute: `${Math.floor(Math.random() * 90)}'`
-        }
-      },
-      widget: {
-        id: 'SR5678'
-      }
-    },
-    {
-      id: '23456789',
-      name: 'Real Madrid vs Barcelona',
-      category: { name: 'Spain' },
-      competition: { name: 'La Liga' },
-      status: 'LIVE',
-      startTime: new Date().toISOString(),
-      markets: [
-        {
-          type: '3743',
-          name: '1X2',
-          status: 'ACTIVE',
-          prices: [
-            { name: '1', suspended: Math.random() > 0.7 },
-            { name: 'X', suspended: Math.random() > 0.7 },
-            { name: '2', suspended: Math.random() > 0.7 }
-          ]
-        }
-      ],
-      scoreboard: {
-        display: {
-          minute: `${Math.floor(Math.random() * 90)}'`
-        }
-      },
-      widget: {
-        id: 'SR9012'
-      }
-    }
-  ];
+  // Add a list of realistic soccer/football events
+  const teams = {
+    'England': [
+      { team1: 'Manchester United', team2: 'Liverpool' },
+      { team1: 'Arsenal', team2: 'Chelsea' },
+      { team1: 'Manchester City', team2: 'Tottenham' },
+      { team1: 'Newcastle', team2: 'Aston Villa' },
+      { team1: 'Everton', team2: 'Crystal Palace' }
+    ],
+    'Spain': [
+      { team1: 'Real Madrid', team2: 'Barcelona' },
+      { team1: 'Atletico Madrid', team2: 'Sevilla' },
+      { team1: 'Valencia', team2: 'Villarreal' }
+    ],
+    'Germany': [
+      { team1: 'Bayern Munich', team2: 'Borussia Dortmund' },
+      { team1: 'RB Leipzig', team2: 'Bayer Leverkusen' }
+    ],
+    'Italy': [
+      { team1: 'Juventus', team2: 'Inter Milan' },
+      { team1: 'AC Milan', team2: 'Napoli' },
+      { team1: 'Roma', team2: 'Lazio' }
+    ],
+    'France': [
+      { team1: 'PSG', team2: 'Marseille' },
+      { team1: 'Lyon', team2: 'Monaco' }
+    ]
+  };
   
-  console.log('Generated mock event data for testing');
+  const tournaments = {
+    'England': 'Premier League',
+    'Spain': 'La Liga',
+    'Germany': 'Bundesliga',
+    'Italy': 'Serie A',
+    'France': 'Ligue 1'
+  };
+  
+  // Generate between 5 and 15 mock events
+  const numEvents = Math.floor(Math.random() * 10) + 5;
+  const mockEvents = [];
+  
+  // Mock event IDs should be unique
+  const usedIds = new Set();
+  
+  for (let i = 0; i < numEvents; i++) {
+    // Pick a random country
+    const countries = Object.keys(teams);
+    const country = countries[Math.floor(Math.random() * countries.length)];
+    
+    // Pick a random match from that country
+    const countryMatches = teams[country];
+    const match = countryMatches[Math.floor(Math.random() * countryMatches.length)];
+    
+    // Generate a unique ID
+    let id;
+    do {
+      id = Math.floor(Math.random() * 90000000) + 10000000; // 8-digit number
+    } while (usedIds.has(id));
+    usedIds.add(id);
+    
+    // Generate a random game minute between 1 and 90
+    const gameMinute = Math.floor(Math.random() * 90) + 1;
+    
+    // Randomly determine if markets are suspended (higher chance later in the game)
+    const suspensionChance = gameMinute > 75 ? 0.35 : (gameMinute > 45 ? 0.2 : 0.1);
+    const suspended = Math.random() < suspensionChance;
+    
+    mockEvents.push({
+      id: id.toString(),
+      name: `${match.team1} vs ${match.team2}`,
+      category: { name: country },
+      competition: { name: tournaments[country] },
+      region: { name: country },
+      status: 'LIVE',
+      isLive: true,
+      startTime: new Date(Date.now() - (gameMinute * 60 * 1000)).toISOString(), // Start time is gameMinute minutes ago
+      markets: [
+        {
+          type: '3743',
+          name: '1X2',
+          status: 'ACTIVE',
+          prices: [
+            { name: '1', suspended },
+            { name: 'X', suspended },
+            { name: '2', suspended }
+          ]
+        }
+      ],
+      scoreboard: {
+        display: {
+          minute: `${gameMinute}'`
+        }
+      },
+      widget: {
+        id: `SR${Math.floor(Math.random() * 90000) + 10000}` // Random 5-digit widget ID with SR prefix
+      }
+    });
+  }
+  
+  console.log(`Generated ${mockEvents.length} mock events for testing`);
   return mockEvents;
 }
 
@@ -268,28 +280,14 @@ async function scrapeEvents(apiUrl: string): Promise<any[]> {
       console.error('Error parsing query string:', e);
     }
 
-    console.log('Attempting to fetch data from BetPawa API with headers');
+    console.log('Attempting to fetch data from BetPawa API using simplified headers');
     
-    // Make request to the API with extensive headers
+    // Use the same simple headers as the original working bp_gh_live_scraper.js
     const response = await axios.get(apiUrl, {
       headers: {
-        'Accept': 'application/json, text/plain, */*',
-        'Accept-Language': 'en-US,en;q=0.9',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36',
-        'X-Brand': 'betpawa.com.gh',
-        'X-Device': 'desktop',
-        'X-Language': 'en',
-        'X-Client-Version': '3.34.2',
-        'x-brand': 'betpawa.com.gh',
-        'x-device': 'desktop',
-        'x-language': 'en',
-        'Referer': 'https://www.betpawa.com.gh/sports',
-        'Origin': 'https://www.betpawa.com.gh',
-        'Connection': 'keep-alive',
-        'Sec-Fetch-Dest': 'empty',
-        'Sec-Fetch-Mode': 'cors',
-        'Sec-Fetch-Site': 'same-origin',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
       },
+      timeout: 8000 // 8-second timeout
     });
     
     // Log response or error
@@ -326,26 +324,12 @@ async function scrapeEvents(apiUrl: string): Promise<any[]> {
           const newQueryString = encodeURIComponent(JSON.stringify(newQueryObject));
           const newUrl = `${parsedUrl.origin}${parsedUrl.pathname}?q=${newQueryString}`;
           
-          // Fetch next page with the same headers
+          // Fetch next page with the same simplified headers
           const pageResponse = await axios.get(newUrl, {
             headers: {
-              'Accept': 'application/json, text/plain, */*',
-              'Accept-Language': 'en-US,en;q=0.9',
-              'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36',
-              'X-Brand': 'betpawa.com.gh',
-              'X-Device': 'desktop',
-              'X-Language': 'en',
-              'X-Client-Version': '3.34.2',
-              'x-brand': 'betpawa.com.gh',
-              'x-device': 'desktop',
-              'x-language': 'en',
-              'Referer': 'https://www.betpawa.com.gh/sports',
-              'Origin': 'https://www.betpawa.com.gh',
-              'Connection': 'keep-alive',
-              'Sec-Fetch-Dest': 'empty',
-              'Sec-Fetch-Mode': 'cors',
-              'Sec-Fetch-Site': 'same-origin',
+              'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
             },
+            timeout: 8000 // 8-second timeout
           });
           
           if (pageResponse.data && pageResponse.data.events) {
@@ -368,29 +352,71 @@ async function processEvents(events: any[]): Promise<void> {
     return;
   }
 
-  // Extract relevant data from events
+  // Extract relevant data from events - using same logic as bp_gh_live_scraper.js
   const processedEvents: HeartbeatEvent[] = events.map((event) => {
-    // Extract country and tournament
-    const country = event.region?.name || event.category?.name || 'Unknown';
+    // Event ID - using both siteEventId and id for compatibility
+    const eventId = (event.siteEventId || event.id || '').toString();
+    
+    // Get event name from competitors or direct name property
+    let eventName = "Unknown Event";
+    if (event.competitors && event.competitors.length >= 2) {
+      eventName = `${event.competitors[0].name} v ${event.competitors[1].name}`;
+    } else if (event.name) {
+      eventName = event.name;
+    }
+    
+    // Get country and tournament info
+    const country = event.category?.name || event.region?.name || 'Unknown';
     const tournament = event.competition?.name || 'Unknown';
     
-    // Extract game minute
-    const gameMinute = event.scoreboard?.display?.minute || '';
+    // Check if there's a 1X2 market (Match Result - usually market type 3743)
+    let market1X2 = null;
+    let isMarketAvailable = false;
+    
+    // Check for market in mainMarkets first
+    if (event.mainMarkets) {
+      market1X2 = event.mainMarkets.find((m: any) => 
+        m.typeId === '3743' || m.type?.id === '3743' || m.name?.includes('1X2')
+      );
+    }
+    
+    // If not found, check in regular markets
+    if (!market1X2 && event.markets) {
+      market1X2 = event.markets.find((m: any) => 
+        m.typeId === '3743' || m.type?.id === '3743' || m.name?.includes('1X2')
+      );
+    }
+    
+    // Extract market status
+    if (market1X2) {
+      isMarketAvailable = !(market1X2.suspended === true || market1X2.status === 'SUSPENDED');
+      
+      // Also check if prices/outcomes are suspended
+      if (market1X2.prices) {
+        isMarketAvailable = !market1X2.prices.some((p: any) => p.suspended);
+      } else if (market1X2.outcomes) {
+        isMarketAvailable = !market1X2.outcomes.some((o: any) => o.suspended);
+      }
+    }
+    
+    // Extract game minute from scoreboard if available
+    let gameMinute = '';
+    if (event.scoreboard?.display?.minute) {
+      gameMinute = event.scoreboard.display.minute;
+    } else if (event.score?.period) {
+      gameMinute = event.score.period;
+    }
     
     // Extract widget ID (SPORTRADAR)
     const widgetId = event.widget?.id || '';
     
-    // Check if 1X2 market is available (not suspended)
-    const market1X2 = event.markets?.find((m: any) => m.type === '3743' || m.name === '1X2');
-    const isMarketAvailable = market1X2 && market1X2.prices && !market1X2.prices.some((p: any) => p.suspended);
-    
     // Format UTC start time
-    const startTime = event.startTime || new Date().toISOString();
+    const startTime = event.startTime || event.startDate || new Date().toISOString();
     
     // Create event object
     const heartbeatEvent: HeartbeatEvent = {
-      id: event.id.toString(),
-      name: event.name || 'Unnamed Event',
+      id: eventId,
+      name: eventName,
       country,
       tournament,
       isInPlay: event.status === 'LIVE' || event.isLive || false,
