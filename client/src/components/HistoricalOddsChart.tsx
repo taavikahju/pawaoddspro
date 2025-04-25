@@ -15,7 +15,7 @@ import { format } from 'date-fns';
 import { Loader2 } from 'lucide-react';
 
 // Type for odds history data from API
-interface BookmakerOddsData {
+export interface BookmakerOddsData {
   homeOdds: Array<{ x: number, y: number }>;
   drawOdds: Array<{ x: number, y: number }>;
   awayOdds: Array<{ x: number, y: number }>;

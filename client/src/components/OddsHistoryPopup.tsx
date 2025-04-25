@@ -21,20 +21,14 @@ export default function OddsHistoryPopup({ event, open, onClose }: OddsHistoryPo
   // Get bookmaker context for filtering
   const { selectedBookmakers } = useBookmakerContext();
   
-  // Define BookmakerOddsData type to match the HistoricalOddsChart component's expected input
-  interface BookmakerOddsData {
-    homeOdds: Array<{ x: number, y: number }>;
-    drawOdds: Array<{ x: number, y: number }>;
-    awayOdds: Array<{ x: number, y: number }>;
-    margins: Array<{ x: number, y: number }>;
-  }
+  // Import BookmakerOddsData type from the chart component
 
-  // Query to fetch odds history - explicitly type the response
+  // Query to fetch odds history
   const {
     data: historyData,
     isLoading,
     error
-  } = useQuery<Record<string, BookmakerOddsData> | null>({
+  } = useQuery({
     queryKey: ['/api/events', event?.eventId, 'history'],
     queryFn: async () => {
       if (!event?.eventId) return null;
@@ -43,8 +37,8 @@ export default function OddsHistoryPopup({ event, open, onClose }: OddsHistoryPo
       if (!response.ok) {
         throw new Error('Failed to fetch historical odds data');
       }
-      // Cast the JSON response to our expected type
-      return await response.json() as Record<string, BookmakerOddsData>;
+      
+      return await response.json();
     },
     enabled: !!event?.eventId && open,
     refetchOnWindowFocus: false,
