@@ -1,0 +1,45 @@
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds/current# # Check PM2 status
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds/current# pm2 status
+┌────┬────────────────────┬──────────┬──────┬───────────┬──────────┬──────────┐
+│ id │ name               │ mode     │ ↺    │ status    │ cpu      │ memory   │
+├────┼────────────────────┼──────────┼──────┼───────────┼──────────┼──────────┤
+│ 0  │ pawaodds           │ cluster  │ 15   │ errored   │ 0%       │ 0b       │
+└────┴────────────────────┴──────────┴──────┴───────────┴──────────┴──────────┘
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds/current# 
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds/current# # Check PM2 logs for errors
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds/current# pm2 logs
+[TAILING] Tailing last 15 lines for [all] processes (change the value with --lines option)
+/root/.pm2/pm2.log last 15 lines:
+PM2        | 2025-04-25T10:31:52: PM2 log: App name:pawaodds id:0 disconnected
+PM2        | 2025-04-25T10:31:52: PM2 log: App [pawaodds:0] exited with code [0] via signal [SIGINT]
+PM2        | 2025-04-25T10:31:52: PM2 log: App [pawaodds:0] starting in -cluster mode-
+PM2        | 2025-04-25T10:31:52: PM2 log: App [pawaodds:0] online
+PM2        | 2025-04-25T10:31:52: PM2 log: App name:pawaodds id:0 disconnected
+PM2        | 2025-04-25T10:31:52: PM2 log: App [pawaodds:0] exited with code [0] via signal [SIGINT]
+PM2        | 2025-04-25T10:31:52: PM2 log: App [pawaodds:0] starting in -cluster mode-
+PM2        | 2025-04-25T10:31:52: PM2 log: App [pawaodds:0] online
+PM2        | 2025-04-25T10:31:52: PM2 log: App name:pawaodds id:0 disconnected
+PM2        | 2025-04-25T10:31:52: PM2 log: App [pawaodds:0] exited with code [0] via signal [SIGINT]
+PM2        | 2025-04-25T10:31:52: PM2 log: App [pawaodds:0] starting in -cluster mode-
+PM2        | 2025-04-25T10:31:52: PM2 log: App [pawaodds:0] online
+PM2        | 2025-04-25T10:31:53: PM2 log: App name:pawaodds id:0 disconnected
+PM2        | 2025-04-25T10:31:53: PM2 log: App [pawaodds:0] exited with code [0] via signal [SIGINT]
+PM2        | 2025-04-25T10:31:53: PM2 log: Script /var/www/pawaodds/current/simple-server.cjs had too many unstable restarts (16). Stopped. "errored"
+
+/var/www/pawaodds/current/logs/out.log last 15 lines:
+/var/www/pawaodds/current/logs/err.log last 15 lines:
+0|pawaodds |     at listenOnPrimaryHandle (node:net:1989:18)
+0|pawaodds |     at rr (node:internal/cluster/child:163:12)
+0|pawaodds |     at Worker.<anonymous> (node:internal/cluster/child:113:7)
+0|pawaodds |     at process.onInternalMessage (node:internal/cluster/utils:49:5)
+0|pawaodds |     at process.emit (node:events:536:35)
+0|pawaodds |     at emit (node:internal/child_process:950:14)
+0|pawaodds |     at process.processTicksAndRejections (node:internal/process/task_queues:83:21)
+0|pawaodds | Error: bind EADDRINUSE 0.0.0.0:3000
+0|pawaodds |     at listenOnPrimaryHandle (node:net:1989:18)
+0|pawaodds |     at rr (node:internal/cluster/child:163:12)
+0|pawaodds |     at Worker.<anonymous> (node:internal/cluster/child:113:7)
+0|pawaodds |     at process.onInternalMessage (node:internal/cluster/utils:49:5)
+0|pawaodds |     at process.emit (node:events:536:35)
+0|pawaodds |     at emit (node:internal/child_process:950:14)
+0|pawaodds |     at process.processTicksAndRejections (node:internal/process/task_queues:83:21)

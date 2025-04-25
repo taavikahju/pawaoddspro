@@ -1,0 +1,21 @@
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds/github# cp -r /var/www/pawaodds/extract/server/scrapers/custom/* /var/www/pawaodds/github/server/scrapers/custom/
+cp: cannot stat '/var/www/pawaodds/extract/server/scrapers/custom/*': No such file or directory
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds/github# cp /var/www/pawaodds/extract/server/scrapers/scheduler.ts /var/www/pawaodds/github/server/scrapers/
+cp: cannot stat '/var/www/pawaodds/extract/server/scrapers/scheduler.ts': No such file or directory
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds/github# cp /var/www/pawaodds/extract/server/utils/dataMapper.ts /var/www/pawaodds/github/server/utils/
+cp: cannot stat '/var/www/pawaodds/extract/server/utils/dataMapper.ts': No such file or directory
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds/github# cp /var/www/pawaodds/extract/server/utils/oddsHistory.ts /var/www/pawaodds/github/server/utils/
+cp: cannot stat '/var/www/pawaodds/extract/server/utils/oddsHistory.ts': No such file or directory
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds/github# cp /var/www/pawaodds/extract/server/db.ts /var/www/pawaodds/github/server/
+cp: cannot stat '/var/www/pawaodds/extract/server/db.ts': No such file or directory
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds/github# cp /var/www/pawaodds/extract/server/routes.ts /var/www/pawaodds/github/server/
+cp: cannot stat '/var/www/pawaodds/extract/server/routes.ts': No such file or directory
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds/github# cp /var/www/pawaodds/extract/server/index.ts /var/www/pawaodds/github/server/
+cp: cannot stat '/var/www/pawaodds/extract/server/index.ts': No such file or directory
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds/github# cp /var/www/pawaodds/extract/server/storage.ts /var/www/pawaodds/github/server/
+cp: cannot stat '/var/www/pawaodds/extract/server/storage.ts': No such file or directory
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds/github# cp /var/www/pawaodds/extract/server/vite.ts /var/www/pawaodds/github/server/
+cp: cannot stat '/var/www/pawaodds/extract/server/vite.ts': No such file or directory
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds/github# cp -r /var/www/pawaodds/extract/server/middleware/* /var/www/pawaodds/github/server/middleware/
+cp: cannot stat '/var/www/pawaodds/extract/server/middleware/*': No such file or directory
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds/github# 

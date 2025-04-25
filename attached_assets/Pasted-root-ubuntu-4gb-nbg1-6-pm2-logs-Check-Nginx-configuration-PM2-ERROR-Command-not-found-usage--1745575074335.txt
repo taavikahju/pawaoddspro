@@ -1,0 +1,69 @@
+root@ubuntu-4gb-nbg1-6:~# pm2 logs# Check Nginx configuration
+[PM2][ERROR] Command not found
+
+usage: pm2 [options] <command>
+
+pm2 -h, --help             all available commands and options
+pm2 examples               display pm2 usage examples
+pm2 <command> -h           help on a specific command
+
+Access pm2 files in ~/.pm2
+root@ubuntu-4gb-nbg1-6:~# nginx -t
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+root@ubuntu-4gb-nbg1-6:~# 
+root@ubuntu-4gb-nbg1-6:~# # Look at Nginx error logs
+root@ubuntu-4gb-nbg1-6:~# tail -n 50 /var/log/nginx/error.log
+2025/04/25 09:19:32 [error] 24573#24573: *73 no live upstreams while connecting to upstream, client: 195.178.110.161, server: _, request: "GET /.env HTTP/1.1", upstream: "http://localhost/.env", host: "91.99.61.93"
+2025/04/25 09:19:32 [error] 24573#24573: *74 no live upstreams while connecting to upstream, client: 195.178.110.161, server: _, request: "GET /.env.production.local HTTP/1.1", upstream: "http://localhost/.env.production.local", host: "91.99.61.93"
+2025/04/25 09:19:32 [error] 24573#24573: *75 no live upstreams while connecting to upstream, client: 195.178.110.161, server: _, request: "GET /.env.save HTTP/1.1", upstream: "http://localhost/.env.save", host: "91.99.61.93"
+2025/04/25 09:19:32 [error] 24573#24573: *76 no live upstreams while connecting to upstream, client: 195.178.110.161, server: _, request: "GET /.env.bak HTTP/1.1", upstream: "http://localhost/.env.bak", host: "91.99.61.93"
+2025/04/25 09:19:32 [error] 24573#24573: *77 no live upstreams while connecting to upstream, client: 195.178.110.161, server: _, request: "GET /.env.testing HTTP/1.1", upstream: "http://localhost/.env.testing", host: "91.99.61.93"
+2025/04/25 09:19:32 [error] 24573#24573: *78 no live upstreams while connecting to upstream, client: 195.178.110.161, server: _, request: "GET /prod/.env HTTP/1.1", upstream: "http://localhost/prod/.env", host: "91.99.61.93"
+2025/04/25 09:19:32 [error] 24573#24573: *79 no live upstreams while connecting to upstream, client: 195.178.110.161, server: _, request: "GET /settings/.env HTTP/1.1", upstream: "http://localhost/settings/.env", host: "91.99.61.93"
+2025/04/25 09:19:32 [error] 24573#24573: *80 no live upstreams while connecting to upstream, client: 195.178.110.161, server: _, request: "GET /core/.git/config HTTP/1.1", upstream: "http://localhost/core/.git/config", host: "91.99.61.93"
+2025/04/25 09:19:32 [error] 24573#24573: *81 no live upstreams while connecting to upstream, client: 195.178.110.161, server: _, request: "GET /docker-compose.prod.yml HTTP/1.1", upstream: "http://localhost/docker-compose.prod.yml", host: "91.99.61.93"
+2025/04/25 09:19:32 [error] 24573#24573: *82 no live upstreams while connecting to upstream, client: 195.178.110.161, server: _, request: "GET /.env.test HTTP/1.1", upstream: "http://localhost/.env.test", host: "91.99.61.93"
+2025/04/25 09:19:32 [error] 24573#24573: *83 no live upstreams while connecting to upstream, client: 195.178.110.161, server: _, request: "GET /assets../.git/config HTTP/1.1", upstream: "http://localhost/assets../.git/config", host: "91.99.61.93"
+2025/04/25 09:19:32 [error] 24573#24573: *84 no live upstreams while connecting to upstream, client: 195.178.110.161, server: _, request: "GET /admin/.git/config HTTP/1.1", upstream: "http://localhost/admin/.git/config", host: "91.99.61.93"
+2025/04/25 09:19:32 [error] 24573#24573: *85 no live upstreams while connecting to upstream, client: 195.178.110.161, server: _, request: "GET /.env.dist HTTP/1.1", upstream: "http://localhost/.env.dist", host: "91.99.61.93"
+2025/04/25 09:19:32 [error] 24573#24573: *86 no live upstreams while connecting to upstream, client: 195.178.110.161, server: _, request: "GET /.env.secret HTTP/1.1", upstream: "http://localhost/.env.secret", host: "91.99.61.93"
+2025/04/25 09:19:32 [error] 24573#24573: *87 no live upstreams while connecting to upstream, client: 195.178.110.161, server: _, request: "GET /.env.sandbox HTTP/1.1", upstream: "http://localhost/.env.sandbox", host: "91.99.61.93"
+2025/04/25 09:19:32 [error] 24573#24573: *88 no live upstreams while connecting to upstream, client: 195.178.110.161, server: _, request: "GET /files/.git/config HTTP/1.1", upstream: "http://localhost/files/.git/config", host: "91.99.61.93"
+2025/04/25 09:19:32 [error] 24573#24573: *89 no live upstreams while connecting to upstream, client: 195.178.110.161, server: _, request: "GET /.env.preprod HTTP/1.1", upstream: "http://localhost/.env.preprod", host: "91.99.61.93"
+2025/04/25 09:19:32 [error] 24573#24573: *90 no live upstreams while connecting to upstream, client: 195.178.110.161, server: _, request: "GET /config/.env HTTP/1.1", upstream: "http://localhost/config/.env", host: "91.99.61.93"
+2025/04/25 09:19:32 [error] 24573#24573: *91 no live upstreams while connecting to upstream, client: 195.178.110.161, server: _, request: "GET /backup/.git/config HTTP/1.1", upstream: "http://localhost/backup/.git/config", host: "91.99.61.93"
+2025/04/25 09:19:32 [error] 24573#24573: *92 no live upstreams while connecting to upstream, client: 195.178.110.161, server: _, request: "GET /.env.dev HTTP/1.1", upstream: "http://localhost/.env.dev", host: "91.99.61.93"
+2025/04/25 09:19:32 [error] 24573#24573: *93 no live upstreams while connecting to upstream, client: 195.178.110.161, server: _, request: "GET /server/.git/config HTTP/1.1", upstream: "http://localhost/server/.git/config", host: "91.99.61.93"
+2025/04/25 09:19:32 [error] 24573#24573: *94 no live upstreams while connecting to upstream, client: 195.178.110.161, server: _, request: "GET /src/.git/config HTTP/1.1", upstream: "http://localhost/src/.git/config", host: "91.99.61.93"
+2025/04/25 09:19:32 [error] 24573#24573: *95 no live upstreams while connecting to upstream, client: 195.178.110.161, server: _, request: "GET /dev/.git/config HTTP/1.1", upstream: "http://localhost/dev/.git/config", host: "91.99.61.93"
+2025/04/25 09:19:32 [error] 24573#24573: *96 no live upstreams while connecting to upstream, client: 195.178.110.161, server: _, request: "GET /.env.dev.local HTTP/1.1", upstream: "http://localhost/.env.dev.local", host: "91.99.61.93"
+2025/04/25 09:19:32 [error] 24573#24573: *97 no live upstreams while connecting to upstream, client: 195.178.110.161, server: _, request: "GET /.env_sample HTTP/1.1", upstream: "http://localhost/.env_sample", host: "91.99.61.93"
+2025/04/25 09:19:32 [error] 24573#24573: *98 no live upstreams while connecting to upstream, client: 195.178.110.161, server: _, request: "GET /public/.git/config HTTP/1.1", upstream: "http://localhost/public/.git/config", host: "91.99.61.93"
+2025/04/25 09:19:32 [error] 24573#24573: *99 no live upstreams while connecting to upstream, client: 195.178.110.161, server: _, request: "GET /.aws/credentials HTTP/1.1", upstream: "http://localhost/.aws/credentials", host: "91.99.61.93"
+2025/04/25 09:19:32 [error] 24573#24573: *100 no live upstreams while connecting to upstream, client: 195.178.110.161, server: _, request: "GET /.env.live HTTP/1.1", upstream: "http://localhost/.env.live", host: "91.99.61.93"
+2025/04/25 09:19:32 [error] 24573#24573: *101 no live upstreams while connecting to upstream, client: 195.178.110.161, server: _, request: "GET /configuration/.env HTTP/1.1", upstream: "http://localhost/configuration/.env", host: "91.99.61.93"
+2025/04/25 09:19:32 [error] 24573#24573: *102 no live upstreams while connecting to upstream, client: 195.178.110.161, server: _, request: "GET /static../.git/config HTTP/1.1", upstream: "http://localhost/static../.git/config", host: "91.99.61.93"
+2025/04/25 09:19:33 [error] 24573#24573: *103 no live upstreams while connecting to upstream, client: 195.178.110.161, server: _, request: "GET /.env.ci HTTP/1.1", upstream: "http://localhost/.env.ci", host: "91.99.61.93"
+2025/04/25 09:19:33 [error] 24573#24573: *104 no live upstreams while connecting to upstream, client: 195.178.110.161, server: _, request: "GET /api/.env HTTP/1.1", upstream: "http://localhost/api/.env", host: "91.99.61.93"
+2025/04/25 09:19:33 [error] 24573#24573: *105 no live upstreams while connecting to upstream, client: 195.178.110.161, server: _, request: "GET /cms/.git/config HTTP/1.1", upstream: "http://localhost/cms/.git/config", host: "91.99.61.93"
+2025/04/25 09:24:45 [error] 24573#24573: *106 connect() failed (111: Connection refused) while connecting to upstream, client: 92.255.57.58, server: _, request: "GET /actuator/gateway/routes HTTP/1.1", upstream: "http://127.0.0.1:3000/actuator/gateway/routes", host: "91.99.61.93:80"
+2025/04/25 09:24:45 [error] 24573#24573: *106 connect() failed (111: Connection refused) while connecting to upstream, client: 92.255.57.58, server: _, request: "GET /actuator/gateway/routes HTTP/1.1", upstream: "http://[::1]:3000/actuator/gateway/routes", host: "91.99.61.93:80"
+2025/04/25 09:25:38 [error] 24573#24573: *109 connect() failed (111: Connection refused) while connecting to upstream, client: 171.241.178.240, server: _, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:3000/", host: "pawaodds.pro"
+2025/04/25 09:25:38 [error] 24573#24573: *109 connect() failed (111: Connection refused) while connecting to upstream, client: 171.241.178.240, server: _, request: "GET / HTTP/1.1", upstream: "http://[::1]:3000/", host: "pawaodds.pro"
+2025/04/25 09:33:25 [error] 24573#24573: *112 connect() failed (111: Connection refused) while connecting to upstream, client: 172.69.136.212, server: _, request: "GET /wp-admin/setup-config.php HTTP/1.1", upstream: "http://127.0.0.1:3000/wp-admin/setup-config.php", host: "pawaodds.pro"
+2025/04/25 09:33:25 [error] 24573#24573: *112 connect() failed (111: Connection refused) while connecting to upstream, client: 172.69.136.212, server: _, request: "GET /wp-admin/setup-config.php HTTP/1.1", upstream: "http://[::1]:3000/wp-admin/setup-config.php", host: "pawaodds.pro"
+2025/04/25 09:35:35 [error] 24573#24573: *115 connect() failed (111: Connection refused) while connecting to upstream, client: 172.71.164.170, server: _, request: "GET /wordpress/wp-admin/setup-config.php HTTP/1.1", upstream: "http://127.0.0.1:3000/wordpress/wp-admin/setup-config.php", host: "pawaodds.pro"
+2025/04/25 09:35:35 [error] 24573#24573: *115 connect() failed (111: Connection refused) while connecting to upstream, client: 172.71.164.170, server: _, request: "GET /wordpress/wp-admin/setup-config.php HTTP/1.1", upstream: "http://[::1]:3000/wordpress/wp-admin/setup-config.php", host: "pawaodds.pro"
+2025/04/25 09:39:00 [error] 24573#24573: *118 connect() failed (111: Connection refused) while connecting to upstream, client: 196.251.92.50, server: _, request: "GET /.env HTTP/1.1", upstream: "http://127.0.0.1:3000/.env", host: "91.99.61.93"
+2025/04/25 09:39:00 [error] 24573#24573: *118 connect() failed (111: Connection refused) while connecting to upstream, client: 196.251.92.50, server: _, request: "GET /.env HTTP/1.1", upstream: "http://[::1]:3000/.env", host: "91.99.61.93"
+2025/04/25 09:51:42 [error] 47241#47241: *4 connect() failed (111: Connection refused) while connecting to upstream, client: 154.81.156.54, server: _, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:3000/", host: "91.99.61.93:80"
+2025/04/25 09:56:05 [error] 47388#47388: *8 connect() failed (111: Connection refused) while connecting to upstream, client: 124.120.121.81, server: _, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:3000/", host: "91.99.61.93"
+2025/04/25 09:56:20 [error] 47389#47389: *12 connect() failed (111: Connection refused) while connecting to upstream, client: 124.120.121.81, server: _, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:3000/", host: "91.99.61.93"
+2025/04/25 09:56:25 [error] 47388#47388: *14 connect() failed (111: Connection refused) while connecting to upstream, client: 124.120.121.81, server: _, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:3000/", host: "91.99.61.93"
+2025/04/25 09:57:22 [error] 47388#47388: *17 connect() failed (111: Connection refused) while connecting to upstream, client: 124.120.121.81, server: _, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:3000/", host: "91.99.61.93"
+2025/04/25 09:57:24 [error] 47388#47388: *17 connect() failed (111: Connection refused) while connecting to upstream, client: 124.120.121.81, server: _, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:3000/", host: "91.99.61.93"
+2025/04/25 09:57:24 [error] 47388#47388: *17 connect() failed (111: Connection refused) while connecting to upstream, client: 124.120.121.81, server: _, request: "GET /favicon.ico HTTP/1.1", upstream: "http://127.0.0.1:3000/favicon.ico", host: "91.99.61.93", referrer: "http://91.99.61.93/"
+root@ubuntu-4gb-nbg1-6:~# 
+root@ubuntu-4gb-nbg1-6:~# # Check access logs
+root@ubuntu-4gb-nbg1-6:~# tail -n 50 /var/log/nginx/access.log

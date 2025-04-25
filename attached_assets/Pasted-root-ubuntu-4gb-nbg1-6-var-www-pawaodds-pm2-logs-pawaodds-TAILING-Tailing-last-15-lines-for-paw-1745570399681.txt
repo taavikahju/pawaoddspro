@@ -1,0 +1,49 @@
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds# pm2 logs pawaodds
+[TAILING] Tailing last 15 lines for [pawaodds] process (change the value with --lines option)
+/var/www/pawaodds/logs/out.log last 15 lines:
+/var/www/pawaodds/logs/err.log last 15 lines:
+^C
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds# netstat -tulpn | grep 3000
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds# cd /var/www/pawaodds
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds# export DATABASE_URL="postgresql://pawauser:P66ri66%401987@localhost:5432/pawaodds"
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds# export ADMIN_KEY="xcINLB7qo0kx3Rxpe9PMHXE3yL4pGwyh" # Replace with your chosen admin key
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds# export NODE_ENV="production"
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds# node_modules/.bin/tsx server/index.ts
+
+Detected scraper file betika KE_scraper.cjs for bookmaker code: betika KE
+Registered custom scraper for bookmaker: betika KE
+Script path: /var/www/pawaodds/server/scrapers/custom/betika KE_scraper.cjs
+Command: node
+Detected scraper file bp GH_scraper.py for bookmaker code: bp GH
+Registered custom scraper for bookmaker: bp GH
+Script path: /var/www/pawaodds/server/scrapers/custom/bp GH_scraper.py
+Command: python
+Detected scraper file bp KE_scraper.py for bookmaker code: bp KE
+Registered custom scraper for bookmaker: bp KE
+Script path: /var/www/pawaodds/server/scrapers/custom/bp KE_scraper.py
+Command: python
+Detected scraper file example_scraper.js for bookmaker code: example
+Registered custom scraper for bookmaker: example
+Script path: /var/www/pawaodds/server/scrapers/custom/example_scraper.js
+Command: node
+Detected scraper file sporty_scraper.cjs for bookmaker code: sporty
+Registered custom scraper for bookmaker: sporty
+Script path: /var/www/pawaodds/server/scrapers/custom/sporty_scraper.cjs
+Command: node
+Loaded 5 custom scrapers
+Setting up scrapers...
+Starting scraper runs...
+Scrapers scheduled to run every 15 minutes (cron: */15 * * * *)
+History cleanup scheduled to run daily at midnight (cron: 0 0 * * *)
+/var/www/pawaodds/server/vite.ts:74
+    throw new Error(
+          ^
+
+
+Error: Could not find the build directory: /var/www/pawaodds/server/public, make sure to build the client first
+    at serveStatic (/var/www/pawaodds/server/vite.ts:74:11)
+    at <anonymous> (/var/www/pawaodds/server/index.ts:56:5)
+
+Node.js v20.19.1
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds# 
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds# 

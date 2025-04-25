@@ -1,0 +1,122 @@
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds# cat > /var/www/pawaodds/deploy.sh << 'EOF'
+> #!/bin/bash
+> 
+> # Directory structure
+> DEPLOY_DIR="/var/www/pawaodds"
+> TEMP_DIR="$DEPLOY_DIR/deploy-temp"
+> CURRENT_DIR="$DEPLOY_DIR/current"
+> BACKUP_DIR="$DEPLOY_DIR/backup"
+> 
+> # Create directories if they don't exist
+> mkdir -p $TEMP_DIR $CURRENT_DIR $BACKUP_DIR
+> 
+> # Clone the repository to the temp directory
+> echo "Cloning the repository..."
+> rm -rf $TEMP_DIR/*
+> git clone https://github.com/taavikahju/pawaodds.git $TEMP_DIR
+> 
+> # Check if clone was successful
+> if [ $? -ne 0 ]; then
+>   echo "Failed to clone the repository"
+>   exit 1
+> fi
+> 
+> # Install dependencies
+> echo "Installing dependencies..."
+> cd $TEMP_DIR
+> npm ci --production
+> 
+> # Build the client (if needed)
+> echo "Building the client..."
+> npm run build
+> 
+> # Create or update the .env file
+> if [ ! -f $TEMP_DIR/.env ]; then
+>   echo "Creating .env file..."
+>   cat > $TEMP_DIR/.env << 'ENVFILE'
+> DATABASE_URL=postgresql://pawauser:P66ri66%401987@localhost:5432/pawaodds
+> ADMIN_KEY=xcINLB7qo0kx3Rxpe9PMHXE3yL4pGwyh
+> NODE_ENV=production
+> ENVFILE
+> else
+>   echo ".env file already exists"
+> fi
+> 
+> # Create logs directory
+> mkdir -p $TEMP_DIR/logs
+> 
+> # Backup the current deployment
+> if [ -d "$CURRENT_DIR" ] && [ "$(ls -A $CURRENT_DIR)" ]; then
+>   echo "Backing up current deployment..."
+>   rm -rf $BACKUP_DIR/*
+>   cp -r $CURRENT_DIR/* $BACKUP_DIR/
+> fi
+> 
+> # Deploy the new version
+> echo "Deploying new version..."
+> rm -rf $CURRENT_DIR/*
+> cp -r $TEMP_DIR/* $CURRENT_DIR/
+> 
+> # Start the application with PM2
+> echo "Starting the application..."
+> cd $CURRENT_DIR
+> pm2 delete pawaodds || true
+> pm2 start ecosystem.config.cjs || pm2 start node_modules/.bin/tsx --name pawaodds -- server/index.ts
+> pm2 save
+> 
+> echo "Deployment completed!"
+> EOF
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds# 
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds# # Make the script executable
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds# chmod +x /var/www/pawaodds/deploy.sh
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds# # Run the deployment script
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds# cd /var/www/pawaodds
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds# ./deploy.sh
+Cloning the repository...
+Cloning into '/var/www/pawaodds/deploy-temp'...
+remote: Enumerating objects: 1615, done.
+remote: Counting objects: 100% (1615/1615), done.
+remote: Compressing objects: 100% (438/438), done.
+remote: Total 1615 (delta 1145), reused 1615 (delta 1145), pack-reused 0 (from 0)
+Receiving objects: 100% (1615/1615), 3.26 MiB | 5.68 MiB/s, done.
+Resolving deltas: 100% (1145/1145), done.
+Installing dependencies...
+npm warn config production Use `--omit=dev` instead.
+
+added 437 packages, and audited 438 packages in 10s
+
+58 packages are looking for funding
+  run `npm fund` for details
+
+2 moderate severity vulnerabilities
+
+To address all issues, run:
+  npm audit fix
+
+Run `npm audit` for details.
+Building the client...
+
+> rest-express@1.0.0 build
+> vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+
+failed to load config from /var/www/pawaodds/deploy-temp/vite.config.ts
+error during build:
+Error [ERR_MODULE_NOT_FOUND]: Cannot find package '@vitejs/plugin-react' imported from /var/www/pawaodds/deploy-temp/vite.config.ts.timestamp-1745571268636-47eca35e4258d.mjs
+    at packageResolve (node:internal/modules/esm/resolve:873:9)
+    at moduleResolve (node:internal/modules/esm/resolve:946:18)
+    at defaultResolve (node:internal/modules/esm/resolve:1188:11)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:642:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:591:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:574:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:236:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:130:49)
+Creating .env file...
+Deploying new version...
+Starting the application...
+[PM2][ERROR] Process or Namespace pawaodds not found
+[PM2][ERROR] File ecosystem.config.cjs not found
+[PM2][ERROR] Script not found: /var/www/pawaodds/current/node_modules/.bin/tsx
+[PM2] Saving current process list...
+[PM2][WARN] PM2 is not managing any process, skipping save...
+[PM2][WARN] To force saving use: pm2 save --force
+Deployment completed!

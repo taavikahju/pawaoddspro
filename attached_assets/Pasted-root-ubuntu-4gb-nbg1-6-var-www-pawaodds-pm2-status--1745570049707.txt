@@ -1,0 +1,129 @@
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds# pm2 status
+┌────┬────────────────────┬──────────┬──────┬───────────┬──────────┬──────────┐
+│ id │ name               │ mode     │ ↺    │ status    │ cpu      │ memory   │
+├────┼────────────────────┼──────────┼──────┼───────────┼──────────┼──────────┤
+│ 0  │ pawaodds           │ fork     │ 22   │ online    │ 0%       │ 3.0mb    │
+└────┴────────────────────┴──────────┴──────┴───────────┴──────────┴──────────┘
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds# 
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds# # Check PM2 logs for errors
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds# pm2 logs
+[TAILING] Tailing last 15 lines for [all] processes (change the value with --lines option)
+/root/.pm2/pm2.log last 15 lines:
+PM2        | 2025-04-25T08:33:30: PM2 log: App [pawaodds:0] exited with code [1] via signal [SIGINT]
+PM2        | 2025-04-25T08:33:30: PM2 log: App [pawaodds:0] starting in -fork mode-
+PM2        | 2025-04-25T08:33:30: PM2 log: App [pawaodds:0] online
+PM2        | 2025-04-25T08:33:32: PM2 log: App [pawaodds:0] exited with code [1] via signal [SIGINT]
+PM2        | 2025-04-25T08:33:32: PM2 log: App [pawaodds:0] starting in -fork mode-
+PM2        | 2025-04-25T08:33:32: PM2 log: App [pawaodds:0] online
+PM2        | 2025-04-25T08:33:35: PM2 log: App [pawaodds:0] exited with code [1] via signal [SIGINT]
+PM2        | 2025-04-25T08:33:35: PM2 log: App [pawaodds:0] starting in -fork mode-
+PM2        | 2025-04-25T08:33:35: PM2 log: App [pawaodds:0] online
+PM2        | 2025-04-25T08:33:38: PM2 log: App [pawaodds:0] exited with code [1] via signal [SIGINT]
+PM2        | 2025-04-25T08:33:38: PM2 log: App [pawaodds:0] starting in -fork mode-
+PM2        | 2025-04-25T08:33:38: PM2 log: App [pawaodds:0] online
+PM2        | 2025-04-25T08:33:40: PM2 log: App [pawaodds:0] exited with code [1] via signal [SIGINT]
+PM2        | 2025-04-25T08:33:40: PM2 log: App [pawaodds:0] starting in -fork mode-
+PM2        | 2025-04-25T08:33:40: PM2 log: App [pawaodds:0] online
+
+/root/.pm2/logs/pawaodds-out.log last 15 lines:
+/root/.pm2/logs/pawaodds-error.log last 15 lines:
+0|pawaodds |     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+0|pawaodds | 
+0|pawaodds | Node.js v20.19.1
+0|pawaodds | /var/www/pawaodds/server/db.ts:9
+0|pawaodds |   throw new Error(
+0|pawaodds |         ^
+0|pawaodds | 
+0|pawaodds | 
+0|pawaodds | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|pawaodds |     at <anonymous> (/var/www/pawaodds/server/db.ts:9:9)
+0|pawaodds |     at ModuleJob.run (node:internal/modules/esm/module_job:263:25)
+0|pawaodds |     at async ModuleLoader.import (node:internal/modules/esm/loader:540:24)
+0|pawaodds |     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+0|pawaodds | 
+0|pawaodds | Node.js v20.19.1
+
+0|pawaodds  | /var/www/pawaodds/server/db.ts:9
+0|pawaodds  |   throw new Error(
+0|pawaodds  |         ^
+0|pawaodds  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|pawaodds  |     at <anonymous> (/var/www/pawaodds/server/db.ts:9:9)
+0|pawaodds  |     at ModuleJob.run (node:internal/modules/esm/module_job:263:25)
+0|pawaodds  |     at async ModuleLoader.import (node:internal/modules/esm/loader:540:24)
+0|pawaodds  |     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+0|pawaodds  | Node.js v20.19.1
+PM2         | App [pawaodds:0] exited with code [1] via signal [SIGINT]
+PM2         | App [pawaodds:0] starting in -fork mode-
+PM2         | App [pawaodds:0] online
+0|pawaodds  | /var/www/pawaodds/server/db.ts:9
+0|pawaodds  |   throw new Error(
+0|pawaodds  |         ^
+0|pawaodds  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|pawaodds  |     at <anonymous> (/var/www/pawaodds/server/db.ts:9:9)
+0|pawaodds  |     at ModuleJob.run (node:internal/modules/esm/module_job:263:25)
+0|pawaodds  |     at async ModuleLoader.import (node:internal/modules/esm/loader:540:24)
+0|pawaodds  |     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+0|pawaodds  | Node.js v20.19.1
+PM2         | App [pawaodds:0] exited with code [1] via signal [SIGINT]
+PM2         | App [pawaodds:0] starting in -fork mode-
+PM2         | App [pawaodds:0] online
+0|pawaodds  | /var/www/pawaodds/server/db.ts:9
+0|pawaodds  |   throw new Error(
+0|pawaodds  |         ^
+0|pawaodds  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|pawaodds  |     at <anonymous> (/var/www/pawaodds/server/db.ts:9:9)
+0|pawaodds  |     at ModuleJob.run (node:internal/modules/esm/module_job:263:25)
+0|pawaodds  |     at async ModuleLoader.import (node:internal/modules/esm/loader:540:24)
+0|pawaodds  |     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+0|pawaodds  | Node.js v20.19.1
+PM2         | App [pawaodds:0] exited with code [1] via signal [SIGINT]
+PM2         | App [pawaodds:0] starting in -fork mode-
+PM2         | App [pawaodds:0] online
+0|pawaodds  | /var/www/pawaodds/server/db.ts:9
+0|pawaodds  |   throw new Error(
+0|pawaodds  |         ^
+0|pawaodds  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|pawaodds  |     at <anonymous> (/var/www/pawaodds/server/db.ts:9:9)
+0|pawaodds  |     at ModuleJob.run (node:internal/modules/esm/module_job:263:25)
+0|pawaodds  |     at async ModuleLoader.import (node:internal/modules/esm/loader:540:24)
+0|pawaodds  |     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+0|pawaodds  | Node.js v20.19.1
+PM2         | App [pawaodds:0] exited with code [1] via signal [SIGINT]
+PM2         | App [pawaodds:0] starting in -fork mode-
+PM2         | App [pawaodds:0] online
+0|pawaodds  | /var/www/pawaodds/server/db.ts:9
+0|pawaodds  |   throw new Error(
+0|pawaodds  |         ^
+0|pawaodds  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|pawaodds  |     at <anonymous> (/var/www/pawaodds/server/db.ts:9:9)
+0|pawaodds  |     at ModuleJob.run (node:internal/modules/esm/module_job:263:25)
+0|pawaodds  |     at async ModuleLoader.import (node:internal/modules/esm/loader:540:24)
+0|pawaodds  |     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+0|pawaodds  | Node.js v20.19.1
+PM2         | App [pawaodds:0] exited with code [1] via signal [SIGINT]
+PM2         | App [pawaodds:0] starting in -fork mode-
+PM2         | App [pawaodds:0] online
+0|pawaodds  | /var/www/pawaodds/server/db.ts:9
+0|pawaodds  |   throw new Error(
+0|pawaodds  |         ^
+0|pawaodds  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|pawaodds  |     at <anonymous> (/var/www/pawaodds/server/db.ts:9:9)
+0|pawaodds  |     at ModuleJob.run (node:internal/modules/esm/module_job:263:25)
+0|pawaodds  |     at async ModuleLoader.import (node:internal/modules/esm/loader:540:24)
+0|pawaodds  |     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+0|pawaodds  | Node.js v20.19.1
+PM2         | App [pawaodds:0] exited with code [1] via signal [SIGINT]
+PM2         | App [pawaodds:0] starting in -fork mode-
+PM2         | App [pawaodds:0] online
+0|pawaodds  | /var/www/pawaodds/server/db.ts:9
+0|pawaodds  |   throw new Error(
+0|pawaodds  |         ^
+0|pawaodds  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|pawaodds  |     at <anonymous> (/var/www/pawaodds/server/db.ts:9:9)
+0|pawaodds  |     at ModuleJob.run (node:internal/modules/esm/module_job:263:25)
+0|pawaodds  |     at async ModuleLoader.import (node:internal/modules/esm/loader:540:24)
+0|pawaodds  |     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+0|pawaodds  | Node.js v20.19.1
+PM2         | App [pawaodds:0] exited with code [1] via signal [SIGINT]
+PM2         | App [pawaodds:0] starting in -fork mode-
+PM2         | App [pawaodds:0] online

@@ -1,0 +1,45 @@
+Building the client...
+
+> rest-express@1.0.0 build
+> vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+
+failed to load config from /var/www/pawaodds/deploy-temp/vite.config.ts
+error during build:
+Error [ERR_MODULE_NOT_FOUND]: Cannot find package '@vitejs/plugin-react' imported from /var/www/pawaodds/deploy-temp/vite.config.ts.timestamp-1745571268636-47eca35e4258d.mjs
+    at packageResolve (node:internal/modules/esm/resolve:873:9)
+    at moduleResolve (node:internal/modules/esm/resolve:946:18)
+    at defaultResolve (node:internal/modules/esm/resolve:1188:11)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:642:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:591:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:574:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:236:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:130:49)
+Creating .env file...
+Deploying new version...
+Starting the application...
+[PM2][ERROR] Process or Namespace pawaodds not found
+[PM2][ERROR] File ecosystem.config.cjs not found
+[PM2][ERROR] Script not found: /var/www/pawaodds/current/node_modules/.bin/tsx
+[PM2] Saving current process list...
+[PM2][WARN] PM2 is not managing any process, skipping save...
+[PM2][WARN] To force saving use: pm2 save --force
+Deployment completed!
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds# cd /var/www/pawaodds/deploy-temp
+root@ubuntu-4gb-nbg1-6:/var/www/pawaodds/deploy-temp# npm install --save-dev @vitejs/plugin-react vite esbuild
+npm warn deprecated @esbuild-kit/esm-loader@2.6.5: Merged into tsx: https://tsx.is
+npm warn deprecated @esbuild-kit/core-utils@3.3.2: Merged into tsx: https://tsx.is
+
+added 76 packages, changed 1 package, and audited 514 packages in 11s
+
+66 packages are looking for funding
+  run `npm fund` for details
+
+6 moderate severity vulnerabilities
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
