@@ -6,32 +6,8 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Site-wide access protection
+// No site-wide access protection
 app.use((req, res, next) => {
-  // Skip protection for API endpoints as they are called by the frontend
-  if (req.path.startsWith('/api/')) {
-    return next();
-  }
-
-  // Skip protection for authentication-related endpoints
-  if (req.path === '/auth-challenge') {
-    return next();
-  }
-
-  // Skip protection if preview mode is enabled (for the iframe in the challenge page)
-  if (req.query.preview === 'true') {
-    return next();
-  }
-
-  // Check session for auth 
-  // Using type assertion here since we extended the SessionData interface
-  const isAuthenticated = req.session && (req.session as any).siteAuthenticated === true;
-  
-  if (!isAuthenticated) {
-    // Redirect to auth challenge page
-    return res.redirect('/auth-challenge');
-  }
-  
   next();
 });
 
