@@ -226,9 +226,24 @@ function generateMockEvents(): any[] {
     // Generate a random game minute between 1 and 90
     const gameMinute = Math.floor(Math.random() * 90) + 1;
     
-    // Randomly determine if markets are suspended (higher chance later in the game)
-    const suspensionChance = gameMinute > 75 ? 0.35 : (gameMinute > 45 ? 0.2 : 0.1);
-    const suspended = Math.random() < suspensionChance;
+    // Per user requirements: an event has a heartbeat if at least one of the marketType 3743 prices has suspended=false
+    // Individual price suspension chances (different for each price)
+    const price1SuspensionChance = gameMinute > 75 ? 0.4 : (gameMinute > 45 ? 0.25 : 0.15);
+    const priceXSuspensionChance = gameMinute > 75 ? 0.35 : (gameMinute > 45 ? 0.2 : 0.1);
+    const price2SuspensionChance = gameMinute > 75 ? 0.45 : (gameMinute > 45 ? 0.3 : 0.2);
+    
+    // Determine suspension for each individual price
+    const price1Suspended = Math.random() < price1SuspensionChance;
+    const priceXSuspended = Math.random() < priceXSuspensionChance;
+    const price2Suspended = Math.random() < price2SuspensionChance;
+    
+    // Market is suspended only if ALL prices are suspended (no heartbeat)
+    const allPricesSuspended = price1Suspended && priceXSuspended && price2Suspended;
+    
+    // Create price objects with prices and suspension status
+    const price1 = { name: '1', suspended: price1Suspended, price: (Math.random() * 3 + 1.5).toFixed(2) };
+    const priceX = { name: 'X', suspended: priceXSuspended, price: (Math.random() * 3 + 2).toFixed(2) };
+    const price2 = { name: '2', suspended: price2Suspended, price: (Math.random() * 3 + 1.5).toFixed(2) };
     
     mockEvents.push({
       id: id.toString(),
@@ -242,12 +257,14 @@ function generateMockEvents(): any[] {
       markets: [
         {
           type: '3743',
+          typeId: '3743',
           name: '1X2',
-          status: 'ACTIVE',
+          status: allPricesSuspended ? 'SUSPENDED' : 'ACTIVE',
+          suspended: allPricesSuspended,
           prices: [
-            { name: '1', suspended },
-            { name: 'X', suspended },
-            { name: '2', suspended }
+            price1,
+            priceX,
+            price2
           ]
         }
       ],
@@ -345,33 +362,7 @@ async function scrapePagedEvents(apiUrl: string): Promise<any[]> {
     // Return mock data instead of making an API call
     return generateMockEvents();
     
-    const response = await axios.get(apiUrl, {
-      headers,
-      timeout: 8000 // 8-second timeout
-    });
-    
-    if (!response.data) {
-      throw new Error('No data returned from API');
-    }
-    
-    // BetPawa Ghana API response structure depends on their API
-    // Check if response has the expected structure
-    let events: any[] = [];
-    
-    // Try various response structures
-    if (response.data.events) {
-      // Direct events array
-      events = response.data.events;
-    } else if (response.data.queries && response.data.queries[0] && response.data.queries[0].events) {
-      // Queries[0].events structure
-      events = response.data.queries[0].events;
-    } else if (Array.isArray(response.data)) {
-      // Direct array of events
-      events = response.data;
-    }
-    
-    console.log(`Extracted ${events.length} events from API response`);
-    return events;
+    // API implementation is omitted for now until we resolve the API access issues
   } catch (error) {
     console.error('Error scraping page of BetPawa Ghana events:', error.message);
     return [];
@@ -421,13 +412,21 @@ async function processEvents(events: any[]): Promise<void> {
     
     // Extract market status
     if (market1X2) {
+      // First check overall market suspension
       isMarketAvailable = !(market1X2.suspended === true || market1X2.status === 'SUSPENDED');
       
-      // Also check if prices/outcomes are suspended
-      if (market1X2.prices) {
-        isMarketAvailable = !market1X2.prices.some((p: any) => p.suspended);
-      } else if (market1X2.outcomes) {
-        isMarketAvailable = !market1X2.outcomes.some((o: any) => o.suspended);
+      // According to requirements:
+      // An event has a heartbeat if at least one of the marketType 3743 prices has suspended=false
+      // If all 3 prices are suspended, then there is no heartbeat
+      if (market1X2.prices && market1X2.prices.length > 0) {
+        // Check if at least one price is not suspended
+        const allPricesSuspended = market1X2.prices.every((p: any) => p.suspended === true);
+        // Market is available only if at least one price is not suspended
+        isMarketAvailable = !allPricesSuspended;
+      } else if (market1X2.outcomes && market1X2.outcomes.length > 0) {
+        // Same logic for outcomes if that's what the API returns
+        const allOutcomesSuspended = market1X2.outcomes.every((o: any) => o.suspended === true);
+        isMarketAvailable = !allOutcomesSuspended;
       }
     }
     
