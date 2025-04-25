@@ -32,17 +32,27 @@ export default function Dashboard() {
     refetchInterval: 60000, // Refresh every minute
   });
   
-  // Fetch events (filtered by selected sports)
+  // Fetch future events (filtered by selected sports)
   const { 
     data: events = [],
     isLoading: isLoadingEvents 
   } = useQuery({ 
-    queryKey: ['/api/events'],
+    queryKey: ['/api/events', 'future', countryFilter, tournamentFilter],
     queryFn: async () => {
-      // Add minBookmakers parameter to ensure we're getting events with sufficient bookmaker data
-      const response = await fetch('/api/events?minBookmakers=3');
+      // Add parameters to ensure we're getting future events with sufficient bookmaker data
+      const params: Record<string, string> = {
+        future_only: 'true',
+        minBookmakers: '3'
+      };
+      
+      // Add filters if not 'all'
+      if (countryFilter !== 'all') params.country = countryFilter;
+      if (tournamentFilter !== 'all') params.tournament = tournamentFilter;
+      
+      const queryString = new URLSearchParams(params).toString();
+      const response = await fetch(`/api/events?${queryString}`);
       const data = await response.json();
-      console.log(`Dashboard: Loaded ${data.length} events`);
+      console.log(`Dashboard: Loaded ${data.length} future events`);
       
       // Debug the first event if available
       if (data.length > 0) {

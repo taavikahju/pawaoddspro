@@ -41,7 +41,7 @@ export default function HistoricalOdds() {
   const { selectedBookmakers } = useBookmakerContext();
   const { toast } = useToast();
 
-  // Fetch past events (not older than 2 weeks)
+  // Fetch past events (only events that have already finished)
   const { 
     data: events = [],
     isLoading: isLoadingEvents,
@@ -50,7 +50,7 @@ export default function HistoricalOdds() {
   } = useQuery<Event[]>({ 
     queryKey: ['/api/events', 'past', countryFilter, tournamentFilter],
     queryFn: async () => {
-      // We'll bypass date filtering for now since it's causing issues
+      // Get only past events with the time filter properly applied
       const params: Record<string, string> = { 
         past_only: 'true',
         minBookmakers: '3'
@@ -80,7 +80,6 @@ export default function HistoricalOdds() {
         }
       }
       
-      // Use all events for now
       console.log('Historical events response:', {
         count: response.data.length,
         firstItem: response.data.length > 0 ? response.data[0] : null,
