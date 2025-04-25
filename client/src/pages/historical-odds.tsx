@@ -22,6 +22,7 @@ import { useBookmakerContext } from '@/contexts/BookmakerContext';
 import { useToast } from '@/hooks/use-toast';
 import CountryFlag from '../components/CountryFlag';
 import OddsHistoryPopup from '../components/OddsHistoryPopup';
+import Layout from '@/components/Layout';
 
 import { Event } from '../types/event';
 
@@ -121,24 +122,34 @@ export default function HistoricalOdds() {
   // Render loading state
   if (isLoadingEvents) {
     return (
-      <div className="flex items-center justify-center h-96">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <span className="ml-2 text-lg">Loading historical events...</span>
-      </div>
+      <Layout 
+        title="Historical Odds"
+        subtitle="View and analyze historical odds for past events"
+      >
+        <div className="flex items-center justify-center h-96">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <span className="ml-2 text-lg">Loading historical events...</span>
+        </div>
+      </Layout>
     );
   }
 
   // Render error state
   if (isError) {
     return (
-      <div className="flex flex-col items-center justify-center h-96">
-        <div className="text-red-500 mb-4 text-lg">
-          Error loading events: {(error as Error).message}
+      <Layout 
+        title="Historical Odds"
+        subtitle="View and analyze historical odds for past events"
+      >
+        <div className="flex flex-col items-center justify-center h-96">
+          <div className="text-red-500 mb-4 text-lg">
+            Error loading events: {(error as Error).message}
+          </div>
+          <Button onClick={() => window.location.reload()}>
+            Retry
+          </Button>
         </div>
-        <Button onClick={() => window.location.reload()}>
-          Retry
-        </Button>
-      </div>
+      </Layout>
     );
   }
 
@@ -151,167 +162,165 @@ export default function HistoricalOdds() {
     : events;
 
   return (
-    <div className="container py-4 mx-auto">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold mb-2">Historical Odds</h1>
-        <p className="text-gray-500 dark:text-gray-400 text-sm">
-          View and analyze historical odds for past events
-        </p>
-      </div>
-      
-      <div className="flex flex-col md:flex-row gap-6">
-        {/* Filters - Now in left sidebar */}
-        <div className="md:w-1/4 w-full">
-          <Card className="sticky top-4">
-            <CardHeader className="pb-3">
-              <div className="flex justify-between items-center">
-                <CardTitle className="text-lg flex items-center">
-                  <Filter className="h-4 w-4 mr-2" />
-                  Filters
-                </CardTitle>
-                {(countryFilter !== 'all' || tournamentFilter !== 'all') && (
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    onClick={resetFilters} 
-                    className="h-8 text-xs"
+    <Layout 
+      title="Historical Odds"
+      subtitle="View and analyze historical odds for past events"
+    >
+      <div className="container mx-auto">
+        <div className="flex flex-col md:flex-row gap-6">
+          {/* Filters - Now in left sidebar */}
+          <div className="md:w-1/4 w-full">
+            <Card className="sticky top-4">
+              <CardHeader className="pb-3">
+                <div className="flex justify-between items-center">
+                  <CardTitle className="text-lg flex items-center">
+                    <Filter className="h-4 w-4 mr-2" />
+                    Filters
+                  </CardTitle>
+                  {(countryFilter !== 'all' || tournamentFilter !== 'all') && (
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={resetFilters} 
+                      className="h-8 text-xs"
+                    >
+                      <X className="h-3 w-3 mr-1" /> Clear
+                    </Button>
+                  )}
+                </div>
+                <CardDescription>Filter historical events</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-col gap-4">
+                  <div>
+                    <label className="text-sm font-medium mb-1 block">Country</label>
+                    <Select 
+                      value={countryFilter} 
+                      onValueChange={setCountryFilter}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select country" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Countries</SelectItem>
+                        {availableCountries.map(country => (
+                          <SelectItem key={country} value={country}>
+                            <div className="flex items-center">
+                              <CountryFlag country={country} className="mr-2 h-3.5" />
+                              {country}
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium mb-1 block">Tournament</label>
+                    <Select 
+                      value={tournamentFilter} 
+                      onValueChange={handleTournamentChange}
+                      disabled={availableTournaments.length === 0}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select tournament" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Tournaments</SelectItem>
+                        {availableTournaments.map(tournament => (
+                          <SelectItem key={tournament} value={tournament}>
+                            {tournament}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  {(countryFilter !== 'all' || tournamentFilter !== 'all') && (
+                    <Button 
+                      variant="outline" 
+                      onClick={resetFilters} 
+                      className="w-full mt-2"
+                    >
+                      <X className="h-4 w-4 mr-2" /> Clear All Filters
+                    </Button>
+                  )}
+                  
+                  <div className="mt-4 text-sm text-gray-500 dark:text-gray-400">
+                    <p>Found {filteredEvents.length} events</p>
+                    {tournamentFilter !== 'all' && (
+                      <p className="mt-1">Tournament: {tournamentFilter}</p>
+                    )}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Event List - Now on the right side */}
+          <div className="md:w-3/4 w-full">
+            {hasPastEvents ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                {filteredEvents.map(event => (
+                  <Card 
+                    key={event.id} 
+                    className="hover:shadow-md transition-shadow cursor-pointer"
+                    onClick={() => openEventDialog(event)}
                   >
-                    <X className="h-3 w-3 mr-1" /> Clear
-                  </Button>
-                )}
+                    <CardHeader className="p-4 pb-2">
+                      <div className="flex items-center justify-between mb-1">
+                        <div className="flex items-center">
+                          <CountryFlag country={event.country} className="mr-2 h-3.5" />
+                          <span className="text-xs text-gray-500 dark:text-gray-400">{event.country}</span>
+                        </div>
+                        <Badge variant="outline" className="text-xs h-5">
+                          {formatDateTime(event.startTime)}
+                        </Badge>
+                      </div>
+                      <CardTitle className="text-base font-semibold">{event.name}</CardTitle>
+                      <CardDescription className="text-xs mt-1">
+                        {event.tournament}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="p-4 pt-2">
+                      <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                        {Object.keys(event.oddsData || {}).length} bookmakers
+                      </div>
+                      <div className="text-xs mt-1">
+                        Click to view historical odds
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
-              <CardDescription>Filter historical events</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex flex-col gap-4">
-                <div>
-                  <label className="text-sm font-medium mb-1 block">Country</label>
-                  <Select 
-                    value={countryFilter} 
-                    onValueChange={setCountryFilter}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select country" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Countries</SelectItem>
-                      {availableCountries.map(country => (
-                        <SelectItem key={country} value={country}>
-                          <div className="flex items-center">
-                            <CountryFlag country={country} className="mr-2 h-3.5" />
-                            {country}
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <label className="text-sm font-medium mb-1 block">Tournament</label>
-                  <Select 
-                    value={tournamentFilter} 
-                    onValueChange={handleTournamentChange}
-                    disabled={availableTournaments.length === 0}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select tournament" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Tournaments</SelectItem>
-                      {availableTournaments.map(tournament => (
-                        <SelectItem key={tournament} value={tournament}>
-                          {tournament}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                
-                {(countryFilter !== 'all' || tournamentFilter !== 'all') && (
-                  <Button 
-                    variant="outline" 
-                    onClick={resetFilters} 
-                    className="w-full mt-2"
-                  >
-                    <X className="h-4 w-4 mr-2" /> Clear All Filters
-                  </Button>
-                )}
-                
-                <div className="mt-4 text-sm text-gray-500 dark:text-gray-400">
-                  <p>Found {filteredEvents.length} events</p>
-                  {tournamentFilter !== 'all' && (
-                    <p className="mt-1">Tournament: {tournamentFilter}</p>
+            ) : (
+              <div className="flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-800/50 rounded-lg p-8 h-64">
+                <div className="text-center">
+                  <h3 className="text-lg font-medium mb-2">No past events found</h3>
+                  <p className="text-gray-500 dark:text-gray-400 text-sm mb-4">
+                    {tournamentFilter !== 'all' 
+                      ? "Try selecting a different tournament or clearing your filters." 
+                      : countryFilter !== 'all' 
+                        ? "Try selecting a different country or clearing your filters."
+                        : "There are no past events with recorded odds history yet."}
+                  </p>
+                  {(countryFilter !== 'all' || tournamentFilter !== 'all') && (
+                    <Button variant="secondary" onClick={resetFilters}>
+                      Clear Filters
+                    </Button>
                   )}
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            )}
+          </div>
         </div>
-
-        {/* Event List - Now on the right side */}
-        <div className="md:w-3/4 w-full">
-          {hasPastEvents ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-              {filteredEvents.map(event => (
-                <Card 
-                  key={event.id} 
-                  className="hover:shadow-md transition-shadow cursor-pointer"
-                  onClick={() => openEventDialog(event)}
-                >
-                  <CardHeader className="p-4 pb-2">
-                    <div className="flex items-center justify-between mb-1">
-                      <div className="flex items-center">
-                        <CountryFlag country={event.country} className="mr-2 h-3.5" />
-                        <span className="text-xs text-gray-500 dark:text-gray-400">{event.country}</span>
-                      </div>
-                      <Badge variant="outline" className="text-xs h-5">
-                        {formatDateTime(event.startTime)}
-                      </Badge>
-                    </div>
-                    <CardTitle className="text-base font-semibold">{event.name}</CardTitle>
-                    <CardDescription className="text-xs mt-1">
-                      {event.tournament}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="p-4 pt-2">
-                    <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                      {Object.keys(event.oddsData || {}).length} bookmakers
-                    </div>
-                    <div className="text-xs mt-1">
-                      Click to view historical odds
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-800/50 rounded-lg p-8 h-64">
-              <div className="text-center">
-                <h3 className="text-lg font-medium mb-2">No past events found</h3>
-                <p className="text-gray-500 dark:text-gray-400 text-sm mb-4">
-                  {tournamentFilter !== 'all' 
-                    ? "Try selecting a different tournament or clearing your filters." 
-                    : countryFilter !== 'all' 
-                      ? "Try selecting a different country or clearing your filters."
-                      : "There are no past events with recorded odds history yet."}
-                </p>
-                {(countryFilter !== 'all' || tournamentFilter !== 'all') && (
-                  <Button variant="secondary" onClick={resetFilters}>
-                    Clear Filters
-                  </Button>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
+        
+        {/* Historical Odds Popup */}
+        <OddsHistoryPopup
+          event={selectedEvent}
+          open={isDialogOpen}
+          onClose={() => setIsDialogOpen(false)}
+        />
       </div>
-      
-      {/* Historical Odds Popup */}
-      <OddsHistoryPopup
-        event={selectedEvent}
-        open={isDialogOpen}
-        onClose={() => setIsDialogOpen(false)}
-      />
-    </div>
+    </Layout>
   );
 }
