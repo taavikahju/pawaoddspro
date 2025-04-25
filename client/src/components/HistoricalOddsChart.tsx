@@ -164,7 +164,7 @@ export default function HistoricalOddsChart({
                   data={chartData}
                   margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+                  <CartesianGrid strokeDasharray="3 3" opacity={0.3} vertical={false} />
                   <XAxis 
                     dataKey="timestamp" 
                     tickFormatter={(timestamp) => format(new Date(timestamp), 'M/dd HH:mm')}
@@ -174,17 +174,23 @@ export default function HistoricalOddsChart({
                     domain={tab === 'margin' ? ['dataMin - 0.2', 'dataMax + 0.2'] : [0, 'auto']}
                     tickFormatter={(value) => value.toFixed(2)}
                   />
-                  <Tooltip content={<CustomTooltip />} />
-                  <Legend />
+                  <Tooltip 
+                    content={<CustomTooltip />} 
+                    isAnimationActive={false}
+                    position={{ y: 0 }}
+                  />
+                  <Legend layout="horizontal" verticalAlign="bottom" align="center" />
                   {bookmakers.map((bookmaker, index) => (
                     <Line
                       key={bookmaker}
-                      type="monotone"
+                      type="linear"
                       dataKey={bookmaker}
                       name={bookmaker}
                       stroke={colors[index % colors.length]}
-                      dot={{ r: 3 }}
-                      activeDot={{ r: 5 }}
+                      strokeWidth={2}
+                      dot={false}
+                      activeDot={{ r: 6, strokeWidth: 1 }}
+                      isAnimationActive={false}
                       connectNulls
                     />
                   ))}

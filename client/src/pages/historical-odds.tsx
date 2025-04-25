@@ -41,7 +41,7 @@ export default function HistoricalOdds() {
   const { selectedBookmakers } = useBookmakerContext();
   const { toast } = useToast();
 
-  // Fetch past events
+  // Fetch past events (not older than 2 weeks)
   const { 
     data: events = [],
     isLoading: isLoadingEvents,
@@ -50,7 +50,14 @@ export default function HistoricalOdds() {
   } = useQuery<Event[]>({ 
     queryKey: ['/api/events', 'past', countryFilter, tournamentFilter],
     queryFn: async () => {
-      const params: Record<string, string> = { past_only: 'true' };
+      // Calculate date 2 weeks ago
+      const twoWeeksAgo = new Date();
+      twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
+      
+      const params: Record<string, string> = { 
+        past_only: 'true',
+        after_date: twoWeeksAgo.toISOString()
+      };
       
       // Add filters if not 'all'
       if (countryFilter !== 'all') params.country = countryFilter;
@@ -61,7 +68,8 @@ export default function HistoricalOdds() {
       console.log('Past events API response:', {
         count: response.data.length,
         firstItem: response.data.length > 0 ? response.data[0] : null,
-        status: response.status
+        status: response.status,
+        twoWeeksAgo: twoWeeksAgo.toISOString()
       });
       return response.data;
     },

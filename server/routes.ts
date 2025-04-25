@@ -428,6 +428,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const futureOnly = req.query.future_only === 'true';
       const country = req.query.country as string | undefined;
       const tournament = req.query.tournament as string | undefined;
+      const afterDate = req.query.after_date as string | undefined;
       
       let events;
 
@@ -451,9 +452,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
       
       // Apply time-based filters (past/future)
-      if (pastOnly || futureOnly) {
+      if (pastOnly || futureOnly || afterDate) {
         const now = new Date();
         console.log('Filtering with time based filter, current time:', now.toISOString());
+        
+        // If afterDate is provided, parse it
+        let afterDateObj: Date | null = null;
+        if (afterDate) {
+          try {
+            afterDateObj = new Date(afterDate);
+            console.log(`Filtering events after: ${afterDateObj.toISOString()}`);
+          } catch (err) {
+            console.error('Invalid after_date parameter:', afterDate);
+          }
+        }
         
         // Debug to see what's coming from the database
         console.log('First event sample:', JSON.stringify(filteredEvents[0] || {}, null, 2));
@@ -490,6 +502,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
           } else {
             // If no time info available, include in results
             return true;
+          }
+          
+          // Apply the 2-week filter if afterDate is provided
+          if (afterDateObj && eventTime < afterDateObj) {
+            // Skip events older than the after date
+            return false;
           }
           
           if (pastOnly) {
