@@ -13,14 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { format } from 'date-fns';
 import { Loader2 } from 'lucide-react';
-
-// Type for odds history data from API
-export interface BookmakerOddsData {
-  homeOdds: Array<{ x: number, y: number }>;
-  drawOdds: Array<{ x: number, y: number }>;
-  awayOdds: Array<{ x: number, y: number }>;
-  margins: Array<{ x: number, y: number }>;
-}
+import { BookmakerOddsData } from '../types/odds';
 
 interface HistoricalOddsChartProps {
   data: Record<string, BookmakerOddsData> | null;

@@ -10,6 +10,7 @@ import { useQuery } from '@tanstack/react-query';
 import HistoricalOddsChart from './HistoricalOddsChart';
 import { useBookmakerContext } from '@/contexts/BookmakerContext';
 import { Event } from '../types/event';
+import { BookmakerOddsData } from '../types/odds';
 
 interface OddsHistoryPopupProps {
   event: Event | null;
@@ -28,7 +29,7 @@ export default function OddsHistoryPopup({ event, open, onClose }: OddsHistoryPo
     data: historyData,
     isLoading,
     error
-  } = useQuery({
+  } = useQuery<Record<string, BookmakerOddsData> | null>({
     queryKey: ['/api/events', event?.eventId, 'history'],
     queryFn: async () => {
       if (!event?.eventId) return null;
@@ -38,19 +39,19 @@ export default function OddsHistoryPopup({ event, open, onClose }: OddsHistoryPo
         throw new Error('Failed to fetch historical odds data');
       }
       
-      return await response.json();
+      return await response.json() as Record<string, BookmakerOddsData>;
     },
     enabled: !!event?.eventId && open,
     refetchOnWindowFocus: false,
   });
   
   // Filter data to only show selected bookmakers
-  const filteredData = historyData 
+  const filteredData: Record<string, BookmakerOddsData> | null = historyData 
     ? Object.fromEntries(
         Object.entries(historyData).filter(([bookmakerCode]) => 
           selectedBookmakers.includes(bookmakerCode)
         )
-      )
+      ) as Record<string, BookmakerOddsData>
     : null;
   
   if (!event) return null;
