@@ -127,16 +127,11 @@ export class MemStorage implements IStorage {
     } catch (error) {
       console.error('Error initializing data:', error);
     }
-  }
-  
-    private formatTime(date: Date): string {
-    return date.toLocaleString('en-US', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: 'numeric',
+  }  private formatTime(date: Date): string {
+    return date.toLocaleTimeString('en-US', {
+      hour: '2-digit',
       minute: '2-digit',
-      hour12: true,
+      hour12: false,
       timeZone: 'UTC'
     }) + " UTC";
   }
@@ -456,16 +451,11 @@ export class DatabaseStorage implements IStorage {
     } catch (error) {
       console.error('Error initializing data:', error);
     }
-  }
-
-    private formatTime(date: Date): string {
-    return date.toLocaleString('en-US', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: 'numeric',
+  }  private formatTime(date: Date): string {
+    return date.toLocaleTimeString('en-US', {
+      hour: '2-digit',
       minute: '2-digit',
-      hour12: true,
+      hour12: false,
       timeZone: 'UTC'
     }) + " UTC";
   }
