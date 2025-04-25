@@ -83,7 +83,7 @@ export default function OddsHistoryPopup({ event, open, onClose }: OddsHistoryPo
             <HistoricalOddsChart 
               data={filteredData} 
               isLoading={isLoading} 
-              eventName={event.name}
+              eventName={event.name || event.teams || 'Event'}
             />
           )}
           

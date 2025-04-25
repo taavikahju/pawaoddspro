@@ -56,7 +56,13 @@ export default function HistoricalOdds() {
       if (countryFilter !== 'all') params.country = countryFilter;
       if (tournamentFilter !== 'all') params.tournament = tournamentFilter;
       
+      console.log('Fetching past events with params:', params);
       const response = await axios.get('/api/events', { params });
+      console.log('Past events API response:', {
+        count: response.data.length,
+        firstItem: response.data.length > 0 ? response.data[0] : null,
+        status: response.status
+      });
       return response.data;
     },
     refetchOnWindowFocus: false
@@ -107,8 +113,20 @@ export default function HistoricalOdds() {
   };
 
   // Format date/time for display
-  const formatDateTime = (dateString: string) => {
-    const date = new Date(dateString);
+  const formatDateTime = (event: Event) => {
+    let date: Date;
+    
+    // Check all possible time fields
+    if (event.startTime) {
+      date = new Date(event.startTime);
+    } else if (event.start_time) {
+      date = new Date(event.start_time);
+    } else if (event.date && event.time) {
+      date = new Date(`${event.date} ${event.time}`);
+    } else {
+      return "No date available";
+    }
+    
     return date.toLocaleString('en-US', {
       month: 'short',
       day: 'numeric',
@@ -117,6 +135,11 @@ export default function HistoricalOdds() {
       minute: '2-digit',
       hour12: true
     });
+  };
+  
+  // Get event name (using teams as fallback)
+  const getEventName = (event: Event) => {
+    return event.name || event.teams || "Unknown Event";
   };
   
   // Render loading state
@@ -273,10 +296,10 @@ export default function HistoricalOdds() {
                           <span className="text-xs text-gray-500 dark:text-gray-400">{event.country}</span>
                         </div>
                         <Badge variant="outline" className="text-xs h-5">
-                          {formatDateTime(event.startTime)}
+                          {formatDateTime(event)}
                         </Badge>
                       </div>
-                      <CardTitle className="text-base font-semibold">{event.name}</CardTitle>
+                      <CardTitle className="text-base font-semibold">{getEventName(event)}</CardTitle>
                       <CardDescription className="text-xs mt-1">
                         {event.tournament}
                       </CardDescription>

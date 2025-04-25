@@ -453,11 +453,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Apply time-based filters (past/future)
       if (pastOnly || futureOnly) {
         const now = new Date();
+        
+        // Debug to see what's coming from the database
+        console.log('First event sample:', JSON.stringify(filteredEvents[0] || {}, null, 2));
+        
         filteredEvents = filteredEvents.filter(event => {
+          // Debug event time fields
+          if (pastOnly && filteredEvents.indexOf(event) < 5) {
+            console.log('Event time fields for past filter:', {
+              id: event.id,
+              startTime: event.startTime,
+              start_time: (event as any).start_time,
+              date: event.date,
+              time: event.time,
+              now: now.toISOString(),
+            });
+          }
+          
           // Use startTime if available, otherwise fallback to date+time string
           let eventTime;
+          
+          // Check if startTime exists in either camelCase or snake_case
           if (event.startTime) {
             eventTime = new Date(event.startTime);
+          } else if ((event as any).start_time) {
+            // Try snake_case as fallback
+            eventTime = new Date((event as any).start_time);
           } else if (event.date && event.time) {
             eventTime = new Date(`${event.date} ${event.time}`);
           } else {

@@ -139,9 +139,9 @@
     "date": "2025-04-25",
     "time": "16:30",
     "odds": {
-      "home": 1.52,
+      "home": 1.51,
       "draw": 5.25,
-      "away": 6.25
+      "away": 6.5
     },
     "raw": {
       "eventId": "51269553",
@@ -149,9 +149,9 @@
       "tournament": "Bundesliga",
       "event": "VfB Stuttgart - 1. FC Heidenheim",
       "market": "1X2 - FT",
-      "home_odds": "1.52",
+      "home_odds": "1.51",
       "draw_odds": "5.25",
-      "away_odds": "6.25",
+      "away_odds": "6.5",
       "start_time": "2025-04-25 18:30"
     }
   },
@@ -919,9 +919,9 @@
     "date": "2025-04-25",
     "time": "20:00",
     "odds": {
-      "home": 1.85,
-      "draw": 3.55,
-      "away": 4.15
+      "home": 1.87,
+      "draw": 3.45,
+      "away": 4.2
     },
     "raw": {
       "eventId": "57380495",
@@ -929,9 +929,9 @@
       "tournament": "Chile Primera Division",
       "event": "Ñublense - La Serena",
       "market": "1X2 - FT",
-      "home_odds": "1.85",
-      "draw_odds": "3.55",
-      "away_odds": "4.15",
+      "home_odds": "1.87",
+      "draw_odds": "3.45",
+      "away_odds": "4.2",
       "start_time": "2025-04-25 22:00"
     }
   },
@@ -15765,9 +15765,9 @@
     "date": "2025-04-26",
     "time": "16:00",
     "odds": {
-      "home": 10,
-      "draw": 4.25,
-      "away": 1.3
+      "home": 9.5,
+      "draw": 4.1,
+      "away": 1.33
     },
     "raw": {
       "eventId": "57445275",
@@ -15775,9 +15775,9 @@
       "tournament": "Argentina Campeonato Femenino",
       "event": "Rosario Central Women - Gimnasia de La Plata Women",
       "market": "1X2 - FT",
-      "home_odds": "10.0",
-      "draw_odds": "4.25",
-      "away_odds": "1.3",
+      "home_odds": "9.5",
+      "draw_odds": "4.1",
+      "away_odds": "1.33",
       "start_time": "2025-04-26 18:00"
     }
   },
@@ -22447,9 +22447,9 @@
     "date": "2025-04-27",
     "time": "10:00",
     "odds": {
-      "home": 4.6,
-      "draw": 3.75,
-      "away": 1.62
+      "home": 4.4,
+      "draw": 3.85,
+      "away": 1.63
     },
     "raw": {
       "eventId": "52122749",
@@ -22457,9 +22457,9 @@
       "tournament": "2. Lig",
       "event": "Kirklarelispor - Batman Petrolspor",
       "market": "1X2 - FT",
-      "home_odds": "4.6",
-      "draw_odds": "3.75",
-      "away_odds": "1.62",
+      "home_odds": "4.4",
+      "draw_odds": "3.85",
+      "away_odds": "1.63",
       "start_time": "2025-04-27 12:00"
     }
   },
@@ -22551,9 +22551,9 @@
     "date": "2025-04-27",
     "time": "10:00",
     "odds": {
-      "home": 1.39,
-      "draw": 4.3,
-      "away": 6.5
+      "home": 1.37,
+      "draw": 4.4,
+      "away": 6.75
     },
     "raw": {
       "eventId": "52122753",
@@ -22561,9 +22561,9 @@
       "tournament": "2. Lig",
       "event": "Sariyer SK - Altinordu FK",
       "market": "1X2 - FT",
-      "home_odds": "1.39",
-      "draw_odds": "4.3",
-      "away_odds": "6.5",
+      "home_odds": "1.37",
+      "draw_odds": "4.4",
+      "away_odds": "6.75",
       "start_time": "2025-04-27 12:00"
     }
   },
@@ -33670,6 +33670,58 @@
     }
   },
   {
+    "id": "50869699",
+    "eventId": "50869699",
+    "teams": "ADO Den Haag - SC Cambuur",
+    "league": "Eerste Divisie",
+    "sport": "football",
+    "country": "Netherlands",
+    "date": "2025-05-02",
+    "time": "16:00",
+    "odds": {
+      "home": 2.35,
+      "draw": 3.4,
+      "away": 2.6
+    },
+    "raw": {
+      "eventId": "50869699",
+      "country": "Netherlands",
+      "tournament": "Eerste Divisie",
+      "event": "ADO Den Haag - SC Cambuur",
+      "market": "1X2 - FT",
+      "home_odds": "2.35",
+      "draw_odds": "3.4",
+      "away_odds": "2.6",
+      "start_time": "2025-05-02 18:00"
+    }
+  },
+  {
+    "id": "50869717",
+    "eventId": "50869717",
+    "teams": "TOP Oss - Vitesse Arnhem",
+    "league": "Eerste Divisie",
+    "sport": "football",
+    "country": "Netherlands",
+    "date": "2025-05-02",
+    "time": "16:00",
+    "odds": {
+      "home": 3.35,
+      "draw": 3.55,
+      "away": 1.91
+    },
+    "raw": {
+      "eventId": "50869717",
+      "country": "Netherlands",
+      "tournament": "Eerste Divisie",
+      "event": "TOP Oss - Vitesse Arnhem",
+      "market": "1X2 - FT",
+      "home_odds": "3.35",
+      "draw_odds": "3.55",
+      "away_odds": "1.91",
+      "start_time": "2025-05-02 18:00"
+    }
+  },
+  {
     "id": "51269573",
     "eventId": "51269573",
     "teams": "1. FC Heidenheim - VfL Bochum",
@@ -37385,32 +37437,6 @@
       "draw_odds": "3.25",
       "away_odds": "3.0",
       "start_time": "2025-06-05 18:45"
-    }
-  },
-  {
-    "id": "59575903",
-    "eventId": "59575903",
-    "teams": "Russia - Nigeria",
-    "league": "Int. Friendly Games",
-    "sport": "football",
-    "country": "International",
-    "date": "2025-06-06",
-    "time": "06:00",
-    "odds": {
-      "home": 2.3,
-      "draw": 3.3,
-      "away": 3.1
-    },
-    "raw": {
-      "eventId": "59575903",
-      "country": "International",
-      "tournament": "Int. Friendly Games",
-      "event": "Russia - Nigeria",
-      "market": "1X2 - FT",
-      "home_odds": "2.3",
-      "draw_odds": "3.3",
-      "away_odds": "3.1",
-      "start_time": "2025-06-06 08:00"
     }
   },
   {
