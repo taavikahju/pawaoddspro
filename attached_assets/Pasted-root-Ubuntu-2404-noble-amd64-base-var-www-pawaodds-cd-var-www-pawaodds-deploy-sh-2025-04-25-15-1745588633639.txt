@@ -1,0 +1,29 @@
+root@Ubuntu-2404-noble-amd64-base /var/www/pawaodds # cd /var/www/pawaodds
+./deploy.sh
+2025-04-25 15:43:09 - Starting deployment...
+2025-04-25 15:43:09 - Building and starting Docker containers...
+[+] Building 0.1s (1/1) FINISHED                                                                                
+ => [app internal] load build definition from Dockerfile                                                   0.0s
+ => => transferring dockerfile: 2B                                                                         0.0s
+failed to solve: failed to read dockerfile: open Dockerfile: no such file or directory
+[+] Running 15/15
+ ✔ db 14 layers [⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿]      0B/0B      Pulled                                                   12.0s 
+   ✔ 8a628cdd7ccc Pull complete                                                                            3.5s 
+   ✔ 3749d7e2b9a3 Pull complete                                                                            3.5s 
+   ✔ 2a1fa5a4b687 Pull complete                                                                            3.7s 
+   ✔ 7d10a0fb5049 Pull complete                                                                            3.8s 
+   ✔ 5ea5a65e95f9 Pull complete                                                                            4.4s 
+   ✔ ee6493606bda Pull complete                                                                            4.5s 
+   ✔ b386b3d0b6aa Pull complete                                                                            4.5s 
+   ✔ 623da4863d13 Pull complete                                                                            4.5s 
+   ✔ c200b2fec74c Pull complete                                                                           10.1s 
+   ✔ ecbeb85d0fa2 Pull complete                                                                           10.1s 
+   ✔ 315eaba65ed3 Pull complete                                                                           10.1s 
+   ✔ 386f70d30d67 Pull complete                                                                           10.2s 
+   ✔ d121f442019e Pull complete                                                                           10.2s 
+   ✔ d002f9687fdd Pull complete                                                                           10.2s 
+[+] Building 0.0s (1/1) FINISHED                                                                                
+ => [app internal] load build definition from Dockerfile                                                   0.0s
+ => => transferring dockerfile: 2B                                                                         0.0s
+failed to solve: failed to read dockerfile: open Dockerfile: no such file or directory
+2025-04-25 15:43:21 - ERROR: Deployment failed. Containers are not running.

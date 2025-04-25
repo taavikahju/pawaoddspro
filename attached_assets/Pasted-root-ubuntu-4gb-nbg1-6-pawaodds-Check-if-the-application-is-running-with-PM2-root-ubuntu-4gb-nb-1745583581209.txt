@@ -1,0 +1,54 @@
+root@ubuntu-4gb-nbg1-6:~/pawaodds# # Check if the application is running with PM2
+root@ubuntu-4gb-nbg1-6:~/pawaodds# pm2 status
+┌────┬────────────────────┬──────────┬──────┬───────────┬──────────┬──────────┐
+│ id │ name               │ mode     │ ↺    │ status    │ cpu      │ memory   │
+├────┼────────────────────┼──────────┼──────┼───────────┼──────────┼──────────┤
+│ 0  │ pawaodds           │ fork     │ 0    │ online    │ 0%       │ 55.7mb   │
+└────┴────────────────────┴──────────┴──────┴───────────┴──────────┴──────────┘
+root@ubuntu-4gb-nbg1-6:~/pawaodds# 
+root@ubuntu-4gb-nbg1-6:~/pawaodds# # Check the application logs
+root@ubuntu-4gb-nbg1-6:~/pawaodds# pm2 logs pawaodds --lines 20
+[TAILING] Tailing last 20 lines for [pawaodds] process (change the value with --lines option)
+/root/.pm2/logs/pawaodds-error.log last 20 lines:
+0|pawaodds |     at node:internal/main/run_main_module:28:49 {
+0|pawaodds |   code: 'MODULE_NOT_FOUND',
+0|pawaodds |   requireStack: []
+0|pawaodds | }
+0|pawaodds | 
+0|pawaodds | Node.js v20.19.1
+0|pawaodds | node:internal/modules/cjs/loader:1215
+0|pawaodds |   throw err;
+0|pawaodds |   ^
+0|pawaodds | 
+0|pawaodds | Error: Cannot find module '/root/pawaodds/dist/index.js'
+0|pawaodds |     at Module._resolveFilename (node:internal/modules/cjs/loader:1212:15)
+0|pawaodds |     at Module._load (node:internal/modules/cjs/loader:1043:27)
+0|pawaodds |     at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:164:12)
+0|pawaodds |     at node:internal/main/run_main_module:28:49 {
+0|pawaodds |   code: 'MODULE_NOT_FOUND',
+0|pawaodds |   requireStack: []
+0|pawaodds | }
+0|pawaodds | 
+0|pawaodds | Node.js v20.19.1
+
+/root/.pm2/logs/pawaodds-out.log last 20 lines:
+0|pawaodds | 
+0|pawaodds | 
+0|pawaodds | > rest-express@1.0.0 start
+0|pawaodds | > NODE_ENV=production node dist/index.js
+0|pawaodds | 
+0|pawaodds | 
+0|pawaodds | > rest-express@1.0.0 start
+0|pawaodds | > NODE_ENV=production node dist/index.js
+0|pawaodds | 
+0|pawaodds | PawaOdds server running on port 3000
+0|pawaodds | PawaOdds server running on port 3000
+0|pawaodds | PawaOdds server running on port 3000
+0|pawaodds | PawaOdds server running on port 3000
+0|pawaodds | PawaOdds server running on port 3000
+0|pawaodds | PawaOdds server running on port 3000
+0|pawaodds | 
+0|pawaodds | > pawaodds@1.0.0 start
+0|pawaodds | > node server/index.js
+0|pawaodds | 
+0|pawaodds | PawaOdds server running on port 3000

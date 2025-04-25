@@ -1,0 +1,26 @@
+failed to solve: process "/bin/sh -c npm install" did not complete successfully: exit code: 254
+[+] Building 1.7s (8/9)                                                                                         
+ => [app internal] load build definition from Dockerfile                                                   0.0s
+ => => transferring dockerfile: 292B                                                                       0.0s
+ => [app internal] load metadata for docker.io/library/node:18-alpine                                      0.2s
+ => [app internal] load .dockerignore                                                                      0.0s
+ => => transferring context: 98B                                                                           0.0s
+ => [app 1/5] FROM docker.io/library/node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0  0.0s
+ => [app internal] load build context                                                                      0.1s
+ => => transferring context: 190.88kB                                                                      0.1s
+ => CACHED [app 2/5] WORKDIR /app                                                                          0.0s
+ => CACHED [app 3/5] COPY package*.json ./                                                                 0.0s
+ => ERROR [app 4/5] RUN npm install                                                                        1.3s
+------                                                                                                          
+ > [app 4/5] RUN npm install:
+#0 1.286 npm error code ENOENT
+#0 1.286 npm error syscall open
+#0 1.286 npm error path /app/package.json
+#0 1.287 npm error errno -2
+#0 1.287 npm error enoent Could not read package.json: Error: ENOENT: no such file or directory, open '/app/package.json'
+#0 1.288 npm error enoent This is related to npm not being able to find a file.
+#0 1.288 npm error enoent
+#0 1.290 npm error A complete log of this run can be found in: /root/.npm/_logs/2025-04-25T13_46_19_344Z-debug-0.log
+------
+failed to solve: process "/bin/sh -c npm install" did not complete successfully: exit code: 254
+2025-04-25 15:46:20 - ERROR: Deployment failed. Containers are not running.

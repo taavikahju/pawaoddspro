@@ -1,0 +1,54 @@
+root@ubuntu-4gb-nbg1-6:~/pawaodds# cat > /etc/nginx/sites-available/pawaodds << 'EOF'
+> server {
+>     listen 80;
+>     server_name pawaodds.pro www.pawaodds.pro;
+> 
+>     # Redirect all HTTP traffic to HTTPS
+>     location / {
+>         return 301 https://$host$request_uri;
+>     }
+> }
+> 
+> server {
+>     listen 443 ssl;
+>     server_name pawaodds.pro www.pawaodds.pro;
+> 
+>     # SSL Configuration will be added by certbot
+> 
+>     # Main application
+>     location / {
+>         proxy_pass http://localhost:3000;
+>         proxy_http_version 1.1;
+>         proxy_set_header Upgrade $http_upgrade;
+>         proxy_set_header Connection 'upgrade';
+>         proxy_set_header Host $host;
+>         proxy_cache_bypass $http_upgrade;
+>         proxy_read_timeout 300s;
+>         proxy_connect_timeout 300s;
+>         proxy_send_timeout 300s;
+>     }
+> 
+>     # WebSocket connections
+>     location /ws {
+>         proxy_pass http://localhost:3000;
+>         proxy_http_version 1.1;
+>         proxy_set_header Upgrade $http_upgrade;
+>         proxy_set_header Connection "upgrade";
+>         proxy_set_header Host $host;
+>         proxy_read_timeout 86400s;
+>     }
+> }
+> EOF
+root@ubuntu-4gb-nbg1-6:~/pawaodds# 
+root@ubuntu-4gb-nbg1-6:~/pawaodds# # Enable the site
+root@ubuntu-4gb-nbg1-6:~/pawaodds# ln -sf /etc/nginx/sites-available/pawaodds /etc/nginx/sites-enabled/
+root@ubuntu-4gb-nbg1-6:~/pawaodds# 
+root@ubuntu-4gb-nbg1-6:~/pawaodds# # Test Nginx configuration
+root@ubuntu-4gb-nbg1-6:~/pawaodds# nginx -t
+nginx: [emerg] no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/sites-enabled/pawaodds:11
+nginx: configuration file /etc/nginx/nginx.conf test failed
+root@ubuntu-4gb-nbg1-6:~/pawaodds# 
+root@ubuntu-4gb-nbg1-6:~/pawaodds# # If the test passes, restart Nginx
+root@ubuntu-4gb-nbg1-6:~/pawaodds# systemctl restart nginx
+Job for nginx.service failed because the control process exited with error code.
+See "systemctl status nginx.service" and "journalctl -xe" for details.
