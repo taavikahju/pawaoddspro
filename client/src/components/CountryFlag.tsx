@@ -1,88 +1,92 @@
 import React from 'react';
 import ReactCountryFlag from 'react-country-flag';
-import { cn } from '@/lib/utils';
 
-export interface CountryFlagProps {
-  country: string;
-  className?: string;
-}
-
-// Map of country names to ISO codes
-const COUNTRY_TO_ISO: Record<string, string> = {
+const COUNTRY_TO_CODE: Record<string, string> = {
   'England': 'GB-ENG',
   'Scotland': 'GB-SCT',
   'Wales': 'GB-WLS',
-  'Ireland': 'IE',
   'Northern Ireland': 'GB-NIR',
-  'International': 'XX', // Special case
-  'International Clubs': 'XX', // Special case
-  'UK': 'GB',
-  'USA': 'US',
-  'United States': 'US',
-  'Germany': 'DE',
+  'Great Britain': 'GB',
   'Spain': 'ES',
+  'Germany': 'DE',
   'Italy': 'IT',
   'France': 'FR',
-  'Netherlands': 'NL',
   'Portugal': 'PT',
+  'Netherlands': 'NL',
   'Belgium': 'BE',
-  'Denmark': 'DK',
-  'Sweden': 'SE',
-  'Norway': 'NO',
-  'Finland': 'FI',
-  'Poland': 'PL',
-  'Austria': 'AT',
-  'Switzerland': 'CH',
-  'Croatia': 'HR',
-  'Greece': 'GR',
-  'Turkey': 'TR',
-  'Russia': 'RU',
-  'Ukraine': 'UA',
-  'Czech Republic': 'CZ',
-  'Romania': 'RO',
-  'Hungary': 'HU',
+  'Ghana': 'GH',
+  'Kenya': 'KE',
+  'Nigeria': 'NG',
+  'South Africa': 'ZA',
+  'Tanzania': 'TZ',
+  'Uganda': 'UG',
+  'Rwanda': 'RW',
   'Brazil': 'BR',
   'Argentina': 'AR',
   'Mexico': 'MX',
-  'Colombia': 'CO',
-  'Peru': 'PE',
-  'Chile': 'CL',
-  'Uruguay': 'UY',
+  'USA': 'US',
+  'Canada': 'CA',
   'Japan': 'JP',
   'South Korea': 'KR',
   'China': 'CN',
   'Australia': 'AU',
-  'New Zealand': 'NZ',
-  'South Africa': 'ZA',
-  'Nigeria': 'NG',
+  'Ukraine': 'UA',
+  'Russia': 'RU',
+  'Poland': 'PL',
+  'Turkey': 'TR',
+  'Sweden': 'SE',
+  'Denmark': 'DK',
+  'Norway': 'NO',
+  'Austria': 'AT',
+  'Switzerland': 'CH',
+  'Croatia': 'HR',
+  'Serbia': 'RS',
+  'Greece': 'GR',
+  'Czech Republic': 'CZ',
+  'Romania': 'RO',
+  'Uruguay': 'UY',
+  'Colombia': 'CO',
+  'Chile': 'CL',
+  'Peru': 'PE',
+  'Ecuador': 'EC',
+  'Venezuela': 'VE',
+  'Bolivia': 'BO',
+  'Paraguay': 'PY',
   'Egypt': 'EG',
-  'Kenya': 'KE',
-  'Ghana': 'GH'
+  'Morocco': 'MA',
+  'Tunisia': 'TN',
+  'Algeria': 'DZ',
+  'Senegal': 'SN',
+  'Ivory Coast': 'CI',
+  'Cameroon': 'CM',
+  'World': 'UN' // Using United Nations flag for global events
 };
 
-/**
- * Component to display a country flag based on country name
- */
-const CountryFlag: React.FC<CountryFlagProps> = ({ country, className }) => {
-  const isoCode = COUNTRY_TO_ISO[country] || '';
+interface CountryFlagProps {
+  country: string;
+  className?: string;
+}
+
+const CountryFlag: React.FC<CountryFlagProps> = ({ country, className = '' }) => {
+  // For Great Britain's countries, use the appropriate flag
+  const countryCode = COUNTRY_TO_CODE[country] || '';
   
-  // For international/unknown countries, return a fallback
-  if (!isoCode || isoCode === 'XX') {
-    return (
-      <span className={cn("inline-block w-5 text-xs", className)}>🌍</span>
-    );
+  if (!countryCode) {
+    // If we don't have a mapping, just show the country name
+    return <span className={className}>{country}</span>;
+  }
+  
+  // For Great Britain's countries, we need a special case
+  if (countryCode.startsWith('GB-')) {
+    return <span className={className}>{country}</span>;
   }
   
   return (
-    <ReactCountryFlag
-      countryCode={isoCode.substring(0, 2)} // ReactCountryFlag only works with 2-letter ISO codes
-      svg
-      className={cn("rounded-sm", className)}
+    <ReactCountryFlag 
+      countryCode={countryCode} 
+      svg 
+      className={className}
       title={country}
-      style={{
-        width: '1em',
-        height: '1em'
-      }}
     />
   );
 };

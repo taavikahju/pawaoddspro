@@ -85,6 +85,7 @@ export const insertEventSchema = createInsertSchema(events).pick({
   sportId: true,
   date: true,
   time: true,
+  startTime: true, // Added startTime field
   oddsData: true,
   bestOdds: true,
 });

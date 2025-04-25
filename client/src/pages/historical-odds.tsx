@@ -30,8 +30,8 @@ import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { useBookmakerContext } from '@/contexts/BookmakerContext';
 import { useToast } from '@/hooks/use-toast';
-import CountryFlag from '@/components/CountryFlag';
-import HistoricalOddsChart from '@/components/HistoricalOddsChart';
+import CountryFlag from '../components/CountryFlag';
+import HistoricalOddsChart from '../components/HistoricalOddsChart';
 
 // Type for event data
 interface Event {
@@ -116,16 +116,22 @@ export default function HistoricalOdds() {
   useEffect(() => {
     if (events.length > 0) {
       // Extract unique countries
-      const countries = [...new Set(events.map(event => event.country).filter(Boolean))];
-      setAvailableCountries(countries.sort());
+      const countriesSet = new Set<string>();
+      events.forEach(event => {
+        if (event.country) countriesSet.add(event.country);
+      });
+      const countries = Array.from(countriesSet).sort();
+      setAvailableCountries(countries);
       
       // Extract tournaments based on country filter
-      let tournaments = events
+      const tournamentsSet = new Set<string>();
+      events
         .filter(event => countryFilter === 'all' || event.country === countryFilter)
-        .map(event => event.tournament)
-        .filter(Boolean) as string[];
+        .forEach(event => {
+          if (event.tournament) tournamentsSet.add(event.tournament);
+        });
       
-      tournaments = [...new Set(tournaments)].sort();
+      const tournaments = Array.from(tournamentsSet).sort();
       setAvailableTournaments(tournaments);
     }
   }, [events, countryFilter]);
@@ -325,76 +331,13 @@ export default function HistoricalOdds() {
         </div>
       )}
 
-      {/* Historical Odds Dialog */}
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-4xl">
-          <DialogHeader>
-            <DialogTitle>{selectedEvent?.name}</DialogTitle>
-            <DialogDescription>
-              <div className="flex items-center gap-1 text-sm mt-1">
-                <CountryFlag country={selectedEvent?.country || ''} className="h-3.5 mr-1" />
-                {selectedEvent?.country} | {selectedEvent?.tournament} | {selectedEvent && formatDateTime(selectedEvent.startTime)}
-              </div>
-            </DialogDescription>
-          </DialogHeader>
-          
-          <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid grid-cols-4 mb-4">
-              <TabsTrigger value="home">Home Odds</TabsTrigger>
-              <TabsTrigger value="draw">Draw Odds</TabsTrigger>
-              <TabsTrigger value="away">Away Odds</TabsTrigger>
-              <TabsTrigger value="margin">Margin %</TabsTrigger>
-            </TabsList>
-            
-            {isLoadingHistory ? (
-              <div className="flex items-center justify-center h-64">
-                <Loader2 className="h-6 w-6 animate-spin text-primary" />
-                <span className="ml-2">Loading odds history...</span>
-              </div>
-            ) : historyData.length === 0 ? (
-              <div className="text-center py-12 text-gray-500 dark:text-gray-400">
-                No historical odds data available for this event
-              </div>
-            ) : (
-              <>
-                <TabsContent value="home">
-                  <HistoricalOddsChart 
-                    historyData={historyData} 
-                    selectedBookmakers={selectedBookmakers}
-                    oddsType="homeOdds"
-                    title="Home Win Odds History"
-                  />
-                </TabsContent>
-                <TabsContent value="draw">
-                  <HistoricalOddsChart 
-                    historyData={historyData} 
-                    selectedBookmakers={selectedBookmakers}
-                    oddsType="drawOdds"
-                    title="Draw Odds History"
-                  />
-                </TabsContent>
-                <TabsContent value="away">
-                  <HistoricalOddsChart 
-                    historyData={historyData} 
-                    selectedBookmakers={selectedBookmakers}
-                    oddsType="awayOdds"
-                    title="Away Win Odds History"
-                  />
-                </TabsContent>
-                <TabsContent value="margin">
-                  <HistoricalOddsChart 
-                    historyData={historyData} 
-                    selectedBookmakers={selectedBookmakers}
-                    oddsType="margin"
-                    title="Margin Percentage History"
-                    isPercentage={true}
-                  />
-                </TabsContent>
-              </>
-            )}
-          </Tabs>
-        </DialogContent>
-      </Dialog>
+      {/* Historical Odds Chart Popup */}
+      {selectedEvent && (
+        <HistoricalOddsChart 
+          eventId={selectedEvent.eventId}
+          onClose={() => setIsDialogOpen(false)}
+        />
+      )}
     </div>
   );
 }

@@ -454,9 +454,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (pastOnly || futureOnly) {
         const now = new Date();
         filteredEvents = filteredEvents.filter(event => {
-          const startTime = new Date(event.startTime);
-          if (pastOnly) return startTime <= now;
-          if (futureOnly) return startTime > now;
+          // Use startTime if available, otherwise fallback to date+time string
+          let eventTime;
+          if (event.startTime) {
+            eventTime = new Date(event.startTime);
+          } else if (event.date && event.time) {
+            eventTime = new Date(`${event.date} ${event.time}`);
+          } else {
+            // If no time info available, include in results
+            return true;
+          }
+          
+          if (pastOnly) return eventTime <= now;
+          if (futureOnly) return eventTime > now;
           return true;
         });
       }

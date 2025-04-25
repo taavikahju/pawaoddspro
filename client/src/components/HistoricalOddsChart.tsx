@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   LineChart,
   Line,
@@ -7,182 +7,260 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer,
+  ResponsiveContainer
 } from 'recharts';
-import { Loader2 } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from '@/components/ui/button';
+import { format } from 'date-fns';
 
-// Type for history entry
-interface OddsHistoryEntry {
-  id: number;
-  eventId: string;
-  externalId: string;
+interface OddsDataPoint {
+  timestamp: string;
+  homeOdds?: string;
+  drawOdds?: string;
+  awayOdds?: string;
+  margin?: string;
   bookmakerCode: string;
-  homeOdds: number;
-  drawOdds: number;
-  awayOdds: number;
-  margin: number;
-  timestamp: string;
 }
 
-// Props interface
 interface HistoricalOddsChartProps {
-  historyData: OddsHistoryEntry[];
-  selectedBookmakers: string[];
-  oddsType: 'homeOdds' | 'drawOdds' | 'awayOdds' | 'margin';
-  title: string;
-  isPercentage?: boolean;
+  eventId: string;
+  onClose: () => void;
 }
 
-interface ChartDataPoint {
-  timestamp: string;
-  [key: string]: any; // For bookmaker codes as keys
-}
-
-// The defined colors for each bookmaker to maintain consistency
-const BOOKMAKER_COLORS: Record<string, string> = {
-  'betika KE': '#1E88E5',
-  'sporty': '#43A047',
-  'bp KE': '#FFB300',
-  'bp GH': '#E53935',
-  'example': '#8E24AA'
+const COLORS = {
+  'bp GH': '#FF5733',
+  'bp KE': '#33FF57',
+  'sporty': '#3357FF',
+  'betika KE': '#FF33A8',
 };
 
-// Fallback colors for any bookmaker not in the predefined list
-const FALLBACK_COLORS = [
-  '#2196F3', '#4CAF50', '#FFC107', '#F44336', '#9C27B0',
-  '#3F51B5', '#009688', '#FF9800', '#795548', '#607D8B'
-];
+// A helper function to format the date for display
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  return format(date, 'MMM dd, HH:mm');
+};
 
-export default function HistoricalOddsChart({
-  historyData,
-  selectedBookmakers,
-  oddsType,
-  title,
-  isPercentage = false
-}: HistoricalOddsChartProps) {
+const HistoricalOddsChart: React.FC<HistoricalOddsChartProps> = ({ eventId, onClose }) => {
+  const [oddsHistory, setOddsHistory] = useState<OddsDataPoint[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState('home');
+  const [bookmakers, setBookmakers] = useState<Set<string>>(new Set());
+  const [visibleBookmakers, setVisibleBookmakers] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    const fetchOddsHistory = async () => {
+      try {
+        const response = await fetch(`/api/events/${eventId}/history`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch odds history');
+        }
+        
+        const data = await response.json();
+        setOddsHistory(data);
+        
+        // Extract unique bookmakers
+        const uniqueBookmakers = new Set<string>();
+        data.forEach((item: OddsDataPoint) => {
+          uniqueBookmakers.add(item.bookmakerCode);
+        });
+        
+        setBookmakers(uniqueBookmakers);
+        setVisibleBookmakers(uniqueBookmakers); // Initially show all bookmakers
+        
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An unknown error occurred');
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchOddsHistory();
+  }, [eventId]);
   
-  // Process data for the chart
-  const chartData = useMemo(() => {
-    if (!historyData || historyData.length === 0) return [];
+  const toggleBookmaker = (bookmakerCode: string) => {
+    const newVisibleBookmakers = new Set(visibleBookmakers);
+    if (newVisibleBookmakers.has(bookmakerCode)) {
+      newVisibleBookmakers.delete(bookmakerCode);
+    } else {
+      newVisibleBookmakers.add(bookmakerCode);
+    }
+    setVisibleBookmakers(newVisibleBookmakers);
+  };
+  
+  // Prepare data for charting - we need to format timestamps and group by bookmaker
+  const prepareChartData = () => {
+    // Sort by timestamp ascending
+    const sortedData = [...oddsHistory].sort((a, b) => 
+      new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+    );
     
-    // Group by timestamp and bookmaker for easy display
-    const groupedByTime: Record<string, ChartDataPoint> = {};
+    // Group and format the data for the chart
+    const formattedData: any[] = [];
     
-    historyData.forEach(entry => {
-      // Only process if the bookmaker is selected
-      if (!selectedBookmakers.includes(entry.bookmakerCode)) return;
+    // Group by timestamp first
+    const timestampGroups: Record<string, OddsDataPoint[]> = {};
+    
+    sortedData.forEach(item => {
+      const timeKey = format(new Date(item.timestamp), 'yyyy-MM-dd HH:mm');
+      if (!timestampGroups[timeKey]) {
+        timestampGroups[timeKey] = [];
+      }
+      timestampGroups[timeKey].push(item);
+    });
+    
+    // For each timestamp, create an entry with all bookmakers' odds
+    Object.entries(timestampGroups).forEach(([timeKey, items]) => {
+      const entry: any = {
+        timestamp: timeKey,
+        formattedTime: formatDate(items[0].timestamp)
+      };
       
-      // Format timestamp for display
-      const timestamp = new Date(entry.timestamp);
-      const timeKey = timestamp.toLocaleString('en-US', {
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false
+      // Add each bookmaker's odds to this timestamp entry
+      items.forEach(item => {
+        if (visibleBookmakers.has(item.bookmakerCode)) {
+          if (activeTab === 'home' && item.homeOdds) {
+            entry[`home_${item.bookmakerCode}`] = parseFloat(item.homeOdds);
+          } else if (activeTab === 'draw' && item.drawOdds) {
+            entry[`draw_${item.bookmakerCode}`] = parseFloat(item.drawOdds);
+          } else if (activeTab === 'away' && item.awayOdds) {
+            entry[`away_${item.bookmakerCode}`] = parseFloat(item.awayOdds);
+          } else if (activeTab === 'margin' && item.margin) {
+            entry[`margin_${item.bookmakerCode}`] = parseFloat(item.margin);
+          }
+        }
       });
       
-      // Initialize time point if it doesn't exist
-      if (!groupedByTime[timeKey]) {
-        groupedByTime[timeKey] = { 
-          timestamp: timeKey,
-          // Store date object as a custom property for sorting later
-          _date: timestamp.getTime()
-        };
-      }
-      
-      // Add the odds value for this bookmaker at this time
-      groupedByTime[timeKey][entry.bookmakerCode] = entry[oddsType];
+      formattedData.push(entry);
     });
     
-    // Convert to array and sort by timestamp
-    return Object.values(groupedByTime)
-      .sort((a, b) => a._date - b._date);
-  }, [historyData, selectedBookmakers, oddsType]);
-  
-  // Determine bookmakers to show in the chart
-  const bookmakersToShow = useMemo(() => {
-    // Get unique bookmaker codes that exist in the data
-    const availableBookmakers = new Set<string>();
-    
-    historyData.forEach(entry => {
-      if (selectedBookmakers.includes(entry.bookmakerCode)) {
-        availableBookmakers.add(entry.bookmakerCode);
-      }
-    });
-    
-    return [...availableBookmakers]; // Convert Set to Array using spread operator
-  }, [historyData, selectedBookmakers]);
-  
-  // Get the color for a bookmaker
-  const getBookmakerColor = (bookmaker: string, index: number) => {
-    return BOOKMAKER_COLORS[bookmaker] || FALLBACK_COLORS[index % FALLBACK_COLORS.length];
+    return formattedData;
   };
   
-  // Format the value for display in tooltip
-  const formatValue = (value: number) => {
-    if (isPercentage) {
-      return `${value.toFixed(2)}%`;
+  const chartData = prepareChartData();
+  
+  // Custom tooltip formatter to show odds values
+  const customTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="custom-tooltip bg-background p-3 border rounded-md shadow-md">
+          <p className="font-medium">{payload[0]?.payload.formattedTime}</p>
+          <div className="space-y-1 mt-2">
+            {payload.map((entry: any) => {
+              const bookmakerCode = entry.dataKey.split('_')[1];
+              return (
+                <p key={entry.dataKey} style={{ color: entry.color }}>
+                  {bookmakerCode}: {entry.value.toFixed(2)}
+                </p>
+              );
+            })}
+          </div>
+        </div>
+      );
     }
-    return value.toFixed(2);
+    return null;
   };
-
-  // If no data or no bookmakers to show
-  if (chartData.length === 0 || bookmakersToShow.length === 0) {
+  
+  if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center h-64 bg-gray-50 dark:bg-gray-800/30 rounded-lg">
-        <p className="text-gray-500 dark:text-gray-400 text-sm">
-          No historical data available for the selected bookmakers
-        </p>
+      <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+        <div className="bg-white p-6 rounded-lg shadow-lg max-w-3xl w-full">
+          <h2 className="text-xl font-bold mb-4">Loading historical odds data...</h2>
+        </div>
       </div>
     );
   }
-
+  
+  if (error) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+        <div className="bg-white p-6 rounded-lg shadow-lg max-w-3xl w-full">
+          <h2 className="text-xl font-bold mb-4">Error</h2>
+          <p className="text-red-500">{error}</p>
+          <Button onClick={onClose} className="mt-4">Close</Button>
+        </div>
+      </div>
+    );
+  }
+  
   return (
-    <div className="w-full">
-      <h3 className="text-sm font-medium mb-4">{title}</h3>
-      <div className="h-[400px] w-full">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart
-            data={chartData}
-            margin={{ top: 5, right: 30, left: 20, bottom: 25 }}
-          >
-            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-            <XAxis 
-              dataKey="timestamp" 
-              tick={{ fontSize: 11 }}
-              angle={-35}
-              textAnchor="end"
-              height={60}
-              tickFormatter={(tick) => {
-                return tick; // Display MM/DD HH:MM
-              }}
-            />
-            <YAxis 
-              domain={['auto', 'auto']}
-              width={60}
-              tickFormatter={(value) => isPercentage ? `${value}%` : value}
-            />
-            <Tooltip
-              formatter={(value: number) => [formatValue(value), '']}
-              labelFormatter={(label) => `Time: ${label}`}
-            />
-            <Legend verticalAlign="top" height={36} />
-            {bookmakersToShow.map((bookmaker, index) => (
-              <Line
-                key={bookmaker}
-                type="monotone"
-                dataKey={bookmaker}
-                name={bookmaker}
-                stroke={getBookmakerColor(bookmaker, index)}
-                activeDot={{ r: 6 }}
-                strokeWidth={2}
-                dot={{ r: 3 }}
-              />
-            ))}
-          </LineChart>
-        </ResponsiveContainer>
+    <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50 overflow-auto">
+      <div className="bg-background p-6 rounded-lg shadow-lg max-w-5xl w-full max-h-[90vh] overflow-auto">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-bold">Historical Odds</h2>
+          <Button variant="ghost" onClick={onClose} className="h-8 w-8 p-0">✕</Button>
+        </div>
+        
+        {/* Bookmaker toggles */}
+        <div className="mb-4 flex flex-wrap gap-2">
+          {Array.from(bookmakers).map(bookmaker => (
+            <Button
+              key={bookmaker}
+              variant={visibleBookmakers.has(bookmaker) ? "default" : "outline"}
+              className="text-xs py-1 h-8"
+              onClick={() => toggleBookmaker(bookmaker)}
+            >
+              {bookmaker}
+            </Button>
+          ))}
+        </div>
+        
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid grid-cols-4 mb-4">
+            <TabsTrigger value="home">Home Odds</TabsTrigger>
+            <TabsTrigger value="draw">Draw Odds</TabsTrigger>
+            <TabsTrigger value="away">Away Odds</TabsTrigger>
+            <TabsTrigger value="margin">Margin %</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value={activeTab}>
+            <div className="h-[400px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart
+                  data={chartData}
+                  margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis 
+                    dataKey="formattedTime" 
+                    angle={-45} 
+                    textAnchor="end" 
+                    height={70} 
+                    tick={{ fontSize: 12 }} 
+                  />
+                  <YAxis domain={['auto', 'auto']} />
+                  <Tooltip content={customTooltip} />
+                  <Legend />
+                  
+                  {/* Render lines for each visible bookmaker */}
+                  {Array.from(visibleBookmakers).map(bookmaker => {
+                    const dataKey = `${activeTab}_${bookmaker}`;
+                    const color = COLORS[bookmaker as keyof typeof COLORS] || '#' + Math.floor(Math.random()*16777215).toString(16);
+                    
+                    return (
+                      <Line
+                        key={dataKey}
+                        type="monotone"
+                        dataKey={dataKey}
+                        name={bookmaker}
+                        stroke={color}
+                        dot={{ r: 4 }}
+                        activeDot={{ r: 6 }}
+                      />
+                    );
+                  })}
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </TabsContent>
+        </Tabs>
+        
+        {oddsHistory.length === 0 && (
+          <p className="text-center mt-4 text-muted-foreground">No historical odds data available for this event.</p>
+        )}
       </div>
     </div>
   );
-}
+};
+
+export default HistoricalOddsChart;

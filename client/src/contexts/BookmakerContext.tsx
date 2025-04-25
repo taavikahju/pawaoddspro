@@ -1,8 +1,8 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { apiRequest, queryClient } from "@/lib/queryClient";
-import { useToast } from "@/hooks/use-toast";
+import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 
+// Define the shape of our bookmaker data
 interface Bookmaker {
   id: number;
   name: string;
@@ -10,171 +10,83 @@ interface Bookmaker {
   active: boolean;
 }
 
-interface Sport {
-  id: number;
-  name: string;
-  code: string;
-  active: boolean;
-}
-
+// Define the context shape
 interface BookmakerContextType {
   bookmakers: Bookmaker[];
-  sports: Sport[];
   selectedBookmakers: string[];
-  selectedSports: string[];
-  autoRefresh: boolean;
-  minMarginFilter: number;
-  maxMarginFilter: number;
-  isLoadingBookmakers: boolean;
-  isLoadingSports: boolean;
-  toggleBookmaker: (code: string) => void;
-  toggleSport: (code: string) => void;
-  toggleAutoRefresh: () => void;
-  setMinMarginFilter: (value: number) => void;
-  setMaxMarginFilter: (value: number) => void;
-  resetMarginFilters: () => void;
-  refreshData: () => Promise<void>;
-  isRefreshing: boolean;
+  toggleBookmaker: (bookmakerId: string) => void;
+  selectAllBookmakers: () => void;
+  deselectAllBookmakers: () => void;
+  isLoading: boolean;
 }
 
-const BookmakerContext = createContext<BookmakerContextType | undefined>(undefined);
+// Create the context with default values
+const BookmakerContext = createContext<BookmakerContextType>({
+  bookmakers: [],
+  selectedBookmakers: [],
+  toggleBookmaker: () => {},
+  selectAllBookmakers: () => {},
+  deselectAllBookmakers: () => {},
+  isLoading: false,
+});
 
-export function BookmakerProvider({ children }: { children: ReactNode }) {
-  const { toast } = useToast();
+// Create a provider component
+export const BookmakerProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [selectedBookmakers, setSelectedBookmakers] = useState<string[]>([]);
-  const [selectedSports, setSelectedSports] = useState<string[]>([]);
-  const [autoRefresh, setAutoRefresh] = useState(true);
-  const [minMarginFilter, setMinMarginFilter] = useState<number>(0); // Default to min value
-  const [maxMarginFilter, setMaxMarginFilter] = useState<number>(15); // Default to max value (no filtering)
-
-  // Fetch bookmakers
-  const { 
-    data: bookmakers = [], 
-    isLoading: isLoadingBookmakers 
-  } = useQuery({ 
+  
+  // Fetch bookmakers data from API
+  const { data: bookmakers = [], isLoading } = useQuery<Bookmaker[]>({
     queryKey: ['/api/bookmakers'],
-    staleTime: 5 * 60 * 1000 // 5 minutes
+    queryFn: async () => {
+      const response = await axios.get('/api/bookmakers');
+      return response.data;
+    },
   });
-
-  // Fetch sports
-  const { 
-    data: sports = [], 
-    isLoading: isLoadingSports 
-  } = useQuery({ 
-    queryKey: ['/api/sports'],
-    staleTime: 5 * 60 * 1000 // 5 minutes
-  });
-
-  // Initialize selected bookmakers and sports
+  
+  // Initialize selected bookmakers when data is loaded
   useEffect(() => {
     if (bookmakers.length > 0 && selectedBookmakers.length === 0) {
-      setSelectedBookmakers(bookmakers.map((b: Bookmaker) => b.code));
+      // By default, select all active bookmakers
+      setSelectedBookmakers(bookmakers.filter(b => b.active).map(b => b.code));
     }
-  }, [bookmakers, selectedBookmakers]);
-
-  useEffect(() => {
-    if (sports.length > 0 && selectedSports.length === 0) {
-      // Default to Football and Basketball (first two sports)
-      if (sports.length >= 2) {
-        setSelectedSports([sports[0].code, sports[1].code]);
-      } else if (sports.length === 1) {
-        setSelectedSports([sports[0].code]);
-      }
-    }
-  }, [sports, selectedSports]);
-
-  // Manual refresh mutation
-  const { mutateAsync: refreshMutation, isPending: isRefreshing } = useMutation({
-    mutationFn: async () => {
-      return await apiRequest('POST', '/api/scrapers/refresh', {});
-    },
-    onSuccess: () => {
-      toast({
-        title: "Data refreshed",
-        description: "The latest bookmaker odds have been fetched",
-        duration: 3000,
-      });
-      
-      // Invalidate queries to refresh data
-      queryClient.invalidateQueries({ queryKey: ['/api/events'] });
-      queryClient.invalidateQueries({ queryKey: ['/api/stats'] });
-      queryClient.invalidateQueries({ queryKey: ['/api/scrapers/status'] });
-    },
-    onError: (error) => {
-      toast({
-        title: "Refresh failed",
-        description: "Could not refresh bookmaker data",
-        variant: "destructive",
-        duration: 3000,
-      });
-      console.error("Error refreshing data:", error);
-    }
-  });
-
-  const toggleBookmaker = (code: string) => {
+  }, [bookmakers]);
+  
+  // Toggle a bookmaker selection
+  const toggleBookmaker = (bookmakerCode: string) => {
     setSelectedBookmakers(prev => {
-      if (prev.includes(code)) {
-        return prev.filter(c => c !== code);
+      if (prev.includes(bookmakerCode)) {
+        return prev.filter(code => code !== bookmakerCode);
       } else {
-        return [...prev, code];
+        return [...prev, bookmakerCode];
       }
     });
   };
-
-  const toggleSport = (code: string) => {
-    setSelectedSports(prev => {
-      if (prev.includes(code)) {
-        return prev.filter(c => c !== code);
-      } else {
-        return [...prev, code];
-      }
-    });
+  
+  // Select all bookmakers
+  const selectAllBookmakers = () => {
+    setSelectedBookmakers(bookmakers.map(b => b.code));
   };
-
-  const toggleAutoRefresh = () => {
-    setAutoRefresh(prev => !prev);
+  
+  // Deselect all bookmakers
+  const deselectAllBookmakers = () => {
+    setSelectedBookmakers([]);
   };
-
-  const resetMarginFilters = () => {
-    setMinMarginFilter(0);
-    setMaxMarginFilter(15);
-  };
-
-  const refreshData = async () => {
-    await refreshMutation();
-  };
-
-  const value = {
-    bookmakers,
-    sports,
-    selectedBookmakers,
-    selectedSports,
-    autoRefresh,
-    minMarginFilter,
-    maxMarginFilter,
-    isLoadingBookmakers,
-    isLoadingSports,
-    toggleBookmaker,
-    toggleSport,
-    toggleAutoRefresh,
-    setMinMarginFilter,
-    setMaxMarginFilter,
-    resetMarginFilters,
-    refreshData,
-    isRefreshing
-  };
-
+  
   return (
-    <BookmakerContext.Provider value={value}>
+    <BookmakerContext.Provider
+      value={{
+        bookmakers,
+        selectedBookmakers,
+        toggleBookmaker,
+        selectAllBookmakers,
+        deselectAllBookmakers,
+        isLoading,
+      }}
+    >
       {children}
     </BookmakerContext.Provider>
   );
-}
+};
 
-export function useBookmakerContext() {
-  const context = useContext(BookmakerContext);
-  if (context === undefined) {
-    throw new Error("useBookmakerContext must be used within a BookmakerProvider");
-  }
-  return context;
-}
+// Create a hook to use the context
+export const useBookmakerContext = () => useContext(BookmakerContext);
