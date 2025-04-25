@@ -517,7 +517,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/events/:eventId/history', async (req, res) => {
     try {
       const { eventId } = req.params;
-      const { bookmaker } = req.query;
+      const { bookmaker, format } = req.query;
       
       // Import the utility functions
       const { getOddsHistory } = await import('./utils/oddsHistory');
@@ -525,15 +525,74 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Get the history
       const history = await getOddsHistory(eventId);
       
+      if (!history || history.length === 0) {
+        return res.status(404).json({ 
+          error: 'No historical data found',
+          message: 'This event does not have any historical odds data recorded yet.'
+        });
+      }
+      
       // Filter by bookmaker if specified
       let filteredHistory = history;
       if (bookmaker) {
         filteredHistory = history.filter(h => h.bookmakerCode === bookmaker);
       }
       
-      // Sort by timestamp descending (newest first)
-      filteredHistory.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+      // Sort by timestamp (oldest first for time series)
+      filteredHistory.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
       
+      // If chart format is requested, transform the data for easier consumption by chart libraries
+      if (format === 'chart') {
+        // Group by bookmaker
+        const bookmakerGroups: Record<string, any> = {};
+        
+        filteredHistory.forEach(entry => {
+          const bookmakerCode = entry.bookmakerCode;
+          
+          if (!bookmakerGroups[bookmakerCode]) {
+            bookmakerGroups[bookmakerCode] = {
+              homeOdds: [],
+              drawOdds: [],
+              awayOdds: [],
+              margins: []
+            };
+          }
+          
+          const timestamp = new Date(entry.timestamp).getTime();
+          
+          if (entry.homeOdds) {
+            bookmakerGroups[bookmakerCode].homeOdds.push({
+              x: timestamp,
+              y: parseFloat(entry.homeOdds)
+            });
+          }
+          
+          if (entry.drawOdds) {
+            bookmakerGroups[bookmakerCode].drawOdds.push({
+              x: timestamp,
+              y: parseFloat(entry.drawOdds)
+            });
+          }
+          
+          if (entry.awayOdds) {
+            bookmakerGroups[bookmakerCode].awayOdds.push({
+              x: timestamp,
+              y: parseFloat(entry.awayOdds)
+            });
+          }
+          
+          if (entry.margin) {
+            bookmakerGroups[bookmakerCode].margins.push({
+              x: timestamp,
+              y: parseFloat(entry.margin)
+            });
+          }
+        });
+        
+        return res.json(bookmakerGroups);
+      }
+      
+      // Default format - return raw history
       res.json(filteredHistory);
     } catch (error) {
       console.error('Error fetching odds history:', error);

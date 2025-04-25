@@ -15,54 +15,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Loader2, Filter, X } from 'lucide-react';
-import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { useBookmakerContext } from '@/contexts/BookmakerContext';
 import { useToast } from '@/hooks/use-toast';
 import CountryFlag from '../components/CountryFlag';
-import HistoricalOddsChart from '../components/HistoricalOddsChart';
+import OddsHistoryPopup from '../components/OddsHistoryPopup';
 
-// Type for event data
-interface Event {
-  id: number;
-  externalId: string;
-  eventId: string;
-  name: string;
-  country: string;
-  tournament: string;
-  sportId: number;
-  startTime: string;
-  oddsData: Record<string, {
-    homeOdds: number;
-    drawOdds: number;
-    awayOdds: number;
-    margin: number;
-  }>;
-}
+import { Event } from '../types/event';
 
-// Type for history entry
-interface OddsHistoryEntry {
-  id: number;
-  eventId: string;
-  externalId: string;
-  bookmakerCode: string;
-  homeOdds: number;
-  drawOdds: number;
-  awayOdds: number;
-  margin: number;
-  timestamp: string;
-}
+// We don't need the OddsHistoryEntry type anymore since
+// it's now handled in OddsHistoryPopup component
 
 export default function HistoricalOdds() {
   const [countryFilter, setCountryFilter] = useState<string>('all');
@@ -97,20 +61,8 @@ export default function HistoricalOdds() {
     refetchOnWindowFocus: false
   });
 
-  // Fetch history data for selected event
-  const { 
-    data: historyData = [],
-    isLoading: isLoadingHistory,
-  } = useQuery<OddsHistoryEntry[]>({ 
-    queryKey: ['/api/events', selectedEvent?.eventId, 'history'],
-    queryFn: async () => {
-      if (!selectedEvent?.eventId) return [];
-      const response = await axios.get(`/api/events/${selectedEvent.eventId}/history`);
-      return response.data;
-    },
-    enabled: !!selectedEvent && isDialogOpen, // Only fetch when dialog is open and event is selected
-    refetchOnWindowFocus: false
-  });
+  // We don't need to fetch the history data here anymore
+  // The OddsHistoryPopup component will handle that for us
 
   // Extract available countries and tournaments from events data
   useEffect(() => {
@@ -331,13 +283,12 @@ export default function HistoricalOdds() {
         </div>
       )}
 
-      {/* Historical Odds Chart Popup */}
-      {selectedEvent && (
-        <HistoricalOddsChart 
-          eventId={selectedEvent.eventId}
-          onClose={() => setIsDialogOpen(false)}
-        />
-      )}
+      {/* Historical Odds Popup */}
+      <OddsHistoryPopup
+        event={selectedEvent}
+        open={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+      />
     </div>
   );
 }
