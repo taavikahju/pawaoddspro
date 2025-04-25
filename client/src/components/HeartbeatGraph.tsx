@@ -144,13 +144,13 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     // Green when market is available, red when not available
     
     // First determine if we're drawing in green or red based on current status
-    let lineColor = '#22c55e'; // Default green
+    let lineColor = '#00ff00'; // Bright ECG green
     let marketActive = true;
     
     if (data.length > 0) {
       const latestPoint = data[data.length - 1];
       marketActive = latestPoint.isAvailable;
-      lineColor = marketActive ? '#22c55e' : '#f43f5e';
+      lineColor = marketActive ? '#00ff00' : '#ff3333'; // Bright ECG green or bright red
     }
     
     // Helper function to get the game minute as a number
@@ -215,10 +215,37 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
       let y;
       
       if (isActive) {
-        // Create small random variations for the ECG effect
-        const variation = Math.sin(x / 10) * 5; // Small sine wave
-        const randomSpike = Math.random() < 0.1 ? -(Math.random() * 20) : 0; // Occasional spike
-        y = height / 2 + variation + randomSpike;
+        // Create ECG pattern with clear spikes as shown in the reference image
+        // Calculate spike pattern based on x position
+        const cycleLength = 80; // Length of one complete heartbeat cycle in pixels
+        const positionInCycle = x % cycleLength;
+        
+        // Create a realistic ECG pattern with distinct spikes
+        if (positionInCycle < 10) {
+          // Small initial bump
+          y = height / 2 - Math.sin((positionInCycle / 10) * Math.PI) * 5;
+        } else if (positionInCycle < 15) {
+          // Sharp downward spike
+          y = height / 2 + (positionInCycle - 10) * 3;
+        } else if (positionInCycle < 20) {
+          // Sharp upward spike (main R wave)
+          y = height / 2 + 15 - ((positionInCycle - 15) / 5) * 35;
+        } else if (positionInCycle < 25) {
+          // Return from spike
+          y = height / 2 - 20 + ((positionInCycle - 20) / 5) * 20;
+        } else if (positionInCycle < 35) {
+          // Small S wave
+          y = height / 2 + Math.sin(((positionInCycle - 25) / 10) * Math.PI) * 5;
+        } else if (positionInCycle < 50) {
+          // T wave (smaller hump)
+          y = height / 2 - Math.sin(((positionInCycle - 35) / 15) * Math.PI) * 10;
+        } else {
+          // Baseline with small variations
+          y = height / 2 + Math.sin(positionInCycle / 5) * 2;
+        }
+        
+        // Add small random variation for natural look
+        y += (Math.random() - 0.5) * 2;
       } else {
         // Inactive market - flat line at 3/4 of height (bottom area)
         y = (height * 3) / 4;
@@ -258,32 +285,50 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
   
   // Function to draw grid on the canvas
   function drawGrid(ctx: CanvasRenderingContext2D, width: number, height: number) {
-    // Draw horizontal center line
-    ctx.beginPath();
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
     ctx.lineWidth = 1;
-    ctx.setLineDash([5, 5]);
+    
+    // Draw horizontal grid lines (like in the ECG monitor reference)
+    const horizontalCount = 6; // Number of horizontal lines to draw
+    const verticalCount = 12; // Number of vertical lines to draw
+    
+    // First draw darker background grid
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgba(0, 255, 0, 0.1)'; // Very faint green
+    
+    // Draw horizontal grid lines
+    for (let i = 0; i <= horizontalCount; i++) {
+      const y = (i / horizontalCount) * height;
+      ctx.moveTo(0, y);
+      ctx.lineTo(width, y);
+    }
+    
+    // Draw vertical grid lines
+    for (let i = 0; i <= verticalCount; i++) {
+      const x = (i / verticalCount) * width;
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, height);
+    }
+    
+    ctx.stroke();
+    
+    // Now draw brighter major grid lines
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgba(0, 255, 0, 0.2)'; // Brighter green
+    
+    // Draw center line - important for ECG
     ctx.moveTo(0, height / 2);
     ctx.lineTo(width, height / 2);
-    ctx.stroke();
-    
-    // Draw flatline for no heartbeat at 3/4 height
-    ctx.beginPath();
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-    ctx.moveTo(0, (height * 3) / 4);
-    ctx.lineTo(width, (height * 3) / 4);
-    ctx.stroke();
-    ctx.setLineDash([]);
     
     // Draw vertical grid lines every 15 minutes of game time
-    ctx.beginPath();
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-    
     for (let minute = 15; minute < 90; minute += 15) {
       const x = (minute / 90) * width;
       ctx.moveTo(x, 0);
       ctx.lineTo(x, height);
     }
+    
+    // Draw flatline for no heartbeat at 3/4 height
+    ctx.moveTo(0, (height * 3) / 4);
+    ctx.lineTo(width, (height * 3) / 4);
     
     ctx.stroke();
   }
@@ -364,12 +409,13 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
             <p className="text-sm text-muted-foreground">No data available yet</p>
           </div>
         ) : (
-          <div className="w-full bg-slate-800 dark:bg-slate-900 rounded-md overflow-hidden">
+          <div className="w-full rounded-md overflow-hidden" 
+               style={{ backgroundColor: '#002211' }}>
             <canvas 
               ref={canvasRef} 
               width={800} 
               height={200} 
-              className="w-full h-48 border border-gray-100 dark:border-slate-800 rounded-md"
+              className="w-full h-48 border border-gray-100/10 rounded-md"
             />
           </div>
         )}

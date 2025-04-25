@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 // Removed Tabs import as view type selection is no longer needed
 import { Separator } from '@/components/ui/separator';
-import HeartbeatGraph from '@/components/HeartbeatGraph';
+import HeartbeatGraph from '../components/HeartbeatGraph';
 import Layout from '@/components/Layout';
 import { queryClient } from '@/lib/queryClient';
 
@@ -239,9 +239,15 @@ export default function LiveHeartbeat() {
                           onClick={() => setSelectedEventId(event.id)}
                         >
                           <div className="flex items-center justify-between mb-1">
-                            <span className="font-medium text-sm truncate max-w-[70%]">
-                              {event.name}
-                            </span>
+                            <div className="flex items-center gap-1.5">
+                              {event.isInPlay && (
+                                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" 
+                                  title="Live event" />
+                              )}
+                              <span className="font-medium text-sm truncate max-w-[70%]">
+                                {event.name}
+                              </span>
+                            </div>
                             <Badge 
                               variant={event.currentlyAvailable ? 'outline' : 'destructive'}
                               className="text-[10px] h-5"
