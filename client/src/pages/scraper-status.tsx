@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Layout from '@/components/Layout';
 import ScraperStatusCard from '@/components/ScraperStatusCard';
 import ScraperActivityFeed from '@/components/ScraperActivityFeed';
 import LiveScraperPanel from '@/components/LiveScraperPanel';
-import { Database, Server, Clock, AlertCircle, Activity } from 'lucide-react';
+import { Database, Server, Clock, AlertCircle, Activity, Key } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useWebSocket } from '@/hooks/use-websocket';
 import { useToast } from '@/hooks/use-toast';
+import { setAdminKey, getAdminKey } from '@/lib/queryClient';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
 
 interface ScraperStatus {
   name: string;
@@ -22,6 +25,8 @@ export default function ScraperStatusPage() {
   const { toast } = useToast();
   const { isConnected, runScrapers } = useWebSocket();
   const [isAdmin, setIsAdmin] = useState(false);
+  const [adminKey, setAdminKeyState] = useState('');
+  const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
   
   // Fetch scraper statuses
   const { 
@@ -32,11 +37,53 @@ export default function ScraperStatusPage() {
     refetchInterval: 30000, // Refresh every 30 seconds
   });
   
-  // Check admin status
-  React.useEffect(() => {
-    const adminKey = localStorage.getItem('adminKey');
-    setIsAdmin(!!adminKey);
+  // Check admin status and set default admin key if not present
+  useEffect(() => {
+    const currentAdminKey = getAdminKey();
+    setIsAdmin(!!currentAdminKey);
+    
+    // Auto-set the default admin key if not present
+    if (!currentAdminKey) {
+      setAdminKey('default-admin-key');
+      setIsAdmin(true);
+    }
   }, []);
+  
+  // Function to set the admin key
+  const setAdminKeyHandler = () => {
+    if (adminKey && adminKey.trim()) {
+      setAdminKey(adminKey.trim());
+      setIsAdminModalOpen(false);
+      setIsAdmin(true);
+      toast({
+        title: "Admin key set",
+        description: "You now have admin access to control the live scraper.",
+      });
+    } else {
+      toast({
+        title: "Invalid admin key",
+        description: "Please enter a valid admin key.",
+        variant: "destructive"
+      });
+    }
+  };
+  
+  // Function to set the admin key in localStorage
+  const setAdminKey = (key: string) => {
+    try {
+      localStorage.setItem('adminKey', key);
+      // Also update in the queryClient utility
+      setAdminKey(key);
+      setAdminKeyState(key);
+    } catch (error) {
+      console.error('Failed to set admin key:', error);
+      toast({
+        title: "Failed to set admin key",
+        description: "There was an error setting the admin key. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
   
   // Count the number of active scrapers
   const activeScrapers = scraperStatuses.filter((scraper) => 
@@ -175,6 +222,49 @@ export default function ScraperStatusPage() {
         <p className="mt-1">Live scraper runs every 10 seconds to track market availability during events.</p>
         <p className="mt-1">Admin users can trigger manual scraping from the Admin Panel.</p>
       </div>
+
+      {/* Admin key floating button */}
+      <Button
+        variant="outline"
+        size="sm"
+        className="fixed bottom-4 right-4 bg-white dark:bg-slate-800 shadow-md flex items-center gap-2"
+        onClick={() => setIsAdminModalOpen(true)}
+      >
+        <Key className="h-4 w-4" />
+        {isAdmin ? "Admin Key Set" : "Set Admin Key"}
+      </Button>
+
+      {/* Admin key dialog */}
+      <Dialog open={isAdminModalOpen} onOpenChange={setIsAdminModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Set Admin Key</DialogTitle>
+            <DialogDescription>
+              Enter your admin key to access admin-only features like controlling the live scraper.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            <Input
+              placeholder="Enter admin key"
+              value={adminKey}
+              onChange={(e) => setAdminKeyState(e.target.value)}
+              type="password"
+              className="w-full"
+            />
+            <p className="text-xs text-muted-foreground mt-2">
+              Default key is "default-admin-key" if not configured otherwise.
+            </p>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsAdminModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={setAdminKeyHandler}>
+              Save Key
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Layout>
   );
 }

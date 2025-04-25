@@ -283,22 +283,32 @@ export default function LiveScraperPanel({ isAdmin }: LiveScraperPanelProps) {
           </div>
           
           {/* Availability Bar */}
-          {status?.marketStats?.totalEvents > 0 && (
-            <div className="mb-2">
-              <div className="flex justify-between text-xs mb-1">
-                <span className="text-muted-foreground">Market Availability ({
-                  Math.round(((status?.marketStats?.availableMarkets || 0) / (status?.marketStats?.totalEvents || 1)) * 100)
-                }%)</span>
-                <span className="font-medium">
-                  {status?.marketStats?.availableMarkets || 0} / {status?.marketStats?.totalEvents || 0}
-                </span>
+          {(() => {
+            if (!status || !status.marketStats) return null;
+            const { marketStats } = status;
+            if (!marketStats.totalEvents || marketStats.totalEvents <= 0) return null;
+            
+            const availableMarkets = marketStats.availableMarkets || 0;
+            const totalEvents = marketStats.totalEvents || 1;
+            const percentage = Math.round((availableMarkets / totalEvents) * 100);
+            
+            return (
+              <div className="mb-2">
+                <div className="flex justify-between text-xs mb-1">
+                  <span className="text-muted-foreground">
+                    Market Availability ({percentage}%)
+                  </span>
+                  <span className="font-medium">
+                    {availableMarkets} / {totalEvents}
+                  </span>
+                </div>
+                <Progress 
+                  value={percentage} 
+                  className="h-2"
+                />
               </div>
-              <Progress 
-                value={((status?.marketStats?.availableMarkets || 0) / (status?.marketStats?.totalEvents || 1)) * 100} 
-                className="h-2"
-              />
-            </div>
-          )}
+            );
+          })()}
         </div>
         
         {/* Events Table */}
