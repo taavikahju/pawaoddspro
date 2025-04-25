@@ -21,6 +21,8 @@ interface HeartbeatEvent {
   currentlyAvailable: boolean;
   marketAvailability: string;
   recordCount: number;
+  gameMinute?: string;
+  widgetId?: string;
 }
 
 export default function LiveHeartbeat() {
