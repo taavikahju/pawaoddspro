@@ -483,35 +483,65 @@ export async function registerRoutes(app: Express): Promise<Server> {
           // Use any available time field to determine the event time
           let eventTime: Date | null = null;
           
+          // Debug current event
+          if (!event.id) {
+            console.log('Warning: Event without id:', event);
+          }
+
           // Try all possible date field combinations
           if (event.startTime) {
             eventTime = new Date(event.startTime);
+            
+            // Fix events with 2023 dates that should be 2025
+            if (eventTime.getFullYear() === 2023) {
+              const correctedDate = new Date(eventTime);
+              correctedDate.setFullYear(2025);
+              console.log(`Correcting date for event ${event.id} from ${eventTime.toISOString()} to ${correctedDate.toISOString()}`);
+              eventTime = correctedDate;
+            }
           } else if ((event as any).start_time) {
             eventTime = new Date((event as any).start_time);
+            
+            // Fix events with 2023 dates that should be 2025
+            if (eventTime.getFullYear() === 2023) {
+              const correctedDate = new Date(eventTime);
+              correctedDate.setFullYear(2025);
+              console.log(`Correcting date for event ${event.id} from ${eventTime.toISOString()} to ${correctedDate.toISOString()}`);
+              eventTime = correctedDate;
+            }
           } else if (event.date && event.time) {
-            // Parse date+time string
+            // Parse date+time string using ISO format (more reliable)
             try {
-              eventTime = new Date(`${event.date} ${event.time}`);
+              // Make sure we have a properly formatted date string with 'T' between date and time
+              const dateStr = `${event.date}T${event.time}:00`;
+              eventTime = new Date(dateStr);
             } catch (e) {
-              // If parsing fails, create a date object from parts
-              const dateParts = event.date.split('-').map(Number);
-              const timeParts = event.time.split(':').map(Number);
-              
-              if (dateParts.length === 3 && timeParts.length >= 2) {
-                eventTime = new Date(
-                  dateParts[0], 
-                  dateParts[1] - 1, // Month is 0-based in JS Date
-                  dateParts[2],
-                  timeParts[0],
-                  timeParts[1],
-                  timeParts.length > 2 ? timeParts[2] : 0
-                );
+              // If ISO format fails, try standard format
+              try {
+                eventTime = new Date(`${event.date} ${event.time}`);
+              } catch (e2) {
+                // If both parse methods fail, create a date object from parts
+                const dateParts = event.date.split('-').map(Number);
+                const timeParts = event.time.split(':').map(Number);
+                
+                if (dateParts.length === 3 && timeParts.length >= 2) {
+                  eventTime = new Date(
+                    dateParts[0], 
+                    dateParts[1] - 1, // Month is 0-based in JS Date
+                    dateParts[2],
+                    timeParts[0],
+                    timeParts[1],
+                    timeParts.length > 2 ? timeParts[2] : 0
+                  );
+                }
               }
             }
           } 
           
           // If no valid time was determined, include the event by default
           if (!eventTime) {
+            console.log(`Warning: Could not determine time for event ${event.id}:`, 
+              event.date, event.time, event.startTime);
             return true;
           }
           
