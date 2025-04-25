@@ -38,6 +38,13 @@ export default function Dashboard() {
     isLoading: isLoadingEvents 
   } = useQuery({ 
     queryKey: ['/api/events'],
+    queryFn: async () => {
+      // Add minBookmakers parameter to ensure we're getting events with sufficient bookmaker data
+      const response = await fetch('/api/events?minBookmakers=3&future_only=true');
+      const data = await response.json();
+      console.log(`Dashboard: Loaded ${data.length} future events`);
+      return data;
+    },
     refetchInterval: 60000, // Refresh every minute
   });
 

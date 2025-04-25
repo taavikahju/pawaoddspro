@@ -56,7 +56,7 @@ export default function HistoricalOdds() {
       
       const params: Record<string, string> = { 
         past_only: 'true',
-        after_date: twoWeeksAgo.toISOString()
+        minBookmakers: '3'
       };
       
       // Add filters if not 'all'
@@ -65,13 +65,37 @@ export default function HistoricalOdds() {
       
       console.log('Fetching past events with params:', params);
       const response = await axios.get('/api/events', { params });
-      console.log('Past events API response:', {
+      
+      // Filter events from last 2 weeks on the client side
+      // This is a backup in case server filtering doesn't work properly
+      let filteredData = response.data;
+      if (Array.isArray(filteredData)) {
+        filteredData = filteredData.filter(event => {
+          let eventDate: Date | null = null;
+          
+          // Try to parse the event date from various fields
+          if (event.startTime) {
+            eventDate = new Date(event.startTime);
+          } else if (event.start_time) {
+            eventDate = new Date(event.start_time);
+          } else if (event.date && event.time) {
+            eventDate = new Date(`${event.date} ${event.time}`);
+          }
+          
+          // Skip events that are too old (more than 2 weeks ago)
+          return !eventDate || eventDate >= twoWeeksAgo;
+        });
+      }
+      
+      console.log('Historical events response:', {
         count: response.data.length,
-        firstItem: response.data.length > 0 ? response.data[0] : null,
+        filteredCount: filteredData.length,
+        firstItem: filteredData.length > 0 ? filteredData[0] : null,
         status: response.status,
         twoWeeksAgo: twoWeeksAgo.toISOString()
       });
-      return response.data;
+      
+      return filteredData;
     },
     refetchOnWindowFocus: false
   });
