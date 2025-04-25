@@ -18,7 +18,7 @@ import { BookmakerOddsData } from '../types/odds';
 interface HistoricalOddsChartProps {
   data: Record<string, BookmakerOddsData> | null;
   isLoading: boolean;
-  eventName: string;
+  eventName: string | undefined;
 }
 
 // Custom tooltip for the chart
@@ -143,7 +143,7 @@ export default function HistoricalOddsChart({
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle className="text-lg">{eventName}</CardTitle>
+        <CardTitle className="text-lg">{eventName || 'Event'}</CardTitle>
         <CardDescription>
           Historical odds changes over time
         </CardDescription>

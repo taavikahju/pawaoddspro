@@ -453,15 +453,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Apply time-based filters (past/future)
       if (pastOnly || futureOnly) {
         const now = new Date();
+        console.log('Filtering with time based filter, current time:', now.toISOString());
         
         // Debug to see what's coming from the database
         console.log('First event sample:', JSON.stringify(filteredEvents[0] || {}, null, 2));
+        
+        // Count events before filtering
+        const beforeCount = filteredEvents.length;
         
         filteredEvents = filteredEvents.filter(event => {
           // Debug event time fields
           if (pastOnly && filteredEvents.indexOf(event) < 5) {
             console.log('Event time fields for past filter:', {
               id: event.id,
+              eventId: event.eventId,
+              name: event.name || event.teams,
               startTime: event.startTime,
               start_time: (event as any).start_time,
               date: event.date,
@@ -486,10 +492,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
             return true;
           }
           
-          if (pastOnly) return eventTime <= now;
+          if (pastOnly) {
+            const isPast = eventTime <= now;
+            if (isPast && filteredEvents.indexOf(event) < 5) {
+              console.log(`Event ${event.id} (${event.name || event.teams}) is in the past: ${eventTime.toISOString()} <= ${now.toISOString()}`);
+            }
+            return isPast;
+          }
           if (futureOnly) return eventTime > now;
           return true;
         });
+        
+        // Count events after filtering
+        const afterCount = filteredEvents.length;
+        console.log(`Time-based filtering: ${beforeCount} events -> ${afterCount} events (${pastOnly ? 'past' : 'future'} filter)`);
       }
       
       // Apply country filter
