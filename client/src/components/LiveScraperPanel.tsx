@@ -56,7 +56,7 @@ export default function LiveScraperPanel({ isAdmin }: LiveScraperPanelProps) {
   // Start the live scraper
   const startScraperMutation = useMutation({
     mutationFn: async (url: string) => {
-      const res = await apiRequest('POST', '/api/live-scraper/start', { apiUrl: url });
+      const res = await apiRequest('POST', '/api/live-scraper/start', { apiUrl: url }, true); // Set isAdmin=true
       return await res.json();
     },
     onSuccess: () => {
@@ -78,7 +78,7 @@ export default function LiveScraperPanel({ isAdmin }: LiveScraperPanelProps) {
   // Stop the live scraper
   const stopScraperMutation = useMutation({
     mutationFn: async () => {
-      const res = await apiRequest('POST', '/api/live-scraper/stop');
+      const res = await apiRequest('POST', '/api/live-scraper/stop', null, true); // Set isAdmin=true
       return await res.json();
     },
     onSuccess: () => {

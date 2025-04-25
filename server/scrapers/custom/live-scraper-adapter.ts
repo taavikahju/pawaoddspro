@@ -115,30 +115,6 @@ export function getLiveScraperStatus() {
   };
 }
 
-/**
- * Register live scraper API routes
- */
-export function registerLiveScraperRoutes(app: Application): void {
-  // Get live scraper status
-  app.get('/api/live-scraper/status', (req: Request, res: Response) => {
-    res.json(getLiveScraperStatus());
-  });
-  
-  // Start live scraper (admin only)
-  app.post('/api/live-scraper/start', isAuthenticated, isAdmin, (req: Request, res: Response) => {
-    const { apiUrl } = req.body;
-    
-    if (!apiUrl) {
-      return res.status(400).json({ error: 'API URL is required' });
-    }
-    
-    startLiveScraper(apiUrl);
-    res.json({ success: true, message: 'Live scraper started' });
-  });
-  
-  // Stop live scraper (admin only)
-  app.post('/api/live-scraper/stop', isAuthenticated, isAdmin, (req: Request, res: Response) => {
-    stopLiveScraper();
-    res.json({ success: true, message: 'Live scraper stopped' });
-  });
-}
+// The routes are already defined in server/routes.ts
+// This function is kept for reference but not used anymore
+// export function registerLiveScraperRoutes(app: Application): void { ... }
