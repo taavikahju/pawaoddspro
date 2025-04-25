@@ -1,30 +1,44 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Activity, BarChart, ZoomIn, Download, Loader2 } from 'lucide-react';
+import { Activity, BarChart, Download, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+
+// Football field background image (base64 SVG)
+const footballFieldBase64 = `data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iNDAwIiB2aWV3Qm94PSIwIDAgODAwIDQwMCI+CiAgPCEtLSBCYWNrZ3JvdW5kIC0tPgogIDxyZWN0IHdpZHRoPSI4MDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjMDA4MDAwIiBvcGFjaXR5PSIwLjIiLz4KCiAgPCEtLSBHcmFzcyBwYXR0ZXJuIC0tPgogIDxwYXR0ZXJuIGlkPSJncmFzc1BhdHRlcm4iIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHdpZHRoPSI4MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblRyYW5zZm9ybT0icm90YXRlKDQ1KSI+CiAgICA8cmVjdCB3aWR0aD0iODAiIGhlaWdodD0iNDAiIGZpbGw9IiMwMDgwMDAiIG9wYWNpdHk9IjAuMSIvPgogICAgPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjMDA5MDAwIiBvcGFjaXR5PSIwLjEiLz4KICA8L3BhdHRlcm4+CiAgPHJlY3Qgd2lkdGg9IjgwMCIgaGVpZ2h0PSI0MDAiIGZpbGw9InVybCgjZ3Jhc3NQYXR0ZXJuKSIgb3BhY2l0eT0iMC4zIi8+CgogIDwhLS0gRmllbGQgbWFya2luZ3MgLS0+CiAgPHJlY3QgeD0iNTAiIHk9IjUwIiB3aWR0aD0iNzAwIiBoZWlnaHQ9IjMwMCIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjIiIGZpbGw9Im5vbmUiIG9wYWNpdHk9IjAuNCIvPgogIDxsaW5lIHgxPSI0MDAiIHkxPSI1MCIgeDI9IjQwMCIgeTI9IjM1MCIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjIiIG9wYWNpdHk9IjAuNCIvPgogIDxjaXJjbGUgY3g9IjQwMCIgY3k9IjIwMCIgcj0iNTAiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIiBvcGFjaXR5PSIwLjQiLz4KCiAgPCEtLSBHb2FsIEFyZWFzIC0tPgogIDxyZWN0IHg9IjUwIiB5PSIxMjUiIHdpZHRoPSI1MCIgaGVpZ2h0PSIxNTAiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIiBvcGFjaXR5PSIwLjQiLz4KICA8cmVjdCB4PSI3MDAiIHk9IjEyNSIgd2lkdGg9IjUwIiBoZWlnaHQ9IjE1MCIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjIiIGZpbGw9Im5vbmUiIG9wYWNpdHk9IjAuNCIvPgoKICA8IS0tIFBlbmFsdHkgQXJlYXMgLS0+CiAgPHJlY3QgeD0iNTAiIHk9IjEwMCIgd2lkdGg9IjEwMCIgaGVpZ2h0PSIyMDAiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIiBvcGFjaXR5PSIwLjQiLz4KICA8cmVjdCB4PSI2NTAiIHk9IjEwMCIgd2lkdGg9IjEwMCIgaGVpZ2h0PSIyMDAiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIiBvcGFjaXR5PSIwLjQiLz4KPC9zdmc+Cg==`;
 
 interface DataPoint {
   timestamp: number;
   isAvailable: boolean;
+  gameMinute?: string;
 }
 
 interface HeartbeatGraphProps {
   eventId: string;
-  historical?: boolean;
+  eventData?: any; // For storing game minute and other event data
 }
 
-export default function HeartbeatGraph({ eventId, historical = false }: HeartbeatGraphProps) {
+export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [data, setData] = useState<DataPoint[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [timeRange, setTimeRange] = useState<'1h' | '3h' | '6h' | '12h' | '24h'>('1h');
   const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
-  const [toggleSound, setToggleSound] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
   const [currentStatus, setCurrentStatus] = useState<'available' | 'suspended' | 'unknown'>('unknown');
+  const [currentMinute, setCurrentMinute] = useState<string>('');
+  const backgroundImage = useRef<HTMLImageElement | null>(null);
+  
+  // Preload football field background
+  useEffect(() => {
+    const img = new Image();
+    img.src = footballFieldBase64;
+    img.onload = () => {
+      backgroundImage.current = img;
+      if (data.length > 0) {
+        drawHeartbeat();
+      }
+    };
+  }, []);
   
   // Fetch data and set up the canvas
   useEffect(() => {
@@ -34,10 +48,8 @@ export default function HeartbeatGraph({ eventId, historical = false }: Heartbea
       try {
         setIsLoading(true);
         
-        // Determine the API endpoint based on whether we're viewing historical data
-        const endpoint = historical 
-          ? `/api/live-heartbeat/history/${eventId}` 
-          : `/api/live-heartbeat/data/${eventId}`;
+        // Always use the live data endpoint
+        const endpoint = `/api/live-heartbeat/data/${eventId}`;
         
         const response = await fetch(endpoint);
         if (!response.ok) {
@@ -46,36 +58,20 @@ export default function HeartbeatGraph({ eventId, historical = false }: Heartbea
         
         const result = await response.json();
         
-        // Filter data based on time range
-        const now = Date.now();
-        let timeRangeInMs = 3600000; // default 1h
-        
-        switch (timeRange) {
-          case '3h':
-            timeRangeInMs = 3 * 3600000;
-            break;
-          case '6h':
-            timeRangeInMs = 6 * 3600000;
-            break;
-          case '12h':
-            timeRangeInMs = 12 * 3600000;
-            break;
-          case '24h':
-            timeRangeInMs = 24 * 3600000;
-            break;
-        }
-        
-        const filteredData = result.filter((point: DataPoint) => {
-          return now - point.timestamp < timeRangeInMs;
-        });
-        
-        setData(filteredData);
+        // For football matches, we want to show the entire 90 minutes
+        // No time range filtering needed as we'll use game minutes instead
+        setData(result);
         
         // Determine current status
-        if (filteredData.length > 0) {
-          const latestData = filteredData[filteredData.length - 1];
+        if (result.length > 0) {
+          const latestData = result[result.length - 1];
           setIsAvailable(latestData.isAvailable);
           setCurrentStatus(latestData.isAvailable ? 'available' : 'suspended');
+          
+          // Extract game minute if available
+          if (latestData.gameMinute) {
+            setCurrentMinute(latestData.gameMinute);
+          }
         }
         
         setIsLoading(false);
@@ -97,16 +93,11 @@ export default function HeartbeatGraph({ eventId, historical = false }: Heartbea
       intervalId = setInterval(fetchData, 10000); // Refresh every 10 seconds for live data
     }
     
-    // Play beep sound based on current availability status and toggle state
-    if (toggleSound && isAvailable !== null) {
-      playBeep();
-    }
-    
     // Clean up interval on unmount
     return () => {
       if (intervalId) clearInterval(intervalId);
     };
-  }, [eventId, historical, timeRange, toggleSound]);
+  }, [eventId, historical]);
   
   // Set up canvas and draw heartbeat whenever data changes
   useEffect(() => {
@@ -128,112 +119,170 @@ export default function HeartbeatGraph({ eventId, historical = false }: Heartbea
     // Clear canvas
     ctx.clearRect(0, 0, width, height);
     
+    // Draw football field background if loaded
+    if (backgroundImage.current) {
+      ctx.globalAlpha = 0.2; // Make it subtle/blurry
+      ctx.drawImage(backgroundImage.current, 0, 0, width, height);
+      ctx.globalAlpha = 1.0;
+    }
+    
     // Draw grid
     drawGrid(ctx, width, height);
     
-    // Draw time labels
-    drawTimeLabels(ctx, width, height, data);
+    // Draw game minute labels
+    drawMinuteLabels(ctx, width, height);
     
-    // Draw status indicator
-    if (isAvailable !== null) {
-      drawStatusIndicator(ctx, width, height, isAvailable);
-    }
-    
-    // Calculate spacing
-    const spacing = width / (data.length === 1 ? 2 : data.length - 1);
+    // Calculate spacing based on game minutes (1-90)
+    // If game minutes are not available, use even spacing
+    const maxGameMinute = 90; // Football matches are typically 90 minutes
+    const pixelsPerMinute = width / maxGameMinute;
     
     // Setup heartbeat line style
     ctx.lineWidth = 2;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     
-    // Draw heartbeat line
+    // We'll simulate an ECG-style line that's mostly straight with small variations
+    // Green when market is available, red when not available
+    
+    // First determine if we're drawing in green or red based on current status
+    let lineColor = '#22c55e'; // Default green
+    let marketActive = true;
+    
+    if (data.length > 0) {
+      const latestPoint = data[data.length - 1];
+      marketActive = latestPoint.isAvailable;
+      lineColor = marketActive ? '#22c55e' : '#f43f5e';
+    }
+    
+    // Helper function to get the game minute as a number
+    const getMinuteNumber = (minuteStr: string | undefined): number => {
+      if (!minuteStr) return 0;
+      // Extract numeric part from strings like "45'" or "45+2'"
+      const match = minuteStr.match(/^(\d+)(?:\+(\d+))?/);
+      if (match) {
+        const baseMinute = parseInt(match[1], 10);
+        const addedTime = match[2] ? parseInt(match[2], 10) : 0;
+        return baseMinute + addedTime;
+      }
+      return 0;
+    };
+    
+    // Draw the ECG line
     ctx.beginPath();
     
-    // Start at the left side
+    // Find the current game minute - either from data or use latest available
+    const extractedMinutes = data
+      .map(point => point.gameMinute)
+      .filter(minute => minute)
+      .map(getMinuteNumber);
+    
+    const currentGameMinute = extractedMinutes.length > 0 
+      ? Math.max(...extractedMinutes) 
+      : 0;
+    
+    // Start from left side (0 minute) to current game minute
+    const endX = Math.min(currentGameMinute * pixelsPerMinute, width);
+    
+    // Begin at the baseline (middle)
     ctx.moveTo(0, height / 2);
     
-    // Draw the heartbeat for each data point
-    data.forEach((point, index) => {
-      const x = index * spacing;
+    // Draw a straight line with small random variations to simulate ECG
+    const step = 5; // Draw points every 5 pixels
+    let lastX = 0;
+    
+    // We'll keep track of the last data point index used
+    let lastDataIndex = 0;
+    
+    for (let x = 0; x <= endX; x += step) {
+      // Find the data point closest to this position
+      const gameMinuteAtX = Math.floor(x / pixelsPerMinute);
+      
+      // Find the right data point based on game minute
+      let dataPointIndex = lastDataIndex;
+      for (let i = lastDataIndex; i < data.length; i++) {
+        const pointMinute = getMinuteNumber(data[i].gameMinute);
+        if (pointMinute >= gameMinuteAtX) {
+          dataPointIndex = i;
+          lastDataIndex = i;
+          break;
+        }
+      }
+      
+      const dataPoint = data[dataPointIndex];
+      const isActive = dataPoint ? dataPoint.isAvailable : true;
+      
+      // For active markets: small variations around center line
+      // For inactive markets: flat line at bottom
       let y;
       
-      if (point.isAvailable) {
-        // For available status, draw a heartbeat peak
-        y = height / 4; // Peak goes up 1/4th of the height from the center
+      if (isActive) {
+        // Create small random variations for the ECG effect
+        const variation = Math.sin(x / 10) * 5; // Small sine wave
+        const randomSpike = Math.random() < 0.1 ? -(Math.random() * 20) : 0; // Occasional spike
+        y = height / 2 + variation + randomSpike;
       } else {
-        // For unavailable status, draw a heartbeat drop
-        y = (3 * height) / 4; // Drop goes down 1/4th of the height from the center
+        // Inactive market - flat line at 3/4 of height (bottom area)
+        y = (height * 3) / 4;
       }
       
-      // Draw line to current point
       ctx.lineTo(x, y);
-      
-      // If not the last point, draw line back to center before next point
-      if (index < data.length - 1) {
-        ctx.lineTo(x + spacing / 2, height / 2);
-      }
-    });
+      lastX = x;
+    }
     
-    // If there's only one data point, continue to the right edge
-    if (data.length === 1) {
+    // If we haven't reached the end, draw to the end
+    if (lastX < width) {
       ctx.lineTo(width, height / 2);
     }
     
-    // Set line color based on latest status
-    if (data.length > 0) {
-      const latestStatus = data[data.length - 1].isAvailable;
-      ctx.strokeStyle = latestStatus ? '#22c55e' : '#f43f5e';
-    } else {
-      ctx.strokeStyle = '#94a3b8';
-    }
-    
+    // Set line color and draw
+    ctx.strokeStyle = lineColor;
     ctx.stroke();
+    
+    // Draw minute indicator at the current position
+    if (currentGameMinute > 0) {
+      const minuteX = Math.min(currentGameMinute * pixelsPerMinute, width - 5);
+      
+      // Draw minute bubble
+      ctx.beginPath();
+      ctx.arc(minuteX, 20, 15, 0, Math.PI * 2);
+      ctx.fillStyle = lineColor;
+      ctx.fill();
+      
+      // Draw minute text
+      ctx.font = 'bold 12px Arial';
+      ctx.fillStyle = 'white';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(currentGameMinute.toString(), minuteX, 20);
+    }
   }
   
   // Function to draw grid on the canvas
   function drawGrid(ctx: CanvasRenderingContext2D, width: number, height: number) {
     // Draw horizontal center line
     ctx.beginPath();
-    ctx.strokeStyle = '#e2e8f0';
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
     ctx.lineWidth = 1;
     ctx.setLineDash([5, 5]);
     ctx.moveTo(0, height / 2);
     ctx.lineTo(width, height / 2);
     ctx.stroke();
+    
+    // Draw flatline for no heartbeat at 3/4 height
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+    ctx.moveTo(0, (height * 3) / 4);
+    ctx.lineTo(width, (height * 3) / 4);
+    ctx.stroke();
     ctx.setLineDash([]);
     
-    // Draw vertical grid lines every 5 minutes
-    const timeIntervalMinutes = 5;
-    const timeIntervalMs = timeIntervalMinutes * 60 * 1000;
-    const now = Date.now();
-    
-    // Calculate how many intervals fit in the current time range
-    let timeRangeInMs = 3600000; // default 1h
-    switch (timeRange) {
-      case '3h':
-        timeRangeInMs = 3 * 3600000;
-        break;
-      case '6h':
-        timeRangeInMs = 6 * 3600000;
-        break;
-      case '12h':
-        timeRangeInMs = 12 * 3600000;
-        break;
-      case '24h':
-        timeRangeInMs = 24 * 3600000;
-        break;
-    }
-    
-    const numIntervals = timeRangeInMs / timeIntervalMs;
-    const pixelsPerInterval = width / numIntervals;
-    
+    // Draw vertical grid lines every 15 minutes of game time
     ctx.beginPath();
-    ctx.strokeStyle = '#e2e8f0';
-    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
     
-    for (let i = 1; i < numIntervals; i++) {
-      const x = i * pixelsPerInterval;
+    for (let minute = 15; minute < 90; minute += 15) {
+      const x = (minute / 90) * width;
       ctx.moveTo(x, 0);
       ctx.lineTo(x, height);
     }
@@ -241,69 +290,18 @@ export default function HeartbeatGraph({ eventId, historical = false }: Heartbea
     ctx.stroke();
   }
   
-  // Function to draw time labels
-  function drawTimeLabels(ctx: CanvasRenderingContext2D, width: number, height: number, data: DataPoint[]) {
-    if (data.length === 0) return;
-    
+  // Function to draw minute labels
+  function drawMinuteLabels(ctx: CanvasRenderingContext2D, width: number, height: number) {
     ctx.font = '10px Arial';
-    ctx.fillStyle = '#94a3b8';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
     ctx.textAlign = 'center';
     
-    // Draw labels for start, middle, and end times
-    const startTime = new Date(data[0].timestamp);
-    const endTime = new Date(data[data.length - 1].timestamp);
-    const middleTime = new Date((startTime.getTime() + endTime.getTime()) / 2);
-    
-    // Format times as HH:MM
-    const formatTime = (date: Date) =>
-      date.toLocaleTimeString('en-US', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false,
-      });
-    
-    ctx.fillText(formatTime(startTime), 30, height - 5);
-    ctx.fillText(formatTime(middleTime), width / 2, height - 5);
-    ctx.fillText(formatTime(endTime), width - 30, height - 5);
-  }
-  
-  // Function to display current status indicator
-  function drawStatusIndicator(ctx: CanvasRenderingContext2D, width: number, height: number, isAvailable: boolean) {
-    const radius = 6;
-    const x = width - radius - 10;
-    const y = radius + 10;
-    
-    ctx.beginPath();
-    ctx.arc(x, y, radius, 0, Math.PI * 2);
-    ctx.fillStyle = isAvailable ? '#22c55e' : '#f43f5e';
-    ctx.fill();
-  }
-  
-  // Function to play beep sound
-  function playBeep() {
-    if (!audioRef.current) return;
-    
-    // Create audio element for heartbeat beep
-    audioRef.current = new Audio();
-    // Using a simple beep sound (short audio data)
-    audioRef.current.src = 'data:audio/wav;base64,UklGRl9vT19CRUdJTk5JTkdfT0ZfQVVESU9fREFUQQ==';
-    
-    // Set volume and play
-    audioRef.current.volume = 0.3;
-    audioRef.current.play().catch(err => console.error('Error playing sound:', err));
-  }
-  
-  // Handle time range change
-  const handleTimeRangeChange = (value: string) => {
-    if (value === '1h' || value === '3h' || value === '6h' || value === '12h' || value === '24h') {
-      setTimeRange(value);
+    // Draw minute labels every 15 minutes
+    for (let minute = 0; minute <= 90; minute += 15) {
+      const x = (minute / 90) * width;
+      ctx.fillText(`${minute}'`, x, height - 5);
     }
-  };
-  
-  // Handle sound toggle
-  const handleSoundToggle = () => {
-    setToggleSound(!toggleSound);
-  };
+  }
   
   // Function to save canvas as image
   const saveCanvasAsImage = () => {
@@ -323,7 +321,7 @@ export default function HeartbeatGraph({ eventId, historical = false }: Heartbea
         <div className="flex justify-between items-center">
           <CardTitle className="flex items-center gap-2">
             <Activity className="h-5 w-5 text-primary" />
-            <span>Heartbeat Monitor</span>
+            <span>Match Heartbeat</span>
             
             {isLoading ? (
               <Skeleton className="h-5 w-16 ml-2" />
@@ -337,18 +335,15 @@ export default function HeartbeatGraph({ eventId, historical = false }: Heartbea
                  currentStatus === 'suspended' ? 'Suspended' : 'Unknown'}
               </Badge>
             )}
+            
+            {currentMinute && (
+              <Badge variant="secondary" className="ml-2">
+                {currentMinute}
+              </Badge>
+            )}
           </CardTitle>
           
           <div className="flex gap-2">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={handleSoundToggle}
-              className={toggleSound ? 'bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-800' : ''}
-            >
-              {toggleSound ? 'Sound On' : 'Sound Off'}
-            </Button>
-            
             <Button 
               variant="outline" 
               size="icon" 
@@ -358,19 +353,6 @@ export default function HeartbeatGraph({ eventId, historical = false }: Heartbea
             </Button>
           </div>
         </div>
-        
-        <ToggleGroup 
-          type="single" 
-          value={timeRange} 
-          onValueChange={handleTimeRangeChange}
-          className="justify-start mt-2"
-        >
-          <ToggleGroupItem value="1h" size="sm" className="text-xs px-2 py-1 h-7">1h</ToggleGroupItem>
-          <ToggleGroupItem value="3h" size="sm" className="text-xs px-2 py-1 h-7">3h</ToggleGroupItem>
-          <ToggleGroupItem value="6h" size="sm" className="text-xs px-2 py-1 h-7">6h</ToggleGroupItem>
-          <ToggleGroupItem value="12h" size="sm" className="text-xs px-2 py-1 h-7">12h</ToggleGroupItem>
-          <ToggleGroupItem value="24h" size="sm" className="text-xs px-2 py-1 h-7">24h</ToggleGroupItem>
-        </ToggleGroup>
       </CardHeader>
       
       <CardContent className="pt-2">
@@ -381,10 +363,10 @@ export default function HeartbeatGraph({ eventId, historical = false }: Heartbea
         ) : data.length === 0 ? (
           <div className="w-full h-48 flex flex-col items-center justify-center bg-gray-50 dark:bg-slate-900 rounded-md">
             <BarChart className="h-10 w-10 text-muted-foreground mb-2" />
-            <p className="text-sm text-muted-foreground">No data available for this time range</p>
+            <p className="text-sm text-muted-foreground">No data available yet</p>
           </div>
         ) : (
-          <div className="w-full bg-white dark:bg-slate-900 rounded-md overflow-hidden">
+          <div className="w-full bg-slate-800 dark:bg-slate-900 rounded-md overflow-hidden">
             <canvas 
               ref={canvasRef} 
               width={800} 

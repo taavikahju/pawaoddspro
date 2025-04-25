@@ -5,7 +5,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+// Removed Tabs import as view type selection is no longer needed
 import { Separator } from '@/components/ui/separator';
 import HeartbeatGraph from '@/components/HeartbeatGraph';
 import Layout from '@/components/Layout';
@@ -29,7 +29,6 @@ export default function LiveHeartbeat() {
   const [selectedCountry, setSelectedCountry] = useState<string>('all');
   const [selectedTournament, setSelectedTournament] = useState<string>('all');
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
-  const [viewType, setViewType] = useState<'live' | 'historical'>('live');
 
   // Fetch heartbeat data
   const { data: heartbeatData, isLoading, error, refetch } = useQuery<{
@@ -202,18 +201,7 @@ export default function LiveHeartbeat() {
                   </Select>
                 </div>
 
-                <div className="flex items-center gap-2 ml-auto">
-                  <Tabs 
-                    value={viewType} 
-                    onValueChange={(v) => setViewType(v as 'live' | 'historical')}
-                    className="w-[200px]"
-                  >
-                    <TabsList className="grid w-full grid-cols-2">
-                      <TabsTrigger value="live">Live View</TabsTrigger>
-                      <TabsTrigger value="historical">Historical</TabsTrigger>
-                    </TabsList>
-                  </Tabs>
-                </div>
+                {/* View type selection removed as events are already ordered by start time */}
               </div>
             </CardContent>
           </Card>
@@ -278,7 +266,6 @@ export default function LiveHeartbeat() {
               {selectedEventId ? (
                 <HeartbeatGraph 
                   eventId={selectedEventId}
-                  historical={viewType === 'historical'}
                 />
               ) : (
                 <Card className="h-full flex items-center justify-center">
