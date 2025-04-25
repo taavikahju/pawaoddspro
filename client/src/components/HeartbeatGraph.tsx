@@ -88,16 +88,14 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     // Initial data fetch
     fetchData();
     
-    // Set up interval for fetching data in non-historical mode
-    if (!historical) {
-      intervalId = setInterval(fetchData, 10000); // Refresh every 10 seconds for live data
-    }
+    // Set up interval for fetching data
+    intervalId = setInterval(fetchData, 10000); // Refresh every 10 seconds for live data
     
     // Clean up interval on unmount
     return () => {
       if (intervalId) clearInterval(intervalId);
     };
-  }, [eventId, historical]);
+  }, [eventId]);
   
   // Set up canvas and draw heartbeat whenever data changes
   useEffect(() => {
