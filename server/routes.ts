@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { z } from "zod";
 import { setupScrapers, runAllScrapers, scraperEvents, SCRAPER_EVENTS } from "./scrapers/scheduler";
+import { startLiveScraper, stopLiveScraper, getLiveScraperStatus, liveScraperEvents, LIVE_SCRAPER_EVENTS } from "./scrapers/custom/live-scraper-adapter";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
@@ -282,6 +283,63 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Initialize and setup scrapers
   setupScrapers(storage);
+  
+  // Setup live scraper event listeners
+  liveScraperEvents.on(LIVE_SCRAPER_EVENTS.STARTED, (data) => {
+    broadcast({
+      type: 'liveScraperEvent',
+      event: LIVE_SCRAPER_EVENTS.STARTED,
+      data
+    });
+    
+    broadcast({
+      type: 'notification',
+      data: {
+        message: `BetPawa Ghana live scraper started`,
+        status: 'info'
+      }
+    });
+  });
+  
+  liveScraperEvents.on(LIVE_SCRAPER_EVENTS.COMPLETED, (data) => {
+    broadcast({
+      type: 'liveScraperEvent',
+      event: LIVE_SCRAPER_EVENTS.COMPLETED,
+      data
+    });
+  });
+  
+  liveScraperEvents.on(LIVE_SCRAPER_EVENTS.ERROR, (data) => {
+    broadcast({
+      type: 'liveScraperEvent',
+      event: LIVE_SCRAPER_EVENTS.ERROR,
+      data
+    });
+    
+    broadcast({
+      type: 'notification',
+      data: {
+        message: `Live scraper error: ${data.message}`,
+        status: 'error'
+      }
+    });
+  });
+  
+  liveScraperEvents.on(LIVE_SCRAPER_EVENTS.MARKET_CHANGE, (data) => {
+    broadcast({
+      type: 'liveScraperEvent',
+      event: LIVE_SCRAPER_EVENTS.MARKET_CHANGE,
+      data
+    });
+    
+    broadcast({
+      type: 'notification',
+      data: {
+        message: data.message,
+        status: data.currentStatus ? 'success' : 'warning'
+      }
+    });
+  });
   
   // Set up event listeners for scraper events
   // Scraper events
@@ -583,6 +641,86 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // BetPawa Ghana Live Scraper Endpoints
+  app.post('/api/live-scraper/start', simpleAdminAuth, async (req, res) => {
+    try {
+      const { apiUrl } = req.body;
+      
+      if (!apiUrl) {
+        return res.status(400).json({ 
+          success: false,
+          message: 'API URL is required'
+        });
+      }
+      
+      // Start the live scraper
+      startLiveScraper(apiUrl);
+      
+      res.json({
+        success: true,
+        message: 'BetPawa Ghana live scraper started'
+      });
+      
+      // Broadcast notification
+      broadcast({
+        type: 'notification',
+        data: {
+          message: 'BetPawa Ghana live scraper started with 10-second interval',
+          status: 'success'
+        }
+      });
+    } catch (error) {
+      console.error('Error starting live scraper:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to start live scraper',
+        error: error instanceof Error ? error.message : String(error)
+      });
+    }
+  });
+  
+  app.post('/api/live-scraper/stop', simpleAdminAuth, async (req, res) => {
+    try {
+      // Stop the live scraper
+      stopLiveScraper();
+      
+      res.json({
+        success: true,
+        message: 'BetPawa Ghana live scraper stopped'
+      });
+      
+      // Broadcast notification
+      broadcast({
+        type: 'notification',
+        data: {
+          message: 'BetPawa Ghana live scraper stopped',
+          status: 'info'
+        }
+      });
+    } catch (error) {
+      console.error('Error stopping live scraper:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to stop live scraper',
+        error: error instanceof Error ? error.message : String(error)
+      });
+    }
+  });
+  
+  app.get('/api/live-scraper/status', async (req, res) => {
+    try {
+      const status = getLiveScraperStatus();
+      res.json(status);
+    } catch (error) {
+      console.error('Error fetching live scraper status:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to get live scraper status',
+        error: error instanceof Error ? error.message : String(error)
+      });
+    }
+  });
+  
   // Endpoint to test a custom scraper
   // Test endpoint for adding some sample odds history
   app.get('/api/test/history', async (req, res) => {
