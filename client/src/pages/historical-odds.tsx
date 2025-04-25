@@ -97,24 +97,50 @@ export default function HistoricalOdds() {
   // Extract available countries and tournaments from events data
   useEffect(() => {
     if (events.length > 0) {
-      // Extract unique countries
-      const countriesSet = new Set<string>();
+      // Extract unique countries with normalization
+      const countryMap = new Map<string, string>();
+      
+      // First pass: collect all countries and normalize them
       events.forEach(event => {
-        if (event.country) countriesSet.add(event.country);
+        if (event.country) {
+          // Normalize the country name (trim, lowercase, remove extra spaces)
+          const normalizedCountry = event.country.toLowerCase().trim().replace(/\s+/g, ' ');
+          // Use the original casing but keep only one instance of each normalized country
+          countryMap.set(normalizedCountry, event.country);
+        }
       });
-      const countries = Array.from(countriesSet).sort();
+      
+      // Convert to sorted array of unique country names with proper casing
+      const countries = Array.from(countryMap.values()).sort();
       setAvailableCountries(countries);
       
       // Extract tournaments based on country filter
-      const tournamentsSet = new Set<string>();
-      events
-        .filter(event => countryFilter === 'all' || event.country === countryFilter)
-        .forEach(event => {
+      if (countryFilter !== 'all') {
+        // First, normalize the country filter for case-insensitive comparison
+        const normalizedCountryFilter = countryFilter.toLowerCase().trim().replace(/\s+/g, ' ');
+        
+        const tournamentsSet = new Set<string>();
+        events
+          // Match country using normalized comparison
+          .filter(event => 
+            event.country && 
+            event.country.toLowerCase().trim().replace(/\s+/g, ' ') === normalizedCountryFilter
+          )
+          .forEach(event => {
+            if (event.tournament) tournamentsSet.add(event.tournament);
+          });
+        
+        const tournaments = Array.from(tournamentsSet).sort();
+        setAvailableTournaments(tournaments);
+      } else {
+        const tournamentsSet = new Set<string>();
+        events.forEach(event => {
           if (event.tournament) tournamentsSet.add(event.tournament);
         });
-      
-      const tournaments = Array.from(tournamentsSet).sort();
-      setAvailableTournaments(tournaments);
+        
+        const tournaments = Array.from(tournamentsSet).sort();
+        setAvailableTournaments(tournaments);
+      }
     }
   }, [events, countryFilter]);
 
@@ -207,7 +233,16 @@ export default function HistoricalOdds() {
   
   // Filter events by country first, then by tournament
   const filteredEvents = events
-    .filter(event => countryFilter === 'all' || event.country === countryFilter)
+    .filter(event => {
+      if (countryFilter === 'all') return true;
+      if (!event.country) return false;
+      
+      // Normalize for comparison
+      const normalizedCountry = event.country.toLowerCase().trim().replace(/\s+/g, ' ');
+      const normalizedFilter = countryFilter.toLowerCase().trim().replace(/\s+/g, ' ');
+      
+      return normalizedCountry === normalizedFilter;
+    })
     .filter(event => tournamentFilter === 'all' || event.tournament === tournamentFilter);
 
   return (

@@ -67,26 +67,34 @@ export default function Dashboard() {
   // Extract available countries and tournaments from the data
   useEffect(() => {
     if (events && Array.isArray(events) && events.length > 0) {
-      // Extract unique countries
-      const countries = Array.from(new Set(
-        events
-          .map((event: any) => event.country)
-          .filter((country): country is string => Boolean(country))
-      )).sort();
+      // Extract unique countries with normalization
+      const countryMap = new Map<string, string>();
       
+      // First pass: collect all countries and normalize them
+      events.forEach((event: any) => {
+        if (event.country) {
+          // Normalize the country name (trim, lowercase, remove extra spaces)
+          const normalizedCountry = event.country.toLowerCase().trim().replace(/\s+/g, ' ');
+          // Use the original casing but keep only one instance of each normalized country
+          countryMap.set(normalizedCountry, event.country);
+        }
+      });
+      
+      // Convert to sorted array of unique country names with proper casing
+      const countries = Array.from(countryMap.values()).sort();
       setAvailableCountries(countries);
       
       // Extract tournaments from the selected country or all tournaments if no country is selected
       if (countryFilter !== 'all') {
         // First, normalize the country filter for case-insensitive comparison
-        const normalizedCountryFilter = countryFilter.toLowerCase();
+        const normalizedCountryFilter = countryFilter.toLowerCase().trim().replace(/\s+/g, ' ');
         
         const tournaments = Array.from(new Set(
           events
-            // Match country case-insensitively
+            // Match country using normalized comparison
             .filter((event: any) => 
               event.country && 
-              event.country.toLowerCase() === normalizedCountryFilter
+              event.country.toLowerCase().trim().replace(/\s+/g, ' ') === normalizedCountryFilter
             )
             .map((event: any) => event.tournament)
             .filter((tournament): tournament is string => Boolean(tournament))
@@ -144,10 +152,15 @@ export default function Dashboard() {
       if (!sportMatches) return false;
       
       // Filter by country
-      const countryMatches = countryFilter === 'all' || 
-        (event.country && event.country === countryFilter);
-      
-      if (!countryMatches) return false;
+      if (countryFilter !== 'all') {
+        if (!event.country) return false;
+        
+        // Normalize for comparison
+        const normalizedCountry = event.country.toLowerCase().trim().replace(/\s+/g, ' ');
+        const normalizedFilter = countryFilter.toLowerCase().trim().replace(/\s+/g, ' ');
+        
+        if (normalizedCountry !== normalizedFilter) return false;
+      }
       
       // Filter by tournament only if country is selected
       if (countryFilter !== 'all' && tournamentFilter !== 'all') {
