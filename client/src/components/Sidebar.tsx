@@ -103,17 +103,25 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
     }
   }, [selectedBookmakers, bookmakers]);
 
-  const lastUpdate = stats.lastScrapeTime;
+  // Format the last update time as HH:MM UTC
+  const formatTimeUTC = (date: Date): string => {
+    return date.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+      timeZone: 'UTC'
+    }) + ' UTC';
+  };
+
+  // Last update time formatting
+  const lastUpdateDate = stats.lastScrapeTime ? new Date(stats.lastScrapeTime) : new Date();
+  const lastUpdate = formatTimeUTC(lastUpdateDate);
+  
+  // Next update time calculation and formatting
   const timeToNextUpdate = stats.timeToNextUpdate;
   const nextUpdate = new Date();
   nextUpdate.setMinutes(nextUpdate.getMinutes() + timeToNextUpdate);
-  // Format as UTC time
-  const nextUpdateStr = nextUpdate.toLocaleTimeString('en-US', {
-    hour: 'numeric',
-    minute: '2-digit',
-    hour12: true,
-    timeZone: 'UTC'
-  }) + ' UTC';
+  const nextUpdateStr = formatTimeUTC(nextUpdate);
   
   // Get sport icon
   const getSportIcon = (sportCode: string) => {

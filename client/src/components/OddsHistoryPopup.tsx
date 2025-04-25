@@ -64,19 +64,19 @@ export default function OddsHistoryPopup({
   const chartData = React.useMemo(() => {
     if (!data) return [];
     
-    // Group by timestamp (converts to YYYY-MM-DD HH:MM)
+    // Group by timestamp (converts to DD MMM HH:MM)
     const dataByTimestamp = data.reduce((acc: Record<string, any>, entry) => {
       const date = new Date(entry.timestamp);
-      // Format the date in UTC timezone
+      
+      // Format the date in UTC timezone - simplified format for popups (DD MMM HH:MM)
       const timeKey = date.toLocaleString('en-US', {
-        year: 'numeric',
-        month: '2-digit',
         day: '2-digit',
+        month: 'short',
         hour: '2-digit',
         minute: '2-digit',
         hour12: false,
         timeZone: 'UTC'
-      }) + ' UTC';
+      });
       
       if (!acc[timeKey]) {
         acc[timeKey] = { 
@@ -144,11 +144,7 @@ export default function OddsHistoryPopup({
                   textAnchor="end"
                   height={85} // Increase height to give more room for the date/time
                   tickFormatter={(tick) => {
-                    // Show date and time
-                    const parts = tick.split(' ');
-                    if (parts.length >= 2) {
-                      return `${parts[0].slice(5)} ${parts[1]}`; // Format: MM/DD HH:MM (omit year for space)
-                    }
+                    // The tick is already in the format we want (DD MMM HH:MM)
                     return tick;
                   }}
                 />
