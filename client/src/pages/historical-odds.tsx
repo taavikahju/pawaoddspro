@@ -179,10 +179,13 @@ export default function HistoricalOdds() {
   // Check if we have past events
   const hasPastEvents = events.length > 0;
 
-  // Filter events by tournaments if tournament filter is set
-  const filteredEvents = tournamentFilter !== 'all'
-    ? events.filter(event => event.tournament === tournamentFilter)
-    : events;
+  // Only show events when both country and tournament are selected
+  const shouldShowEvents = countryFilter !== 'all' && tournamentFilter !== 'all';
+  
+  // Filter events by country first, then by tournament
+  const filteredEvents = events
+    .filter(event => countryFilter === 'all' || event.country === countryFilter)
+    .filter(event => tournamentFilter === 'all' || event.tournament === tournamentFilter);
 
   return (
     <Layout 
@@ -242,10 +245,10 @@ export default function HistoricalOdds() {
                     <Select 
                       value={tournamentFilter} 
                       onValueChange={handleTournamentChange}
-                      disabled={availableTournaments.length === 0}
+                      disabled={countryFilter === 'all' || availableTournaments.length === 0}
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder="Select tournament" />
+                        <SelectValue placeholder={countryFilter === 'all' ? "Select country first" : "Select tournament"} />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="all">All Tournaments</SelectItem>
@@ -256,6 +259,9 @@ export default function HistoricalOdds() {
                         ))}
                       </SelectContent>
                     </Select>
+                    {countryFilter === 'all' && (
+                      <p className="text-xs text-muted-foreground mt-1">Please select a country first</p>
+                    )}
                   </div>
                   
                   {(countryFilter !== 'all' || tournamentFilter !== 'all') && (
@@ -281,50 +287,75 @@ export default function HistoricalOdds() {
 
           {/* Event List - Now on the right side */}
           <div className="md:w-3/4 w-full">
-            {hasPastEvents ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                {filteredEvents.map(event => (
-                  <Card 
-                    key={event.id} 
-                    className="hover:shadow-md transition-shadow cursor-pointer"
-                    onClick={() => openEventDialog(event)}
-                  >
-                    <CardHeader className="p-4 pb-2">
-                      <div className="flex items-center justify-between mb-1">
-                        <div className="flex items-center">
-                          <CountryFlag country={event.country} className="mr-2 h-3.5" />
-                          <span className="text-xs text-gray-500 dark:text-gray-400">{event.country}</span>
-                        </div>
-                        <Badge variant="outline" className="text-xs h-5">
-                          {formatDateTime(event)}
-                        </Badge>
-                      </div>
-                      <CardTitle className="text-base font-semibold">{getEventName(event)}</CardTitle>
-                      <CardDescription className="text-xs mt-1">
-                        {event.tournament}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="p-4 pt-2">
-                      <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                        {Object.keys(event.oddsData || {}).length} bookmakers
-                      </div>
-                      <div className="text-xs mt-1">
-                        Click to view historical odds
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
+            {!shouldShowEvents ? (
+              <div className="flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-800/50 rounded-lg p-8 h-64">
+                <div className="text-center">
+                  <h3 className="text-lg font-medium mb-2">Select filters to view events</h3>
+                  <p className="text-gray-500 dark:text-gray-400 text-sm mb-4">
+                    Please select both a country and tournament to view historical events
+                  </p>
+                </div>
+              </div>
+            ) : filteredEvents.length > 0 ? (
+              <div className="bg-white dark:bg-gray-800 rounded-md shadow">
+                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                  <thead className="bg-gray-50 dark:bg-gray-700">
+                    <tr>
+                      <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                        Event
+                      </th>
+                      <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                        Date/Time
+                      </th>
+                      <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                        Bookmakers
+                      </th>
+                      <th scope="col" className="px-4 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                        Action
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                    {filteredEvents.map((event, idx) => (
+                      <tr 
+                        key={event.id}
+                        className={`${idx % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-900/50'} hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer transition-colors`}
+                        onClick={() => openEventDialog(event)}
+                      >
+                        <td className="px-4 py-3 whitespace-nowrap">
+                          <div className="text-sm font-medium text-gray-900 dark:text-white">
+                            {getEventName(event)}
+                          </div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400">
+                            {event.tournament}
+                          </div>
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap">
+                          <span className="text-sm text-gray-500 dark:text-gray-400">
+                            {formatDateTime(event)}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap">
+                          <span className="text-sm text-gray-500 dark:text-gray-400">
+                            {Object.keys(event.oddsData || {}).length}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap text-center">
+                          <Button variant="ghost" size="sm" className="text-xs h-7">
+                            View Odds
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-800/50 rounded-lg p-8 h-64">
                 <div className="text-center">
                   <h3 className="text-lg font-medium mb-2">No past events found</h3>
                   <p className="text-gray-500 dark:text-gray-400 text-sm mb-4">
-                    {tournamentFilter !== 'all' 
-                      ? "Try selecting a different tournament or clearing your filters." 
-                      : countryFilter !== 'all' 
-                        ? "Try selecting a different country or clearing your filters."
-                        : "There are no past events with recorded odds history yet."}
+                    No events match your current filter selection
                   </p>
                   {(countryFilter !== 'all' || tournamentFilter !== 'all') && (
                     <Button variant="secondary" onClick={resetFilters}>
