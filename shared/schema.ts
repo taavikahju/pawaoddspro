@@ -69,7 +69,6 @@ export const events = pgTable("events", {
   sportId: integer("sport_id").notNull(),
   date: text("date").notNull(),
   time: text("time").notNull(),
-  startTime: timestamp("start_time"), // ISO date-time format for easier filtering
   oddsData: json("odds_data").notNull(),
   bestOdds: json("best_odds").notNull(),
   lastUpdated: timestamp("last_updated").notNull().defaultNow(),
@@ -85,7 +84,6 @@ export const insertEventSchema = createInsertSchema(events).pick({
   sportId: true,
   date: true,
   time: true,
-  startTime: true, // Added startTime field
   oddsData: true,
   bestOdds: true,
 });
@@ -127,7 +125,6 @@ export const eventDataSchema = z.object({
   sportId: z.number(),
   date: z.string(),
   time: z.string(),
-  startTime: z.string().optional(), // ISO date string for start time
   odds: bookmakerOddsSchema,
   bestOdds: oddsSchema,
   lastUpdated: z.string(),

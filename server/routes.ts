@@ -424,12 +424,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const sportIdParam = req.query.sportId as string | undefined;
       const minBookmakers = req.query.minBookmakers ? parseInt(req.query.minBookmakers as string, 10) : 3;
-      const pastOnly = req.query.past_only === 'true';
-      const futureOnly = req.query.future_only === 'true';
-      const country = req.query.country as string | undefined;
-      const tournament = req.query.tournament as string | undefined;
-      const afterDate = req.query.after_date as string | undefined;
-      
       let events;
 
       if (sportIdParam) {
@@ -441,149 +435,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       } else {
         events = await storage.getEvents();
       }
-      
+
       // Filter events to only include those with at least the minimum number of bookmakers
-      let filteredEvents = events.filter(event => {
+      const filteredEvents = events.filter(event => {
         // Count bookmakers with odds for this event
         if (!event.oddsData) return false;
         
         const bookmakerCount = Object.keys(event.oddsData).length;
         return bookmakerCount >= minBookmakers;
       });
-      
-      // Apply time-based filters (past/future)
-      // Debug to see what's coming from the database
-      if (filteredEvents.length > 0) {
-        console.log('First event sample:', JSON.stringify(filteredEvents[0] || {}, null, 2));
-      }
-      
-      // Count events before filtering
-      const beforeCount = filteredEvents.length;
-      
-      // We need to apply time-based filtering again as requested by the user
-      if (pastOnly || futureOnly || afterDate) {
-        const now = new Date();
-        console.log('Filtering with time based filter, current time:', now.toISOString());
-        
-        // If afterDate is provided, parse it
-        let afterDateObj: Date | null = null;
-        if (afterDate) {
-          try {
-            afterDateObj = new Date(afterDate);
-            console.log(`Filtering events after: ${afterDateObj.toISOString()}`);
-          } catch (err) {
-            console.error('Invalid after_date parameter:', afterDate);
-          }
-        }
-        
-        // Count events before filtering
-        const beforeCount = filteredEvents.length;
-        
-        filteredEvents = filteredEvents.filter(event => {
-          // Use any available time field to determine the event time
-          let eventTime: Date | null = null;
-          
-          // Debug current event
-          if (!event.id) {
-            console.log('Warning: Event without id:', event);
-          }
 
-          // Try all possible date field combinations
-          if (event.startTime) {
-            eventTime = new Date(event.startTime);
-            
-            // Fix events with 2023 dates that should be 2025
-            if (eventTime.getFullYear() === 2023) {
-              const correctedDate = new Date(eventTime);
-              correctedDate.setFullYear(2025);
-              console.log(`Correcting date for event ${event.id} from ${eventTime.toISOString()} to ${correctedDate.toISOString()}`);
-              eventTime = correctedDate;
-            }
-          } else if ((event as any).start_time) {
-            eventTime = new Date((event as any).start_time);
-            
-            // Fix events with 2023 dates that should be 2025
-            if (eventTime.getFullYear() === 2023) {
-              const correctedDate = new Date(eventTime);
-              correctedDate.setFullYear(2025);
-              console.log(`Correcting date for event ${event.id} from ${eventTime.toISOString()} to ${correctedDate.toISOString()}`);
-              eventTime = correctedDate;
-            }
-          } else if (event.date && event.time) {
-            // Parse date+time string using ISO format (more reliable)
-            try {
-              // Make sure we have a properly formatted date string with 'T' between date and time
-              const dateStr = `${event.date}T${event.time}:00`;
-              eventTime = new Date(dateStr);
-            } catch (e) {
-              // If ISO format fails, try standard format
-              try {
-                eventTime = new Date(`${event.date} ${event.time}`);
-              } catch (e2) {
-                // If both parse methods fail, create a date object from parts
-                const dateParts = event.date.split('-').map(Number);
-                const timeParts = event.time.split(':').map(Number);
-                
-                if (dateParts.length === 3 && timeParts.length >= 2) {
-                  eventTime = new Date(
-                    dateParts[0], 
-                    dateParts[1] - 1, // Month is 0-based in JS Date
-                    dateParts[2],
-                    timeParts[0],
-                    timeParts[1],
-                    timeParts.length > 2 ? timeParts[2] : 0
-                  );
-                }
-              }
-            }
-          } 
-          
-          // If no valid time was determined, include the event by default
-          if (!eventTime) {
-            console.log(`Warning: Could not determine time for event ${event.id}:`, 
-              event.date, event.time, event.startTime);
-            return true;
-          }
-          
-          // Apply time filter based on past/future selection
-          if (pastOnly) {
-            return eventTime < now;
-          } else if (futureOnly) {
-            return eventTime >= now;
-          }
-          
-          return true;
-        });
-        
-        // Count events after filtering
-        const afterCount = filteredEvents.length;
-        console.log(`Time-based filtering: ${beforeCount} events -> ${afterCount} events (${pastOnly ? 'past' : 'future'} filter)`);
-      }
-      
-      // Apply country filter
-      if (country && country !== 'all') {
-        filteredEvents = filteredEvents.filter(event => {
-          if (!event.country) return false;
-          // Normalize country names for comparison 
-          // Remove duplicate spaces, trim, and convert to lowercase
-          const normalizedEventCountry = event.country.toLowerCase().trim().replace(/\s+/g, ' ');
-          const normalizedFilterCountry = country.toLowerCase().trim().replace(/\s+/g, ' ');
-          return normalizedEventCountry === normalizedFilterCountry;
-        });
-      }
-      
-      // Apply tournament filter
-      if (tournament && tournament !== 'all') {
-        filteredEvents = filteredEvents.filter(event => {
-          if (!event.tournament) return false;
-          // Normalize tournament names for comparison
-          const normalizedEventTournament = event.tournament.toLowerCase().trim().replace(/\s+/g, ' ');
-          const normalizedFilterTournament = tournament.toLowerCase().trim().replace(/\s+/g, ' ');
-          return normalizedEventTournament === normalizedFilterTournament;
-        });
-      }
-
-      console.log(`Filtered ${events.length} events down to ${filteredEvents.length} with at least ${minBookmakers} bookmakers and applied filters`);
+      console.log(`Filtered ${events.length} events down to ${filteredEvents.length} with at least ${minBookmakers} bookmakers`);
       
       res.json(filteredEvents);
     } catch (error) {
@@ -615,7 +477,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/events/:eventId/history', async (req, res) => {
     try {
       const { eventId } = req.params;
-      const { bookmaker, format } = req.query;
+      const { bookmaker } = req.query;
       
       // Import the utility functions
       const { getOddsHistory } = await import('./utils/oddsHistory');
@@ -623,74 +485,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Get the history
       const history = await getOddsHistory(eventId);
       
-      if (!history || history.length === 0) {
-        return res.status(404).json({ 
-          error: 'No historical data found',
-          message: 'This event does not have any historical odds data recorded yet.'
-        });
-      }
-      
       // Filter by bookmaker if specified
       let filteredHistory = history;
       if (bookmaker) {
         filteredHistory = history.filter(h => h.bookmakerCode === bookmaker);
       }
       
-      // Sort by timestamp (oldest first for time series)
-      filteredHistory.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+      // Sort by timestamp descending (newest first)
+      filteredHistory.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
       
-      // If chart format is requested, transform the data for easier consumption by chart libraries
-      if (format === 'chart') {
-        // Group by bookmaker
-        const bookmakerGroups: Record<string, any> = {};
-        
-        filteredHistory.forEach(entry => {
-          const bookmakerCode = entry.bookmakerCode;
-          
-          if (!bookmakerGroups[bookmakerCode]) {
-            bookmakerGroups[bookmakerCode] = {
-              homeOdds: [],
-              drawOdds: [],
-              awayOdds: [],
-              margins: []
-            };
-          }
-          
-          const timestamp = new Date(entry.timestamp).getTime();
-          
-          if (entry.homeOdds) {
-            bookmakerGroups[bookmakerCode].homeOdds.push({
-              x: timestamp,
-              y: parseFloat(entry.homeOdds)
-            });
-          }
-          
-          if (entry.drawOdds) {
-            bookmakerGroups[bookmakerCode].drawOdds.push({
-              x: timestamp,
-              y: parseFloat(entry.drawOdds)
-            });
-          }
-          
-          if (entry.awayOdds) {
-            bookmakerGroups[bookmakerCode].awayOdds.push({
-              x: timestamp,
-              y: parseFloat(entry.awayOdds)
-            });
-          }
-          
-          if (entry.margin) {
-            bookmakerGroups[bookmakerCode].margins.push({
-              x: timestamp,
-              y: parseFloat(entry.margin)
-            });
-          }
-        });
-        
-        return res.json(bookmakerGroups);
-      }
-      
-      // Default format - return raw history
       res.json(filteredHistory);
     } catch (error) {
       console.error('Error fetching odds history:', error);

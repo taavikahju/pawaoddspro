@@ -340,42 +340,8 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                           rowSpan={filteredBookmakers.length}
                         >
                           <div className="flex flex-col">
-                            {event.startTime ? (
-                              // If startTime is available, format it
-                              (() => {
-                                let dateObj = new Date(event.startTime);
-                                // Correct any 2023 dates to 2025
-                                if (dateObj.getFullYear() === 2023) {
-                                  dateObj = new Date(dateObj);
-                                  dateObj.setFullYear(2025);
-                                }
-                                
-                                const dateStr = dateObj.toLocaleDateString('en-US', {
-                                  year: 'numeric', 
-                                  month: 'short', 
-                                  day: 'numeric'
-                                });
-                                
-                                const timeStr = dateObj.toLocaleTimeString('en-US', {
-                                  hour: '2-digit', 
-                                  minute: '2-digit',
-                                  hour12: true
-                                });
-                                
-                                return (
-                                  <>
-                                    <span className="text-sm font-medium text-gray-800 dark:text-gray-200">{dateStr}</span>
-                                    <span className="text-sm text-gray-500 dark:text-gray-400">{timeStr}</span>
-                                  </>
-                                );
-                              })()
-                            ) : (
-                              // Fallback to separate date/time fields
-                              <>
-                                <span className="text-sm font-medium text-gray-800 dark:text-gray-200">{event.date || 'N/A'}</span>
-                                <span className="text-sm text-gray-500 dark:text-gray-400">{event.time || 'N/A'}</span>
-                              </>
-                            )}
+                            <span className="text-sm font-medium text-gray-800 dark:text-gray-200">{event.date}</span>
+                            <span className="text-sm text-gray-500 dark:text-gray-400">{event.time}</span>
                           </div>
                         </TableCell>
                         

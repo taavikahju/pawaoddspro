@@ -32,104 +32,38 @@ export default function Dashboard() {
     refetchInterval: 60000, // Refresh every minute
   });
   
-  // Fetch future events (filtered by selected sports)
+  // Fetch events (filtered by selected sports)
   const { 
     data: events = [],
     isLoading: isLoadingEvents 
   } = useQuery({ 
-    queryKey: ['/api/events', 'future', countryFilter, tournamentFilter],
-    queryFn: async () => {
-      // Add parameters to ensure we're getting future events with sufficient bookmaker data
-      const params: Record<string, string> = {
-        future_only: 'true',
-        minBookmakers: '3'
-      };
-      
-      // Add filters if not 'all'
-      if (countryFilter !== 'all') params.country = countryFilter;
-      if (tournamentFilter !== 'all') params.tournament = tournamentFilter;
-      
-      const queryString = new URLSearchParams(params).toString();
-      console.log(`Fetching events with params: ${queryString}`);
-      try {
-        const response = await fetch(`/api/events?${queryString}`);
-        const responseText = await response.text();
-        
-        // Try to parse the response
-        let data = [];
-        try {
-          data = JSON.parse(responseText);
-          console.log(`Dashboard: Loaded ${data.length} future events`);
-          
-          // Debug the first event if available
-          if (data.length > 0) {
-            console.log('Sample event structure:', Object.keys(data[0]));
-            console.log('Sample event:', data[0]);
-          } else {
-            console.log('No events returned from API');
-          }
-        } catch (parseError) {
-          console.error('Error parsing JSON response:', parseError);
-          console.log('Raw response:', responseText);
-          return [];
-        }
-        
-        return data;
-      } catch (error) {
-        console.error('Error fetching events:', error);
-        return [];
-      }
-      
-      return data;
-    },
+    queryKey: ['/api/events'],
     refetchInterval: 60000, // Refresh every minute
   });
 
   // Extract available countries and tournaments from the data
   useEffect(() => {
     if (events && Array.isArray(events) && events.length > 0) {
-      // Extract unique countries with normalization
-      const countryMap = new Map<string, string>();
+      // Extract unique countries
+      const countries = Array.from(new Set(
+        events
+          .map((event: any) => event.country)
+          .filter((country): country is string => Boolean(country))
+      )).sort();
       
-      // First pass: collect all countries and normalize them
-      events.forEach((event: any) => {
-        if (event.country) {
-          // First normalize the country name (trim, lowercase, remove extra spaces)
-          let normalizedCountry = event.country.toLowerCase().trim().replace(/\s+/g, ' ');
-          
-          // Fix duplicated country names like "England England"
-          const parts = normalizedCountry.split(' ');
-          if (parts.length > 1 && parts[0] === parts[1]) {
-            normalizedCountry = parts[0]; // Keep just one occurrence
-            console.log(`Fixed duplicated country: "${event.country}" -> "${normalizedCountry}"`);
-          }
-          
-          // Create a properly capitalized version of the country name
-          const properCountry = normalizedCountry
-            .split(' ')
-            .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
-            .join(' ');
-          
-          // Use the proper casing and keep only one instance of each normalized country
-          countryMap.set(normalizedCountry, properCountry);
-        }
-      });
-      
-      // Convert to sorted array of unique country names with proper casing
-      const countries = Array.from(countryMap.values()).sort();
       setAvailableCountries(countries);
       
       // Extract tournaments from the selected country or all tournaments if no country is selected
       if (countryFilter !== 'all') {
         // First, normalize the country filter for case-insensitive comparison
-        const normalizedCountryFilter = countryFilter.toLowerCase().trim().replace(/\s+/g, ' ');
+        const normalizedCountryFilter = countryFilter.toLowerCase();
         
         const tournaments = Array.from(new Set(
           events
-            // Match country using normalized comparison
+            // Match country case-insensitively
             .filter((event: any) => 
               event.country && 
-              event.country.toLowerCase().trim().replace(/\s+/g, ' ') === normalizedCountryFilter
+              event.country.toLowerCase() === normalizedCountryFilter
             )
             .map((event: any) => event.tournament)
             .filter((tournament): tournament is string => Boolean(tournament))
@@ -187,26 +121,10 @@ export default function Dashboard() {
       if (!sportMatches) return false;
       
       // Filter by country
-      if (countryFilter !== 'all') {
-        if (!event.country) return false;
-        
-        // Normalize for comparison
-        let normalizedCountry = event.country.toLowerCase().trim().replace(/\s+/g, ' ');
-        const normalizedFilter = countryFilter.toLowerCase().trim().replace(/\s+/g, ' ');
-        
-        // Fix duplicated country names for filtering too
-        const countryParts = normalizedCountry.split(' ');
-        if (countryParts.length > 1 && countryParts[0] === countryParts[1]) {
-          normalizedCountry = countryParts[0];
-        }
-        
-        // Check both the normalized country and if it contains the filter string
-        if (normalizedCountry !== normalizedFilter && 
-            !normalizedCountry.includes(normalizedFilter) && 
-            !normalizedFilter.includes(normalizedCountry)) {
-          return false;
-        }
-      }
+      const countryMatches = countryFilter === 'all' || 
+        (event.country && event.country === countryFilter);
+      
+      if (!countryMatches) return false;
       
       // Filter by tournament only if country is selected
       if (countryFilter !== 'all' && tournamentFilter !== 'all') {
@@ -247,33 +165,17 @@ export default function Dashboard() {
       return true;
     });
     
-    // Fix any date issues before sorting
-  filtered.forEach(event => {
-    // Check if startTime exists but year is 2023 (should be 2025) 
-    if (event.startTime) {
-      const startDate = new Date(event.startTime);
-      if (startDate.getFullYear() === 2023) {
-        // Create corrected date
-        const correctedDate = new Date(startDate);
-        correctedDate.setFullYear(2025);
-        console.log(`Client-side date correction: Event ${event.id} from ${startDate.toISOString()} to ${correctedDate.toISOString()}`);
-        // Update the event in place
-        event.startTime = correctedDate.toISOString();
+    // Then sort by date and time (in ascending order)
+    return filtered.sort((a, b) => {
+      // First sort by date
+      const dateComparison = a.date.localeCompare(b.date);
+      if (dateComparison !== 0) {
+        return dateComparison;
       }
-    }
-  });
-
-  // Then sort by date and time (in ascending order)
-  return filtered.sort((a, b) => {
-    // First sort by date
-    const dateComparison = a.date.localeCompare(b.date);
-    if (dateComparison !== 0) {
-      return dateComparison;
-    }
-    
-    // If dates are the same, sort by time
-    return a.time.localeCompare(b.time);
-  });
+      
+      // If dates are the same, sort by time
+      return a.time.localeCompare(b.time);
+    });
   }, [events, selectedSports, selectedBookmakers, countryFilter, tournamentFilter, minMarginFilter, maxMarginFilter]);
   
   // Get sport name by ID
