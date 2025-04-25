@@ -1,28 +1,45 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Layout from '@/components/Layout';
 import ScraperStatusCard from '@/components/ScraperStatusCard';
 import ScraperActivityFeed from '@/components/ScraperActivityFeed';
+import LiveScraperPanel from '@/components/LiveScraperPanel';
 import { Database, Server, Clock, AlertCircle, Activity } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useWebSocket } from '@/hooks/use-websocket';
 import { useToast } from '@/hooks/use-toast';
 
-export default function ScraperStatus() {
+interface ScraperStatus {
+  name: string;
+  status: string;
+  lastRun: string;
+  nextRun: string;
+  eventCount: number;
+  fileSize: number | string;
+}
+
+export default function ScraperStatusPage() {
   const { toast } = useToast();
   const { isConnected, runScrapers } = useWebSocket();
+  const [isAdmin, setIsAdmin] = useState(false);
   
   // Fetch scraper statuses
   const { 
-    data: scraperStatuses = [],
+    data: scraperStatuses = [] as ScraperStatus[],
     isLoading 
-  } = useQuery({ 
+  } = useQuery<ScraperStatus[]>({ 
     queryKey: ['/api/scrapers/status'],
     refetchInterval: 30000, // Refresh every 30 seconds
   });
   
+  // Check admin status
+  React.useEffect(() => {
+    const adminKey = localStorage.getItem('adminKey');
+    setIsAdmin(!!adminKey);
+  }, []);
+  
   // Count the number of active scrapers
-  const activeScrapers = scraperStatuses.filter((scraper: any) => 
+  const activeScrapers = scraperStatuses.filter((scraper) => 
     scraper.status === 'Running'
   ).length;
   
@@ -117,7 +134,7 @@ export default function ScraperStatus() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {scraperStatuses.map((scraper: any, index: number) => (
+              {scraperStatuses.map((scraper, index: number) => (
                 <ScraperStatusCard
                   key={index}
                   name={scraper.name}
@@ -143,9 +160,19 @@ export default function ScraperStatus() {
         </div>
       </div>
       
+      {/* Live Scraper Panel */}
+      <div className="mb-8">
+        <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
+          <Clock className="h-4 w-4 mr-2 text-primary" />
+          BetPawa Ghana Live Scraper (10-second intervals)
+        </h3>
+        <LiveScraperPanel isAdmin={isAdmin} />
+      </div>
+      
       {/* Footer Note */}
       <div className="text-center text-xs text-gray-500 dark:text-gray-400 mb-4">
-        <p>Data is collected from bookmaker APIs every 15 minutes automatically.</p>
+        <p>Standard data is collected from bookmaker APIs every 15 minutes automatically.</p>
+        <p className="mt-1">Live scraper runs every 10 seconds to track market availability during events.</p>
         <p className="mt-1">Admin users can trigger manual scraping from the Admin Panel.</p>
       </div>
     </Layout>
