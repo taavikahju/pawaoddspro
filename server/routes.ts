@@ -479,7 +479,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             console.log('Event time fields for past filter:', {
               id: event.id,
               eventId: event.eventId,
-              name: event.name || event.teams,
+              teams: event.teams,
               startTime: event.startTime,
               start_time: (event as any).start_time,
               date: event.date,
@@ -513,7 +513,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           if (pastOnly) {
             const isPast = eventTime <= now;
             if (isPast && filteredEvents.indexOf(event) < 5) {
-              console.log(`Event ${event.id} (${event.name || event.teams}) is in the past: ${eventTime.toISOString()} <= ${now.toISOString()}`);
+              console.log(`Event ${event.id} (${event.teams}) is in the past: ${eventTime.toISOString()} <= ${now.toISOString()}`);
             }
             return isPast;
           }
