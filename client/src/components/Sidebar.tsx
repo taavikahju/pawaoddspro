@@ -113,9 +113,9 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
     }) + ' UTC';
   };
 
-  // Last update time formatting
-  const lastUpdateDate = stats.lastScrapeTime ? new Date(stats.lastScrapeTime) : new Date();
-  const lastUpdate = formatTimeUTC(lastUpdateDate);
+  // Last update time handling 
+  // stats.lastScrapeTime is already in the format "HH:MM UTC", so we don't need to format it
+  const lastUpdate = stats.lastScrapeTime || 'N/A';
   
   // Next update time calculation and formatting
   const timeToNextUpdate = stats.timeToNextUpdate;
