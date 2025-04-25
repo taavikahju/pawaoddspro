@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import { z } from "zod";
 import { setupScrapers, runAllScrapers, scraperEvents, SCRAPER_EVENTS } from "./scrapers/scheduler";
 import { startLiveScraper, stopLiveScraper, getLiveScraperStatus, liveScraperEvents, LIVE_SCRAPER_EVENTS } from "./scrapers/custom/live-scraper-adapter";
+import { startHeartbeatTracker, stopHeartbeatTracker, getHeartbeatStatus, getEventMarketHistory, heartbeatEvents, HEARTBEAT_EVENTS } from "./scrapers/custom/live-heartbeat";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
@@ -283,6 +284,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Initialize and setup scrapers
   setupScrapers(storage);
+  
+  // Setup live heartbeat event listeners
+  heartbeatEvents.on(HEARTBEAT_EVENTS.STATUS_UPDATED, (data) => {
+    broadcast({
+      type: 'heartbeatEvent',
+      event: HEARTBEAT_EVENTS.STATUS_UPDATED,
+      data
+    });
+  });
+  
+  heartbeatEvents.on(HEARTBEAT_EVENTS.DATA_UPDATED, (data) => {
+    broadcast({
+      type: 'heartbeatEvent',
+      event: HEARTBEAT_EVENTS.DATA_UPDATED,
+      data
+    });
+  });
+  
+  heartbeatEvents.on(HEARTBEAT_EVENTS.ERROR, (data) => {
+    broadcast({
+      type: 'heartbeatEvent',
+      event: HEARTBEAT_EVENTS.ERROR,
+      data
+    });
+    
+    broadcast({
+      type: 'notification',
+      data: {
+        message: `Live heartbeat error: ${data.message}`,
+        status: 'error'
+      }
+    });
+  });
   
   // Setup live scraper event listeners
   liveScraperEvents.on(LIVE_SCRAPER_EVENTS.STARTED, (data) => {
@@ -637,6 +671,114 @@ export async function registerRoutes(app: Express): Promise<Server> {
         success: false, 
         message: 'Failed to check custom scraper', 
         error: error instanceof Error ? error.message : String(error) 
+      });
+    }
+  });
+
+  // Live Heartbeat Endpoints
+  app.get('/api/live-heartbeat/status', async (req, res) => {
+    try {
+      const status = getHeartbeatStatus();
+      res.json(status);
+    } catch (error) {
+      console.error('Error getting heartbeat status:', error);
+      res.status(500).json({ 
+        success: false, 
+        message: 'Failed to get heartbeat status',
+        error: error instanceof Error ? error.message : String(error)
+      });
+    }
+  });
+  
+  app.get('/api/live-heartbeat/data/:eventId', async (req, res) => {
+    try {
+      const { eventId } = req.params;
+      
+      if (!eventId) {
+        return res.status(400).json({
+          success: false,
+          message: 'Event ID is required'
+        });
+      }
+      
+      const marketHistory = getEventMarketHistory(eventId);
+      res.json(marketHistory);
+    } catch (error) {
+      console.error('Error getting heartbeat data:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to get heartbeat data',
+        error: error instanceof Error ? error.message : String(error)
+      });
+    }
+  });
+  
+  app.get('/api/live-heartbeat/history/:eventId', async (req, res) => {
+    try {
+      const { eventId } = req.params;
+      
+      if (!eventId) {
+        return res.status(400).json({
+          success: false,
+          message: 'Event ID is required'
+        });
+      }
+      
+      const marketHistory = getEventMarketHistory(eventId);
+      res.json(marketHistory);
+    } catch (error) {
+      console.error('Error getting heartbeat history:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to get heartbeat history',
+        error: error instanceof Error ? error.message : String(error)
+      });
+    }
+  });
+  
+  app.post('/api/live-heartbeat/start', simpleAdminAuth, async (req, res) => {
+    try {
+      const { apiUrl } = req.body;
+      
+      if (!apiUrl) {
+        return res.status(400).json({ 
+          success: false,
+          message: 'API URL is required'
+        });
+      }
+      
+      // Start the heartbeat tracker
+      startHeartbeatTracker(apiUrl, storage);
+      
+      res.json({
+        success: true,
+        message: 'Live heartbeat tracker started successfully'
+      });
+    } catch (error) {
+      console.error('Error starting heartbeat tracker:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to start heartbeat tracker',
+        error: error instanceof Error ? error.message : String(error)
+      });
+    }
+  });
+  
+  app.post('/api/live-heartbeat/stop', simpleAdminAuth, async (req, res) => {
+    try {
+      // Stop the heartbeat tracker
+      stopHeartbeatTracker();
+      
+      res.json({
+        success: true,
+        message: 'Live heartbeat tracker stopped successfully'
+      });
+    } catch (error) {
+      console.error('Error stopping heartbeat tracker:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to stop heartbeat tracker',
+        error: error instanceof Error ? error.message : String(error)
       });
     }
   });
