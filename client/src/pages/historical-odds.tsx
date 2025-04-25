@@ -50,10 +50,7 @@ export default function HistoricalOdds() {
   } = useQuery<Event[]>({ 
     queryKey: ['/api/events', 'past', countryFilter, tournamentFilter],
     queryFn: async () => {
-      // Calculate date 2 weeks ago
-      const twoWeeksAgo = new Date();
-      twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
-      
+      // We'll bypass date filtering for now since it's causing issues
       const params: Record<string, string> = { 
         past_only: 'true',
         minBookmakers: '3'
@@ -66,36 +63,31 @@ export default function HistoricalOdds() {
       console.log('Fetching past events with params:', params);
       const response = await axios.get('/api/events', { params });
       
-      // Filter events from last 2 weeks on the client side
-      // This is a backup in case server filtering doesn't work properly
-      let filteredData = response.data;
-      if (Array.isArray(filteredData)) {
-        filteredData = filteredData.filter(event => {
-          let eventDate: Date | null = null;
-          
-          // Try to parse the event date from various fields
-          if (event.startTime) {
-            eventDate = new Date(event.startTime);
-          } else if (event.start_time) {
-            eventDate = new Date(event.start_time);
-          } else if (event.date && event.time) {
-            eventDate = new Date(`${event.date} ${event.time}`);
-          }
-          
-          // Skip events that are too old (more than 2 weeks ago)
-          return !eventDate || eventDate >= twoWeeksAgo;
-        });
+      // For debugging: Log sample events
+      if (response.data.length > 0) {
+        console.log('Sample event:', response.data[0]);
+        
+        // Check if date fields are valid
+        if (response.data[0].date) {
+          console.log('Event date sample:', {
+            date: response.data[0].date,
+            time: response.data[0].time,
+            startTime: response.data[0].startTime,
+            startTimeFormatted: response.data[0].startTime ? new Date(response.data[0].startTime).toISOString() : 'N/A',
+            start_time: response.data[0].start_time,
+            start_time_formatted: response.data[0].start_time ? new Date(response.data[0].start_time).toISOString() : 'N/A'
+          });
+        }
       }
       
+      // Use all events for now
       console.log('Historical events response:', {
         count: response.data.length,
-        filteredCount: filteredData.length,
-        firstItem: filteredData.length > 0 ? filteredData[0] : null,
-        status: response.status,
-        twoWeeksAgo: twoWeeksAgo.toISOString()
+        firstItem: response.data.length > 0 ? response.data[0] : null,
+        status: response.status
       });
       
-      return filteredData;
+      return response.data;
     },
     refetchOnWindowFocus: false
   });

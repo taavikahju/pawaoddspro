@@ -40,9 +40,15 @@ export default function Dashboard() {
     queryKey: ['/api/events'],
     queryFn: async () => {
       // Add minBookmakers parameter to ensure we're getting events with sufficient bookmaker data
-      const response = await fetch('/api/events?minBookmakers=3&future_only=true');
+      const response = await fetch('/api/events?minBookmakers=3');
       const data = await response.json();
-      console.log(`Dashboard: Loaded ${data.length} future events`);
+      console.log(`Dashboard: Loaded ${data.length} events`);
+      
+      // Debug the first event if available
+      if (data.length > 0) {
+        console.log('Sample event:', data[0]);
+      }
+      
       return data;
     },
     refetchInterval: 60000, // Refresh every minute
