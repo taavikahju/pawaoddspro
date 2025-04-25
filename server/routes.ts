@@ -12,10 +12,143 @@ import { processAndMapEvents } from "./utils/dataMapper";
 import { setupAuth } from "./auth";
 import { isAuthenticated, isAdmin } from "./middleware/auth";
 import { simpleAdminAuth } from "./middleware/simpleAdminAuth";
+import session from "express-session";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Setup authentication
   setupAuth(app);
+  
+  // Add site access protection - the auth challenge endpoint
+  app.get('/auth-challenge', (req, res) => {
+    // If already authenticated, redirect to home
+    if (req.session?.siteAuthenticated) {
+      return res.redirect('/');
+    }
+
+    // Serve the auth challenge HTML page
+    res.send(`
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Access Protected</title>
+        <style>
+          body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+          }
+          .container {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+          }
+          h1 {
+            margin-top: 0;
+            color: #fff;
+            font-size: 24px;
+            text-align: center;
+          }
+          p {
+            margin-bottom: 20px;
+            color: #e1e1e1;
+            line-height: 1.5;
+          }
+          form {
+            display: flex;
+            flex-direction: column;
+          }
+          label {
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #e1e1e1;
+          }
+          input {
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            margin-bottom: 20px;
+            font-size: 16px;
+          }
+          input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(62, 142, 208, 0.5);
+          }
+          button {
+            padding: 14px;
+            background: linear-gradient(135deg, #3e8ed0, #4e54c8);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+          }
+          button:hover {
+            background: linear-gradient(135deg, #4e54c8, #3e8ed0);
+          }
+          .error {
+            background: rgba(220, 53, 69, 0.2);
+            color: #ff6b6b;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 14px;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h1>Access Protected</h1>
+          <p>This site is protected. Please answer the question below to continue:</p>
+          
+          ${req.query.error ? '<div class="error">Incorrect answer. Please try again.</div>' : ''}
+          
+          <form action="/api/verify-access" method="post">
+            <label for="answer">Who is the greatest football player of all time?</label>
+            <input type="text" id="answer" name="answer" required autocomplete="off" placeholder="Enter your answer...">
+            <button type="submit">Submit</button>
+          </form>
+        </div>
+      </body>
+      </html>
+    `);
+  });
+  
+  // API endpoint to verify the answer
+  app.post('/api/verify-access', (req, res) => {
+    const { answer } = req.body;
+    
+    // Check the answer (case-insensitive)
+    // The correct answer is Pele or Pelé or Messi or Lionel Messi
+    const correctAnswers = ['pele', 'pelé', 'messi', 'lionel messi'];
+    
+    if (answer && correctAnswers.includes(answer.trim().toLowerCase())) {
+      // Set the session as authenticated
+      req.session.siteAuthenticated = true;
+      
+      // Redirect to home page
+      return res.redirect('/');
+    }
+    
+    // Wrong answer, redirect back with error
+    res.redirect('/auth-challenge?error=true');
+  });
+  
   // Create HTTP server
   const httpServer = createServer(app);
   
