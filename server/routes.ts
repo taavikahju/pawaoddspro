@@ -460,23 +460,70 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Count events before filtering
       const beforeCount = filteredEvents.length;
       
-      // Temporary fix: Skip time-based filtering to see all events
-      // We have database time inconsistencies that need to be addressed
-      if (false && (pastOnly || futureOnly || afterDate)) {
+      // We need to apply time-based filtering again as requested by the user
+      if (pastOnly || futureOnly || afterDate) {
         const now = new Date();
-        console.log('Filtering with time based filter (DISABLED for debugging), current time:', now.toISOString());
+        console.log('Filtering with time based filter, current time:', now.toISOString());
         
-        // Temporary - just show all events without time filtering
-        console.log('WARNING: Time filtering currently disabled to debug data issues');
-      } else {
-        // Apply country and tournament filters if provided
-        if (country || tournament) {
-          filteredEvents = filteredEvents.filter(event => {
-            const countryMatch = !country || event.country === country;
-            const tournamentMatch = !tournament || event.tournament === tournament;
-            return countryMatch && tournamentMatch;
-          });
+        // If afterDate is provided, parse it
+        let afterDateObj: Date | null = null;
+        if (afterDate) {
+          try {
+            afterDateObj = new Date(afterDate);
+            console.log(`Filtering events after: ${afterDateObj.toISOString()}`);
+          } catch (err) {
+            console.error('Invalid after_date parameter:', afterDate);
+          }
         }
+        
+        // Count events before filtering
+        const beforeCount = filteredEvents.length;
+        
+        filteredEvents = filteredEvents.filter(event => {
+          // Use any available time field to determine the event time
+          let eventTime: Date | null = null;
+          
+          // Try all possible date field combinations
+          if (event.startTime) {
+            eventTime = new Date(event.startTime);
+          } else if ((event as any).start_time) {
+            eventTime = new Date((event as any).start_time);
+          } else if (event.date && event.time) {
+            // Parse date+time string
+            try {
+              eventTime = new Date(`${event.date} ${event.time}`);
+            } catch (e) {
+              // If parsing fails, create a date object from parts
+              const dateParts = event.date.split('-').map(Number);
+              const timeParts = event.time.split(':').map(Number);
+              
+              if (dateParts.length === 3 && timeParts.length >= 2) {
+                eventTime = new Date(
+                  dateParts[0], 
+                  dateParts[1] - 1, // Month is 0-based in JS Date
+                  dateParts[2],
+                  timeParts[0],
+                  timeParts[1],
+                  timeParts.length > 2 ? timeParts[2] : 0
+                );
+              }
+            }
+          } 
+          
+          // If no valid time was determined, include the event by default
+          if (!eventTime) {
+            return true;
+          }
+          
+          // Apply time filter based on past/future selection
+          if (pastOnly) {
+            return eventTime < now;
+          } else if (futureOnly) {
+            return eventTime >= now;
+          }
+          
+          return true;
+        });
         
         // Count events after filtering
         const afterCount = filteredEvents.length;
@@ -485,16 +532,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Apply country filter
       if (country && country !== 'all') {
-        filteredEvents = filteredEvents.filter(event => 
-          event.country && event.country.toLowerCase() === country.toLowerCase()
-        );
+        filteredEvents = filteredEvents.filter(event => {
+          if (!event.country) return false;
+          // Normalize country names for comparison 
+          // Remove duplicate spaces, trim, and convert to lowercase
+          const normalizedEventCountry = event.country.toLowerCase().trim().replace(/\s+/g, ' ');
+          const normalizedFilterCountry = country.toLowerCase().trim().replace(/\s+/g, ' ');
+          return normalizedEventCountry === normalizedFilterCountry;
+        });
       }
       
       // Apply tournament filter
       if (tournament && tournament !== 'all') {
-        filteredEvents = filteredEvents.filter(event => 
-          event.tournament && event.tournament.toLowerCase() === tournament.toLowerCase()
-        );
+        filteredEvents = filteredEvents.filter(event => {
+          if (!event.tournament) return false;
+          // Normalize tournament names for comparison
+          const normalizedEventTournament = event.tournament.toLowerCase().trim().replace(/\s+/g, ' ');
+          const normalizedFilterTournament = tournament.toLowerCase().trim().replace(/\s+/g, ' ');
+          return normalizedEventTournament === normalizedFilterTournament;
+        });
       }
 
       console.log(`Filtered ${events.length} events down to ${filteredEvents.length} with at least ${minBookmakers} bookmakers and applied filters`);
