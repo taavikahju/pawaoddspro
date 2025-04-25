@@ -113,9 +113,9 @@
     "date": "2025-04-25",
     "time": "16:30",
     "odds": {
-      "home": 1.96,
-      "draw": 3.2,
-      "away": 3.55
+      "home": 1.92,
+      "draw": 3.25,
+      "away": 3.7
     },
     "raw": {
       "eventId": "51830339",
@@ -123,9 +123,9 @@
       "tournament": "Primera Federacion",
       "event": "Atletico Sanluqueno - CF Intercity",
       "market": "1X2 - FT",
-      "home_odds": "1.96",
-      "draw_odds": "3.2",
-      "away_odds": "3.55",
+      "home_odds": "1.92",
+      "draw_odds": "3.25",
+      "away_odds": "3.7",
       "start_time": "2025-04-25 18:30"
     }
   },
@@ -22109,9 +22109,9 @@
     "date": "2025-04-27",
     "time": "10:00",
     "odds": {
-      "home": 2.3,
+      "home": 2.4,
       "draw": 3.5,
-      "away": 2.65
+      "away": 2.5
     },
     "raw": {
       "eventId": "52122757",
@@ -22119,9 +22119,9 @@
       "tournament": "2. Lig",
       "event": "Ankaraspor - Beykoz Anadoluspor",
       "market": "1X2 - FT",
-      "home_odds": "2.3",
+      "home_odds": "2.4",
       "draw_odds": "3.5",
-      "away_odds": "2.65",
+      "away_odds": "2.5",
       "start_time": "2025-04-27 12:00"
     }
   },
@@ -24787,9 +24787,9 @@
     "date": "2025-04-27",
     "time": "12:30",
     "odds": {
-      "home": 3.65,
+      "home": 3.55,
       "draw": 3.15,
-      "away": 1.95
+      "away": 1.98
     },
     "raw": {
       "eventId": "51548255",
@@ -24797,9 +24797,9 @@
       "tournament": "Serie C, Group B",
       "event": "US Pianese - SS Arezzo",
       "market": "1X2 - FT",
-      "home_odds": "3.65",
+      "home_odds": "3.55",
       "draw_odds": "3.15",
-      "away_odds": "1.95",
+      "away_odds": "1.98",
       "start_time": "2025-04-27 14:30"
     }
   },
@@ -33566,6 +33566,110 @@
     }
   },
   {
+    "id": "51967103",
+    "eventId": "51967103",
+    "teams": "Grenoble Foot - ESTAC Troyes",
+    "league": "Ligue 2",
+    "sport": "football",
+    "country": "France",
+    "date": "2025-05-02",
+    "time": "16:00",
+    "odds": {
+      "home": 3,
+      "draw": 3.2,
+      "away": 2.4
+    },
+    "raw": {
+      "eventId": "51967103",
+      "country": "France",
+      "tournament": "Ligue 2",
+      "event": "Grenoble Foot - ESTAC Troyes",
+      "market": "1X2 - FT",
+      "home_odds": "3.0",
+      "draw_odds": "3.2",
+      "away_odds": "2.4",
+      "start_time": "2025-05-02 18:00"
+    }
+  },
+  {
+    "id": "50956909",
+    "eventId": "50956909",
+    "teams": "Clermont Foot 63 - FC Annecy",
+    "league": "Ligue 2",
+    "sport": "football",
+    "country": "France",
+    "date": "2025-05-02",
+    "time": "16:00",
+    "odds": {
+      "home": 2.3,
+      "draw": 3.3,
+      "away": 3.15
+    },
+    "raw": {
+      "eventId": "50956909",
+      "country": "France",
+      "tournament": "Ligue 2",
+      "event": "Clermont Foot 63 - FC Annecy",
+      "market": "1X2 - FT",
+      "home_odds": "2.3",
+      "draw_odds": "3.3",
+      "away_odds": "3.15",
+      "start_time": "2025-05-02 18:00"
+    }
+  },
+  {
+    "id": "50956913",
+    "eventId": "50956913",
+    "teams": "USL Dunkerque - Stade Lavallois MFC",
+    "league": "Ligue 2",
+    "sport": "football",
+    "country": "France",
+    "date": "2025-05-02",
+    "time": "16:00",
+    "odds": {
+      "home": 1.78,
+      "draw": 3.65,
+      "away": 4.4
+    },
+    "raw": {
+      "eventId": "50956913",
+      "country": "France",
+      "tournament": "Ligue 2",
+      "event": "USL Dunkerque - Stade Lavallois MFC",
+      "market": "1X2 - FT",
+      "home_odds": "1.78",
+      "draw_odds": "3.65",
+      "away_odds": "4.4",
+      "start_time": "2025-05-02 18:00"
+    }
+  },
+  {
+    "id": "50956907",
+    "eventId": "50956907",
+    "teams": "EA Guingamp - SC Bastia",
+    "league": "Ligue 2",
+    "sport": "football",
+    "country": "France",
+    "date": "2025-05-02",
+    "time": "16:00",
+    "odds": {
+      "home": 2.35,
+      "draw": 3.15,
+      "away": 3.15
+    },
+    "raw": {
+      "eventId": "50956907",
+      "country": "France",
+      "tournament": "Ligue 2",
+      "event": "EA Guingamp - SC Bastia",
+      "market": "1X2 - FT",
+      "home_odds": "2.35",
+      "draw_odds": "3.15",
+      "away_odds": "3.15",
+      "start_time": "2025-05-02 18:00"
+    }
+  },
+  {
     "id": "51269573",
     "eventId": "51269573",
     "teams": "1. FC Heidenheim - VfL Bochum",
@@ -36816,6 +36920,32 @@
     }
   },
   {
+    "id": "59010465",
+    "eventId": "59010465",
+    "teams": "Universidad de Chile - Estudiantes de La Plata",
+    "league": "Copa Libertadores",
+    "sport": "football",
+    "country": "International",
+    "date": "2025-05-07",
+    "time": "22:30",
+    "odds": {
+      "home": 2.45,
+      "draw": 3.15,
+      "away": 2.8
+    },
+    "raw": {
+      "eventId": "59010465",
+      "country": "International",
+      "tournament": "Copa Libertadores",
+      "event": "Universidad de Chile - Estudiantes de La Plata",
+      "market": "1X2 - FT",
+      "home_odds": "2.45",
+      "draw_odds": "3.15",
+      "away_odds": "2.8",
+      "start_time": "2025-05-08 00:30"
+    }
+  },
+  {
     "id": "59011615",
     "eventId": "59011615",
     "teams": "Sporting Cristal - Club Bolivar",
@@ -37307,32 +37437,6 @@
       "draw_odds": "3.3",
       "away_odds": "3.1",
       "start_time": "2025-06-06 08:00"
-    }
-  },
-  {
-    "id": "59576181",
-    "eventId": "59576181",
-    "teams": "Belarus - Russia",
-    "league": "Int. Friendly Games",
-    "sport": "football",
-    "country": "International",
-    "date": "2025-06-10",
-    "time": "06:00",
-    "odds": {
-      "home": 7.25,
-      "draw": 4.45,
-      "away": 1.43
-    },
-    "raw": {
-      "eventId": "59576181",
-      "country": "International",
-      "tournament": "Int. Friendly Games",
-      "event": "Belarus - Russia",
-      "market": "1X2 - FT",
-      "home_odds": "7.25",
-      "draw_odds": "4.45",
-      "away_odds": "1.43",
-      "start_time": "2025-06-10 08:00"
     }
   },
   {
