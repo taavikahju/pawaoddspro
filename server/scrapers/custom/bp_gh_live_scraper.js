@@ -15,10 +15,92 @@ const WRITE_INTERVAL = 60000; // Write to disk every minute
 /**
  * Scrape live events from BetPawa Ghana API
  */
+/**
+ * Scrape live events from BetPawa Ghana API with pagination support
+ */
 async function scrapeLiveEvents(apiUrl) {
   try {
     console.log('Scraping BetPawa Ghana live events...');
     
+    // Parse the current URL to get the query parameters
+    const url = new URL(apiUrl);
+    const queryParams = url.searchParams.get('q');
+    
+    // If no query params found, use the URL as-is
+    if (!queryParams) {
+      return await scrapePagedEvents(apiUrl);
+    }
+    
+    // Parse the query JSON to modify for pagination
+    let queryObj;
+    try {
+      queryObj = JSON.parse(queryParams);
+    } catch (err) {
+      console.error('Error parsing query parameters:', err);
+      return await scrapePagedEvents(apiUrl);
+    }
+    
+    // Get all pages of results
+    const allEvents = [];
+    let hasMoreResults = true;
+    let skip = 0;
+    const pageSize = 20;
+    
+    while (hasMoreResults) {
+      // Update the skip parameter in the query for pagination
+      if (queryObj.queries && queryObj.queries.length > 0) {
+        queryObj.queries[0].skip = skip;
+      }
+      
+      // Create the new URL with updated pagination
+      const updatedQueryParams = JSON.stringify(queryObj);
+      url.searchParams.set('q', updatedQueryParams);
+      const pagedUrl = url.toString();
+      
+      // Fetch the current page of results
+      console.log(`Fetching page ${skip / pageSize + 1} (skip=${skip})...`);
+      const pageEvents = await scrapePagedEvents(pagedUrl);
+      
+      if (pageEvents.length > 0) {
+        allEvents.push(...pageEvents);
+        // Move to the next page
+        skip += pageSize;
+      } else {
+        // No more results, stop pagination
+        hasMoreResults = false;
+      }
+      
+      // Limit to 5 pages maximum to avoid excessive requests
+      if (skip >= 100) {
+        hasMoreResults = false;
+      }
+    }
+    
+    const timestamp = new Date().toISOString();
+    
+    // Update market history for all events
+    updateMarketHistory(allEvents, timestamp);
+    
+    // Write to disk periodically to avoid excessive I/O
+    const currentTime = Date.now();
+    if (currentTime - lastWriteTime > WRITE_INTERVAL) {
+      await writeMarketHistoryToFile();
+      lastWriteTime = currentTime;
+    }
+    
+    console.log(`Fetched a total of ${allEvents.length} events across multiple pages`);
+    return allEvents;
+  } catch (error) {
+    console.error('Error scraping BetPawa Ghana live events:', error.message);
+    return [];
+  }
+}
+
+/**
+ * Fetch a single page of events from the API
+ */
+async function scrapePagedEvents(apiUrl) {
+  try {
     const response = await axios.get(apiUrl, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
@@ -32,20 +114,9 @@ async function scrapeLiveEvents(apiUrl) {
     
     const timestamp = new Date().toISOString();
     const events = extractEvents(response.data, timestamp);
-    
-    // Update market history
-    updateMarketHistory(events, timestamp);
-    
-    // Write to disk periodically to avoid excessive I/O
-    const currentTime = Date.now();
-    if (currentTime - lastWriteTime > WRITE_INTERVAL) {
-      await writeMarketHistoryToFile();
-      lastWriteTime = currentTime;
-    }
-    
     return events;
   } catch (error) {
-    console.error('Error scraping BetPawa Ghana live events:', error.message);
+    console.error('Error scraping page of BetPawa Ghana events:', error.message);
     return [];
   }
 }
@@ -57,35 +128,96 @@ function extractEvents(data, timestamp) {
   const events = [];
   
   try {
-    // Logic to extract events will depend on the actual API response structure
-    // This is a placeholder until we see the actual API structure
-    if (data.events) {
-      data.events.forEach(event => {
-        // Check if there's a 1X2 market (match result)
-        const market1X2 = event.markets?.find(m => 
-          m.type === '1X2' || m.id === '1' || m.name?.includes('Match Result')
-        );
+    // BetPawa Ghana API structure: data.queries[0].events
+    if (data?.queries?.[0]?.events) {
+      data.queries[0].events.forEach(event => {
+        // Event ID - using both siteEventId and id for compatibility
+        const eventId = event.siteEventId || event.id;
         
-        const isSuspended = market1X2?.suspended === true;
-        const hasOdds = market1X2?.outcomes && market1X2.outcomes.length >= 3;
+        // Get event name from competitors
+        let eventName = "Unknown Event";
+        if (event.competitors && event.competitors.length >= 2) {
+          eventName = `${event.competitors[0].name} v ${event.competitors[1].name}`;
+        } else if (event.name) {
+          eventName = event.name;
+        }
+        
+        // Get country and tournament info
+        const country = event.category?.name || 'Unknown';
+        const tournament = event.competition?.name || 'Unknown';
+        
+        // Check if there's a 1X2 market (Match Result - usually market type 3743)
+        let market1X2 = null;
+        let isSuspended = true;
+        let homeOdds = null;
+        let drawOdds = null;
+        let awayOdds = null;
+        
+        // Check for market in mainMarkets first
+        if (event.mainMarkets) {
+          market1X2 = event.mainMarkets.find(m => 
+            m.typeId === '3743' || m.type?.id === '3743' || m.name?.includes('1X2')
+          );
+        }
+        
+        // If not found, check in regular markets
+        if (!market1X2 && event.markets) {
+          market1X2 = event.markets.find(m => 
+            m.typeId === '3743' || m.type?.id === '3743' || m.name?.includes('1X2')
+          );
+        }
+        
+        // Extract market status and odds
+        if (market1X2) {
+          isSuspended = market1X2.suspended === true || market1X2.status === 'SUSPENDED';
+          
+          // Extract outcomes if available
+          if (market1X2.outcomes && market1X2.outcomes.length >= 3) {
+            // Sort by outcome type if available (1, X, 2)
+            const sortedOutcomes = [...market1X2.outcomes].sort((a, b) => {
+              // If type ids are available, use them
+              if (a.typeId && b.typeId) {
+                return a.typeId.localeCompare(b.typeId);
+              }
+              // Otherwise use the order as is
+              return 0;
+            });
+            
+            homeOdds = sortedOutcomes[0]?.decimal || sortedOutcomes[0]?.price;
+            drawOdds = sortedOutcomes[1]?.decimal || sortedOutcomes[1]?.price;
+            awayOdds = sortedOutcomes[2]?.decimal || sortedOutcomes[2]?.price;
+          }
+        }
+        
+        // Create score object if available
+        let score = null;
+        if (event.score) {
+          score = {
+            home: event.score.home || 0,
+            away: event.score.away || 0,
+            period: event.score.period || ''
+          };
+        }
         
         events.push({
-          id: event.id,
-          eventId: event.id,
-          name: event.name,
-          country: event.country || event.tournament?.country || 'Unknown',
-          tournament: event.tournament?.name || 'Unknown',
-          startTime: event.startTime || event.date,
-          isLive: event.isLive || event.inPlay || false,
-          score: event.score || null,
-          market1X2Available: !isSuspended && hasOdds,
-          homeOdds: hasOdds ? market1X2.outcomes[0]?.price : null,
-          drawOdds: hasOdds ? market1X2.outcomes[1]?.price : null,
-          awayOdds: hasOdds ? market1X2.outcomes[2]?.price : null,
+          id: eventId,
+          eventId: eventId,
+          name: eventName,
+          country: country,
+          tournament: tournament,
+          startTime: event.startTime || event.startDate,
+          isLive: true, // These are all live events from the API
+          score: score,
+          market1X2Available: !isSuspended && homeOdds && drawOdds && awayOdds,
+          homeOdds: homeOdds,
+          drawOdds: drawOdds,
+          awayOdds: awayOdds,
           timestamp: timestamp
         });
       });
     }
+    
+    console.log(`Extracted ${events.length} events from API response`);
   } catch (err) {
     console.error('Error extracting events:', err.message);
   }

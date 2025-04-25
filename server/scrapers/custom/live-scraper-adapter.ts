@@ -1,124 +1,144 @@
 import { EventEmitter } from 'events';
-import * as fs from 'fs';
-import * as path from 'path';
+import { Request, Response, Application } from 'express';
+import { isAuthenticated, isAdmin } from '../../middleware/auth';
+import { createRequire } from 'module';
 
-// Define types for the imported modules
-interface LiveScraperScheduler {
-  liveScraperEvents: EventEmitter;
-  startLiveScraper: (apiUrl: string) => void;
-  stopLiveScraper: () => void;
-  getLiveScraperStatus: () => any;
-}
+// Create a require function
+const require = createRequire(import.meta.url);
 
-interface BpGhLiveScraper {
-  scrapeLiveEvents: (apiUrl: string) => Promise<any[]>;
-  getMarketAvailabilityStats: () => any;
-}
+// Use require to import the CommonJS module
+const { scrapeLiveEvents, getMarketAvailabilityStats } = require('./bp_gh_live_scraper');
 
-// We'll load these dynamically
-let liveScraperScheduler: LiveScraperScheduler;
-let bpGhLiveScraper: BpGhLiveScraper;
+// Event emitter for live scraper events
+export const liveScraperEvents = new EventEmitter();
 
-// Function to dynamically load the modules
-async function loadModules() {
-  // Check if the files exist
-  const schedulerPath = path.join(process.cwd(), 'server', 'scrapers', 'custom', 'live_scraper_scheduler.js');
-  const scraperPath = path.join(process.cwd(), 'server', 'scrapers', 'custom', 'bp_gh_live_scraper.js');
-  
-  if (!fs.existsSync(schedulerPath)) {
-    throw new Error(`Scheduler module not found at: ${schedulerPath}`);
-  }
-  
-  if (!fs.existsSync(scraperPath)) {
-    throw new Error(`Live scraper module not found at: ${scraperPath}`);
-  }
-  
-  // Use dynamic import for ESM compatibility
-  const schedulerModule = await import(schedulerPath);
-  const scraperModule = await import(scraperPath);
-  
-  liveScraperScheduler = schedulerModule.default || schedulerModule;
-  bpGhLiveScraper = scraperModule.default || scraperModule;
-}
-
-// Initialize the modules
-loadModules().catch(err => {
-  console.error('Error loading live scraper modules:', err);
-});
-
-// Re-export the constants
+// Event types
 export const LIVE_SCRAPER_EVENTS = {
-  STARTED: 'live-scraper:started',
-  COMPLETED: 'live-scraper:completed',
-  ERROR: 'live-scraper:error',
-  MARKET_CHANGE: 'live-scraper:market-change',
+  STARTED: 'live_scraper_started',
+  STOPPED: 'live_scraper_stopped',
+  DATA_UPDATED: 'live_scraper_data_updated',
+  COMPLETED: 'live_scraper_completed', // For compatibility with routes.ts
+  MARKET_CHANGE: 'live_scraper_market_change', // For compatibility with routes.ts
+  ERROR: 'live_scraper_error'
 };
 
-// Create a dummy event emitter to use until the real one is loaded
-const dummyEmitter = new EventEmitter();
+// Scraper state
+let isRunning = false;
+let apiUrl: string | null = null;
+let scraperInterval: NodeJS.Timeout | null = null;
+const SCRAPE_INTERVAL = 10000; // 10 seconds
 
-// Export the functions and objects with dynamic loading
-export const liveScraperEvents: EventEmitter = dummyEmitter;
+/**
+ * Start the live scraper
+ */
+export function startLiveScraper(url: string): void {
+  if (isRunning) {
+    return;
+  }
+  
+  apiUrl = url;
+  isRunning = true;
+  
+  // Run immediately
+  runScraper();
+  
+  // Schedule recurring runs
+  scraperInterval = setInterval(runScraper, SCRAPE_INTERVAL);
+  
+  liveScraperEvents.emit(LIVE_SCRAPER_EVENTS.STARTED, {
+    timestamp: new Date().toISOString(),
+    message: 'BetPawa Ghana live scraper started'
+  });
+  
+  console.log('BetPawa Ghana live scraper started');
+}
 
-export async function startLiveScraper(apiUrl: string): Promise<void> {
+/**
+ * Run a single scraper cycle
+ */
+async function runScraper(): Promise<void> {
   try {
-    await loadModules();
-    return liveScraperScheduler.startLiveScraper(apiUrl);
+    if (!apiUrl) {
+      throw new Error('No API URL configured');
+    }
+    
+    console.log('Running BetPawa Ghana live scraper...');
+    const events = await scrapeLiveEvents(apiUrl);
+    
+    liveScraperEvents.emit(LIVE_SCRAPER_EVENTS.DATA_UPDATED, {
+      timestamp: new Date().toISOString(),
+      eventCount: events.length,
+      message: `Scraped ${events.length} live events`,
+      stats: getMarketAvailabilityStats()
+    });
   } catch (error) {
-    console.error('Error starting live scraper:', error);
-    throw error;
+    console.error('Error in BetPawa Ghana live scraper:', error);
+    
+    liveScraperEvents.emit(LIVE_SCRAPER_EVENTS.ERROR, {
+      timestamp: new Date().toISOString(),
+      error: error instanceof Error ? error.message : 'Unknown error',
+      message: 'Error in BetPawa Ghana live scraper'
+    });
   }
 }
 
-export async function stopLiveScraper(): Promise<void> {
-  try {
-    await loadModules();
-    return liveScraperScheduler.stopLiveScraper();
-  } catch (error) {
-    console.error('Error stopping live scraper:', error);
-    throw error;
+/**
+ * Stop the live scraper
+ */
+export function stopLiveScraper(): void {
+  if (!isRunning) {
+    return;
   }
+  
+  if (scraperInterval) {
+    clearInterval(scraperInterval);
+    scraperInterval = null;
+  }
+  
+  isRunning = false;
+  
+  liveScraperEvents.emit(LIVE_SCRAPER_EVENTS.STOPPED, {
+    timestamp: new Date().toISOString(),
+    message: 'BetPawa Ghana live scraper stopped'
+  });
+  
+  console.log('BetPawa Ghana live scraper stopped');
 }
 
-export async function getLiveScraperStatus(): Promise<any> {
-  try {
-    await loadModules();
-    return liveScraperScheduler.getLiveScraperStatus();
-  } catch (error) {
-    console.error('Error getting live scraper status:', error);
-    return {
-      isRunning: false,
-      marketStats: {
-        totalEvents: 0,
-        availableMarkets: 0,
-        suspendedMarkets: 0,
-        eventDetails: []
-      }
-    };
-  }
+/**
+ * Get the current status of the live scraper
+ */
+export function getLiveScraperStatus() {
+  return {
+    isRunning,
+    marketStats: getMarketAvailabilityStats()
+  };
 }
 
-export async function scrapeLiveEvents(apiUrl: string): Promise<any[]> {
-  try {
-    await loadModules();
-    return bpGhLiveScraper.scrapeLiveEvents(apiUrl);
-  } catch (error) {
-    console.error('Error scraping live events:', error);
-    return [];
-  }
-}
-
-export async function getMarketAvailabilityStats(): Promise<any> {
-  try {
-    await loadModules();
-    return bpGhLiveScraper.getMarketAvailabilityStats();
-  } catch (error) {
-    console.error('Error getting market availability stats:', error);
-    return {
-      totalEvents: 0,
-      availableMarkets: 0,
-      suspendedMarkets: 0,
-      eventDetails: []
-    };
-  }
+/**
+ * Register live scraper API routes
+ */
+export function registerLiveScraperRoutes(app: Application): void {
+  // Get live scraper status
+  app.get('/api/live-scraper/status', (req: Request, res: Response) => {
+    res.json(getLiveScraperStatus());
+  });
+  
+  // Start live scraper (admin only)
+  app.post('/api/live-scraper/start', isAuthenticated, isAdmin, (req: Request, res: Response) => {
+    const { apiUrl } = req.body;
+    
+    if (!apiUrl) {
+      return res.status(400).json({ error: 'API URL is required' });
+    }
+    
+    startLiveScraper(apiUrl);
+    res.json({ success: true, message: 'Live scraper started' });
+  });
+  
+  // Stop live scraper (admin only)
+  app.post('/api/live-scraper/stop', isAuthenticated, isAdmin, (req: Request, res: Response) => {
+    stopLiveScraper();
+    res.json({ success: true, message: 'Live scraper stopped' });
+  });
 }

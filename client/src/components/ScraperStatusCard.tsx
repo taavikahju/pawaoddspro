@@ -9,7 +9,7 @@ interface ScraperStatusCardProps {
   lastRun: string;
   nextRun: string;
   eventCount: number;
-  fileSize: string;
+  fileSize: string | number;
   className?: string;
 }
 

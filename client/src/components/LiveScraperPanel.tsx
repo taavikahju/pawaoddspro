@@ -1,303 +1,371 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
-import { CheckCircle, AlertCircle, Clock, BarChart2 } from "lucide-react";
-import { Loader2 } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { apiRequest } from '@/lib/queryClient';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { useToast } from '@/hooks/use-toast';
+import { Play, Pause, RefreshCw, Check, X, Activity, Clock, Lightbulb } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
+import { Progress } from '@/components/ui/progress';
 
-interface LiveScraperStatusProps {
-  isAdmin: boolean;
+interface LiveScraperEvent {
+  id: string;
+  name: string;
+  country: string;
+  tournament: string;
+  marketAvailability: string;
+  currentlyAvailable: boolean;
+  recordCount: number;
+}
+
+interface LiveScraperStats {
+  totalEvents: number;
+  availableMarkets: number;
+  suspendedMarkets: number;
+  eventDetails: LiveScraperEvent[];
 }
 
 interface LiveScraperStatus {
   isRunning: boolean;
-  marketStats: {
-    totalEvents: number;
-    availableMarkets: number;
-    suspendedMarkets: number;
-    eventDetails: Array<{
-      id: string;
-      name: string;
-      country: string;
-      tournament: string;
-      marketAvailability: string;
-      currentlyAvailable: boolean;
-      recordCount: number;
-    }>;
-  };
+  marketStats: LiveScraperStats;
 }
 
-const LiveScraperPanel: React.FC<LiveScraperStatusProps> = ({ isAdmin }) => {
-  const { toast } = useToast();
-  const [status, setStatus] = useState<LiveScraperStatus | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isStarting, setIsStarting] = useState(false);
-  const [isStopping, setIsStopping] = useState(false);
-  const [apiUrl, setApiUrl] = useState('');
+interface LiveScraperPanelProps {
+  isAdmin: boolean;
+}
 
-  const fetchStatus = async () => {
-    try {
-      setIsLoading(true);
-      const response = await axios.get('/api/live-scraper/status');
-      setStatus(response.data);
-    } catch (error) {
-      console.error('Error fetching live scraper status:', error);
+export default function LiveScraperPanel({ isAdmin }: LiveScraperPanelProps) {
+  const [apiUrl, setApiUrl] = useState<string>('');
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+  
+  // Fetch the current status of the live scraper
+  const { 
+    data: status, 
+    isLoading, 
+    error,
+    refetch 
+  } = useQuery<LiveScraperStatus>({
+    queryKey: ['/api/live-scraper/status'],
+    refetchInterval: 10000, // Refresh every 10 seconds
+  });
+
+  // Start the live scraper
+  const startScraperMutation = useMutation({
+    mutationFn: async (url: string) => {
+      const res = await apiRequest('POST', '/api/live-scraper/start', { apiUrl: url });
+      return await res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/live-scraper/status'] });
       toast({
-        title: 'Error',
-        description: 'Failed to fetch live scraper status',
+        title: 'Live Scraper Started',
+        description: 'BetPawa Ghana live scraper is now running every 10 seconds',
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: 'Failed to Start Scraper',
+        description: error.message || 'An error occurred',
         variant: 'destructive',
       });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    },
+  });
 
-  const startScraper = async () => {
-    if (!apiUrl) {
+  // Stop the live scraper
+  const stopScraperMutation = useMutation({
+    mutationFn: async () => {
+      const res = await apiRequest('POST', '/api/live-scraper/stop');
+      return await res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/live-scraper/status'] });
       toast({
-        title: 'Error',
-        description: 'API URL is required',
+        title: 'Live Scraper Stopped',
+        description: 'BetPawa Ghana live scraper has been stopped',
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: 'Failed to Stop Scraper',
+        description: error.message || 'An error occurred',
+        variant: 'destructive',
+      });
+    },
+  });
+
+  // Handle the start scraper button click
+  const handleStartScraper = () => {
+    if (!apiUrl.trim()) {
+      toast({
+        title: 'API URL Required',
+        description: 'Please enter the BetPawa Ghana API URL',
         variant: 'destructive',
       });
       return;
     }
-
-    try {
-      setIsStarting(true);
-      const adminKey = localStorage.getItem('adminKey');
-      const response = await axios.post('/api/live-scraper/start', 
-        { apiUrl },
-        { headers: { 'x-admin-key': adminKey } }
-      );
-      
-      toast({
-        title: 'Success',
-        description: 'BetPawa Ghana live scraper started',
-        variant: 'default',
-      });
-      
-      // Fetch updated status
-      fetchStatus();
-    } catch (error) {
-      console.error('Error starting live scraper:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to start live scraper',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsStarting(false);
-    }
-  };
-
-  const stopScraper = async () => {
-    try {
-      setIsStopping(true);
-      const adminKey = localStorage.getItem('adminKey');
-      const response = await axios.post('/api/live-scraper/stop', 
-        {},
-        { headers: { 'x-admin-key': adminKey } }
-      );
-      
-      toast({
-        title: 'Success',
-        description: 'BetPawa Ghana live scraper stopped',
-        variant: 'default',
-      });
-      
-      // Fetch updated status
-      fetchStatus();
-    } catch (error) {
-      console.error('Error stopping live scraper:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to stop live scraper',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsStopping(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchStatus();
     
-    // Refresh status every 30 seconds
-    const interval = setInterval(fetchStatus, 30000);
-    return () => clearInterval(interval);
-  }, []);
+    startScraperMutation.mutate(apiUrl);
+  };
 
-  if (isLoading && !status) {
+  // Handle the stop scraper button click
+  const handleStopScraper = () => {
+    stopScraperMutation.mutate();
+  };
+
+  // Effects to check status periodically
+  useEffect(() => {
+    // If there's an error in the API status, show a toast
+    if (error) {
+      toast({
+        title: 'Error Fetching Scraper Status',
+        description: (error as Error).message || 'An unknown error occurred',
+        variant: 'destructive',
+      });
+    }
+  }, [error, toast]);
+
+  if (isLoading) {
     return (
       <Card className="w-full">
-        <CardHeader>
-          <CardTitle>BetPawa Ghana Live Scraper</CardTitle>
-          <CardDescription>
-            Tracks market availability every 10 seconds
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="flex justify-center items-center p-6">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <CardContent className="flex items-center justify-center h-48">
+          <div className="flex flex-col items-center">
+            <RefreshCw className="h-8 w-8 animate-spin text-primary mb-2" />
+            <p className="text-sm text-muted-foreground">Loading live scraper status...</p>
+          </div>
         </CardContent>
       </Card>
     );
   }
 
   return (
-    <Card className="w-full">
-      <CardHeader>
+    <Card className="w-full overflow-hidden border-t-4 border-t-primary">
+      <CardHeader className="bg-slate-50 dark:bg-slate-900/40 pb-3">
         <div className="flex justify-between items-center">
           <div>
-            <CardTitle>BetPawa Ghana Live Scraper</CardTitle>
+            <CardTitle className="flex items-center text-lg">
+              <Activity className="h-5 w-5 mr-2 text-primary" />
+              BetPawa Ghana Live Market Tracker
+            </CardTitle>
             <CardDescription>
-              Tracks market availability every 10 seconds
+              Monitors market availability during live events every 10 seconds
             </CardDescription>
           </div>
-          {status && (
-            <Badge
-              variant={status.isRunning ? "default" : "outline"}
-              className={status.isRunning ? "bg-green-600 hover:bg-green-700" : ""}
-            >
-              {status.isRunning ? (
-                <>
-                  <Clock className="h-3 w-3 mr-1" />
-                  Running
-                </>
-              ) : (
-                <>
-                  <AlertCircle className="h-3 w-3 mr-1" />
-                  Stopped
-                </>
-              )}
-            </Badge>
-          )}
+          <Badge 
+            variant={status?.isRunning ? "default" : "secondary"}
+            className={`text-xs flex items-center gap-1 ${status?.isRunning ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300" : ""}`}
+          >
+            {status?.isRunning ? (
+              <>
+                <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
+                Running
+              </>
+            ) : (
+              <>Stopped</>
+            )}
+          </Badge>
         </div>
       </CardHeader>
-      <CardContent>
-        {status && (
-          <>
-            <div className="grid grid-cols-3 gap-4 mb-4">
-              <div className="bg-muted rounded-lg p-3 text-center">
-                <div className="text-2xl font-bold">{status.marketStats.totalEvents}</div>
-                <div className="text-sm">Total Events</div>
-              </div>
-              <div className="bg-muted rounded-lg p-3 text-center">
-                <div className="text-2xl font-bold text-green-600">{status.marketStats.availableMarkets}</div>
-                <div className="text-sm">Available Markets</div>
-              </div>
-              <div className="bg-muted rounded-lg p-3 text-center">
-                <div className="text-2xl font-bold text-orange-600">{status.marketStats.suspendedMarkets}</div>
-                <div className="text-sm">Suspended Markets</div>
-              </div>
+      
+      <CardContent className="pt-4">
+        {/* Admin Controls */}
+        {isAdmin && (
+          <div className="mb-6 space-y-3 p-3 bg-slate-50 dark:bg-slate-900/40 rounded-md border border-dashed">
+            <div className="text-sm font-medium text-primary flex items-center mb-2">
+              <Lightbulb className="h-4 w-4 mr-1" /> Admin Controls
             </div>
             
-            {status.marketStats.eventDetails.length > 0 ? (
-              <div className="border rounded-md overflow-hidden">
-                <table className="w-full border-collapse">
-                  <thead>
-                    <tr className="bg-muted border-b">
-                      <th className="px-4 py-2 text-left text-xs font-medium">Event</th>
-                      <th className="px-4 py-2 text-left text-xs font-medium">Tournament</th>
-                      <th className="px-4 py-2 text-center text-xs font-medium">Status</th>
-                      <th className="px-4 py-2 text-center text-xs font-medium">Availability</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {status.marketStats.eventDetails.slice(0, 5).map((event) => (
-                      <tr key={event.id} className="border-b last:border-0">
-                        <td className="px-4 py-2 text-xs">{event.name}</td>
-                        <td className="px-4 py-2 text-xs">{event.tournament}</td>
-                        <td className="px-4 py-2 text-center">
-                          {event.currentlyAvailable ? (
-                            <span className="inline-flex items-center rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-700">
-                              <CheckCircle className="h-3 w-3 mr-1" />
-                              Available
-                            </span>
-                          ) : (
-                            <span className="inline-flex items-center rounded-full bg-orange-100 px-2 py-1 text-xs font-medium text-orange-700">
-                              <AlertCircle className="h-3 w-3 mr-1" />
-                              Suspended
-                            </span>
-                          )}
-                        </td>
-                        <td className="px-4 py-2 text-center">
-                          <span className="inline-flex items-center rounded-full bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700">
-                            <BarChart2 className="h-3 w-3 mr-1" />
-                            {event.marketAvailability}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                {status.marketStats.eventDetails.length > 5 && (
-                  <div className="bg-muted text-center py-2 text-xs text-muted-foreground">
-                    + {status.marketStats.eventDetails.length - 5} more events
-                  </div>
-                )}
-              </div>
-            ) : (
-              <Alert className="mt-2">
-                <AlertCircle className="h-4 w-4" />
-                <AlertTitle>No Data</AlertTitle>
-                <AlertDescription>
-                  No live events have been tracked yet.
-                </AlertDescription>
-              </Alert>
-            )}
-          </>
-        )}
-
-        {isAdmin && (
-          <div className="mt-4">
-            <div className="flex gap-2 mb-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <Input
-                placeholder="BetPawa Ghana API URL"
+                placeholder="Enter BetPawa Ghana API URL"
                 value={apiUrl}
                 onChange={(e) => setApiUrl(e.target.value)}
-                disabled={isStarting || isStopping || status?.isRunning}
+                className="flex-1"
+                disabled={status?.isRunning || startScraperMutation.isPending}
+              />
+              
+              <div className="flex gap-2">
+                <Button
+                  size="sm"
+                  variant="default"
+                  onClick={handleStartScraper}
+                  disabled={status?.isRunning || startScraperMutation.isPending || !apiUrl.trim()}
+                  className="flex-shrink-0"
+                >
+                  {startScraperMutation.isPending ? (
+                    <RefreshCw className="h-4 w-4 mr-1 animate-spin" />
+                  ) : (
+                    <Play className="h-4 w-4 mr-1" />
+                  )}
+                  Start
+                </Button>
+                
+                <Button
+                  size="sm" 
+                  variant="outline"
+                  onClick={handleStopScraper}
+                  disabled={!status?.isRunning || stopScraperMutation.isPending}
+                  className="flex-shrink-0"
+                >
+                  {stopScraperMutation.isPending ? (
+                    <RefreshCw className="h-4 w-4 mr-1 animate-spin" />
+                  ) : (
+                    <Pause className="h-4 w-4 mr-1" />
+                  )}
+                  Stop
+                </Button>
+                
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => refetch()}
+                  className="flex-shrink-0"
+                >
+                  <RefreshCw className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+        
+        {/* Stats Overview */}
+        <div className="mb-6">
+          <h3 className="text-sm font-medium mb-3 flex items-center text-muted-foreground">
+            <Clock className="h-4 w-4 mr-1" />
+            Real-time Market Availability
+          </h3>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+            <Card className="bg-blue-50 dark:bg-blue-900/20 border-blue-100 dark:border-blue-800/50">
+              <CardContent className="p-3 flex items-center">
+                <div className="bg-blue-100 dark:bg-blue-800/30 p-2 rounded-full mr-3">
+                  <Activity className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                </div>
+                <div>
+                  <p className="text-xs text-blue-700 dark:text-blue-400">Total Events</p>
+                  <p className="text-xl font-bold text-blue-800 dark:text-blue-300">
+                    {status?.marketStats.totalEvents || 0}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-green-50 dark:bg-green-900/20 border-green-100 dark:border-green-800/50">
+              <CardContent className="p-3 flex items-center">
+                <div className="bg-green-100 dark:bg-green-800/30 p-2 rounded-full mr-3">
+                  <Check className="h-5 w-5 text-green-600 dark:text-green-400" />
+                </div>
+                <div>
+                  <p className="text-xs text-green-700 dark:text-green-400">Available Markets</p>
+                  <p className="text-xl font-bold text-green-800 dark:text-green-300">
+                    {status?.marketStats.availableMarkets || 0}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-red-50 dark:bg-red-900/20 border-red-100 dark:border-red-800/50">
+              <CardContent className="p-3 flex items-center">
+                <div className="bg-red-100 dark:bg-red-800/30 p-2 rounded-full mr-3">
+                  <X className="h-5 w-5 text-red-600 dark:text-red-400" />
+                </div>
+                <div>
+                  <p className="text-xs text-red-700 dark:text-red-400">Suspended Markets</p>
+                  <p className="text-xl font-bold text-red-800 dark:text-red-300">
+                    {status?.marketStats.suspendedMarkets || 0}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          
+          {/* Availability Bar */}
+          {status?.marketStats?.totalEvents > 0 && (
+            <div className="mb-2">
+              <div className="flex justify-between text-xs mb-1">
+                <span className="text-muted-foreground">Market Availability ({
+                  Math.round(((status?.marketStats?.availableMarkets || 0) / (status?.marketStats?.totalEvents || 1)) * 100)
+                }%)</span>
+                <span className="font-medium">
+                  {status?.marketStats?.availableMarkets || 0} / {status?.marketStats?.totalEvents || 0}
+                </span>
+              </div>
+              <Progress 
+                value={((status?.marketStats?.availableMarkets || 0) / (status?.marketStats?.totalEvents || 1)) * 100} 
+                className="h-2"
               />
             </div>
-            <div className="flex gap-2">
-              <Button
-                onClick={startScraper}
-                disabled={isStarting || isStopping || status?.isRunning || !apiUrl}
-                className="flex-1"
-              >
-                {isStarting ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Starting...
-                  </>
-                ) : (
-                  'Start Live Scraper'
-                )}
-              </Button>
-              <Button
-                onClick={stopScraper}
-                disabled={isStarting || isStopping || !status?.isRunning}
-                variant="outline"
-                className="flex-1"
-              >
-                {isStopping ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Stopping...
-                  </>
-                ) : (
-                  'Stop Live Scraper'
-                )}
-              </Button>
-            </div>
+          )}
+        </div>
+        
+        {/* Events Table */}
+        {status?.marketStats?.eventDetails && status?.marketStats?.eventDetails.length > 0 ? (
+          <div className="border rounded-md overflow-hidden">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-slate-50 dark:bg-slate-900/40">
+                  <TableHead className="w-[40%]">Event</TableHead>
+                  <TableHead className="w-[20%]">Tournament</TableHead>
+                  <TableHead className="w-[15%]">Availability</TableHead>
+                  <TableHead className="w-[15%]">Status</TableHead>
+                  <TableHead className="w-[10%] text-right">History</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {status?.marketStats?.eventDetails?.map((event) => (
+                  <TableRow key={event.id} className="hover:bg-slate-50 dark:hover:bg-slate-900/20">
+                    <TableCell className="font-medium truncate max-w-[200px]">{event.name}</TableCell>
+                    <TableCell>
+                      <span className="text-xs text-muted-foreground block">{event.country}</span>
+                      {event.tournament}
+                    </TableCell>
+                    <TableCell>{event.marketAvailability}</TableCell>
+                    <TableCell>
+                      {event.currentlyAvailable ? (
+                        <Badge variant="outline" className="bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400 border-green-200 dark:border-green-800/50">
+                          Available
+                        </Badge>
+                      ) : (
+                        <Badge variant="outline" className="bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-400 border-red-200 dark:border-red-800/50">
+                          Suspended
+                        </Badge>
+                      )}
+                    </TableCell>
+                    <TableCell className="text-right">{event.recordCount}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        ) : status?.isRunning ? (
+          <div className="text-center py-8 text-muted-foreground">
+            <Activity className="h-10 w-10 mx-auto mb-3 text-primary/40" />
+            <p className="text-sm">Waiting for live events data...</p>
+            <p className="text-xs mt-1">The scraper will collect market data on the next run.</p>
+          </div>
+        ) : (
+          <div className="text-center py-8 text-muted-foreground">
+            <Pause className="h-10 w-10 mx-auto mb-3 text-muted-foreground/40" />
+            <p className="text-sm">Live scraper is not running</p>
+            <p className="text-xs mt-1">Start the scraper to monitor market availability.</p>
           </div>
         )}
       </CardContent>
+      
+      <CardFooter className="border-t bg-slate-50 dark:bg-slate-900/40 py-2 px-4 text-xs text-muted-foreground">
+        <div className="flex items-center justify-between w-full">
+          <span>
+            {status?.isRunning ? 'Updated every 10 seconds' : 'Scraper stopped'}
+          </span>
+          <span className="flex items-center">
+            <Clock className="h-3 w-3 mr-1" />
+            {new Date().toLocaleTimeString()}
+          </span>
+        </div>
+      </CardFooter>
     </Card>
   );
-};
-
-export default LiveScraperPanel;
+}
