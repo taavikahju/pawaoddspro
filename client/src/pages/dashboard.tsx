@@ -73,10 +73,24 @@ export default function Dashboard() {
       // First pass: collect all countries and normalize them
       events.forEach((event: any) => {
         if (event.country) {
-          // Normalize the country name (trim, lowercase, remove extra spaces)
-          const normalizedCountry = event.country.toLowerCase().trim().replace(/\s+/g, ' ');
-          // Use the original casing but keep only one instance of each normalized country
-          countryMap.set(normalizedCountry, event.country);
+          // First normalize the country name (trim, lowercase, remove extra spaces)
+          let normalizedCountry = event.country.toLowerCase().trim().replace(/\s+/g, ' ');
+          
+          // Fix duplicated country names like "England England"
+          const parts = normalizedCountry.split(' ');
+          if (parts.length > 1 && parts[0] === parts[1]) {
+            normalizedCountry = parts[0]; // Keep just one occurrence
+            console.log(`Fixed duplicated country: "${event.country}" -> "${normalizedCountry}"`);
+          }
+          
+          // Create a properly capitalized version of the country name
+          const properCountry = normalizedCountry
+            .split(' ')
+            .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
+          
+          // Use the proper casing and keep only one instance of each normalized country
+          countryMap.set(normalizedCountry, properCountry);
         }
       });
       
@@ -156,10 +170,21 @@ export default function Dashboard() {
         if (!event.country) return false;
         
         // Normalize for comparison
-        const normalizedCountry = event.country.toLowerCase().trim().replace(/\s+/g, ' ');
+        let normalizedCountry = event.country.toLowerCase().trim().replace(/\s+/g, ' ');
         const normalizedFilter = countryFilter.toLowerCase().trim().replace(/\s+/g, ' ');
         
-        if (normalizedCountry !== normalizedFilter) return false;
+        // Fix duplicated country names for filtering too
+        const countryParts = normalizedCountry.split(' ');
+        if (countryParts.length > 1 && countryParts[0] === countryParts[1]) {
+          normalizedCountry = countryParts[0];
+        }
+        
+        // Check both the normalized country and if it contains the filter string
+        if (normalizedCountry !== normalizedFilter && 
+            !normalizedCountry.includes(normalizedFilter) && 
+            !normalizedFilter.includes(normalizedCountry)) {
+          return false;
+        }
       }
       
       // Filter by tournament only if country is selected
@@ -201,17 +226,33 @@ export default function Dashboard() {
       return true;
     });
     
-    // Then sort by date and time (in ascending order)
-    return filtered.sort((a, b) => {
-      // First sort by date
-      const dateComparison = a.date.localeCompare(b.date);
-      if (dateComparison !== 0) {
-        return dateComparison;
+    // Fix any date issues before sorting
+  filtered.forEach(event => {
+    // Check if startTime exists but year is 2023 (should be 2025) 
+    if (event.startTime) {
+      const startDate = new Date(event.startTime);
+      if (startDate.getFullYear() === 2023) {
+        // Create corrected date
+        const correctedDate = new Date(startDate);
+        correctedDate.setFullYear(2025);
+        console.log(`Client-side date correction: Event ${event.id} from ${startDate.toISOString()} to ${correctedDate.toISOString()}`);
+        // Update the event in place
+        event.startTime = correctedDate.toISOString();
       }
-      
-      // If dates are the same, sort by time
-      return a.time.localeCompare(b.time);
-    });
+    }
+  });
+
+  // Then sort by date and time (in ascending order)
+  return filtered.sort((a, b) => {
+    // First sort by date
+    const dateComparison = a.date.localeCompare(b.date);
+    if (dateComparison !== 0) {
+      return dateComparison;
+    }
+    
+    // If dates are the same, sort by time
+    return a.time.localeCompare(b.time);
+  });
   }, [events, selectedSports, selectedBookmakers, countryFilter, tournamentFilter, minMarginFilter, maxMarginFilter]);
   
   // Get sport name by ID
