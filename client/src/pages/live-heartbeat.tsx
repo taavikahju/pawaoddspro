@@ -238,22 +238,24 @@ export default function LiveHeartbeat() {
                           }`}
                           onClick={() => setSelectedEventId(event.id)}
                         >
-                          <div className="flex items-center justify-between mb-1">
-                            <div className="flex items-center gap-1.5">
-                              {event.isInPlay && (
-                                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" 
-                                  title="Live event" />
-                              )}
-                              <span className="font-medium text-sm truncate max-w-[70%]">
-                                {event.name}
-                              </span>
+                          <div className="flex flex-col mb-1">
+                            <div className="flex items-center justify-between mb-1">
+                              <div className="flex items-center gap-1.5">
+                                {event.isInPlay && (
+                                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" 
+                                    title="Live event" />
+                                )}
+                                <Badge 
+                                  variant={event.currentlyAvailable ? 'outline' : 'destructive'}
+                                  className="text-[10px] h-5 ml-1"
+                                >
+                                  {event.currentlyAvailable ? 'Available' : 'Suspended'}
+                                </Badge>
+                              </div>
                             </div>
-                            <Badge 
-                              variant={event.currentlyAvailable ? 'outline' : 'destructive'}
-                              className="text-[10px] h-5"
-                            >
-                              {event.currentlyAvailable ? 'Available' : 'Suspended'}
-                            </Badge>
+                            <div className="font-medium text-sm w-full" style={{wordWrap: 'break-word'}}>
+                              {event.name}
+                            </div>
                           </div>
                           <div className="flex items-center justify-between text-xs text-muted-foreground">
                             <span>{event.tournament}</span>

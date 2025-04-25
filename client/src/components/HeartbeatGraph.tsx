@@ -135,8 +135,8 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     const maxGameMinute = 90; // Football matches are typically 90 minutes
     const pixelsPerMinute = width / maxGameMinute;
     
-    // Setup heartbeat line style
-    ctx.lineWidth = 2;
+    // Setup heartbeat line style with thicker line
+    ctx.lineWidth = 3; // Increased thickness for better visibility
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     
@@ -215,37 +215,46 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
       let y;
       
       if (isActive) {
-        // Create ECG pattern with clear spikes as shown in the reference image
+        // Create ECG pattern with VERY PRONOUNCED SPIKES as shown in the reference image
         // Calculate spike pattern based on x position
-        const cycleLength = 80; // Length of one complete heartbeat cycle in pixels
+        const cycleLength = 100; // Length of one complete heartbeat cycle in pixels
         const positionInCycle = x % cycleLength;
         
-        // Create a realistic ECG pattern with distinct spikes
-        if (positionInCycle < 10) {
-          // Small initial bump
-          y = height / 2 - Math.sin((positionInCycle / 10) * Math.PI) * 5;
+        // Create a realistic ECG pattern with LARGE distinct spikes
+        if (positionInCycle < 5) {
+          // Baseline
+          y = height / 2;
+        } else if (positionInCycle < 10) {
+          // Initial P wave (small bump)
+          y = height / 2 - Math.sin(((positionInCycle - 5) / 5) * Math.PI) * 8;
         } else if (positionInCycle < 15) {
-          // Sharp downward spike
-          y = height / 2 + (positionInCycle - 10) * 3;
+          // Baseline before QRS complex
+          y = height / 2;
+        } else if (positionInCycle < 18) {
+          // Q wave (small dip)
+          y = height / 2 + ((positionInCycle - 15) / 3) * 15;
         } else if (positionInCycle < 20) {
-          // Sharp upward spike (main R wave)
-          y = height / 2 + 15 - ((positionInCycle - 15) / 5) * 35;
+          // R wave (MAJOR SPIKE UP - very large)
+          y = height / 2 + 15 - ((positionInCycle - 18) / 2) * 60;
+        } else if (positionInCycle < 23) {
+          // Return from R spike
+          y = height / 2 - 45 + ((positionInCycle - 20) / 3) * 50;
         } else if (positionInCycle < 25) {
-          // Return from spike
-          y = height / 2 - 20 + ((positionInCycle - 20) / 5) * 20;
-        } else if (positionInCycle < 35) {
-          // Small S wave
-          y = height / 2 + Math.sin(((positionInCycle - 25) / 10) * Math.PI) * 5;
-        } else if (positionInCycle < 50) {
-          // T wave (smaller hump)
-          y = height / 2 - Math.sin(((positionInCycle - 35) / 15) * Math.PI) * 10;
+          // S wave (dip down)
+          y = height / 2 + 5 + ((positionInCycle - 23) / 2) * 10;
+        } else if (positionInCycle < 30) {
+          // Return to baseline
+          y = height / 2 + 15 - ((positionInCycle - 25) / 5) * 15;
+        } else if (positionInCycle < 45) {
+          // ST segment (flat)
+          y = height / 2;
+        } else if (positionInCycle < 55) {
+          // T wave (medium hump)
+          y = height / 2 - Math.sin(((positionInCycle - 45) / 10) * Math.PI) * 15;
         } else {
-          // Baseline with small variations
-          y = height / 2 + Math.sin(positionInCycle / 5) * 2;
+          // Baseline until next beat
+          y = height / 2;
         }
-        
-        // Add small random variation for natural look
-        y += (Math.random() - 0.5) * 2;
       } else {
         // Inactive market - flat line at 3/4 of height (bottom area)
         y = (height * 3) / 4;
