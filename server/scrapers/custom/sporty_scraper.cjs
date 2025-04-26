@@ -228,6 +228,10 @@ const processEndpoint = async (endpoint, endpointIndex) => {
   }
 };
 
+// Shared variables to store partial results
+let highPriorityResults = [];
+let fetchedSources = [];
+
 // Prioritized data collection with resilience
 const fetchFromAllEndpoints = async () => {
   console.error(`📊 Starting Sportybet data collection from ${ALL_ENDPOINTS.length} endpoints...`);
@@ -237,6 +241,10 @@ const fetchFromAllEndpoints = async () => {
   
   // To store all tournaments
   let allTournaments = [];
+  
+  // Reset partial results storage for this run
+  highPriorityResults = [];
+  fetchedSources = [];
   
   // Sort endpoints by priority to ensure critical ones are processed first
   const sortedEndpoints = [...ALL_ENDPOINTS].sort((a, b) => {
@@ -261,8 +269,15 @@ const fetchFromAllEndpoints = async () => {
     try {
       // Process each high priority endpoint with robust error handling
       const tournaments = await processEndpoint(endpoint, i);
+      
+      // Store high priority results separately to use if timeouts occur
+      highPriorityResults = highPriorityResults.concat(tournaments);
+      
       allTournaments = allTournaments.concat(tournaments);
       tournamentCount += tournaments.length;
+      
+      // Also save to fetchedSources for potentially more data
+      fetchedSources = fetchedSources.concat(tournaments);
       
       console.error(`📊 Critical endpoint ${displayName} collected ${tournaments.length} tournaments (total: ${tournamentCount})`);
       
@@ -308,6 +323,9 @@ const fetchFromAllEndpoints = async () => {
           const tournaments = await processEndpoint(endpoint, endpointIdx);
           allTournaments = allTournaments.concat(tournaments);
           tournamentCount += tournaments.length;
+          
+          // Also save to fetchedSources for potentially more data during timeouts
+          fetchedSources = fetchedSources.concat(tournaments);
           
           console.error(`📊 Endpoint ${displayName} collected ${tournaments.length} tournaments (total: ${tournamentCount})`);
           
@@ -478,22 +496,41 @@ const processEvents = (tournaments) => {
 
 const run = async () => {
   try {
-    // Set a reasonable timeout for the entire operation (57 seconds)
+    // Set multiple timeouts for different phases of operation
+    // Main timeout: 45 seconds to allow time for processing
+    const MAIN_TIMEOUT = 45000;
+    let fetchedTournaments = [];
+    let globalTimeout = false;
+    
+    // Use a timeout promise for the fetching phase
     const timeoutPromise = new Promise((_, reject) => {
-      setTimeout(() => reject(new Error("Global timeout after 57 seconds")), 57000);
+      setTimeout(() => {
+        globalTimeout = true;
+        reject(new Error(`Global timeout after ${MAIN_TIMEOUT/1000} seconds`));
+      }, MAIN_TIMEOUT);
     });
 
+    // Start fetching data
     const tournamentPromise = fetchFromAllEndpoints();
     
-    // Race between fetching data and timeout
-    const tournaments = await Promise.race([tournamentPromise, timeoutPromise])
-      .catch(error => {
-        console.error(`Operation error: ${error.message}`);
-        return [];
-      });
+    try {
+      // Race between fetching data and timeout
+      fetchedTournaments = await Promise.race([tournamentPromise, timeoutPromise]);
+    } catch (error) {
+      console.error(`Operation timed out or failed: ${error.message}`);
+      // If we have partial data from high-priority sources, use that
+      if (highPriorityResults.length > 0) {
+        console.error(`✓ Using partial data from ${highPriorityResults.length} high-priority sources`);
+        fetchedTournaments = highPriorityResults;
+      } else if (fetchedSources.length > 0) {
+        console.error(`✓ Using partial data from ${fetchedSources.length} sources`);
+        fetchedTournaments = fetchedSources;
+      }
+    }
 
     // Process tournaments into events with enhanced parsing
-    const events = processEvents(tournaments);
+    // If we hit the global timeout, prioritize processing what we have
+    const events = processEvents(fetchedTournaments);
     
     if (events.length === 0) {
       console.error('No valid events found');
@@ -501,7 +538,7 @@ const run = async () => {
       return;
     }
     
-    console.error(`✅ Successfully extracted ${events.length} valid events`);
+    console.error(`✅ Successfully extracted ${events.length} valid events${globalTimeout ? ' (partial data due to timeout)' : ''}`);
     
     // Output to stdout for the integration system
     console.log(JSON.stringify(events));
