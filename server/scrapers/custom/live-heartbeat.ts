@@ -1308,9 +1308,12 @@ export function getHeartbeatStatus(): HeartbeatState {
       
       // Try to extract team names from various sources
       // 1. First, use the existing team names if available
-      if (event.homeTeam && event.awayTeam) {
+      if (event.homeTeam && event.awayTeam && 
+          event.homeTeam !== "" && event.awayTeam !== "" &&
+          event.homeTeam !== "Home" && event.awayTeam !== "Away") {
         homeTeam = event.homeTeam;
         awayTeam = event.awayTeam;
+        console.log(`Using existing team names for ${event.id}: ${homeTeam} vs ${awayTeam}`);
       }
       // 2. If we don't have team names but have an event name with "vs"
       else if (event.name && event.name.includes(" vs ")) {
@@ -1318,6 +1321,7 @@ export function getHeartbeatStatus(): HeartbeatState {
         if (parts.length === 2) {
           homeTeam = parts[0].trim() || homeTeam;
           awayTeam = parts[1].trim() || awayTeam;
+          console.log(`Extracted team names from name field for ${event.id}: ${homeTeam} vs ${awayTeam}`);
         }
       }
       // 3. Try alternative separators in event name
@@ -1329,6 +1333,7 @@ export function getHeartbeatStatus(): HeartbeatState {
             if (parts.length === 2) {
               homeTeam = parts[0].trim() || homeTeam;
               awayTeam = parts[1].trim() || awayTeam;
+              console.log(`Extracted team names from name field with separator '${separator}' for ${event.id}: ${homeTeam} vs ${awayTeam}`);
               break;
             }
           }
@@ -1337,8 +1342,8 @@ export function getHeartbeatStatus(): HeartbeatState {
       
       // Update the display name based on what we've found
       if (homeTeam && awayTeam && 
-          homeTeam !== "Home" && homeTeam !== "Unknown" && 
-          awayTeam !== "Away" && awayTeam !== "Unknown") {
+          homeTeam !== "Home" && homeTeam !== "Unknown" && homeTeam !== "" &&
+          awayTeam !== "Away" && awayTeam !== "Unknown" && awayTeam !== "") {
         // Only use team names if they are actual team names, not placeholders
         displayName = `${homeTeam} vs ${awayTeam}`;
       } else if (event.name && event.name.trim() !== "" && 
@@ -1360,6 +1365,9 @@ export function getHeartbeatStatus(): HeartbeatState {
           displayName = `Match ID: ${fixtureId}`;
         }
       }
+      
+      // Add more debug info
+      console.log(`Final display name for event ${event.id}: "${displayName}"`);
       
       return {
         ...event,
