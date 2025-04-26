@@ -819,20 +819,26 @@ async function processEvents(events: any[]): Promise<void> {
       
       // Check prices array first
       if (market1X2.prices && market1X2.prices.length > 0) {
-        // Check if at least one price is not suspended
-        const allPricesSuspended = market1X2.prices.every((p: any) => p.suspended === true);
-        // Market is available only if at least one price is not suspended
+        // Market is suspended only if ALL THREE prices are suspended
+        const allPricesSuspended = market1X2.prices.length >= 3 && 
+          market1X2.prices.every((p: any) => p.suspended === true);
+        
         isMarketAvailable = !allPricesSuspended;
       } 
       // Check outcomes array
       else if (market1X2.outcomes && market1X2.outcomes.length > 0) {
-        // Same logic for outcomes if that's what the API returns
-        const allOutcomesSuspended = market1X2.outcomes.every((o: any) => o.suspended === true);
+        // Same logic for outcomes - ALL outcomes must be suspended
+        const allOutcomesSuspended = market1X2.outcomes.length >= 3 && 
+          market1X2.outcomes.every((o: any) => o.suspended === true);
+        
         isMarketAvailable = !allOutcomesSuspended;
       }
       // In v2 API, the selections might be under a different property
       else if (market1X2.selections && market1X2.selections.length > 0) {
-        const allSelectionsSuspended = market1X2.selections.every((s: any) => s.suspended === true);
+        // Same logic for selections - ALL selections must be suspended
+        const allSelectionsSuspended = market1X2.selections.length >= 3 && 
+          market1X2.selections.every((s: any) => s.suspended === true);
+        
         isMarketAvailable = !allSelectionsSuspended;
       }
     }
