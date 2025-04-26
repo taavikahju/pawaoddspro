@@ -127,39 +127,29 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
         gameMinute: pointInfo.gameMinute
       });
       
-      // DRAW DYNAMIC HORIZONTAL LINE BASED ON HOVER POSITION
+      // DRAW DYNAMIC VERTICAL GUIDELINE BASED ON HOVER POSITION
       try {
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
         
-        // Redraw the entire heartbeat to clear previous hover line
+        // First, redraw the entire graph to clear any previous vertical guideline
         drawHeartbeat();
         
-        // Draw the horizontal line at the center
-        const centerY = height / 2;
-        
-        // Set up styles based on the current status
+        // Only draw the vertical guideline, don't redraw the horizontal line
+        // as it would override the actual red/green segments
         ctx.beginPath();
         ctx.lineWidth = 2;
-        ctx.strokeStyle = isAvailable ? 'rgba(0, 255, 0, 0.9)' : 'rgba(255, 0, 0, 0.9)';
+        ctx.strokeStyle = isAvailable ? 'rgba(0, 255, 0, 0.8)' : 'rgba(255, 0, 0, 0.8)';
         ctx.shadowColor = isAvailable ? '#00ff00' : '#ff0000';
         ctx.shadowBlur = 5;
         
-        // Draw a horizontal line across the entire canvas at center
-        ctx.moveTo(0, centerY);
-        ctx.lineTo(width, centerY);
+        // Draw vertical guideline exactly at the mouse position
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, height);
         ctx.stroke();
         
         // Reset shadow
         ctx.shadowBlur = 0;
-        
-        // Draw vertical guideline exactly at the mouse position
-        ctx.beginPath();
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = isAvailable ? 'rgba(0, 255, 0, 0.8)' : 'rgba(255, 0, 0, 0.8)';
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, height);
-        ctx.stroke();
       }
       catch (error) {
         console.error("Failed to draw hover guideline:", error);
