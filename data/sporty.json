@@ -321,9 +321,9 @@
     "date": "2025-04-27",
     "time": "14:15",
     "odds": {
-      "home": 1.49,
-      "draw": 4.99,
-      "away": 6.83
+      "home": 1.46,
+      "draw": 5.12,
+      "away": 7.16
     },
     "raw": {
       "eventId": "58879673",
@@ -331,9 +331,9 @@
       "tournament": "LaLiga",
       "event": "Villarreal - Espanyol",
       "market": "1X2",
-      "home_odds": "1.49",
-      "draw_odds": "4.99",
-      "away_odds": "6.83",
+      "home_odds": "1.46",
+      "draw_odds": "5.12",
+      "away_odds": "7.16",
       "start_time": "2025-04-27 14:15"
     }
   },
@@ -764,8 +764,8 @@
     "time": "16:30",
     "odds": {
       "home": 1.38,
-      "draw": 5.46,
-      "away": 6.95
+      "draw": 5.49,
+      "away": 7.08
     },
     "raw": {
       "eventId": "51269571",
@@ -774,8 +774,8 @@
       "event": "Borussia Dortmund - Wolfsburg",
       "market": "1X2",
       "home_odds": "1.38",
-      "draw_odds": "5.46",
-      "away_odds": "6.95",
+      "draw_odds": "5.49",
+      "away_odds": "7.08",
       "start_time": "2025-05-03 16:30"
     }
   },
@@ -3961,9 +3961,9 @@
     "date": "2025-05-02",
     "time": "18:00",
     "odds": {
-      "home": 1.91,
-      "draw": 3.6,
-      "away": 3.75
+      "home": 1.95,
+      "draw": 3.5,
+      "away": 3.7
     },
     "raw": {
       "eventId": "50956911",
@@ -3971,9 +3971,9 @@
       "tournament": "Ligue 2",
       "event": "Caen - Red Star FC",
       "market": "1X2",
-      "home_odds": "1.91",
-      "draw_odds": "3.60",
-      "away_odds": "3.75",
+      "home_odds": "1.95",
+      "draw_odds": "3.50",
+      "away_odds": "3.70",
       "start_time": "2025-05-02 18:00"
     }
   },
@@ -5185,7 +5185,7 @@
     "odds": {
       "home": 2.35,
       "draw": 2.85,
-      "away": 3.7
+      "away": 3.6
     },
     "raw": {
       "eventId": "58052511",
@@ -5195,7 +5195,7 @@
       "market": "1X2",
       "home_odds": "2.35",
       "draw_odds": "2.85",
-      "away_odds": "3.70",
+      "away_odds": "3.60",
       "start_time": "2025-04-26 21:30"
     }
   },
@@ -5209,9 +5209,9 @@
     "date": "2025-04-26",
     "time": "21:30",
     "odds": {
-      "home": 3.1,
+      "home": 3.2,
       "draw": 3.1,
-      "away": 2.45
+      "away": 2.4
     },
     "raw": {
       "eventId": "58052503",
@@ -5219,9 +5219,9 @@
       "tournament": "Brasileiro Serie A",
       "event": "Mirassol FC SP - Atletico Mineiro MG",
       "market": "1X2",
-      "home_odds": "3.10",
+      "home_odds": "3.20",
       "draw_odds": "3.10",
-      "away_odds": "2.45",
+      "away_odds": "2.40",
       "start_time": "2025-04-26 21:30"
     }
   },
@@ -6821,9 +6821,9 @@
     "date": "2025-04-26",
     "time": "21:30",
     "odds": {
-      "home": 1.95,
-      "draw": 3.25,
-      "away": 3.6
+      "home": 1.91,
+      "draw": 3.3,
+      "away": 3.7
     },
     "raw": {
       "eventId": "57250093",
@@ -6831,9 +6831,9 @@
       "tournament": "Primera Division",
       "event": "Metropolitanos FC - Rayo Zuliano",
       "market": "1X2",
-      "home_odds": "1.95",
-      "draw_odds": "3.25",
-      "away_odds": "3.60",
+      "home_odds": "1.91",
+      "draw_odds": "3.30",
+      "away_odds": "3.70",
       "start_time": "2025-04-26 21:30"
     }
   },
@@ -9256,6 +9256,32 @@
     }
   },
   {
+    "id": "60112563",
+    "eventId": "60112563",
+    "teams": "Envigado FC - CD Once Caldas",
+    "league": "Primera A, Apertura",
+    "sport": "football",
+    "country": "Colombia",
+    "date": "2025-05-01",
+    "time": "19:00",
+    "odds": {
+      "home": 3.9,
+      "draw": 3,
+      "away": 2.05
+    },
+    "raw": {
+      "eventId": "60112563",
+      "country": "Colombia",
+      "tournament": "Primera A, Apertura",
+      "event": "Envigado FC - CD Once Caldas",
+      "market": "1X2",
+      "home_odds": "3.90",
+      "draw_odds": "3.00",
+      "away_odds": "2.05",
+      "start_time": "2025-05-01 19:00"
+    }
+  },
+  {
     "id": "57380239",
     "eventId": "57380239",
     "teams": "CD O'Higgins - Deportes Iquique",
@@ -10254,8 +10280,8 @@
     "time": "22:00",
     "odds": {
       "home": 1.56,
-      "draw": 3.5,
-      "away": 6.5
+      "draw": 3.6,
+      "away": 6.25
     },
     "raw": {
       "eventId": "58475695",
@@ -10264,8 +10290,8 @@
       "event": "Costa Brava de General Pico - Sportivo Y Biblioteca Atenas",
       "market": "1X2",
       "home_odds": "1.56",
-      "draw_odds": "3.50",
-      "away_odds": "6.50",
+      "draw_odds": "3.60",
+      "away_odds": "6.25",
       "start_time": "2025-04-26 22:00"
     }
   },
@@ -10305,9 +10331,9 @@
     "date": "2025-04-27",
     "time": "14:00",
     "odds": {
-      "home": 2.7,
+      "home": 2.5,
       "draw": 2.95,
-      "away": 2.7
+      "away": 2.9
     },
     "raw": {
       "eventId": "58478581",
@@ -10315,9 +10341,9 @@
       "tournament": "Torneo Federal A",
       "event": "9 de Julio Rafaela - Douglas Haig",
       "market": "1X2",
-      "home_odds": "2.70",
+      "home_odds": "2.50",
       "draw_odds": "2.95",
-      "away_odds": "2.70",
+      "away_odds": "2.90",
       "start_time": "2025-04-27 14:00"
     }
   },
@@ -10331,9 +10357,9 @@
     "date": "2025-04-27",
     "time": "14:00",
     "odds": {
-      "home": 1.24,
-      "draw": 5,
-      "away": 13.5
+      "home": 1.22,
+      "draw": 4.9,
+      "away": 16.5
     },
     "raw": {
       "eventId": "58474871",
@@ -10341,9 +10367,9 @@
       "tournament": "Torneo Federal A",
       "event": "Club Olimpo - Germinal",
       "market": "1X2",
-      "home_odds": "1.24",
-      "draw_odds": "5.00",
-      "away_odds": "13.50",
+      "home_odds": "1.22",
+      "draw_odds": "4.90",
+      "away_odds": "16.50",
       "start_time": "2025-04-27 14:00"
     }
   },
@@ -10357,9 +10383,9 @@
     "date": "2025-04-27",
     "time": "14:00",
     "odds": {
-      "home": 1.45,
-      "draw": 3.75,
-      "away": 7.9
+      "home": 1.43,
+      "draw": 3.8,
+      "away": 8.5
     },
     "raw": {
       "eventId": "58478583",
@@ -10367,9 +10393,9 @@
       "tournament": "Torneo Federal A",
       "event": "Independiente de Chivilcoy - Club Sportivo Ben Hur",
       "market": "1X2",
-      "home_odds": "1.45",
-      "draw_odds": "3.75",
-      "away_odds": "7.90",
+      "home_odds": "1.43",
+      "draw_odds": "3.80",
+      "away_odds": "8.50",
       "start_time": "2025-04-27 14:00"
     }
   },
@@ -10825,9 +10851,9 @@
     "date": "2025-04-27",
     "time": "11:00",
     "odds": {
-      "home": 3.25,
-      "draw": 3.75,
-      "away": 1.97
+      "home": 3.3,
+      "draw": 3.6,
+      "away": 2
     },
     "raw": {
       "eventId": "60109163",
@@ -10835,9 +10861,9 @@
       "tournament": "Indian Super Cup",
       "event": "Inter Kashi FC - Mumbai City",
       "market": "1X2",
-      "home_odds": "3.25",
-      "draw_odds": "3.75",
-      "away_odds": "1.97",
+      "home_odds": "3.30",
+      "draw_odds": "3.60",
+      "away_odds": "2.00",
       "start_time": "2025-04-27 11:00"
     }
   },
@@ -14855,9 +14881,9 @@
     "date": "2025-04-27",
     "time": "05:00",
     "odds": {
-      "home": 3.8,
-      "draw": 3.5,
-      "away": 1.82
+      "home": 3.7,
+      "draw": 3.4,
+      "away": 1.86
     },
     "raw": {
       "eventId": "58318585",
@@ -14865,9 +14891,9 @@
       "tournament": "K3 League",
       "event": "Gangneung Citizen FC - Gyeongju FC",
       "market": "1X2",
-      "home_odds": "3.80",
-      "draw_odds": "3.50",
-      "away_odds": "1.82",
+      "home_odds": "3.70",
+      "draw_odds": "3.40",
+      "away_odds": "1.86",
       "start_time": "2025-04-27 05:00"
     }
   },
@@ -14907,9 +14933,9 @@
     "date": "2025-04-29",
     "time": "18:45",
     "odds": {
-      "home": 3.6,
-      "draw": 3.33,
-      "away": 2
+      "home": 3.5,
+      "draw": 3.4,
+      "away": 1.98
     },
     "raw": {
       "eventId": "58873721",
@@ -14917,9 +14943,9 @@
       "tournament": "National League",
       "event": "Solihull Moors FC - Rochdale AFC",
       "market": "1X2",
-      "home_odds": "3.60",
-      "draw_odds": "3.33",
-      "away_odds": "2.00",
+      "home_odds": "3.50",
+      "draw_odds": "3.40",
+      "away_odds": "1.98",
       "start_time": "2025-04-29 18:45"
     }
   },
@@ -16571,9 +16597,9 @@
     "date": "2025-04-27",
     "time": "21:15",
     "odds": {
-      "home": 1.44,
-      "draw": 3.9,
-      "away": 7.6
+      "home": 1.45,
+      "draw": 4,
+      "away": 7.8
     },
     "raw": {
       "eventId": "59934235",
@@ -16581,9 +16607,9 @@
       "tournament": "Primera Division",
       "event": "CA Penarol Montevideo - CA Cerro",
       "market": "1X2",
-      "home_odds": "1.44",
-      "draw_odds": "3.90",
-      "away_odds": "7.60",
+      "home_odds": "1.45",
+      "draw_odds": "4.00",
+      "away_odds": "7.80",
       "start_time": "2025-04-27 21:15"
     }
   },
@@ -22733,9 +22759,9 @@
     "date": "2025-04-27",
     "time": "21:00",
     "odds": {
-      "home": 2.35,
+      "home": 2.3,
       "draw": 3.1,
-      "away": 3
+      "away": 3.1
     },
     "raw": {
       "eventId": "59947845",
@@ -22743,9 +22769,9 @@
       "tournament": "Division de Honor, Apertura",
       "event": "Sportivo Luqueno - Club General Caballero JLM",
       "market": "1X2",
-      "home_odds": "2.35",
+      "home_odds": "2.30",
       "draw_odds": "3.10",
-      "away_odds": "3.00",
+      "away_odds": "3.10",
       "start_time": "2025-04-27 21:00"
     }
   },
@@ -24466,6 +24492,136 @@
     }
   },
   {
+    "id": "57059519",
+    "eventId": "57059519",
+    "teams": "Antigua GFC - Deportivo Achuapa",
+    "league": "Liga Nacional. Clausura",
+    "sport": "football",
+    "country": "Guatemala",
+    "date": "2025-04-27",
+    "time": "21:00",
+    "odds": {
+      "home": 1.42,
+      "draw": 4.4,
+      "away": 6.8
+    },
+    "raw": {
+      "eventId": "57059519",
+      "country": "Guatemala",
+      "tournament": "Liga Nacional. Clausura",
+      "event": "Antigua GFC - Deportivo Achuapa",
+      "market": "1X2",
+      "home_odds": "1.42",
+      "draw_odds": "4.40",
+      "away_odds": "6.80",
+      "start_time": "2025-04-27 21:00"
+    }
+  },
+  {
+    "id": "57059515",
+    "eventId": "57059515",
+    "teams": "CD Guastatoya - Deportivo Mixco",
+    "league": "Liga Nacional. Clausura",
+    "sport": "football",
+    "country": "Guatemala",
+    "date": "2025-04-27",
+    "time": "21:00",
+    "odds": {
+      "home": 1.84,
+      "draw": 3.2,
+      "away": 4.4
+    },
+    "raw": {
+      "eventId": "57059515",
+      "country": "Guatemala",
+      "tournament": "Liga Nacional. Clausura",
+      "event": "CD Guastatoya - Deportivo Mixco",
+      "market": "1X2",
+      "home_odds": "1.84",
+      "draw_odds": "3.20",
+      "away_odds": "4.40",
+      "start_time": "2025-04-27 21:00"
+    }
+  },
+  {
+    "id": "57059521",
+    "eventId": "57059521",
+    "teams": "CD Marquense - CD Malacateco",
+    "league": "Liga Nacional. Clausura",
+    "sport": "football",
+    "country": "Guatemala",
+    "date": "2025-04-27",
+    "time": "21:00",
+    "odds": {
+      "home": 2.2,
+      "draw": 3,
+      "away": 3.4
+    },
+    "raw": {
+      "eventId": "57059521",
+      "country": "Guatemala",
+      "tournament": "Liga Nacional. Clausura",
+      "event": "CD Marquense - CD Malacateco",
+      "market": "1X2",
+      "home_odds": "2.20",
+      "draw_odds": "3.00",
+      "away_odds": "3.40",
+      "start_time": "2025-04-27 21:00"
+    }
+  },
+  {
+    "id": "57059517",
+    "eventId": "57059517",
+    "teams": "Comunicaciones FC Guatemala City - Huehueteco Xinabajul",
+    "league": "Liga Nacional. Clausura",
+    "sport": "football",
+    "country": "Guatemala",
+    "date": "2025-04-27",
+    "time": "21:00",
+    "odds": {
+      "home": 1.41,
+      "draw": 4.5,
+      "away": 6.9
+    },
+    "raw": {
+      "eventId": "57059517",
+      "country": "Guatemala",
+      "tournament": "Liga Nacional. Clausura",
+      "event": "Comunicaciones FC Guatemala City - Huehueteco Xinabajul",
+      "market": "1X2",
+      "home_odds": "1.41",
+      "draw_odds": "4.50",
+      "away_odds": "6.90",
+      "start_time": "2025-04-27 21:00"
+    }
+  },
+  {
+    "id": "57059523",
+    "eventId": "57059523",
+    "teams": "CSD Coban Imperial - CSD Municipal",
+    "league": "Liga Nacional. Clausura",
+    "sport": "football",
+    "country": "Guatemala",
+    "date": "2025-04-27",
+    "time": "21:00",
+    "odds": {
+      "home": 2.65,
+      "draw": 2.45,
+      "away": 3.4
+    },
+    "raw": {
+      "eventId": "57059523",
+      "country": "Guatemala",
+      "tournament": "Liga Nacional. Clausura",
+      "event": "CSD Coban Imperial - CSD Municipal",
+      "market": "1X2",
+      "home_odds": "2.65",
+      "draw_odds": "2.45",
+      "away_odds": "3.40",
+      "start_time": "2025-04-27 21:00"
+    }
+  },
+  {
     "id": "60045979",
     "eventId": "60045979",
     "teams": "CD Bocas FC - Academia Mario Mendez",
@@ -24865,9 +25021,9 @@
     "date": "2025-04-27",
     "time": "11:00",
     "odds": {
-      "home": 1.95,
-      "draw": 3.9,
-      "away": 3.25
+      "home": 1.8,
+      "draw": 4,
+      "away": 3.7
     },
     "raw": {
       "eventId": "57129163",
@@ -24875,9 +25031,9 @@
       "tournament": "2nd Division Group 1",
       "event": "FK Eik Toensberg 871 - Vard Haugesund",
       "market": "1X2",
-      "home_odds": "1.95",
-      "draw_odds": "3.90",
-      "away_odds": "3.25",
+      "home_odds": "1.80",
+      "draw_odds": "4.00",
+      "away_odds": "3.70",
       "start_time": "2025-04-27 11:00"
     }
   },
@@ -25697,9 +25853,9 @@
     "date": "2025-04-27",
     "time": "11:00",
     "odds": {
-      "home": 1.4,
-      "draw": 5,
-      "away": 6.5
+      "home": 1.42,
+      "draw": 4.9,
+      "away": 6.25
     },
     "raw": {
       "eventId": "51251547",
@@ -25707,9 +25863,9 @@
       "tournament": "Thai League 1",
       "event": "Muang Thong United - Nakhon Ratchasima FC",
       "market": "1X2",
-      "home_odds": "1.40",
-      "draw_odds": "5.00",
-      "away_odds": "6.50",
+      "home_odds": "1.42",
+      "draw_odds": "4.90",
+      "away_odds": "6.25",
       "start_time": "2025-04-27 11:00"
     }
   },
@@ -26191,7 +26347,7 @@
     "date": "2025-04-27",
     "time": "21:15",
     "odds": {
-      "home": 3.1,
+      "home": 3.2,
       "draw": 3.1,
       "away": 2.25
     },
@@ -26201,7 +26357,7 @@
       "tournament": "Division Profesional",
       "event": "FC Universitario de Vinto - Always Ready",
       "market": "1X2",
-      "home_odds": "3.10",
+      "home_odds": "3.20",
       "draw_odds": "3.10",
       "away_odds": "2.25",
       "start_time": "2025-04-27 21:15"
@@ -27141,162 +27297,6 @@
       "draw_odds": "5.10",
       "away_odds": "11.00",
       "start_time": "2025-04-29 16:00"
-    }
-  },
-  {
-    "id": "52371895",
-    "eventId": "52371895",
-    "teams": "TS Galaxy FC - Sekhukhune United",
-    "league": "Premiership",
-    "sport": "football",
-    "country": "South Africa",
-    "date": "2025-04-27",
-    "time": "13:30",
-    "odds": {
-      "home": 2.05,
-      "draw": 3.1,
-      "away": 3.9
-    },
-    "raw": {
-      "eventId": "52371895",
-      "country": "South Africa",
-      "tournament": "Premiership",
-      "event": "TS Galaxy FC - Sekhukhune United",
-      "market": "1X2",
-      "home_odds": "2.05",
-      "draw_odds": "3.10",
-      "away_odds": "3.90",
-      "start_time": "2025-04-27 13:30"
-    }
-  },
-  {
-    "id": "60031335",
-    "eventId": "60031335",
-    "teams": "Mamelodi Sundowns - Richards Bay FC",
-    "league": "Premiership",
-    "sport": "football",
-    "country": "South Africa",
-    "date": "2025-04-30",
-    "time": "17:30",
-    "odds": {
-      "home": 1.34,
-      "draw": 4.3,
-      "away": 9.5
-    },
-    "raw": {
-      "eventId": "60031335",
-      "country": "South Africa",
-      "tournament": "Premiership",
-      "event": "Mamelodi Sundowns - Richards Bay FC",
-      "market": "1X2",
-      "home_odds": "1.34",
-      "draw_odds": "4.30",
-      "away_odds": "9.50",
-      "start_time": "2025-04-30 17:30"
-    }
-  },
-  {
-    "id": "52888491",
-    "eventId": "52888491",
-    "teams": "Milford FC - Black Leopards",
-    "league": "Championship",
-    "sport": "football",
-    "country": "South Africa",
-    "date": "2025-04-27",
-    "time": "13:00",
-    "odds": {
-      "home": 2.3,
-      "draw": 3.1,
-      "away": 2.9
-    },
-    "raw": {
-      "eventId": "52888491",
-      "country": "South Africa",
-      "tournament": "Championship",
-      "event": "Milford FC - Black Leopards",
-      "market": "1X2",
-      "home_odds": "2.30",
-      "draw_odds": "3.10",
-      "away_odds": "2.90",
-      "start_time": "2025-04-27 13:00"
-    }
-  },
-  {
-    "id": "52888493",
-    "eventId": "52888493",
-    "teams": "Orbit College FC - Kruger United",
-    "league": "Championship",
-    "sport": "football",
-    "country": "South Africa",
-    "date": "2025-04-27",
-    "time": "13:00",
-    "odds": {
-      "home": 2.5,
-      "draw": 2.8,
-      "away": 2.9
-    },
-    "raw": {
-      "eventId": "52888493",
-      "country": "South Africa",
-      "tournament": "Championship",
-      "event": "Orbit College FC - Kruger United",
-      "market": "1X2",
-      "home_odds": "2.50",
-      "draw_odds": "2.80",
-      "away_odds": "2.90",
-      "start_time": "2025-04-27 13:00"
-    }
-  },
-  {
-    "id": "59992955",
-    "eventId": "59992955",
-    "teams": "Ben Aknoun - RC Arbaa",
-    "league": "Ligue 2",
-    "sport": "football",
-    "country": "Algeria",
-    "date": "2025-04-27",
-    "time": "15:00",
-    "odds": {
-      "home": 1.23,
-      "draw": 5.2,
-      "away": 10.5
-    },
-    "raw": {
-      "eventId": "59992955",
-      "country": "Algeria",
-      "tournament": "Ligue 2",
-      "event": "Ben Aknoun - RC Arbaa",
-      "market": "1X2",
-      "home_odds": "1.23",
-      "draw_odds": "5.20",
-      "away_odds": "10.50",
-      "start_time": "2025-04-27 15:00"
-    }
-  },
-  {
-    "id": "59993307",
-    "eventId": "59993307",
-    "teams": "MC Saida - Bechar Djedid",
-    "league": "Ligue 2",
-    "sport": "football",
-    "country": "Algeria",
-    "date": "2025-04-27",
-    "time": "15:00",
-    "odds": {
-      "home": 1.76,
-      "draw": 3.33,
-      "away": 4.3
-    },
-    "raw": {
-      "eventId": "59993307",
-      "country": "Algeria",
-      "tournament": "Ligue 2",
-      "event": "MC Saida - Bechar Djedid",
-      "market": "1X2",
-      "home_odds": "1.76",
-      "draw_odds": "3.33",
-      "away_odds": "4.30",
-      "start_time": "2025-04-27 15:00"
     }
   }
 ]
