@@ -502,7 +502,7 @@ function updateMarketHistory(event: HeartbeatEvent): void {
 
 // Get market history for an event
 export function getEventMarketHistory(eventId: string): { 
-  timestamps: { timestamp: number; isAvailable: boolean }[],
+  timestamps: { timestamp: number; isAvailable: boolean; gameMinute?: string }[],
   uptimePercentage: number,
   totalMinutes: number,
   suspendedMinutes: number
@@ -515,6 +515,7 @@ export function getEventMarketHistory(eventId: string): {
   }
   
   const history = marketHistories.find(h => h.eventId === eventId);
+  const event = heartbeatState.events.find(e => e.id === eventId);
   
   if (!history || history.timestamps.length === 0) {
     console.log(`No history found for event ID: ${eventId}`);
@@ -525,6 +526,18 @@ export function getEventMarketHistory(eventId: string): {
       suspendedMinutes: 0
     };
   }
+  
+  // Add game minute to each timestamp if available
+  const timestampsWithGameMinute = history.timestamps.map(timestamp => {
+    // If event is found, add the current game minute to all timestamps
+    if (event && event.gameMinute) {
+      return {
+        ...timestamp,
+        gameMinute: event.gameMinute
+      };
+    }
+    return timestamp;
+  });
   
   console.log(`Found history for event ID: ${eventId} with ${history.timestamps.length} data points`);
   
@@ -556,7 +569,7 @@ export function getEventMarketHistory(eventId: string): {
   console.log(`Sample timestamps: ${JSON.stringify(simplifiedTimestamps)}`);
   
   return {
-    timestamps: history.timestamps,
+    timestamps: timestampsWithGameMinute,
     uptimePercentage: Math.round(uptimePercentage * 10) / 10, // Round to 1 decimal place
     totalMinutes,
     suspendedMinutes

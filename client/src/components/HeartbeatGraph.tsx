@@ -121,12 +121,41 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
           // Check if result is directly an array of data points
           if (Array.isArray(result)) {
             console.log(`Result is a direct array with ${result.length} data points`);
-            timestamps = result;
+            timestamps = result.map(item => {
+              // Make sure each item has all necessary properties
+              if (!item.hasOwnProperty('isAvailable')) {
+                console.log(`Data point missing isAvailable property, setting to true by default:`, item);
+                item.isAvailable = true;
+              }
+              
+              // Add gameMinute from event details if the data point doesn't have one
+              if (!item.gameMinute && eventDetails && eventDetails.gameMinute) {
+                console.log(`Adding gameMinute ${eventDetails.gameMinute} to data point`);
+                item.gameMinute = eventDetails.gameMinute;
+              }
+              
+              return item;
+            });
           } 
           // Check if result has a timestamps array property
           else if (result.timestamps && Array.isArray(result.timestamps)) {
             console.log(`Result contains a timestamps array with ${result.timestamps.length} data points`);
-            timestamps = result.timestamps;
+            
+            timestamps = result.timestamps.map(item => {
+              // Make sure each item has all necessary properties
+              if (!item.hasOwnProperty('isAvailable')) {
+                console.log(`Data point missing isAvailable property, setting to true by default:`, item);
+                item.isAvailable = true;
+              }
+              
+              // Add gameMinute from event details if the data point doesn't have one
+              if (!item.gameMinute && eventDetails && eventDetails.gameMinute) {
+                console.log(`Adding gameMinute ${eventDetails.gameMinute} to data point`);
+                item.gameMinute = eventDetails.gameMinute;
+              }
+              
+              return item;
+            });
           }
           // Otherwise create an empty array (will be populated with sample data if needed)
           else {
@@ -235,14 +264,24 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     // Helper function to get the game minute as a number
     const getMinuteNumber = (minuteStr: string | undefined): number => {
       if (!minuteStr) return 0;
-      // Extract numeric part from strings like "45'" or "45+2'"
+      
+      // Handle halftime (HT) case
+      if (minuteStr === 'HT' || minuteStr.toLowerCase() === 'ht') {
+        console.log("Detected halftime (HT)");
+        return 45;
+      }
+      
+      // Extract numeric part from strings like "45'" or "45+2'" or just "45"
       const match = minuteStr.match(/^(\d+)(?:\+(\d+))?/);
       if (match) {
         const baseMinute = parseInt(match[1], 10);
         const addedTime = match[2] ? parseInt(match[2], 10) : 0;
         return baseMinute + addedTime;
       }
-      return 0;
+      
+      // If we get here, the string format is unexpected
+      console.log(`Unable to parse minute string: ${minuteStr}, defaulting to 45`);
+      return 45; // Default to 45 minutes as a fallback
     };
     
     // Find the current game minute - either from data or use latest available
@@ -393,12 +432,22 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
       ctx.fillStyle = '#00ff00'; // Always green for visibility
       ctx.fill();
       
-      // Draw minute text
+      // Draw minute text - use "HT" for halftime if the current minute is 45
       ctx.font = 'bold 12px Arial';
       ctx.fillStyle = 'white';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(currentGameMinute.toString(), minuteX, 20);
+      
+      // Check if any data point has "HT" as the game minute
+      const isHalftime = data.some(point => 
+        point.gameMinute === "HT" || point.gameMinute?.toLowerCase() === "ht");
+      
+      // Use "HT" if it's halftime and minute is 45
+      const displayText = (isHalftime && currentGameMinute === 45) 
+        ? "HT" 
+        : currentGameMinute.toString();
+      
+      ctx.fillText(displayText, minuteX, 20);
     }
     
     console.log("Heartbeat drawing completed successfully");
