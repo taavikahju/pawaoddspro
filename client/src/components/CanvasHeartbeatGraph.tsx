@@ -188,7 +188,8 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
                 point.marketStatus === 'SUSPENDED'
               );
               
-              console.log(`Processing data point: original isAvailable=${point.isAvailable}, marketStatus=${point.marketStatus}, converted=${isAvailable}`);
+              // More verbose logging to debug suspension status
+              console.log(`Processing data point: timestamp=${new Date(point.timestamp).toISOString()}, original isAvailable=${point.isAvailable}, marketStatus=${point.marketStatus}, converted=${isAvailable}`);
               
               return {
                 ...point,

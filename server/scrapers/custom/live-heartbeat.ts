@@ -53,6 +53,7 @@ interface HeartbeatEvent {
   widgetId?: string;
   homeTeam?: string;
   awayTeam?: string;
+  suspended?: boolean; // Explicit suspended flag for better TypeScript type safety
 }
 
 // Define the structure for market history
@@ -195,6 +196,7 @@ async function runHeartbeatTracker(url: string, storage: IStorage): Promise<void
                 startTime: event.start_time || new Date().toISOString(),
                 currentlyAvailable: !event.suspended,
                 marketAvailability: event.suspended ? 'SUSPENDED' : 'ACTIVE',
+                suspended: !!event.suspended, // Explicit suspended property that matches the direct suspended flag
                 gameMinute: event.gameMinute || '1',
                 recordCount: 1,
                 widgetId: event.eventId || ''
@@ -746,6 +748,7 @@ async function processEvents(events: any[]): Promise<void> {
         startTime: event.startTime || new Date().toISOString(),
         currentlyAvailable: isAvailable,
         marketAvailability: marketStatus,
+        suspended: !isAvailable, // Add explicit suspended property that matches !currentlyAvailable
         recordCount: 1,
         gameMinute: gameMinute,
         widgetId: event.widgetId || event.id?.toString() || '',
