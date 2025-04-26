@@ -408,7 +408,7 @@ export default function LiveHeartbeat() {
                                 : event.name}
                             </div>
                           </div>
-                          <div className="flex items-center justify-between text-xs text-muted-foreground">
+                          <div className="flex items-center text-xs text-muted-foreground">
                             <div className="flex items-center gap-1">
                               {(() => {
                                 const getCountryCode = (countryName: string) => {
@@ -469,7 +469,6 @@ export default function LiveHeartbeat() {
                               })()}
                               <span>{event.tournament}</span>
                             </div>
-                            <span>{formatDate(event.startTime)}</span>
                           </div>
                         </div>
                       ))}
