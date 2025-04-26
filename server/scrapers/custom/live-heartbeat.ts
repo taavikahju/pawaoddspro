@@ -185,6 +185,15 @@ async function runHeartbeatTracker(url: string, storage: IStorage): Promise<void
               const homeTeam = event.homeTeam || (event.event ? event.event.split(' vs ')[0] : '');
               const awayTeam = event.awayTeam || (event.event ? event.event.split(' vs ')[1] : '');
               
+              // IMPORTANT: Base the currentlyAvailable ONLY on totalMarketCount for consistency
+              // Event is only suspended when totalMarketCount = 0
+              const isSuspended = event.totalMarketCount === 0;
+              
+              // Log resuming events for debugging
+              if (event.suspended && !isSuspended) {
+                console.log(`🟢 RESUMED EVENT: ${event.eventId} has totalMarketCount=${event.totalMarketCount || 'N/A'}`);
+              }
+              
               return {
                 id: event.eventId || '',
                 name: event.event || `${homeTeam} vs ${awayTeam}`,
@@ -194,9 +203,9 @@ async function runHeartbeatTracker(url: string, storage: IStorage): Promise<void
                 tournament: event.tournament || 'Unknown',
                 isInPlay: true,
                 startTime: event.start_time || new Date().toISOString(),
-                currentlyAvailable: !event.suspended,
-                marketAvailability: event.suspended ? 'SUSPENDED' : 'ACTIVE',
-                suspended: !!event.suspended, // Explicit suspended property that matches the direct suspended flag
+                currentlyAvailable: !isSuspended,
+                marketAvailability: isSuspended ? 'SUSPENDED' : 'ACTIVE',
+                suspended: isSuspended, // Explicit suspended property that matches totalMarketCount = 0
                 gameMinute: event.gameMinute || '1',
                 recordCount: 1,
                 widgetId: event.eventId || ''
@@ -658,12 +667,13 @@ async function processEvents(events: any[]): Promise<void> {
         awayTeam = parts[1].trim();
       }
       
-      // Determine if the market is available based on event data
+      // IMPORTANT: Determine if the market is available based ONLY on totalMarketCount
+      // Events should ONLY be suspended when totalMarketCount = 0, and automatically
+      // return to available state when markets return
       let isAvailable = true;
       let marketStatus = 'ACTIVE';
       
-      // Check different properties that might indicate if a market is suspended
-      // First, check for totalMarketCount=0 which is the most reliable indicator
+      // Check ONLY totalMarketCount=0 which is the most reliable indicator
       if (event.totalMarketCount === 0) {
         isAvailable = false;
         marketStatus = 'SUSPENDED';
@@ -678,33 +688,20 @@ async function processEvents(events: any[]): Promise<void> {
           totalMarketCount: 0,
           suspended: true
         }, null, 2)}`);
-      }
-      // Then check other suspension indicators 
-      else if (event.suspended === true) {
-        // Directly use the suspended flag from the event (set by betpawa_direct.cjs)
-        isAvailable = false;
-        marketStatus = 'SUSPENDED';
-        console.log(`Event ${event.id || event.eventId} is marked as suspended by other detection methods`);
-        console.log(`EVENT SUSPENDED (other methods): ${JSON.stringify({
-          id: event.id || event.eventId,
-          name: event.name || event.event,
-          homeTeam: event.homeTeam || (event.name ? event.name.split(" vs ")[0] : "Unknown"),
-          awayTeam: event.awayTeam || (event.name ? event.name.split(" vs ")[1] : "Unknown"),
-          suspended: true,
-          home_odds: event.home_odds || '0.0',
-          draw_odds: event.draw_odds || '0.0',
-          away_odds: event.away_odds || '0.0'
-        })}`);
-      } else if (event.markets && event.markets.length > 0) {
-        isAvailable = !event.markets[0].suspended;
-        marketStatus = event.markets[0].suspended ? 'SUSPENDED' : 'ACTIVE';
-        if (event.markets[0].suspended) {
-          console.log(`Event ${event.id || event.eventId} is marked as suspended via markets[0].suspended`);
+      } else {
+        // If totalMarketCount > 0, ensure event is marked as available
+        // Explicitly log any events that were previously suspended but now available
+        const eventId = event.id || event.eventId;
+        const existingEvent = heartbeatState.events.find(e => e.id === eventId);
+        
+        if (existingEvent && !existingEvent.currentlyAvailable) {
+          console.log(`🟢 EVENT RESUMED: ${eventId} (${event.name || 'Unknown'}) - totalMarketCount=${event.totalMarketCount}`);
+          console.log(`EVENT RESUMED DETAILS: Previously suspended event now has totalMarketCount=${event.totalMarketCount}`);
         }
-      } else if (event.status === 'SUSPENDED' || event.bettingStatus === 'SUSPENDED') {
-        isAvailable = false;
-        marketStatus = 'SUSPENDED';
-        console.log(`Event ${event.id || event.eventId} is marked as suspended via status/bettingStatus field`);
+        
+        // Ensure available status is set correctly
+        isAvailable = true;
+        marketStatus = 'ACTIVE';
       }
       
       // Extract gameMinute from different possible structures
