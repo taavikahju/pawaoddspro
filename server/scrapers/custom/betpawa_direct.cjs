@@ -96,27 +96,21 @@ async function fetchEventsPage(skip) {
     } else {
       process.stderr.write(`[INFO] No naturally suspended events found with totalMarketCount=0 in this batch\n`);
       
-      // Since we don't have any real suspended events, let's create a few for testing
-      // Only add enough suspended events to verify the functionality works properly
+      // We're using real suspension data now, no need to create test events
+      // Just ensure all events have a defined totalMarketCount, defaulting to 1 for non-suspended
       if (events.length > 0) {
-        // Create suspended test events - set EVERY OTHER EVENT to have totalMarketCount=0
-        // This ensures we have an equal mix of suspended and available events to test with
-        const modifiedEvents = events.map((event, index) => {
-          if (index % 2 === 0) { // Every 2nd event (50% of events will be suspended)
-            const modifiedEvent = { ...event, totalMarketCount: 0 };
-            process.stderr.write(`[TEST] Modified event ${modifiedEvent.widgets?.[0]?.id || 'unknown'}: ${modifiedEvent.name} to have totalMarketCount=0\n`);
-            return modifiedEvent;
-          } else {
-            // Ensure non-suspended events explicitly have totalMarketCount > 0
-            const modifiedEvent = { ...event };
-            if (!modifiedEvent.totalMarketCount || modifiedEvent.totalMarketCount === 0) {
-              modifiedEvent.totalMarketCount = 1 + Math.floor(Math.random() * 5); // 1-5 markets
-            }
-            return modifiedEvent;
+        const safeEvents = events.map(event => {
+          // Ensure non-suspended events explicitly have totalMarketCount > 0
+          const modifiedEvent = { ...event };
+          if (modifiedEvent.totalMarketCount === undefined) {
+            // Only set a default if totalMarketCount is undefined
+            // We want to preserve real totalMarketCount=0 values for actual suspended events
+            modifiedEvent.totalMarketCount = 1;
           }
+          return modifiedEvent;
         });
         
-        events = modifiedEvents;
+        events = safeEvents;
       }
     }
     
@@ -229,28 +223,7 @@ async function processEvents(events) {
       // This ensures events will automatically return to available state when markets return
       const isSuspended = noMarketsAvailable;
       
-      // For testing - force a few specific events to show as suspended so we can verify the visualization
-      // Use a modulo condition so we get consistent results for the same event IDs
-      const eventIdAsNumber = parseInt(widget.id);
-      if (eventIdAsNumber % 10 === 0) { // Force every 10th event to be suspended
-        process.stderr.write(`[TEST] Forcing test suspension for event ID ending in 0: ${widget.id}\n`);
-        processedEvents.push({
-          eventId: widget.id,
-          country: event.region?.name,
-          tournament: event.competition?.name,
-          event: event.name,
-          market: market.marketType?.name,
-          home_odds: "0.0",
-          draw_odds: "0.0",
-          away_odds: "0.0",
-          start_time: event.startTime,
-          gameMinute: event.scoreboard?.display?.minute || "1",
-          suspended: true,
-          homeTeam: event.name.split(" vs ")[0],
-          awayTeam: event.name.split(" vs ")[1]
-        });
-        continue; // Skip to the next event
-      }
+      // We no longer need to artificially create suspended events
 
       // Create an event object
       processedEvents.push({
