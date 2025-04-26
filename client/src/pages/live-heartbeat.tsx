@@ -4,65 +4,70 @@ import { Activity, Calendar, Map, Filter, History, Gauge } from 'lucide-react';
 import { RadialBarChart, RadialBar, ResponsiveContainer, PolarAngleAxis } from 'recharts';
 
 // Component for displaying uptime metrics in a modern gauge
-const UptimeGauge = ({ value, min, max, avg, title }: { value: number, min: number, max: number, avg: number, title: string }) => {
-  const data = [
-    { name: 'Minimum', value: min, fill: '#f87171' },
-    { name: 'Average', value: avg, fill: '#fbbf24' },
-    { name: 'Maximum', value: max, fill: '#34d399' },
-  ];
-
+const UptimeGauge = ({ value, title }: { value: number, title: string }) => {
+  // Convert value to position on the gauge (between -30 and 210 degrees)
+  const needleRotation = -30 + (value / 100) * 240;
+  
+  // Determine color based on value
+  const getColor = (val: number) => {
+    if (val < 40) return '#ef4444'; // red
+    if (val < 60) return '#f97316'; // orange
+    if (val < 75) return '#eab308'; // yellow
+    return '#22c55e'; // green
+  };
+  
   return (
     <div className="w-full flex flex-col items-center justify-center">
-      <div className="text-sm font-medium mb-2 text-center text-muted-foreground flex items-center gap-1">
-        <Gauge className="h-4 w-4" />
+      <div className="text-xs font-medium mb-1 text-center text-muted-foreground">
         {title}
       </div>
-      <div className="w-full h-[120px]">
-        <ResponsiveContainer width="100%" height="100%">
-          <RadialBarChart 
-            cx="50%" 
-            cy="50%" 
-            innerRadius="40%" 
-            outerRadius="100%" 
-            barSize={10} 
-            data={data}
-            startAngle={180}
-            endAngle={0}
-          >
-            <PolarAngleAxis
-              type="number"
-              domain={[0, 100]}
-              angleAxisId={0}
-              tick={false}
-            />
-            <RadialBar
-              background
-              dataKey="value"
-              cornerRadius={5}
-              label={{ position: 'insideStart', fill: '#fff', fontSize: 11, fontWeight: 'bold' }}
-            />
-            <text
-              x="50%"
-              y="50%"
-              textAnchor="middle"
-              dominantBaseline="middle"
-              className="text-lg font-bold"
-              fill="#888"
-            >
-              {value.toFixed(1)}%
-            </text>
-          </RadialBarChart>
-        </ResponsiveContainer>
+      
+      <div className="relative w-[80px] h-[40px]">
+        {/* Gauge background */}
+        <svg className="w-full h-full" viewBox="0 0 100 50">
+          {/* Red section */}
+          <path 
+            d="M 50 50 A 40 40 0 0 1 10 50" 
+            fill="none" 
+            stroke="#ef4444" 
+            strokeWidth="8"
+          />
+          
+          {/* Orange section */}
+          <path 
+            d="M 50 50 A 40 40 0 0 1 25 14.6" 
+            fill="none" 
+            stroke="#f97316" 
+            strokeWidth="8"
+          />
+          
+          {/* Yellow section */}
+          <path 
+            d="M 50 50 A 40 40 0 0 1 75 14.6" 
+            fill="none" 
+            stroke="#eab308" 
+            strokeWidth="8"
+          />
+          
+          {/* Green section */}
+          <path 
+            d="M 50 50 A 40 40 0 0 1 90 50" 
+            fill="none" 
+            stroke="#22c55e" 
+            strokeWidth="8"
+          />
+          
+          {/* Needle */}
+          <g transform={`rotate(${needleRotation}, 50, 50)`}>
+            <line x1="50" y1="50" x2="50" y2="20" stroke="#000" strokeWidth="2" />
+            <circle cx="50" cy="50" r="3" fill="#000" />
+          </g>
+        </svg>
       </div>
-      <div className="flex justify-between w-full text-xs text-muted-foreground mt-1">
-        <div className="flex items-center">
-          <span className="w-2 h-2 bg-red-400 rounded-full mr-1"></span>
-          <span>Min: {min.toFixed(1)}%</span>
-        </div>
-        <div className="flex items-center">
-          <span className="w-2 h-2 bg-green-400 rounded-full mr-1"></span>
-          <span>Max: {max.toFixed(1)}%</span>
-        </div>
+      
+      {/* Value */}
+      <div className="text-sm font-semibold mt-1" style={{ color: getColor(value) }}>
+        {value.toFixed(1)}%
       </div>
     </div>
   );
@@ -143,10 +148,10 @@ export default function LiveHeartbeat() {
         min: min,
         max: max,
         avg: avg,
-        events: 5 // Demo count of events
+        events: filteredEvents.length // Count of filtered events
       });
     }
-  }, [eventStatsData, selectedEventId]);
+  }, [eventStatsData, selectedEventId, filteredEvents.length]);
 
   // Fetch live heartbeat data
   const { data: heartbeatData, isLoading: isLoadingLive, error: liveError, refetch: refetchLive } = useQuery<{
@@ -427,27 +432,24 @@ export default function LiveHeartbeat() {
                 </div>
                 
                 {/* Uptime Statistics Gauge */}
-                <div className="mt-4 border rounded-lg p-4 bg-card/50">
-                  <div className="text-sm font-medium mb-3 text-center">Market Uptime Statistics</div>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="mt-4 border rounded-lg p-3 bg-card/50">
+                  <div className="text-sm font-medium mb-2 text-center">Market Uptime Statistics</div>
+                  <div className="flex justify-center gap-6">
                     <UptimeGauge 
-                      value={uptimeStats.current} 
-                      min={uptimeStats.min} 
-                      max={uptimeStats.max} 
-                      avg={uptimeStats.avg} 
-                      title="Current Event" 
+                      value={uptimeStats.min}
+                      title="Minimum" 
                     />
                     <UptimeGauge 
-                      value={uptimeStats.avg} 
-                      min={uptimeStats.min} 
-                      max={uptimeStats.max} 
-                      avg={uptimeStats.avg} 
-                      title="Average Uptime" 
+                      value={uptimeStats.avg}
+                      title="Average" 
                     />
-                    <div className="flex flex-col justify-center items-center">
-                      <div className="text-xl font-bold">{uptimeStats.events}</div>
-                      <div className="text-sm text-muted-foreground">Total Events</div>
-                    </div>
+                    <UptimeGauge 
+                      value={uptimeStats.max}
+                      title="Maximum" 
+                    />
+                  </div>
+                  <div className="text-xs text-center text-muted-foreground mt-2">
+                    Based on {uptimeStats.events} events
                   </div>
                 </div>
               </div>
