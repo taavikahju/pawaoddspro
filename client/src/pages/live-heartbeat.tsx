@@ -63,30 +63,60 @@ const UptimeGauge = ({ value }: { value: number }) => {
             {/* Center point */}
             <circle cx="50" cy="50" r="5" fill="white" stroke="#64748b" strokeWidth="1" />
             
-            {/* Needle */}
+            {/* Needle that adapts to dark/light mode */}
             <g transform={`rotate(${rotation}, 50, 50)`}>
-              {/* Main needle with highlight for visibility in dark mode */}
+              {/* Dark mode needle (visible in dark mode) */}
               <line 
+                className="dark:block hidden"
                 x1="50" 
                 y1="50" 
                 x2="50" 
                 y2="15" 
                 stroke="white" 
-                strokeWidth="5" 
+                strokeWidth="4" 
                 strokeLinecap="round"
               />
+              
+              {/* Light mode needle (visible in light mode) */}
               <line 
+                className="dark:hidden block"
                 x1="50" 
                 y1="50" 
                 x2="50" 
                 y2="15" 
-                stroke="red" 
-                strokeWidth="3" 
+                stroke="black" 
+                strokeWidth="4" 
                 strokeLinecap="round"
               />
-              {/* Center point with highlight */}
-              <circle cx="50" cy="50" r="6" fill="white" />
-              <circle cx="50" cy="50" r="4" fill="red" />
+              
+              {/* Outline for better visibility in both modes */}
+              <line 
+                className="dark:block hidden"
+                x1="50" 
+                y1="50" 
+                x2="50" 
+                y2="15" 
+                stroke="#111" 
+                strokeWidth="6" 
+                strokeLinecap="round"
+                strokeOpacity="0.3"
+              />
+              
+              <line 
+                className="dark:hidden block"
+                x1="50" 
+                y1="50" 
+                x2="50" 
+                y2="15" 
+                stroke="#fff" 
+                strokeWidth="6" 
+                strokeLinecap="round"
+                strokeOpacity="0.3"
+              />
+              
+              {/* Center point that adapts to theme */}
+              <circle cx="50" cy="50" r="6" fill="white" className="dark:opacity-100 opacity-25" />
+              <circle cx="50" cy="50" r="4" className="dark:fill-white fill-black" />
             </g>
           </svg>
         </div>
