@@ -52,6 +52,14 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     };
   }, []);
   
+  // State to store event details
+  const [eventDetails, setEventDetails] = useState<{
+    name: string;
+    homeTeam?: string;
+    awayTeam?: string;
+    gameMinute?: string;
+  } | null>(null);
+
   // Fetch data and set up the canvas
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
@@ -69,6 +77,29 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
         }
         
         const result = await response.json();
+        
+        // Also fetch event details from the status endpoint
+        try {
+          const statusResponse = await fetch('/api/live-heartbeat/status');
+          if (statusResponse.ok) {
+            const statusData = await statusResponse.json();
+            const event = statusData.events.find((e: any) => e.id === eventId);
+            if (event) {
+              setEventDetails({
+                name: event.name,
+                homeTeam: event.homeTeam,
+                awayTeam: event.awayTeam,
+                gameMinute: event.gameMinute
+              });
+              
+              if (event.gameMinute) {
+                setCurrentMinute(event.gameMinute);
+              }
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching event details:', error);
+        }
         
         // For football matches, we want to show the entire 90 minutes
         // No time range filtering needed as we'll use game minutes instead

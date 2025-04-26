@@ -10,6 +10,7 @@ import { Separator } from '@/components/ui/separator';
 import HeartbeatGraph from '../components/HeartbeatGraph';
 import Layout from '@/components/Layout';
 import { queryClient } from '@/lib/queryClient';
+import ReactCountryFlag from 'react-country-flag';
 
 interface HeartbeatEvent {
   id: string;
@@ -23,6 +24,8 @@ interface HeartbeatEvent {
   recordCount: number;
   gameMinute?: string;
   widgetId?: string;
+  homeTeam?: string;
+  awayTeam?: string;
 }
 
 export default function LiveHeartbeat() {
@@ -170,12 +173,75 @@ export default function LiveHeartbeat() {
                       <SelectValue placeholder="Select Country" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">All Countries</SelectItem>
-                      {heartbeatData?.countries?.map(country => (
-                        <SelectItem key={country} value={country}>
-                          {country}
-                        </SelectItem>
-                      ))}
+                      <SelectItem value="all">
+                        <span className="flex items-center gap-2">
+                          <span className="opacity-60">🌎</span> All Countries
+                        </span>
+                      </SelectItem>
+                      {heartbeatData?.countries?.map(country => {
+                        // Convert country name to 2-letter ISO code for the flag
+                        // This is a simple mapping for common countries
+                        const getCountryCode = (countryName: string) => {
+                          const codeMap: Record<string, string> = {
+                            'Australia': 'AU',
+                            'England': 'GB',
+                            'United Kingdom': 'GB',
+                            'France': 'FR',
+                            'Germany': 'DE',
+                            'Spain': 'ES',
+                            'Italy': 'IT',
+                            'Brazil': 'BR',
+                            'Portugal': 'PT',
+                            'Netherlands': 'NL',
+                            'Belgium': 'BE',
+                            'Croatia': 'HR',
+                            'Romania': 'RO',
+                            'Russia': 'RU',
+                            'Russian Federation': 'RU',
+                            'China': 'CN',
+                            'Chinese Taipei': 'TW',
+                            'Japan': 'JP',
+                            'Korea': 'KR',
+                            'Republic of Korea': 'KR',
+                            'South Korea': 'KR',
+                            'Greece': 'GR',
+                            'Turkey': 'TR',
+                            'Ghana': 'GH',
+                            'Kenya': 'KE',
+                            'Uganda': 'UG',
+                            'South Africa': 'ZA',
+                            'Nigeria': 'NG',
+                            'India': 'IN',
+                            'International': 'WW',
+                            'Israel': 'IL',
+                            'New Zealand': 'NZ',
+                            'Hong Kong': 'HK',
+                          };
+                          
+                          return codeMap[countryName] || 'UN'; // Default to UN flag if country not found
+                        };
+                        
+                        const countryCode = getCountryCode(country);
+                        
+                        return (
+                          <SelectItem key={country} value={country}>
+                            <span className="flex items-center gap-2">
+                              {countryCode !== 'WW' && countryCode !== 'UN' ? (
+                                <ReactCountryFlag 
+                                  countryCode={countryCode} 
+                                  svg 
+                                  style={{ width: '1em', height: '1em' }}
+                                />
+                              ) : countryCode === 'WW' ? (
+                                <span>🌐</span>
+                              ) : (
+                                <span>🏳️</span>
+                              )}
+                              {country}
+                            </span>
+                          </SelectItem>
+                        );
+                      })}
                     </SelectContent>
                   </Select>
                 </div>
@@ -259,11 +325,72 @@ export default function LiveHeartbeat() {
                               </div>
                             </div>
                             <div className="font-medium text-sm w-full" style={{wordWrap: 'break-word'}}>
-                              {event.name}
+                              {event.homeTeam && event.awayTeam 
+                                ? `${event.homeTeam} vs ${event.awayTeam}` 
+                                : event.name}
                             </div>
                           </div>
                           <div className="flex items-center justify-between text-xs text-muted-foreground">
-                            <span>{event.tournament}</span>
+                            <div className="flex items-center gap-1">
+                              {(() => {
+                                const getCountryCode = (countryName: string) => {
+                                  const codeMap: Record<string, string> = {
+                                    'Australia': 'AU',
+                                    'England': 'GB',
+                                    'United Kingdom': 'GB',
+                                    'France': 'FR',
+                                    'Germany': 'DE',
+                                    'Spain': 'ES',
+                                    'Italy': 'IT',
+                                    'Brazil': 'BR',
+                                    'Portugal': 'PT',
+                                    'Netherlands': 'NL',
+                                    'Belgium': 'BE',
+                                    'Croatia': 'HR',
+                                    'Romania': 'RO',
+                                    'Russia': 'RU',
+                                    'Russian Federation': 'RU',
+                                    'China': 'CN',
+                                    'Chinese Taipei': 'TW',
+                                    'Japan': 'JP',
+                                    'Korea': 'KR',
+                                    'Republic of Korea': 'KR',
+                                    'South Korea': 'KR',
+                                    'Greece': 'GR',
+                                    'Turkey': 'TR',
+                                    'Ghana': 'GH',
+                                    'Kenya': 'KE',
+                                    'Uganda': 'UG',
+                                    'South Africa': 'ZA',
+                                    'Nigeria': 'NG',
+                                    'India': 'IN',
+                                    'International': 'WW',
+                                    'Israel': 'IL',
+                                    'New Zealand': 'NZ',
+                                    'Hong Kong': 'HK',
+                                  };
+                                  
+                                  return codeMap[countryName] || 'UN';
+                                };
+                                
+                                const countryCode = getCountryCode(event.country);
+                                
+                                return countryCode !== 'WW' && countryCode !== 'UN' ? (
+                                  <ReactCountryFlag 
+                                    countryCode={countryCode} 
+                                    svg 
+                                    style={{ width: '0.8em', height: '0.8em' }}
+                                    className="mr-1"
+                                    title={event.country}
+                                  />
+                                ) : countryCode === 'WW' ? (
+                                  <span className="mr-1" title={event.country}>🌐</span>
+                                ) : (
+                                  <span className="mr-1" title={event.country}>🏳️</span>
+                                );
+                              })()}
+                              <span>{event.tournament}</span>
+                            </div>
                             <span>{formatDate(event.startTime)}</span>
                           </div>
                         </div>
