@@ -12,8 +12,12 @@ import ReactCountryFlag from 'react-country-flag';
 
 // Component for displaying uptime metrics with a gauge that looks like a speedometer
 const UptimeGauge = ({ value }: { value: number }) => {
-  // Calculate rotation angle for the needle (from -45 to 225 degrees)
-  const rotation = -45 + (value / 100) * 270;
+  // Ensure value is within 0-100 range to prevent rendering issues
+  const safeValue = Math.max(0, Math.min(100, value || 0));
+  
+  // Calculate rotation angle for the needle (from -90 to 90 degrees)
+  // 0% is at -90 degrees, 50% at 0 degrees, and 100% at 90 degrees
+  const rotation = -90 + (safeValue / 100) * 180;
   
   // Get color based on value
   const getColor = (val: number) => {
@@ -23,14 +27,17 @@ const UptimeGauge = ({ value }: { value: number }) => {
     return '#16a34a'; // green
   };
   
+  // Get needle color based on the value
+  const needleColor = getColor(safeValue);
+  
   return (
     <div className="flex items-center">
       <div className="text-sm font-medium text-muted-foreground mr-2">
         Average Uptime:
       </div>
       <div className="flex flex-col items-center">
-        <div className="relative w-[100px] h-[50px]">
-          <svg className="w-full h-full" viewBox="0 0 100 50">
+        <div className="relative w-[120px] h-[70px]">
+          <svg className="w-full h-full" viewBox="0 0 120 70">
             {/* Gauge background */}
             <defs>
               <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -44,86 +51,65 @@ const UptimeGauge = ({ value }: { value: number }) => {
             
             {/* Gauge arc (semi-circle) */}
             <path 
-              d="M 10 50 A 40 40 0 0 1 90 50" 
+              d="M 10 60 A 50 50 0 0 1 110 60" 
               fill="transparent" 
               stroke="url(#gaugeGradient)" 
-              strokeWidth="8" 
+              strokeWidth="10" 
               strokeLinecap="round"
             />
             
+            {/* Percentage markers */}
+            <g fill="currentColor" fontFamily="sans-serif" fontSize="8">
+              <text x="10" y="68" textAnchor="middle">0%</text>
+              <text x="60" y="20" textAnchor="middle">50%</text>
+              <text x="110" y="68" textAnchor="middle">100%</text>
+            </g>
+            
             {/* Ticks for scale */}
             <g stroke="#64748b" strokeWidth="1">
-              <line x1="10" y1="50" x2="15" y2="45" />
-              <line x1="25" y1="25" x2="30" y2="25" />
-              <line x1="50" y1="10" x2="50" y2="15" />
-              <line x1="75" y1="25" x2="70" y2="25" />
-              <line x1="90" y1="50" x2="85" y2="45" />
+              <line x1="10" y1="60" x2="10" y2="55" />
+              <line x1="35" y1="35" x2="38" y2="32" />
+              <line x1="60" y1="20" x2="60" y2="25" />
+              <line x1="85" y1="35" x2="82" y2="32" />
+              <line x1="110" y1="60" x2="110" y2="55" />
             </g>
             
             {/* Center point */}
-            <circle cx="50" cy="50" r="5" fill="white" stroke="#64748b" strokeWidth="1" />
+            <circle cx="60" cy="60" r="6" fill="#64748b" />
             
-            {/* Needle that adapts to dark/light mode */}
-            <g transform={`rotate(${rotation}, 50, 50)`}>
-              {/* Dark mode needle (visible in dark mode) */}
+            {/* Needle with color based on value */}
+            <g transform={`rotate(${rotation}, 60, 60)`}>
+              {/* Needle shadow/outline for better visibility */}
               <line 
-                className="dark:block hidden"
-                x1="50" 
-                y1="50" 
-                x2="50" 
-                y2="15" 
-                stroke="white" 
-                strokeWidth="4" 
+                x1="60" 
+                y1="60" 
+                x2="60" 
+                y2="25" 
+                stroke="rgba(0,0,0,0.3)" 
+                strokeWidth="5" 
                 strokeLinecap="round"
               />
               
-              {/* Light mode needle (visible in light mode) */}
+              {/* Actual needle */}
               <line 
-                className="dark:hidden block"
-                x1="50" 
-                y1="50" 
-                x2="50" 
-                y2="15" 
-                stroke="black" 
-                strokeWidth="4" 
+                x1="60" 
+                y1="60" 
+                x2="60" 
+                y2="25" 
+                stroke={needleColor} 
+                strokeWidth="3" 
                 strokeLinecap="round"
               />
-              
-              {/* Outline for better visibility in both modes */}
-              <line 
-                className="dark:block hidden"
-                x1="50" 
-                y1="50" 
-                x2="50" 
-                y2="15" 
-                stroke="#111" 
-                strokeWidth="6" 
-                strokeLinecap="round"
-                strokeOpacity="0.3"
-              />
-              
-              <line 
-                className="dark:hidden block"
-                x1="50" 
-                y1="50" 
-                x2="50" 
-                y2="15" 
-                stroke="#fff" 
-                strokeWidth="6" 
-                strokeLinecap="round"
-                strokeOpacity="0.3"
-              />
-              
-              {/* Center point that adapts to theme */}
-              <circle cx="50" cy="50" r="6" fill="white" className="dark:opacity-100 opacity-25" />
-              <circle cx="50" cy="50" r="4" className="dark:fill-white fill-black" />
             </g>
+            
+            {/* Center point overlay */}
+            <circle cx="60" cy="60" r="4" fill="white" />
           </svg>
         </div>
         
         {/* Percentage text */}
-        <div className="text-center text-sm font-medium" style={{ color: getColor(value) }}>
-          {value.toFixed(1)}%
+        <div className="text-center text-sm font-medium" style={{ color: getColor(safeValue) }}>
+          {safeValue.toFixed(1)}%
         </div>
       </div>
     </div>
