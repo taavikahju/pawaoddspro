@@ -365,17 +365,35 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
         let marketAvailable = isAvailable;
         
         if (timestamps.length > 0) {
-          // Get a timestamp index based on our position in the game
-          const timestampIndex = Math.min(
-            Math.floor((i / beatsToShow) * timestamps.length), 
-            timestamps.length - 1
-          );
+          // IMPROVED: Get a timestamp index based on our EXACT position in the timeline
+          // This ensures we map to the right timestamp instead of evenly distributing
+          // We calculate what timestamp this position represents
+          const positionRatio = i / beatsToShow;
+          const elapsedMs = timestamps[timestamps.length - 1].timestamp - timestamps[0].timestamp;
+          const msAtPosition = timestamps[0].timestamp + (positionRatio * elapsedMs);
+          
+          // Find the nearest timestamp to this position
+          let nearestIndex = 0;
+          let smallestDiff = Number.MAX_SAFE_INTEGER;
+          
+          for (let j = 0; j < timestamps.length; j++) {
+            const diff = Math.abs(timestamps[j].timestamp - msAtPosition);
+            if (diff < smallestDiff) {
+              smallestDiff = diff;
+              nearestIndex = j;
+            }
+          }
+          
+          // Use the nearest timestamp
+          const timestampIndex = nearestIndex;
+          console.log(`Position ${i}/${beatsToShow} maps to timestamp index ${timestampIndex} of ${timestamps.length}`);
+          
           // Ensure boolean value - even if string 'true'/'false' comes from server
           marketAvailable = timestamps[timestampIndex].isAvailable === true;
           
           // Log when a suspended section is detected
           if (!marketAvailable) {
-            console.log(`SUSPENDED section at beat ${i}, using timestamp ${timestampIndex}`);
+            console.log(`SUSPENDED section at beat ${i}, using timestamp ${timestampIndex}, time: ${new Date(timestamps[timestampIndex].timestamp).toISOString()}`);
           }
         }
         

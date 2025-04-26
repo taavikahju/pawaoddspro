@@ -231,7 +231,23 @@ export default function LiveHeartbeat() {
       console.log(`DEBUG: ${allSuspendedEvents.length - suspendedEventsAfterFiltering.length} suspended events were filtered out by country/tournament selection`);
     }
     
-    return filteredByCountryAndTournament;
+    // Sort events by startTime (ascending) as requested by the user
+    // First put live events at the top (they have isInPlay=true)
+    // Then sort by startTime for all other events
+    const sortedEvents = [...filteredByCountryAndTournament].sort((a, b) => {
+      // First prioritize live events
+      if (a.isInPlay && !b.isInPlay) return -1;
+      if (!a.isInPlay && b.isInPlay) return 1;
+      
+      // Then sort by start time (convert strings to Date objects)
+      const aTime = new Date(a.startTime);
+      const bTime = new Date(b.startTime);
+      return aTime.getTime() - bTime.getTime();
+    });
+    
+    console.log("✅ Events sorted by startTime (ascending)");
+    
+    return sortedEvents;
   }, [heartbeatData, historicalData, selectedCountry, selectedTournament, activeTab]);
   
   // Fetch heartbeat stats for the selected event
