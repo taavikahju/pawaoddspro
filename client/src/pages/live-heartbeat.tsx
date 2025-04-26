@@ -615,11 +615,8 @@ export default function LiveHeartbeat() {
                             // Priority 1: Selected event
                             selectedEventId === event.id
                               ? 'bg-accent hover:bg-accent/80'
-                              // Priority 2: Suspended events (both live and historical)
-                              : (!event.currentlyAvailable || event.suspended === true)
-                                ? 'bg-red-500/10 border-l-2 border-red-500 dark:bg-red-900/15 hover:bg-red-500/15'
-                                // Priority 3: Normal events
-                                : 'hover:bg-accent'
+                              // All events except selected have the same style
+                              : 'hover:bg-accent'
                           }`}
                           onClick={() => {
                             console.log(`Selecting event:`, {
