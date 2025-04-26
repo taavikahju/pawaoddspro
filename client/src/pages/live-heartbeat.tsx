@@ -200,9 +200,30 @@ export default function LiveHeartbeat() {
       ? heartbeatData?.events || []
       : (historicalData?.success ? historicalData.data : []);
     
+    // Remove finished events
+    // A finished event is one that is suspended (not in the current API response) 
+    // and has a start time more than 3 hours ago
+    const threeHoursAgo = new Date();
+    threeHoursAgo.setHours(threeHoursAgo.getHours() - 3);
+    
+    const activeEvents = events.filter(event => {
+      // Keep non-suspended events
+      if (!event.suspended && event.currentlyAvailable !== false) {
+        return true;
+      }
+      
+      // For suspended events, check if they're recent
+      const eventStartTime = new Date(event.startTime);
+      const isRecentEvent = eventStartTime > threeHoursAgo;
+      
+      return isRecentEvent;
+    });
+    
+    console.log(`DEBUG: Filtered out ${events.length - activeEvents.length} likely finished events (suspended & older than 3 hours)`);
+    
     // Log summary of suspended events to debug
-    const allSuspendedEvents = events.filter(e => !e.currentlyAvailable || e.suspended);
-    console.log(`DEBUG: Found ${allSuspendedEvents.length} suspended events out of ${events.length} total`);
+    const allSuspendedEvents = activeEvents.filter(e => !e.currentlyAvailable || e.suspended);
+    console.log(`DEBUG: Found ${allSuspendedEvents.length} suspended events out of ${activeEvents.length} total`);
     
     // Always log suspended events for debugging
     if (allSuspendedEvents.length > 0) {
@@ -219,7 +240,7 @@ export default function LiveHeartbeat() {
     }
     
     // Apply country and tournament filters
-    const filteredByCountryAndTournament = events.filter(event => {
+    const filteredByCountryAndTournament = activeEvents.filter(event => {
       const countryMatch = selectedCountry === 'all' || event.country === selectedCountry;
       const tournamentMatch = selectedTournament === 'all' || event.tournament === selectedTournament;
       return countryMatch && tournamentMatch;
