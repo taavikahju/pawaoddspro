@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, timestamp, json } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, timestamp, json, bigint } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -164,7 +164,7 @@ export type HeartbeatStats = z.infer<typeof heartbeatStatsSchema>;
 export const heartbeatStats = pgTable("heartbeat_stats", {
   id: serial("id").primaryKey(),
   eventId: text("event_id").notNull(),
-  timestamp: integer("timestamp").notNull(),
+  timestamp: bigint("timestamp", { mode: "number" }).notNull(),
   uptimePercentage: integer("uptime_percentage").notNull(),
   availableDurationMinutes: integer("available_duration_minutes").notNull(),
   suspendedDurationMinutes: integer("suspended_duration_minutes").notNull(),
