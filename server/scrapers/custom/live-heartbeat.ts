@@ -301,27 +301,35 @@ async function scrapeEvents(apiUrl: string): Promise<any[]> {
   try {
     console.log('Scraping BetPawa live events...');
     
-    // Using the exact URL format confirmed by you that works for the heartbeat project
-    // This URL includes the query parameter with proper structure for the BetPawa Uganda API
+    // Try multiple approaches with simpler URLs first and then more complex ones
     
+    // Start with simple URLs that don't require complex query parameters
+    const simpleUrls = [
+      // Mobile API URLs
+      'https://www.betpawa.ug/mobile-api/events?sport=1&type=LIVE',
+      'https://www.betpawa.com.gh/mobile-api/events?sport=1&type=LIVE',
+      
+      // Standard betting API URLs
+      'https://www.betpawa.ug/api/events/football/LIVE',
+      'https://www.betpawa.com.gh/api/events/football/LIVE',
+      'https://ke.betpawa.com/api/events/football/LIVE',
+    ];
+    
+    // Then try the more complex v2 sportsbook API
     // Create the specific query object for the v2 API with pagination support
     const createQueryParam = (skip: number, take: number) => {
-      // Using exactly the structure from the URL you provided
+      // Using a simpler structure than the original
       const queryObj = {
         queries: [
           {
             query: {
               eventType: "LIVE",
-              categories: ["2"], // Football category ID (2 is their code for football)
-              zones: {}
+              categories: ["2"],
             },
             view: {
-              marketTypes: ["3743"] // Match Result (1X2) market type ID
+              marketTypes: ["3743"]
             },
             skip: skip,
-            sort: {
-              competitionPriority: "DESC"
-            },
             take: take
           }
         ]
@@ -330,20 +338,15 @@ async function scrapeEvents(apiUrl: string): Promise<any[]> {
       return `q=${encodeURIComponent(JSON.stringify(queryObj))}`;
     };
     
-    // Using the exact endpoint URL you confirmed works
-    const mainEndpoint = 'https://www.betpawa.ug/api/sportsbook/v2/events/lists/by-queries';
-    
-    // Prioritize the working URL with different page sizes to ensure we get all events
+    // Combine both simple and complex URLs
     const potentialEndpoints = [
-      // Primary endpoint with the confirmed working URL format and a larger page size (50)
-      `${mainEndpoint}?${createQueryParam(0, 50)}`,
+      // First try the simple URLs
+      ...simpleUrls,
       
-      // Try with a smaller page size as fallback
-      `${mainEndpoint}?${createQueryParam(0, 20)}`,
-      
-      // Also try alternative domains with same API structure
-      `https://www.betpawa.com.gh/api/sportsbook/v2/events/lists/by-queries?${createQueryParam(0, 50)}`,
-      `https://ke.betpawa.com/api/sportsbook/v2/events/lists/by-queries?${createQueryParam(0, 50)}`
+      // Then try the v2 sportsbook API with the query parameter
+      `https://www.betpawa.ug/api/sportsbook/v2/events/lists/by-queries?${createQueryParam(0, 20)}`,
+      `https://www.betpawa.com.gh/api/sportsbook/v2/events/lists/by-queries?${createQueryParam(0, 20)}`,
+      `https://ke.betpawa.com/api/sportsbook/v2/events/lists/by-queries?${createQueryParam(0, 20)}`
     ];
     
     for (const endpoint of potentialEndpoints) {
@@ -391,25 +394,16 @@ async function scrapePagedEvents(apiUrl: string): Promise<any[]> {
     const baseEndpoint = apiUrl.split('?')[0]; // Get base URL without query params
     
     // Make an actual API call with enhanced headers that more closely match a browser
+    // Using simpler headers that are less likely to be rejected by the API
     const response = await axios.get(apiUrl, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
-        'Accept': 'application/json, text/plain, */*',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
+        'Accept': 'application/json',
         'Accept-Language': 'en-US,en;q=0.9',
-        'Referer': `https://${domain}/sport/football/live`,
+        'Referer': `https://${domain}/`,
         'Origin': `https://${domain}`,
         'Connection': 'keep-alive',
-        'sec-ch-ua': '"Chromium";v="123", "Not_A Brand";v="24"',
-        'sec-ch-ua-mobile': '?0',
-        'sec-ch-ua-platform': '"Windows"',
-        'Sec-Fetch-Dest': 'empty',
-        'Sec-Fetch-Mode': 'cors',
-        'Sec-Fetch-Site': 'same-origin',
         'Cache-Control': 'no-cache',
-        'Pragma': 'no-cache',
-        'X-Requested-With': 'XMLHttpRequest',
-        'X-Timestamp': timestamp.toString(),
-        'Cookie': `VISITOR_ID=${visitorId}; VISITOR_COUNTRY_CODE=UG; betPawaSport=football; betPawaHasVisitedSport=true; pageLoadAt=${timestamp}`
       },
       timeout: 30000 // 30-second timeout
     });
@@ -526,23 +520,24 @@ async function scrapePagedEvents(apiUrl: string): Promise<any[]> {
     try {
       console.log('Trying one more time with alternative headers...');
       
-      // Create alternative request headers that might bypass any restrictions
+      // Create a very simple headers set that just identifies as a regular browser
       const alternativeHeaders = {
-        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36',
         'Accept': '*/*',
-        'Accept-Language': 'en-GB,en;q=0.9',
-        'Origin': 'https://www.betpawa.ug',
-        'Referer': 'https://www.betpawa.ug/sport/football',
-        'Connection': 'keep-alive'
       };
       
-      // Try with a simple GET request as fallback
-      const retryUrl = apiUrl.includes('?') ? apiUrl.split('?')[0] : apiUrl;
+      // Try a completely different approach:
+      // 1. First, try the BetPawa Uganda mobile API which might have less restrictions
+      const mobileApiUrl = 'https://www.betpawa.ug/mobile-api/events?sport=1&type=LIVE&categoryId=2';
       
-      const response = await axios.get(retryUrl, {
+      // Try with the mobile API first
+      const response = await axios.get(mobileApiUrl, {
         headers: alternativeHeaders,
         timeout: 20000
       });
+      
+      // Log the exact URL used for debugging
+      console.log(`Tried alternative mobile API URL: ${mobileApiUrl}`);
       
       if (response.data) {
         // Try to extract any events
@@ -567,7 +562,7 @@ async function scrapePagedEvents(apiUrl: string): Promise<any[]> {
           return events;
         }
       }
-    } catch (retryError) {
+    } catch (retryError: any) {
       console.error('Retry also failed:', retryError.message || String(retryError));
     }
     
