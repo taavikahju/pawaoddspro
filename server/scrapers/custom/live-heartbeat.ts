@@ -800,7 +800,35 @@ async function processEvents(events: any[]): Promise<void> {
   // Debug: Show the full structure of the first event to see what we're working with
   if (events.length > 0) {
     const firstEvent = events[0];
-    console.log(`RAW EVENT DATA - First event structure (ID: ${firstEvent.id || 'unknown'}):`, JSON.stringify(firstEvent, null, 2));
+    
+    // Log the structure of an event to understand what data is available
+    console.log(`RAW EVENT DATA - First event structure (ID: ${firstEvent.id || firstEvent.eventId || 'unknown'}):`);
+    
+    // Look for useful fields for team names
+    console.log('EVENT NAME:', firstEvent.name);
+    console.log('FIXTURE NAME:', firstEvent.fixtureName);
+    console.log('EVENT TITLE:', firstEvent.title);
+    
+    // Check for team info in competitors array
+    if (firstEvent.competitors) {
+      console.log('COMPETITORS:', JSON.stringify(firstEvent.competitors));
+    }
+    
+    // Check for team info in home/away properties
+    if (firstEvent.homeTeam || firstEvent.awayTeam) {
+      console.log('HOME TEAM:', JSON.stringify(firstEvent.homeTeam));
+      console.log('AWAY TEAM:', JSON.stringify(firstEvent.awayTeam));
+    }
+    
+    // Extract and log the match teams
+    if (firstEvent.matchTeams) {
+      console.log('MATCH TEAMS:', JSON.stringify(firstEvent.matchTeams));
+    }
+    
+    // Look for fixture information which often contains team names
+    if (firstEvent.fixture) {
+      console.log('FIXTURE:', JSON.stringify(firstEvent.fixture));
+    }
   }
 
   // Extract relevant data from events - specifically tailored for the BetPawa Uganda API format
@@ -1076,7 +1104,18 @@ async function processEvents(events: any[]): Promise<void> {
         // Create a descriptive fixture identifier based on tournament and ID
         // This is more informative than "Match Details Unavailable"
         const fixtureId = eventId.substring(0, 4); // Use first few digits as unique ID
-        eventName = `Fixture #${fixtureId} (${tournament})`;
+        
+        // Include more context information in the display name
+        if (country !== 'Unknown' && tournament !== 'Unknown') {
+          eventName = `${country} - ${tournament} (ID: ${fixtureId})`;
+        } else if (country !== 'Unknown') {
+          eventName = `${country} Match (ID: ${fixtureId})`;
+        } else if (tournament !== 'Unknown') {
+          eventName = `${tournament} Match (ID: ${fixtureId})`;
+        } else {
+          eventName = `Match ID: ${fixtureId}`;
+        }
+        
         console.log(`Created descriptive fixture name: ${eventName}`);
         homeTeam = "";
         awayTeam = "";
@@ -1098,7 +1137,7 @@ async function processEvents(events: any[]): Promise<void> {
       marketAvailability: isMarketAvailable ? 'Available' : 'Suspended',
       recordCount: 0,
       gameMinute,
-      widgetId,
+      widgetId: widgetId || extractedWidgetId || '',
       homeTeam,
       awayTeam
     };
@@ -1258,8 +1297,17 @@ export function getHeartbeatStatus(): HeartbeatState {
         // Use the event name if it's meaningful
         displayName = event.name;
       } else {
-        // If nothing else works, use the tournament name as part of the match description
-        displayName = `Match from ${event.tournament || event.country || "Unknown League"}`;
+        // If nothing else works, create a more informative match description
+        const fixtureId = event.id.substring(0, 4);
+        if (event.country !== 'Unknown' && event.tournament !== 'Unknown') {
+          displayName = `${event.country} - ${event.tournament} (ID: ${fixtureId})`;
+        } else if (event.country !== 'Unknown') {
+          displayName = `${event.country} Match (ID: ${fixtureId})`;
+        } else if (event.tournament !== 'Unknown') {
+          displayName = `${event.tournament} Match (ID: ${fixtureId})`;
+        } else {
+          displayName = `Match ID: ${fixtureId}`;
+        }
       }
       
       return {
