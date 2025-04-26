@@ -12,40 +12,65 @@ import ReactCountryFlag from 'react-country-flag';
 
 // Component for displaying uptime metrics in a modern gauge
 const UptimeGauge = ({ value }: { value: number }) => {
-  // Calculate the angle for the needle based on the value
+  // Calculate the angle for the needle based on the value (between -30 and 210 degrees)
   const needleRotation = -30 + (value / 100) * 240;
+  
+  // Get color based on value
+  const getColor = (val: number) => {
+    if (val < 40) return '#ef4444'; // red
+    if (val < 60) return '#f97316'; // orange
+    if (val < 75) return '#eab308'; // yellow
+    return '#10b981'; // green
+  };
   
   return (
     <div className="flex items-center">
       <div className="text-sm font-medium text-muted-foreground mr-2">
-        Uptime:
+        Average Uptime:
       </div>
-      <div className="relative w-[60px] h-[30px]">
-        <svg className="w-full h-full" viewBox="0 0 60 30">
-          {/* Gauge sections */}
-          <path d="M 30 30 A 20 20 0 0 1 10 30" fill="#ef4444" /> {/* Red */}
-          <path d="M 30 30 A 20 20 0 0 1 17 14" fill="#f97316" /> {/* Orange */}
-          <path d="M 30 30 A 20 20 0 0 1 30 10" fill="#eab308" /> {/* Yellow */}
-          <path d="M 30 30 A 20 20 0 0 1 43 14" fill="#65a30d" /> {/* Green */}
-          <path d="M 30 30 A 20 20 0 0 1 50 30" fill="#22c55e" /> {/* Green */}
-          
-          {/* Center white circle */}
-          <circle cx="30" cy="30" r="10" fill="white" />
-          
-          {/* Needle */}
-          <g transform={`rotate(${needleRotation}, 30, 30)`}>
-            <line x1="30" y1="30" x2="30" y2="12" stroke="#000" strokeWidth="1.5" />
-            <circle cx="30" cy="30" r="2" fill="#000" />
-          </g>
-        </svg>
-      </div>
-      <div className="ml-2 text-sm font-medium" 
-           style={{ 
-             color: value < 40 ? '#ef4444' : 
-                    value < 60 ? '#f97316' : 
-                    value < 75 ? '#eab308' : '#22c55e' 
-           }}>
-        {value.toFixed(1)}%
+      <div className="flex items-center">
+        <div className="relative w-[100px] h-[50px]">
+          <svg className="w-full h-full" viewBox="0 0 100 50">
+            {/* Gauge background - more like your picture */}
+            <defs>
+              <linearGradient id="redGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#ef4444" />
+                <stop offset="100%" stopColor="#f97316" />
+              </linearGradient>
+              <linearGradient id="yellowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#f97316" />
+                <stop offset="100%" stopColor="#eab308" />
+              </linearGradient>
+              <linearGradient id="greenGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#eab308" />
+                <stop offset="100%" stopColor="#10b981" />
+              </linearGradient>
+            </defs>
+            
+            {/* Gauge arc sections with gradients */}
+            <path d="M 50 50 A 40 40 0 0 1 12 32" fill="none" stroke="url(#redGradient)" strokeWidth="8" strokeLinecap="round" />
+            <path d="M 50 50 A 40 40 0 0 1 30 12" fill="none" stroke="url(#yellowGradient)" strokeWidth="8" strokeLinecap="round" />
+            <path d="M 50 50 A 40 40 0 0 1 88 32" fill="none" stroke="url(#greenGradient)" strokeWidth="8" strokeLinecap="round" />
+            
+            {/* Center white circle */}
+            <circle cx="50" cy="50" r="15" fill="white" stroke="#e2e8f0" strokeWidth="1" />
+            
+            {/* Ticks */}
+            <line x1="16" y1="38" x2="20" y2="42" stroke="#64748b" strokeWidth="1" />
+            <line x1="50" y1="10" x2="50" y2="15" stroke="#64748b" strokeWidth="1" />
+            <line x1="84" y1="38" x2="80" y2="42" stroke="#64748b" strokeWidth="1" />
+            
+            {/* Needle */}
+            <g transform={`rotate(${needleRotation}, 50, 50)`}>
+              <line x1="50" y1="50" x2="50" y2="15" stroke="#000" strokeWidth="2" strokeLinecap="round" />
+              <circle cx="50" cy="50" r="4" fill="#000" />
+            </g>
+          </svg>
+        </div>
+        <div className="ml-2 text-sm font-medium" 
+              style={{ color: getColor(value) }}>
+          {value.toFixed(1)}%
+        </div>
       </div>
     </div>
   );
