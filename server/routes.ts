@@ -1407,15 +1407,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // CRITICAL FIX: Ensure all events have BOTH currentlyAvailable and suspended properties 
       // correctly set for consistency between backend and frontend
       status.events = status.events.map(event => {
-        // If the event is marked as suspended in either property, ensure both are consistent
-        if (event.suspended === true || event.currentlyAvailable === false) {
+        // Check if the event has markets available (totalMarketCount > 0)
+        if (event.totalMarketCount && event.totalMarketCount > 0) {
+          // Event has markets, should be marked as available regardless of previous state
+          console.log(`Event ${event.id} (${event.name}) has ${event.totalMarketCount} markets - marking as AVAILABLE`);
+          return {
+            ...event,
+            suspended: false,
+            currentlyAvailable: true
+          };
+        } 
+        // No markets available (totalMarketCount is 0 or undefined)
+        else if (event.totalMarketCount === 0) {
+          // Explicitly mark as suspended due to zero markets
+          console.log(`Event ${event.id} (${event.name}) has 0 markets - marking as SUSPENDED`);
           return {
             ...event,
             suspended: true,
             currentlyAvailable: false
           };
         }
-        // Otherwise make sure it's properly marked as available
+        // Otherwise, use existing suspension flags
+        else if (event.suspended === true || event.currentlyAvailable === false) {
+          // Event is already marked as suspended in at least one property
+          return {
+            ...event,
+            suspended: true,
+            currentlyAvailable: false
+          };
+        }
+        // Default case - event should be available
         return {
           ...event,
           suspended: false,
