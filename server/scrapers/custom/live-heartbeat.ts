@@ -297,56 +297,68 @@ function buildApiUrl(host: string, path: string, params: Record<string, any> = {
 }
 
 // Scrape events from the API
+/**
+ * Scrape live events from BetPawa using the exact approach from the Python script
+ */
 async function scrapeEvents(apiUrl: string): Promise<any[]> {
   try {
-    console.log('Scraping BetPawa live events...');
+    console.log('Scraping BetPawa live events with Python-based approach...');
     
-    // Try multiple approaches with simpler URLs first and then more complex ones
+    // Following the exact approach from the Python script
+    const allEvents: any[] = [];
+    const take = 20;
+    let skip = 0;
     
-    // Start with simple URLs that don't require complex query parameters
-    const simpleUrls = [
-      // Mobile API URLs
-      'https://www.betpawa.ug/mobile-api/events?sport=1&type=LIVE',
-      'https://www.betpawa.com.gh/mobile-api/events?sport=1&type=LIVE',
-      
-      // Standard betting API URLs
-      'https://www.betpawa.ug/api/events/football/LIVE',
-      'https://www.betpawa.com.gh/api/events/football/LIVE',
-      'https://ke.betpawa.com/api/events/football/LIVE',
-    ];
-    
-    // Then try the more complex v2 sportsbook API
-    // Create the specific query object for the v2 API with pagination support
-    const createQueryParam = (skip: number, take: number) => {
-      // Using a simpler structure than the original
-      const queryObj = {
-        queries: [
-          {
-            query: {
-              eventType: "LIVE",
-              categories: ["2"],
-            },
-            view: {
-              marketTypes: ["3743"]
-            },
-            skip: skip,
-            take: take
-          }
-        ]
-      };
-      
-      return `q=${encodeURIComponent(JSON.stringify(queryObj))}`;
+    // Create the exact query parameters format used in the Python script, just replacing "UPCOMING" with "LIVE"
+    const createEncodedQuery = (skipValue: number) => {
+      // Base encoded query with placeholder for skip
+      const baseQuery = "%7B%22queries%22%3A%5B%7B%22query%22%3A%7B%22eventType%22%3A%22LIVE%22%2C%22categories%22%3A%5B2%5D%2C%22zones%22%3A%7B%7D%2C%22hasOdds%22%3Atrue%7D%2C%22view%22%3A%7B%22marketTypes%22%3A%5B%223743%22%5D%7D%2C%22skip%22%3ASKIP_PLACEHOLDER%2C%22take%22%3A20%7D%5D%7D";
+      return baseQuery.replace("SKIP_PLACEHOLDER", skipValue.toString());
     };
     
-    // Combine both simple and complex URLs
+    // Using the exact headers from the Python script, which are known to work
+    const headers = {
+      "accept": "*/*",
+      "accept-language": "en-GB,en-US;q=0.9,en;q=0.8,la;q=0.7",
+      "baggage": "sentry-environment=production,sentry-release=1.203.58,sentry-public_key=f051fd6f1fdd4877afd406a80df0ddb8,sentry-trace_id=69dc4eced394402e8b4842078bf03b47,sentry-sample_rate=0.1,sentry-transaction=Upcoming,sentry-sampled=false",
+      "devicetype": "web",
+      "if-modified-since": new Date().toUTCString(),
+      "priority": "u=1, i",
+      "referer": "https://www.betpawa.ug/events?marketId=1X2&categoryId=2",
+      "sec-ch-ua": "\"Google Chrome\";v=\"135\", \"Not-A.Brand\";v=\"8\", \"Chromium\";v=\"135\"",
+      "sec-ch-ua-mobile": "?0",
+      "sec-ch-ua-platform": "\"macOS\"",
+      "sec-fetch-dest": "empty",
+      "sec-fetch-mode": "cors",
+      "sec-fetch-site": "same-origin",
+      "sentry-trace": "69dc4eced394402e8b4842078bf03b47-982bacd1c87283b4-0",
+      "traceid": "1ecc4dce-f388-46a2-8275-0acddeffcf4d",
+      "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36",
+      "vuejs": "true",
+      "x-pawa-brand": "betpawa-uganda",
+      "x-pawa-language": "en"
+    };
+    
+    // Generate cookies - similar structure to Python but generating fresh values
+    const timestamp = Date.now();
+    const cookies = {
+      "_ga": `GA1.1.${timestamp}.${timestamp - 1000000}`,
+      "_ga_608WPEPCC3": `GS1.1.${timestamp}.7.0.${timestamp}.0.0.0`,
+      "aff_cookie": "F60",
+      "_gcl_au": `1.1.${timestamp}.${timestamp}`,
+      "PHPSESSID": crypto.randomBytes(16).toString('hex'),
+      "tracingId": `${crypto.randomBytes(8).toString('hex')}-${crypto.randomBytes(4).toString('hex')}-${crypto.randomBytes(4).toString('hex')}-${crypto.randomBytes(4).toString('hex')}-${crypto.randomBytes(12).toString('hex')}`,
+      "x-pawa-token": `${crypto.randomBytes(8).toString('hex')}-${crypto.randomBytes(8).toString('hex')}`,
+      "cf_clearance": `${crypto.randomBytes(20).toString('hex')}-${timestamp}-1.2.1.1-${crypto.randomBytes(80).toString('hex')}`,
+      "__cf_bm": `${crypto.randomBytes(20).toString('hex')}-${timestamp}-1.0.1.1-${crypto.randomBytes(80).toString('hex')}`,
+      "_ga_81NDDTKQDC": `GS1.1.${timestamp}.454.1.${timestamp+1000}.60.0.0`
+    };
+    
+    // URLs to try in order of preference, based on Python script
     const potentialEndpoints = [
-      // First try the simple URLs
-      ...simpleUrls,
-      
-      // Then try the v2 sportsbook API with the query parameter
-      `https://www.betpawa.ug/api/sportsbook/v2/events/lists/by-queries?${createQueryParam(0, 20)}`,
-      `https://www.betpawa.com.gh/api/sportsbook/v2/events/lists/by-queries?${createQueryParam(0, 20)}`,
-      `https://ke.betpawa.com/api/sportsbook/v2/events/lists/by-queries?${createQueryParam(0, 20)}`
+      "https://www.betpawa.ug/api/sportsbook/v2/events/lists/by-queries", // Uganda (main target)
+      "https://www.betpawa.com.gh/api/sportsbook/v2/events/lists/by-queries", // Ghana
+      "https://ke.betpawa.com/api/sportsbook/v2/events/lists/by-queries", // Kenya
     ];
     
     for (const endpoint of potentialEndpoints) {
@@ -376,141 +388,158 @@ async function scrapeEvents(apiUrl: string): Promise<any[]> {
 /**
  * Fetch events from the API with pagination support
  */
+/**
+ * Fetch events from the API with pagination support
+ * This implementation is based directly on the Python script approach
+ */
 async function scrapePagedEvents(apiUrl: string): Promise<any[]> {
   try {
     console.log(`Fetching data from BetPawa API: ${apiUrl}`);
     
-    // Create a properly formatted date for headers
-    const now = new Date();
-    const visitorId = now.getTime().toString();
-    const timestamp = now.getTime();
+    // Following the Python script pagination approach
+    const allEvents: any[] = [];
+    const take = 20;
+    let skip = 0;
     
-    // Determine which domain we're using
-    const domain = new URL(apiUrl).hostname;
+    // We need to use the clean base URL for pagination
+    const baseEndpoint = apiUrl.split('?')[0]; 
     
-    // Extract base URL and check if it uses the sportsbook/v2 format 
-    // which would need pagination support
-    const isV2Endpoint = apiUrl.includes('sportsbook/v2');
-    const baseEndpoint = apiUrl.split('?')[0]; // Get base URL without query params
-    
-    // Make an actual API call with enhanced headers that more closely match a browser
-    // Using simpler headers that are less likely to be rejected by the API
-    const response = await axios.get(apiUrl, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
-        'Accept': 'application/json',
-        'Accept-Language': 'en-US,en;q=0.9',
-        'Referer': `https://${domain}/`,
-        'Origin': `https://${domain}`,
-        'Connection': 'keep-alive',
-        'Cache-Control': 'no-cache',
-      },
-      timeout: 30000 // 30-second timeout
-    });
-    
-    if (!response.data) {
-      throw new Error('No data returned from API');
-    }
-    
-    let events: any[] = [];
-    let totalEvents = 0;
-    let hasMorePages = false;
-    let currentSkip = 0;
-    const pageSize = 50; // Default page size
-    
-    // Function to extract query object from URL for pagination
-    const extractQueryFromUrl = (url: string): any => {
-      const queryParams = new URLSearchParams(url.split('?')[1]);
-      if (queryParams.has('q')) {
-        try {
-          return JSON.parse(decodeURIComponent(queryParams.get('q') || '{}'));
-        } catch (e) {
-          console.log('Error parsing query object:', e);
-          return null;
-        }
-      }
-      return null;
+    // Use the exact headers from the Python script
+    const headers = {
+      "accept": "*/*",
+      "accept-language": "en-GB,en-US;q=0.9,en;q=0.8,la;q=0.7",
+      "baggage": "sentry-environment=production,sentry-release=1.203.58,sentry-public_key=f051fd6f1fdd4877afd406a80df0ddb8,sentry-trace_id=69dc4eced394402e8b4842078bf03b47,sentry-sample_rate=0.1,sentry-transaction=Upcoming,sentry-sampled=false",
+      "devicetype": "web",
+      "if-modified-since": new Date().toUTCString(),
+      "priority": "u=1, i",
+      "referer": "https://www.betpawa.ug/events?marketId=1X2&categoryId=2",
+      "sec-ch-ua": "\"Google Chrome\";v=\"135\", \"Not-A.Brand\";v=\"8\", \"Chromium\";v=\"135\"",
+      "sec-ch-ua-mobile": "?0",
+      "sec-ch-ua-platform": "\"macOS\"",
+      "sec-fetch-dest": "empty",
+      "sec-fetch-mode": "cors",
+      "sec-fetch-site": "same-origin",
+      "sentry-trace": "69dc4eced394402e8b4842078bf03b47-982bacd1c87283b4-0",
+      "traceid": "1ecc4dce-f388-46a2-8275-0acddeffcf4d",
+      "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36",
+      "vuejs": "true",
+      "x-pawa-brand": "betpawa-uganda",
+      "x-pawa-language": "en"
     };
     
-    // Try multiple paths to extract events based on API response format
-    // Handle v2 sportsbook API format first (confirmed format from the user)
-    if (response.data?.queries?.[0]?.events) {
-      events = response.data.queries[0].events;
+    // Paginate through all results
+    while (true) {
+      // Create the exact same type of encoded query used in the Python script
+      const encodedQuery = "%7B%22queries%22%3A%5B%7B%22query%22%3A%7B%22eventType%22%3A%22LIVE%22%2C%22categories%22%3A%5B2%5D%2C%22zones%22%3A%7B%7D%2C%22hasOdds%22%3Atrue%7D%2C%22view%22%3A%7B%22marketTypes%22%3A%5B%223743%22%5D%7D%2C%22skip%22%3ASKIP_PLACEHOLDER%2C%22take%22%3A20%7D%5D%7D".replace("SKIP_PLACEHOLDER", skip.toString());
+      const currentUrl = `${baseEndpoint}?q=${encodedQuery}`;
       
-      // Check if we need to handle pagination
-      if (isV2Endpoint && events.length === pageSize) {
-        // Extract query object for pagination
-        const queryObj = extractQueryFromUrl(apiUrl);
-        if (queryObj && queryObj.queries && queryObj.queries.length > 0) {
-          currentSkip = queryObj.queries[0].skip || 0;
-          totalEvents = response.data.queries[0].total || 0;
-          
-          // Determine if there are more pages
-          hasMorePages = (currentSkip + pageSize) < totalEvents;
-          
-          // If we have more pages, fetch them
-          if (hasMorePages) {
-            console.log(`Found ${events.length} events, but there are more. Fetching next page...`);
-            
-            // Update skip parameter for next page
-            const nextSkip = currentSkip + pageSize;
-            
-            // Create query for next page
-            const nextQueryObj = { ...queryObj };
-            nextQueryObj.queries[0].skip = nextSkip;
-            
-            // Build URL for next page
-            const nextPageUrl = `${baseEndpoint}?q=${encodeURIComponent(JSON.stringify(nextQueryObj))}`;
-            
-            try {
-              // Recursively fetch next page
-              const nextPageEvents = await scrapePagedEvents(nextPageUrl);
-              
-              // Combine with current events
-              events = [...events, ...nextPageEvents];
-            } catch (paginationError) {
-              console.error('Error fetching next page:', paginationError);
-              // Continue with what we have
-            }
-          }
+      console.log(`Fetching page with skip=${skip}...`);
+      
+      try {
+        // Make API call with headers from Python script
+        const response = await axios.get(currentUrl, {
+          headers,
+          timeout: 30000
+        });
+        
+        if (response.status !== 200) {
+          console.log(`Request failed with status ${response.status}`);
+          break;
         }
-      }
-    } else if (response.data?.events) {
-      // Handle other common response formats
-      events = response.data.events;
-    } else if (response.data?.data?.events) {
-      events = response.data.data.events;
-    } else if (Array.isArray(response.data)) {
-      events = response.data.filter(item => item.status === 'LIVE' || item.isLive);
-    } else if (response.data?.sports) {
-      // Extract events from sports array
-      const football = response.data.sports.find((s: any) => 
-        s.name?.toLowerCase().includes('football') || s.name?.toLowerCase().includes('soccer')
-      );
-      if (football && football.events) {
-        events = football.events;
+        
+        // Extract events from the response using the correct path
+        let pageEvents: any[] = [];
+        
+        try {
+          // Look for events in the same format as the Python script
+          const responses = response.data?.responses?.[0]?.responses;
+          
+          if (responses && Array.isArray(responses) && responses.length > 0) {
+            // We found data in the expected format, now extract events
+            pageEvents = responses;
+            console.log(`Found ${pageEvents.length} events on page with skip=${skip}`);
+          } 
+          // If we didn't find events in the expected format, try other common formats
+          else if (response.data?.queries?.[0]?.events) {
+            pageEvents = response.data.queries[0].events;
+          }
+          else if (response.data?.events) {
+            pageEvents = response.data.events;
+          }
+          else if (response.data?.data?.events) {
+            pageEvents = response.data.data.events;
+          }
+          else if (Array.isArray(response.data)) {
+            pageEvents = response.data.filter(item => item.status === 'LIVE' || item.isLive);
+          }
+          
+          // Process each event from this page and add to allEvents
+          if (pageEvents.length > 0) {
+            // Using a similar approach to extract data as the Python script
+            for (const event of pageEvents) {
+              try {
+                // Get the SPORTRADAR widget for event ID
+                const widget = event.widgets?.find((w: any) => w.type === 'SPORTRADAR');
+                const widgetId = widget?.id || '';
+                
+                // Get the 1X2 market (market type 3743)
+                const market = event.markets?.find((m: any) => m.marketType?.id === '3743');
+                
+                // Extract basic event data
+                const eventData: any = {
+                  eventId: widgetId || event.id || '',
+                  country: event.region?.name || event.category?.name || 'Unknown',
+                  tournament: event.competition?.name || event.league?.name || 'Unknown',
+                  event: event.name || '',
+                  market: market?.marketType?.name || '1X2',
+                  isInPlay: true,
+                  startTime: event.startTime || new Date().toISOString(),
+                  gameMinute: event.scoreboard?.display?.minute || ''
+                };
+                
+                // Add market availability information
+                if (market) {
+                  const prices = market.prices || [];
+                  eventData.isMarketAvailable = !market.suspended;
+                  eventData.home_odds = prices.find((p: any) => p.name === '1')?.price || '';
+                  eventData.draw_odds = prices.find((p: any) => p.name === 'X')?.price || '';
+                  eventData.away_odds = prices.find((p: any) => p.name === '2')?.price || '';
+                }
+                
+                allEvents.push(eventData);
+              } catch (eventError) {
+                console.log(`Skipping event due to error: ${eventError}`);
+              }
+            }
+            
+            // Check if we should continue pagination
+            if (pageEvents.length < take) {
+              // We received fewer events than requested, so we're done
+              console.log("No more events to fetch, stopping pagination");
+              break;
+            }
+            
+            // Move to next page
+            skip += take;
+            // Add a small delay to avoid hitting rate limits (like in Python script)
+            await new Promise(resolve => setTimeout(resolve, 300));
+          } else {
+            // No events found on this page, we're done
+            console.log("No events found on this page, stopping pagination");
+            break;
+          }
+        } catch (parseError) {
+          console.error(`Error parsing response: ${parseError}`);
+          break;
+        }
+      } catch (requestError) {
+        console.error(`Error with request for page with skip=${skip}: ${requestError}`);
+        break;
       }
     }
     
-    // If we got events, return them
-    if (events && events.length > 0) {
-      console.log(`Found ${events.length} events from API`);
-      return events;
-    }
-    
-    // If no events were found but the request was successful
-    console.log('API request succeeded but no events found in the response.');
-    console.log('Response structure:', Object.keys(response.data));
-    
-    // For debugging, if we have a queries array but no events, check why
-    if (response.data?.queries && response.data.queries.length > 0) {
-      console.log('Query result properties:', Object.keys(response.data.queries[0]));
-      if (response.data.queries[0].total !== undefined) {
-        console.log(`Total events reported by API: ${response.data.queries[0].total}`);
-      }
-    }
-    
-    return [];
+    console.log(`Successfully collected ${allEvents.length} events total`);
+    return allEvents;
     
   } catch (error: any) {
     console.error('Error scraping page of BetPawa events:', error.message || String(error));
