@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import SimpleHeartbeatGraph from '../components/SimpleHeartbeatGraph';
+import CanvasHeartbeatGraph from '../components/CanvasHeartbeatGraph';
 import Layout from '@/components/Layout';
 import ReactCountryFlag from 'react-country-flag';
 
@@ -650,7 +650,7 @@ export default function LiveHeartbeat() {
             {/* Heartbeat Graph */}
             <div className="md:col-span-2">
               {selectedEventId ? (
-                <SimpleHeartbeatGraph 
+                <CanvasHeartbeatGraph 
                   eventId={selectedEventId}
                 />
               ) : (
