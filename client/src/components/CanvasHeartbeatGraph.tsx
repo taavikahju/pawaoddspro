@@ -315,128 +315,118 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
       // Work with a copy of the data to ensure we don't modify the original
       let timestamps = [...data].sort((a, b) => a.timestamp - b.timestamp);
       
-      // Calculate the elapsed time in minutes (default to 45 if insufficient data)
-      let elapsedMinutes = 45; // Default
+      // COMPLETELY NEW APPROACH: Draw directly based on the actual timeline data
+      // Instead of creating artificial beats, we'll draw the actual data points
       
-      if (timestamps.length >= 2) {
-        const firstTimestamp = timestamps[0].timestamp;
-        const lastTimestamp = timestamps[timestamps.length - 1].timestamp;
-        
-        // Calculate the difference in milliseconds and convert to minutes
-        const diffMs = lastTimestamp - firstTimestamp;
-        elapsedMinutes = Math.max(1, Math.floor(diffMs / (1000 * 60)));
-        console.log(`Time elapsed between first and last data point: ${elapsedMinutes} minutes`);
-      }
+      // Calculate how to map timestamp positions to the canvas width
+      const firstTimestamp = timestamps[0].timestamp;
+      const lastTimestamp = timestamps[timestamps.length - 1].timestamp;
+      const timeRange = lastTimestamp - firstTimestamp;
       
-      // Set a reasonable game minute, capped at 120
-      const currentGameMinute = Math.min(elapsedMinutes, 120);
-      console.log("Current game minute:", currentGameMinute);
-      
-      // Draw a simple line based on the availability data
-      const pixelsPerMinute = width / 120;
-      
-      // Set up the drawing style
-      ctx.lineWidth = 2;
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-      
-      // Initial availability state based on first data point (default to available)
-      let isAvailable = timestamps.length > 0 ? (timestamps[0].isAvailable === true) : true;
-      
-      // Calculate the number of beats to show
-      const beatWidth = 40;  // Doubled width to reduce frequency (was 20)
-      const beatCount = Math.ceil(currentGameMinute * pixelsPerMinute / beatWidth);
-      const beatsToShow = Math.min(beatCount, Math.ceil(currentGameMinute));
-      
-      console.log(`Drawing ${beatsToShow} beats for ${currentGameMinute} game minutes`);
-      
-      let currentPath = {
-        available: isAvailable,
-        points: [[0, height / 2]] // Start at the left edge, middle height
+      // Function to convert a timestamp to x position on canvas
+      const getXPosition = (timestamp: number) => {
+        return Math.max(0, Math.min(width, 
+          ((timestamp - firstTimestamp) / timeRange) * width
+        ));
       };
       
-      let paths = [currentPath];
+      // Set up paths for available and suspended segments
+      let paths: {
+        available: boolean;
+        points: number[][];
+        startTimestamp: number;
+        endTimestamp: number;
+      }[] = [];
       
-      // First gather all the paths based on availability changes
-      for (let i = 0; i < beatsToShow; i++) {
-        const x = i * beatWidth;
+      // Initialize with the first data point's status
+      let currentPath = {
+        available: timestamps[0].isAvailable === true,
+        points: [[getXPosition(timestamps[0].timestamp), height / 2]],
+        startTimestamp: timestamps[0].timestamp,
+        endTimestamp: timestamps[0].timestamp
+      };
+      
+      // Process all data points to create path segments
+      for (let i = 1; i < timestamps.length; i++) {
+        const timestamp = timestamps[i];
+        const isAvailable = timestamp.isAvailable === true;
+        const x = getXPosition(timestamp.timestamp);
         
-        // Find the market status for this position 
-        let marketAvailable = isAvailable;
-        
-        if (timestamps.length > 0) {
-          // IMPROVED: Get a timestamp index based on our EXACT position in the timeline
-          // This ensures we map to the right timestamp instead of evenly distributing
-          // We calculate what timestamp this position represents
-          const positionRatio = i / beatsToShow;
-          const elapsedMs = timestamps[timestamps.length - 1].timestamp - timestamps[0].timestamp;
-          const msAtPosition = timestamps[0].timestamp + (positionRatio * elapsedMs);
-          
-          // Find the nearest timestamp to this position
-          let nearestIndex = 0;
-          let smallestDiff = Number.MAX_SAFE_INTEGER;
-          
-          for (let j = 0; j < timestamps.length; j++) {
-            const diff = Math.abs(timestamps[j].timestamp - msAtPosition);
-            if (diff < smallestDiff) {
-              smallestDiff = diff;
-              nearestIndex = j;
-            }
-          }
-          
-          // Use the nearest timestamp
-          const timestampIndex = nearestIndex;
-          console.log(`Position ${i}/${beatsToShow} maps to timestamp index ${timestampIndex} of ${timestamps.length}`);
-          
-          // Ensure boolean value - even if string 'true'/'false' comes from server
-          marketAvailable = timestamps[timestampIndex].isAvailable === true;
-          
-          // Log when a suspended section is detected
-          if (!marketAvailable) {
-            console.log(`SUSPENDED section at beat ${i}, using timestamp ${timestampIndex}, time: ${new Date(timestamps[timestampIndex].timestamp).toISOString()}`);
-          }
-        }
-        
-        // If market status changed, start a new path
-        if (marketAvailable !== currentPath.available) {
-          // Close the current path
-          const endX = x;
-          currentPath.points.push([endX, height / 2]);
+        // If availability status changed, start a new path
+        if (isAvailable !== currentPath.available) {
+          // Add the timestamp at this position to end the current path
+          currentPath.points.push([x, height / 2]);
+          currentPath.endTimestamp = timestamp.timestamp;
           
           // Start a new path
           currentPath = {
-            available: marketAvailable,
-            points: [[x, height / 2]] // Start from same position
+            available: isAvailable,
+            points: [[x, height / 2]],
+            startTimestamp: timestamp.timestamp,
+            endTimestamp: timestamp.timestamp
           };
           paths.push(currentPath);
           
-          console.log(`Status changed at x=${x} from ${isAvailable} to ${marketAvailable}`);
+          console.log(`Status changed at timestamp ${new Date(timestamp.timestamp).toISOString()} - now ${isAvailable ? 'available' : 'suspended'}`);
         }
         
-        // Add points based on availability
-        if (!marketAvailable) {
-          // For suspended markets, flat line
-          const endX = Math.min(x + beatWidth, currentGameMinute * pixelsPerMinute);
-          currentPath.points.push([endX, height / 2]);
-        } else {
-          // For available markets, add heartbeat pattern
-          currentPath.points.push([x, height / 2]);
-          currentPath.points.push([x + 10, height / 2 - 3]);      // Small P wave
-          currentPath.points.push([x + 14, height / 2]);          // Baseline
-          currentPath.points.push([x + 18, height / 2 + 3]);      // Q dip
-          currentPath.points.push([x + 20, height / 2 - 20]);     // R spike
-          currentPath.points.push([x + 24, height / 2 + 5]);      // S dip
-          currentPath.points.push([x + 28, height / 2]);          // Baseline
-          currentPath.points.push([x + 32, height / 2 - 5]);      // T wave
-          currentPath.points.push([x + 36, height / 2]);          // Baseline
+        // If this is the last point, make sure to close the current path
+        if (i === timestamps.length - 1) {
+          currentPath.endTimestamp = timestamp.timestamp;
+          paths.push(currentPath);
         }
-        
-        isAvailable = marketAvailable;
       }
       
-      // Close the last path
-      const endX = currentGameMinute * pixelsPerMinute;
-      currentPath.points.push([endX, height / 2]);
+      console.log(`Created ${paths.length} path segments based on ${timestamps.length} data points`);
+      
+      // Now enhance each path with appropriate visualization
+      for (let i = 0; i < paths.length; i++) {
+        const path = paths[i];
+        const startX = path.points[0][0];
+        const endX = getXPosition(path.endTimestamp);
+        const segmentWidth = endX - startX;
+        
+        if (!path.available) {
+          // For suspended segments, just use a flat line
+          path.points = [[startX, height / 2], [endX, height / 2]];
+        } else {
+          // For available segments, create a heartbeat pattern
+          // We'll add beat patterns based on the segment width
+          path.points = []; // Reset points for this segment
+          
+          const beatWidth = 40; // Width of one heartbeat pattern
+          const beatsInSegment = Math.max(1, Math.floor(segmentWidth / beatWidth));
+          
+          // Calculate space between beats to fit exactly in the segment
+          const actualBeatWidth = segmentWidth / beatsInSegment;
+          
+          for (let j = 0; j < beatsInSegment; j++) {
+            const beatStart = startX + (j * actualBeatWidth);
+            
+            // Scale factors for the beat drawing
+            const sf = actualBeatWidth / 40; // Scale factor based on standard beat width
+            
+            // Add points for this beat
+            path.points.push([beatStart, height / 2]);
+            path.points.push([beatStart + (10 * sf), height / 2 - (3 * sf)]);   // P wave
+            path.points.push([beatStart + (14 * sf), height / 2]);              // Baseline
+            path.points.push([beatStart + (18 * sf), height / 2 + (3 * sf)]);   // Q dip
+            path.points.push([beatStart + (20 * sf), height / 2 - (20 * sf)]);  // R spike
+            path.points.push([beatStart + (24 * sf), height / 2 + (5 * sf)]);   // S dip
+            path.points.push([beatStart + (28 * sf), height / 2]);              // Baseline
+            path.points.push([beatStart + (32 * sf), height / 2 - (5 * sf)]);   // T wave
+            path.points.push([beatStart + (36 * sf), height / 2]);              // Baseline
+            
+            // If this is the last beat and it doesn't end exactly at endX
+            if (j === beatsInSegment - 1) {
+              const lastPoint = path.points[path.points.length - 1];
+              if (lastPoint[0] < endX) {
+                path.points.push([endX, height / 2]);
+              }
+            }
+          }
+        }
+      }
       
       // Now draw all the paths with proper colors
       console.log(`Drawing ${paths.length} separate paths based on market status changes`);
