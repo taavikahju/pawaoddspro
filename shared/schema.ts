@@ -145,15 +145,17 @@ export type ScraperStatus = z.infer<typeof scraperStatusSchema>;
 
 // Heartbeat statistics schema for tracking market availability
 export const heartbeatStatsSchema = z.object({
+  id: z.number().optional(),
   eventId: z.string(),
   timestamp: z.number(),
   uptimePercentage: z.number(),
   availableDurationMinutes: z.number(),
   suspendedDurationMinutes: z.number(),
   totalDurationMinutes: z.number(),
-  day: z.string().optional(), // YYYY-MM-DD format for daily aggregation
-  week: z.string().optional(), // YYYY-WW format for weekly aggregation
-  month: z.string().optional(), // YYYY-MM format for monthly aggregation
+  day: z.string().nullable(), // YYYY-MM-DD format for daily aggregation
+  week: z.string().nullable(), // YYYY-WW format for weekly aggregation
+  month: z.string().nullable(), // YYYY-MM format for monthly aggregation
+  createdAt: z.date().nullable()
 });
 
 export type HeartbeatStats = z.infer<typeof heartbeatStatsSchema>;
