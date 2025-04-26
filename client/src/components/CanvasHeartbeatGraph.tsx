@@ -71,34 +71,50 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
         return;
       }
       
+      // Check if we're out of bounds
+      if (x < 0 || x > canvas.width || y < 0 || y > canvas.height) {
+        setHoverInfo(null);
+        return;
+      }
+      
       // Get dimensions
       const width = canvas.width;
       
-      // Calculate which data point this corresponds to
-      const dataPosRatio = x / width;
-      const dataIndex = Math.min(
-        Math.floor(dataPosRatio * data.length),
-        data.length - 1
-      );
+      // Sort timestamps by time (ascending)
+      const sortedData = [...data].sort((a, b) => a.timestamp - b.timestamp);
+      const firstTimestamp = sortedData[0].timestamp;
+      const lastTimestamp = sortedData[sortedData.length - 1].timestamp;
+      const timeRange = lastTimestamp - firstTimestamp;
       
-      // Get the data point
-      const dataPoint = data[dataIndex];
+      // Convert mouse X position to timestamp
+      const posRatio = x / width;
+      const timeAtPosition = firstTimestamp + (posRatio * timeRange);
       
-      if (dataPoint) {
-        setHoverInfo({
-          x, 
-          y,
-          timestamp: new Date(dataPoint.timestamp),
-          isAvailable: dataPoint.isAvailable,
-          gameMinute: dataPoint.gameMinute
-        });
-        
-        // Add a visible cursor
-        canvas.style.cursor = 'crosshair';
-      } else {
-        setHoverInfo(null);
-        canvas.style.cursor = 'default';
+      // Find the nearest data point to the cursor
+      let closestPoint = sortedData[0];
+      let smallestDiff = Math.abs(sortedData[0].timestamp - timeAtPosition);
+      
+      for (let i = 1; i < sortedData.length; i++) {
+        const diff = Math.abs(sortedData[i].timestamp - timeAtPosition);
+        if (diff < smallestDiff) {
+          smallestDiff = diff;
+          closestPoint = sortedData[i];
+        }
       }
+      
+      // Update hover information with correct boolean conversion
+      const isAvailable = closestPoint.isAvailable === true; // Force boolean conversion
+      
+      setHoverInfo({
+        x, 
+        y,
+        timestamp: new Date(closestPoint.timestamp),
+        isAvailable,
+        gameMinute: closestPoint.gameMinute
+      });
+      
+      // Add a visible cursor
+      canvas.style.cursor = 'crosshair';
     };
     
     const handleMouseLeave = () => {
