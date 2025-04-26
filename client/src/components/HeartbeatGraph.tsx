@@ -224,11 +224,6 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
       return;
     }
     
-    if (data.length === 0) {
-      console.log("No data available to draw");
-      // We'll still draw a sample pattern below
-    }
-    
     const ctx = canvas.getContext('2d');
     if (!ctx) {
       console.error("Could not get canvas context");
@@ -279,17 +274,24 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
       console.log(`Created ${renderData.length} sample data points`);
     }
     
-    // Find the earliest and latest timestamps to calculate the time range
-    const earliestTimestamp = renderData.length > 0 ? renderData[0].timestamp : Date.now() - 3600000; // 1 hour ago default
+    // Find the latest timestamp
     const latestTimestamp = renderData.length > 0 ? renderData[renderData.length - 1].timestamp : Date.now();
     
-    // Calculate time range in milliseconds
-    const timeRange = latestTimestamp - earliestTimestamp;
+    // Create a 2-hour time window (7200000 ms)
+    // To ensure we're showing data within a 2-hour cycle as requested
+    const twoHoursMs = 7200000;
+    const earliestTimestamp = Math.max(
+      renderData.length > 0 ? renderData[0].timestamp : latestTimestamp - twoHoursMs,
+      latestTimestamp - twoHoursMs
+    );
     
-    // Calculate pixels per millisecond
-    const pixelsPerMs = timeRange > 0 ? width / timeRange : 0.001; // Default small value if no range
+    // Calculate time range in milliseconds (limited to 2 hours max)
+    const timeRange = Math.min(latestTimestamp - earliestTimestamp, twoHoursMs);
     
-    console.log(`Time range: ${timeRange}ms, from ${new Date(earliestTimestamp).toISOString()} to ${new Date(latestTimestamp).toISOString()}`);
+    // Calculate pixels per millisecond based on our 2-hour window
+    const pixelsPerMs = width / twoHoursMs;
+    
+    console.log(`Time range: ${timeRange}ms in 2-hour window, from ${new Date(earliestTimestamp).toISOString()} to ${new Date(latestTimestamp).toISOString()}`);
     console.log(`Pixels per ms: ${pixelsPerMs}`);
     
     // We'll still keep track of game minute for display purposes
@@ -306,8 +308,7 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     
     console.log("Current game minute:", currentGameMinute);
     
-    // Set up drawing parameters
-    // Extremely simple approach - draw a clean heartbeat line
+    // Set up drawing parameters for more pronounced ECG-style spikes
     ctx.lineWidth = 2;  // Thinner line as requested
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
@@ -318,27 +319,33 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     // Define the heartbeat pattern size in pixels
     const heartbeatPatternWidth = 40; // Width in pixels for a single heartbeat
     
-    // Calculate the number of heartbeats based on the time range
-    // We want to show a beat approximately every 20 seconds
+    // Calculate how many beats to fit within our 2-hour window
+    // We want visible heartbeats approximately every 20 seconds
     const beatInterval = 20000; // ms between each heartbeat
-    const totalBeats = Math.ceil(timeRange / beatInterval);
+    const totalBeats = Math.ceil(twoHoursMs / beatInterval);
     
-    console.log(`Drawing ${totalBeats} beats for time range of ${timeRange / 1000} seconds`);
+    console.log(`Drawing up to ${totalBeats} beats for 2-hour time window`);
     
-    // Start drawing from the left edge
+    // Filter data points to only those within our 2-hour window
+    const visibleData = renderData.filter(point => 
+      point.timestamp >= earliestTimestamp && point.timestamp <= latestTimestamp
+    );
+    
+    // Start drawing from the left edge (representing 2 hours ago)
     ctx.beginPath();
     ctx.moveTo(0, height / 2);
     
     // Process actual data points to create a continuous line
-    if (renderData.length > 1) {
-      for (let i = 0; i < renderData.length; i++) {
-        const dataPoint = renderData[i];
+    if (visibleData.length > 1) {
+      for (let i = 0; i < visibleData.length; i++) {
+        const dataPoint = visibleData[i];
         
-        // Calculate x position based on timestamp
+        // Calculate x position based on timestamp position in our 2-hour window
+        // This ensures the line grows from left to right within a fixed 2-hour cycle
         const x = Math.round((dataPoint.timestamp - earliestTimestamp) * pixelsPerMs);
         
         // If this is the first point or status changed, we need to handle it specially
-        if (i === 0 || dataPoint.isAvailable !== renderData[i-1].isAvailable) {
+        if (i === 0 || dataPoint.isAvailable !== visibleData[i-1].isAvailable) {
           // If not the first point, complete previous path before changing color
           if (i > 0) {
             ctx.lineTo(x, height / 2); // Draw straight line to the status change point
@@ -353,18 +360,18 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
         
         // For suspended markets (not available), just draw a straight line
         if (!dataPoint.isAvailable) {
-          if (i < renderData.length - 1) {
-            const nextX = Math.round((renderData[i+1].timestamp - earliestTimestamp) * pixelsPerMs);
+          if (i < visibleData.length - 1) {
+            const nextX = Math.round((visibleData[i+1].timestamp - earliestTimestamp) * pixelsPerMs);
             ctx.lineTo(nextX, height / 2);
           } else {
             ctx.lineTo(width, height / 2); // To the end if it's the last point
           }
         } 
-        // For available markets, draw a heartbeat pattern
+        // For available markets, draw a heartbeat pattern with more pronounced spikes
         else {
           // Skip drawing heartbeats if points are too close together (prevents overcrowding)
           if (i > 0) {
-            const prevX = Math.round((renderData[i-1].timestamp - earliestTimestamp) * pixelsPerMs);
+            const prevX = Math.round((visibleData[i-1].timestamp - earliestTimestamp) * pixelsPerMs);
             const distance = x - prevX;
             
             // Only draw heartbeat pattern if there's enough space
@@ -378,15 +385,15 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
                 // Draw baseline up to this beat
                 ctx.lineTo(beatX, height / 2);
                 
-                // Draw heartbeat pattern (simple ECG-like) with smaller spikes
-                ctx.lineTo(beatX + 10, height / 2 - 3);      // Small P wave
-                ctx.lineTo(beatX + 14, height / 2);          // Back to baseline
-                ctx.lineTo(beatX + 18, height / 2 + 3);      // Q dip
-                ctx.lineTo(beatX + 20, height / 2 - 20);     // R spike
-                ctx.lineTo(beatX + 24, height / 2 + 5);      // S dip
-                ctx.lineTo(beatX + 28, height / 2);          // Back to baseline
-                ctx.lineTo(beatX + 32, height / 2 - 5);      // T wave
-                ctx.lineTo(beatX + 36, height / 2);          // Back to baseline
+                // Draw heartbeat pattern (ECG-like) with more pronounced spikes
+                ctx.lineTo(beatX + 8, height / 2 - 4);       // P wave
+                ctx.lineTo(beatX + 12, height / 2);          // Back to baseline
+                ctx.lineTo(beatX + 15, height / 2 + 5);      // Q dip
+                ctx.lineTo(beatX + 18, height / 2 - 30);     // R spike (taller)
+                ctx.lineTo(beatX + 22, height / 2 + 10);     // S dip (deeper)
+                ctx.lineTo(beatX + 26, height / 2);          // Back to baseline
+                ctx.lineTo(beatX + 32, height / 2 - 8);      // T wave
+                ctx.lineTo(beatX + 38, height / 2);          // Back to baseline
               }
               
               // Complete to the current point
@@ -409,15 +416,15 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
         // Draw baseline up to this beat
         ctx.lineTo(beatX, height / 2);
         
-        // Draw heartbeat pattern
-        ctx.lineTo(beatX + 10, height / 2 - 3);
-        ctx.lineTo(beatX + 14, height / 2);
-        ctx.lineTo(beatX + 18, height / 2 + 3);
-        ctx.lineTo(beatX + 20, height / 2 - 20);
-        ctx.lineTo(beatX + 24, height / 2 + 5);
-        ctx.lineTo(beatX + 28, height / 2);
-        ctx.lineTo(beatX + 32, height / 2 - 5);
-        ctx.lineTo(beatX + 36, height / 2);
+        // Draw heartbeat pattern with more pronounced spikes
+        ctx.lineTo(beatX + 8, height / 2 - 4);       // P wave
+        ctx.lineTo(beatX + 12, height / 2);          // Back to baseline
+        ctx.lineTo(beatX + 15, height / 2 + 5);      // Q dip
+        ctx.lineTo(beatX + 18, height / 2 - 30);     // R spike (taller)
+        ctx.lineTo(beatX + 22, height / 2 + 10);     // S dip (deeper)
+        ctx.lineTo(beatX + 26, height / 2);          // Back to baseline
+        ctx.lineTo(beatX + 32, height / 2 - 8);      // T wave
+        ctx.lineTo(beatX + 38, height / 2);          // Back to baseline
       }
       
       // Draw to the end
@@ -669,7 +676,7 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
           </div>
           <div>
             Last update: {data.length > 0 && data[data.length - 1].time 
-              ? new Date(data[data.length - 1].time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) 
+              ? new Date(String(data[data.length - 1].time)).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) 
               : new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
           </div>
         </div>
