@@ -131,27 +131,8 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     drawMinuteLabels(ctx, width, height);
     
     // Calculate spacing based on game minutes (1-120)
-    // If game minutes are not available, use even spacing
     const maxGameMinute = 120; // Extended to 120 minutes as requested
     const pixelsPerMinute = width / maxGameMinute;
-    
-    // Setup heartbeat line style with much thicker line
-    ctx.lineWidth = 5; // Significantly increased thickness for better visibility
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    
-    // We'll simulate an ECG-style line that's mostly straight with small variations
-    // Green when market is available, red when not available
-    
-    // First determine if we're drawing in green or red based on current status
-    let lineColor = '#00ff00'; // Bright ECG green
-    let marketActive = true;
-    
-    if (data.length > 0) {
-      const latestPoint = data[data.length - 1];
-      marketActive = latestPoint.isAvailable;
-      lineColor = marketActive ? '#00ff00' : '#ff3333'; // Bright ECG green or bright red
-    }
     
     // Helper function to get the game minute as a number
     const getMinuteNumber = (minuteStr: string | undefined): number => {
@@ -166,9 +147,6 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
       return 0;
     };
     
-    // Draw the ECG line
-    ctx.beginPath();
-    
     // Find the current game minute - either from data or use latest available
     const extractedMinutes = data
       .map(point => point.gameMinute)
@@ -182,101 +160,149 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     // Start from left side (0 minute) to current game minute
     const endX = Math.min(currentGameMinute * pixelsPerMinute, width);
     
-    // Begin at the baseline (middle)
-    ctx.moveTo(0, height / 2);
+    // Setup heartbeat line style with thinner line (like in the drawing)
+    ctx.lineWidth = 2; 
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
     
-    // Draw a straight line with dramatic ECG pattern
-    const step = 3; // Draw points every 3 pixels for smoother lines
-    let lastX = 0;
-    
-    // We'll keep track of the last data point index used
-    let lastDataIndex = 0;
-    
-    // Create a map of availability changes by minute
-    const availabilityByMinute: Record<number, boolean> = {};
-    
-    // Process data to find availability status for each minute
-    data.forEach(point => {
-      const minute = getMinuteNumber(point.gameMinute);
-      if (minute > 0) {
-        availabilityByMinute[minute] = point.isAvailable;
-      }
+    // Sort data points by minute for sequential processing
+    const sortedData = [...data].sort((a, b) => {
+      const minA = getMinuteNumber(a.gameMinute) || 0;
+      const minB = getMinuteNumber(b.gameMinute) || 0;
+      return minA - minB;
     });
     
-    // Ensure we have data for minute 0
-    if (data.length > 0 && !availabilityByMinute[0]) {
-      availabilityByMinute[0] = data[0].isAvailable;
-    }
+    // Group the data by availability status to find change points
+    let currentStatus = sortedData.length > 0 ? sortedData[0].isAvailable : true;
+    let lastStatusChangeMinute = 0;
     
-    for (let x = 0; x <= endX; x += step) {
-      // Find the minute corresponding to this x position
-      const gameMinuteAtX = Math.floor(x / pixelsPerMinute);
-      
-      // Find the closest data point for this minute
-      const isActive = availabilityByMinute[gameMinuteAtX] !== undefined 
-        ? availabilityByMinute[gameMinuteAtX] 
-        : (data.length > 0 ? data[data.length - 1].isAvailable : true);
-      
-      // For active markets: small variations around center line
-      // For inactive markets: flat line at bottom
-      let y;
-      
-      if (isActive) {
-        // Create ECG pattern with EXTREMELY PRONOUNCED SPIKES
-        // Calculate spike pattern based on x position
-        const cycleLength = 60; // Even shorter cycle length to fit more heartbeats
-        const positionInCycle = x % cycleLength;
+    // This will track the sequences of available/unavailable periods
+    const statusSegments: Array<{
+      startMinute: number;
+      endMinute: number;
+      isAvailable: boolean;
+    }> = [];
+    
+    // Add the initial status
+    if (sortedData.length > 0) {
+      // Find the status changes
+      for (let i = 0; i < sortedData.length; i++) {
+        const point = sortedData[i];
+        const minute = getMinuteNumber(point.gameMinute) || 0;
         
-        // Create a dramatic ECG pattern with very large spikes
-        if (positionInCycle < 5) {
-          // Baseline
-          y = height / 2;
-        } else if (positionInCycle < 10) {
-          // Initial P wave (small bump)
-          y = height / 2 - Math.sin(((positionInCycle - 5) / 5) * Math.PI) * 10;
-        } else if (positionInCycle < 15) {
-          // Baseline before QRS complex
-          y = height / 2;
-        } else if (positionInCycle < 17) {
-          // Q wave (sharper dip)
-          y = height / 2 + ((positionInCycle - 15) / 2) * 20;
-        } else if (positionInCycle < 19) {
-          // R wave (EXTREME SPIKE UP - very dramatic) - made even taller!
-          y = height / 2 + 20 - ((positionInCycle - 17) / 2) * 110;
-        } else if (positionInCycle < 21) {
-          // Return from R spike (sharp drop) - adjusted for even taller spike
-          y = height / 2 - 90 + ((positionInCycle - 19) / 2) * 100;
-        } else if (positionInCycle < 23) {
-          // S wave (deeper dip)
-          y = height / 2 + 10 + ((positionInCycle - 21) / 2) * 20;
-        } else if (positionInCycle < 28) {
-          // Return to baseline (faster)
-          y = height / 2 + 25 - ((positionInCycle - 23) / 5) * 25;
-        } else if (positionInCycle < 40) {
-          // ST segment (flat)
-          y = height / 2;
-        } else if (positionInCycle < 50) {
-          // T wave (more pronounced hump)
-          y = height / 2 - Math.sin(((positionInCycle - 40) / 10) * Math.PI) * 20;
-        } else {
-          // Baseline until next beat
-          y = height / 2;
+        // If status changed, add a segment
+        if (point.isAvailable !== currentStatus || i === sortedData.length - 1) {
+          // Add the segment that just ended
+          statusSegments.push({
+            startMinute: lastStatusChangeMinute,
+            endMinute: minute,
+            isAvailable: currentStatus
+          });
+          
+          // Update for the next segment
+          currentStatus = point.isAvailable;
+          lastStatusChangeMinute = minute;
         }
-      } else {
-        // Inactive market - flat line at 3/4 of height (bottom area)
-        y = (height * 3) / 4;
       }
       
-      ctx.lineTo(x, y);
-      lastX = x;
+      // Make sure we add the final segment to the current minute
+      if (lastStatusChangeMinute < currentGameMinute) {
+        statusSegments.push({
+          startMinute: lastStatusChangeMinute,
+          endMinute: currentGameMinute,
+          isAvailable: currentStatus
+        });
+      }
+    } else {
+      // If no data, just add one segment
+      statusSegments.push({
+        startMinute: 0,
+        endMinute: currentGameMinute || 10, // Default to 10 if no data
+        isAvailable: true
+      });
     }
     
-    // DO NOT extend the line to the end of the graph
-    // The line should stop at the current game minute
-    
-    // Set line color and draw
-    ctx.strokeStyle = lineColor;
-    ctx.stroke();
+    // Now draw each segment
+    for (const segment of statusSegments) {
+      const startX = segment.startMinute * pixelsPerMinute;
+      const segmentEndX = segment.endMinute * pixelsPerMinute;
+      
+      // Set color based on segment status
+      const segmentColor = segment.isAvailable ? '#00ff00' : '#ff3333';
+      
+      ctx.beginPath();
+      ctx.strokeStyle = segmentColor;
+      
+      // Start at middle for available, or bottom for unavailable
+      const baselineY = segment.isAvailable ? height / 2 : (height * 3) / 4;
+      ctx.moveTo(startX, baselineY);
+      
+      if (segment.isAvailable) {
+        // Draw ECG pattern for available segments with more natural look
+        // (more like your drawing)
+        const beatWidth = 30; // Width of each heartbeat
+        const startBeat = Math.floor(startX / beatWidth);
+        const endBeat = Math.ceil(segmentEndX / beatWidth);
+        
+        // Draw each individual beat in the segment
+        for (let beat = startBeat; beat < endBeat; beat++) {
+          const beatStartX = Math.max(beat * beatWidth, startX);
+          const beatEndX = Math.min((beat + 1) * beatWidth, segmentEndX);
+          
+          if (beatEndX <= beatStartX) continue;
+          
+          // Calculate position within the beat (0 to 1)
+          const beatPoints = [];
+          const pointCount = Math.max(5, Math.floor((beatEndX - beatStartX) / 3));
+          
+          for (let i = 0; i <= pointCount; i++) {
+            const x = beatStartX + (beatEndX - beatStartX) * (i / pointCount);
+            const position = (x - beat * beatWidth) / beatWidth;
+            
+            let y;
+            if (position < 0.25) {
+              // Initial flat part (with small variation)
+              y = baselineY + Math.sin(position * 10) * 2;
+            } else if (position < 0.35) {
+              // Upward spike
+              const progress = (position - 0.25) / 0.1;
+              y = baselineY - Math.pow(progress, 0.8) * 80;
+            } else if (position < 0.45) {
+              // Downward after spike
+              const progress = (position - 0.35) / 0.1;
+              y = baselineY - 80 + Math.pow(progress, 0.7) * 95;
+            } else if (position < 0.55) {
+              // S wave (dip below baseline)
+              y = baselineY + 15 - Math.cos((position - 0.45) * Math.PI * 5) * 10;
+            } else if (position < 0.8) {
+              // Return to and small T wave
+              y = baselineY - Math.sin((position - 0.55) * Math.PI * 1.5) * 12;
+            } else {
+              // Rest of baseline
+              y = baselineY + Math.sin(position * 15) * 1.5;
+            }
+            
+            beatPoints.push({ x, y });
+          }
+          
+          // Draw the points for this beat
+          if (beatPoints.length > 0) {
+            ctx.moveTo(beatPoints[0].x, beatPoints[0].y);
+            for (let i = 1; i < beatPoints.length; i++) {
+              ctx.lineTo(beatPoints[i].x, beatPoints[i].y);
+            }
+          }
+        }
+      } else {
+        // For unavailable segments, draw a flat line with small variations
+        for (let x = startX; x <= segmentEndX; x += 3) {
+          const y = baselineY + (Math.sin(x * 0.1) * 2);
+          ctx.lineTo(x, y);
+        }
+      }
+      
+      ctx.stroke();
+    }
     
     // Draw minute indicator at the current position
     if (currentGameMinute > 0) {
@@ -285,7 +311,10 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
       // Draw minute bubble
       ctx.beginPath();
       ctx.arc(minuteX, 20, 15, 0, Math.PI * 2);
-      ctx.fillStyle = lineColor;
+      
+      // Use the current status color
+      const currentStatusColor = currentStatus ? '#00ff00' : '#ff3333';
+      ctx.fillStyle = currentStatusColor;
       ctx.fill();
       
       // Draw minute text
