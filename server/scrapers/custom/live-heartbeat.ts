@@ -5,6 +5,53 @@ import path from 'path';
 import { IStorage } from '../../storage';
 import { URL } from 'url';
 
+// Debug utility function to dump API response
+function debugDumpApiResponse(event: any, source: string) {
+  try {
+    console.log(`[DEBUG-${source}] Event ID: ${event.id}`);
+    console.log(`[DEBUG-${source}] Event Name: ${event.name}`);
+    
+    // Log different paths where team information might be
+    if (event.name) {
+      console.log(`[DEBUG-${source}] Found event.name: ${event.name}`);
+    }
+    
+    if (event.competitors) {
+      console.log(`[DEBUG-${source}] Found event.competitors:`, 
+        JSON.stringify(event.competitors.map((c: any) => c.name || c))
+      );
+    }
+    
+    if (event.homeTeam || event.awayTeam) {
+      console.log(`[DEBUG-${source}] Found homeTeam/awayTeam:`, 
+        JSON.stringify({home: event.homeTeam, away: event.awayTeam})
+      );
+    }
+    
+    // Log any teams information in results
+    if (event.results && event.results.teams) {
+      console.log(`[DEBUG-${source}] Found event.results.teams:`, 
+        JSON.stringify(event.results.teams)
+      );
+    }
+    
+    // Log any display/scoreboard info that might have team data
+    if (event.scoreboard) {
+      console.log(`[DEBUG-${source}] Found event.scoreboard:`, 
+        JSON.stringify(event.scoreboard)
+      );
+    }
+    
+    if (event.results && event.results.display) {
+      console.log(`[DEBUG-${source}] Found event.results.display:`, 
+        JSON.stringify(event.results.display)
+      );
+    }
+  } catch (error) {
+    console.error(`Error in debugDumpApiResponse for ${source}:`, error);
+  }
+}
+
 // Event emitter for live heartbeat updates
 export const heartbeatEvents = new EventEmitter();
 
