@@ -171,6 +171,11 @@ async function runHeartbeatTracker(url: string, storage: IStorage): Promise<void
           // Use dynamic import for ES modules compatibility
           const betpawaDirect = await import('./betpawa_direct.mjs');
           events = await betpawaDirect.scrapeWithAlternateDomains();
+          
+          // Debug: Check the events data structure
+          if (events && events.length > 0) {
+            console.log('Debug team names - Sample event structure:', JSON.stringify(events[0], null, 2));
+          }
         } catch (importError) {
           console.error('Error importing betpawa_direct module:', importError.message);
           // Fall through to the standard API approach

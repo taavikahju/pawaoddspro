@@ -169,18 +169,44 @@ async function scrapeWithDomain(domain, brand) {
         }
         
         // Create event object in the format needed for the heartbeat tracker
+        // Determine real market availability - a market is available only if at least one price is not suspended
+        let isMarketAvailable = false;
+        if (market) {
+          // Check if at least one price is not suspended
+          if (homeOdds && drawOdds && awayOdds) {
+            isMarketAvailable = true;
+          }
+          
+          // Check market suspended property explicitly
+          if (market.suspended === true || market.status === 'SUSPENDED') {
+            isMarketAvailable = false;
+          }
+          
+          // Check if all individual prices are suspended
+          const prices = market.prices || [];
+          if (prices.length > 0) {
+            const allPricesSuspended = prices.every(p => p.suspended === true);
+            if (allPricesSuspended) {
+              isMarketAvailable = false;
+            }
+          }
+        }
+        
         const eventObject = {
           id: event.id,
           eventId: widgetId || event.id || '',
           country: event.region?.name || event.category?.name || 'Unknown',
           tournament: event.competition?.name || event.league?.name || 'Unknown',
           event: event.name || `${homeTeam} vs ${awayTeam}`,
+          home_team: homeTeam,
+          away_team: awayTeam,
           home_odds: homeOdds,
           draw_odds: drawOdds,
           away_odds: awayOdds,
           isInPlay: true,
           status: 'LIVE',
-          market_status: market?.suspended ? 'SUSPENDED' : 'AVAILABLE',
+          market_status: isMarketAvailable ? 'AVAILABLE' : 'SUSPENDED',
+          market_available: isMarketAvailable,
           start_time: event.startTime || new Date().toISOString(),
           game_minute: event.scoreboard?.display?.minute || '',
           widget_id: widgetId
