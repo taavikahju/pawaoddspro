@@ -211,7 +211,13 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
   
   // Set up canvas and draw heartbeat whenever data changes
   useEffect(() => {
-    drawHeartbeat();
+    try {
+      if (canvasRef.current) {
+        drawHeartbeat();
+      }
+    } catch (error) {
+      console.error("Error drawing heartbeat:", error);
+    }
   }, [data]);
   
   // Function to draw the heartbeat graph
