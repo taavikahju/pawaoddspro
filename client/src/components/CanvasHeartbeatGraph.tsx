@@ -34,6 +34,13 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
     suspendedDurationMinutes: 0,
     totalDurationMinutes: 0
   });
+  const [hoverInfo, setHoverInfo] = useState<{
+    x: number;
+    y: number;
+    timestamp: Date;
+    isAvailable: boolean;
+    gameMinute?: string;
+  } | null>(null);
   const backgroundImage = useRef<HTMLImageElement | null>(null);
   
   // Preload football field background
@@ -47,6 +54,66 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
       }
     };
   }, []);
+  
+  // Mouse move handler to show timestamp tooltip
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    
+    const handleMouseMove = (event: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      
+      // Only process if we have data
+      if (data.length === 0) {
+        setHoverInfo(null);
+        return;
+      }
+      
+      // Get dimensions
+      const width = canvas.width;
+      
+      // Calculate which data point this corresponds to
+      const dataPosRatio = x / width;
+      const dataIndex = Math.min(
+        Math.floor(dataPosRatio * data.length),
+        data.length - 1
+      );
+      
+      // Get the data point
+      const dataPoint = data[dataIndex];
+      
+      if (dataPoint) {
+        setHoverInfo({
+          x, 
+          y,
+          timestamp: new Date(dataPoint.timestamp),
+          isAvailable: dataPoint.isAvailable,
+          gameMinute: dataPoint.gameMinute
+        });
+        
+        // Add a visible cursor
+        canvas.style.cursor = 'crosshair';
+      } else {
+        setHoverInfo(null);
+        canvas.style.cursor = 'default';
+      }
+    };
+    
+    const handleMouseLeave = () => {
+      setHoverInfo(null);
+      canvas.style.cursor = 'default';
+    };
+    
+    canvas.addEventListener('mousemove', handleMouseMove);
+    canvas.addEventListener('mouseleave', handleMouseLeave);
+    
+    return () => {
+      canvas.removeEventListener('mousemove', handleMouseMove);
+      canvas.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, [data]);
   
   // State to store event details
   const [eventDetails, setEventDetails] = useState<{
@@ -575,6 +642,28 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
             height={200}
             style={{ background: '#111', borderRadius: '0.5rem' }}
           />
+          
+          {/* Timestamp tooltip */}
+          {hoverInfo && (
+            <div 
+              className={`absolute px-2 py-1 text-xs rounded pointer-events-none ${hoverInfo.isAvailable ? 'bg-green-700/80' : 'bg-red-700/80'} text-white border border-white/30`}
+              style={{ 
+                left: `${hoverInfo.x}px`, 
+                top: `${Math.max(10, hoverInfo.y - 40)}px`,
+                transform: 'translateX(-50%)',
+                zIndex: 20,
+                whiteSpace: 'nowrap'
+              }}
+            >
+              <div className="font-bold">
+                {hoverInfo.timestamp.toLocaleTimeString()} 
+                {hoverInfo.gameMinute && <span className="ml-2">(Min {hoverInfo.gameMinute})</span>}
+              </div>
+              <div>
+                Status: {hoverInfo.isAvailable ? 'Available' : 'Suspended'}
+              </div>
+            </div>
+          )}
           
           {status === 'loading' && (
             <div 
