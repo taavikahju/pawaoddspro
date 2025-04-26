@@ -3,6 +3,7 @@ import { Activity, BarChart, Loader2, Heart, AlertCircle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
+import ReactCountryFlag from 'react-country-flag';
 
 // Football field background image (base64 SVG)
 const footballFieldBase64 = `data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iNDAwIiB2aWV3Qm94PSIwIDAgODAwIDQwMCI+CiAgPCEtLSBCYWNrZ3JvdW5kIC0tPgogIDxyZWN0IHdpZHRoPSI4MDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjMDA4MDAwIiBvcGFjaXR5PSIwLjIiLz4KCiAgPCEtLSBHcmFzcyBwYXR0ZXJuIC0tPgogIDxwYXR0ZXJuIGlkPSJncmFzc1BhdHRlcm4iIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHdpZHRoPSI4MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblRyYW5zZm9ybT0icm90YXRlKDQ1KSI+CiAgICA8cmVjdCB3aWR0aD0iODAiIGhlaWdodD0iNDAiIGZpbGw9IiMwMDgwMDAiIG9wYWNpdHk9IjAuMSIvPgogICAgPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjMDA5MDAwIiBvcGFjaXR5PSIwLjEiLz4KICA8L3BhdHRlcm4+CiAgPHJlY3Qgd2lkdGg9IjgwMCIgaGVpZ2h0PSI0MDAiIGZpbGw9InVybCgjZ3Jhc3NQYXR0ZXJuKSIgb3BhY2l0eT0iMC4zIi8+CgogIDwhLS0gRmllbGQgbWFya2luZ3MgLS0+CiAgPHJlY3QgeD0iNTAiIHk9IjUwIiB3aWR0aD0iNzAwIiBoZWlnaHQ9IjMwMCIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjIiIGZpbGw9Im5vbmUiIG9wYWNpdHk9IjAuNCIvPgogIDxsaW5lIHgxPSI0MDAiIHkxPSI1MCIgeDI9IjQwMCIgeTI9IjM1MCIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjIiIG9wYWNpdHk9IjAuNCIvPgogIDxjaXJjbGUgY3g9IjQwMCIgY3k9IjIwMCIgcj0iNTAiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIiBvcGFjaXR5PSIwLjQiLz4KCiAgPCEtLSBHb2FsIEFyZWFzIC0tPgogIDxyZWN0IHg9IjUwIiB5PSIxMjUiIHdpZHRoPSI1MCIgaGVpZ2h0PSIxNTAiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIiBvcGFjaXR5PSIwLjQiLz4KICA8cmVjdCB4PSI3MDAiIHk9IjEyNSIgd2lkdGg9IjUwIiBoZWlnaHQ9IjE1MCIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjIiIGZpbGw9Im5vbmUiIG9wYWNpdHk9IjAuNCIvPgoKICA8IS0tIFBlbmFsdHkgQXJlYXMgLS0+CiAgPHJlY3QgeD0iNTAiIHk9IjEwMCIgd2lkdGg9IjEwMCIgaGVpZ2h0PSIyMDAiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIiBvcGFjaXR5PSIwLjQiLz4KICA8cmVjdCB4PSI2NTAiIHk9IjEwMCIgd2lkdGg9IjEwMCIgaGVpZ2h0PSIyMDAiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIiBvcGFjaXR5PSIwLjQiLz4KPC9zdmc+Cg==`;
@@ -58,6 +59,8 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     homeTeam?: string;
     awayTeam?: string;
     gameMinute?: string;
+    country?: string;
+    tournament?: string;
   } | null>(null);
 
   // Fetch data and set up the canvas
@@ -89,7 +92,9 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
                 name: event.name,
                 homeTeam: event.homeTeam,
                 awayTeam: event.awayTeam,
-                gameMinute: event.gameMinute
+                gameMinute: event.gameMinute,
+                country: event.country,
+                tournament: event.tournament
               });
               
               if (event.gameMinute) {
@@ -474,7 +479,77 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
         <div className="flex justify-between items-center">
           <CardTitle className="flex items-center gap-2">
             <Activity className="h-5 w-5 text-primary" />
-            <span>Match Heartbeat</span>
+            <div className="flex items-center gap-2">
+              {eventDetails?.country && (
+                <>
+                  {(() => {
+                    // Convert country name to 2-letter ISO code for the flag
+                    const getCountryCode = (countryName: string) => {
+                      const codeMap: Record<string, string> = {
+                        'Australia': 'AU',
+                        'England': 'GB',
+                        'United Kingdom': 'GB',
+                        'France': 'FR',
+                        'Germany': 'DE',
+                        'Spain': 'ES',
+                        'Italy': 'IT',
+                        'Brazil': 'BR',
+                        'Portugal': 'PT',
+                        'Netherlands': 'NL',
+                        'Belgium': 'BE',
+                        'Croatia': 'HR',
+                        'Romania': 'RO',
+                        'Russia': 'RU',
+                        'Russian Federation': 'RU',
+                        'China': 'CN',
+                        'Chinese Taipei': 'TW',
+                        'Japan': 'JP',
+                        'Korea': 'KR',
+                        'Republic of Korea': 'KR',
+                        'South Korea': 'KR',
+                        'Greece': 'GR',
+                        'Turkey': 'TR',
+                        'Ghana': 'GH',
+                        'Kenya': 'KE',
+                        'Uganda': 'UG',
+                        'South Africa': 'ZA',
+                        'Nigeria': 'NG',
+                        'India': 'IN',
+                        'International': 'WW',
+                        'Israel': 'IL',
+                        'New Zealand': 'NZ',
+                        'Hong Kong': 'HK',
+                        'Czech Republic': 'CZ', 
+                        'Hungary': 'HU',
+                      };
+                      
+                      return codeMap[countryName] || 'UN'; // Default to UN flag if country not found
+                    };
+                    
+                    const countryCode = getCountryCode(eventDetails.country);
+                    
+                    return countryCode !== 'WW' && countryCode !== 'UN' ? (
+                      <ReactCountryFlag 
+                        countryCode={countryCode} 
+                        svg 
+                        style={{ width: '1.2em', height: '1.2em' }}
+                        className="mr-2"
+                        title={eventDetails.country}
+                      />
+                    ) : countryCode === 'WW' ? (
+                      <span className="mr-2" title={eventDetails.country}>🌐</span>
+                    ) : (
+                      <span className="mr-2" title={eventDetails.country}>🏳️</span>
+                    );
+                  })()}
+                </>
+              )}
+              <span>
+                {eventDetails?.homeTeam && eventDetails?.awayTeam
+                  ? `${eventDetails.homeTeam} vs ${eventDetails.awayTeam}`
+                  : eventDetails?.name || "Match Heartbeat"}
+              </span>
+            </div>
             
             {isLoading ? (
               <Skeleton className="h-5 w-16 ml-2" />
@@ -492,6 +567,12 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
             {currentMinute && (
               <Badge variant="secondary" className="ml-2">
                 {currentMinute}
+              </Badge>
+            )}
+            
+            {eventDetails?.tournament && (
+              <Badge variant="outline" className="ml-2 text-xs">
+                {eventDetails.tournament}
               </Badge>
             )}
           </CardTitle>
