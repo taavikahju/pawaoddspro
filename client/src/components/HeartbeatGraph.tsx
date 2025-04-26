@@ -214,27 +214,24 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
         (currentBeatMinute >= 45 && currentBeatMinute < 60);
         
       if (isInSuspendedSection) {
-        // If we're in a suspended section, switch to red and draw a flat line at 3/4 height
+        // If we're in a suspended section, switch to red and draw a straight line at same level
         ctx.stroke(); // End the current path
         
         // Start a new red path
         ctx.beginPath();
         ctx.strokeStyle = '#ff3333'; // Red for suspended
-        ctx.moveTo(x, (height * 3) / 4); // Move to the suspended line position (3/4 down)
+        ctx.moveTo(x, height / 2); // Stay at the same level as the heartbeat
         
-        // Draw a fairly straight line with small variations for the suspended section
+        // Draw a perfectly straight line for the suspended section
         const suspendedEndX = Math.min(x + beatWidth, currentGameMinute * pixelsPerMinute);
-        for (let sx = x; sx <= suspendedEndX; sx += 4) {
-          const y = (height * 3) / 4 + Math.sin(sx * 0.1) * 2; // Small variations
-          ctx.lineTo(sx, y);
-        }
+        ctx.lineTo(suspendedEndX, height / 2); // Straight line
         
         ctx.stroke(); // Draw the suspended section
         
         // Start a new green path for any remaining heartbeat after suspension
         ctx.beginPath();
         ctx.strokeStyle = '#00ff00'; // Back to green
-        ctx.moveTo(suspendedEndX, height / 2); // Move back to center line
+        ctx.moveTo(suspendedEndX, height / 2); // Continue from the same point
       } else {
         // Regular heartbeat pattern
         // Draw baseline up to this beat
