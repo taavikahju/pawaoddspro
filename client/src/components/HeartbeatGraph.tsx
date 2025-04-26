@@ -262,91 +262,23 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     const maxGameMinute = 120; // Extended to 120 minutes as requested
     const pixelsPerMinute = width / maxGameMinute;
     
-    // Helper function to get the game minute as a number
-    const getMinuteNumber = (minuteStr: string | undefined): number => {
-      if (!minuteStr) return 0;
-      
-      // Handle halftime (HT) case
-      if (minuteStr === 'HT' || minuteStr.toLowerCase() === 'ht') {
-        console.log("Detected halftime (HT)");
-        return 45;
-      }
-      
-      // Extract numeric part from strings like "45'" or "45+2'" or just "45"
-      const match = minuteStr.match(/^(\d+)(?:\+(\d+))?/);
-      if (match) {
-        const baseMinute = parseInt(match[1], 10);
-        const addedTime = match[2] ? parseInt(match[2], 10) : 0;
-        return baseMinute + addedTime;
-      }
-      
-      // If we get here, the string format is unexpected
-      console.log(`Unable to parse minute string: ${minuteStr}, defaulting to 45`);
-      return 45; // Default to 45 minutes as a fallback
-    };
-    
-    // Find the current game minute from event data
-    let currentGameMinute = 45; // Default to 45 minutes
-    
-    // First try to get the game minute from the current event data
-    if (eventDetails && eventDetails.gameMinute) {
-      console.log(`Using game minute from event details: ${eventDetails.gameMinute}`);
-      
-      if (eventDetails.gameMinute === 'HT' || eventDetails.gameMinute?.toLowerCase() === 'ht') {
-        currentGameMinute = 45;
-      } else {
-        // Extract numeric part from strings like "45'" or "45+2'" or just "45"
-        const match = eventDetails.gameMinute.match(/^(\d+)(?:\+(\d+))?/);
-        if (match) {
-          const baseMinute = parseInt(match[1], 10);
-          const addedTime = match[2] ? parseInt(match[2], 10) : 0;
-          currentGameMinute = baseMinute + addedTime;
-        }
-      }
-    } else {
-      // As a fallback, extract from data points
-      const extractedMinutes = data
-        .map(point => point.gameMinute)
-        .filter(minute => minute)
-        .map(getMinuteNumber);
-      
-      // Use the max minute if available
-      if (extractedMinutes.length > 0) {
-        currentGameMinute = Math.max(...extractedMinutes);
-      }
-    }
-    
-    console.log("Current game minute:", currentGameMinute);
-    
-    // Set up a completely fixed example heartbeat pattern
-    // This ensures we always see something visually on the screen
-    // and ensures our drawing is working
-    
-    // Extremely simple approach - draw a clean heartbeat line
-    ctx.lineWidth = 2;  // Thinner line as requested
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    
-    // Green for normal heartbeat
-    ctx.strokeStyle = '#00ff00';
-    
-    // Draw a series of heartbeats from 0 to current minute with reduced frequency
-    const beatWidth = 40;  // Doubled width to reduce frequency (was 20)
-    // Ensure we draw heartbeats up to the exact current game minute
-    const beatCount = Math.ceil(currentGameMinute * pixelsPerMinute / beatWidth);
-    
-    console.log(`Drawing ${beatCount} heartbeats`);
-    
-    // Add some sections of normal heartbeat and some sections with no heartbeat (suspended)
-    // to demonstrate how it looks when the market is suspended
-    
-    // Use the actual market availability data from our API
-    console.log("Using real market data for heartbeat visualization");
-    
-    // Create timestamps array from the data provided
-    let timestamps = Array.isArray(data) ? data : [];
-    
+    // Work with a copy of the data to ensure we don't modify the original
+    let timestamps = [...data].sort((a, b) => a.timestamp - b.timestamp);
     console.log(`Data points available: ${timestamps.length}`);
+    
+    // Calculate the elapsed time in minutes based on the first and last data points
+    let elapsedMinutes = 0;
+    
+    if (timestamps.length >= 2) {
+      const firstTimestamp = timestamps[0].timestamp;
+      const lastTimestamp = timestamps[timestamps.length - 1].timestamp;
+      
+      // Calculate the difference in milliseconds and convert to minutes
+      const diffMs = lastTimestamp - firstTimestamp;
+      elapsedMinutes = Math.max(1, Math.floor(diffMs / (1000 * 60)));
+      
+      console.log(`Time elapsed between first and last data point: ${elapsedMinutes} minutes`);
+    }
     
     // Create sample data if we don't have any real data yet
     if (timestamps.length === 0) {
@@ -367,8 +299,38 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
       // Use our sample data instead
       console.log(`Created ${sampleData.length} sample data points`);
       timestamps = sampleData;
+      
+      // Set elapsed minutes for sample data
+      elapsedMinutes = 10; // 10 minutes of sample data
     }
     
+    // Find the current game minute from elapsed time
+    // In this new version, we use the actual elapsed time but keep the UI visually the same
+    let currentGameMinute = elapsedMinutes > 0 ? Math.min(elapsedMinutes, 120) : 45; // Default to 45 minutes if no data
+    
+    // We'll still use the game minute from event details for display purposes only, not for graph width
+    if (eventDetails && eventDetails.gameMinute) {
+      console.log(`Event game minute from details: ${eventDetails.gameMinute} (using elapsed time ${elapsedMinutes} for graph width)`);
+    }
+    
+    console.log("Current game minute (based on elapsed time):", currentGameMinute);
+    
+    // Set up the drawing style
+    ctx.lineWidth = 2;  // Thinner line as requested
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    
+    // Green for normal heartbeat
+    ctx.strokeStyle = '#00ff00';
+    
+    // Draw a series of heartbeats from 0 to current minute with reduced frequency
+    const beatWidth = 40;  // Doubled width to reduce frequency (was 20)
+    // Ensure we draw heartbeats up to the exact current game minute
+    const beatCount = Math.ceil(currentGameMinute * pixelsPerMinute / beatWidth);
+    
+    console.log(`Drawing ${beatCount} heartbeats`);
+    
+    // Start the drawing path
     ctx.beginPath();
     ctx.moveTo(0, height / 2);  // Start at the left edge, middle height
     
@@ -393,11 +355,9 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
       const currentBeatMinute = Math.floor(x / pixelsPerMinute);
       
       // Find the market status for this minute by searching through timestamps
-      // In a real implementation, you would interpolate the status based on game minute
       let marketAvailable = currentlyAvailable;
       
-      // If we have timestamps, use the availability status from the latest timestamp
-      // This is a simplification - in a real implementation you would map timestamps to game minutes
+      // If we have timestamps, use the availability status from the appropriate timestamp
       if (i % 3 === 0 && timestamps.length > 0) { // Only check every 3rd beat to avoid too many status changes
         // Get a timestamp index based on our position in the game
         const timestampIndex = Math.min(
@@ -443,8 +403,6 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     
     // Stroke the path
     ctx.stroke();
-    
-    // Removed heartbeat minute indicator as requested
     
     console.log("Heartbeat drawing completed successfully");
   }
