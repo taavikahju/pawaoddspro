@@ -507,9 +507,17 @@ export function getEventMarketHistory(eventId: string): {
   totalMinutes: number,
   suspendedMinutes: number
 } {
+  console.log(`Getting market history for event ID: ${eventId}`);
+  console.log(`Total market histories available: ${marketHistories.length}`);
+  
+  if (marketHistories.length > 0) {
+    console.log(`Available event IDs: ${marketHistories.map(h => h.eventId).join(', ')}`);
+  }
+  
   const history = marketHistories.find(h => h.eventId === eventId);
   
   if (!history || history.timestamps.length === 0) {
+    console.log(`No history found for event ID: ${eventId}`);
     return {
       timestamps: [],
       uptimePercentage: 0,
@@ -517,6 +525,8 @@ export function getEventMarketHistory(eventId: string): {
       suspendedMinutes: 0
     };
   }
+  
+  console.log(`Found history for event ID: ${eventId} with ${history.timestamps.length} data points`);
   
   // Calculate statistics
   let availableCount = 0;
@@ -533,6 +543,17 @@ export function getEventMarketHistory(eventId: string): {
   // Estimate minutes based on timestamp count (assuming ~1 reading per 10 seconds)
   const totalMinutes = Math.round(totalPoints / 6);
   const suspendedMinutes = Math.round(totalMinutes * (1 - (uptimePercentage / 100)));
+  
+  console.log(`Statistics for event ID ${eventId}: ${availableCount}/${totalPoints} available (${uptimePercentage.toFixed(1)}% uptime)`);
+  
+  // Create a simpler representation of the history with only a few data points for debugging
+  const simplifiedTimestamps = history.timestamps.slice(0, 5).map(t => ({
+    timestamp: t.timestamp,
+    isAvailable: t.isAvailable,
+    time: new Date(t.timestamp).toISOString()
+  }));
+  
+  console.log(`Sample timestamps: ${JSON.stringify(simplifiedTimestamps)}`);
   
   return {
     timestamps: history.timestamps,

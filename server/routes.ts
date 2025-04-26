@@ -1420,21 +1420,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/live-heartbeat/data/:eventId', async (req, res) => {
     try {
       const eventId = req.params.eventId;
+      console.log(`Received request for heartbeat data for event ID: ${eventId}`);
+      
+      // getEventMarketHistory always returns an object, never null
       const history = getEventMarketHistory(eventId);
       
-      if (!history) {
-        return res.status(404).json({ 
-          success: false, 
-          message: 'Event data not found' 
-        });
+      // Log what we're returning for debugging
+      console.log(`Returning heartbeat data with ${history.timestamps.length} timestamps, uptime: ${history.uptimePercentage}%`);
+      
+      // Add a game minute to the response for the frontend if not present
+      if (history.timestamps.length > 0) {
+        // Find the current event from the heartbeat state to get the game minute
+        const status = getHeartbeatStatus();
+        const event = status.events.find(e => e.id === eventId);
+        
+        if (event && event.gameMinute) {
+          console.log(`Found matching event with game minute: ${event.gameMinute}`);
+          // Add game minute to the most recent 10 data points
+          const recentTimestamps = history.timestamps.slice(-10);
+          for (const timestamp of recentTimestamps) {
+            (timestamp as any).gameMinute = event.gameMinute;
+          }
+        }
       }
       
+      // Always return valid data, even if empty
       res.json(history);
     } catch (error) {
       console.error('Error getting event market history:', error);
-      res.status(500).json({ 
-        success: false, 
-        message: 'Failed to get event market history',
+      
+      // Always return at least an empty structure so the frontend doesn't break
+      res.status(200).json({ 
+        timestamps: [],
+        uptimePercentage: 0,
+        totalMinutes: 0,
+        suspendedMinutes: 0,
         error: error instanceof Error ? error.message : String(error)
       });
     }

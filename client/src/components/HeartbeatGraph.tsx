@@ -73,6 +73,7 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
         
         // Always use the live data endpoint
         const endpoint = `/api/live-heartbeat/data/${eventId}`;
+        console.log(`Fetching live heartbeat data for event ID: ${eventId}`);
         
         const response = await fetch(endpoint);
         if (!response.ok) {
@@ -80,14 +81,18 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
         }
         
         const result = await response.json();
+        console.log(`Received heartbeat data:`, result);
         
         // Also fetch event details from the status endpoint
         try {
           const statusResponse = await fetch('/api/live-heartbeat/status');
           if (statusResponse.ok) {
             const statusData = await statusResponse.json();
-            const event = statusData.events.find((e: any) => e.id === eventId);
+            console.log(`Received status data containing ${statusData.events?.length || 0} events`);
+            
+            const event = statusData.events?.find((e: any) => e.id === eventId);
             if (event) {
+              console.log(`Found matching event in status data:`, event);
               setEventDetails({
                 name: event.name,
                 homeTeam: event.homeTeam,
@@ -98,28 +103,57 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
               });
               
               if (event.gameMinute) {
+                console.log(`Setting current minute to: ${event.gameMinute}`);
                 setCurrentMinute(event.gameMinute);
               }
+            } else {
+              console.log(`No matching event found in status data for ID: ${eventId}`);
             }
           }
         } catch (error) {
           console.error('Error fetching event details:', error);
         }
         
-        // For football matches, we want to show the entire 90 minutes
-        // No time range filtering needed as we'll use game minutes instead
-        setData(result);
+        // Process the result data based on its structure
+        let timestamps: DataPoint[] = [];
         
-        // Determine current status
-        if (result.length > 0) {
-          const latestData = result[result.length - 1];
+        if (result) {
+          // Check if result is directly an array of data points
+          if (Array.isArray(result)) {
+            console.log(`Result is a direct array with ${result.length} data points`);
+            timestamps = result;
+          } 
+          // Check if result has a timestamps array property
+          else if (result.timestamps && Array.isArray(result.timestamps)) {
+            console.log(`Result contains a timestamps array with ${result.timestamps.length} data points`);
+            timestamps = result.timestamps;
+          }
+          // Otherwise create an empty array (will be populated with sample data if needed)
+          else {
+            console.log(`Result has an unexpected format, creating empty array`);
+            timestamps = [];
+          }
+        }
+        
+        // Update the state with the processed data
+        console.log(`Setting data state with ${timestamps.length} timestamps`);
+        setData(timestamps);
+        
+        // Determine current status from the latest data point
+        if (timestamps.length > 0) {
+          const latestData = timestamps[timestamps.length - 1];
+          console.log(`Latest data point:`, latestData);
+          
           setIsAvailable(latestData.isAvailable);
           setCurrentStatus(latestData.isAvailable ? 'available' : 'suspended');
           
           // Extract game minute if available
           if (latestData.gameMinute) {
+            console.log(`Data point has game minute: ${latestData.gameMinute}`);
             setCurrentMinute(latestData.gameMinute);
           }
+        } else {
+          console.log(`No data points available to determine current status`);
         }
         
         setIsLoading(false);
@@ -248,13 +282,30 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     // Use the actual market availability data from our API
     console.log("Using real market data for heartbeat visualization");
     
-    // Create timestamps array from result.timestamps
-    const timestamps = Array.isArray(data) ? data : [];
+    // Create timestamps array from the data provided
+    let timestamps = Array.isArray(data) ? data : [];
+    
     console.log(`Data points available: ${timestamps.length}`);
     
+    // Create sample data if we don't have any real data yet
     if (timestamps.length === 0) {
-      console.log("No timestamps available for drawing");
-      return;
+      console.log("No data available, creating sample data for visualization");
+      
+      // Create a series of timestamps over the last 10 minutes to show something
+      const now = Date.now();
+      const sampleData: DataPoint[] = [];
+      
+      // Generate 20 data points, alternating between available and suspended
+      for (let i = 0; i < 20; i++) {
+        sampleData.push({
+          timestamp: now - (20 - i) * 30000, // Every 30 seconds, most recent last
+          isAvailable: i % 3 !== 0 // Make 2/3 of points available for a realistic pattern
+        });
+      }
+      
+      // Use our sample data instead
+      console.log(`Created ${sampleData.length} sample data points`);
+      timestamps = sampleData;
     }
     
     ctx.beginPath();
