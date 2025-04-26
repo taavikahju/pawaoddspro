@@ -222,189 +222,155 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
   
   // Function to draw the heartbeat graph
   function drawHeartbeat() {
-    console.log("Drawing heartbeat with data points:", data.length);
-    
-    const canvas = canvasRef.current;
-    if (!canvas) {
-      console.error("Canvas ref is null");
-      return;
-    }
-    
-    if (data.length === 0) {
-      console.log("No data available to draw");
-      return;
-    }
-    
-    const ctx = canvas.getContext('2d');
-    if (!ctx) {
-      console.error("Could not get canvas context");
-      return;
-    }
-    
-    // Debug canvas dimensions
-    console.log(`Canvas dimensions: ${canvas.width} x ${canvas.height}`);
-    
-    // Get canvas dimensions
-    const width = canvas.width;
-    const height = canvas.height;
-    
-    // Clear canvas
-    ctx.clearRect(0, 0, width, height);
-    
-    // Draw football field background if loaded
-    if (backgroundImage.current) {
-      ctx.globalAlpha = 0.2; // Make it subtle/blurry
-      ctx.drawImage(backgroundImage.current, 0, 0, width, height);
-      ctx.globalAlpha = 1.0;
-    }
-    
-    // Draw grid
-    drawGrid(ctx, width, height);
-    
-    // Draw game minute labels
-    drawMinuteLabels(ctx, width, height);
-    
-    // Calculate spacing based on game minutes (1-120)
-    const maxGameMinute = 120; // Extended to 120 minutes as requested
-    const pixelsPerMinute = width / maxGameMinute;
-    
-    // Work with a copy of the data to ensure we don't modify the original
-    let timestamps = [...data].sort((a, b) => a.timestamp - b.timestamp);
-    console.log(`Data points available: ${timestamps.length}`);
-    
-    // Calculate the elapsed time in minutes based on the first and last data points
-    let elapsedMinutes = 0;
-    
-    if (timestamps.length >= 2) {
-      const firstTimestamp = timestamps[0].timestamp;
-      const lastTimestamp = timestamps[timestamps.length - 1].timestamp;
+    try {
+      console.log("Drawing heartbeat with data points:", data.length);
       
-      // Calculate the difference in milliseconds and convert to minutes
-      const diffMs = lastTimestamp - firstTimestamp;
-      elapsedMinutes = Math.max(1, Math.floor(diffMs / (1000 * 60)));
+      const canvas = canvasRef.current;
+      if (!canvas) {
+        console.error("Canvas ref is null");
+        return;
+      }
       
-      console.log(`Time elapsed between first and last data point: ${elapsedMinutes} minutes`);
-    }
-    
-    // Display empty state message if no data is available
-    if (timestamps.length === 0) {
-      console.log("No data available, showing empty state");
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        console.error("Could not get canvas context");
+        return;
+      }
       
-      // Draw grid lines anyway to show the background
+      // Debug canvas dimensions
+      console.log(`Canvas dimensions: ${canvas.width} x ${canvas.height}`);
+      
+      // Get canvas dimensions
+      const width = canvas.width;
+      const height = canvas.height;
+      
+      // Clear canvas
+      ctx.clearRect(0, 0, width, height);
+      
+      // Draw football field background if loaded
+      if (backgroundImage.current) {
+        ctx.globalAlpha = 0.2; // Make it subtle/blurry
+        ctx.drawImage(backgroundImage.current, 0, 0, width, height);
+        ctx.globalAlpha = 1.0;
+      }
+      
+      // Always draw the grid for visual consistency
       drawGrid(ctx, width, height);
       drawMinuteLabels(ctx, width, height);
       
-      // Draw empty state message
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '14px Arial';
-      ctx.textAlign = 'center';
-      ctx.fillText('Waiting for live data...', width / 2, height / 2);
-      
-      // Early return since we can't draw a heartbeat without data
-      return;
-    }
-    
-    // Find the current game minute from elapsed time
-    // In this new version, we use the actual elapsed time but keep the UI visually the same
-    let currentGameMinute = elapsedMinutes > 0 ? Math.min(elapsedMinutes, 120) : 45; // Default to 45 minutes if no data
-    
-    // We'll still use the game minute from event details for display purposes only, not for graph width
-    if (eventDetails && eventDetails.gameMinute) {
-      console.log(`Event game minute from details: ${eventDetails.gameMinute} (using elapsed time ${elapsedMinutes} for graph width)`);
-    }
-    
-    console.log("Current game minute (based on elapsed time):", currentGameMinute);
-    
-    // Set up the drawing style
-    ctx.lineWidth = 2;  // Thinner line as requested
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    
-    // Green for normal heartbeat
-    ctx.strokeStyle = '#00ff00';
-    
-    // Draw a series of heartbeats from 0 to current minute with reduced frequency
-    const beatWidth = 40;  // Doubled width to reduce frequency (was 20)
-    // Ensure we draw heartbeats up to the exact current game minute
-    const beatCount = Math.ceil(currentGameMinute * pixelsPerMinute / beatWidth);
-    
-    console.log(`Drawing ${beatCount} heartbeats`);
-    
-    // Start the drawing path
-    ctx.beginPath();
-    ctx.moveTo(0, height / 2);  // Start at the left edge, middle height
-    
-    // Calculate how many beats to show based on available game minutes
-    const availableBeats = Math.ceil(currentGameMinute);
-    const beatsToShow = Math.min(beatCount, availableBeats);
-    
-    console.log(`Drawing ${beatsToShow} beats for ${currentGameMinute} game minutes`);
-    
-    // Track the current market status to detect changes
-    let currentlyAvailable = true; // Default status (will be updated with real data)
-    
-    // First check if we have a current availability status from the last data point
-    if (timestamps.length > 0) {
-      currentlyAvailable = timestamps[timestamps.length - 1].isAvailable;
-    }
-    
-    for (let i = 0; i < beatsToShow; i++) {
-      const x = i * beatWidth;
-      
-      // Calculate which game minute this heartbeat represents
-      const currentBeatMinute = Math.floor(x / pixelsPerMinute);
-      
-      // Find the market status for this minute by searching through timestamps
-      let marketAvailable = currentlyAvailable;
-      
-      // If we have timestamps, use the availability status from the appropriate timestamp
-      if (i % 3 === 0 && timestamps.length > 0) { // Only check every 3rd beat to avoid too many status changes
-        // Get a timestamp index based on our position in the game
-        const timestampIndex = Math.min(
-          Math.floor((i / beatsToShow) * timestamps.length), 
-          timestamps.length - 1
-        );
-        marketAvailable = timestamps[timestampIndex].isAvailable;
+      // If no data, show empty state message and exit
+      if (!data || data.length === 0) {
+        console.log("No data available, showing empty state");
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '14px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Waiting for live data...', width / 2, height / 2);
+        return;
       }
       
-      // If market status changed, end current path and start a new one with different color
-      if (marketAvailable !== currentlyAvailable) {
-        ctx.stroke(); // End current path
-        ctx.beginPath(); // Start new path
-        ctx.strokeStyle = marketAvailable ? '#00ff00' : '#ff3333'; // Green for available, red for suspended
-        ctx.moveTo(x, height / 2); // Continue from same position
-        currentlyAvailable = marketAvailable; // Update the status
-      }
+      // Work with a copy of the data to ensure we don't modify the original
+      let timestamps = [...data].sort((a, b) => a.timestamp - b.timestamp);
       
-      if (!marketAvailable) {
-        // For suspended markets, draw a flat line
-        const endX = Math.min(x + beatWidth, currentGameMinute * pixelsPerMinute);
-        ctx.lineTo(endX, height / 2); // Flat line for suspended
-      } else {
-        // Regular heartbeat pattern for available markets
-        // Draw baseline up to this beat
-        ctx.lineTo(x, height / 2);
+      // Calculate the elapsed time in minutes (default to 45 if insufficient data)
+      let elapsedMinutes = 45; // Default
+      
+      if (timestamps.length >= 2) {
+        const firstTimestamp = timestamps[0].timestamp;
+        const lastTimestamp = timestamps[timestamps.length - 1].timestamp;
         
-        // Draw heartbeat pattern (simple ECG-like) with smaller spikes
-        ctx.lineTo(x + 10, height / 2 - 3);      // Small P wave (smaller)
-        ctx.lineTo(x + 14, height / 2);          // Back to baseline
-        ctx.lineTo(x + 18, height / 2 + 3);      // Q dip (smaller)
-        ctx.lineTo(x + 20, height / 2 - 20);     // R spike (reduced height)
-        ctx.lineTo(x + 24, height / 2 + 5);      // S dip (smaller)
-        ctx.lineTo(x + 28, height / 2);          // Back to baseline
-        ctx.lineTo(x + 32, height / 2 - 5);      // T wave (smaller)
-        ctx.lineTo(x + 36, height / 2);          // Back to baseline
+        // Calculate the difference in milliseconds and convert to minutes
+        const diffMs = lastTimestamp - firstTimestamp;
+        elapsedMinutes = Math.max(1, Math.floor(diffMs / (1000 * 60)));
+        console.log(`Time elapsed between first and last data point: ${elapsedMinutes} minutes`);
+      }
+      
+      // Set a reasonable game minute, capped at 120
+      const currentGameMinute = Math.min(elapsedMinutes, 120);
+      console.log("Current game minute:", currentGameMinute);
+      
+      // Draw a simple line based on the availability data
+      const pixelsPerMinute = width / 120;
+      
+      // Set up the drawing style
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      
+      // Start with a green line (available)
+      ctx.strokeStyle = '#00ff00';
+      
+      // Initial availability state based on first data point (default to available)
+      let isAvailable = timestamps.length > 0 ? timestamps[0].isAvailable : true;
+      
+      // For each status change, draw a segment of the appropriate color
+      let prevX = 0;
+      let prevY = height / 2;
+      
+      // Start with the center line
+      ctx.beginPath();
+      ctx.moveTo(0, height / 2);
+      
+      // For each data point, draw a segment
+      for (let i = 0; i < timestamps.length; i++) {
+        const dataPoint = timestamps[i];
+        
+        // Calculate x position based on relative time
+        const relativeTime = dataPoint.timestamp - timestamps[0].timestamp;
+        const relativeMinutes = relativeTime / (1000 * 60); // Convert ms to minutes
+        const x = Math.min(relativeMinutes * pixelsPerMinute, width);
+        
+        // If availability changed, finalize current path and start a new one
+        if (dataPoint.isAvailable !== isAvailable) {
+          // Finish current segment
+          ctx.lineTo(x, height / 2);
+          ctx.stroke();
+          
+          // Start new segment with correct color
+          isAvailable = dataPoint.isAvailable;
+          ctx.beginPath();
+          ctx.strokeStyle = isAvailable ? '#00ff00' : '#ff3333'; // Green for available, red for suspended
+          ctx.moveTo(x, height / 2);
+        }
+        
+        // For available status, draw a heartbeat spike every few points
+        if (isAvailable && i % 3 === 0) {
+          // Simple heartbeat spike
+          ctx.lineTo(x, height / 2);
+          ctx.lineTo(x + 5, height / 2 - 15);
+          ctx.lineTo(x + 10, height / 2);
+        } else {
+          // Just continue the line
+          ctx.lineTo(x, height / 2);
+        }
+      }
+      
+      // Finish the final segment
+      ctx.stroke();
+      
+      console.log("Heartbeat drawing completed successfully");
+    } catch (error) {
+      console.error("Error in drawHeartbeat:", error);
+      
+      // Try to render a fallback if canvas exists
+      try {
+        const canvas = canvasRef.current;
+        if (canvas) {
+          const ctx = canvas.getContext('2d');
+          if (ctx) {
+            // Clear and show error message
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '14px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('Error rendering heartbeat', canvas.width / 2, canvas.height / 2);
+          }
+        }
+      } catch (e) {
+        console.error("Could not even render fallback:", e);
       }
     }
-    
-    // Draw remaining line to current minute position
-    const endX = currentGameMinute * pixelsPerMinute;
-    ctx.lineTo(endX, height / 2);
-    
-    // Stroke the path
-    ctx.stroke();
-    
-    console.log("Heartbeat drawing completed successfully");
   }
   
   // Function to draw grid on the canvas
