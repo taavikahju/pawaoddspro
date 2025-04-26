@@ -62,6 +62,7 @@ interface MarketHistory {
     timestamp: number;
     isAvailable: boolean;
     marketStatus?: string; // Optional to maintain backward compatibility
+    gameMinute?: string; // Game minute for live events
   }[];
 }
 
@@ -811,8 +812,9 @@ function updateMarketHistory(event: HeartbeatEvent): void {
   const timestamp = Date.now();
   history.timestamps.push({
     timestamp: timestamp,
-    isAvailable: event.currentlyAvailable,
-    marketStatus: event.marketAvailability // Include the exact market status for better debugging
+    isAvailable: event.currentlyAvailable === true, // Force to boolean type
+    marketStatus: event.marketAvailability, // Include the exact market status for better debugging
+    gameMinute: event.gameMinute || '1' // Include game minute in each timestamp
   });
   
   // Log timestamp data for debugging when market is not available
@@ -849,7 +851,7 @@ export function getAllEventHistories(): any[] {
 
 // Get market history for a specific event
 export function getEventMarketHistory(eventId: string): { 
-  timestamps: { timestamp: number; isAvailable: boolean }[]; 
+  timestamps: { timestamp: number; isAvailable: boolean; marketStatus?: string; gameMinute?: string }[]; 
   statistics: { totalPoints: number; availablePoints: number; uptimePercentage: number }
 } {
   // Find the history for this event

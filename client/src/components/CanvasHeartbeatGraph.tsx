@@ -287,6 +287,13 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
         return;
       }
       
+      // Debug log to check suspended events in data
+      const suspendedCount = data.filter(point => point.isAvailable === false).length;
+      console.log(`DRAWING: Found ${suspendedCount} suspended data points out of ${data.length}`);
+      if (suspendedCount > 0) {
+        console.log("Sample suspended point:", data.find(point => point.isAvailable === false));
+      }
+      
       // Work with a copy of the data to ensure we don't modify the original
       let timestamps = [...data].sort((a, b) => a.timestamp - b.timestamp);
       
@@ -315,11 +322,8 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
       
-      // Start with a green line (available)
-      ctx.strokeStyle = '#00ff00';
-      
       // Initial availability state based on first data point (default to available)
-      let isAvailable = timestamps.length > 0 ? timestamps[0].isAvailable : true;
+      let isAvailable = timestamps.length > 0 ? (timestamps[0].isAvailable === true) : true;
       
       // Calculate the number of beats to show
       const beatWidth = 40;  // Doubled width to reduce frequency (was 20)
@@ -328,70 +332,98 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
       
       console.log(`Drawing ${beatsToShow} beats for ${currentGameMinute} game minutes`);
       
-      // Start the drawing path
-      ctx.beginPath();
-      ctx.moveTo(0, height / 2);  // Start at the left edge, middle height
+      let currentPath = {
+        available: isAvailable,
+        points: [[0, height / 2]] // Start at the left edge, middle height
+      };
       
+      let paths = [currentPath];
+      
+      // First gather all the paths based on availability changes
       for (let i = 0; i < beatsToShow; i++) {
         const x = i * beatWidth;
         
-        // Find the market status for this position by searching through timestamps
+        // Find the market status for this position 
         let marketAvailable = isAvailable;
         
-        // Check data status for every beat to ensure we don't miss suspension changes
         if (timestamps.length > 0) {
           // Get a timestamp index based on our position in the game
           const timestampIndex = Math.min(
             Math.floor((i / beatsToShow) * timestamps.length), 
             timestamps.length - 1
           );
-          marketAvailable = timestamps[timestampIndex].isAvailable;
+          // Ensure boolean value - even if string 'true'/'false' comes from server
+          marketAvailable = timestamps[timestampIndex].isAvailable === true;
           
-          // Log suspended status for debugging
-          if (!marketAvailable && i % 10 === 0) {
-            console.log(`Detected suspended market at beat ${i}, timestamp index ${timestampIndex}`, 
-              timestamps[timestampIndex]);
+          // Log when a suspended section is detected
+          if (!marketAvailable) {
+            console.log(`SUSPENDED section at beat ${i}, using timestamp ${timestampIndex}`);
           }
         }
         
-        // If market status changed, end current path and start a new one with different color
-        if (marketAvailable !== isAvailable) {
-          ctx.stroke(); // End current path
-          ctx.beginPath(); // Start new path
-          ctx.strokeStyle = marketAvailable ? '#00ff00' : '#ff3333'; // Green for available, red for suspended
-          ctx.moveTo(x, height / 2); // Continue from same position
-          isAvailable = marketAvailable; // Update the status
+        // If market status changed, start a new path
+        if (marketAvailable !== currentPath.available) {
+          // Close the current path
+          const endX = x;
+          currentPath.points.push([endX, height / 2]);
+          
+          // Start a new path
+          currentPath = {
+            available: marketAvailable,
+            points: [[x, height / 2]] // Start from same position
+          };
+          paths.push(currentPath);
+          
+          console.log(`Status changed at x=${x} from ${isAvailable} to ${marketAvailable}`);
         }
         
+        // Add points based on availability
         if (!marketAvailable) {
-          // For suspended markets, draw a flat red line with increased width for visibility
-          ctx.lineWidth = 4; // Make the line thicker for suspended state
+          // For suspended markets, flat line
           const endX = Math.min(x + beatWidth, currentGameMinute * pixelsPerMinute);
-          ctx.lineTo(endX, height / 2); // Flat line for suspended
+          currentPath.points.push([endX, height / 2]);
         } else {
-          ctx.lineWidth = 2; // Normal width for available state
-          // Regular heartbeat pattern for available markets
-          // Draw baseline up to this beat
-          ctx.lineTo(x, height / 2);
-          
-          // Draw heartbeat pattern (simple ECG-like) with smaller spikes
-          ctx.lineTo(x + 10, height / 2 - 3);      // Small P wave (smaller)
-          ctx.lineTo(x + 14, height / 2);          // Back to baseline
-          ctx.lineTo(x + 18, height / 2 + 3);      // Q dip (smaller)
-          ctx.lineTo(x + 20, height / 2 - 20);     // R spike (reduced height)
-          ctx.lineTo(x + 24, height / 2 + 5);      // S dip (smaller)
-          ctx.lineTo(x + 28, height / 2);          // Back to baseline
-          ctx.lineTo(x + 32, height / 2 - 5);      // T wave (smaller)
-          ctx.lineTo(x + 36, height / 2);          // Back to baseline
+          // For available markets, add heartbeat pattern
+          currentPath.points.push([x, height / 2]);
+          currentPath.points.push([x + 10, height / 2 - 3]);      // Small P wave
+          currentPath.points.push([x + 14, height / 2]);          // Baseline
+          currentPath.points.push([x + 18, height / 2 + 3]);      // Q dip
+          currentPath.points.push([x + 20, height / 2 - 20]);     // R spike
+          currentPath.points.push([x + 24, height / 2 + 5]);      // S dip
+          currentPath.points.push([x + 28, height / 2]);          // Baseline
+          currentPath.points.push([x + 32, height / 2 - 5]);      // T wave
+          currentPath.points.push([x + 36, height / 2]);          // Baseline
         }
+        
+        isAvailable = marketAvailable;
       }
       
-      // Draw remaining line to current minute position
+      // Close the last path
       const endX = currentGameMinute * pixelsPerMinute;
-      ctx.lineTo(endX, height / 2);
+      currentPath.points.push([endX, height / 2]);
       
-      // Stroke the path
-      ctx.stroke();
+      // Now draw all the paths with proper colors
+      console.log(`Drawing ${paths.length} separate paths based on market status changes`);
+      
+      // Draw each path with its appropriate color
+      paths.forEach((path, index) => {
+        ctx.beginPath();
+        ctx.strokeStyle = path.available ? '#00ff00' : '#ff0000'; // Green or Red
+        ctx.lineWidth = path.available ? 2 : 4; // Thicker for suspended
+        
+        // Draw the path
+        path.points.forEach((point, i) => {
+          if (i === 0) {
+            ctx.moveTo(point[0], point[1]);
+          } else {
+            ctx.lineTo(point[0], point[1]);
+          }
+        });
+        
+        ctx.stroke();
+        
+        console.log(`Drew path ${index+1}/${paths.length} with ${path.points.length} points, available=${path.available}`);
+      });
       
       console.log("Heartbeat drawing completed successfully");
     } catch (error) {
