@@ -416,36 +416,20 @@ export default function LiveHeartbeat() {
                     </Button>
                   </div>
 
-                  {/* Uptime Gauge positioned to the right */}
+                  {/* Uptime percentage display positioned to the right */}
                   <div className="flex items-center">
-                    <div className="mr-1 text-xs font-medium text-muted-foreground">
+                    <div className="text-sm font-medium text-muted-foreground mr-1">
                       Uptime:
                     </div>
-                    <div className="flex items-center">
-                      <div className="relative w-[60px] h-[30px]">
-                        {/* Semi-circle gauge background */}
-                        <svg className="w-full h-full" viewBox="0 0 60 30">
-                          {/* Colored gauge sections */}
-                          <path d="M 30 30 A 20 20 0 0 1 10 30" fill="none" stroke="#ef4444" strokeWidth="4" />
-                          <path d="M 30 30 A 20 20 0 0 1 20 13" fill="none" stroke="#f97316" strokeWidth="4" />
-                          <path d="M 30 30 A 20 20 0 0 1 40 13" fill="none" stroke="#eab308" strokeWidth="4" />
-                          <path d="M 30 30 A 20 20 0 0 1 50 30" fill="none" stroke="#22c55e" strokeWidth="4" />
-                          
-                          {/* Needle */}
-                          <g transform={`rotate(${-30 + (uptimeStats.current / 100) * 240}, 30, 30)`}>
-                            <line x1="30" y1="30" x2="30" y2="12" stroke="#000" strokeWidth="1.5" />
-                            <circle cx="30" cy="30" r="2" fill="#000" />
-                          </g>
-                        </svg>
-                      </div>
-                      <div className="ml-1 text-xs font-medium" 
-                           style={{ 
-                             color: uptimeStats.current < 40 ? '#ef4444' : 
-                                    uptimeStats.current < 60 ? '#f97316' : 
-                                    uptimeStats.current < 75 ? '#eab308' : '#22c55e' 
-                           }}>
-                        {uptimeStats.current.toFixed(1)}%
-                      </div>
+                    <div 
+                      className="font-medium text-sm"
+                      style={{ 
+                        color: uptimeStats.current < 40 ? '#ef4444' : 
+                               uptimeStats.current < 60 ? '#f97316' : 
+                               uptimeStats.current < 75 ? '#eab308' : '#22c55e' 
+                      }}
+                    >
+                      {uptimeStats.current.toFixed(1)}%
                     </div>
                   </div>
                 </div>
