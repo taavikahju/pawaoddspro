@@ -392,32 +392,42 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
         totalDurationMinutes
       });
       
-      // Send stats to server for storage (would be implemented in the backend)
-      // This allows for historical analytics over time
+      // Send stats to server for storage for historical analytics over time
       const storeStats = async () => {
         try {
-          // This would be the API call to store stats in the database
-          // It's commented out as it would need the backend implementation
-          /*
-          await fetch(`/api/live-heartbeat/stats/${eventId}`, {
+          // Get admin key from localStorage if available (for authentication)
+          const adminKey = localStorage.getItem('adminKey');
+          
+          // Current date components for time-based filtering
+          const now = new Date();
+          const day = now.toISOString().split('T')[0]; // YYYY-MM-DD
+          const week = `${now.getFullYear()}-W${Math.ceil((now.getDate() + now.getDay()) / 7)}`;
+          const month = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+          
+          const response = await fetch(`/api/live-heartbeat/stats`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+              'Content-Type': 'application/json',
+              ...(adminKey ? { 'x-admin-key': adminKey } : {})
+            },
             body: JSON.stringify({
               eventId,
               timestamp: Date.now(),
               uptimePercentage,
               availableDurationMinutes,
               suspendedDurationMinutes,
-              totalDurationMinutes
+              totalDurationMinutes,
+              day,
+              week,
+              month
             })
           });
-          */
-          console.log("Heartbeat statistics calculated:", {
-            uptimePercentage,
-            availableDurationMinutes,
-            suspendedDurationMinutes,
-            totalDurationMinutes
-          });
+          
+          if (response.ok) {
+            console.log("⚡ Heartbeat stats successfully stored to database");
+          } else {
+            console.error("Failed to store heartbeat stats:", await response.text());
+          }
         } catch (error) {
           console.error("Failed to store heartbeat statistics:", error);
         }
