@@ -216,6 +216,28 @@ export default function LiveHeartbeat() {
                             'Israel': 'IL',
                             'New Zealand': 'NZ',
                             'Hong Kong': 'HK',
+                            'Czech Republic': 'CZ',
+                            'Hungary': 'HU',
+                            'Tanzania': 'TZ',
+                            'Sweden': 'SE',
+                            'Norway': 'NO',
+                            'Denmark': 'DK',
+                            'Finland': 'FI',
+                            'Iceland': 'IS',
+                            'Poland': 'PL',
+                            'Ethiopia': 'ET',
+                            'Zambia': 'ZM',
+                            'Zimbabwe': 'ZW',
+                            'Mexico': 'MX',
+                            'Argentina': 'AR',
+                            'Chile': 'CL',
+                            'Colombia': 'CO',
+                            'Egypt': 'EG',
+                            'Morocco': 'MA',
+                            'Tunisia': 'TN',
+                            'Uruguay': 'UY',
+                            'Iraq': 'IQ',
+                            'Iran': 'IR',
                           };
                           
                           return codeMap[countryName] || 'UN'; // Default to UN flag if country not found
@@ -267,7 +289,18 @@ export default function LiveHeartbeat() {
                   </Select>
                 </div>
 
-                {/* View type selection removed as events are already ordered by start time */}
+                {/* Clear filters button */}
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => {
+                    setSelectedCountry('all');
+                    setSelectedTournament('all');
+                  }}
+                  className="gap-1"
+                >
+                  Clear Filters
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -319,7 +352,11 @@ export default function LiveHeartbeat() {
                                 </Badge>
                                 {event.gameMinute && (
                                   <Badge variant="secondary" className="text-[10px] h-5 ml-1">
-                                    {event.gameMinute}
+                                    {event.gameMinute === 'HT' || event.gameMinute?.toLowerCase() === 'ht' 
+                                      ? 'HT' 
+                                      : !event.gameMinute.includes("'") 
+                                        ? `${event.gameMinute}'` 
+                                        : event.gameMinute}
                                   </Badge>
                                 )}
                               </div>

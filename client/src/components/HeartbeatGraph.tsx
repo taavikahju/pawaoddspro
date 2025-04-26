@@ -142,7 +142,7 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
           else if (result.timestamps && Array.isArray(result.timestamps)) {
             console.log(`Result contains a timestamps array with ${result.timestamps.length} data points`);
             
-            timestamps = result.timestamps.map(item => {
+            timestamps = result.timestamps.map((item: any) => {
               // Make sure each item has all necessary properties
               if (!item.hasOwnProperty('isAvailable')) {
                 console.log(`Data point missing isAvailable property, setting to true by default:`, item);
@@ -448,10 +448,10 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     if (currentGameMinute > 0) {
       const minuteX = Math.min(currentGameMinute * pixelsPerMinute, width - 20);
       
-      // Draw minute bubble
+      // Draw a more subtle minute indicator (smaller and less bright)
       ctx.beginPath();
-      ctx.arc(minuteX, 20, 15, 0, Math.PI * 2);
-      ctx.fillStyle = '#00ff00'; // Always green for visibility
+      ctx.arc(minuteX, 20, 12, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0, 180, 0, 0.6)'; // Semi-transparent darker green
       ctx.fill();
       
       // Draw minute text - use "HT" for halftime if the current minute is 45
@@ -541,47 +541,50 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
   // Calculate statistics based on the collected data
   useEffect(() => {
     if (data.length > 0) {
-      // Count segments with available and suspended status
-      let availableCount = 0;
-      let suspendedCount = 0;
+      // Calculate statistics from the data points
+      const calculateStats = () => {
+        // Count data points by availability status
+        let availableCount = 0;
+        let suspendedCount = 0;
+        
+        data.forEach(point => {
+          if (point.isAvailable) {
+            availableCount++;
+          } else {
+            suspendedCount++;
+          }
+        });
+        
+        // We estimate each data point represents approximately 10 seconds
+        const secondsPerDataPoint = 10;
+        
+        // Calculate durations in minutes
+        const availableMinutes = (availableCount * secondsPerDataPoint) / 60;
+        const suspendedMinutes = (suspendedCount * secondsPerDataPoint) / 60;
+        const totalMinutes = availableMinutes + suspendedMinutes;
+        
+        // Calculate uptime percentage based on time (available ÷ total)
+        const uptime = totalMinutes > 0 
+          ? (availableMinutes / totalMinutes) * 100
+          : 0;
+          
+        // Return the calculated statistics with 1 decimal place precision
+        return {
+          uptimePercentage: Number(uptime.toFixed(1)),
+          availableDurationMinutes: Number(availableMinutes.toFixed(1)),
+          suspendedDurationMinutes: Number(suspendedMinutes.toFixed(1)),
+          totalDurationMinutes: Number(totalMinutes.toFixed(1))
+        };
+      };
       
-      // Count each status based on the actual data points
-      data.forEach(point => {
-        if (point.isAvailable) {
-          availableCount++;
-        } else {
-          suspendedCount++;
-        }
-      });
+      // Update the stats state
+      const newStats = calculateStats();
+      setStats(newStats);
       
-      const totalCount = availableCount + suspendedCount;
-      
-      // Calculate uptime percentage
-      const uptimePercentage = totalCount > 0 
-        ? Math.round((availableCount / totalCount) * 100) 
-        : 0;
-      
-      // For duration calculations, we need to approximate minutes from data points
-      // Assuming each data point represents approximately 10 seconds of time
-      // (this will vary based on how frequently the data is collected)
-      const secondsPerDataPoint = 10; // Typically 10 seconds between samples
-      
-      const availableDurationMinutes = Math.round((availableCount * secondsPerDataPoint) / 60);
-      const suspendedDurationMinutes = Math.round((suspendedCount * secondsPerDataPoint) / 60);
-      const totalDurationMinutes = availableDurationMinutes + suspendedDurationMinutes;
-      
-      // Update stats state with exactly 1 decimal place
-      setStats({
-        uptimePercentage: Number(uptimePercentage.toFixed(1)),
-        availableDurationMinutes: Number(availableDurationMinutes.toFixed(1)),
-        suspendedDurationMinutes: Number(suspendedDurationMinutes.toFixed(1)),
-        totalDurationMinutes: Number(totalDurationMinutes.toFixed(1))
-      });
-      
-      // Send stats to server for storage for historical analytics over time
+      // Send stats to server for historical analytics
       const storeStats = async () => {
         try {
-          // Get admin key from localStorage if available (for authentication)
+          // Get admin key from localStorage if available
           const adminKey = localStorage.getItem('adminKey');
           
           // Current date components for time-based filtering
@@ -599,10 +602,11 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
             body: JSON.stringify({
               eventId,
               timestamp: Date.now(),
-              uptimePercentage,
-              availableDurationMinutes,
-              suspendedDurationMinutes,
-              totalDurationMinutes,
+              // Convert to integers for database compatibility
+              uptimePercentage: Math.round(newStats.uptimePercentage),
+              availableDurationMinutes: Math.round(newStats.availableDurationMinutes),
+              suspendedDurationMinutes: Math.round(newStats.suspendedDurationMinutes),
+              totalDurationMinutes: Math.round(newStats.totalDurationMinutes),
               day,
               week,
               month
