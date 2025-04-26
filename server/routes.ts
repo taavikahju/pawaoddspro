@@ -738,14 +738,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   app.post('/api/live-heartbeat/start', simpleAdminAuth, async (req, res) => {
     try {
-      const { apiUrl } = req.body;
-      
-      if (!apiUrl) {
-        return res.status(400).json({ 
-          success: false,
-          message: 'API URL is required'
-        });
-      }
+      // Provide a default URL in case none is supplied
+      const defaultUrl = 'https://www.betpawa.com.gh/api/sportsbook/events/inplay?sport=2&category=0';
+      const apiUrl = req.body.apiUrl || defaultUrl;
       
       // Start the heartbeat tracker
       startHeartbeatTracker(apiUrl, storage);
@@ -1351,7 +1346,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Start the heartbeat tracker
   app.post('/api/live-heartbeat/start', simpleAdminAuth, async (req, res) => {
     try {
-      const url = req.body.url || 'https://www.betpawa.com.gh/api/sportsbook/v2/events/lists/by-queries?q=%7B%22queries%22%3A%5B%7B%22query%22%3A%7B%22eventType%22%3A%22LIVE%22%2C%22categories%22%3A%5B%222%22%5D%2C%22zones%22%3A%7B%7D%7D%2C%22view%22%3A%7B%22marketTypes%22%3A%5B%223743%22%5D%7D%2C%22skip%22%3A0%2C%22sort%22%3A%7B%22competitionPriority%22%3A%22DESC%22%7D%2C%22take%22%3A20%7D%5D%7D';
+      // Updated API URL with improved format for better reliability
+      const defaultUrl = 'https://www.betpawa.com.gh/api/sportsbook/events/inplay?sport=2&category=0';
+      const url = req.body.url || defaultUrl;
       
       startHeartbeatTracker(url, storage);
       

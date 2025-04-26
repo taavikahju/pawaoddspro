@@ -515,6 +515,7 @@ function updateMarketHistory(event: HeartbeatEvent): void {
       eventId,
       timestamps: []
     };
+    console.log(`New live event tracking started: ${event.name}, ID: ${eventId}, Country: ${event.country}, Tournament: ${event.tournament}`);
   }
   
   // Add new timestamp only if status changed or it's been at least 60 seconds
@@ -532,6 +533,11 @@ function updateMarketHistory(event: HeartbeatEvent): void {
     
     // Update record count
     event.recordCount = history.timestamps.length;
+    
+    // Log market status changes (for visibility and debugging)
+    if (lastRecord && lastRecord.isAvailable !== isAvailable) {
+      console.log(`Market status changed for ${event.name} (ID: ${eventId}): ${isAvailable ? 'AVAILABLE' : 'SUSPENDED'}`);
+    }
     
     // Emit event update
     heartbeatEvents.emit(HEARTBEAT_EVENTS.EVENT_UPDATED, event);
