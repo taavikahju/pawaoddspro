@@ -358,14 +358,20 @@ async function scrapePagedEvents(apiUrl: string): Promise<any[]> {
     // Make an actual API call to BetPawa Ghana API
     const response = await axios.get(apiUrl, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
-        'Accept': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'application/json, text/plain, */*',
         'Accept-Language': 'en-US,en;q=0.9',
         'Referer': 'https://www.betpawa.com.gh/',
         'Origin': 'https://www.betpawa.com.gh',
-        'Connection': 'keep-alive'
+        'Connection': 'keep-alive',
+        'sec-ch-ua': '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-origin'
       },
-      timeout: 10000 // 10-second timeout
+      timeout: 15000 // 15-second timeout
     });
     
     if (!response.data) {
