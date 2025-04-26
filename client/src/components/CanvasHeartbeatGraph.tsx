@@ -419,6 +419,9 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
         endTimestamp: timestamps[0].timestamp
       };
       
+      // Make sure we have the first path in the array
+      paths.push(currentPath);
+        
       // Process all data points to create path segments
       for (let i = 1; i < timestamps.length; i++) {
         const timestamp = timestamps[i];
@@ -446,7 +449,9 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
         // If this is the last point, make sure to close the current path
         if (i === timestamps.length - 1) {
           currentPath.endTimestamp = timestamp.timestamp;
-          paths.push(currentPath);
+          if (!paths.includes(currentPath)) { // Only push if not already in the array
+            paths.push(currentPath);
+          }
         }
       }
       
