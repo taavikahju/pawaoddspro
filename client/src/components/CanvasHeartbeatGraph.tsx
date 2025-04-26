@@ -173,11 +173,17 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
               console.log(`DEBUG - Found suspended data points:`, suspendedPoints.slice(0, 3));
             }
             
-            // Ensure suspended status is properly set as boolean false and not string 'false'
-            const processedTimestamps = apiData.timestamps.map(point => ({
-              ...point,
-              isAvailable: point.isAvailable === true || point.isAvailable === 'true'
-            }));
+            // Ensure suspended status is properly set as boolean
+            // The API might return isAvailable as a string or boolean, so we need to handle both cases
+            const processedTimestamps = apiData.timestamps.map(point => {
+              // Convert to proper boolean (handling string 'true'/'false' and actual boolean values)
+              const isAvailable = point.isAvailable === true || point.isAvailable === 'true';
+              console.log(`Processing data point: original isAvailable=${point.isAvailable}, converted=${isAvailable}`);
+              return {
+                ...point,
+                isAvailable: isAvailable
+              };
+            });
             
             // Set the data points directly from the API
             console.log("Using real data points with processed availability status");
@@ -409,7 +415,15 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
       paths.forEach((path, index) => {
         ctx.beginPath();
         ctx.strokeStyle = path.available ? '#00ff00' : '#ff0000'; // Green or Red
-        ctx.lineWidth = path.available ? 2 : 4; // Thicker for suspended
+        ctx.lineWidth = path.available ? 2 : 6; // Much thicker for suspended
+        
+        // For suspended paths, add a glowing effect
+        if (!path.available) {
+          ctx.shadowColor = '#ff0000';
+          ctx.shadowBlur = 10;
+        } else {
+          ctx.shadowBlur = 0;
+        }
         
         // Draw the path
         path.points.forEach((point, i) => {

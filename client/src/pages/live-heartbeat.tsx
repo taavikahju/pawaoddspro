@@ -545,8 +545,8 @@ export default function LiveHeartbeat() {
                               ? 'bg-accent'
                               : ''
                           } ${
-                            activeTab === 'live' && !event.currentlyAvailable
-                              ? 'bg-red-100/10 border-l-4 border-red-500 dark:bg-red-950/10'
+                            activeTab === 'live' && event.currentlyAvailable === false
+                              ? 'bg-red-500/20 border-l-4 border-red-500 dark:bg-red-900/30'
                               : ''
                           }`}
                           onClick={() => setSelectedEventId(event.id)}
@@ -562,9 +562,9 @@ export default function LiveHeartbeat() {
                                 {activeTab === 'live' ? (
                                   <Badge 
                                     variant={event.currentlyAvailable ? 'outline' : 'destructive'}
-                                    className={`text-[10px] h-5 ml-1 ${!event.currentlyAvailable ? 'font-bold animate-pulse' : ''}`}
+                                    className={`text-[10px] h-5 ml-1 ${!event.currentlyAvailable ? 'font-bold animate-pulse text-white' : ''}`}
                                   >
-                                    {event.currentlyAvailable ? 'Available' : 'SUSPENDED'}
+                                    {event.currentlyAvailable ? 'Available' : '❗ SUSPENDED ❗'}
                                   </Badge>
                                 ) : (
                                   <Badge 
