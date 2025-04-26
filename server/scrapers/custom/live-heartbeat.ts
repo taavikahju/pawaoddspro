@@ -883,11 +883,31 @@ async function processEvents(events: any[]): Promise<void> {
     } else if (event.competitors && event.competitors.length >= 2) {
       homeTeam = event.competitors[0].name || '';
       awayTeam = event.competitors[1].name || '';
-    } else if (eventName.includes(' vs ')) {
+    } else if (eventName && eventName.includes(' vs ')) {
       const teams = eventName.split(' vs ');
       if (teams.length === 2) {
         homeTeam = teams[0].trim();
         awayTeam = teams[1].trim();
+      }
+    }
+    
+    // If we still don't have team names, try to extract them from other sources
+    if (!homeTeam && !awayTeam) {
+      // Try to use the event name itself
+      if (eventName) {
+        // Common separators for team names in event names: 'vs', 'v', '-', '/'
+        const separators = [' vs ', ' v ', ' - ', '/'];
+        
+        for (const separator of separators) {
+          if (eventName.includes(separator)) {
+            const parts = eventName.split(separator);
+            if (parts.length === 2) {
+              homeTeam = parts[0].trim();
+              awayTeam = parts[1].trim();
+              break;
+            }
+          }
+        }
       }
     }
     
@@ -953,7 +973,10 @@ function updateMarketHistory(event: HeartbeatEvent): void {
       eventId,
       timestamps: []
     };
-    console.log(`New live event tracking started: ${event.name}, ID: ${eventId}, Country: ${event.country}, Tournament: ${event.tournament}`);
+    const displayName = event.homeTeam && event.awayTeam
+      ? `${event.homeTeam} vs ${event.awayTeam}`
+      : event.name;
+    console.log(`New live event tracking started: ${displayName}, ID: ${eventId}, Country: ${event.country}, Tournament: ${event.tournament}`);
   }
   
   // Add new timestamp only if status changed or it's been at least 60 seconds
@@ -974,7 +997,10 @@ function updateMarketHistory(event: HeartbeatEvent): void {
     
     // Log market status changes (for visibility and debugging)
     if (lastRecord && lastRecord.isAvailable !== isAvailable) {
-      console.log(`Market status changed for ${event.name} (ID: ${eventId}): ${isAvailable ? 'AVAILABLE' : 'SUSPENDED'}`);
+      const displayName = event.homeTeam && event.awayTeam 
+        ? `${event.homeTeam} vs ${event.awayTeam}` 
+        : event.name;
+      console.log(`Market status changed for ${displayName} (ID: ${eventId}): ${isAvailable ? 'AVAILABLE' : 'SUSPENDED'}`);
     }
     
     // Emit event update
