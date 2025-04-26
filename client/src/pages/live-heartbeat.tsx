@@ -617,7 +617,7 @@ export default function LiveHeartbeat() {
                               ? 'bg-accent hover:bg-accent/80'
                               // Priority 2: Suspended events (both live and historical)
                               : (!event.currentlyAvailable || event.suspended === true)
-                                ? 'bg-red-500/20 border-l-4 border-red-500 dark:bg-red-900/30 hover:bg-red-500/30'
+                                ? 'bg-red-500/10 border-l-2 border-red-500 dark:bg-red-900/15 hover:bg-red-500/15'
                                 // Priority 3: Normal events
                                 : 'hover:bg-accent'
                           }`}
@@ -642,16 +642,16 @@ export default function LiveHeartbeat() {
                                 {activeTab === 'live' ? (
                                   <Badge 
                                     variant={event.currentlyAvailable ? 'outline' : 'destructive'}
-                                    className={`text-[10px] h-5 ml-1 ${!event.currentlyAvailable ? 'font-bold animate-pulse text-white' : ''}`}
+                                    className={`text-[10px] h-5 ml-1 ${!event.currentlyAvailable ? 'text-white' : ''}`}
                                   >
-                                    {event.currentlyAvailable ? 'Available' : '❗ SUSPENDED ❗'}
+                                    {event.currentlyAvailable ? 'Available' : 'SUSPENDED'}
                                   </Badge>
                                 ) : (
                                   <Badge 
                                     variant={event.suspended ? "destructive" : "secondary"}
-                                    className={`text-[10px] h-5 ml-1 ${event.suspended ? 'font-bold text-white' : ''}`}
+                                    className={`text-[10px] h-5 ml-1 ${event.suspended ? 'text-white' : ''}`}
                                   >
-                                    {event.suspended ? '❗ SUSPENDED ❗' : 'Completed'}
+                                    {event.suspended ? 'SUSPENDED' : 'Completed'}
                                   </Badge>
                                 )}
                                 {event.gameMinute && (
