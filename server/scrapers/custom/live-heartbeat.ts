@@ -1147,6 +1147,10 @@ async function processEvents(events: any[]): Promise<void> {
       console.log(`Processing event: ${homeTeam} vs ${awayTeam} (${eventId}), Country: ${country}, Tournament: ${tournament}, Market Available: ${isMarketAvailable}, Minute: ${gameMinute}`);
     } else {
       console.log(`Processing event: ${eventName || "Unknown"} (${eventId}), Country: ${country}, Tournament: ${tournament}, Market Available: ${isMarketAvailable}, Minute: ${gameMinute}`);
+      
+      // Debug the raw event object to see what data is available
+      console.log('Raw event data:');
+      console.log(JSON.stringify(event, null, 2));
     }
     
     // Update market history
