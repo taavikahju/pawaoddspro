@@ -10,11 +10,8 @@ import HeartbeatGraph from '../components/HeartbeatGraph';
 import Layout from '@/components/Layout';
 import ReactCountryFlag from 'react-country-flag';
 
-// Component for displaying uptime metrics in a semi-circular gauge
+// Component for displaying uptime metrics with a horizontal bar indicator
 const UptimeGauge = ({ value }: { value: number }) => {
-  // Calculate needle rotation angle (between -180 and 0 degrees)
-  const needleRotation = -180 + (value / 100) * 180;
-  
   // Get color based on value
   const getColor = (val: number) => {
     if (val < 40) return '#ef4444'; // red
@@ -23,107 +20,39 @@ const UptimeGauge = ({ value }: { value: number }) => {
     return '#16a34a'; // green
   };
   
+  const color = getColor(value);
+  const needlePosition = `${value}%`;
+  
   return (
     <div className="flex items-center">
       <div className="text-sm font-medium text-muted-foreground mr-2">
         Average Uptime:
       </div>
-      <div className="flex items-center">
-        <div className="relative w-[140px] h-[70px]">
-          <svg className="w-full h-full" viewBox="0 0 140 70">
-            {/* Gauge segments - colors from red to green */}
-            <g>
-              {/* Red segment */}
-              <path 
-                d="M 70 70 A 60 60 0 0 1 28 45" 
-                fill="#ef4444" 
-                stroke="#ffffff" 
-                strokeWidth="1"
-              />
-              
-              {/* Orange segment */}
-              <path 
-                d="M 70 70 A 60 60 0 0 1 28 45 A 60 60 0 0 1 10 10" 
-                fill="#f97316" 
-                stroke="#ffffff" 
-                strokeWidth="1" 
-                strokeLinejoin="round"
-                d="M 70 70 L 28 45 A 60 60 0 0 1 10 10 Z"
-              />
-              
-              {/* Light orange segment */}
-              <path 
-                d="M 70 70 A 60 60 0 0 1 10 10 A 60 60 0 0 1 40 5" 
-                fill="#fb923c" 
-                stroke="#ffffff" 
-                strokeWidth="1"
-                d="M 70 70 L 10 10 A 60 60 0 0 1 40 5 Z"
-              />
-              
-              {/* Yellow segment */}
-              <path 
-                d="M 70 70 A 60 60 0 0 1 40 5 A 60 60 0 0 1 70 0" 
-                fill="#facc15" 
-                stroke="#ffffff" 
-                strokeWidth="1"
-                d="M 70 70 L 40 5 A 60 60 0 0 1 70 0 Z"
-              />
-              
-              {/* Light green segment */}
-              <path 
-                d="M 70 70 A 60 60 0 0 1 70 0 A 60 60 0 0 1 100 5" 
-                fill="#a3e635" 
-                stroke="#ffffff" 
-                strokeWidth="1"
-                d="M 70 70 L 70 0 A 60 60 0 0 1 100 5 Z"
-              />
-              
-              {/* Medium green segment */}
-              <path 
-                d="M 70 70 A 60 60 0 0 1 100 5 A 60 60 0 0 1 130 10" 
-                fill="#84cc16" 
-                stroke="#ffffff" 
-                strokeWidth="1"
-                d="M 70 70 L 100 5 A 60 60 0 0 1 130 10 Z"
-              />
-              
-              {/* Green segment */}
-              <path 
-                d="M 70 70 A 60 60 0 0 1 130 10 A 60 60 0 0 1 112 45" 
-                fill="#16a34a" 
-                stroke="#ffffff" 
-                strokeWidth="1"
-                d="M 70 70 L 130 10 A 60 60 0 0 1 112 45 Z"
-              />
-              
-              {/* Teal segment */}
-              <path 
-                d="M 70 70 A 60 60 0 0 1 112 45" 
-                fill="#0d9488" 
-                stroke="#ffffff" 
-                strokeWidth="1"
-                d="M 70 70 L 112 45 Z"
-              />
-            </g>
-            
-            {/* Center white circle */}
-            <circle cx="70" cy="70" r="30" fill="white" />
-            
-            {/* Needle */}
-            <g transform={`rotate(${needleRotation}, 70, 70)`}>
-              <path 
-                d="M 70 70 L 95 70" 
-                stroke="#111" 
-                strokeWidth="3" 
-                strokeLinecap="round"
-              />
-              <circle cx="70" cy="70" r="6" fill="#111" />
-              <circle cx="70" cy="70" r="3" fill="white" />
-            </g>
-          </svg>
+      <div className="flex flex-col w-[140px]">
+        <div className="relative h-4 w-full rounded-md overflow-hidden">
+          {/* Gradient background */}
+          <div 
+            className="absolute inset-0 h-full w-full"
+            style={{
+              background: 'linear-gradient(to right, #ef4444 0%, #f97316 30%, #facc15 50%, #84cc16 70%, #16a34a 100%)'
+            }}
+          />
+          
+          {/* Needle indicator */}
+          <div 
+            className="absolute top-0 bottom-0 w-0.5 bg-white shadow-md"
+            style={{ 
+              left: needlePosition,
+              transform: 'translateX(-50%)',
+              zIndex: 10
+            }}
+          >
+            <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-black rounded-full"></div>
+          </div>
         </div>
-        <div className="ml-2 text-sm font-medium" 
-          style={{ color: getColor(value) }}>
+        
+        {/* Percentage text */}
+        <div className="text-center mt-1 text-sm font-medium" style={{ color }}>
           {value.toFixed(1)}%
         </div>
       </div>
