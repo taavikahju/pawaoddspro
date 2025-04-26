@@ -1,5 +1,5 @@
 // Direct implementation based on the Python script
-import axios from 'axios';
+const axios = require('axios');
 
 async function scrapeRealEvents() {
   try {
@@ -126,8 +126,9 @@ async function main() {
   return events;
 }
 
-// Run the main function and export it
-main().catch(console.error);
-
-// Export for ES modules
-export default main;
+// Node.js script execution
+if (require.main === module) {
+  main().catch(console.error);
+} else {
+  module.exports = main;
+}
