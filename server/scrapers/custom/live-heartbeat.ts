@@ -1023,6 +1023,18 @@ async function processEvents(events: any[]): Promise<void> {
       }
     }
     
+    // Extract fixtures id information, which can be used to get fixture names from Sportradar
+    // Check if widgetId already exists (from event parsing), if not try to find it in widgets
+    let extractedWidgetId = '';
+    if (!widgetId) {
+      if (event.widgets && Array.isArray(event.widgets)) {
+        const widget = event.widgets.find((w: any) => w.type === 'SPORTRADAR');
+        if (widget && widget.id) {
+          extractedWidgetId = widget.id;
+        }
+      }
+    }
+    
     // Enhanced team name extraction from event name
     // This is critical for showing the correct team names in the UI
     if ((!homeTeam || !awayTeam) && eventName && eventName !== "Unknown Event") {
@@ -1057,12 +1069,15 @@ async function processEvents(events: any[]): Promise<void> {
     if ((!homeTeam || homeTeam === "Home" || homeTeam === "") && 
         (!awayTeam || awayTeam === "Away" || awayTeam === "")) {
       // Last resort: try to use event name directly
-      if (eventName && eventName !== "Unknown Event" && eventName !== "Home vs Away") {
+      if (eventName && eventName !== "Unknown Event" && eventName !== "Home vs Away" && eventName.trim() !== " vs ") {
         console.log(`Using event name directly since team names could not be extracted: ${eventName}`);
         // Don't set homeTeam/awayTeam as we'll use the full event name
       } else {
-        // If we truly have no information, set a meaningful event name 
-        eventName = "Match Details Unavailable";
+        // Create a descriptive fixture identifier based on tournament and ID
+        // This is more informative than "Match Details Unavailable"
+        const fixtureId = eventId.substring(0, 4); // Use first few digits as unique ID
+        eventName = `Fixture #${fixtureId} (${tournament})`;
+        console.log(`Created descriptive fixture name: ${eventName}`);
         homeTeam = "";
         awayTeam = "";
       }
