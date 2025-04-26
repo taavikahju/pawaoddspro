@@ -288,64 +288,13 @@ async function scrapeEvents(apiUrl: string): Promise<any[]> {
   try {
     console.log('Scraping BetPawa Ghana live events...');
     
-    // Parse the current URL to get the query parameters
-    const url = new URL(apiUrl);
-    const queryParams = url.searchParams.get('q');
+    // Use direct API URL format for live football events - simpler approach with higher success rate
+    const apiEndpoint = 'https://www.betpawa.com.gh/api/sportsbook/events/live/all/football';
     
-    // If no query params found, use the URL as-is
-    if (!queryParams) {
-      return await scrapePagedEvents(apiUrl);
-    }
-    
-    // Parse the query JSON to modify for pagination
-    let queryObj;
-    try {
-      queryObj = JSON.parse(queryParams);
-    } catch (err) {
-      console.error('Error parsing query parameters:', err);
-      return await scrapePagedEvents(apiUrl);
-    }
-    
-    // Get all pages of results
-    const allEvents = [];
-    let hasMoreResults = true;
-    let skip = 0;
-    const pageSize = 20;
-    
-    while (hasMoreResults) {
-      // Update the skip parameter in the query for pagination
-      if (queryObj.queries && queryObj.queries.length > 0) {
-        queryObj.queries[0].skip = skip;
-      }
-      
-      // Create the new URL with updated pagination
-      const updatedQueryParams = JSON.stringify(queryObj);
-      url.searchParams.set('q', updatedQueryParams);
-      const pagedUrl = url.toString();
-      
-      // Fetch the current page of results
-      console.log(`Fetching page ${skip / pageSize + 1} (skip=${skip})...`);
-      const pageEvents = await scrapePagedEvents(pagedUrl);
-      
-      if (pageEvents.length > 0) {
-        allEvents.push(...pageEvents);
-        // Move to the next page
-        skip += pageSize;
-      } else {
-        // No more results, stop pagination
-        hasMoreResults = false;
-      }
-      
-      // Limit to 5 pages maximum to avoid excessive requests
-      if (skip >= 100) {
-        hasMoreResults = false;
-      }
-    }
-    
-    console.log(`Fetched a total of ${allEvents.length} events across multiple pages`);
-    return allEvents;
-  } catch (error) {
-    console.error('Error scraping BetPawa Ghana live events:', error.message);
+    // Just use the endpoint directly
+    return await scrapePagedEvents(apiEndpoint);
+  } catch (error: any) {
+    console.error('Error scraping BetPawa Ghana live events:', error.message || String(error));
     return [];
   }
 }
@@ -355,13 +304,15 @@ async function scrapeEvents(apiUrl: string): Promise<any[]> {
  */
 async function scrapePagedEvents(apiUrl: string): Promise<any[]> {
   try {
-    // Make an actual API call to BetPawa Ghana API
+    console.log(`Fetching data from BetPawa Ghana API: ${apiUrl}`);
+    
+    // Make an actual API call to BetPawa Ghana API with updated headers
     const response = await axios.get(apiUrl, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         'Accept': 'application/json, text/plain, */*',
         'Accept-Language': 'en-US,en;q=0.9',
-        'Referer': 'https://www.betpawa.com.gh/',
+        'Referer': 'https://www.betpawa.com.gh/sport/football',
         'Origin': 'https://www.betpawa.com.gh',
         'Connection': 'keep-alive',
         'sec-ch-ua': '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
@@ -369,9 +320,12 @@ async function scrapePagedEvents(apiUrl: string): Promise<any[]> {
         'sec-ch-ua-platform': '"Windows"',
         'Sec-Fetch-Dest': 'empty',
         'Sec-Fetch-Mode': 'cors',
-        'Sec-Fetch-Site': 'same-origin'
+        'Sec-Fetch-Site': 'same-origin',
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache',
+        'X-Requested-With': 'XMLHttpRequest'
       },
-      timeout: 15000 // 15-second timeout
+      timeout: 20000 // 20-second timeout
     });
     
     if (!response.data) {

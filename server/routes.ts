@@ -739,7 +739,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/live-heartbeat/start', simpleAdminAuth, async (req, res) => {
     try {
       // Provide a default URL in case none is supplied
-      const defaultUrl = 'https://www.betpawa.com.gh/api/sportsbook/events/inplay?sport=2&category=0';
+      const defaultUrl = 'https://www.betpawa.com.gh/api/sportsbook/events/live/all/football';
       const apiUrl = req.body.apiUrl || defaultUrl;
       
       // Start the heartbeat tracker
@@ -1347,7 +1347,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/live-heartbeat/start', simpleAdminAuth, async (req, res) => {
     try {
       // Use a direct and reliable API endpoint for football matches
-      const defaultUrl = 'https://www.betpawa.com.gh/api/sportsbook/categories/2';
+      const defaultUrl = 'https://www.betpawa.com.gh/api/sportsbook/events/live/all/football';
       const url = req.body.url || defaultUrl;
       
       startHeartbeatTracker(url, storage);
