@@ -561,22 +561,20 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
             <Activity className="h-5 w-5 text-primary" />
             <div className="flex items-center gap-2">
               <span className="font-medium">
-                {/* No data available */}
-                {!eventDetails ? "Loading event details..." : 
-                  /* First priority: Valid homeTeam and awayTeam */
-                  (eventDetails?.homeTeam && eventDetails?.awayTeam && 
-                  eventDetails.homeTeam !== "Home" && eventDetails.homeTeam !== "Unknown" &&
-                  eventDetails.awayTeam !== "Away" && eventDetails.awayTeam !== "Unknown"
-                    ? `${eventDetails.homeTeam} vs ${eventDetails.awayTeam}`
-                    : /* Second priority: Valid event name */
-                      (eventDetails?.name && 
-                      eventDetails.name !== "Home vs Away" && 
-                      eventDetails.name !== "Unknown vs Unknown" &&
-                      eventDetails.name !== "Match Details Unavailable")
-                        ? eventDetails.name 
-                        : /* Third priority: Tournament/country based description */
-                        `Match from ${eventDetails?.tournament || eventDetails?.country || "Unknown League"}`
-                      )}
+                {!eventDetails ? (
+                  "Loading event details..."
+                ) : eventDetails.homeTeam && eventDetails.awayTeam && 
+                   eventDetails.homeTeam !== "Home" && eventDetails.homeTeam !== "Unknown" &&
+                   eventDetails.awayTeam !== "Away" && eventDetails.awayTeam !== "Unknown" ? (
+                  `${eventDetails.homeTeam} vs ${eventDetails.awayTeam}`
+                ) : eventDetails.name && 
+                   eventDetails.name !== "Home vs Away" && 
+                   eventDetails.name !== "Unknown vs Unknown" &&
+                   eventDetails.name !== "Match Details Unavailable" ? (
+                  eventDetails.name
+                ) : (
+                  `Match from ${eventDetails.tournament || eventDetails.country || "Unknown League"}`
+                )}
                 
               </span>
             </div>

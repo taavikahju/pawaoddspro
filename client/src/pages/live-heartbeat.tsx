@@ -177,7 +177,7 @@ export default function LiveHeartbeat() {
     // Get the appropriate events based on active tab
     const events = activeTab === 'live' 
       ? heartbeatData?.events || []
-      : historicalData?.data || [];
+      : (historicalData?.success ? historicalData.data : []);
     
     return events.filter(event => {
       const countryMatch = selectedCountry === 'all' || event.country === selectedCountry;
