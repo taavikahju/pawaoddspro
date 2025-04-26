@@ -605,20 +605,42 @@ export function getEventMarketHistory(eventId: string): {
   
   console.log(`Found history for event ID: ${eventId} with ${history.timestamps.length} data points`);
   
-  // Calculate statistics
-  let availableCount = 0;
+  // Calculate statistics based on actual time periods instead of just counts
+  let availableTimeMs = 0;
+  let totalTimeMs = 0;
   
-  for (const timestamp of history.timestamps) {
-    if (timestamp.isAvailable) {
-      availableCount++;
+  // Sort timestamps to ensure they're in chronological order
+  const sortedTimestamps = [...history.timestamps].sort((a, b) => a.timestamp - b.timestamp);
+  
+  // Calculate time periods between consecutive measurements
+  for (let i = 0; i < sortedTimestamps.length - 1; i++) {
+    const currentTimestamp = sortedTimestamps[i];
+    const nextTimestamp = sortedTimestamps[i + 1];
+    
+    // Time difference between this measurement and the next one (in milliseconds)
+    const timeDiffMs = nextTimestamp.timestamp - currentTimestamp.timestamp;
+    
+    // Only count reasonable time differences (less than 5 minutes)
+    // This prevents outliers when scraping was paused or irregular
+    if (timeDiffMs > 0 && timeDiffMs < 300000) {
+      totalTimeMs += timeDiffMs;
+      
+      // If market was available at this timestamp, add this time period to available time
+      if (currentTimestamp.isAvailable) {
+        availableTimeMs += timeDiffMs;
+      }
     }
   }
   
-  const totalPoints = history.timestamps.length;
-  const uptimePercentage = totalPoints > 0 ? (availableCount / totalPoints) * 100 : 0;
+  // Calculate uptime percentage based on time periods
+  const uptimePercentage = totalTimeMs > 0 ? (availableTimeMs / totalTimeMs) * 100 : 0;
   
-  // Estimate minutes based on timestamp count (assuming ~1 reading per 10 seconds)
-  const totalMinutes = Math.round(totalPoints / 6);
+  // For backward compatibility, still provide these metrics
+  const totalPoints = history.timestamps.length;
+  const availableCount = history.timestamps.filter(t => t.isAvailable).length;
+  
+  // Convert milliseconds to minutes
+  const totalMinutes = Math.round(totalTimeMs / 60000);
   const suspendedMinutes = Math.round(totalMinutes * (1 - (uptimePercentage / 100)));
   
   console.log(`Statistics for event ID ${eventId}: ${availableCount}/${totalPoints} available (${uptimePercentage.toFixed(1)}% uptime)`);
