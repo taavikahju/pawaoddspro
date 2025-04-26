@@ -275,157 +275,178 @@ export default function LiveHeartbeat() {
             </CardHeader>
             <CardContent className="p-4 pt-0">
               <div className="flex flex-col gap-4">
-                <div className="flex flex-wrap gap-3">
-                  <div className="flex items-center gap-2">
-                    <Map className="h-4 w-4 text-muted-foreground" />
-                    <Select
-                      value={selectedCountry}
-                      onValueChange={handleCountryChange}
-                    >
-                      <SelectTrigger className="w-[180px] h-9">
-                        <SelectValue placeholder="Select Country" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">
-                          <span className="flex items-center gap-2">
-                            <span className="opacity-60">🌎</span> All Countries
-                          </span>
-                        </SelectItem>
-                        {heartbeatData?.countries?.map(country => {
-                          // Convert country name to 2-letter ISO code for the flag
-                          // This is a simple mapping for common countries
-                          const getCountryCode = (countryName: string) => {
-                            const codeMap: Record<string, string> = {
-                              'Australia': 'AU',
-                              'England': 'GB',
-                              'United Kingdom': 'GB',
-                              'France': 'FR',
-                              'Germany': 'DE',
-                              'Spain': 'ES',
-                              'Italy': 'IT',
-                              'Brazil': 'BR',
-                              'Portugal': 'PT',
-                              'Netherlands': 'NL',
-                              'Belgium': 'BE',
-                              'Croatia': 'HR',
-                              'Romania': 'RO',
-                              'Russia': 'RU',
-                              'Russian Federation': 'RU',
-                              'China': 'CN',
-                              'Chinese Taipei': 'TW',
-                              'Japan': 'JP',
-                              'Korea': 'KR',
-                              'Republic of Korea': 'KR',
-                              'South Korea': 'KR',
-                              'Greece': 'GR',
-                              'Turkey': 'TR',
-                              'Ghana': 'GH',
-                              'Kenya': 'KE',
-                              'Uganda': 'UG',
-                              'South Africa': 'ZA',
-                              'Nigeria': 'NG',
-                              'India': 'IN',
-                              'International': 'WW',
-                              'Israel': 'IL',
-                              'New Zealand': 'NZ',
-                              'Hong Kong': 'HK',
-                              'Czech Republic': 'CZ',
-                              'Hungary': 'HU',
-                              'Tanzania': 'TZ',
-                              'Sweden': 'SE',
-                              'Norway': 'NO',
-                              'Denmark': 'DK',
-                              'Finland': 'FI',
-                              'Iceland': 'IS',
-                              'Poland': 'PL',
-                              'Ethiopia': 'ET',
-                              'Zambia': 'ZM',
-                              'Zimbabwe': 'ZW',
-                              'Mexico': 'MX',
-                              'Argentina': 'AR',
-                              'Chile': 'CL',
-                              'Colombia': 'CO',
-                              'Egypt': 'EG',
-                              'Morocco': 'MA',
-                              'Tunisia': 'TN',
-                              'Uruguay': 'UY',
-                              'Iraq': 'IQ',
-                              'Iran': 'IR',
+                <div className="flex flex-wrap gap-3 justify-between items-center">
+                  <div className="flex gap-3">
+                    <div className="flex items-center gap-2">
+                      <Map className="h-4 w-4 text-muted-foreground" />
+                      <Select
+                        value={selectedCountry}
+                        onValueChange={handleCountryChange}
+                      >
+                        <SelectTrigger className="w-[180px] h-9">
+                          <SelectValue placeholder="Select Country" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">
+                            <span className="flex items-center gap-2">
+                              <span className="opacity-60">🌎</span> All Countries
+                            </span>
+                          </SelectItem>
+                          {heartbeatData?.countries?.map(country => {
+                            // Convert country name to 2-letter ISO code for the flag
+                            // This is a simple mapping for common countries
+                            const getCountryCode = (countryName: string) => {
+                              const codeMap: Record<string, string> = {
+                                'Australia': 'AU',
+                                'England': 'GB',
+                                'United Kingdom': 'GB',
+                                'France': 'FR',
+                                'Germany': 'DE',
+                                'Spain': 'ES',
+                                'Italy': 'IT',
+                                'Brazil': 'BR',
+                                'Portugal': 'PT',
+                                'Netherlands': 'NL',
+                                'Belgium': 'BE',
+                                'Croatia': 'HR',
+                                'Romania': 'RO',
+                                'Russia': 'RU',
+                                'Russian Federation': 'RU',
+                                'China': 'CN',
+                                'Chinese Taipei': 'TW',
+                                'Japan': 'JP',
+                                'Korea': 'KR',
+                                'Republic of Korea': 'KR',
+                                'South Korea': 'KR',
+                                'Greece': 'GR',
+                                'Turkey': 'TR',
+                                'Ghana': 'GH',
+                                'Kenya': 'KE',
+                                'Uganda': 'UG',
+                                'South Africa': 'ZA',
+                                'Nigeria': 'NG',
+                                'India': 'IN',
+                                'International': 'WW',
+                                'Israel': 'IL',
+                                'New Zealand': 'NZ',
+                                'Hong Kong': 'HK',
+                                'Czech Republic': 'CZ',
+                                'Hungary': 'HU',
+                                'Tanzania': 'TZ',
+                                'Sweden': 'SE',
+                                'Norway': 'NO',
+                                'Denmark': 'DK',
+                                'Finland': 'FI',
+                                'Iceland': 'IS',
+                                'Poland': 'PL',
+                                'Ethiopia': 'ET',
+                                'Zambia': 'ZM',
+                                'Zimbabwe': 'ZW',
+                                'Mexico': 'MX',
+                                'Argentina': 'AR',
+                                'Chile': 'CL',
+                                'Colombia': 'CO',
+                                'Egypt': 'EG',
+                                'Morocco': 'MA',
+                                'Tunisia': 'TN',
+                                'Uruguay': 'UY',
+                                'Iraq': 'IQ',
+                                'Iran': 'IR',
+                              };
+                              
+                              return codeMap[countryName] || 'UN'; // Default to UN flag if country not found
                             };
                             
-                            return codeMap[countryName] || 'UN'; // Default to UN flag if country not found
-                          };
-                          
-                          const countryCode = getCountryCode(country);
-                          
-                          return (
-                            <SelectItem key={country} value={country}>
-                              <span className="flex items-center gap-2">
-                                {countryCode !== 'WW' && countryCode !== 'UN' ? (
-                                  <ReactCountryFlag 
-                                    countryCode={countryCode} 
-                                    svg 
-                                    style={{ width: '1em', height: '1em' }}
-                                  />
-                                ) : countryCode === 'WW' ? (
-                                  <span>🌐</span>
-                                ) : (
-                                  <span>🏳️</span>
-                                )}
-                                {country}
-                              </span>
+                            const countryCode = getCountryCode(country);
+                            
+                            return (
+                              <SelectItem key={country} value={country}>
+                                <span className="flex items-center gap-2">
+                                  {countryCode !== 'WW' && countryCode !== 'UN' ? (
+                                    <ReactCountryFlag 
+                                      countryCode={countryCode} 
+                                      svg 
+                                      style={{ width: '1em', height: '1em' }}
+                                    />
+                                  ) : countryCode === 'WW' ? (
+                                    <span>🌐</span>
+                                  ) : (
+                                    <span>🏳️</span>
+                                  )}
+                                  {country}
+                                </span>
+                              </SelectItem>
+                            );
+                          })}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <Calendar className="h-4 w-4 text-muted-foreground" />
+                      <Select
+                        value={selectedTournament}
+                        onValueChange={handleTournamentChange}
+                        disabled={tournamentsForCountry.length === 0}
+                      >
+                        <SelectTrigger className="w-[240px] h-9">
+                          <SelectValue placeholder="Select Tournament" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Tournaments</SelectItem>
+                          {tournamentsForCountry.map(tournament => (
+                            <SelectItem key={tournament} value={tournament}>
+                              {tournament}
                             </SelectItem>
-                          );
-                        })}
-                      </SelectContent>
-                    </Select>
-                  </div>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
 
-                  <div className="flex items-center gap-2">
-                    <Calendar className="h-4 w-4 text-muted-foreground" />
-                    <Select
-                      value={selectedTournament}
-                      onValueChange={handleTournamentChange}
-                      disabled={tournamentsForCountry.length === 0}
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      className="h-9"
+                      onClick={() => {
+                        setSelectedCountry('all');
+                        setSelectedTournament('all');
+                      }}
                     >
-                      <SelectTrigger className="w-[240px] h-9">
-                        <SelectValue placeholder="Select Tournament" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All Tournaments</SelectItem>
-                        {tournamentsForCountry.map(tournament => (
-                          <SelectItem key={tournament} value={tournament}>
-                            {tournament}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                      Clear Filters
+                    </Button>
                   </div>
 
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    className="h-9 ml-auto"
-                    onClick={() => {
-                      setSelectedCountry('all');
-                      setSelectedTournament('all');
-                    }}
-                  >
-                    Clear Filters
-                  </Button>
-                </div>
-                
-                {/* Uptime Statistics Gauge */}
-                <div className="mt-4 border rounded-lg p-3 bg-card/50">
-                  <div className="text-sm font-medium mb-2 text-center">Market Uptime</div>
-                  <div className="flex justify-center">
-                    <UptimeGauge 
-                      value={uptimeStats.current}
-                      title="Average" 
-                    />
-                  </div>
-                  <div className="text-xs text-center text-muted-foreground mt-2">
-                    Based on {uptimeStats.events} events
+                  {/* Uptime Gauge positioned to the right */}
+                  <div className="flex items-center">
+                    <div className="mr-1 text-xs font-medium text-muted-foreground">
+                      Uptime:
+                    </div>
+                    <div className="flex items-center">
+                      <div className="relative w-[60px] h-[30px]">
+                        {/* Semi-circle gauge background */}
+                        <svg className="w-full h-full" viewBox="0 0 60 30">
+                          {/* Colored gauge sections */}
+                          <path d="M 30 30 A 20 20 0 0 1 10 30" fill="none" stroke="#ef4444" strokeWidth="4" />
+                          <path d="M 30 30 A 20 20 0 0 1 20 13" fill="none" stroke="#f97316" strokeWidth="4" />
+                          <path d="M 30 30 A 20 20 0 0 1 40 13" fill="none" stroke="#eab308" strokeWidth="4" />
+                          <path d="M 30 30 A 20 20 0 0 1 50 30" fill="none" stroke="#22c55e" strokeWidth="4" />
+                          
+                          {/* Needle */}
+                          <g transform={`rotate(${-30 + (uptimeStats.current / 100) * 240}, 30, 30)`}>
+                            <line x1="30" y1="30" x2="30" y2="12" stroke="#000" strokeWidth="1.5" />
+                            <circle cx="30" cy="30" r="2" fill="#000" />
+                          </g>
+                        </svg>
+                      </div>
+                      <div className="ml-1 text-xs font-medium" 
+                           style={{ 
+                             color: uptimeStats.current < 40 ? '#ef4444' : 
+                                    uptimeStats.current < 60 ? '#f97316' : 
+                                    uptimeStats.current < 75 ? '#eab308' : '#22c55e' 
+                           }}>
+                        {uptimeStats.current.toFixed(1)}%
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
