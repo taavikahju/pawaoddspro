@@ -173,22 +173,9 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
               console.log(`DEBUG - Found suspended data points:`, suspendedPoints.slice(0, 3));
             }
             
-            // FORCED DEBUG TEST: Make the first 50% of data points show as suspended for testing
-            const modifiedData = apiData.timestamps.map((point, index) => {
-              // Make every other data point suspended for testing visualization
-              if (index % 2 === 0) {
-                return {
-                  ...point,
-                  isAvailable: false,
-                  marketStatus: 'SUSPENDED'
-                };
-              }
-              return point;
-            });
-            
-            // Set the data points - use modified data for testing
-            console.log("Using test data with forced suspended points");
-            setData(modifiedData);
+            // Set the data points directly from the API
+            console.log("Using real data points without forced suspensions");
+            setData(apiData.timestamps);
             
             // If we got data, check if there's game minute information
             if (apiData.timestamps.length > 0 && apiData.timestamps[apiData.timestamps.length - 1].gameMinute) {
