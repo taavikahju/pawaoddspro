@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Activity, BarChart, Download, Loader2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Activity, BarChart, Loader2, Heart, AlertCircle } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 
@@ -12,6 +11,13 @@ interface DataPoint {
   timestamp: number;
   isAvailable: boolean;
   gameMinute?: string;
+}
+
+interface HeartbeatStats {
+  uptimePercentage: number;
+  availableDurationMinutes: number;
+  suspendedDurationMinutes: number;
+  totalDurationMinutes: number;
 }
 
 interface HeartbeatGraphProps {
@@ -26,6 +32,12 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
   const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
   const [currentStatus, setCurrentStatus] = useState<'available' | 'suspended' | 'unknown'>('unknown');
   const [currentMinute, setCurrentMinute] = useState<string>('');
+  const [stats, setStats] = useState<HeartbeatStats>({
+    uptimePercentage: 0,
+    availableDurationMinutes: 0,
+    suspendedDurationMinutes: 0,
+    totalDurationMinutes: 0
+  });
   const backgroundImage = useRef<HTMLImageElement | null>(null);
   
   // Preload football field background
@@ -340,17 +352,80 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     }
   }
   
-  // Function to save canvas as image
-  const saveCanvasAsImage = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    
-    const dataUrl = canvas.toDataURL('image/png');
-    const link = document.createElement('a');
-    link.download = `heartbeat-${eventId}-${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.png`;
-    link.href = dataUrl;
-    link.click();
-  };
+  // Calculate statistics based on the collected data
+  useEffect(() => {
+    if (data.length > 0) {
+      // Count segments with available and suspended status
+      let availableCount = 0;
+      let suspendedCount = 0;
+      
+      // Count each status based on the actual data points
+      data.forEach(point => {
+        if (point.isAvailable) {
+          availableCount++;
+        } else {
+          suspendedCount++;
+        }
+      });
+      
+      const totalCount = availableCount + suspendedCount;
+      
+      // Calculate uptime percentage
+      const uptimePercentage = totalCount > 0 
+        ? Math.round((availableCount / totalCount) * 100) 
+        : 0;
+      
+      // For duration calculations, we need to approximate minutes from data points
+      // Assuming each data point represents approximately 10 seconds of time
+      // (this will vary based on how frequently the data is collected)
+      const secondsPerDataPoint = 10; // Typically 10 seconds between samples
+      
+      const availableDurationMinutes = Math.round((availableCount * secondsPerDataPoint) / 60);
+      const suspendedDurationMinutes = Math.round((suspendedCount * secondsPerDataPoint) / 60);
+      const totalDurationMinutes = availableDurationMinutes + suspendedDurationMinutes;
+      
+      // Update stats state
+      setStats({
+        uptimePercentage,
+        availableDurationMinutes,
+        suspendedDurationMinutes,
+        totalDurationMinutes
+      });
+      
+      // Send stats to server for storage (would be implemented in the backend)
+      // This allows for historical analytics over time
+      const storeStats = async () => {
+        try {
+          // This would be the API call to store stats in the database
+          // It's commented out as it would need the backend implementation
+          /*
+          await fetch(`/api/live-heartbeat/stats/${eventId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              eventId,
+              timestamp: Date.now(),
+              uptimePercentage,
+              availableDurationMinutes,
+              suspendedDurationMinutes,
+              totalDurationMinutes
+            })
+          });
+          */
+          console.log("Heartbeat statistics calculated:", {
+            uptimePercentage,
+            availableDurationMinutes,
+            suspendedDurationMinutes,
+            totalDurationMinutes
+          });
+        } catch (error) {
+          console.error("Failed to store heartbeat statistics:", error);
+        }
+      };
+      
+      storeStats();
+    }
+  }, [data, eventId]);
   
   return (
     <Card className="w-full overflow-hidden">
@@ -380,14 +455,11 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
             )}
           </CardTitle>
           
-          <div className="flex gap-2">
-            <Button 
-              variant="outline" 
-              size="icon" 
-              onClick={saveCanvasAsImage}
-            >
-              <Download className="h-4 w-4" />
-            </Button>
+          {/* Stats badge is shown here instead of the download button */}
+          <div className="flex items-center gap-2 text-sm">
+            <Badge variant="outline" className="bg-green-50/10 text-green-400 border-green-800">
+              Uptime {stats.uptimePercentage}%
+            </Badge>
           </div>
         </div>
       </CardHeader>
@@ -414,6 +486,31 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
           </div>
         )}
       </CardContent>
+      
+      {/* Add CardFooter with heartbeat statistics */}
+      <CardFooter className="pt-0 pb-3 border-t border-gray-100/10">
+        <div className="flex flex-wrap items-center justify-between w-full gap-2 text-sm">
+          <div className="flex items-center gap-2">
+            <Heart className="h-4 w-4 text-green-500" />
+            <span className="text-green-400">
+              {stats.availableDurationMinutes} min available
+            </span>
+          </div>
+          
+          <div className="flex items-center gap-2">
+            <AlertCircle className="h-4 w-4 text-red-500" />
+            <span className="text-red-400">
+              {stats.suspendedDurationMinutes} min suspended
+            </span>
+          </div>
+          
+          <div className="flex items-center gap-2">
+            <Badge variant="secondary" className="text-xs">
+              Total time: {stats.totalDurationMinutes} min
+            </Badge>
+          </div>
+        </div>
+      </CardFooter>
     </Card>
   );
 }
