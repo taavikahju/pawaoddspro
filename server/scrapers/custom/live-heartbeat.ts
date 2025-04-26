@@ -3,6 +3,7 @@ import axios from 'axios';
 import fs from 'fs/promises';
 import path from 'path';
 import { IStorage } from '../../storage';
+import { URL } from 'url';
 
 // Event emitter for live heartbeat updates
 export const heartbeatEvents = new EventEmitter();
@@ -286,22 +287,37 @@ function generateMockEvents(): any[] {
   return mockEvents;
 }
 
+// Helper function to build API URLs
+function buildApiUrl(host: string, path: string, params: Record<string, any> = {}): string {
+  const url = new URL(`https://${host}${path}`);
+  Object.entries(params).forEach(([key, value]) => {
+    url.searchParams.append(key, value.toString());
+  });
+  return url.toString();
+}
+
 // Scrape events from the API - adapted from bp_gh_live_scraper.js
 async function scrapeEvents(apiUrl: string): Promise<any[]> {
   try {
     console.log('Scraping BetPawa Ghana live events...');
     
-    // Try multiple potential API endpoints to increase chances of success
-    // The endpoint format seems to change occasionally
+    // Current timestamp for fresh requests
+    const timestamp = Date.now();
+    
+    // Try multiple potential API endpoints with various configurations
     const potentialEndpoints = [
-      'https://www.betpawa.com.gh/api/sportsbook/eventList?categoryIds=1',  // Football category ID
-      'https://ke.betpawa.com/api/sportsbook/eventList?categoryIds=1',      // Try Kenya subdomain
-      'https://www.betpawa.com.gh/api/sportsbook/events/live/all/football',
-      'https://www.betpawa.com.gh/api/sportsbook/live',
-      'https://www.betpawa.com.gh/api/sportsbook/live?sport=football',
-      'https://www.betpawa.com.gh/api/sportsbook/inplay',
-      'https://www.betpawa.com.gh/api/sportsbook/events?type=inplay&sportId=1',
-      'https://www.betpawa.com.gh/api/events/football/live'
+      // Directly use the dashboard endpoint with LIVE instead of UPCOMING as you suggested
+      'https://www.betpawa.com.gh/api/events/football/LIVE',
+      
+      // A list of other potential endpoints using different paths and query parameters
+      buildApiUrl('www.betpawa.com.gh', '/api/events/football/LIVE', { _t: timestamp }),
+      buildApiUrl('www.betpawa.com.gh', '/api/sportsbook/eventList', { categoryIds: 1, type: 'LIVE', _t: timestamp }),
+      buildApiUrl('ke.betpawa.com', '/api/events/football/LIVE', { _t: timestamp }),
+      buildApiUrl('www.betpawa.com.gh', '/api/events/football/all', { status: 'LIVE', _t: timestamp }),
+      
+      // Try API URLs that fetch all events
+      'https://www.betpawa.com.gh/api/sportsbook/events/all',
+      'https://www.betpawa.com.gh/api/sportsbook/events?type=inplay&sportId=1'
     ];
     
     for (const endpoint of potentialEndpoints) {
@@ -335,16 +351,20 @@ async function scrapePagedEvents(apiUrl: string): Promise<any[]> {
   try {
     console.log(`Fetching data from BetPawa Ghana API: ${apiUrl}`);
     
+    // Use a unique visitor ID for each request to avoid possible caching issues
+    const visitorId = Date.now().toString();
+    const timestamp = Date.now();
+    
     // Make an actual API call to BetPawa Ghana API with enhanced headers that more closely match a browser
     const response = await axios.get(apiUrl, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
         'Accept': 'application/json, text/plain, */*',
         'Accept-Language': 'en-US,en;q=0.9',
         'Referer': 'https://www.betpawa.com.gh/sport/football/live',
         'Origin': 'https://www.betpawa.com.gh',
         'Connection': 'keep-alive',
-        'sec-ch-ua': '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
+        'sec-ch-ua': '"Chromium";v="123", "Not_A Brand";v="24"',
         'sec-ch-ua-mobile': '?0',
         'sec-ch-ua-platform': '"Windows"',
         'Sec-Fetch-Dest': 'empty',
@@ -353,7 +373,12 @@ async function scrapePagedEvents(apiUrl: string): Promise<any[]> {
         'Cache-Control': 'no-cache',
         'Pragma': 'no-cache',
         'X-Requested-With': 'XMLHttpRequest',
-        'Cookie': 'VISITOR_ID=1690028199; VISITOR_COUNTRY_CODE=GH; betPawaSport=football; betPawaHasVisitedSport=true'
+        'Cookie': `VISITOR_ID=${visitorId}; VISITOR_COUNTRY_CODE=GH; betPawaSport=football; betPawaHasVisitedSport=true; pageLoadAt=${timestamp}`
+      },
+      params: {
+        // Add additional query parameters that might help authenticate the request
+        _t: timestamp, // Add timestamp to avoid caching
+        isLive: true
       },
       timeout: 30000 // 30-second timeout
     });
