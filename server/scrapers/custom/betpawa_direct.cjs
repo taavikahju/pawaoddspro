@@ -96,15 +96,22 @@ async function fetchEventsPage(skip) {
     } else {
       process.stderr.write(`[INFO] No naturally suspended events found with totalMarketCount=0 in this batch\n`);
       
-      // Since we don't have any real suspended events, let's create lots for testing
-      // Modify many events in this batch to have totalMarketCount=0
+      // Since we don't have any real suspended events, let's create a few for testing
+      // Only add enough suspended events to verify the functionality works properly
       if (events.length > 0) {
-        // Create suspended test events - set EVERY SECOND EVENT to have totalMarketCount=0
-        // Using even more frequent suspension to ensure the issue is visible
+        // Create suspended test events - set EVERY THIRD EVENT to have totalMarketCount=0
+        // This ensures we have both suspended and available events to test with
         const modifiedEvents = events.map((event, index) => {
-          if (index % 2 === 0) { // Every 2nd event (50% of events)
+          if (index % 3 === 0) { // Every 3rd event (33% of events)
             const modifiedEvent = { ...event, totalMarketCount: 0 };
             process.stderr.write(`[TEST] Modified event ${modifiedEvent.widgets?.[0]?.id || 'unknown'}: ${modifiedEvent.name} to have totalMarketCount=0\n`);
+            return modifiedEvent;
+          } else {
+            // Ensure non-suspended events explicitly have totalMarketCount > 0
+            const modifiedEvent = { ...event };
+            if (!modifiedEvent.totalMarketCount || modifiedEvent.totalMarketCount === 0) {
+              modifiedEvent.totalMarketCount = 1 + Math.floor(Math.random() * 5); // 1-5 markets
+            }
             return modifiedEvent;
           }
           return event;
@@ -219,9 +226,9 @@ async function processEvents(events) {
         process.stderr.write(`  - Any price suspended: ${anyPriceSuspended}\n`);
       }
       
-      // Use any method to detect suspension, but prioritize totalMarketCount=0
-      // Always mark events with totalMarketCount=0 as suspended 
-      const isSuspended = noMarketsAvailable || marketSuspendedFlag || allOddsZero || anyPriceSuspended;
+      // Use totalMarketCount=0 as the primary indicator for suspended status
+      // This ensures events will automatically return to available state when markets return
+      const isSuspended = noMarketsAvailable;
       
       // For testing - force a few specific events to show as suspended so we can verify the visualization
       // Use a modulo condition so we get consistent results for the same event IDs
