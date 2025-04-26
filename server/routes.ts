@@ -1326,21 +1326,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Start the heartbeat tracker
   app.post('/api/live-heartbeat/start', simpleAdminAuth, async (req, res) => {
     try {
-      // Use a direct and reliable API endpoint for football matches
-      const defaultUrl = 'https://www.betpawa.com.gh/api/sportsbook/events/live/all/football';
+      // Use the BetPawa API with the working configuration from the custom scraper
+      const domain = 'www.betpawa.com.gh';
+      const take = 20;
+      const skip = 0;
+      const encodedQuery = `%7B%22queries%22%3A%5B%7B%22query%22%3A%7B%22eventType%22%3A%22LIVE%22%2C%22categories%22%3A%5B2%5D%2C%22zones%22%3A%7B%7D%2C%22hasOdds%22%3Atrue%7D%2C%22view%22%3A%7B%22marketTypes%22%3A%5B%223743%22%5D%7D%2C%22skip%22%3A${skip}%2C%22take%22%3A${take}%7D%5D%7D`;
+      const defaultUrl = `https://${domain}/api/sportsbook/v2/events/lists/by-queries?q=${encodedQuery}`;
+      
+      // Allow custom URL if provided, but default to known working configuration
       const url = req.body.url || defaultUrl;
       
+      // Start the heartbeat tracker with the correct URL
       startHeartbeatTracker(url, storage);
       
       res.json({ 
         success: true, 
-        message: 'Heartbeat tracker started successfully' 
+        message: 'Heartbeat tracker started successfully with real-time data' 
       });
       
       broadcast({
         type: 'notification',
         data: {
-          message: 'Heartbeat tracker started successfully',
+          title: 'Live Heartbeat Tracker',
+          message: 'Started successfully with real-time BetPawa data',
           status: 'success'
         }
       });
@@ -1350,6 +1358,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
         success: false, 
         message: 'Failed to start heartbeat tracker',
         error: error instanceof Error ? error.message : String(error)
+      });
+      
+      broadcast({
+        type: 'notification',
+        data: {
+          title: 'Live Heartbeat Tracker',
+          message: 'Failed to start: ' + (error instanceof Error ? error.message : String(error)),
+          status: 'error'
+        }
       });
     }
   });

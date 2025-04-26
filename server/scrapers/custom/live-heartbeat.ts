@@ -368,16 +368,16 @@ async function scrapeEvents(apiUrl: string): Promise<any[]> {
       const skip = 0;
       const encodedQuery = `%7B%22queries%22%3A%5B%7B%22query%22%3A%7B%22eventType%22%3A%22LIVE%22%2C%22categories%22%3A%5B2%5D%2C%22zones%22%3A%7B%7D%2C%22hasOdds%22%3Atrue%7D%2C%22view%22%3A%7B%22marketTypes%22%3A%5B%223743%22%5D%7D%2C%22skip%22%3A${skip}%2C%22take%22%3A${take}%7D%5D%7D`;
       
-      // Override with the URL that's known to work
-      url = `https://${domain}/api/sportsbook/v2/events/lists/by-queries?q=${encodedQuery}`;
+      // Use a completely different endpoint for testing to avoid the caching issue
+      url = `https://${domain}/api/sportsbook/events/live/football?_=${Date.now()}`;
       
-      // Create the headers from the working implementation
+      // Create the headers from the working implementation, but remove the if-modified-since header to force a fresh response
       headers = {
         "accept": "*/*",
         "accept-language": "en-GB,en-US;q=0.9,en;q=0.8",
         "baggage": "sentry-environment=production,sentry-release=1.203.58",
         "devicetype": "web",
-        "if-modified-since": new Date().toUTCString(),
+        // Removed if-modified-since header to force fresh responses
         "priority": "u=1, i",
         "referer": `https://${domain}/events?marketId=1X2&categoryId=2`,
         "sec-ch-ua": "\"Google Chrome\";v=\"135\", \"Not-A.Brand\";v=\"8\", \"Chromium\";v=\"135\"",
@@ -416,9 +416,15 @@ async function scrapeEvents(apiUrl: string): Promise<any[]> {
     console.log(`Scraping using URL: ${url}`);
     
     console.log(`Making request to: ${url}`);
+    console.log(`Using headers with cookie length: ${headers.cookie ? headers.cookie.length : 0} chars`);
+    
     const response = await axios.get(url, {
       headers,
-      timeout: 30000
+      timeout: 30000,
+      // Important: Force a fresh response to avoid cache issues with 304 responses
+      params: {
+        _t: Date.now() // Add timestamp to prevent caching
+      }
     });
     
     if (response.status !== 200) {
@@ -427,14 +433,17 @@ async function scrapeEvents(apiUrl: string): Promise<any[]> {
     
     const data = response.data;
     
+    // Log the full API response for debugging
+    console.log('API response structure:', Object.keys(data));
+    
     // BetPawa API returns different structures based on the endpoint
-    if (isBetPawa && data.events) {
+    if (isBetPawa && data.events && Array.isArray(data.events)) {
       // Handle BetPawa v2 API response format
-      console.log(`Scraped ${data.events.length} events from BetPawa API`);
+      console.log(`Scraped ${data.events.length} events from BetPawa API (events array)`);
       return data.events;
     } else if (isBetPawa && data.results && Array.isArray(data.results)) {
       // Handle BetPawa v1 API response format
-      console.log(`Scraped ${data.results.length} events from BetPawa API`);
+      console.log(`Scraped ${data.results.length} events from BetPawa API (results array)`);
       return data.results;
     } else if (isBetPawa && data.queries && Array.isArray(data.queries)) {
       // Handle the queries format (lists/by-queries endpoint)
@@ -446,12 +455,45 @@ async function scrapeEvents(apiUrl: string): Promise<any[]> {
       }
       console.log(`Scraped ${allEvents.length} events from BetPawa API (queries format)`);
       return allEvents;
+    } else if (isBetPawa && data.data && data.data.events && Array.isArray(data.data.events)) {
+      // Handle nested data structure
+      console.log(`Scraped ${data.data.events.length} events from BetPawa API (nested data.events)`);
+      return data.data.events;
+    } else if (isBetPawa && data.responses && Array.isArray(data.responses)) {
+      // Handle 'responses' structure
+      const allEvents = [];
+      for (const response of data.responses) {
+        if (response.events && Array.isArray(response.events)) {
+          allEvents.push(...response.events);
+        } else if (response.data && response.data.events && Array.isArray(response.data.events)) {
+          allEvents.push(...response.data.events);
+        }
+      }
+      console.log(`Scraped ${allEvents.length} events from BetPawa API (responses format)`);
+      return allEvents;
     } else if (Array.isArray(data)) {
       // Handle standard array response
-      console.log(`Scraped ${data.length} events`);
+      console.log(`Scraped ${data.length} events from standard array response`);
       return data;
     } else {
-      throw new Error('Invalid data format: expected array or known BetPawa structure');
+      // Since we received a response but couldn't parse it, log it for debugging
+      console.error('Unrecognized data format. Raw response data:', JSON.stringify(data).substring(0, 1000) + '...');
+      
+      // Log a specific error if we see a BRAND_HEADER_IS_MISSING message
+      if (data && data.error === 'BRAND_HEADER_IS_MISSING') {
+        console.error('Authentication error: BRAND_HEADER_IS_MISSING. Need to set the x-pawa-brand header correctly.');
+        throw new Error('BetPawa API authentication error: Missing brand header');
+      }
+      
+      // Last resort fallback: try to find anything that could be events
+      for (const key in data) {
+        if (Array.isArray(data[key])) {
+          console.log(`Found possible events array in key '${key}' with ${data[key].length} items`);
+          return data[key];
+        }
+      }
+      
+      throw new Error('Could not parse response data into events array');
     }
   } catch (error) {
     console.error('Error scraping events:', error);
