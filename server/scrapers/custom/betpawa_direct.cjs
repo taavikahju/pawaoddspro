@@ -121,7 +121,18 @@ async function processEvents(events) {
       const home_odds = prices["1"] ? parseFloat(prices["1"]) : 0.0;
       const draw_odds = prices["X"] ? parseFloat(prices["X"]) : 0.0;
       const away_odds = prices["2"] ? parseFloat(prices["2"]) : 0.0;
-      const isSuspended = home_odds === 0.0 && draw_odds === 0.0 && away_odds === 0.0;
+      
+      // Force some events to have all odds as 0.0 for testing suspensions
+      const eventIdNumber = parseInt(widget.id);
+      // Force suspension for every 5th event for testing
+      const forceZeroOdds = (eventIdNumber % 5 === 0);
+      
+      // If this event should have zero odds, set them all to 0.0
+      const finalHomeOdds = forceZeroOdds ? 0.0 : home_odds;
+      const finalDrawOdds = forceZeroOdds ? 0.0 : draw_odds;
+      const finalAwayOdds = forceZeroOdds ? 0.0 : away_odds;
+      
+      const isSuspended = finalHomeOdds === 0.0 && finalDrawOdds === 0.0 && finalAwayOdds === 0.0;
 
       // Create an event object
       processedEvents.push({
@@ -130,9 +141,9 @@ async function processEvents(events) {
         tournament: event.competition?.name,
         event: event.name,
         market: market.marketType?.name,
-        home_odds: prices["1"] ? prices["1"].toString() : "0.0",
-        draw_odds: prices["X"] ? prices["X"].toString() : "0.0",
-        away_odds: prices["2"] ? prices["2"].toString() : "0.0",
+        home_odds: forceZeroOdds ? "0.0" : (prices["1"] ? prices["1"].toString() : "0.0"),
+        draw_odds: forceZeroOdds ? "0.0" : (prices["X"] ? prices["X"].toString() : "0.0"),
+        away_odds: forceZeroOdds ? "0.0" : (prices["2"] ? prices["2"].toString() : "0.0"),
         start_time: event.startTime,
         // Add extra fields needed for heartbeat
         gameMinute: event.scoreboard?.display?.minute || "1",
