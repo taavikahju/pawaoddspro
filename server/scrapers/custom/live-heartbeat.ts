@@ -200,6 +200,11 @@ async function runHeartbeatTracker(url: string, storage: IStorage): Promise<void
         
         // Use our multi-domain scraper that specifically formats data for the heartbeat tracker
         events = await scraperModule.scrapeWithAlternateDomains();
+        
+        // DEBUG: Log raw response data for the first event
+        if (events && events.length > 0) {
+          console.log('DEBUG - Full raw data for first event:', JSON.stringify(events[0], null, 2));
+        }
       } catch (importError) {
         console.error('Error importing scraper module:', importError.message);
         // Fall through to the next approach
@@ -791,6 +796,12 @@ async function processEvents(events: any[]): Promise<void> {
   }
 
   console.log(`Processing ${events.length} live events...`);
+  
+  // Debug: Show the full structure of the first event to see what we're working with
+  if (events.length > 0) {
+    const firstEvent = events[0];
+    console.log(`RAW EVENT DATA - First event structure (ID: ${firstEvent.id || 'unknown'}):`, JSON.stringify(firstEvent, null, 2));
+  }
 
   // Extract relevant data from events - specifically tailored for the BetPawa Uganda API format
   const processedEvents: HeartbeatEvent[] = events.map((event) => {
