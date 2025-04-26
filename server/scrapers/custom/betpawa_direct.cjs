@@ -99,10 +99,10 @@ async function fetchEventsPage(skip) {
       // Since we don't have any real suspended events, let's create a few for testing
       // Only add enough suspended events to verify the functionality works properly
       if (events.length > 0) {
-        // Create suspended test events - set EVERY THIRD EVENT to have totalMarketCount=0
-        // This ensures we have both suspended and available events to test with
+        // Create suspended test events - set EVERY OTHER EVENT to have totalMarketCount=0
+        // This ensures we have an equal mix of suspended and available events to test with
         const modifiedEvents = events.map((event, index) => {
-          if (index % 3 === 0) { // Every 3rd event (33% of events)
+          if (index % 2 === 0) { // Every 2nd event (50% of events will be suspended)
             const modifiedEvent = { ...event, totalMarketCount: 0 };
             process.stderr.write(`[TEST] Modified event ${modifiedEvent.widgets?.[0]?.id || 'unknown'}: ${modifiedEvent.name} to have totalMarketCount=0\n`);
             return modifiedEvent;
@@ -114,7 +114,6 @@ async function fetchEventsPage(skip) {
             }
             return modifiedEvent;
           }
-          return event;
         });
         
         events = modifiedEvents;
