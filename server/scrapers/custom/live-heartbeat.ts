@@ -664,12 +664,26 @@ async function processEvents(events: any[]): Promise<void> {
         isAvailable = false;
         marketStatus = 'SUSPENDED';
         console.log(`Event ${event.id || event.eventId} is marked as suspended by zero odds detection`);
+        console.log(`EVENT SUSPENDED: ${JSON.stringify({
+          id: event.id || event.eventId,
+          name: event.name || event.event,
+          homeTeam: event.homeTeam || (event.name ? event.name.split(" vs ")[0] : "Unknown"),
+          awayTeam: event.awayTeam || (event.name ? event.name.split(" vs ")[1] : "Unknown"),
+          suspended: true,
+          home_odds: event.home_odds || '0.0',
+          draw_odds: event.draw_odds || '0.0',
+          away_odds: event.away_odds || '0.0'
+        })}`);
       } else if (event.markets && event.markets.length > 0) {
         isAvailable = !event.markets[0].suspended;
         marketStatus = event.markets[0].suspended ? 'SUSPENDED' : 'ACTIVE';
+        if (event.markets[0].suspended) {
+          console.log(`Event ${event.id || event.eventId} is marked as suspended via markets[0].suspended`);
+        }
       } else if (event.status === 'SUSPENDED' || event.bettingStatus === 'SUSPENDED') {
         isAvailable = false;
         marketStatus = 'SUSPENDED';
+        console.log(`Event ${event.id || event.eventId} is marked as suspended via status/bettingStatus field`);
       }
       
       // Extract gameMinute from different possible structures
