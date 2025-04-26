@@ -368,29 +368,24 @@ async function scrapeEvents(apiUrl: string): Promise<any[]> {
       const skip = 0;
       const encodedQuery = `%7B%22queries%22%3A%5B%7B%22query%22%3A%7B%22eventType%22%3A%22LIVE%22%2C%22categories%22%3A%5B2%5D%2C%22zones%22%3A%7B%7D%2C%22hasOdds%22%3Atrue%7D%2C%22view%22%3A%7B%22marketTypes%22%3A%5B%223743%22%5D%7D%2C%22skip%22%3A${skip}%2C%22take%22%3A${take}%7D%5D%7D`;
       
-      // Use a completely different endpoint for testing to avoid the caching issue
-      url = `https://${domain}/api/sportsbook/events/live/football?_=${Date.now()}`;
+      // Use the exact endpoint and query format from betpawa_gh_scraper.js that's known to work
+      url = `https://${domain}/api/sportsbook/v2/events/lists/by-queries?q=${encodedQuery}&cacheBust=${Date.now()}`;
       
-      // Create the headers from the working implementation, but remove the if-modified-since header to force a fresh response
+      // Use the exact headers from bp_gh_live_scraper.js that we know are working
       headers = {
-        "accept": "*/*",
-        "accept-language": "en-GB,en-US;q=0.9,en;q=0.8",
-        "baggage": "sentry-environment=production,sentry-release=1.203.58",
-        "devicetype": "web",
-        // Removed if-modified-since header to force fresh responses
-        "priority": "u=1, i",
-        "referer": `https://${domain}/events?marketId=1X2&categoryId=2`,
-        "sec-ch-ua": "\"Google Chrome\";v=\"135\", \"Not-A.Brand\";v=\"8\", \"Chromium\";v=\"135\"",
-        "sec-ch-ua-mobile": "?0",
-        "sec-ch-ua-platform": "\"macOS\"",
-        "sec-fetch-dest": "empty",
-        "sec-fetch-mode": "cors",
-        "sec-fetch-site": "same-origin",
-        "sentry-trace": "69dc4eced394402e8b4842078bf03b47-982bacd1c87283b4-0",
-        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36",
-        "vuejs": "true",
-        "x-pawa-brand": `betpawa-${brand}`,
-        "x-pawa-language": "en"
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'application/json, text/plain, */*',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Referer': `https://${domain}/`,
+        'Origin': `https://${domain}`,
+        'Connection': 'keep-alive',
+        'sec-ch-ua': '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-origin',
+        "x-pawa-brand": `betpawa-${brand}`
       };
       
       // Use the cookies from the working implementation
