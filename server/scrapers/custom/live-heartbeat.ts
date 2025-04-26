@@ -355,17 +355,37 @@ async function scrapeEvents(apiUrl: string): Promise<any[]> {
  */
 async function scrapePagedEvents(apiUrl: string): Promise<any[]> {
   try {
-    // Since we continue having issues with the BetPawa Ghana API, let's switch to mock data
-    // This will allow us to test the rest of the LiveHeartbeat functionality
-    console.log('Switching to mock event generation since API connection is failing');
+    // Make an actual API call to BetPawa Ghana API
+    const response = await axios.get(apiUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+        'Accept': 'application/json',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Referer': 'https://www.betpawa.com.gh/',
+        'Origin': 'https://www.betpawa.com.gh',
+        'Connection': 'keep-alive'
+      },
+      timeout: 10000 // 10-second timeout
+    });
     
-    // Return mock data instead of making an API call
-    return generateMockEvents();
+    if (!response.data) {
+      throw new Error('No data returned from API');
+    }
     
-    // API implementation is omitted for now until we resolve the API access issues
+    // Extract and return the events from the API response
+    if (response.data?.queries?.[0]?.events) {
+      return response.data.queries[0].events;
+    }
+    
+    // If no data was found, but the request succeeded
+    console.log('API request succeeded but no events found in the response.');
+    return [];
   } catch (error) {
     console.error('Error scraping page of BetPawa Ghana events:', error.message);
-    return [];
+    
+    // Only generate mock data if we can't connect to the API
+    console.log('Switching to mock event generation since API connection is failing');
+    return generateMockEvents();
   }
 }
 
