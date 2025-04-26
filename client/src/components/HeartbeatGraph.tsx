@@ -444,33 +444,7 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     // Stroke the path
     ctx.stroke();
     
-    // Draw minute indicator at the current position
-    if (currentGameMinute > 0) {
-      const minuteX = Math.min(currentGameMinute * pixelsPerMinute, width - 20);
-      
-      // Draw a more subtle minute indicator (smaller and less bright)
-      ctx.beginPath();
-      ctx.arc(minuteX, 20, 12, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(0, 180, 0, 0.6)'; // Semi-transparent darker green
-      ctx.fill();
-      
-      // Draw minute text - use "HT" for halftime if the current minute is 45
-      ctx.font = 'bold 12px Arial';
-      ctx.fillStyle = 'white';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      
-      // Check if any data point has "HT" as the game minute
-      const isHalftime = data.some(point => 
-        point.gameMinute === "HT" || point.gameMinute?.toLowerCase() === "ht");
-      
-      // Use "HT" if it's halftime and minute is 45, otherwise append an apostrophe
-      const displayText = (isHalftime && currentGameMinute === 45) 
-        ? "HT" 
-        : `${currentGameMinute}'`;
-      
-      ctx.fillText(displayText, minuteX, 20);
-    }
+    // Removed heartbeat minute indicator as requested
     
     console.log("Heartbeat drawing completed successfully");
   }
