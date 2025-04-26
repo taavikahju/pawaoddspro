@@ -1,13 +1,34 @@
 // Direct implementation based on the Python script
 const axios = require('axios');
 
-async function scrapeRealEvents() {
-  try {
-    // Replace UPCOMING with LIVE in the endpoint
-    const encoded_q = "%7B%22queries%22%3A%5B%7B%22query%22%3A%7B%22eventType%22%3A%22LIVE%22%2C%22categories%22%3A%5B2%5D%2C%22zones%22%3A%7B%7D%2C%22hasOdds%22%3Atrue%7D%2C%22view%22%3A%7B%22marketTypes%22%3A%5B%223743%22%5D%7D%2C%22skip%22%3A0%2C%22take%22%3A20%7D%5D%7D";
-    const url = `https://www.betpawa.com.gh/api/sportsbook/v2/events/lists/by-queries?q=${encoded_q}`;
+// Function to build the encoded query string with pagination parameters
+function buildQueryString(skip, take = 20) {
+  const query = {
+    queries: [
+      {
+        query: {
+          eventType: "LIVE",
+          categories: [2],
+          zones: {},
+          hasOdds: true
+        },
+        view: {
+          marketTypes: ["3743"]
+        },
+        skip: skip,
+        take: take
+      }
+    ]
+  };
+  
+  // Encode the query in the same format as the original
+  return encodeURIComponent(JSON.stringify(query));
+}
 
-    // No console logs that would corrupt the JSON output
+async function fetchEventsPage(skip) {
+  try {
+    const encoded_q = buildQueryString(skip);
+    const url = `https://www.betpawa.com.gh/api/sportsbook/v2/events/lists/by-queries?q=${encoded_q}`;
     
     const headers = {
       "accept": "*/*",
@@ -54,67 +75,104 @@ async function scrapeRealEvents() {
     const response = await axios.get(url, { headers });
 
     if (response.status !== 200) {
-      // No console output
-      return [];
+      return { events: [], moreAvailable: false };
     }
 
     const result = response.data;
     
     if (!result.responses || !result.responses[0] || !result.responses[0].responses) {
-      // No console output
-      return [];
+      return { events: [], moreAvailable: false };
     }
     
     const events = result.responses[0].responses;
-    // No console.log here
+    
+    // Check if there might be more pages
+    // If we got a full page of results, there might be more
+    const moreAvailable = events.length === 20;
+    
+    return { events, moreAvailable };
+  } catch (error) {
+    return { events: [], moreAvailable: false };
+  }
+}
 
+async function processEvents(events) {
+  const processedEvents = [];
+  
+  for (const event of events) {
+    try {
+      // Find the widget with type SPORTRADAR
+      const widget = event.widgets?.find(w => w.type === "SPORTRADAR");
+      
+      // Find the market with id "3743" (1X2 market)
+      const market = event.markets?.find(m => m.marketType?.id === "3743");
+      
+      if (!widget || !market) {
+        continue;
+      }
+      
+      // Map prices by name (1, X, 2)
+      const prices = {};
+      for (const price of market.prices || []) {
+        prices[price.name] = price.price;
+      }
+
+      // Create an event object
+      processedEvents.push({
+        eventId: widget.id,
+        country: event.region?.name,
+        tournament: event.competition?.name,
+        event: event.name,
+        market: market.marketType?.name,
+        home_odds: prices["1"] ? prices["1"].toString() : "",
+        draw_odds: prices["X"] ? prices["X"].toString() : "",
+        away_odds: prices["2"] ? prices["2"].toString() : "",
+        start_time: event.startTime,
+        // Add extra fields needed for heartbeat
+        gameMinute: event.scoreboard?.display?.minute,
+        suspended: market.suspended === true,
+        homeTeam: event.name.split(" vs ")[0],
+        awayTeam: event.name.split(" vs ")[1]
+      });
+    } catch (e) {
+      // Skip this event if there's an error
+    }
+  }
+  
+  return processedEvents;
+}
+
+async function scrapeRealEvents() {
+  try {
     const allEvents = [];
-
-    for (const event of events) {
-      try {
-        // Find the widget with type SPORTRADAR, similar to Python script
-        const widget = event.widgets?.find(w => w.type === "SPORTRADAR");
-        
-        // Find the market with id "3743" (1X2 market)
-        const market = event.markets?.find(m => m.marketType?.id === "3743");
-        
-        if (!widget || !market) {
-          // No console output
-          continue;
-        }
-        
-        // Map prices by name (1, X, 2) - same as Python script
-        const prices = {};
-        for (const price of market.prices || []) {
-          prices[price.name] = price.price;
-        }
-
-        // Create an event object similar to Python script
-        allEvents.push({
-          eventId: widget.id,
-          country: event.region?.name,
-          tournament: event.competition?.name,
-          event: event.name,
-          market: market.marketType?.name,
-          home_odds: prices["1"] ? prices["1"].toString() : "",
-          draw_odds: prices["X"] ? prices["X"].toString() : "",
-          away_odds: prices["2"] ? prices["2"].toString() : "",
-          start_time: event.startTime,
-          // Add extra fields needed for heartbeat
-          gameMinute: event.scoreboard?.display?.minute,
-          suspended: market.suspended === true,
-          homeTeam: event.name.split(" vs ")[0],
-          awayTeam: event.name.split(" vs ")[1]
-        });
-      } catch (e) {
-        // No console output
+    let currentPage = 0;
+    let moreAvailable = true;
+    const PAGE_SIZE = 20;
+    const MAX_PAGES = 5; // Limit to 5 pages to avoid excessive requests (up to 100 events)
+    
+    // Fetch pages until we've got all events or reached the maximum page limit
+    while (moreAvailable && currentPage < MAX_PAGES) {
+      const skip = currentPage * PAGE_SIZE;
+      const { events, moreAvailable: hasMore } = await fetchEventsPage(skip);
+      
+      if (events.length === 0) {
+        break;
+      }
+      
+      const processedEvents = await processEvents(events);
+      allEvents.push(...processedEvents);
+      
+      moreAvailable = hasMore;
+      currentPage++;
+      
+      // Small delay between requests to avoid rate limiting
+      if (moreAvailable) {
+        await new Promise(resolve => setTimeout(resolve, 500));
       }
     }
 
-    // No console output
     return allEvents;
   } catch (error) {
-    // No console output
     return [];
   }
 }
