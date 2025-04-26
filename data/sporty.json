@@ -10409,9 +10409,9 @@
     "date": "2025-04-28",
     "time": "15:00",
     "odds": {
-      "home": 1.62,
-      "draw": 3.8,
-      "away": 5.6
+      "home": 1.59,
+      "draw": 3.9,
+      "away": 5.75
     },
     "raw": {
       "eventId": "58803469",
@@ -10419,9 +10419,9 @@
       "tournament": "Super League",
       "event": "Volos NPS - Panseraikos FC",
       "market": "1X2",
-      "home_odds": "1.62",
-      "draw_odds": "3.80",
-      "away_odds": "5.60",
+      "home_odds": "1.59",
+      "draw_odds": "3.90",
+      "away_odds": "5.75",
       "start_time": "2025-04-28 17:00"
     }
   },
@@ -16302,32 +16302,6 @@
     }
   },
   {
-    "id": "59758334",
-    "eventId": "59758334",
-    "teams": "Adelaide Olympic FC - Adelaide Cobras",
-    "league": "South Australia State League 1",
-    "sport": "football",
-    "country": "Australia",
-    "date": "2025-04-26",
-    "time": "06:30",
-    "odds": {
-      "home": 3.33,
-      "draw": 4,
-      "away": 1.83
-    },
-    "raw": {
-      "eventId": "59758334",
-      "country": "Australia",
-      "tournament": "South Australia State League 1",
-      "event": "Adelaide Olympic FC - Adelaide Cobras",
-      "market": "1X2",
-      "home_odds": "3.33",
-      "draw_odds": "4.00",
-      "away_odds": "1.83",
-      "start_time": "2025-04-26 08:30"
-    }
-  },
-  {
     "id": "56592901",
     "eventId": "56592901",
     "teams": "Melbourne City FC - FC Bulleen Lions",
@@ -16403,32 +16377,6 @@
       "draw_odds": "3.80",
       "away_odds": "2.35",
       "start_time": "2025-04-26 09:00"
-    }
-  },
-  {
-    "id": "52325081",
-    "eventId": "52325081",
-    "teams": "PSBS Biak - Barito Putera",
-    "league": "Liga 1",
-    "sport": "football",
-    "country": "Indonesia",
-    "date": "2025-04-26",
-    "time": "06:30",
-    "odds": {
-      "home": 2,
-      "draw": 3.6,
-      "away": 3.25
-    },
-    "raw": {
-      "eventId": "52325081",
-      "country": "Indonesia",
-      "tournament": "Liga 1",
-      "event": "PSBS Biak - Barito Putera",
-      "market": "1X2",
-      "home_odds": "2.00",
-      "draw_odds": "3.60",
-      "away_odds": "3.25",
-      "start_time": "2025-04-26 08:30"
     }
   },
   {
@@ -17628,58 +17576,6 @@
     }
   },
   {
-    "id": "51867125",
-    "eventId": "51867125",
-    "teams": "CE Sabadell FC - UE Costa Brava",
-    "league": "Segunda Federacion",
-    "sport": "football",
-    "country": "Spain",
-    "date": "2025-04-27",
-    "time": "08:00",
-    "odds": {
-      "home": 1.06,
-      "draw": 7.25,
-      "away": 20
-    },
-    "raw": {
-      "eventId": "51867125",
-      "country": "Spain",
-      "tournament": "Segunda Federacion",
-      "event": "CE Sabadell FC - UE Costa Brava",
-      "market": "1X2",
-      "home_odds": "1.06",
-      "draw_odds": "7.25",
-      "away_odds": "20.00",
-      "start_time": "2025-04-27 10:00"
-    }
-  },
-  {
-    "id": "51869595",
-    "eventId": "51869595",
-    "teams": "CF Rayo Majadahonda - CD Union Sur Yaiza",
-    "league": "Segunda Federacion",
-    "sport": "football",
-    "country": "Spain",
-    "date": "2025-04-27",
-    "time": "08:00",
-    "odds": {
-      "home": 1.2,
-      "draw": 4.5,
-      "away": 13.5
-    },
-    "raw": {
-      "eventId": "51869595",
-      "country": "Spain",
-      "tournament": "Segunda Federacion",
-      "event": "CF Rayo Majadahonda - CD Union Sur Yaiza",
-      "market": "1X2",
-      "home_odds": "1.20",
-      "draw_odds": "4.50",
-      "away_odds": "13.50",
-      "start_time": "2025-04-27 10:00"
-    }
-  },
-  {
     "id": "51868471",
     "eventId": "51868471",
     "teams": "Club Deportiva Minera - CD Estepona",
@@ -17884,6 +17780,58 @@
       "home_odds": "1.46",
       "draw_odds": "3.10",
       "away_odds": "8.25",
+      "start_time": "2025-04-27 10:00"
+    }
+  },
+  {
+    "id": "51869585",
+    "eventId": "51869585",
+    "teams": "Getafe CF B - CF Talavera de La Reina",
+    "league": "Segunda Federacion",
+    "sport": "football",
+    "country": "Spain",
+    "date": "2025-04-27",
+    "time": "08:00",
+    "odds": {
+      "home": 1.93,
+      "draw": 3,
+      "away": 3.5
+    },
+    "raw": {
+      "eventId": "51869585",
+      "country": "Spain",
+      "tournament": "Segunda Federacion",
+      "event": "Getafe CF B - CF Talavera de La Reina",
+      "market": "1X2",
+      "home_odds": "1.93",
+      "draw_odds": "3.00",
+      "away_odds": "3.50",
+      "start_time": "2025-04-27 10:00"
+    }
+  },
+  {
+    "id": "51867123",
+    "eventId": "51867123",
+    "teams": "Olot - Terrassa FC",
+    "league": "Segunda Federacion",
+    "sport": "football",
+    "country": "Spain",
+    "date": "2025-04-27",
+    "time": "08:00",
+    "odds": {
+      "home": 2.1,
+      "draw": 2.75,
+      "away": 3.4
+    },
+    "raw": {
+      "eventId": "51867123",
+      "country": "Spain",
+      "tournament": "Segunda Federacion",
+      "event": "Olot - Terrassa FC",
+      "market": "1X2",
+      "home_odds": "2.10",
+      "draw_odds": "2.75",
+      "away_odds": "3.40",
       "start_time": "2025-04-27 10:00"
     }
   },
@@ -18365,9 +18313,9 @@
     "date": "2025-04-26",
     "time": "09:30",
     "odds": {
-      "home": 4,
-      "draw": 3.25,
-      "away": 1.95
+      "home": 4.1,
+      "draw": 3.3,
+      "away": 1.91
     },
     "raw": {
       "eventId": "58590839",
@@ -18375,9 +18323,9 @@
       "tournament": "China League 1",
       "event": "Nanjing City - Chongqing Tonglianglong FC",
       "market": "1X2",
-      "home_odds": "4.00",
-      "draw_odds": "3.25",
-      "away_odds": "1.95",
+      "home_odds": "4.10",
+      "draw_odds": "3.30",
+      "away_odds": "1.91",
       "start_time": "2025-04-26 11:30"
     }
   },
@@ -18625,9 +18573,9 @@
     "date": "2025-04-27",
     "time": "05:30",
     "odds": {
-      "home": 1.93,
-      "draw": 3,
-      "away": 3.5
+      "home": 2.1,
+      "draw": 2.9,
+      "away": 3.25
     },
     "raw": {
       "eventId": "59038993",
@@ -18635,9 +18583,9 @@
       "tournament": "China League 2",
       "event": "Shanghai Port B - Nantong Haimen Codion",
       "market": "1X2",
-      "home_odds": "1.93",
-      "draw_odds": "3.00",
-      "away_odds": "3.50",
+      "home_odds": "2.10",
+      "draw_odds": "2.90",
+      "away_odds": "3.25",
       "start_time": "2025-04-27 07:30"
     }
   },
@@ -18651,9 +18599,9 @@
     "date": "2025-04-27",
     "time": "06:00",
     "odds": {
-      "home": 2,
-      "draw": 2.7,
-      "away": 3.8
+      "home": 1.96,
+      "draw": 2.75,
+      "away": 4
     },
     "raw": {
       "eventId": "59038945",
@@ -18661,9 +18609,9 @@
       "tournament": "China League 2",
       "event": "Shenzhen 2028 FC - Quanzhou Yaxin",
       "market": "1X2",
-      "home_odds": "2.00",
-      "draw_odds": "2.70",
-      "away_odds": "3.80",
+      "home_odds": "1.96",
+      "draw_odds": "2.75",
+      "away_odds": "4.00",
       "start_time": "2025-04-27 08:00"
     }
   },
@@ -19093,9 +19041,9 @@
     "date": "2025-04-26",
     "time": "22:00",
     "odds": {
-      "home": 1.55,
+      "home": 1.58,
       "draw": 3.7,
-      "away": 4.7
+      "away": 4.5
     },
     "raw": {
       "eventId": "60022125",
@@ -19103,9 +19051,9 @@
       "tournament": "Liga de Expansion MX, Clausura",
       "event": "Atlante FC - Atletico Morelia",
       "market": "1X2",
-      "home_odds": "1.55",
+      "home_odds": "1.58",
       "draw_odds": "3.70",
-      "away_odds": "4.70",
+      "away_odds": "4.50",
       "start_time": "2025-04-27 00:00"
     }
   },
@@ -21667,9 +21615,9 @@
     "date": "2025-04-26",
     "time": "12:00",
     "odds": {
-      "home": 1.53,
-      "draw": 4.6,
-      "away": 4.4
+      "home": 1.5,
+      "draw": 4.25,
+      "away": 5
     },
     "raw": {
       "eventId": "51796727",
@@ -21677,9 +21625,9 @@
       "tournament": "Southern League Premier Central",
       "event": "Bedford Town Football Club - Stourbridge FC",
       "market": "1X2",
-      "home_odds": "1.53",
-      "draw_odds": "4.60",
-      "away_odds": "4.40",
+      "home_odds": "1.50",
+      "draw_odds": "4.25",
+      "away_odds": "5.00",
       "start_time": "2025-04-26 14:00"
     }
   },
@@ -21862,6 +21810,58 @@
       "home_odds": "2.85",
       "draw_odds": "4.40",
       "away_odds": "1.90",
+      "start_time": "2025-04-26 14:00"
+    }
+  },
+  {
+    "id": "51795673",
+    "eventId": "51795673",
+    "teams": "Gloucester City - Gosport Borough",
+    "league": "Southern League Premier South",
+    "sport": "football",
+    "country": "England Amateur",
+    "date": "2025-04-26",
+    "time": "12:00",
+    "odds": {
+      "home": 2,
+      "draw": 3.9,
+      "away": 2.9
+    },
+    "raw": {
+      "eventId": "51795673",
+      "country": "England Amateur",
+      "tournament": "Southern League Premier South",
+      "event": "Gloucester City - Gosport Borough",
+      "market": "1X2",
+      "home_odds": "2.00",
+      "draw_odds": "3.90",
+      "away_odds": "2.90",
+      "start_time": "2025-04-26 14:00"
+    }
+  },
+  {
+    "id": "51795675",
+    "eventId": "51795675",
+    "teams": "Hanwell Town FC - Plymouth Parkway",
+    "league": "Southern League Premier South",
+    "sport": "football",
+    "country": "England Amateur",
+    "date": "2025-04-26",
+    "time": "12:00",
+    "odds": {
+      "home": 1.74,
+      "draw": 3.9,
+      "away": 3.7
+    },
+    "raw": {
+      "eventId": "51795675",
+      "country": "England Amateur",
+      "tournament": "Southern League Premier South",
+      "event": "Hanwell Town FC - Plymouth Parkway",
+      "market": "1X2",
+      "home_odds": "1.74",
+      "draw_odds": "3.90",
+      "away_odds": "3.70",
       "start_time": "2025-04-26 14:00"
     }
   }
