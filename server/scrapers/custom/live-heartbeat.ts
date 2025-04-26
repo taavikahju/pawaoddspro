@@ -346,10 +346,78 @@ async function scrapeEvents(apiUrl: string): Promise<any[]> {
   console.log(`Scraping events from ${apiUrl}`);
   
   try {
-    const response = await axios.get(apiUrl, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-      },
+    // For BetPawa API, we need specific headers and a specific query format
+    // Using the same configuration from the working scraper
+    const domain = 'www.betpawa.com.gh';
+    const brand = 'ghana';
+    
+    // Try with the provided URL first
+    let url = apiUrl;
+    let headers: Record<string, string> = {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+    };
+    
+    // Check if this is the BetPawa domain
+    const isBetPawa = apiUrl.includes('betpawa');
+    
+    if (isBetPawa) {
+      console.log('Using BetPawa-specific configuration');
+      
+      // Construct a query for live events with football (category 2)
+      const take = 20;
+      const skip = 0;
+      const encodedQuery = `%7B%22queries%22%3A%5B%7B%22query%22%3A%7B%22eventType%22%3A%22LIVE%22%2C%22categories%22%3A%5B2%5D%2C%22zones%22%3A%7B%7D%2C%22hasOdds%22%3Atrue%7D%2C%22view%22%3A%7B%22marketTypes%22%3A%5B%223743%22%5D%7D%2C%22skip%22%3A${skip}%2C%22take%22%3A${take}%7D%5D%7D`;
+      
+      // Override with the URL that's known to work
+      url = `https://${domain}/api/sportsbook/v2/events/lists/by-queries?q=${encodedQuery}`;
+      
+      // Create the headers from the working implementation
+      headers = {
+        "accept": "*/*",
+        "accept-language": "en-GB,en-US;q=0.9,en;q=0.8",
+        "baggage": "sentry-environment=production,sentry-release=1.203.58",
+        "devicetype": "web",
+        "if-modified-since": new Date().toUTCString(),
+        "priority": "u=1, i",
+        "referer": `https://${domain}/events?marketId=1X2&categoryId=2`,
+        "sec-ch-ua": "\"Google Chrome\";v=\"135\", \"Not-A.Brand\";v=\"8\", \"Chromium\";v=\"135\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\"",
+        "sec-fetch-dest": "empty",
+        "sec-fetch-mode": "cors",
+        "sec-fetch-site": "same-origin",
+        "sentry-trace": "69dc4eced394402e8b4842078bf03b47-982bacd1c87283b4-0",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36",
+        "vuejs": "true",
+        "x-pawa-brand": `betpawa-${brand}`,
+        "x-pawa-language": "en"
+      };
+      
+      // Use the cookies from the working implementation
+      const cookies = {
+        "_ga": "GA1.1.459857438.1713161475",
+        "_ga_608WPEPCC3": "GS1.1.1731480684.7.0.1731480684.0.0.0",
+        "aff_cookie": "F60",
+        "_gcl_au": "1.1.1725251410.1738666716",
+        "PHPSESSID": "b0694dabe05179bc223abcdf8f7bf83e",
+        "tracingId": "0f5927de-e30d-4228-b29c-c92210017a62",
+        "x-pawa-token": "b4c6eda2ae319f4b-8a3075ba3c9d9984"
+      };
+      
+      // Convert cookies to string format
+      const cookieString = Object.entries(cookies)
+        .map(([key, value]) => `${key}=${value}`)
+        .join('; ');
+      
+      // Add cookies to headers
+      headers['cookie'] = cookieString;
+    }
+    
+    console.log(`Scraping using URL: ${url}`);
+    
+    console.log(`Making request to: ${url}`);
+    const response = await axios.get(url, {
+      headers,
       timeout: 30000
     });
     
@@ -359,14 +427,41 @@ async function scrapeEvents(apiUrl: string): Promise<any[]> {
     
     const data = response.data;
     
-    if (!data || !Array.isArray(data)) {
-      throw new Error('Invalid data format: expected array');
+    // BetPawa API returns different structures based on the endpoint
+    if (isBetPawa && data.events) {
+      // Handle BetPawa v2 API response format
+      console.log(`Scraped ${data.events.length} events from BetPawa API`);
+      return data.events;
+    } else if (isBetPawa && data.results && Array.isArray(data.results)) {
+      // Handle BetPawa v1 API response format
+      console.log(`Scraped ${data.results.length} events from BetPawa API`);
+      return data.results;
+    } else if (isBetPawa && data.queries && Array.isArray(data.queries)) {
+      // Handle the queries format (lists/by-queries endpoint)
+      const allEvents = [];
+      for (const query of data.queries) {
+        if (query.events && Array.isArray(query.events)) {
+          allEvents.push(...query.events);
+        }
+      }
+      console.log(`Scraped ${allEvents.length} events from BetPawa API (queries format)`);
+      return allEvents;
+    } else if (Array.isArray(data)) {
+      // Handle standard array response
+      console.log(`Scraped ${data.length} events`);
+      return data;
+    } else {
+      throw new Error('Invalid data format: expected array or known BetPawa structure');
     }
-    
-    console.log(`Scraped ${data.length} events`);
-    return data;
   } catch (error) {
     console.error('Error scraping events:', error);
+    if (axios.isAxiosError(error) && error.response) {
+      console.error('Response data:', error.response.data);
+      console.error('Response status:', error.response.status);
+      console.error('Response headers:', error.response.headers);
+    }
+    
+    // Return empty array on error
     return [];
   }
 }
@@ -411,27 +506,86 @@ async function processEvents(events: any[]): Promise<void> {
   // Process each live event
   for (const event of events) {
     try {
-      const eventId = event.id?.toString();
+      // Debug: Print the raw event structure to better understand the API's format
+      console.log("Processing event:", JSON.stringify(event, null, 2).substring(0, 500) + "...");
+
+      // Extract event ID - BetPawa API may use different structures
+      const eventId = event.id?.toString() || 
+                     event.eventId?.toString() || 
+                     event.fixture?.id?.toString();
+                     
       if (!eventId) {
         console.log("Skipping event with no ID");
         continue;
       }
       
-      const eventName = event.name || (event.homeTeam && event.awayTeam 
-                         ? `${event.homeTeam} vs ${event.awayTeam}` 
-                         : "Unknown Event");
+      // Extract event name - BetPawa API may have teams in different properties
+      let eventName = "";
+      let homeTeam = "";
+      let awayTeam = "";
       
-      const country = event.category?.name || event.region?.name || "Unknown";
-      const tournament = event.competition?.name || event.tournament?.name || "Unknown";
+      // Try to get home and away team names from various possible properties
+      if (event.fixture?.homeName && event.fixture?.awayName) {
+        homeTeam = event.fixture.homeName;
+        awayTeam = event.fixture.awayName;
+        eventName = `${homeTeam} vs ${awayTeam}`;
+      } else if (event.homeTeam && event.awayTeam) {
+        homeTeam = event.homeTeam;
+        awayTeam = event.awayTeam;
+        eventName = `${homeTeam} vs ${awayTeam}`;
+      } else if (event.name && event.name.includes(" vs ")) {
+        eventName = event.name;
+        const parts = eventName.split(" vs ");
+        homeTeam = parts[0].trim();
+        awayTeam = parts[1].trim();
+      } else if (event.fixture?.name) {
+        eventName = event.fixture.name;
+        if (eventName.includes(" vs ")) {
+          const parts = eventName.split(" vs ");
+          homeTeam = parts[0].trim();
+          awayTeam = parts[1].trim();
+        }
+      } else {
+        // Fallback to event name or default
+        eventName = event.name || "Unknown Event";
+      }
       
-      // Check if the market is available from the suspended flag
-      const isMarketAvailable = event.markets && event.markets.length > 0 ? 
-        !event.markets[0].suspended : false;
+      // Extract location information
+      const country = event.category?.name || 
+                     event.tournament?.category?.name || 
+                     event.fixture?.tournament?.category?.name || 
+                     event.region?.name || 
+                     "Unknown";
+                     
+      const tournament = event.competition?.name || 
+                        event.tournament?.name || 
+                        event.fixture?.tournament?.name || 
+                        "Unknown";
       
-      // Get the game minute from the event data
+      // Check market availability - BetPawa API has different structures for markets
+      let isMarketAvailable = false;
+      
+      // Check different possible market structures
+      if (event.markets && event.markets.length > 0) {
+        // Classic market structure
+        isMarketAvailable = !event.markets[0].suspended;
+      } else if (event.fixture?.markets && event.fixture.markets.length > 0) {
+        // Alternative market structure
+        isMarketAvailable = !event.fixture.markets[0].suspended;
+      } else if (event.bettingStatus === "AVAILABLE") {
+        // Direct betting status property
+        isMarketAvailable = true;
+      } else if (event.status === "ACTIVE" || event.status === "OPEN") {
+        // Status property
+        isMarketAvailable = true;
+      }
+      
+      // Get the game minute from the event data - check multiple possible structures
       const gameMinute = event.scoreboard?.display?.minute || 
+                       event.fixture?.timer?.minute?.toString() || 
                        event.minute?.toString() || 
                        event.time?.toString() || 
+                       event.matchTime?.toString() || 
                        "1";
       
       // Create a HeartbeatEvent from the real event data
@@ -441,14 +595,14 @@ async function processEvents(events: any[]): Promise<void> {
         country: country,
         tournament: tournament,
         isInPlay: true,
-        startTime: event.startTime || new Date().toISOString(),
+        startTime: event.startTime || event.fixture?.startTime || new Date().toISOString(),
         currentlyAvailable: isMarketAvailable,
         marketAvailability: isMarketAvailable ? "ACTIVE" : "SUSPENDED",
         recordCount: 1,
         gameMinute: gameMinute,
-        widgetId: event.widget?.id || "",
-        homeTeam: eventName.includes(" vs ") ? eventName.split(" vs ")[0] : event.homeTeam,
-        awayTeam: eventName.includes(" vs ") ? eventName.split(" vs ")[1] : event.awayTeam
+        widgetId: event.widget?.id || event.id?.toString() || "",
+        homeTeam: homeTeam,
+        awayTeam: awayTeam
       };
       
       processedEvents.push(heartbeatEvent);

@@ -736,38 +736,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  app.post('/api/live-heartbeat/start', simpleAdminAuth, async (req, res) => {
-    try {
-      // Provide a default URL in case none is supplied
-      const defaultUrl = 'https://www.betpawa.com.gh/api/sportsbook/events/live/all/football';
-      const apiUrl = req.body.apiUrl || defaultUrl;
-      
-      // Start the heartbeat tracker
-      startHeartbeatTracker(apiUrl, storage);
-      
-      res.json({
-        success: true,
-        message: 'Live heartbeat tracker started successfully with real data'
-      });
-      
-      // Broadcast an event to connected clients
-      broadcast({
-        type: 'notification',
-        data: {
-          title: 'Heartbeat Tracker',
-          message: 'Live heartbeat tracker started with real-time data',
-          type: 'success'
-        }
-      });
-    } catch (error) {
-      console.error('Error starting heartbeat tracker:', error);
-      res.status(500).json({
-        success: false,
-        message: 'Failed to start heartbeat tracker',
-        error: error instanceof Error ? error.message : String(error)
-      });
-    }
-  });
+  // REMOVED DUPLICATE ENDPOINT - Using endpoint at line ~1347 instead
+  /* Route removed to avoid conflict */
   
   app.post('/api/live-heartbeat/stop', simpleAdminAuth, async (req, res) => {
     try {
