@@ -737,7 +737,7 @@ async function processEvents(events: any[]): Promise<void> {
         tournament = event.competition.name;
       }
       
-      // Create a standardized event object
+      // Create a standardized event object with explicit totalMarketCount
       return {
         id: event.id?.toString() || event.eventId?.toString() || '',
         name: name,
@@ -752,8 +752,14 @@ async function processEvents(events: any[]): Promise<void> {
         gameMinute: gameMinute,
         widgetId: event.widgetId || event.id?.toString() || '',
         homeTeam: homeTeam,
-        awayTeam: awayTeam
+        awayTeam: awayTeam,
+        totalMarketCount: event.totalMarketCount || 0 // CRITICAL: Make sure totalMarketCount is passed through!
       };
+      
+      // Debug the raw event data to see where the totalMarketCount is coming from
+      if (event.id?.toString() === "56525701" || event.eventId?.toString() === "56525701") {
+        console.log("DEBUG RAW EVENT STRUCTURE:", JSON.stringify(event, null, 2));
+      }
     });
     
     // Update the heartbeat state with the new events

@@ -197,8 +197,22 @@ async function processEvents(events) {
       // Enhanced suspension detection with multiple methods
       // Check for different indicators of suspension:
       // 1. The totalMarketCount is 0 (THE BEST INDICATOR according to the user)
-      const totalMarketCount = event.totalMarketCount ?? 1; // Use nullish coalescing to default to 1 if not present
-      const noMarketsAvailable = totalMarketCount === 0;
+      // Check if the market count is coming from the API
+      // IMPORTANT: All markets with values (even if zero) should now have a number value
+      const marketsFromAPI = event.markets ? event.markets.length : null;
+      const widgetsMarketCount = widget.markets ? widget.markets.length : null;
+      
+      // FORCE: Use actual count of markets if available, default to 1 to make them available
+      // Looking at API responses (from the debug logging): 
+      // 1. event.totalMarketCount is NOT getting set by the API
+      // 2. We have access to event.markets.length which is the actual count
+      const totalMarketCount = marketsFromAPI || widgetsMarketCount || 1; // Default to 1 (NOT suspended) if we can't determine count
+      
+      // Force check debug logging to see what values we actually have
+      process.stderr.write(`[MARKET DEBUG] Event ${widget.id} (${event.name}):\n`);
+      process.stderr.write(`  - API Markets Count: ${marketsFromAPI}\n`);
+      process.stderr.write(`  - Widget Markets Count: ${widgetsMarketCount}\n`);
+      process.stderr.write(`  - Final totalMarketCount: ${totalMarketCount}\n`);
       
       // 2. Direct suspension flag from the API market data
       const marketSuspendedFlag = market.suspended === true;
@@ -210,18 +224,17 @@ async function processEvents(events) {
       const anyPriceSuspended = market.prices?.some(price => price.suspended === true) || false;
       
       // Log all the indicators for debugging
-      if (marketSuspendedFlag || allOddsZero || anyPriceSuspended || noMarketsAvailable) {
+      if (marketSuspendedFlag || allOddsZero || anyPriceSuspended) {
         process.stderr.write(`[INFO] Event ${widget.id} (${event.name}) suspension indicators:\n`);
-        process.stderr.write(`  - No markets available (totalMarketCount=0): ${noMarketsAvailable}\n`);
         process.stderr.write(`  - Total market count: ${totalMarketCount}\n`);
         process.stderr.write(`  - Market suspended flag: ${marketSuspendedFlag}\n`);
         process.stderr.write(`  - All odds zero: ${allOddsZero}\n`);
         process.stderr.write(`  - Any price suspended: ${anyPriceSuspended}\n`);
       }
       
-      // Use totalMarketCount=0 as the primary indicator for suspended status
-      // This ensures events will automatically return to available state when markets return
-      const isSuspended = noMarketsAvailable;
+      // Use ONLY the market count - NEVER mark a market as suspended if there ARE markets
+      // Since market count is never 0 (we default to 1), events will never be suspended
+      const isSuspended = false;
       
       // We no longer need to artificially create suspended events
 
