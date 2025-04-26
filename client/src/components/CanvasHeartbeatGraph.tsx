@@ -167,7 +167,7 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
           
           if (apiData && apiData.timestamps) {
             // Debug log to check for suspended events
-            const suspendedPoints = apiData.timestamps.filter(p => p.isAvailable === false);
+            const suspendedPoints = apiData.timestamps.filter((p: { isAvailable: boolean | string }) => p.isAvailable === false);
             console.log(`HEARTBEAT DATA: ${apiData.timestamps.length} total data points, ${suspendedPoints.length} suspended points`);
             if (suspendedPoints.length > 0) {
               console.log(`DEBUG - Found suspended data points:`, suspendedPoints.slice(0, 3));
@@ -175,7 +175,12 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
             
             // Ensure suspended status is properly set as boolean
             // The API might return isAvailable as a string or boolean, so we need to handle both cases
-            const processedTimestamps = apiData.timestamps.map(point => {
+            const processedTimestamps = apiData.timestamps.map((point: { 
+              timestamp: number; 
+              isAvailable: boolean | string; 
+              gameMinute?: string;
+              marketStatus?: string;
+            }) => {
               // Force proper boolean values - EXPLICITLY check for false conditions first
               const isAvailable = !(
                 point.isAvailable === false || 

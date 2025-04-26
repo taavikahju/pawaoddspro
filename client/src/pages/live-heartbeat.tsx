@@ -130,6 +130,7 @@ interface HeartbeatEvent {
   widgetId?: string;
   homeTeam?: string;
   awayTeam?: string;
+  suspended?: boolean; // Added suspended property for historical events
 }
 
 export default function LiveHeartbeat() {
@@ -217,7 +218,7 @@ export default function LiveHeartbeat() {
           // Calculate uptime if not directly available from API
           if (data.timestamps && Array.isArray(data.timestamps)) {
             // Count available and suspended data points
-            const availablePoints = data.timestamps.filter(p => p.isAvailable).length;
+            const availablePoints = data.timestamps.filter((p: any) => p.isAvailable).length;
             const totalPoints = data.timestamps.length;
             
             // Calculate percentage
@@ -545,7 +546,9 @@ export default function LiveHeartbeat() {
                               ? 'bg-accent'
                               : ''
                           } ${
-                            activeTab === 'live' && event.currentlyAvailable === false
+                            // Show red background for any suspended events - live or historical
+                            (activeTab === 'live' && event.currentlyAvailable === false) || 
+                            event.suspended === true
                               ? 'bg-red-500/20 border-l-4 border-red-500 dark:bg-red-900/30'
                               : ''
                           }`}
@@ -568,10 +571,10 @@ export default function LiveHeartbeat() {
                                   </Badge>
                                 ) : (
                                   <Badge 
-                                    variant="secondary"
-                                    className="text-[10px] h-5 ml-1"
+                                    variant={event.suspended ? "destructive" : "secondary"}
+                                    className={`text-[10px] h-5 ml-1 ${event.suspended ? 'font-bold text-white' : ''}`}
                                   >
-                                    Completed
+                                    {event.suspended ? '❗ SUSPENDED ❗' : 'Completed'}
                                   </Badge>
                                 )}
                                 {event.gameMinute && (
