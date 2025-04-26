@@ -54,6 +54,7 @@ interface HeartbeatEvent {
   homeTeam?: string;
   awayTeam?: string;
   suspended?: boolean; // Explicit suspended flag for better TypeScript type safety
+  totalMarketCount?: number; // Added to track the actual number of markets available
 }
 
 // Define the structure for market history
@@ -208,7 +209,8 @@ async function runHeartbeatTracker(url: string, storage: IStorage): Promise<void
                 suspended: isSuspended, // Explicit suspended property that matches totalMarketCount = 0
                 gameMinute: event.gameMinute || '1',
                 recordCount: 1,
-                widgetId: event.eventId || ''
+                widgetId: event.eventId || '',
+                totalMarketCount: event.totalMarketCount || 0 // Store the actual market count for better tracking
               };
             });
           }
@@ -799,13 +801,21 @@ async function processEvents(events: any[]): Promise<void> {
       const existingEvent = heartbeatState.events.find(e => e.id === newEvent.id);
       
       if (existingEvent) {
-        // Event exists in both sets - use new data but preserve suspension state if needed
+        // Event exists in both sets - update suspension state properly based on totalMarketCount
         if (existingEvent.suspended && newEvent.currentlyAvailable) {
-          // The API says it's available but our previous state says it's suspended
-          // This could happen when the API temporarily returns the event during suspension
-          console.log(`DEBUG: Event ${newEvent.id} (${newEvent.name}) is marked available in API but was suspended in our state. Keeping it as suspended.`);
-          newEvent.suspended = true;
-          newEvent.currentlyAvailable = false;
+          // The event was previously suspended but API now says it's available
+          // Check if it has markets available (totalMarketCount > 0)
+          if (newEvent.totalMarketCount && newEvent.totalMarketCount > 0) {
+            // Event has markets again, mark it as available
+            console.log(`🟢 MARKET RESUMED: Event ${newEvent.id} (${newEvent.name}) was suspended but now has ${newEvent.totalMarketCount} markets available. Marking as AVAILABLE.`);
+            newEvent.suspended = false;
+            newEvent.currentlyAvailable = true;
+          } else {
+            // No markets available, keep it as suspended
+            console.log(`DEBUG: Event ${newEvent.id} (${newEvent.name}) is marked available in API but has no markets. Keeping it as suspended.`);
+            newEvent.suspended = true;
+            newEvent.currentlyAvailable = false;
+          }
         }
       }
       
