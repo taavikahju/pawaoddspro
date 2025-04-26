@@ -90,13 +90,38 @@ export async function scrapeBetPawaGhana() {
         // Parse events from response
         let events = [];
         
+        // Log the response structure for debugging
+        console.log('Response data keys:', Object.keys(response.data));
+        if (response.data?.responses) {
+          console.log('responses array length:', response.data.responses.length);
+          if (response.data.responses[0]) {
+            console.log('First response keys:', Object.keys(response.data.responses[0]));
+            
+            // If this is a responses format, log a sample response to understand structure
+            if (response.data.responses[0].responses && response.data.responses[0].responses.length > 0) {
+              const sampleEvent = response.data.responses[0].responses[0];
+              console.log('Sample event keys:', Object.keys(sampleEvent));
+              console.log('Sample event name:', sampleEvent.name);
+              if (sampleEvent.competitors) {
+                console.log('Sample event has competitors:', sampleEvent.competitors.length);
+                if (sampleEvent.competitors.length > 0) {
+                  console.log('First competitor:', sampleEvent.competitors[0].name);
+                }
+              }
+            }
+          }
+        }
+        
         // Different APIs might return data in different structures, handle all possibilities
         if (response.data?.queries?.[0]?.events) {
           events = response.data.queries[0].events;
+          console.log('Found events in queries[0].events');
         } else if (response.data?.responses?.[0]?.responses) {
           events = response.data.responses[0].responses;
+          console.log('Found events in responses[0].responses');
         } else if (response.data?.events) {
           events = response.data.events;
+          console.log('Found events in events');
         }
         
         // If no events found, break the loop

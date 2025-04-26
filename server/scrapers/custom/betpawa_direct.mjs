@@ -124,12 +124,22 @@ async function scrapeWithDomain(domain, brand) {
     // Parse events from response - different APIs might return data in different structures
     let events = [];
     
+    // Log the response structure for debugging
+    console.log('Response data keys:', Object.keys(response.data));
+    if (response.data?.responses) {
+      console.log('responses array length:', response.data.responses.length);
+      console.log('First response keys:', response.data.responses[0] ? Object.keys(response.data.responses[0]) : 'none');
+    }
+    
     if (response.data?.queries?.[0]?.events) {
       events = response.data.queries[0].events;
+      console.log('Found events in queries[0].events');
     } else if (response.data?.responses?.[0]?.responses) {
       events = response.data.responses[0].responses;
+      console.log('Found events in responses[0].responses');
     } else if (response.data?.events) {
       events = response.data.events;
+      console.log('Found events in events');
     }
     
     if (!events || events.length === 0) {
