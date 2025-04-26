@@ -1402,6 +1402,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/live-heartbeat/status', async (req, res) => {
     try {
       const status = getHeartbeatStatus();
+      
+      // Debug logging for specific event
+      const specificEventId = "50956891";
+      const eventFound = status.events.find(e => e.id === specificEventId);
+      if (eventFound) {
+        console.log(`DEBUG: Found event ${specificEventId} in heartbeat state:`, JSON.stringify(eventFound));
+      } else {
+        console.log(`DEBUG: Event ${specificEventId} NOT found in heartbeat state. Total events: ${status.events.length}`);
+      }
+      
       res.json(status);
     } catch (error) {
       console.error('Error getting heartbeat status:', error);
