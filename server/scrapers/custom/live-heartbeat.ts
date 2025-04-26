@@ -513,7 +513,7 @@ export function getAllEventHistories(): any[] {
       };
     }
     return null;
-  }).filter(Boolean);
+  }).filter((e): e is NonNullable<typeof e> => e !== null);
   
   // Add any historical events that are not in the current active events
   marketHistories.forEach(history => {
@@ -526,6 +526,10 @@ export function getAllEventHistories(): any[] {
         name: `Historical Event ${history.eventId}`,
         country: "Unknown",
         tournament: "Unknown",
+        isInPlay: false,
+        startTime: new Date().toISOString(),
+        currentlyAvailable: false,
+        marketAvailability: "UNKNOWN",
         recordCount: history.timestamps.length,
         lastUpdate: history.timestamps[history.timestamps.length - 1]?.timestamp || Date.now()
       };

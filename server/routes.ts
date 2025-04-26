@@ -1416,6 +1416,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
+  // Get historical heartbeat events
+  app.get('/api/live-heartbeat/historical-events', async (req, res) => {
+    try {
+      const historicalEvents = getAllEventHistories();
+      res.json({
+        success: true,
+        data: historicalEvents
+      });
+    } catch (error) {
+      console.error('Error getting historical events:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to get historical events',
+        error: error instanceof Error ? error.message : String(error)
+      });
+    }
+  });
+  
   // Get event market history data
   app.get('/api/live-heartbeat/data/:eventId', async (req, res) => {
     try {
