@@ -145,11 +145,16 @@ async function runHeartbeatTracker(url: string, storage: IStorage): Promise<void
     try {
       console.log('Using dedicated BetPawa live events scraper...');
       
-      // Import our new dedicated scraper for live events
-      const betpawaGhScraper = require('./betpawa_gh_scraper');
-      
-      // Use our multi-domain scraper that specifically formats data for the heartbeat tracker
-      events = await betpawaGhScraper.scrapeWithAlternateDomains();
+      try {
+        // Use dynamic import for ES modules compatibility
+        const scraperModule = await import('./betpawa_gh_scraper.mjs');
+        
+        // Use our multi-domain scraper that specifically formats data for the heartbeat tracker
+        events = await scraperModule.scrapeWithAlternateDomains();
+      } catch (importError) {
+        console.error('Error importing scraper module:', importError.message);
+        // Fall through to the next approach
+      }
       
       // If we successfully got events, use them
       if (events && events.length > 0) {
@@ -162,8 +167,14 @@ async function runHeartbeatTracker(url: string, storage: IStorage): Promise<void
         console.log('Dedicated scraper found no live events. Trying alternative approach...');
         
         // Try the betpawa_direct module which has a different implementation
-        const betpawaDirect = require('./betpawa_direct');
-        events = await betpawaDirect.scrapeWithAlternateDomains();
+        try {
+          // Use dynamic import for ES modules compatibility
+          const betpawaDirect = await import('./betpawa_direct.mjs');
+          events = await betpawaDirect.scrapeWithAlternateDomains();
+        } catch (importError) {
+          console.error('Error importing betpawa_direct module:', importError.message);
+          // Fall through to the standard API approach
+        }
         
         if (events && events.length > 0) {
           console.log(`Found ${events.length} events using betpawa_direct implementation`);
@@ -343,11 +354,13 @@ async function scrapeEvents(apiUrl: string): Promise<any[]> {
     
     // Use the direct JS implementation of the Python script
     try {
-      // Import the direct scraper we created based on the Python script
-      const betpawaDirect = require('./betpawa_direct');
+      // Import the direct scraper we created based on the Python script using dynamic import
+      console.log('Using the direct scraper implementation...');
+      
+      // Use dynamic import for ES modules compatibility
+      const betpawaDirect = await import('./betpawa_direct.mjs');
       
       // Use our direct method that follows the exact Python script approach
-      console.log('Using the direct scraper implementation...');
       const events = await betpawaDirect.scrapeBetPawa();
       
       if (events && events.length > 0) {
