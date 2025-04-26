@@ -143,6 +143,43 @@ export const scraperStatusSchema = z.object({
 
 export type ScraperStatus = z.infer<typeof scraperStatusSchema>;
 
+// Heartbeat statistics schema for tracking market availability
+export const heartbeatStatsSchema = z.object({
+  eventId: z.string(),
+  timestamp: z.number(),
+  uptimePercentage: z.number(),
+  availableDurationMinutes: z.number(),
+  suspendedDurationMinutes: z.number(),
+  totalDurationMinutes: z.number(),
+  day: z.string().optional(), // YYYY-MM-DD format for daily aggregation
+  week: z.string().optional(), // YYYY-WW format for weekly aggregation
+  month: z.string().optional(), // YYYY-MM format for monthly aggregation
+});
+
+export type HeartbeatStats = z.infer<typeof heartbeatStatsSchema>;
+
+// Database table for storing heartbeat statistics
+export const heartbeatStats = pgTable("heartbeat_stats", {
+  id: serial("id").primaryKey(),
+  eventId: text("event_id").notNull(),
+  timestamp: integer("timestamp").notNull(),
+  uptimePercentage: integer("uptime_percentage").notNull(),
+  availableDurationMinutes: integer("available_duration_minutes").notNull(),
+  suspendedDurationMinutes: integer("suspended_duration_minutes").notNull(),
+  totalDurationMinutes: integer("total_duration_minutes").notNull(),
+  day: text("day"), // YYYY-MM-DD format
+  week: text("week"), // YYYY-WW format
+  month: text("month"), // YYYY-MM format
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const insertHeartbeatStatsSchema = createInsertSchema(heartbeatStats).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertHeartbeatStats = z.infer<typeof insertHeartbeatStatsSchema>;
+
 // Odds history table to track odds changes over time
 export const oddsHistory = pgTable("odds_history", {
   id: serial("id").primaryKey(),

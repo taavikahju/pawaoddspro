@@ -3,6 +3,7 @@ import {
   bookmakers,
   sports,
   events,
+  heartbeatStats,
   type User, 
   type InsertUser, 
   type Bookmaker, 
@@ -12,7 +13,9 @@ import {
   type Event,
   type InsertEvent,
   type StatsData,
-  type ScraperStatus
+  type ScraperStatus,
+  type HeartbeatStats,
+  type InsertHeartbeatStats
 } from "@shared/schema";
 import * as fs from 'fs';
 import * as path from 'path';
