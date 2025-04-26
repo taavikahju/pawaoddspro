@@ -10,8 +10,11 @@ import HeartbeatGraph from '../components/HeartbeatGraph';
 import Layout from '@/components/Layout';
 import ReactCountryFlag from 'react-country-flag';
 
-// Component for displaying uptime metrics with a horizontal bar indicator
+// Component for displaying uptime metrics with a gauge that looks like a speedometer
 const UptimeGauge = ({ value }: { value: number }) => {
+  // Calculate rotation angle for the needle (from -45 to 225 degrees)
+  const rotation = -45 + (value / 100) * 270;
+  
   // Get color based on value
   const getColor = (val: number) => {
     if (val < 40) return '#ef4444'; // red
@@ -20,39 +23,64 @@ const UptimeGauge = ({ value }: { value: number }) => {
     return '#16a34a'; // green
   };
   
-  const color = getColor(value);
-  const needlePosition = `${value}%`;
-  
   return (
     <div className="flex items-center">
       <div className="text-sm font-medium text-muted-foreground mr-2">
         Average Uptime:
       </div>
-      <div className="flex flex-col w-[140px]">
-        <div className="relative h-4 w-full rounded-md overflow-hidden">
-          {/* Gradient background */}
-          <div 
-            className="absolute inset-0 h-full w-full"
-            style={{
-              background: 'linear-gradient(to right, #ef4444 0%, #f97316 30%, #facc15 50%, #84cc16 70%, #16a34a 100%)'
-            }}
-          />
-          
-          {/* Needle indicator */}
-          <div 
-            className="absolute top-0 bottom-0 w-0.5 bg-white shadow-md"
-            style={{ 
-              left: needlePosition,
-              transform: 'translateX(-50%)',
-              zIndex: 10
-            }}
-          >
-            <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-black rounded-full"></div>
-          </div>
+      <div className="flex flex-col items-center">
+        <div className="relative w-[100px] h-[50px]">
+          <svg className="w-full h-full" viewBox="0 0 100 50">
+            {/* Gauge background */}
+            <defs>
+              <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#ef4444" />
+                <stop offset="30%" stopColor="#f97316" />
+                <stop offset="50%" stopColor="#facc15" />
+                <stop offset="70%" stopColor="#84cc16" />
+                <stop offset="100%" stopColor="#16a34a" />
+              </linearGradient>
+            </defs>
+            
+            {/* Gauge arc (semi-circle) */}
+            <path 
+              d="M 10 50 A 40 40 0 0 1 90 50" 
+              fill="transparent" 
+              stroke="url(#gaugeGradient)" 
+              strokeWidth="8" 
+              strokeLinecap="round"
+            />
+            
+            {/* Ticks for scale */}
+            <g stroke="#64748b" strokeWidth="1">
+              <line x1="10" y1="50" x2="15" y2="45" />
+              <line x1="25" y1="25" x2="30" y2="25" />
+              <line x1="50" y1="10" x2="50" y2="15" />
+              <line x1="75" y1="25" x2="70" y2="25" />
+              <line x1="90" y1="50" x2="85" y2="45" />
+            </g>
+            
+            {/* Center point */}
+            <circle cx="50" cy="50" r="5" fill="white" stroke="#64748b" strokeWidth="1" />
+            
+            {/* Needle */}
+            <g transform={`rotate(${rotation}, 50, 50)`}>
+              <line 
+                x1="50" 
+                y1="50" 
+                x2="50" 
+                y2="15" 
+                stroke="black" 
+                strokeWidth="2" 
+                strokeLinecap="round"
+              />
+              <circle cx="50" cy="50" r="3" fill="black" />
+            </g>
+          </svg>
         </div>
         
         {/* Percentage text */}
-        <div className="text-center mt-1 text-sm font-medium" style={{ color }}>
+        <div className="text-center text-sm font-medium" style={{ color: getColor(value) }}>
           {value.toFixed(1)}%
         </div>
       </div>
