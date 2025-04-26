@@ -264,17 +264,15 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     // Use actual timestamps for visualization instead of relying on game minutes
     console.log("Using timestamp-based visualization instead of game minute-based");
     
-    // Make a copy of the data for our timestamps array (if not already done)
-    if (!timestamps) {
-      timestamps = Array.isArray(data) ? [...data] : [];
-    }
+    // Make a working copy of our data points for rendering
+    const renderData = [...data];
     
-    // Sort timestamps by timestamp (just to be safe)
-    timestamps.sort((a, b) => a.timestamp - b.timestamp);
+    // Sort data by timestamp (just to be safe)
+    renderData.sort((a, b) => a.timestamp - b.timestamp);
     
     // Find the earliest and latest timestamps to calculate the time range
-    const earliestTimestamp = timestamps.length > 0 ? timestamps[0].timestamp : Date.now() - 3600000; // 1 hour ago default
-    const latestTimestamp = timestamps.length > 0 ? timestamps[timestamps.length - 1].timestamp : Date.now();
+    const earliestTimestamp = renderData.length > 0 ? renderData[0].timestamp : Date.now() - 3600000; // 1 hour ago default
+    const latestTimestamp = renderData.length > 0 ? renderData[renderData.length - 1].timestamp : Date.now();
     
     // Calculate time range in milliseconds
     const timeRange = latestTimestamp - earliestTimestamp;
@@ -292,17 +290,14 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     if (eventDetails && eventDetails.gameMinute) {
       console.log(`Using game minute from event details: ${eventDetails.gameMinute}`);
       currentGameMinute = eventDetails.gameMinute;
-    } else if (timestamps.length > 0 && timestamps[timestamps.length - 1].gameMinute) {
+    } else if (renderData.length > 0 && renderData[renderData.length - 1].gameMinute) {
       // As a fallback, use the game minute from the latest timestamp
-      currentGameMinute = timestamps[timestamps.length - 1].gameMinute || "";
+      currentGameMinute = renderData[renderData.length - 1].gameMinute || "";
     }
     
     console.log("Current game minute:", currentGameMinute);
     
-    // Set up a completely fixed example heartbeat pattern
-    // This ensures we always see something visually on the screen
-    // and ensures our drawing is working
-    
+    // Set up drawing parameters
     // Extremely simple approach - draw a clean heartbeat line
     ctx.lineWidth = 2;  // Thinner line as requested
     ctx.lineCap = 'round';
@@ -315,14 +310,8 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     const beatWidth = 40;  // Width in pixels for a single heartbeat
     // This will be determined by the timestamp range now, not game minutes
     
-    // Add some sections of normal heartbeat and some sections with no heartbeat (suspended)
-    // to demonstrate how it looks when the market is suspended
-    
-    // Use the actual market availability data from our API
-    console.log("Using real market data for heartbeat visualization");
-    
     // Create sample data if we don't have any real data yet
-    if (timestamps.length === 0) {
+    if (renderData.length === 0) {
       console.log("No data available, creating sample data for visualization");
       
       // Create a series of timestamps over the last 10 minutes to show something
@@ -339,15 +328,15 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
       
       // Use our sample data instead
       console.log(`Created ${sampleData.length} sample data points`);
-      timestamps = sampleData;
+      renderData.push(...sampleData);
     }
     
     // Track the current market status to detect changes
     let currentlyAvailable = true; // Default status (will be updated with real data)
     
     // First check if we have a current availability status from the last data point
-    if (timestamps.length > 0) {
-      currentlyAvailable = timestamps[timestamps.length - 1].isAvailable;
+    if (renderData.length > 0) {
+      currentlyAvailable = renderData[renderData.length - 1].isAvailable;
     }
     
     // Calculate the number of heartbeats based on the time range
@@ -369,15 +358,15 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     const heartbeatPatternWidth = 40; // Width in pixels for a single heartbeat
     
     // Process actual data points to create a continuous line
-    if (timestamps.length > 1) {
-      for (let i = 0; i < timestamps.length; i++) {
-        const dataPoint = timestamps[i];
+    if (renderData.length > 1) {
+      for (let i = 0; i < renderData.length; i++) {
+        const dataPoint = renderData[i];
         
         // Calculate x position based on timestamp
         const x = Math.round((dataPoint.timestamp - earliestTimestamp) * pixelsPerMs);
         
         // If this is the first point or status changed, we need to handle it specially
-        if (i === 0 || dataPoint.isAvailable !== timestamps[i-1].isAvailable) {
+        if (i === 0 || dataPoint.isAvailable !== renderData[i-1].isAvailable) {
           // If not the first point, complete previous path before changing color
           if (i > 0) {
             ctx.lineTo(x, height / 2); // Draw straight line to the status change point
@@ -392,8 +381,8 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
         
         // For suspended markets (not available), just draw a straight line
         if (!dataPoint.isAvailable) {
-          if (i < timestamps.length - 1) {
-            const nextX = Math.round((timestamps[i+1].timestamp - earliestTimestamp) * pixelsPerMs);
+          if (i < renderData.length - 1) {
+            const nextX = Math.round((renderData[i+1].timestamp - earliestTimestamp) * pixelsPerMs);
             ctx.lineTo(nextX, height / 2);
           } else {
             ctx.lineTo(width, height / 2); // To the end if it's the last point
@@ -403,7 +392,7 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
         else {
           // Skip drawing heartbeats if points are too close together (prevents overcrowding)
           if (i > 0) {
-            const prevX = Math.round((timestamps[i-1].timestamp - earliestTimestamp) * pixelsPerMs);
+            const prevX = Math.round((renderData[i-1].timestamp - earliestTimestamp) * pixelsPerMs);
             const distance = x - prevX;
             
             // Only draw heartbeat pattern if there's enough space
