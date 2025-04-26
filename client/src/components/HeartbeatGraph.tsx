@@ -545,9 +545,12 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
                 </>
               )}
               <span>
-                {eventDetails?.homeTeam && eventDetails?.awayTeam
+                {eventDetails?.homeTeam && eventDetails?.awayTeam && 
+                 (eventDetails.homeTeam !== "Home" || eventDetails.awayTeam !== "Away")
                   ? `${eventDetails.homeTeam} vs ${eventDetails.awayTeam}`
-                  : eventDetails?.name || "Match Heartbeat"}
+                  : (eventDetails?.name && eventDetails.name !== "Home vs Away") 
+                    ? eventDetails.name 
+                    : "Match Heartbeat"}
               </span>
             </div>
             

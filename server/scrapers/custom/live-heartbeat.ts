@@ -1023,19 +1023,42 @@ async function processEvents(events: any[]): Promise<void> {
       }
     }
     
-    // Ensure team names are properly formatted
-    if (!homeTeam && !awayTeam) {
-      // If after all our extraction attempts we still don't have team names
-      // Set default placeholder values instead of empty strings
-      homeTeam = "Home";
-      awayTeam = "Away";
+    // Enhanced team name extraction from event name
+    // This is critical for showing the correct team names in the UI
+    if ((!homeTeam || !awayTeam) && eventName && eventName !== "Unknown Event") {
+      // Try to extract from the event name using common separators
+      const separators = [' vs ', ' v ', ' - ', '/'];
+      
+      for (const separator of separators) {
+        if (eventName.includes(separator)) {
+          const parts = eventName.split(separator);
+          if (parts.length === 2) {
+            homeTeam = parts[0].trim() || homeTeam || "Unknown";
+            awayTeam = parts[1].trim() || awayTeam || "Unknown";
+            console.log(`Extracted team names from event name using "${separator}": ${homeTeam} ${separator} ${awayTeam}`);
+            break;
+          }
+        }
+      }
     }
     
-    // Update event name based on final team names
-    if (homeTeam !== "Home" || awayTeam !== "Away") {
+    // Check again if we still don't have valid team names
+    // We want to avoid showing "Home vs Away" to the user
+    if ((!homeTeam || homeTeam === "Home" || homeTeam === "") && 
+        (!awayTeam || awayTeam === "Away" || awayTeam === "")) {
+      // Last resort: try to use event name directly
+      if (eventName && eventName !== "Unknown Event" && eventName !== "Home vs Away") {
+        console.log(`Using event name directly since team names could not be extracted: ${eventName}`);
+        // Don't set homeTeam/awayTeam as we'll use the full event name
+      } else {
+        // If we truly have no information, set a meaningful event name 
+        eventName = "Match Details Unavailable";
+        homeTeam = "";
+        awayTeam = "";
+      }
+    } else if (homeTeam && awayTeam && (homeTeam !== "Home" || awayTeam !== "Away")) {
+      // If we have proper team names, use them to form the event name
       eventName = `${homeTeam} vs ${awayTeam}`;
-    } else if (!eventName || eventName === "Unknown Event" || eventName === " vs ") {
-      eventName = "Unknown Event";
     }
     
     // Create event object with enhanced properties
