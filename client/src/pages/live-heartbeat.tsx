@@ -560,11 +560,13 @@ export default function LiveHeartbeat() {
                                 )}
                                 {event.gameMinute && (
                                   <Badge variant="secondary" className="text-[10px] h-5 ml-1">
-                                    {event.gameMinute === 'HT' || event.gameMinute?.toLowerCase() === 'ht' 
+                                    {event.gameMinute === 'HT' || (typeof event.gameMinute === 'string' && event.gameMinute.toLowerCase() === 'ht')
                                       ? 'HT' 
-                                      : !event.gameMinute.includes("'") 
+                                      : typeof event.gameMinute === 'string' && !event.gameMinute.includes("'")
                                         ? `${event.gameMinute}'` 
-                                        : event.gameMinute}
+                                        : typeof event.gameMinute === 'number'
+                                          ? `${event.gameMinute}'`
+                                          : event.gameMinute}
                                   </Badge>
                                 )}
                               </div>

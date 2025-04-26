@@ -1,0 +1,31 @@
+live-heartbeat.tsx:563 Uncaught TypeError: event.gameMinute?.toLowerCase is not a function
+    at live-heartbeat.tsx:563:85
+    at Array.map (<anonymous>)
+    at LiveHeartbeat (live-heartbeat.tsx:528:39)
+chunk-RPCDYKBN.js?v=48370eb9:14032 The above error occurred in the <LiveHeartbeat> component:
+
+    at LiveHeartbeat (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/pages/live-heartbeat.tsx?t=1745679915371:245:49)
+    at Route (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.…/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=48370eb9:323:16)
+    at Switch (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.…/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=48370eb9:379:17)
+    at Router
+    at BookmakerProvider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/contexts/BookmakerContext.tsx:23:37)
+    at Provider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.…unner/workspace/node_modules/.vite/deps/chunk-OXZDJRWN.js?v=48370eb9:38:15)
+    at TooltipProvider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.…rkspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=48370eb9:63:5)
+    at V (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.…e/runner/workspace/node_modules/.vite/deps/next-themes.js?v=48370eb9:44:25)
+    at J (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.…e/runner/workspace/node_modules/.vite/deps/next-themes.js?v=48370eb9:42:18)
+    at QueryClientProvider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.…rkspace/node_modules/.vite/deps/@tanstack_react-query.js?v=48370eb9:2805:3)
+    at App
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+chunk-RPCDYKBN.js?v=48370eb9:9129 Uncaught TypeError: event.gameMinute?.toLowerCase is not a function
+    at live-heartbeat.tsx:563:85
+    at Array.map (<anonymous>)
+    at LiveHeartbeat (live-heartbeat.tsx:528:39)
+use-websocket.tsx:143 WebSocket connection to 'wss://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/ws' failed: WebSocket is closed before the connection is established.
+use-websocket.tsx:76 WebSocket error: 
+Event {isTrusted: true, type: 'error', target: WebSocket, currentTarget: WebSocket, eventPhase: 2, …}
+use-websocket.tsx:51 WebSocket disconnected (code: 1006, clean: false)
+use-websocket.tsx:62 Attempting to reconnect (attempt 1) in 1000ms...
+use-websocket.tsx:66 Reconnecting now...
+﻿
