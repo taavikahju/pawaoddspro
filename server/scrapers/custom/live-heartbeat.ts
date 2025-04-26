@@ -665,15 +665,17 @@ async function processEvents(events: any[]): Promise<void> {
       if (event.totalMarketCount === 0) {
         isAvailable = false;
         marketStatus = 'SUSPENDED';
-        console.log(`Event ${event.id || event.eventId} is suspended because totalMarketCount=0`);
-        console.log(`EVENT SUSPENDED (totalMarketCount=0): ${JSON.stringify({
+        console.log(`🚨 EVENT SUSPENDED: ${event.id || event.eventId} (${event.name || 'Unknown'}) - totalMarketCount=0`);
+        
+        // Output detailed debug information
+        console.log(`EVENT SUSPENDED DETAILS: ${JSON.stringify({
           id: event.id || event.eventId,
           name: event.name || event.event,
           homeTeam: event.homeTeam || (event.name ? event.name.split(" vs ")[0] : "Unknown"),
           awayTeam: event.awayTeam || (event.name ? event.name.split(" vs ")[1] : "Unknown"),
           totalMarketCount: 0,
           suspended: true
-        })}`);
+        }, null, 2)}`);
       }
       // Then check other suspension indicators 
       else if (event.suspended === true) {
@@ -810,12 +812,22 @@ function updateMarketHistory(event: HeartbeatEvent): void {
   
   // Add the current timestamp with more detailed information
   const timestamp = Date.now();
+  const isAvailable = !!event.currentlyAvailable; // Double-bang to ensure it's always a boolean
+  
+  // Create detailed tracking data point
   history.timestamps.push({
     timestamp: timestamp,
-    isAvailable: event.currentlyAvailable === true, // Force to boolean type
-    marketStatus: event.marketAvailability, // Include the exact market status for better debugging
+    isAvailable: isAvailable, // Force to boolean type
+    marketStatus: event.marketAvailability || (isAvailable ? 'ACTIVE' : 'SUSPENDED'), // Include the exact market status for better debugging
     gameMinute: event.gameMinute || '1' // Include game minute in each timestamp
   });
+  
+  // Debug log for suspended events to ensure they're properly tracked
+  if (!isAvailable) {
+    console.log(`⚠️ TRACKING SUSPENDED MARKET EVENT ${event.id}: ${event.name}`);
+    console.log(`  - Market status: ${event.marketAvailability}`);
+    console.log(`  - Stored isAvailable=${isAvailable}`);
+  }
   
   // Log timestamp data for debugging when market is not available
   if (!event.currentlyAvailable) {

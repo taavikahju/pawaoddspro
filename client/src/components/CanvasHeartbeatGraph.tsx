@@ -176,9 +176,15 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
             // Ensure suspended status is properly set as boolean
             // The API might return isAvailable as a string or boolean, so we need to handle both cases
             const processedTimestamps = apiData.timestamps.map(point => {
-              // Convert to proper boolean (handling string 'true'/'false' and actual boolean values)
-              const isAvailable = point.isAvailable === true || point.isAvailable === 'true';
-              console.log(`Processing data point: original isAvailable=${point.isAvailable}, converted=${isAvailable}`);
+              // Force proper boolean values - EXPLICITLY check for false conditions first
+              const isAvailable = !(
+                point.isAvailable === false || 
+                point.isAvailable === 'false' ||
+                point.marketStatus === 'SUSPENDED'
+              );
+              
+              console.log(`Processing data point: original isAvailable=${point.isAvailable}, marketStatus=${point.marketStatus}, converted=${isAvailable}`);
+              
               return {
                 ...point,
                 isAvailable: isAvailable
@@ -411,19 +417,18 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
       // Now draw all the paths with proper colors
       console.log(`Drawing ${paths.length} separate paths based on market status changes`);
       
-      // Draw each path with its appropriate color
-      paths.forEach((path, index) => {
+      // First draw all available paths (green lines)
+      const availablePaths = paths.filter(path => path.available);
+      const suspendedPaths = paths.filter(path => !path.available);
+      
+      console.log(`Segregated paths: ${availablePaths.length} available, ${suspendedPaths.length} suspended`);
+      
+      // Draw normal green paths first (without effects)
+      ctx.shadowBlur = 0;
+      availablePaths.forEach((path, index) => {
         ctx.beginPath();
-        ctx.strokeStyle = path.available ? '#00ff00' : '#ff0000'; // Green or Red
-        ctx.lineWidth = path.available ? 2 : 6; // Much thicker for suspended
-        
-        // For suspended paths, add a glowing effect
-        if (!path.available) {
-          ctx.shadowColor = '#ff0000';
-          ctx.shadowBlur = 10;
-        } else {
-          ctx.shadowBlur = 0;
-        }
+        ctx.strokeStyle = '#00ff00'; // Green
+        ctx.lineWidth = 2;
         
         // Draw the path
         path.points.forEach((point, i) => {
@@ -435,9 +440,33 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
         });
         
         ctx.stroke();
-        
-        console.log(`Drew path ${index+1}/${paths.length} with ${path.points.length} points, available=${path.available}`);
       });
+      
+      // Then draw suspended paths on top with glow effect
+      suspendedPaths.forEach((path, index) => {
+        ctx.beginPath();
+        ctx.strokeStyle = '#ff0000'; // Red
+        ctx.lineWidth = 6; // Much thicker for suspended
+        
+        // Add strong glowing effect for suspended paths
+        ctx.shadowColor = '#ff0000';
+        ctx.shadowBlur = 15;
+        
+        // Draw the path
+        path.points.forEach((point, i) => {
+          if (i === 0) {
+            ctx.moveTo(point[0], point[1]);
+          } else {
+            ctx.lineTo(point[0], point[1]);
+          }
+        });
+        
+        ctx.stroke();
+        console.log(`Drew SUSPENDED path ${index+1}/${suspendedPaths.length} with ${path.points.length} points`);
+      });
+      
+      // Reset shadow effects
+      ctx.shadowBlur = 0;
       
       console.log("Heartbeat drawing completed successfully");
     } catch (error) {
