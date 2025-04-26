@@ -801,21 +801,22 @@ async function processEvents(events: any[]): Promise<void> {
       const existingEvent = heartbeatState.events.find(e => e.id === newEvent.id);
       
       if (existingEvent) {
-        // Event exists in both sets - update suspension state properly based on totalMarketCount
-        if (existingEvent.suspended && newEvent.currentlyAvailable) {
-          // The event was previously suspended but API now says it's available
-          // Check if it has markets available (totalMarketCount > 0)
-          if (newEvent.totalMarketCount && newEvent.totalMarketCount > 0) {
-            // Event has markets again, mark it as available
-            console.log(`🟢 MARKET RESUMED: Event ${newEvent.id} (${newEvent.name}) was suspended but now has ${newEvent.totalMarketCount} markets available. Marking as AVAILABLE.`);
-            newEvent.suspended = false;
-            newEvent.currentlyAvailable = true;
-          } else {
-            // No markets available, keep it as suspended
-            console.log(`DEBUG: Event ${newEvent.id} (${newEvent.name}) is marked available in API but has no markets. Keeping it as suspended.`);
-            newEvent.suspended = true;
-            newEvent.currentlyAvailable = false;
+        // COMPLETELY SIMPLIFIED: ONLY check totalMarketCount
+        // Don't look at any other flag
+        if (newEvent.totalMarketCount && newEvent.totalMarketCount > 0) {
+          // EVENT HAS MARKETS, ALWAYS MARK AS AVAILABLE
+          if (existingEvent.suspended) {
+            console.log(`🟢 MARKET RESUMED: Event ${newEvent.id} (${newEvent.name}) now has ${newEvent.totalMarketCount} markets available. FORCING AVAILABLE STATE.`);
           }
+          newEvent.suspended = false;
+          newEvent.currentlyAvailable = true;
+        } else {
+          // No markets, ALWAYS mark as suspended
+          if (!existingEvent.suspended) {
+            console.log(`🚨 MARKET SUSPENDED: Event ${newEvent.id} (${newEvent.name}) has no markets available. FORCING SUSPENDED STATE.`);
+          }
+          newEvent.suspended = true;
+          newEvent.currentlyAvailable = false;
         }
       }
       
