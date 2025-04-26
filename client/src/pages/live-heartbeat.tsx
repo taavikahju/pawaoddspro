@@ -1,7 +1,14 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Activity, Calendar, Map, Filter, History, Gauge } from 'lucide-react';
-import { RadialBarChart, RadialBar, ResponsiveContainer, PolarAngleAxis } from 'recharts';
+import { Activity, Calendar, Map, Filter, History } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import HeartbeatGraph from '../components/HeartbeatGraph';
+import Layout from '@/components/Layout';
+import ReactCountryFlag from 'react-country-flag';
 
 // Component for displaying uptime metrics in a modern gauge
 const UptimeGauge = ({ value, title }: { value: number, title: string }) => {
@@ -72,16 +79,6 @@ const UptimeGauge = ({ value, title }: { value: number, title: string }) => {
     </div>
   );
 };
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Separator } from '@/components/ui/separator';
-import HeartbeatGraph from '../components/HeartbeatGraph';
-import Layout from '@/components/Layout';
-import { queryClient } from '@/lib/queryClient';
-import ReactCountryFlag from 'react-country-flag';
 
 interface HeartbeatEvent {
   id: string;
@@ -108,51 +105,9 @@ export default function LiveHeartbeat() {
   // Define uptime statistics state
   const [uptimeStats, setUptimeStats] = useState({
     current: 0,
-    min: 0,
-    max: 0,
-    avg: 0,
     events: 0
   });
   
-  // Fetch heartbeat stats for the selected event
-  const { data: eventStatsData } = useQuery<{
-    success: boolean;
-    data: {
-      id: number;
-      timestamp: number;
-      time: string;
-      eventId: string;
-      isAvailable: boolean;
-    }[];
-  }>({
-    queryKey: ['/api/live-heartbeat/stats/event', selectedEventId],
-    enabled: !!selectedEventId,
-  });
-  
-  // Calculate uptime statistics from event stats data
-  useEffect(() => {
-    if (eventStatsData?.success && eventStatsData.data?.length > 0) {
-      const stats = eventStatsData.data;
-      const totalCount = stats.length;
-      const availableCount = stats.filter(stat => stat.isAvailable).length;
-      const uptime = totalCount > 0 ? (availableCount / totalCount) * 100 : 0;
-      
-      // Demo values for min/max/avg - in a real implementation, these would come from backend calculations
-      // across all filtered events based on country/tournament
-      const min = Math.max(uptime - 15, 0); // Demo value: current minus 15%, but not below 0
-      const max = Math.min(uptime + 10, 100); // Demo value: current plus 10%, but not above 100
-      const avg = (min + uptime + max) / 3; // Demo value: simple average of the three
-
-      setUptimeStats({
-        current: uptime,
-        min: min,
-        max: max,
-        avg: avg,
-        events: filteredEvents.length // Count of filtered events
-      });
-    }
-  }, [eventStatsData, selectedEventId, filteredEvents.length]);
-
   // Fetch live heartbeat data
   const { data: heartbeatData, isLoading: isLoadingLive, error: liveError, refetch: refetchLive } = useQuery<{
     events: HeartbeatEvent[];
@@ -194,6 +149,36 @@ export default function LiveHeartbeat() {
       return countryMatch && tournamentMatch;
     });
   }, [heartbeatData, historicalData, selectedCountry, selectedTournament, activeTab]);
+  
+  // Fetch heartbeat stats for the selected event
+  const { data: eventStatsData } = useQuery<{
+    success: boolean;
+    data: {
+      id: number;
+      timestamp: number;
+      time: string;
+      eventId: string;
+      isAvailable: boolean;
+    }[];
+  }>({
+    queryKey: ['/api/live-heartbeat/stats/event', selectedEventId],
+    enabled: !!selectedEventId,
+  });
+  
+  // Calculate uptime statistics from event stats data
+  useEffect(() => {
+    if (eventStatsData?.success && eventStatsData.data?.length > 0) {
+      const stats = eventStatsData.data;
+      const totalCount = stats.length;
+      const availableCount = stats.filter(stat => stat.isAvailable).length;
+      const uptime = totalCount > 0 ? (availableCount / totalCount) * 100 : 0;
+
+      setUptimeStats({
+        current: uptime,
+        events: filteredEvents.length // Count of filtered events
+      });
+    }
+  }, [eventStatsData, selectedEventId, filteredEvents.length]);
 
   // Format date to "DD MMM HH:MM" format 
   const formatDate = (dateString: string) => {
@@ -232,9 +217,9 @@ export default function LiveHeartbeat() {
     if (!heartbeatData?.tournaments) return [];
     if (selectedCountry === 'all') {
       // Combine all tournaments from all countries
-      return [...new Set(
-        Object.values(heartbeatData.tournaments).flat()
-      )].sort();
+      return Array.from(
+        new Set(Object.values(heartbeatData.tournaments).flat())
+      ).sort();
     }
     return heartbeatData.tournaments[selectedCountry] || [];
   }, [heartbeatData, selectedCountry]);
@@ -417,15 +402,14 @@ export default function LiveHeartbeat() {
                     </Select>
                   </div>
 
-                  {/* Clear filters button */}
                   <Button 
                     variant="outline" 
-                    size="sm" 
+                    size="sm"
+                    className="h-9 ml-auto"
                     onClick={() => {
                       setSelectedCountry('all');
                       setSelectedTournament('all');
                     }}
-                    className="gap-1"
                   >
                     Clear Filters
                   </Button>
@@ -433,19 +417,11 @@ export default function LiveHeartbeat() {
                 
                 {/* Uptime Statistics Gauge */}
                 <div className="mt-4 border rounded-lg p-3 bg-card/50">
-                  <div className="text-sm font-medium mb-2 text-center">Market Uptime Statistics</div>
-                  <div className="flex justify-center gap-6">
+                  <div className="text-sm font-medium mb-2 text-center">Market Uptime</div>
+                  <div className="flex justify-center">
                     <UptimeGauge 
-                      value={uptimeStats.min}
-                      title="Minimum" 
-                    />
-                    <UptimeGauge 
-                      value={uptimeStats.avg}
+                      value={uptimeStats.current}
                       title="Average" 
-                    />
-                    <UptimeGauge 
-                      value={uptimeStats.max}
-                      title="Maximum" 
                     />
                   </div>
                   <div className="text-xs text-center text-muted-foreground mt-2">
