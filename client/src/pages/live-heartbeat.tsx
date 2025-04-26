@@ -10,17 +10,17 @@ import HeartbeatGraph from '../components/HeartbeatGraph';
 import Layout from '@/components/Layout';
 import ReactCountryFlag from 'react-country-flag';
 
-// Component for displaying uptime metrics in a modern gauge
+// Component for displaying uptime metrics in a modern gauge that matches the screenshot
 const UptimeGauge = ({ value }: { value: number }) => {
-  // Calculate the angle for the needle based on the value (between -30 and 210 degrees)
-  const needleRotation = -30 + (value / 100) * 240;
+  // Calculate needle rotation angle (between -120 and 120 degrees)
+  const needleRotation = -120 + (value / 100) * 240;
   
   // Get color based on value
   const getColor = (val: number) => {
     if (val < 40) return '#ef4444'; // red
     if (val < 60) return '#f97316'; // orange
     if (val < 75) return '#eab308'; // yellow
-    return '#10b981'; // green
+    return '#16a34a'; // green
   };
   
   return (
@@ -29,46 +29,62 @@ const UptimeGauge = ({ value }: { value: number }) => {
         Average Uptime:
       </div>
       <div className="flex items-center">
-        <div className="relative w-[100px] h-[50px]">
-          <svg className="w-full h-full" viewBox="0 0 100 50">
-            {/* Gauge background - more like your picture */}
-            <defs>
-              <linearGradient id="redGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#ef4444" />
-                <stop offset="100%" stopColor="#f97316" />
-              </linearGradient>
-              <linearGradient id="yellowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#f97316" />
-                <stop offset="100%" stopColor="#eab308" />
-              </linearGradient>
-              <linearGradient id="greenGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#eab308" />
-                <stop offset="100%" stopColor="#10b981" />
-              </linearGradient>
-            </defs>
+        <div className="relative w-[120px] h-[60px]">
+          <svg className="w-full h-full" viewBox="0 0 120 60">
+            {/* Semicircular gauge background */}
+            <path 
+              d="M 60 60 A 50 50 0 0 1 10 60" 
+              fill="#ef4444" 
+              stroke="#333" 
+              strokeWidth="0.5"
+            />
+            <path 
+              d="M 60 60 A 50 50 0 0 1 35 15" 
+              fill="#f97316" 
+              stroke="#333" 
+              strokeWidth="0.5"
+            />
+            <path 
+              d="M 60 60 A 50 50 0 0 1 85 15" 
+              fill="#eab308" 
+              stroke="#333" 
+              strokeWidth="0.5"
+            />
+            <path 
+              d="M 60 60 A 50 50 0 0 1 110 60" 
+              fill="#16a34a" 
+              stroke="#333" 
+              strokeWidth="0.5"
+            />
             
-            {/* Gauge arc sections with gradients */}
-            <path d="M 50 50 A 40 40 0 0 1 12 32" fill="none" stroke="url(#redGradient)" strokeWidth="8" strokeLinecap="round" />
-            <path d="M 50 50 A 40 40 0 0 1 30 12" fill="none" stroke="url(#yellowGradient)" strokeWidth="8" strokeLinecap="round" />
-            <path d="M 50 50 A 40 40 0 0 1 88 32" fill="none" stroke="url(#greenGradient)" strokeWidth="8" strokeLinecap="round" />
-            
-            {/* Center white circle */}
-            <circle cx="50" cy="50" r="15" fill="white" stroke="#e2e8f0" strokeWidth="1" />
-            
-            {/* Ticks */}
-            <line x1="16" y1="38" x2="20" y2="42" stroke="#64748b" strokeWidth="1" />
-            <line x1="50" y1="10" x2="50" y2="15" stroke="#64748b" strokeWidth="1" />
-            <line x1="84" y1="38" x2="80" y2="42" stroke="#64748b" strokeWidth="1" />
+            {/* Center circle */}
+            <circle cx="60" cy="60" r="15" fill="#fff" stroke="#333" strokeWidth="0.5" />
             
             {/* Needle */}
-            <g transform={`rotate(${needleRotation}, 50, 50)`}>
-              <line x1="50" y1="50" x2="50" y2="15" stroke="#000" strokeWidth="2" strokeLinecap="round" />
-              <circle cx="50" cy="50" r="4" fill="#000" />
+            <g transform={`rotate(${needleRotation}, 60, 60)`}>
+              <path 
+                d="M 60 60 L 60 20 C 62 23, 58 23, 60 20 Z" 
+                fill="#000" 
+                stroke="#000" 
+                strokeWidth="1"
+              />
+              <circle cx="60" cy="60" r="3" fill="#000" />
+            </g>
+            
+            {/* Gauge ticks */}
+            <g stroke="#333" strokeWidth="1">
+              <line x1="10" y1="60" x2="15" y2="60" />
+              <line x1="23" y1="40" x2="28" y2="43" />
+              <line x1="47" y1="18" x2="49" y2="23" />
+              <line x1="60" y1="10" x2="60" y2="15" />
+              <line x1="73" y1="18" x2="71" y2="23" />
+              <line x1="97" y1="40" x2="92" y2="43" />
+              <line x1="110" y1="60" x2="105" y2="60" />
             </g>
           </svg>
         </div>
         <div className="ml-2 text-sm font-medium" 
-              style={{ color: getColor(value) }}>
+          style={{ color: getColor(value) }}>
           {value.toFixed(1)}%
         </div>
       </div>
