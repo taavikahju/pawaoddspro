@@ -1401,7 +1401,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get heartbeat status
   app.get('/api/live-heartbeat/status', async (req, res) => {
     try {
-      const status = getHeartbeatStatus();
+      // Get the status directly from the heartbeat tracker
+      let status = getHeartbeatStatus();
+      
+      // CRITICAL FIX: Ensure all events have BOTH currentlyAvailable and suspended properties 
+      // correctly set for consistency between backend and frontend
+      status.events = status.events.map(event => {
+        // If the event is marked as suspended in either property, ensure both are consistent
+        if (event.suspended === true || event.currentlyAvailable === false) {
+          return {
+            ...event,
+            suspended: true,
+            currentlyAvailable: false
+          };
+        }
+        // Otherwise make sure it's properly marked as available
+        return {
+          ...event,
+          suspended: false,
+          currentlyAvailable: true
+        };
+      });
       
       // Debug logging: Check what happens to suspended events in the API response
       let suspendedCount = 0;
@@ -1429,6 +1449,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       });
       
+      // Log the entire events array to confirm suspended events are included
+      console.log(`DEBUG: Complete events list being sent to frontend: ${JSON.stringify(
+        status.events.map(e => ({
+          id: e.id,
+          name: e.name, 
+          suspended: e.suspended,
+          currentlyAvailable: e.currentlyAvailable
+        }))
+      )}`);
+      
+      // Send the status response
       res.json(status);
     } catch (error) {
       console.error('Error getting heartbeat status:', error);

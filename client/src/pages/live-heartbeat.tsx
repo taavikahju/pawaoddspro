@@ -155,6 +155,26 @@ export default function LiveHeartbeat() {
   }>({
     queryKey: ['/api/live-heartbeat/status'],
     refetchInterval: activeTab === 'live' ? 30000 : false, // Only refresh when on live tab
+    onSuccess: (data) => {
+      if (data?.events) {
+        // Normalize data on frontend to ensure suspended events are properly marked
+        const suspendedCount = data.events.filter(e => !e.currentlyAvailable || e.suspended).length;
+        console.log(`FRONTEND: Received ${data.events.length} events from API, ${suspendedCount} are suspended`);
+        
+        // Log any suspended events for debugging
+        if (suspendedCount > 0) {
+          const suspendedEvents = data.events.filter(e => !e.currentlyAvailable || e.suspended);
+          console.log(`FRONTEND: Found suspended events:`, 
+            suspendedEvents.map(e => ({
+              id: e.id, 
+              name: e.name,
+              suspended: e.suspended,
+              currentlyAvailable: e.currentlyAvailable
+            }))
+          );
+        }
+      }
+    },
   });
   
   // Fetch historical events data
@@ -568,16 +588,15 @@ export default function LiveHeartbeat() {
                       {filteredEvents.map(event => (
                         <div
                           key={event.id}
-                          className={`p-2 cursor-pointer hover:bg-accent ${
+                          className={`p-2 cursor-pointer ${
+                            // Priority 1: Selected event
                             selectedEventId === event.id
-                              ? 'bg-accent'
-                              : ''
-                          } ${
-                            // Show red background for any suspended events - live or historical
-                            (activeTab === 'live' && event.currentlyAvailable === false) || 
-                            event.suspended === true
-                              ? 'bg-red-500/20 border-l-4 border-red-500 dark:bg-red-900/30'
-                              : ''
+                              ? 'bg-accent hover:bg-accent/80'
+                              // Priority 2: Suspended events (both live and historical)
+                              : (!event.currentlyAvailable || event.suspended === true)
+                                ? 'bg-red-500/20 border-l-4 border-red-500 dark:bg-red-900/30 hover:bg-red-500/30'
+                                // Priority 3: Normal events
+                                : 'hover:bg-accent'
                           }`}
                           onClick={() => {
                             console.log(`Selecting event:`, {

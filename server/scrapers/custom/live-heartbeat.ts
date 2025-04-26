@@ -1021,14 +1021,32 @@ function cleanupOldData(): void {
   const now = Date.now();
   const oneDay = 24 * 60 * 60 * 1000; // 1 day in milliseconds
   
-  // For each history, remove points older than 24 hours
-  for (const history of marketHistories) {
-    history.timestamps = history.timestamps.filter(t => now - t.timestamp < oneDay);
+  // Before cleaning up, make a list of all suspended events to preserve them
+  const suspendedEventIds = heartbeatState.events
+    .filter(e => !e.currentlyAvailable || e.suspended)
+    .map(e => e.id);
+  
+  if (suspendedEventIds.length > 0) {
+    console.log(`CLEANUP: Found ${suspendedEventIds.length} suspended events to preserve:`);
+    console.log(suspendedEventIds);
   }
   
-  // Remove histories with no data points
+  // For each history, remove points older than 24 hours
+  for (const history of marketHistories) {
+    // Keep more history for suspended events (3 days instead of 1)
+    const keepDuration = suspendedEventIds.includes(history.eventId) 
+      ? 3 * oneDay  // 3 days for suspended events
+      : oneDay;     // 1 day for normal events
+    
+    history.timestamps = history.timestamps.filter(t => now - t.timestamp < keepDuration);
+  }
+  
+  // Remove histories with no data points, but ALWAYS keep suspended event histories
   const initialCount = marketHistories.length;
-  const filteredHistories = marketHistories.filter(h => h.timestamps.length > 0);
+  const filteredHistories = marketHistories.filter(h => {
+    // Keep if it has timestamps OR is a suspended event
+    return h.timestamps.length > 0 || suspendedEventIds.includes(h.eventId);
+  });
   
   if (filteredHistories.length < initialCount) {
     console.log(`Removed ${initialCount - filteredHistories.length} empty histories`);
