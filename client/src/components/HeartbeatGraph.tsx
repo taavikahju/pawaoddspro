@@ -181,7 +181,7 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     // and ensures our drawing is working
     
     // Extremely simple approach - draw a clean heartbeat line
-    ctx.lineWidth = 5;  // Thick line for visibility
+    ctx.lineWidth = 2;  // Thinner line as requested
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     
@@ -203,14 +203,14 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
       // Draw baseline up to this beat
       ctx.lineTo(x, height / 2);
       
-      // Draw heartbeat pattern (simple ECG-like)
-      ctx.lineTo(x + 5, height / 2 - 5);      // Small P wave
+      // Draw heartbeat pattern (simple ECG-like) with smaller spikes
+      ctx.lineTo(x + 5, height / 2 - 3);      // Small P wave (smaller)
       ctx.lineTo(x + 7, height / 2);          // Back to baseline
-      ctx.lineTo(x + 9, height / 2 + 5);      // Q dip
-      ctx.lineTo(x + 10, height / 2 - 50);    // R spike (tall!)
-      ctx.lineTo(x + 12, height / 2 + 10);    // S dip
+      ctx.lineTo(x + 9, height / 2 + 3);      // Q dip (smaller)
+      ctx.lineTo(x + 10, height / 2 - 25);    // R spike (reduced height)
+      ctx.lineTo(x + 12, height / 2 + 5);     // S dip (smaller)
       ctx.lineTo(x + 14, height / 2);         // Back to baseline
-      ctx.lineTo(x + 16, height / 2 - 10);    // T wave
+      ctx.lineTo(x + 16, height / 2 - 6);     // T wave (smaller)
       ctx.lineTo(x + 18, height / 2);         // Back to baseline
     }
     
