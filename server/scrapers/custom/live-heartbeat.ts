@@ -501,6 +501,41 @@ function updateMarketHistory(event: HeartbeatEvent): void {
 }
 
 // Get market history for an event
+export function getAllEventHistories(): any[] {
+  // Return an array of event details with their histories
+  const events = heartbeatState.events.map(event => {
+    const history = marketHistories.find(h => h.eventId === event.id);
+    if (history) {
+      return {
+        ...event,
+        recordCount: history.timestamps.length,
+        lastUpdate: history.timestamps[history.timestamps.length - 1]?.timestamp || Date.now()
+      };
+    }
+    return null;
+  }).filter(Boolean);
+  
+  // Add any historical events that are not in the current active events
+  marketHistories.forEach(history => {
+    const exists = events.some(e => e.id === history.eventId);
+    if (!exists && history.timestamps.length > 0) {
+      // This is a historical event not in current active set
+      // Get the last event data if we have it
+      const basicEventData = {
+        id: history.eventId,
+        name: `Historical Event ${history.eventId}`,
+        country: "Unknown",
+        tournament: "Unknown",
+        recordCount: history.timestamps.length,
+        lastUpdate: history.timestamps[history.timestamps.length - 1]?.timestamp || Date.now()
+      };
+      events.push(basicEventData);
+    }
+  });
+  
+  return events;
+}
+
 export function getEventMarketHistory(eventId: string): { 
   timestamps: { timestamp: number; isAvailable: boolean; gameMinute?: string }[],
   uptimePercentage: number,

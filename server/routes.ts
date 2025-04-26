@@ -4,7 +4,7 @@ import { storage } from "./storage";
 import { z } from "zod";
 import { setupScrapers, runAllScrapers, scraperEvents, SCRAPER_EVENTS } from "./scrapers/scheduler";
 import { startLiveScraper, stopLiveScraper, getLiveScraperStatus, liveScraperEvents, LIVE_SCRAPER_EVENTS } from "./scrapers/custom/live-scraper-adapter";
-import { startHeartbeatTracker, stopHeartbeatTracker, getHeartbeatStatus, getEventMarketHistory, heartbeatEvents, HEARTBEAT_EVENTS } from "./scrapers/custom/live-heartbeat";
+import { startHeartbeatTracker, stopHeartbeatTracker, getHeartbeatStatus, getEventMarketHistory, heartbeatEvents, HEARTBEAT_EVENTS, getAllEventHistories } from "./scrapers/custom/live-heartbeat";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
