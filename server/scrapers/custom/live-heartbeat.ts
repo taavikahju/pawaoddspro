@@ -95,7 +95,7 @@ export function startHeartbeatTracker(url: string, storage: IStorage): void {
         message: `Heartbeat tracker error: ${(error as Error).message}`,
       });
     }
-  }, 10000); // Run every 10 seconds
+  }, 20000); // Run every 20 seconds
 
   // Save data to persistent storage periodically
   const saveInterval = setInterval(() => {
@@ -164,7 +164,7 @@ async function runHeartbeatTracker(url: string, storage: IStorage): Promise<void
 // Generate mock events for testing when API is unavailable
 function generateMockEvents(): any[] {
   // Add a list of realistic soccer/football events
-  const teams = {
+  const teams: Record<string, Array<{team1: string, team2: string}>> = {
     'England': [
       { team1: 'Manchester United', team2: 'Liverpool' },
       { team1: 'Arsenal', team2: 'Chelsea' },
@@ -192,7 +192,7 @@ function generateMockEvents(): any[] {
     ]
   };
   
-  const tournaments = {
+  const tournaments: Record<string, string> = {
     'England': 'Premier League',
     'Spain': 'La Liga',
     'Germany': 'Bundesliga',
@@ -209,11 +209,11 @@ function generateMockEvents(): any[] {
   
   for (let i = 0; i < numEvents; i++) {
     // Pick a random country
-    const countries = Object.keys(teams);
-    const country = countries[Math.floor(Math.random() * countries.length)];
+    const countryKeys = Object.keys(teams);
+    const countryKey = countryKeys[Math.floor(Math.random() * countryKeys.length)];
     
-    // Pick a random match from that country
-    const countryMatches = teams[country];
+    // Pick a random match from that country (with proper type assertion)
+    const countryMatches = teams[countryKey as keyof typeof teams];
     const match = countryMatches[Math.floor(Math.random() * countryMatches.length)];
     
     // Generate a unique ID
@@ -245,12 +245,15 @@ function generateMockEvents(): any[] {
     const priceX = { name: 'X', suspended: priceXSuspended, price: (Math.random() * 3 + 2).toFixed(2) };
     const price2 = { name: '2', suspended: price2Suspended, price: (Math.random() * 3 + 1.5).toFixed(2) };
     
+    // Get tournament name with proper type assertion
+    const tournamentName = tournaments[countryKey as keyof typeof tournaments];
+    
     mockEvents.push({
       id: id.toString(),
       name: `${match.team1} vs ${match.team2}`,
-      category: { name: country },
-      competition: { name: tournaments[country] },
-      region: { name: country },
+      category: { name: countryKey },
+      competition: { name: tournamentName },
+      region: { name: countryKey },
       status: 'LIVE',
       isLive: true,
       startTime: new Date(Date.now() - (gameMinute * 60 * 1000)).toISOString(), // Start time is gameMinute minutes ago
@@ -340,8 +343,8 @@ async function scrapePagedEvents(apiUrl: string): Promise<any[]> {
     // If no data was found, but the request succeeded
     console.log('API request succeeded but no events found in the response.');
     return [];
-  } catch (error) {
-    console.error('Error scraping page of BetPawa Ghana events:', error.message);
+  } catch (error: any) {
+    console.error('Error scraping page of BetPawa Ghana events:', error.message || String(error));
     
     // Only generate mock data if we can't connect to the API
     console.log('Switching to mock event generation since API connection is failing');
@@ -446,12 +449,14 @@ async function processEvents(events: any[]): Promise<void> {
   });
 
   // Update countries and tournaments
-  const countries = [...new Set(processedEvents.map(event => event.country))];
+  const countriesSet = new Set(processedEvents.map(event => event.country));
+  const countries = Array.from(countriesSet);
   const tournaments: Record<string, string[]> = {};
   
   countries.forEach(country => {
     const countryEvents = processedEvents.filter(event => event.country === country);
-    tournaments[country] = [...new Set(countryEvents.map(event => event.tournament))];
+    const tournamentSet = new Set(countryEvents.map(event => event.tournament));
+    tournaments[country] = Array.from(tournamentSet);
   });
 
   // Update state
