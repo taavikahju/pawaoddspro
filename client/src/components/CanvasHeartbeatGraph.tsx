@@ -602,16 +602,69 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
     ctx.stroke();
   }
   
-  // Function to draw minute labels
+  // Function to draw time labels based on actual timestamps
   function drawMinuteLabels(ctx: CanvasRenderingContext2D, width: number, height: number) {
+    // Only draw if we have data
+    if (!data || data.length === 0) return;
+    
+    // Sort timestamps
+    const timestamps = [...data].sort((a, b) => a.timestamp - b.timestamp);
+    const firstTimestamp = timestamps[0].timestamp;
+    const lastTimestamp = timestamps[timestamps.length - 1].timestamp;
+    const timeRange = lastTimestamp - firstTimestamp;
+    
+    // Function to convert a timestamp to x position on canvas
+    const getXPosition = (timestamp: number) => {
+      return Math.max(0, Math.min(width, 
+        ((timestamp - firstTimestamp) / timeRange) * width
+      ));
+    };
+    
+    // Calculate appropriate time increments based on the total time range
+    // If total range is > 60 minutes, use 10-minute increments
+    // If total range is > 180 minutes, use 30-minute increments
+    const totalMinutesRange = timeRange / (1000 * 60);
+    let minuteIncrement = 5; // Default to 5 minutes
+    
+    if (totalMinutesRange > 180) {
+      minuteIncrement = 30;
+    } else if (totalMinutesRange > 60) {
+      minuteIncrement = 10;
+    }
+    
+    console.log(`Total time range: ${totalMinutesRange.toFixed(1)} minutes, using ${minuteIncrement}-minute increments`);
+    
+    // Create time increments based on the actual time range
+    const startTime = new Date(firstTimestamp);
+    startTime.setMinutes(Math.floor(startTime.getMinutes() / minuteIncrement) * minuteIncrement); // Round down to nearest interval
+    startTime.setSeconds(0);
+    startTime.setMilliseconds(0);
+    
+    const endTime = new Date(lastTimestamp);
+    
     ctx.font = '10px Arial';
     ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
     ctx.textAlign = 'center';
     
-    // Draw minute labels every 15 minutes (up to 120 minutes)
-    for (let minute = 0; minute <= 120; minute += 15) {
-      const x = (minute / 120) * width;
-      ctx.fillText(`${minute}'`, x, height - 5);
+    // Generate labels at calculated intervals
+    const currentTime = new Date(startTime);
+    while (currentTime <= endTime) {
+      const timestamp = currentTime.getTime();
+      const x = getXPosition(timestamp);
+      
+      // Format the time as HH:MM
+      const timeStr = currentTime.toTimeString().substring(0, 5);
+      ctx.fillText(timeStr, x, height - 5);
+      
+      // Draw a vertical line for the time marker
+      ctx.beginPath();
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+      ctx.moveTo(x, height - 15);
+      ctx.lineTo(x, 0);
+      ctx.stroke();
+      
+      // Increment by the calculated increment
+      currentTime.setMinutes(currentTime.getMinutes() + minuteIncrement);
     }
   }
   
