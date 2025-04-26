@@ -117,6 +117,12 @@ async function processEvents(events) {
         prices[price.name] = price.price;
       }
 
+      // Check if all prices are 0.0 (option 2 for suspended)
+      const home_odds = prices["1"] ? parseFloat(prices["1"]) : 0.0;
+      const draw_odds = prices["X"] ? parseFloat(prices["X"]) : 0.0;
+      const away_odds = prices["2"] ? parseFloat(prices["2"]) : 0.0;
+      const isSuspended = home_odds === 0.0 && draw_odds === 0.0 && away_odds === 0.0;
+
       // Create an event object
       processedEvents.push({
         eventId: widget.id,
@@ -124,13 +130,13 @@ async function processEvents(events) {
         tournament: event.competition?.name,
         event: event.name,
         market: market.marketType?.name,
-        home_odds: prices["1"] ? prices["1"].toString() : "",
-        draw_odds: prices["X"] ? prices["X"].toString() : "",
-        away_odds: prices["2"] ? prices["2"].toString() : "",
+        home_odds: prices["1"] ? prices["1"].toString() : "0.0",
+        draw_odds: prices["X"] ? prices["X"].toString() : "0.0",
+        away_odds: prices["2"] ? prices["2"].toString() : "0.0",
         start_time: event.startTime,
         // Add extra fields needed for heartbeat
-        gameMinute: event.scoreboard?.display?.minute,
-        suspended: market.suspended === true,
+        gameMinute: event.scoreboard?.display?.minute || "1",
+        suspended: isSuspended, // Use the all-0.0 check for suspension status
         homeTeam: event.name.split(" vs ")[0],
         awayTeam: event.name.split(" vs ")[1]
       });
