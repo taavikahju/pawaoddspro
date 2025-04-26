@@ -1013,8 +1013,50 @@ async function processEvents(events: any[]): Promise<void> {
         console.log(`Checking market suspension for event ${eventId} - No prices found in market`);
       }
       
+      // For these events, we'll do detailed examination of the market data structure
+      // to understand exactly what's being returned from the API
+      if (eventId === '26987202' || eventId === '26968026' || eventId === '27008584') {
+        console.log(`DETAILED EVENT INSPECTION FOR ${eventId}:`);
+        
+        // Log the entire market structure
+        console.log(`FULL MARKET STRUCTURE:`, JSON.stringify(market1X2, null, 2));
+        
+        // Check for suspended flag directly on the market
+        console.log(`Market suspended flag:`, market1X2.suspended);
+        console.log(`Market status:`, market1X2.status);
+        
+        // Check if we're getting price data, and what format it's in
+        if (market1X2.prices && market1X2.prices.length > 0) {
+          console.log(`Has ${market1X2.prices.length} prices`);
+          market1X2.prices.forEach((p: any, index: number) => {
+            console.log(`Price ${index}:`, JSON.stringify(p, null, 2));
+          });
+        } else if (market1X2.outcomes && market1X2.outcomes.length > 0) {
+          console.log(`Has ${market1X2.outcomes.length} outcomes`);
+          market1X2.outcomes.forEach((o: any, index: number) => {
+            console.log(`Outcome ${index}:`, JSON.stringify(o, null, 2));
+          });
+        } else if (market1X2.selections && market1X2.selections.length > 0) {
+          console.log(`Has ${market1X2.selections.length} selections`);
+          market1X2.selections.forEach((s: any, index: number) => {
+            console.log(`Selection ${index}:`, JSON.stringify(s, null, 2));
+          });
+        } else {
+          console.log(`No prices, outcomes, or selections found in market`);
+          console.log(`Market keys:`, Object.keys(market1X2));
+          
+          // Look deeper for nested data structures that might have the prices
+          for (const key of Object.keys(market1X2)) {
+            const value = market1X2[key];
+            if (value && typeof value === 'object') {
+              console.log(`Contents of market1X2.${key}:`, JSON.stringify(value, null, 2));
+            }
+          }
+        }
+      }
+      
       // First check overall market suspension
-      if (market1X2.suspended === false && market1X2.status !== 'SUSPENDED') {
+      else if (market1X2.suspended === false && market1X2.status !== 'SUSPENDED') {
         // Initially consider available if the overall market isn't suspended
         isMarketAvailable = true;
       }
