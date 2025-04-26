@@ -502,42 +502,65 @@ function updateMarketHistory(event: HeartbeatEvent): void {
 
 // Get market history for an event
 export function getAllEventHistories(): any[] {
-  // Return an array of event details with their histories
-  const events = heartbeatState.events.map(event => {
-    const history = marketHistories.find(h => h.eventId === event.id);
-    if (history) {
-      return {
-        ...event,
-        recordCount: history.timestamps.length,
-        lastUpdate: history.timestamps[history.timestamps.length - 1]?.timestamp || Date.now()
-      };
-    }
-    return null;
-  }).filter((e): e is NonNullable<typeof e> => e !== null);
+  // Only return historical events that are not in the current active events
+  const historicalEvents: any[] = [];
   
   // Add any historical events that are not in the current active events
   marketHistories.forEach(history => {
-    const exists = events.some(e => e.id === history.eventId);
-    if (!exists && history.timestamps.length > 0) {
+    // Skip events that are currently active
+    const isActive = heartbeatState.events.some(e => e.id === history.eventId);
+    
+    // Only include events with enough data (at least 20 data points)
+    if (!isActive && history.timestamps.length >= 20) {
       // This is a historical event not in current active set
-      // Get the last event data if we have it
+      // Find the team names if available in the timestamps data
+      let homeTeam = '';
+      let awayTeam = '';
+      
+      // Try to extract team names from event data if possible
+      const eventId = history.eventId;
+      if (eventId.includes('vs')) {
+        const nameParts = eventId.split('vs');
+        homeTeam = nameParts[0].trim();
+        awayTeam = nameParts[1].trim();
+      }
+      
+      // Create a proper name from the event ID
+      let eventName = history.eventId;
+      if (eventId.includes('-')) {
+        eventName = eventId.replace(/-/g, ' vs ');
+      }
+      
+      // Get the first timestamp to use as the start time
+      const firstTimestamp = history.timestamps[0]?.timestamp || Date.now();
+      const lastTimestamp = history.timestamps[history.timestamps.length - 1]?.timestamp || Date.now();
+      
+      // Calculate game duration in minutes
+      const durationMs = lastTimestamp - firstTimestamp;
+      const durationMinutes = Math.floor(durationMs / (1000 * 60));
+      
+      // Construct the historical event object
       const basicEventData = {
         id: history.eventId,
-        name: `Historical Event ${history.eventId}`,
-        country: "Unknown",
-        tournament: "Unknown",
+        name: eventName,
+        country: "Historical",
+        tournament: `Game duration: ${durationMinutes} min`,
         isInPlay: false,
-        startTime: new Date().toISOString(),
+        startTime: new Date(firstTimestamp).toISOString(),
         currentlyAvailable: false,
-        marketAvailability: "UNKNOWN",
+        marketAvailability: "COMPLETED",
         recordCount: history.timestamps.length,
-        lastUpdate: history.timestamps[history.timestamps.length - 1]?.timestamp || Date.now()
+        lastUpdate: lastTimestamp,
+        homeTeam,
+        awayTeam,
+        gameMinute: 'FT'  // Full Time
       };
-      events.push(basicEventData);
+      historicalEvents.push(basicEventData);
     }
   });
   
-  return events;
+  // Sort by lastUpdate, most recent first
+  return historicalEvents.sort((a, b) => b.lastUpdate - a.lastUpdate);
 }
 
 export function getEventMarketHistory(eventId: string): { 
