@@ -930,10 +930,25 @@ async function processEvents(events: any[]): Promise<void> {
       }
     }
     
+    // Ensure team names are properly formatted
+    if (!homeTeam && !awayTeam) {
+      // If after all our extraction attempts we still don't have team names
+      // Set default placeholder values instead of empty strings
+      homeTeam = "Home";
+      awayTeam = "Away";
+    }
+    
+    // Update event name based on final team names
+    if (homeTeam !== "Home" || awayTeam !== "Away") {
+      eventName = `${homeTeam} vs ${awayTeam}`;
+    } else if (!eventName || eventName === "Unknown Event" || eventName === " vs ") {
+      eventName = "Unknown Event";
+    }
+    
     // Create event object with enhanced properties
     const heartbeatEvent: HeartbeatEvent = {
       id: eventId,
-      name: eventName || (homeTeam && awayTeam ? `${homeTeam} vs ${awayTeam}` : 'Unknown Event'),
+      name: eventName,
       country,
       tournament,
       isInPlay: event.status === 'LIVE' || event.isLive || event.inPlay === true || false,
@@ -992,9 +1007,16 @@ function updateMarketHistory(event: HeartbeatEvent): void {
       eventId,
       timestamps: []
     };
-    const displayName = event.homeTeam && event.awayTeam
-      ? `${event.homeTeam} vs ${event.awayTeam}`
-      : event.name;
+    
+    // Create a proper display name for the event
+    let displayName = event.name;
+    
+    // Ensure we have valid team names (not empty strings and not placeholder values)
+    if (event.homeTeam && event.awayTeam && 
+        event.homeTeam !== "Home" && event.awayTeam !== "Away") {
+      displayName = `${event.homeTeam} vs ${event.awayTeam}`;
+    }
+    
     console.log(`New live event tracking started: ${displayName}, ID: ${eventId}, Country: ${event.country}, Tournament: ${event.tournament}`);
   }
   
@@ -1016,9 +1038,15 @@ function updateMarketHistory(event: HeartbeatEvent): void {
     
     // Log market status changes (for visibility and debugging)
     if (lastRecord && lastRecord.isAvailable !== isAvailable) {
-      const displayName = event.homeTeam && event.awayTeam 
-        ? `${event.homeTeam} vs ${event.awayTeam}` 
-        : event.name;
+      // Create a proper display name for the event
+      let displayName = event.name;
+      
+      // Ensure we have valid team names (not placeholder values)
+      if (event.homeTeam && event.awayTeam && 
+          event.homeTeam !== "Home" && event.awayTeam !== "Away") {
+        displayName = `${event.homeTeam} vs ${event.awayTeam}`;
+      }
+      
       console.log(`Market status changed for ${displayName} (ID: ${eventId}): ${isAvailable ? 'AVAILABLE' : 'SUSPENDED'}`);
     }
     
@@ -1047,27 +1075,51 @@ export function getHeartbeatStatus(): HeartbeatState {
       let homeTeam = event.homeTeam || "";
       let awayTeam = event.awayTeam || "";
       
-      // If we don't have team names but we have a full event name
-      if ((!homeTeam || !awayTeam) && event.name && event.name.includes(" vs ")) {
+      // Try to extract team names from various sources
+      // 1. First, use the existing team names if available
+      if (event.homeTeam && event.awayTeam) {
+        homeTeam = event.homeTeam;
+        awayTeam = event.awayTeam;
+      }
+      // 2. If we don't have team names but have an event name with "vs"
+      else if (event.name && event.name.includes(" vs ")) {
         const parts = event.name.split(" vs ");
         if (parts.length === 2) {
-          homeTeam = parts[0].trim();
-          awayTeam = parts[1].trim();
+          homeTeam = parts[0].trim() || homeTeam;
+          awayTeam = parts[1].trim() || awayTeam;
+        }
+      }
+      // 3. Try alternative separators in event name
+      else if (event.name) {
+        const separators = [' v ', ' - ', '/'];
+        for (const separator of separators) {
+          if (event.name.includes(separator)) {
+            const parts = event.name.split(separator);
+            if (parts.length === 2) {
+              homeTeam = parts[0].trim() || homeTeam;
+              awayTeam = parts[1].trim() || awayTeam;
+              break;
+            }
+          }
         }
       }
       
-      // Update the name if we have team names
-      if (homeTeam && awayTeam) {
+      // Ensure we have valid team names (not empty strings)
+      homeTeam = homeTeam || "Home";
+      awayTeam = awayTeam || "Away";
+      
+      // Update the display name based on what we've found
+      if (homeTeam !== "Home" || awayTeam !== "Away") {
         displayName = `${homeTeam} vs ${awayTeam}`;
-      } else if (event.name && event.name !== " vs ") {
+      } else if (event.name && event.name.trim() !== "" && event.name !== " vs ") {
         displayName = event.name;
       }
       
       return {
         ...event,
         name: displayName,
-        homeTeam: homeTeam || event.homeTeam,
-        awayTeam: awayTeam || event.awayTeam,
+        homeTeam,
+        awayTeam,
         recordCount: marketHistories[event.id]?.timestamps.length || 0
       };
     })
