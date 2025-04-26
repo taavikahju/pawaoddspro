@@ -173,9 +173,15 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
               console.log(`DEBUG - Found suspended data points:`, suspendedPoints.slice(0, 3));
             }
             
+            // Ensure suspended status is properly set as boolean false and not string 'false'
+            const processedTimestamps = apiData.timestamps.map(point => ({
+              ...point,
+              isAvailable: point.isAvailable === true || point.isAvailable === 'true'
+            }));
+            
             // Set the data points directly from the API
-            console.log("Using real data points without forced suspensions");
-            setData(apiData.timestamps);
+            console.log("Using real data points with processed availability status");
+            setData(processedTimestamps);
             
             // If we got data, check if there's game minute information
             if (apiData.timestamps.length > 0 && apiData.timestamps[apiData.timestamps.length - 1].gameMinute) {
