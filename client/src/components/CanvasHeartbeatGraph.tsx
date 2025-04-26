@@ -277,10 +277,12 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
         }
         
         if (!marketAvailable) {
-          // For suspended markets, draw a flat line
+          // For suspended markets, draw a flat red line with increased width for visibility
+          ctx.lineWidth = 4; // Make the line thicker for suspended state
           const endX = Math.min(x + beatWidth, currentGameMinute * pixelsPerMinute);
           ctx.lineTo(endX, height / 2); // Flat line for suspended
         } else {
+          ctx.lineWidth = 2; // Normal width for available state
           // Regular heartbeat pattern for available markets
           // Draw baseline up to this beat
           ctx.lineTo(x, height / 2);

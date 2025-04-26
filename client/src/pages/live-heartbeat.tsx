@@ -213,6 +213,18 @@ export default function LiveHeartbeat() {
           if (!response.ok) return null;
           
           const data = await response.json();
+          
+          // Calculate uptime if not directly available from API
+          if (data.timestamps && Array.isArray(data.timestamps)) {
+            // Count available and suspended data points
+            const availablePoints = data.timestamps.filter(p => p.isAvailable).length;
+            const totalPoints = data.timestamps.length;
+            
+            // Calculate percentage
+            const calculatedUptime = totalPoints > 0 ? (availablePoints / totalPoints) * 100 : 0;
+            return calculatedUptime;
+          }
+          
           return data.uptimePercentage || 0;
         } catch (error) {
           console.error(`Error fetching uptime for event ${event.id}:`, error);
