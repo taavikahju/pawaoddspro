@@ -841,17 +841,36 @@ async function processEvents(events: any[]): Promise<void> {
     let homeTeam = "";
     let awayTeam = "";
     
-    // First check if we already have home_team and away_team from our customized scraper
-    if (event.home_team && event.away_team) {
+    // Check for the 'event' field from BetPawa which contains full team names
+    if (event.event && typeof event.event === 'string' && event.event.trim() !== '') {
+      // Try to parse out team names from different separator formats
+      const separators = [' - ', ' vs ', ' v ', '/'];
+      for (const separator of separators) {
+        if (event.event.includes(separator)) {
+          const parts = event.event.split(separator);
+          if (parts.length === 2) {
+            homeTeam = parts[0].trim();
+            awayTeam = parts[1].trim();
+            eventName = `${homeTeam} vs ${awayTeam}`;
+            console.log(`Extracted team names from 'event' field: ${homeTeam} vs ${awayTeam}`);
+            break;
+          }
+        }
+      }
+    }
+    // If we still don't have team names, check if we already have home_team and away_team from our customized scraper
+    else if (event.home_team && event.away_team) {
       homeTeam = event.home_team;
       awayTeam = event.away_team;
       eventName = `${homeTeam} vs ${awayTeam}`;
       console.log(`Using teams from direct home_team/away_team properties: ${homeTeam} vs ${awayTeam}`);
     }
     // V2 API specific format - competitors array
-    else if (event.competitors && event.competitors.length >= 2) {
-      homeTeam = event.competitors[0].name || "";
-      awayTeam = event.competitors[1].name || "";
+    else if (event.competitors && event.competitors.length >= 2 && 
+             event.competitors[0].name && event.competitors[1].name &&
+             event.competitors[0].name.trim() !== '' && event.competitors[1].name.trim() !== '') {
+      homeTeam = event.competitors[0].name;
+      awayTeam = event.competitors[1].name;
       eventName = `${homeTeam} vs ${awayTeam}`;
     } 
     // Some versions use homeTeam/awayTeam objects
@@ -1149,8 +1168,36 @@ async function processEvents(events: any[]): Promise<void> {
       console.log(`Processing event: ${eventName || "Unknown"} (${eventId}), Country: ${country}, Tournament: ${tournament}, Market Available: ${isMarketAvailable}, Minute: ${gameMinute}`);
       
       // Debug the raw event object to see what data is available
-      console.log('Raw event data:');
-      console.log(JSON.stringify(event, null, 2));
+      console.log('TEAM DATA DEBUGGING:');
+      console.log(`Event ID: ${eventId}`);
+      console.log(`Event name: ${event.name}`);
+      console.log(`Country: ${country}, Tournament: ${tournament}`);
+      
+      // Check competitors data
+      if (event.competitors) {
+        console.log(`Competitors data found for event ${eventId}:`, JSON.stringify(event.competitors, null, 2));
+      } else {
+        console.log(`No competitors data found for event ${eventId}`);
+      }
+      
+      // Check if we have deeper nested team data
+      if (event.scoreboard?.teams) {
+        console.log(`Scoreboard teams data found for event ${eventId}:`, JSON.stringify(event.scoreboard.teams, null, 2));
+      }
+      
+      // Look for any property that might contain "team" or "competitor" in its name
+      const teamKeys = Object.keys(event).filter(key => 
+        key.toLowerCase().includes('team') || 
+        key.toLowerCase().includes('competitor') ||
+        key.toLowerCase().includes('player')
+      );
+      
+      if (teamKeys.length > 0) {
+        console.log(`Found potential team data in keys: ${teamKeys.join(', ')}`);
+        teamKeys.forEach(key => {
+          console.log(`${key} data:`, JSON.stringify(event[key], null, 2));
+        });
+      }
     }
     
     // Update market history
