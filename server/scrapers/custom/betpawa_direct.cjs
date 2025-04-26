@@ -7,7 +7,7 @@ async function scrapeRealEvents() {
     const encoded_q = "%7B%22queries%22%3A%5B%7B%22query%22%3A%7B%22eventType%22%3A%22LIVE%22%2C%22categories%22%3A%5B2%5D%2C%22zones%22%3A%7B%7D%2C%22hasOdds%22%3Atrue%7D%2C%22view%22%3A%7B%22marketTypes%22%3A%5B%223743%22%5D%7D%2C%22skip%22%3A0%2C%22take%22%3A20%7D%5D%7D";
     const url = `https://www.betpawa.com.gh/api/sportsbook/v2/events/lists/by-queries?q=${encoded_q}`;
 
-    console.log(`Fetching events from ${url}...`);
+    // No console logs that would corrupt the JSON output
     
     const headers = {
       "accept": "*/*",
@@ -54,19 +54,19 @@ async function scrapeRealEvents() {
     const response = await axios.get(url, { headers });
 
     if (response.status !== 200) {
-      console.error(`Request failed with status ${response.status}`);
+      // No console output
       return [];
     }
 
     const result = response.data;
     
     if (!result.responses || !result.responses[0] || !result.responses[0].responses) {
-      console.error('Invalid response structure');
+      // No console output
       return [];
     }
     
     const events = result.responses[0].responses;
-    console.log(`Found ${events.length} events`);
+    // No console.log here
 
     const allEvents = [];
 
@@ -79,7 +79,7 @@ async function scrapeRealEvents() {
         const market = event.markets?.find(m => m.marketType?.id === "3743");
         
         if (!widget || !market) {
-          console.log('Skipping event - missing widget or market');
+          // No console output
           continue;
         }
         
@@ -107,28 +107,39 @@ async function scrapeRealEvents() {
           awayTeam: event.name.split(" vs ")[1]
         });
       } catch (e) {
-        console.error(`Skipping event due to error: ${e.message}`);
+        // No console output
       }
     }
 
-    console.log(`Successfully processed ${allEvents.length} events`);
+    // No console output
     return allEvents;
   } catch (error) {
-    console.error('Error scraping events:', error.message);
+    // No console output
     return [];
   }
 }
 
 // This is the function that will be called from outside
 async function main() {
-  const events = await scrapeRealEvents();
-  console.log(JSON.stringify(events));
-  return events;
+  try {
+    const events = await scrapeRealEvents();
+    // Only output the JSON, nothing else before or after
+    process.stdout.write(JSON.stringify(events));
+    return events;
+  } catch (error) {
+    // No console output
+    process.stdout.write(JSON.stringify([]));
+    return [];
+  }
 }
 
 // Node.js script execution
 if (require.main === module) {
-  main().catch(console.error);
+  main().catch(() => {
+    // No console output
+    process.stdout.write(JSON.stringify([]));
+    process.exit(1);
+  });
 } else {
   module.exports = main;
 }

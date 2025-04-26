@@ -161,7 +161,7 @@ async function runHeartbeatTracker(url: string, storage: IStorage): Promise<void
     
     // Run our direct implementation that uses the direct approach from the Python script
     try {
-      const scriptPath = path.resolve(process.cwd(), 'server/scrapers/custom/betpawa_direct.js');
+      const scriptPath = path.resolve(process.cwd(), 'server/scrapers/custom/betpawa_direct.cjs');
       console.log(`Running script: ${scriptPath}`);
       
       const { stdout, stderr } = await execPromise(`node ${scriptPath}`);
@@ -175,7 +175,7 @@ async function runHeartbeatTracker(url: string, storage: IStorage): Promise<void
           const directEvents = JSON.parse(stdout);
           
           if (Array.isArray(directEvents) && directEvents.length > 0) {
-            console.log(`Direct script returned ${directEvents.length} events`);
+            console.log(`Direct script returned ${directEvents.length} events from BetPawa`);
             
             // Convert events to our format
             events = directEvents.map((event: any) => {
