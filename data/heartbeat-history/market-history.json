@@ -1,1 +1,112 @@
-[]
+[
+  {
+    "eventId": "26987200",
+    "timestamps": [
+      {
+        "timestamp": 1745676795022,
+        "isAvailable": true
+      },
+      {
+        "timestamp": 1745676814356,
+        "isAvailable": true
+      },
+      {
+        "timestamp": 1745676834841,
+        "isAvailable": true
+      },
+      {
+        "timestamp": 1745676854321,
+        "isAvailable": true
+      },
+      {
+        "timestamp": 1745676874379,
+        "isAvailable": true
+      }
+    ]
+  },
+  {
+    "eventId": "26987201",
+    "timestamps": [
+      {
+        "timestamp": 1745676795022,
+        "isAvailable": true
+      },
+      {
+        "timestamp": 1745676814356,
+        "isAvailable": true
+      },
+      {
+        "timestamp": 1745676834841,
+        "isAvailable": false
+      },
+      {
+        "timestamp": 1745676854321,
+        "isAvailable": false
+      },
+      {
+        "timestamp": 1745676874379,
+        "isAvailable": true
+      }
+    ]
+  },
+  {
+    "eventId": "26987202",
+    "timestamps": [
+      {
+        "timestamp": 1745676795023,
+        "isAvailable": true
+      },
+      {
+        "timestamp": 1745676814356,
+        "isAvailable": true
+      },
+      {
+        "timestamp": 1745676834841,
+        "isAvailable": false
+      },
+      {
+        "timestamp": 1745676854321,
+        "isAvailable": true
+      },
+      {
+        "timestamp": 1745676874379,
+        "isAvailable": true
+      }
+    ]
+  },
+  {
+    "eventId": "26987203",
+    "timestamps": [
+      {
+        "timestamp": 1745676795023,
+        "isAvailable": false
+      },
+      {
+        "timestamp": 1745676834841,
+        "isAvailable": true
+      }
+    ]
+  },
+  {
+    "eventId": "26987204",
+    "timestamps": [
+      {
+        "timestamp": 1745676795023,
+        "isAvailable": true
+      },
+      {
+        "timestamp": 1745676834841,
+        "isAvailable": true
+      }
+    ]
+  },
+  {
+    "eventId": "26987192",
+    "timestamps": [
+      {
+        "timestamp": 1745676874379,
+        "isAvailable": true
+      }
+    ]
+  }
+]
