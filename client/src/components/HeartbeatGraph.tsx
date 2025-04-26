@@ -311,7 +311,8 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     
     // Draw a series of heartbeats from 0 to current minute with reduced frequency
     const beatWidth = 40;  // Doubled width to reduce frequency (was 20)
-    const beatCount = Math.floor(currentGameMinute * pixelsPerMinute / beatWidth);
+    // Ensure we draw heartbeats up to the exact current game minute
+    const beatCount = Math.ceil(currentGameMinute * pixelsPerMinute / beatWidth);
     
     console.log(`Drawing ${beatCount} heartbeats`);
     
@@ -442,10 +443,10 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
       const isHalftime = data.some(point => 
         point.gameMinute === "HT" || point.gameMinute?.toLowerCase() === "ht");
       
-      // Use "HT" if it's halftime and minute is 45
+      // Use "HT" if it's halftime and minute is 45, otherwise append an apostrophe
       const displayText = (isHalftime && currentGameMinute === 45) 
         ? "HT" 
-        : currentGameMinute.toString();
+        : `${currentGameMinute}'`;
       
       ctx.fillText(displayText, minuteX, 20);
     }
@@ -548,12 +549,12 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
       const suspendedDurationMinutes = Math.round((suspendedCount * secondsPerDataPoint) / 60);
       const totalDurationMinutes = availableDurationMinutes + suspendedDurationMinutes;
       
-      // Update stats state
+      // Update stats state with exactly 1 decimal place
       setStats({
-        uptimePercentage,
-        availableDurationMinutes,
-        suspendedDurationMinutes,
-        totalDurationMinutes
+        uptimePercentage: Number(uptimePercentage.toFixed(1)),
+        availableDurationMinutes: Number(availableDurationMinutes.toFixed(1)),
+        suspendedDurationMinutes: Number(suspendedDurationMinutes.toFixed(1)),
+        totalDurationMinutes: Number(totalDurationMinutes.toFixed(1))
       });
       
       // Send stats to server for storage for historical analytics over time
@@ -608,70 +609,6 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
           <CardTitle className="flex items-center gap-2">
             <Activity className="h-5 w-5 text-primary" />
             <div className="flex items-center gap-2">
-              {eventDetails?.country && (
-                <>
-                  {(() => {
-                    // Convert country name to 2-letter ISO code for the flag
-                    const getCountryCode = (countryName: string) => {
-                      const codeMap: Record<string, string> = {
-                        'Australia': 'AU',
-                        'England': 'GB',
-                        'United Kingdom': 'GB',
-                        'France': 'FR',
-                        'Germany': 'DE',
-                        'Spain': 'ES',
-                        'Italy': 'IT',
-                        'Brazil': 'BR',
-                        'Portugal': 'PT',
-                        'Netherlands': 'NL',
-                        'Belgium': 'BE',
-                        'Croatia': 'HR',
-                        'Romania': 'RO',
-                        'Russia': 'RU',
-                        'Russian Federation': 'RU',
-                        'China': 'CN',
-                        'Chinese Taipei': 'TW',
-                        'Japan': 'JP',
-                        'Korea': 'KR',
-                        'Republic of Korea': 'KR',
-                        'South Korea': 'KR',
-                        'Greece': 'GR',
-                        'Turkey': 'TR',
-                        'Ghana': 'GH',
-                        'Kenya': 'KE',
-                        'Uganda': 'UG',
-                        'South Africa': 'ZA',
-                        'Nigeria': 'NG',
-                        'India': 'IN',
-                        'International': 'WW',
-                        'Israel': 'IL',
-                        'New Zealand': 'NZ',
-                        'Hong Kong': 'HK',
-                        'Czech Republic': 'CZ', 
-                        'Hungary': 'HU',
-                      };
-                      
-                      return codeMap[countryName] || 'UN'; // Default to UN flag if country not found
-                    };
-                    
-                    const countryCode = getCountryCode(eventDetails.country);
-                    
-                    return countryCode !== 'WW' && countryCode !== 'UN' ? (
-                      <ReactCountryFlag 
-                        countryCode={countryCode} 
-                        svg 
-                        style={{ width: '1.2em', height: '1.2em' }}
-                        className="mr-2"
-                        title={eventDetails.country}
-                      />
-                    ) : countryCode === 'WW' ? (
-                      <span className="mr-2" title={eventDetails.country}>🌐</span>
-                    ) : (
-                      <span className="mr-2" title={eventDetails.country}>🏳️</span>
-                    );
-                  })()}
-                </>
-              )}
               <span className="font-medium">
                 {/* First priority: Valid homeTeam and awayTeam */}
                 {eventDetails?.homeTeam && eventDetails?.awayTeam && 
@@ -688,31 +625,6 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
                         `Match from ${eventDetails?.tournament || eventDetails?.country || "Unknown League"}`}
               </span>
             </div>
-            
-            {isLoading ? (
-              <Skeleton className="h-5 w-16 ml-2" />
-            ) : (
-              <Badge 
-                variant={currentStatus === 'available' ? 'outline' : 
-                         currentStatus === 'suspended' ? 'destructive' : 'outline'}
-                className={`ml-2 ${currentStatus === 'available' ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800' : ''}`}
-              >
-                {currentStatus === 'available' ? 'Available' : 
-                 currentStatus === 'suspended' ? 'Suspended' : 'Unknown'}
-              </Badge>
-            )}
-            
-            {currentMinute && (
-              <Badge variant="secondary" className="ml-2">
-                {currentMinute}
-              </Badge>
-            )}
-            
-            {eventDetails?.tournament && (
-              <Badge variant="outline" className="ml-2 text-xs">
-                {eventDetails.tournament}
-              </Badge>
-            )}
           </CardTitle>
           
           {/* Stats badge is shown here instead of the download button */}
