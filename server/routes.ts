@@ -1481,6 +1481,109 @@ export async function registerRoutes(app: Express): Promise<Server> {
       data: event
     });
   });
+  
+  // Endpoints for heartbeat statistics
+  app.post('/api/live-heartbeat/stats', simpleAdminAuth, async (req, res) => {
+    try {
+      const stats = req.body;
+      
+      // Validate the request body
+      if (!stats.eventId || !stats.timestamp || typeof stats.uptimePercentage !== 'number') {
+        return res.status(400).json({ 
+          success: false,
+          message: 'Invalid heartbeat stats data' 
+        });
+      }
+      
+      const savedStats = await storage.saveHeartbeatStats(stats);
+      res.status(201).json({
+        success: true,
+        data: savedStats
+      });
+    } catch (error) {
+      console.error('Error saving heartbeat stats:', error);
+      res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+  });
+  
+  // Time-based stats routes (need to come before generic eventId route to avoid conflict)
+  app.get('/api/live-heartbeat/stats/day/:day', async (req, res) => {
+    try {
+      const { day } = req.params;
+      const stats = await storage.getHeartbeatStatsByDay(day);
+      res.json({
+        success: true,
+        data: stats
+      });
+    } catch (error) {
+      console.error(`Error fetching heartbeat stats for day ${req.params.day}:`, error);
+      res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+  });
+  
+  app.get('/api/live-heartbeat/stats/week/:week', async (req, res) => {
+    try {
+      const { week } = req.params;
+      const stats = await storage.getHeartbeatStatsByWeek(week);
+      res.json({
+        success: true,
+        data: stats
+      });
+    } catch (error) {
+      console.error(`Error fetching heartbeat stats for week ${req.params.week}:`, error);
+      res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+  });
+  
+  app.get('/api/live-heartbeat/stats/month/:month', async (req, res) => {
+    try {
+      const { month } = req.params;
+      const stats = await storage.getHeartbeatStatsByMonth(month);
+      res.json({
+        success: true,
+        data: stats
+      });
+    } catch (error) {
+      console.error(`Error fetching heartbeat stats for month ${req.params.month}:`, error);
+      res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+  });
+  
+  // Event-specific stats route (must come after the more specific routes)
+  app.get('/api/live-heartbeat/stats/event/:eventId', async (req, res) => {
+    try {
+      const { eventId } = req.params;
+      const stats = await storage.getHeartbeatStats(eventId);
+      res.json({
+        success: true,
+        data: stats
+      });
+    } catch (error) {
+      console.error(`Error fetching heartbeat stats for event ${req.params.eventId}:`, error);
+      res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+  });
+  
+  app.delete('/api/live-heartbeat/stats/cleanup/:days', simpleAdminAuth, async (req, res) => {
+    try {
+      const days = parseInt(req.params.days);
+      if (isNaN(days) || days <= 0) {
+        return res.status(400).json({ 
+          success: false,
+          message: 'Invalid number of days' 
+        });
+      }
+      
+      const deletedCount = await storage.deleteOldHeartbeatStats(days);
+      res.json({ 
+        success: true,
+        message: `Deleted ${deletedCount} old heartbeat stats records` 
+      });
+    } catch (error) {
+      console.error(`Error cleaning up old heartbeat stats:`, error);
+      res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+  });
 
   return httpServer;
 }
