@@ -95,12 +95,12 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
       let pointInfo = {
         timestamp: new Date(exactTimestamp),
         isAvailable: false,
-        gameMinute: undefined
+        gameMinute: undefined as string | undefined
       };
       
       // Find which segment of the timeline we're in
-      let currentStatus = null;
-      let currentGameMinute = undefined;
+      let currentStatus: boolean | null = null;
+      let currentGameMinute: string | undefined = undefined;
       
       // Go through the data points in order to determine the status at hover position
       for (let i = 0; i < sortedData.length; i++) {
@@ -427,40 +427,47 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
           // For suspended segments, just use a flat line
           path.points = [[startX, height / 2], [endX, height / 2]];
         } else {
-          // For available segments, create a heartbeat pattern
-          // We'll add beat patterns based on the segment width
+          // For available segments, we'll draw heartbeats directly on the timestamp positions
           path.points = []; // Reset points for this segment
           
-          const beatWidth = 40; // Width of one heartbeat pattern
-          const beatsInSegment = Math.max(1, Math.floor(segmentWidth / beatWidth));
+          // Get all timestamps that fall within this path's time range
+          const pathTimestamps = timestamps
+            .filter(ts => ts.timestamp >= path.startTimestamp && ts.timestamp <= path.endTimestamp)
+            .map(ts => ts.timestamp);
+            
+          // Always start with the segment's start point
+          path.points.push([startX, height / 2]);
           
-          // Calculate space between beats to fit exactly in the segment
-          const actualBeatWidth = segmentWidth / beatsInSegment;
-          
-          for (let j = 0; j < beatsInSegment; j++) {
-            const beatStart = startX + (j * actualBeatWidth);
+          // Add the heartbeat pattern directly based on the actual timestamps
+          for (let j = 0; j < pathTimestamps.length; j++) {
+            const timestamp = pathTimestamps[j];
+            const x = getXPosition(timestamp);
             
-            // Scale factors for the beat drawing
-            const sf = actualBeatWidth / 40; // Scale factor based on standard beat width
+            // Only add heartbeat if there's enough space between points
+            const minSpaceBetweenBeats = 20; // Minimum pixels between beats
+            const lastPoint = path.points[path.points.length - 1];
             
-            // Add points for this beat
-            path.points.push([beatStart, height / 2]);
-            path.points.push([beatStart + (10 * sf), height / 2 - (3 * sf)]);   // P wave
-            path.points.push([beatStart + (14 * sf), height / 2]);              // Baseline
-            path.points.push([beatStart + (18 * sf), height / 2 + (3 * sf)]);   // Q dip
-            path.points.push([beatStart + (20 * sf), height / 2 - (20 * sf)]);  // R spike
-            path.points.push([beatStart + (24 * sf), height / 2 + (5 * sf)]);   // S dip
-            path.points.push([beatStart + (28 * sf), height / 2]);              // Baseline
-            path.points.push([beatStart + (32 * sf), height / 2 - (5 * sf)]);   // T wave
-            path.points.push([beatStart + (36 * sf), height / 2]);              // Baseline
-            
-            // If this is the last beat and it doesn't end exactly at endX
-            if (j === beatsInSegment - 1) {
-              const lastPoint = path.points[path.points.length - 1];
-              if (lastPoint[0] < endX) {
-                path.points.push([endX, height / 2]);
-              }
+            if (j > 0 && (x - lastPoint[0]) < minSpaceBetweenBeats) {
+              continue; // Skip this point if it's too close to the previous one
             }
+            
+            // Scale factor for the beat size
+            const beatSize = 20; // Height of the main spike
+            
+            // Add a small beat at each actual timestamp
+            path.points.push([x - 4, height / 2]);          // Before beat baseline
+            path.points.push([x - 2, height / 2 + 3]);      // Q dip
+            path.points.push([x, height / 2 - beatSize]);   // R spike
+            path.points.push([x + 2, height / 2 + 5]);      // S dip
+            path.points.push([x + 4, height / 2]);          // Return to baseline
+            path.points.push([x + 6, height / 2 - 5]);      // T wave
+            path.points.push([x + 10, height / 2]);         // End of beat
+          }
+          
+          // Always end with the segment's end point
+          const lastPoint = path.points[path.points.length - 1];
+          if (lastPoint[0] < endX) {
+            path.points.push([endX, height / 2]);
           }
         }
       }
