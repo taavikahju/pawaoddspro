@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Activity, Calendar, Map, Filter, RefreshCw } from 'lucide-react';
+import { Activity, Calendar, Map, Filter, RefreshCw, History } from 'lucide-react';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-// Removed Tabs import as view type selection is no longer needed
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from '@/components/ui/separator';
 import HeartbeatGraph from '../components/HeartbeatGraph';
 import Layout from '@/components/Layout';
@@ -32,9 +32,10 @@ export default function LiveHeartbeat() {
   const [selectedCountry, setSelectedCountry] = useState<string>('all');
   const [selectedTournament, setSelectedTournament] = useState<string>('all');
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<'live' | 'historical'>('live');
 
-  // Fetch heartbeat data
-  const { data: heartbeatData, isLoading, error, refetch } = useQuery<{
+  // Fetch live heartbeat data
+  const { data: heartbeatData, isLoading: isLoadingLive, error: liveError, refetch: refetchLive } = useQuery<{
     events: HeartbeatEvent[];
     countries: string[];
     tournaments: Record<string, string[]>;
@@ -42,7 +43,16 @@ export default function LiveHeartbeat() {
     isRunning: boolean;
   }>({
     queryKey: ['/api/live-heartbeat/status'],
-    refetchInterval: 30000, // Refresh every 30 seconds
+    refetchInterval: activeTab === 'live' ? 30000 : false, // Only refresh when on live tab
+  });
+  
+  // Fetch historical events data
+  const { data: historicalData, isLoading: isLoadingHistorical, error: historicalError, refetch: refetchHistorical } = useQuery<{
+    success: boolean;
+    data: HeartbeatEvent[];
+  }>({
+    queryKey: ['/api/live-heartbeat/historical-events'],
+    enabled: activeTab === 'historical', // Only fetch when on historical tab
   });
 
   // Set the first event as selected when data is loaded
@@ -54,14 +64,17 @@ export default function LiveHeartbeat() {
 
   // Filter events based on selected country and tournament
   const filteredEvents = React.useMemo(() => {
-    if (!heartbeatData?.events) return [];
+    // Get the appropriate events based on active tab
+    const events = activeTab === 'live' 
+      ? heartbeatData?.events || []
+      : historicalData?.data || [];
     
-    return heartbeatData.events.filter(event => {
+    return events.filter(event => {
       const countryMatch = selectedCountry === 'all' || event.country === selectedCountry;
       const tournamentMatch = selectedTournament === 'all' || event.tournament === selectedTournament;
       return countryMatch && tournamentMatch;
     });
-  }, [heartbeatData, selectedCountry, selectedTournament]);
+  }, [heartbeatData, historicalData, selectedCountry, selectedTournament, activeTab]);
 
   // Format date to "DD MMM HH:MM" format 
   const formatDate = (dateString: string) => {
@@ -88,7 +101,11 @@ export default function LiveHeartbeat() {
 
   // Handle manual refresh
   const handleRefresh = () => {
-    refetch();
+    if (activeTab === 'live') {
+      refetchLive();
+    } else {
+      refetchHistorical();
+    }
   };
 
   // Get tournaments for the selected country
@@ -152,6 +169,20 @@ export default function LiveHeartbeat() {
               </Badge>
             </div>
           </div>
+
+          {/* Tabs for switching between live and historical views */}
+          <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'live' | 'historical')}>
+            <TabsList className="grid w-full grid-cols-2 mb-4">
+              <TabsTrigger value="live" className="flex items-center gap-2">
+                <Activity className="h-4 w-4" />
+                Live Events
+              </TabsTrigger>
+              <TabsTrigger value="historical" className="flex items-center gap-2">
+                <History className="h-4 w-4" />
+                Historical Events
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
 
           {/* Filters Section */}
           <Card>
@@ -317,7 +348,7 @@ export default function LiveHeartbeat() {
               </CardHeader>
               <CardContent className="p-0">
                 <div className="max-h-[calc(100vh-250px)] overflow-y-auto">
-                  {isLoading ? (
+                  {(activeTab === 'live' ? isLoadingLive : isLoadingHistorical) ? (
                     <div className="p-4 text-center text-muted-foreground">
                       Loading events...
                     </div>
