@@ -280,28 +280,18 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
       console.log(`Time elapsed between first and last data point: ${elapsedMinutes} minutes`);
     }
     
-    // Create sample data if we don't have any real data yet
+    // Display empty state message if no data is available
     if (timestamps.length === 0) {
-      console.log("No data available, creating sample data for visualization");
+      console.log("No data available, showing empty state");
       
-      // Create a series of timestamps over the last 10 minutes to show something
-      const now = Date.now();
-      const sampleData: DataPoint[] = [];
+      // Draw empty state message
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '14px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText('Waiting for live data...', width / 2, height / 2);
       
-      // Generate 20 data points, alternating between available and suspended
-      for (let i = 0; i < 20; i++) {
-        sampleData.push({
-          timestamp: now - (20 - i) * 30000, // Every 30 seconds, most recent last
-          isAvailable: i % 3 !== 0 // Make 2/3 of points available for a realistic pattern
-        });
-      }
-      
-      // Use our sample data instead
-      console.log(`Created ${sampleData.length} sample data points`);
-      timestamps = sampleData;
-      
-      // Set elapsed minutes for sample data
-      elapsedMinutes = 10; // 10 minutes of sample data
+      // Early return since we can't draw a heartbeat without data
+      return;
     }
     
     // Find the current game minute from elapsed time
