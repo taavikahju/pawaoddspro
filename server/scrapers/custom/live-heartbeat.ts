@@ -181,11 +181,44 @@ async function runHeartbeatTracker(url: string, storage: IStorage): Promise<void
       console.log('No events from specialized API, falling back to original scraper...');
       events = await scrapeEvents(url);
       
-      // If still no events after trying all methods, use mock events for testing
+      // Try betpawa Kenya as a fallback
       if (events.length === 0) {
-        console.log('No real events found from any source, using mock events for testing');
-        events = generateMockEvents();
+        console.log('Trying betpawa Kenya as a fallback for live events...');
+        const kenyaUrl = 'https://www.betpawa.co.ke/api/sportsbook/events/live/football?_=' + Date.now();
+        
+        try {
+          console.log(`Making request to Kenya endpoint: ${kenyaUrl}`);
+          const headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Accept': 'application/json, text/plain, */*',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Referer': 'https://www.betpawa.co.ke/',
+            'Origin': 'https://www.betpawa.co.ke',
+            'Connection': 'keep-alive',
+            'sec-ch-ua': '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Windows"',
+            'Sec-Fetch-Dest': 'empty',
+            'Sec-Fetch-Mode': 'cors',
+            'Sec-Fetch-Site': 'same-origin',
+            'x-pawa-brand': 'betpawa-kenya'
+          };
+          
+          const response = await axios.get(kenyaUrl, { headers, timeout: 30000 });
+          if (response.status === 200 && response.data) {
+            console.log('Kenya endpoint returned data:', Object.keys(response.data));
+            if (Array.isArray(response.data)) {
+              events = response.data;
+              console.log(`Found ${events.length} events from Kenya endpoint`);
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching from Kenya endpoint:', error.message);
+        }
       }
+      
+      // If still no events after trying all methods, do not use mock events
+      // We want to see real events only as requested by the user
     }
     
     console.log(`Total events collected: ${events.length}`);
