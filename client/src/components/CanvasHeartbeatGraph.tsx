@@ -55,7 +55,7 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
     };
   }, []);
   
-  // Mouse move handler to show timestamp tooltip
+  // Mouse move handler to show timestamp tooltip and draw dynamic horizontal line
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -79,6 +79,7 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
       
       // Get dimensions
       const width = canvas.width;
+      const height = canvas.height;
       
       // Sort timestamps by time (ascending)
       const sortedData = [...data].sort((a, b) => a.timestamp - b.timestamp);
@@ -126,6 +127,44 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
         gameMinute: pointInfo.gameMinute
       });
       
+      // DRAW DYNAMIC HORIZONTAL LINE BASED ON HOVER POSITION
+      try {
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+        
+        // Redraw the entire heartbeat to clear previous hover line
+        drawHeartbeat();
+        
+        // Draw the horizontal line at the center
+        const centerY = height / 2;
+        
+        // Set up styles based on the current status
+        ctx.beginPath();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = isAvailable ? 'rgba(0, 255, 0, 0.9)' : 'rgba(255, 0, 0, 0.9)';
+        ctx.shadowColor = isAvailable ? '#00ff00' : '#ff0000';
+        ctx.shadowBlur = 5;
+        
+        // Draw a horizontal line across the entire canvas at center
+        ctx.moveTo(0, centerY);
+        ctx.lineTo(width, centerY);
+        ctx.stroke();
+        
+        // Reset shadow
+        ctx.shadowBlur = 0;
+        
+        // Draw vertical guideline exactly at the mouse position
+        ctx.beginPath();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = isAvailable ? 'rgba(0, 255, 0, 0.8)' : 'rgba(255, 0, 0, 0.8)';
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, height);
+        ctx.stroke();
+      }
+      catch (error) {
+        console.error("Failed to draw hover guideline:", error);
+      }
+      
       // Add a visible cursor
       canvas.style.cursor = 'crosshair';
     };
@@ -133,6 +172,9 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
     const handleMouseLeave = () => {
       setHoverInfo(null);
       canvas.style.cursor = 'default';
+      
+      // Redraw the original heartbeat when mouse leaves
+      drawHeartbeat();
     };
     
     canvas.addEventListener('mousemove', handleMouseMove);
@@ -829,43 +871,26 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
             style={{ background: '#111', borderRadius: '0.5rem' }}
           />
           
-          {/* Vertical guideline and timestamp tooltip */}
+          {/* Timestamp tooltip */}
           {hoverInfo && (
-            <>
-              {/* Vertical guideline */}
-              <div 
-                className="absolute pointer-events-none" 
-                style={{
-                  left: `${hoverInfo.x}px`,
-                  top: '0',
-                  width: '2px',
-                  height: '100%',
-                  backgroundColor: hoverInfo.isAvailable ? 'rgba(0, 255, 0, 0.8)' : 'rgba(255, 0, 0, 0.8)',
-                  zIndex: 10,
-                  transform: 'translateX(-50%)', // Center the line on the exact mouse position
-                }}
-              />
-              
-              {/* Tooltip */}
-              <div 
-                className={`absolute px-3 py-2 text-xs rounded pointer-events-none ${hoverInfo.isAvailable ? 'bg-green-700/90' : 'bg-red-700/90'} text-white border-2 border-white/40 shadow-lg`}
-                style={{ 
-                  left: `${hoverInfo.x}px`, 
-                  top: `${Math.max(10, hoverInfo.y - 45)}px`,
-                  transform: 'translateX(-50%)',
-                  zIndex: 20,
-                  whiteSpace: 'nowrap'
-                }}
-              >
-                <div className="font-bold text-sm">
-                  {hoverInfo.timestamp.toLocaleTimeString()} 
-                  {hoverInfo.gameMinute && <span className="ml-2">(Min {hoverInfo.gameMinute})</span>}
-                </div>
-                <div className="mt-1">
-                  Status: <span className="font-semibold">{hoverInfo.isAvailable ? 'Available' : 'Suspended'}</span>
-                </div>
+            <div 
+              className={`absolute px-3 py-2 text-xs rounded pointer-events-none ${hoverInfo.isAvailable ? 'bg-green-700/90' : 'bg-red-700/90'} text-white border-2 border-white/40 shadow-lg`}
+              style={{ 
+                left: `${hoverInfo.x}px`, 
+                top: `${Math.max(10, hoverInfo.y - 45)}px`,
+                transform: 'translateX(-50%)',
+                zIndex: 20,
+                whiteSpace: 'nowrap'
+              }}
+            >
+              <div className="font-bold text-sm">
+                {hoverInfo.timestamp.toLocaleTimeString()} 
+                {hoverInfo.gameMinute && <span className="ml-2">(Min {hoverInfo.gameMinute})</span>}
               </div>
-            </>
+              <div className="mt-1">
+                Status: <span className="font-semibold">{hoverInfo.isAvailable ? 'Available' : 'Suspended'}</span>
+              </div>
+            </div>
           )}
           
           {status === 'loading' && (
