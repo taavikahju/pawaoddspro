@@ -604,13 +604,26 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
           }
         });
         
-        // We estimate each data point represents approximately 10 seconds
-        const secondsPerDataPoint = 10;
+        // Sort data points by timestamp
+        const sortedData = [...data].sort((a, b) => a.timestamp - b.timestamp);
         
-        // Calculate durations in minutes
-        const availableMinutes = (availableCount * secondsPerDataPoint) / 60;
-        const suspendedMinutes = (suspendedCount * secondsPerDataPoint) / 60;
-        const totalMinutes = availableMinutes + suspendedMinutes;
+        // Calculate actual time span in minutes if we have data points
+        let totalMinutes = 0;
+        let availableMinutes = 0;
+        let suspendedMinutes = 0;
+        
+        if (sortedData.length >= 2) {
+          const firstTimestamp = sortedData[0].timestamp;
+          const lastTimestamp = sortedData[sortedData.length - 1].timestamp;
+          
+          // Get total time in minutes
+          totalMinutes = (lastTimestamp - firstTimestamp) / (1000 * 60);
+          
+          // Calculate available/suspended based on the percentage of data points
+          const ratio = availableCount / (availableCount + suspendedCount);
+          availableMinutes = totalMinutes * ratio;
+          suspendedMinutes = totalMinutes - availableMinutes;
+        }
         
         // Calculate uptime percentage based on time (available ÷ total)
         const uptime = totalMinutes > 0 
