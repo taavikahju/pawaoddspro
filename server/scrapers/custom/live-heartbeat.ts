@@ -660,12 +660,27 @@ async function processEvents(events: any[]): Promise<void> {
       let marketStatus = 'ACTIVE';
       
       // Check different properties that might indicate if a market is suspended
-      if (event.suspended === true) {
+      // First, check for totalMarketCount=0 which is the most reliable indicator
+      if (event.totalMarketCount === 0) {
+        isAvailable = false;
+        marketStatus = 'SUSPENDED';
+        console.log(`Event ${event.id || event.eventId} is suspended because totalMarketCount=0`);
+        console.log(`EVENT SUSPENDED (totalMarketCount=0): ${JSON.stringify({
+          id: event.id || event.eventId,
+          name: event.name || event.event,
+          homeTeam: event.homeTeam || (event.name ? event.name.split(" vs ")[0] : "Unknown"),
+          awayTeam: event.awayTeam || (event.name ? event.name.split(" vs ")[1] : "Unknown"),
+          totalMarketCount: 0,
+          suspended: true
+        })}`);
+      }
+      // Then check other suspension indicators 
+      else if (event.suspended === true) {
         // Directly use the suspended flag from the event (set by betpawa_direct.cjs)
         isAvailable = false;
         marketStatus = 'SUSPENDED';
-        console.log(`Event ${event.id || event.eventId} is marked as suspended by zero odds detection`);
-        console.log(`EVENT SUSPENDED: ${JSON.stringify({
+        console.log(`Event ${event.id || event.eventId} is marked as suspended by other detection methods`);
+        console.log(`EVENT SUSPENDED (other methods): ${JSON.stringify({
           id: event.id || event.eventId,
           name: event.name || event.event,
           homeTeam: event.homeTeam || (event.name ? event.name.split(" vs ")[0] : "Unknown"),
