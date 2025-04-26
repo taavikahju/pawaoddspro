@@ -12,6 +12,7 @@ interface DataPoint {
   timestamp: number;
   isAvailable: boolean;
   gameMinute?: string;
+  time?: string; // ISO string timestamp
 }
 
 interface HeartbeatStats {
@@ -284,16 +285,36 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
       return 45; // Default to 45 minutes as a fallback
     };
     
-    // Find the current game minute - either from data or use latest available
-    const extractedMinutes = data
-      .map(point => point.gameMinute)
-      .filter(minute => minute)
-      .map(getMinuteNumber);
+    // Find the current game minute from event data
+    let currentGameMinute = 45; // Default to 45 minutes
     
-    // Default to 45 minutes if no game minutes are available
-    const currentGameMinute = extractedMinutes.length > 0 
-      ? Math.max(...extractedMinutes) 
-      : 45;
+    // First try to get the game minute from the current event data
+    if (eventDetails && eventDetails.gameMinute) {
+      console.log(`Using game minute from event details: ${eventDetails.gameMinute}`);
+      
+      if (eventDetails.gameMinute === 'HT' || eventDetails.gameMinute?.toLowerCase() === 'ht') {
+        currentGameMinute = 45;
+      } else {
+        // Extract numeric part from strings like "45'" or "45+2'" or just "45"
+        const match = eventDetails.gameMinute.match(/^(\d+)(?:\+(\d+))?/);
+        if (match) {
+          const baseMinute = parseInt(match[1], 10);
+          const addedTime = match[2] ? parseInt(match[2], 10) : 0;
+          currentGameMinute = baseMinute + addedTime;
+        }
+      }
+    } else {
+      // As a fallback, extract from data points
+      const extractedMinutes = data
+        .map(point => point.gameMinute)
+        .filter(minute => minute)
+        .map(getMinuteNumber);
+      
+      // Use the max minute if available
+      if (extractedMinutes.length > 0) {
+        currentGameMinute = Math.max(...extractedMinutes);
+      }
+    }
     
     console.log("Current game minute:", currentGameMinute);
     
@@ -665,20 +686,20 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
           <div className="flex items-center gap-2">
             <Heart className="h-4 w-4 text-green-500" />
             <span className="text-green-400">
-              {stats.availableDurationMinutes} min available
+              {stats.availableDurationMinutes.toFixed(1)} min available
             </span>
           </div>
           
           <div className="flex items-center gap-2">
             <AlertCircle className="h-4 w-4 text-red-500" />
             <span className="text-red-400">
-              {stats.suspendedDurationMinutes} min suspended
+              {stats.suspendedDurationMinutes.toFixed(1)} min suspended
             </span>
           </div>
           
           <div className="flex items-center gap-2">
             <Badge variant="secondary" className="text-xs">
-              Total time: {stats.totalDurationMinutes} min
+              Total time: {stats.totalDurationMinutes.toFixed(1)} min
             </Badge>
           </div>
         </div>
