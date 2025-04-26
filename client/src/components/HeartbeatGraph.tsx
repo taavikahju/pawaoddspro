@@ -116,13 +116,13 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
         }
         
         // Process the result data based on its structure
-        let timestamps: DataPoint[] = [];
+        let processedData: DataPoint[] = [];
         
         if (result) {
           // Check if result is directly an array of data points
           if (Array.isArray(result)) {
             console.log(`Result is a direct array with ${result.length} data points`);
-            timestamps = result.map(item => {
+            processedData = result.map(item => {
               // Make sure each item has all necessary properties
               if (!item.hasOwnProperty('isAvailable')) {
                 console.log(`Data point missing isAvailable property, setting to true by default:`, item);
@@ -142,7 +142,7 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
           else if (result.timestamps && Array.isArray(result.timestamps)) {
             console.log(`Result contains a timestamps array with ${result.timestamps.length} data points`);
             
-            timestamps = result.timestamps.map((item: any) => {
+            processedData = result.timestamps.map((item: any) => {
               // Make sure each item has all necessary properties
               if (!item.hasOwnProperty('isAvailable')) {
                 console.log(`Data point missing isAvailable property, setting to true by default:`, item);
@@ -161,17 +161,17 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
           // Otherwise create an empty array (will be populated with sample data if needed)
           else {
             console.log(`Result has an unexpected format, creating empty array`);
-            timestamps = [];
+            processedData = [];
           }
         }
         
         // Update the state with the processed data
-        console.log(`Setting data state with ${timestamps.length} timestamps`);
-        setData(timestamps);
+        console.log(`Setting data state with ${processedData.length} data points`);
+        setData(processedData);
         
         // Determine current status from the latest data point
-        if (timestamps.length > 0) {
-          const latestData = timestamps[timestamps.length - 1];
+        if (processedData.length > 0) {
+          const latestData = processedData[processedData.length - 1];
           console.log(`Latest data point:`, latestData);
           
           setIsAvailable(latestData.isAvailable);
@@ -214,7 +214,7 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     drawHeartbeat();
   }, [data]);
   
-  // Function to draw the heartbeat graph
+  // Main drawing function
   function drawHeartbeat() {
     console.log("Drawing heartbeat with data points:", data.length);
     
@@ -226,7 +226,7 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     
     if (data.length === 0) {
       console.log("No data available to draw");
-      return;
+      // We'll still draw a sample pattern below
     }
     
     const ctx = canvas.getContext('2d');
@@ -258,17 +258,26 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     // Draw game minute labels
     drawMinuteLabels(ctx, width, height);
     
-    // Instead of using game minutes, we'll use real timestamps for x-axis
-    // This will give a continuous flow of data points regardless of game state (e.g., during halftime)
-    
-    // Use actual timestamps for visualization instead of relying on game minutes
-    console.log("Using timestamp-based visualization instead of game minute-based");
-    
     // Make a working copy of our data points for rendering
     const renderData = [...data];
     
     // Sort data by timestamp (just to be safe)
     renderData.sort((a, b) => a.timestamp - b.timestamp);
+    
+    // Create sample data if we don't have any real data yet
+    if (renderData.length === 0) {
+      console.log("No data available, creating sample data for visualization");
+      
+      // Create a series of timestamps over the last 10 minutes to show something
+      const now = Date.now();
+      for (let i = 0; i < 20; i++) {
+        renderData.push({
+          timestamp: now - (20 - i) * 30000, // Every 30 seconds, most recent last
+          isAvailable: i % 3 !== 0 // Make 2/3 of points available for a realistic pattern
+        });
+      }
+      console.log(`Created ${renderData.length} sample data points`);
+    }
     
     // Find the earliest and latest timestamps to calculate the time range
     const earliestTimestamp = renderData.length > 0 ? renderData[0].timestamp : Date.now() - 3600000; // 1 hour ago default
@@ -306,38 +315,8 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     // Green for normal heartbeat
     ctx.strokeStyle = '#00ff00';
     
-    // Draw a series of heartbeats with reduced frequency (based on timestamps now, not minutes)
-    const beatWidth = 40;  // Width in pixels for a single heartbeat
-    // This will be determined by the timestamp range now, not game minutes
-    
-    // Create sample data if we don't have any real data yet
-    if (renderData.length === 0) {
-      console.log("No data available, creating sample data for visualization");
-      
-      // Create a series of timestamps over the last 10 minutes to show something
-      const now = Date.now();
-      const sampleData: DataPoint[] = [];
-      
-      // Generate 20 data points, alternating between available and suspended
-      for (let i = 0; i < 20; i++) {
-        sampleData.push({
-          timestamp: now - (20 - i) * 30000, // Every 30 seconds, most recent last
-          isAvailable: i % 3 !== 0 // Make 2/3 of points available for a realistic pattern
-        });
-      }
-      
-      // Use our sample data instead
-      console.log(`Created ${sampleData.length} sample data points`);
-      renderData.push(...sampleData);
-    }
-    
-    // Track the current market status to detect changes
-    let currentlyAvailable = true; // Default status (will be updated with real data)
-    
-    // First check if we have a current availability status from the last data point
-    if (renderData.length > 0) {
-      currentlyAvailable = renderData[renderData.length - 1].isAvailable;
-    }
+    // Define the heartbeat pattern size in pixels
+    const heartbeatPatternWidth = 40; // Width in pixels for a single heartbeat
     
     // Calculate the number of heartbeats based on the time range
     // We want to show a beat approximately every 20 seconds
@@ -349,13 +328,6 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     // Start drawing from the left edge
     ctx.beginPath();
     ctx.moveTo(0, height / 2);
-    
-    // Initialize variables to track current position and status
-    let currentX = 0;
-    let lastDataPointIndex = 0;
-    
-    // Define the heartbeat pattern size in pixels
-    const heartbeatPatternWidth = 40; // Width in pixels for a single heartbeat
     
     // Process actual data points to create a continuous line
     if (renderData.length > 1) {
@@ -425,9 +397,6 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
             }
           }
         }
-        
-        // Update current position
-        currentX = x;
       }
     } 
     // If no data points, create a sample pattern just to show something
@@ -460,8 +429,6 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     
     // Stroke the path
     ctx.stroke();
-    
-    // Removed heartbeat minute indicator as requested
     
     console.log("Heartbeat drawing completed successfully");
   }
@@ -654,48 +621,56 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
       
       <CardContent className="pt-2">
         {isLoading ? (
-          <div className="w-full h-48 flex items-center justify-center bg-gray-50 dark:bg-slate-900 rounded-md">
-            <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-          </div>
-        ) : data.length === 0 ? (
-          <div className="w-full h-48 flex flex-col items-center justify-center bg-gray-50 dark:bg-slate-900 rounded-md">
-            <BarChart className="h-10 w-10 text-muted-foreground mb-2" />
-            <p className="text-sm text-muted-foreground">No data available yet</p>
+          <div>
+            <Skeleton className="h-40 w-full bg-muted/10" />
           </div>
         ) : (
-          <div className="w-full rounded-md overflow-hidden" 
-               style={{ backgroundColor: '#002211' }}>
+          <div className="relative">
             <canvas 
               ref={canvasRef} 
               width={800} 
               height={200} 
-              className="w-full h-48 border border-gray-100/10 rounded-md"
+              className="w-full h-[200px] rounded-md"
             />
+            
+            {/* Status indicator */}
+            <div className="absolute top-4 right-4 flex gap-2 items-center">
+              {currentStatus === 'available' ? (
+                <Badge variant="outline" className="bg-green-500/20 text-green-400 border-green-800">
+                  <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse mr-2"></div>
+                  Available
+                </Badge>
+              ) : currentStatus === 'suspended' ? (
+                <Badge variant="outline" className="bg-red-500/20 text-red-400 border-red-800">
+                  <div className="w-2 h-2 rounded-full bg-red-400 mr-2"></div>
+                  Suspended
+                </Badge>
+              ) : (
+                <Badge variant="outline" className="bg-yellow-500/20 text-yellow-400 border-yellow-800">
+                  <AlertCircle className="w-3 h-3 mr-1" />
+                  Unknown
+                </Badge>
+              )}
+              
+              {currentMinute && (
+                <Badge variant="outline" className="bg-blue-500/20 text-blue-400 border-blue-800">
+                  {currentMinute}'
+                </Badge>
+              )}
+            </div>
           </div>
         )}
       </CardContent>
       
-      {/* Add CardFooter with heartbeat statistics */}
-      <CardFooter className="pt-0 pb-3 border-t border-gray-100/10">
-        <div className="flex flex-wrap items-center justify-between w-full gap-2 text-sm">
-          <div className="flex items-center gap-2">
-            <Heart className="h-4 w-4 text-green-500" />
-            <span className="text-green-400">
-              {stats.availableDurationMinutes.toFixed(1)} min available
-            </span>
+      <CardFooter className="pt-0 text-xs text-muted-foreground">
+        <div className="flex w-full justify-between items-center">
+          <div>
+            Available: {stats.availableDurationMinutes} min | Suspended: {stats.suspendedDurationMinutes} min
           </div>
-          
-          <div className="flex items-center gap-2">
-            <AlertCircle className="h-4 w-4 text-red-500" />
-            <span className="text-red-400">
-              {stats.suspendedDurationMinutes.toFixed(1)} min suspended
-            </span>
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <Badge variant="secondary" className="text-xs">
-              Total time: {stats.totalDurationMinutes.toFixed(1)} min
-            </Badge>
+          <div>
+            Last update: {data.length > 0 && data[data.length - 1].time 
+              ? new Date(data[data.length - 1].time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) 
+              : new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
           </div>
         </div>
       </CardFooter>
