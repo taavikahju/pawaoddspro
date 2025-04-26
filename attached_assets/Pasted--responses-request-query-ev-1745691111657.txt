@@ -1,0 +1,236 @@
+"responses": [
+        {
+            "request": {
+                "query": {
+                    "eventType": "LIVE",
+                    "categories": [
+                        "2"
+                    ],
+                    "zones": {}
+                },
+                "view": {
+                    "marketTypes": [
+                        "3743"
+                    ]
+                },
+                "sort": {
+                    "startTime": "ASC"
+                },
+                "take": 20,
+                "skip": 0
+            },
+            "responses": [
+                {
+                    "id": "26970463",
+                    "name": "Elite Utd - Wallidan FC",
+                    "results": {
+                        "display": {
+                            "minute": "91",
+                            "currentPeriod": {
+                                "id": "3012",
+                                "name": "Second Half",
+                                "slug": "SECOND_HALF"
+                            },
+                            "currentServer": null
+                        },
+                        "participantPeriodResults": [
+                            {
+                                "participant": {
+                                    "id": "656181",
+                                    "type": "HOME"
+                                },
+                                "periodResults": [
+                                    {
+                                        "period": {
+                                            "id": "3010",
+                                            "name": "Full Time (Excluding Overtime)",
+                                            "slug": "FULL_TIME_EXCLUDING_OVERTIME"
+                                        },
+                                        "result": "0",
+                                        "type": "SCORE"
+                                    },
+                                    {
+                                        "period": {
+                                            "id": "3012",
+                                            "name": "Second Half",
+                                            "slug": "SECOND_HALF"
+                                        },
+                                        "result": "0",
+                                        "type": "SCORE"
+                                    },
+                                    {
+                                        "period": {
+                                            "id": "3007",
+                                            "name": "First Half",
+                                            "slug": "FIRST_HALF"
+                                        },
+                                        "result": "0",
+                                        "type": "SCORE"
+                                    }
+                                ]
+                            },
+                            {
+                                "participant": {
+                                    "id": "656515",
+                                    "type": "AWAY"
+                                },
+                                "periodResults": [
+                                    {
+                                        "period": {
+                                            "id": "3010",
+                                            "name": "Full Time (Excluding Overtime)",
+                                            "slug": "FULL_TIME_EXCLUDING_OVERTIME"
+                                        },
+                                        "result": "1",
+                                        "type": "SCORE"
+                                    },
+                                    {
+                                        "period": {
+                                            "id": "3012",
+                                            "name": "Second Half",
+                                            "slug": "SECOND_HALF"
+                                        },
+                                        "result": "1",
+                                        "type": "SCORE"
+                                    },
+                                    {
+                                        "period": {
+                                            "id": "3007",
+                                            "name": "First Half",
+                                            "slug": "FIRST_HALF"
+                                        },
+                                        "result": "0",
+                                        "type": "SCORE"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "scoreboard": {
+                        "matchState": {
+                            "minute": 90,
+                            "second": 0
+                        },
+                        "matchScore": {
+                            "scoreHome": "0",
+                            "scoreAway": "1"
+                        },
+                        "display": {
+                            "minute": 91
+                        },
+                        "currentPeriod": {
+                            "historicId": null
+                        }
+                    },
+                    "widget": {
+                        "id": "60061921",
+                        "type": "SPORTRADAR"
+                    },
+                    "widgets": [
+                        {
+                            "id": "60061921",
+                            "type": "SPORTRADAR"
+                        }
+                    ],
+                    "participants": [
+                        {
+                            "id": "656181",
+                            "name": "Elite Utd",
+                            "position": 1
+                        },
+                        {
+                            "id": "656515",
+                            "name": "Wallidan FC",
+                            "position": 2
+                        }
+                    ],
+                    "startTime": "2025-04-26T16:00:00Z",
+                    "markets": [
+                        {
+                            "marketType": {
+                                "id": "3743",
+                                "name": "1X2 - FT",
+                                "displayName": "1X2 | Full Time",
+                                "explainer": "Pick what the result will be for the stated period: 1 (home win), X (draw), 2 (away win).",
+                                "priority": 0,
+                                "tabs": [
+                                    "popular",
+                                    "all"
+                                ],
+                                "priceColumnCount": 3,
+                                "priceSortingMethod": "PRICE_TYPE_ID"
+                            },
+                            "handicap": null,
+                            "handicapType": "",
+                            "pricePresentation": "TYPE_SHORT",
+                            "prices": [
+                                {
+                                    "id": "1191758029",
+                                    "name": "1",
+                                    "typeId": "3744",
+                                    "price": 0.0,
+                                    "suspended": false,
+                                    "handicap": null,
+                                    "position": 1,
+                                    "displayName": "1",
+                                    "additionalInfo": {
+                                        "hot": false
+                                    },
+                                    "probability": "eyJ3aW4iOm51bGwsInJlZnVuZCI6bnVsbCwia2V5IjozNTA3OTIyMDE2Mzc3NDU0ODh9"
+                                },
+                                {
+                                    "id": "1191758030",
+                                    "name": "X",
+                                    "typeId": "3745",
+                                    "price": 0.0,
+                                    "suspended": false,
+                                    "handicap": null,
+                                    "position": 2,
+                                    "displayName": "X",
+                                    "additionalInfo": {
+                                        "hot": false
+                                    },
+                                    "probability": "eyJ3aW4iOm51bGwsInJlZnVuZCI6bnVsbCwia2V5IjotMjQ4MzgyNDE4Mzg5NjgyMjMxMn0="
+                                },
+                                {
+                                    "id": "1191758031",
+                                    "name": "2",
+                                    "typeId": "3746",
+                                    "price": 0.0,
+                                    "suspended": false,
+                                    "handicap": null,
+                                    "position": 3,
+                                    "displayName": "2",
+                                    "additionalInfo": {
+                                        "hot": false
+                                    },
+                                    "probability": "eyJ3aW4iOm51bGwsInJlZnVuZCI6bnVsbCwia2V5IjoyODU5MzM5MzU3MjUxNzc1NTY5fQ=="
+                                }
+                            ],
+                            "additionalInfo": {
+                                "boosted": false,
+                                "cashoutable": true,
+                                "twoUp": false
+                            }
+                        }
+                    ],
+                    "totalMarketCount": 0,
+                    "category": {
+                        "id": "2",
+                        "name": "Football"
+                    },
+                    "region": {
+                        "id": "77",
+                        "name": "Gambia"
+                    },
+                    "competition": {
+                        "id": "12104",
+                        "name": "Division 2"
+                    },
+                    "additionalInfo": {
+                        "live": true
+                    },
+                    "score": -0.9377779462068457,
+                    "neutralVenue": false,
+                    "version": 265
+                },

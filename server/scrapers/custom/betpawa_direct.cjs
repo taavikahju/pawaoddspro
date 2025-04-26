@@ -138,16 +138,22 @@ async function processEvents(events) {
       // 3. Check if any individual price in the market is suspended
       const anyPriceSuspended = market.prices?.some(price => price.suspended === true) || false;
       
+      // 4. Check if totalMarketCount is 0 (per user's suggestion - best indicator)
+      const totalMarketCount = event.totalMarketCount || 1; // Default to 1 if not present
+      const noMarketsAvailable = totalMarketCount === 0;
+      
       // Log all the indicators for debugging
-      if (marketSuspendedFlag || allOddsZero || anyPriceSuspended) {
+      if (marketSuspendedFlag || allOddsZero || anyPriceSuspended || noMarketsAvailable) {
         process.stderr.write(`[INFO] Event ${widget.id} (${event.name}) suspension indicators:\n`);
         process.stderr.write(`  - Market suspended flag: ${marketSuspendedFlag}\n`);
         process.stderr.write(`  - All odds zero: ${allOddsZero}\n`);
         process.stderr.write(`  - Any price suspended: ${anyPriceSuspended}\n`);
+        process.stderr.write(`  - No markets available (totalMarketCount=0): ${noMarketsAvailable}\n`);
+        process.stderr.write(`  - Total market count: ${totalMarketCount}\n`);
       }
       
-      // Use any method to detect suspension
-      const isSuspended = marketSuspendedFlag || allOddsZero || anyPriceSuspended;
+      // Use any method to detect suspension, but prioritize totalMarketCount=0
+      const isSuspended = noMarketsAvailable || marketSuspendedFlag || allOddsZero || anyPriceSuspended;
       
       // For testing - force a few specific events to show as suspended so we can verify the visualization
       // Use a modulo condition so we get consistent results for the same event IDs
