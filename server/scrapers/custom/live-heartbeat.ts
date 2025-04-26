@@ -766,15 +766,60 @@ async function processEvents(events: any[]): Promise<void> {
     
     // Update the heartbeat state by:
     // 1. Keeping existing events that are not in the new set (these are suspended events no longer returned by API)
-    // 2. Adding all new events from the current API response
-    const updatedEvents = [
-      // Keep existing suspended events that are not in the current API response
-      ...heartbeatState.events.filter(e => 
-        e.suspended === true && !newEventsMap.has(e.id)
-      ),
-      // Add all new events from the current API response
-      ...normalizedEvents
-    ];
+    // 2. Updating events that exist in both sets (prefer new data but keep suspension state if needed)
+    // 3. Adding events that are in the new set but not in the existing set
+    
+    // Debugging counts
+    console.log(`PROCESSING: ${heartbeatState.events.length} events in current state, ${normalizedEvents.length} events in new API response`);
+    
+    // Keep track of suspended events for debugging
+    const existingSuspendedEvents = heartbeatState.events.filter(e => e.suspended === true || e.currentlyAvailable === false);
+    console.log(`PROCESSING: ${existingSuspendedEvents.length} suspended events in current state before update`);
+    
+    // Create the updated events array
+    const updatedEvents = [];
+    
+    // First, add all existing events that aren't in the new set (likely suspended events)
+    for (const existingEvent of heartbeatState.events) {
+      if (!newEventsMap.has(existingEvent.id)) {
+        // This event wasn't returned by the API, so it's likely suspended
+        // Keep it in our state with suspended=true
+        if (!existingEvent.suspended) {
+          console.log(`DEBUG: Marking event ${existingEvent.id} (${existingEvent.name}) as suspended because it's no longer in API response`);
+          existingEvent.suspended = true;
+          existingEvent.currentlyAvailable = false;
+        }
+        updatedEvents.push(existingEvent);
+      }
+    }
+    
+    // Then add all events from the new response
+    for (const newEvent of normalizedEvents) {
+      // Check if this event exists in our current state
+      const existingEvent = heartbeatState.events.find(e => e.id === newEvent.id);
+      
+      if (existingEvent) {
+        // Event exists in both sets - use new data but preserve suspension state if needed
+        if (existingEvent.suspended && newEvent.currentlyAvailable) {
+          // The API says it's available but our previous state says it's suspended
+          // This could happen when the API temporarily returns the event during suspension
+          console.log(`DEBUG: Event ${newEvent.id} (${newEvent.name}) is marked available in API but was suspended in our state. Keeping it as suspended.`);
+          newEvent.suspended = true;
+          newEvent.currentlyAvailable = false;
+        }
+      }
+      
+      updatedEvents.push(newEvent);
+    }
+    
+    // Debug final count
+    const finalSuspendedEvents = updatedEvents.filter(e => e.suspended === true || e.currentlyAvailable === false);
+    console.log(`PROCESSING: ${updatedEvents.length} total events after update, ${finalSuspendedEvents.length} suspended`);
+    
+    // If we lost any suspended events, log a warning
+    if (finalSuspendedEvents.length < existingSuspendedEvents.length) {
+      console.warn(`WARNING: Lost ${existingSuspendedEvents.length - finalSuspendedEvents.length} suspended events during update!`);
+    }
     
     // Update the state
     heartbeatState.events = updatedEvents;
@@ -923,6 +968,15 @@ export function getEventMarketHistory(eventId: string): {
 
 // Get the current heartbeat status
 export function getHeartbeatStatus(): HeartbeatState {
+  // Debug suspensions
+  const suspendedEvents = heartbeatState.events.filter(e => !e.currentlyAvailable || e.suspended);
+  if (suspendedEvents.length > 0) {
+    console.log(`BACKEND DEBUG: Found ${suspendedEvents.length} suspended events in heartbeatState. Total events: ${heartbeatState.events.length}`);
+    suspendedEvents.forEach(e => {
+      console.log(`BACKEND DEBUG: Suspended event: ${e.id} (${e.name}) - currentlyAvailable: ${e.currentlyAvailable}, suspended: ${e.suspended}`);
+    });
+  }
+  
   return heartbeatState;
 }
 

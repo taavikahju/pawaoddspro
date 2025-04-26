@@ -1403,14 +1403,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const status = getHeartbeatStatus();
       
-      // Debug logging for specific event
-      const specificEventId = "50956891";
-      const eventFound = status.events.find(e => e.id === specificEventId);
-      if (eventFound) {
-        console.log(`DEBUG: Found event ${specificEventId} in heartbeat state:`, JSON.stringify(eventFound));
-      } else {
-        console.log(`DEBUG: Event ${specificEventId} NOT found in heartbeat state. Total events: ${status.events.length}`);
-      }
+      // Debug logging: Check what happens to suspended events in the API response
+      let suspendedCount = 0;
+      let availableCount = 0;
+      
+      status.events.forEach(event => {
+        if (!event.currentlyAvailable || event.suspended) {
+          suspendedCount++;
+          console.log(`DEBUG: Found SUSPENDED event in response: ${event.id} (${event.name}) - currentlyAvailable: ${event.currentlyAvailable}, suspended: ${event.suspended}`);
+        } else {
+          availableCount++;
+        }
+      });
+      
+      console.log(`DEBUG: Events summary - Total: ${status.events.length}, Available: ${availableCount}, Suspended: ${suspendedCount}`);
+
+      // Check for specific events
+      const specificEvents = ["50956891", "59934167"];
+      specificEvents.forEach(id => {
+        const event = status.events.find(e => e.id === id);
+        if (event) {
+          console.log(`DEBUG: Specific event ${id} found in API response:`, JSON.stringify(event));
+        } else {
+          console.log(`DEBUG: Specific event ${id} NOT found in API response`);
+        }
+      });
       
       res.json(status);
     } catch (error) {

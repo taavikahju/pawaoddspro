@@ -180,30 +180,38 @@ export default function LiveHeartbeat() {
       ? heartbeatData?.events || []
       : (historicalData?.success ? historicalData.data : []);
     
-    // Debug output for specific events
-    const specificEvents = [
-      events.find(e => e.id === '50956891'),
-      events.find(e => e.id === '59934167')
-    ].filter(Boolean);
+    // Log summary of suspended events to debug
+    const allSuspendedEvents = events.filter(e => !e.currentlyAvailable || e.suspended);
+    console.log(`DEBUG: Found ${allSuspendedEvents.length} suspended events out of ${events.length} total`);
     
-    if (specificEvents.length > 0) {
-      console.log(`DEBUG: Found specific events in source data:`, 
-        specificEvents.map(e => ({
+    // Always log suspended events for debugging
+    if (allSuspendedEvents.length > 0) {
+      console.log(`DEBUG: Suspended events:`, 
+        allSuspendedEvents.map(e => ({
           id: e.id,
           name: e.name,
+          country: e.country,
+          tournament: e.tournament,
           currentlyAvailable: e.currentlyAvailable,
           suspended: e.suspended
         }))
       );
-    } else {
-      console.log(`DEBUG: Specific events 50956891 and 59934167 NOT found in data. Total events: ${events.length}`);
     }
     
-    return events.filter(event => {
+    // Apply country and tournament filters
+    const filteredByCountryAndTournament = events.filter(event => {
       const countryMatch = selectedCountry === 'all' || event.country === selectedCountry;
       const tournamentMatch = selectedTournament === 'all' || event.tournament === selectedTournament;
       return countryMatch && tournamentMatch;
     });
+    
+    // Log any filtered suspended events that were excluded
+    const suspendedEventsAfterFiltering = filteredByCountryAndTournament.filter(e => !e.currentlyAvailable || e.suspended);
+    if (suspendedEventsAfterFiltering.length !== allSuspendedEvents.length) {
+      console.log(`DEBUG: ${allSuspendedEvents.length - suspendedEventsAfterFiltering.length} suspended events were filtered out by country/tournament selection`);
+    }
+    
+    return filteredByCountryAndTournament;
   }, [heartbeatData, historicalData, selectedCountry, selectedTournament, activeTab]);
   
   // Fetch heartbeat stats for the selected event
