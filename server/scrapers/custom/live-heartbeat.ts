@@ -28,6 +28,8 @@ interface HeartbeatEvent {
   recordCount: number;
   gameMinute?: string;
   widgetId?: string;
+  homeTeam?: string;
+  awayTeam?: string;
 }
 
 interface MarketHistory {
@@ -865,10 +867,28 @@ async function processEvents(events: any[]): Promise<void> {
     // Format UTC start time - try different paths
     const startTime = event.startTime || event.startDate || event.date || new Date().toISOString();
     
-    // Create event object
+    // Check for home_team and away_team from our enhanced scraper
+    let homeTeam = '';
+    let awayTeam = '';
+    
+    if (event.home_team && event.away_team) {
+      homeTeam = event.home_team;
+      awayTeam = event.away_team;
+    } else if (event.competitors && event.competitors.length >= 2) {
+      homeTeam = event.competitors[0].name || '';
+      awayTeam = event.competitors[1].name || '';
+    } else if (eventName.includes(' vs ')) {
+      const teams = eventName.split(' vs ');
+      if (teams.length === 2) {
+        homeTeam = teams[0].trim();
+        awayTeam = teams[1].trim();
+      }
+    }
+    
+    // Create event object with enhanced properties
     const heartbeatEvent: HeartbeatEvent = {
       id: eventId,
-      name: eventName,
+      name: eventName || (homeTeam && awayTeam ? `${homeTeam} vs ${awayTeam}` : 'Unknown Event'),
       country,
       tournament,
       isInPlay: event.status === 'LIVE' || event.isLive || event.inPlay === true || false,
@@ -877,7 +897,9 @@ async function processEvents(events: any[]): Promise<void> {
       marketAvailability: isMarketAvailable ? 'Available' : 'Suspended',
       recordCount: 0,
       gameMinute,
-      widgetId
+      widgetId,
+      homeTeam,
+      awayTeam
     };
     
     // Log event details for debugging
