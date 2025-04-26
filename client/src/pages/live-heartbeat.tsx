@@ -180,6 +180,25 @@ export default function LiveHeartbeat() {
       ? heartbeatData?.events || []
       : (historicalData?.success ? historicalData.data : []);
     
+    // Debug output for specific events
+    const specificEvents = [
+      events.find(e => e.id === '50956891'),
+      events.find(e => e.id === '59934167')
+    ].filter(Boolean);
+    
+    if (specificEvents.length > 0) {
+      console.log(`DEBUG: Found specific events in source data:`, 
+        specificEvents.map(e => ({
+          id: e.id,
+          name: e.name,
+          currentlyAvailable: e.currentlyAvailable,
+          suspended: e.suspended
+        }))
+      );
+    } else {
+      console.log(`DEBUG: Specific events 50956891 and 59934167 NOT found in data. Total events: ${events.length}`);
+    }
+    
     return events.filter(event => {
       const countryMatch = selectedCountry === 'all' || event.country === selectedCountry;
       const tournamentMatch = selectedTournament === 'all' || event.tournament === selectedTournament;
@@ -552,7 +571,15 @@ export default function LiveHeartbeat() {
                               ? 'bg-red-500/20 border-l-4 border-red-500 dark:bg-red-900/30'
                               : ''
                           }`}
-                          onClick={() => setSelectedEventId(event.id)}
+                          onClick={() => {
+                            console.log(`Selecting event:`, {
+                              id: event.id,
+                              name: event.name,
+                              currentlyAvailable: event.currentlyAvailable,
+                              suspended: event.suspended
+                            });
+                            setSelectedEventId(event.id);
+                          }}
                         >
                           <div className="flex flex-col mb-1">
                             <div className="flex items-center justify-between mb-1">
