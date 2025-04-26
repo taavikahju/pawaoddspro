@@ -1022,10 +1022,36 @@ export function getEventMarketHistory(eventId: string): {
 export function getHeartbeatStatus(): HeartbeatState {
   return {
     ...heartbeatState,
-    events: heartbeatState.events.map(event => ({
-      ...event,
-      recordCount: marketHistories[event.id]?.timestamps.length || 0
-    }))
+    events: heartbeatState.events.map(event => {
+      // Make sure we have a proper name for display
+      let displayName = "Match";
+      let homeTeam = event.homeTeam || "";
+      let awayTeam = event.awayTeam || "";
+      
+      // If we don't have team names but we have a full event name
+      if ((!homeTeam || !awayTeam) && event.name && event.name.includes(" vs ")) {
+        const parts = event.name.split(" vs ");
+        if (parts.length === 2) {
+          homeTeam = parts[0].trim();
+          awayTeam = parts[1].trim();
+        }
+      }
+      
+      // Update the name if we have team names
+      if (homeTeam && awayTeam) {
+        displayName = `${homeTeam} vs ${awayTeam}`;
+      } else if (event.name && event.name !== " vs ") {
+        displayName = event.name;
+      }
+      
+      return {
+        ...event,
+        name: displayName,
+        homeTeam: homeTeam || event.homeTeam,
+        awayTeam: awayTeam || event.awayTeam,
+        recordCount: marketHistories[event.id]?.timestamps.length || 0
+      };
+    })
   };
 }
 
