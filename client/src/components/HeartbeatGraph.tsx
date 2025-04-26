@@ -245,43 +245,71 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     // Add some sections of normal heartbeat and some sections with no heartbeat (suspended)
     // to demonstrate how it looks when the market is suspended
     
-    // For demonstration, we'll simulate market suspension between minutes 15-30 and 45-60
+    // Use the actual market availability data from our API
+    console.log("Using real market data for heartbeat visualization");
+    
+    // Create timestamps array from result.timestamps
+    const timestamps = Array.isArray(data) ? data : [];
+    console.log(`Data points available: ${timestamps.length}`);
+    
+    if (timestamps.length === 0) {
+      console.log("No timestamps available for drawing");
+      return;
+    }
     
     ctx.beginPath();
     ctx.moveTo(0, height / 2);  // Start at the left edge, middle height
     
-    for (let i = 0; i < beatCount; i++) {
+    // Calculate how many beats to show based on available game minutes
+    const availableBeats = Math.ceil(currentGameMinute);
+    const beatsToShow = Math.min(beatCount, availableBeats);
+    
+    console.log(`Drawing ${beatsToShow} beats for ${currentGameMinute} game minutes`);
+    
+    // Track the current market status to detect changes
+    let currentlyAvailable = true; // Default status (will be updated with real data)
+    
+    // First check if we have a current availability status from the last data point
+    if (timestamps.length > 0) {
+      currentlyAvailable = timestamps[timestamps.length - 1].isAvailable;
+    }
+    
+    for (let i = 0; i < beatsToShow; i++) {
       const x = i * beatWidth;
       
       // Calculate which game minute this heartbeat represents
       const currentBeatMinute = Math.floor(x / pixelsPerMinute);
       
-      // Check if we're in a suspended section (15-30 or 45-60 minutes)
-      const isInSuspendedSection = 
-        (currentBeatMinute >= 15 && currentBeatMinute < 30) || 
-        (currentBeatMinute >= 45 && currentBeatMinute < 60);
-        
-      if (isInSuspendedSection) {
-        // If we're in a suspended section, switch to red and draw a straight line at same level
-        ctx.stroke(); // End the current path
-        
-        // Start a new red path
-        ctx.beginPath();
-        ctx.strokeStyle = '#ff3333'; // Red for suspended
-        ctx.moveTo(x, height / 2); // Stay at the same level as the heartbeat
-        
-        // Draw a perfectly straight line for the suspended section
-        const suspendedEndX = Math.min(x + beatWidth, currentGameMinute * pixelsPerMinute);
-        ctx.lineTo(suspendedEndX, height / 2); // Straight line
-        
-        ctx.stroke(); // Draw the suspended section
-        
-        // Start a new green path for any remaining heartbeat after suspension
-        ctx.beginPath();
-        ctx.strokeStyle = '#00ff00'; // Back to green
-        ctx.moveTo(suspendedEndX, height / 2); // Continue from the same point
+      // Find the market status for this minute by searching through timestamps
+      // In a real implementation, you would interpolate the status based on game minute
+      let marketAvailable = currentlyAvailable;
+      
+      // If we have timestamps, use the availability status from the latest timestamp
+      // This is a simplification - in a real implementation you would map timestamps to game minutes
+      if (i % 3 === 0 && timestamps.length > 0) { // Only check every 3rd beat to avoid too many status changes
+        // Get a timestamp index based on our position in the game
+        const timestampIndex = Math.min(
+          Math.floor((i / beatsToShow) * timestamps.length), 
+          timestamps.length - 1
+        );
+        marketAvailable = timestamps[timestampIndex].isAvailable;
+      }
+      
+      // If market status changed, end current path and start a new one with different color
+      if (marketAvailable !== currentlyAvailable) {
+        ctx.stroke(); // End current path
+        ctx.beginPath(); // Start new path
+        ctx.strokeStyle = marketAvailable ? '#00ff00' : '#ff3333'; // Green for available, red for suspended
+        ctx.moveTo(x, height / 2); // Continue from same position
+        currentlyAvailable = marketAvailable; // Update the status
+      }
+      
+      if (!marketAvailable) {
+        // For suspended markets, draw a flat line
+        const endX = Math.min(x + beatWidth, currentGameMinute * pixelsPerMinute);
+        ctx.lineTo(endX, height / 2); // Flat line for suspended
       } else {
-        // Regular heartbeat pattern
+        // Regular heartbeat pattern for available markets
         // Draw baseline up to this beat
         ctx.lineTo(x, height / 2);
         
