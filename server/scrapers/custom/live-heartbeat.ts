@@ -832,9 +832,17 @@ async function processEvents(events: any[]): Promise<void> {
     
     // Extract game minute from scoreboard - various paths based on API version
     let gameMinute = '';
+    let periodName = '';
     
+    // Check if the match is at halftime (display is null and periodName is First Half)
+    if (event.scoreboard?.display === null && 
+        (event.scoreboard?.periodName === 'First Half' || 
+         event.score?.periodName === 'First Half' || 
+         event.periodName === 'First Half')) {
+      gameMinute = 'HT'; // Set to HT for halftime
+    }
     // Try different paths for the game minute
-    if (event.scoreboard?.display?.minute) {
+    else if (event.scoreboard?.display?.minute) {
       gameMinute = event.scoreboard.display.minute;
     } else if (event.score?.period) {
       gameMinute = event.score.period;
@@ -842,6 +850,8 @@ async function processEvents(events: any[]): Promise<void> {
       gameMinute = event.inPlayMatchDetails.minute.toString();
     } else if (event.currentMinute) {
       gameMinute = event.currentMinute.toString();
+    } else if (event.game_minute) {
+      gameMinute = event.game_minute;
     }
     
     // Extract widget ID if available for visualizations
