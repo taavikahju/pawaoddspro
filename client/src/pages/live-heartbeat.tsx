@@ -11,69 +11,40 @@ import Layout from '@/components/Layout';
 import ReactCountryFlag from 'react-country-flag';
 
 // Component for displaying uptime metrics in a modern gauge
-const UptimeGauge = ({ value, title }: { value: number, title: string }) => {
-  // Convert value to position on the gauge (between -30 and 210 degrees)
+const UptimeGauge = ({ value }: { value: number }) => {
+  // Calculate the angle for the needle based on the value
   const needleRotation = -30 + (value / 100) * 240;
   
-  // Determine color based on value
-  const getColor = (val: number) => {
-    if (val < 40) return '#ef4444'; // red
-    if (val < 60) return '#f97316'; // orange
-    if (val < 75) return '#eab308'; // yellow
-    return '#22c55e'; // green
-  };
-  
   return (
-    <div className="w-full flex flex-col items-center justify-center">
-      <div className="text-xs font-medium mb-1 text-center text-muted-foreground">
-        {title}
+    <div className="flex items-center">
+      <div className="text-sm font-medium text-muted-foreground mr-2">
+        Uptime:
       </div>
-      
-      <div className="relative w-[80px] h-[40px]">
-        {/* Gauge background */}
-        <svg className="w-full h-full" viewBox="0 0 100 50">
-          {/* Red section */}
-          <path 
-            d="M 50 50 A 40 40 0 0 1 10 50" 
-            fill="none" 
-            stroke="#ef4444" 
-            strokeWidth="8"
-          />
+      <div className="relative w-[60px] h-[30px]">
+        <svg className="w-full h-full" viewBox="0 0 60 30">
+          {/* Gauge sections */}
+          <path d="M 30 30 A 20 20 0 0 1 10 30" fill="#ef4444" /> {/* Red */}
+          <path d="M 30 30 A 20 20 0 0 1 17 14" fill="#f97316" /> {/* Orange */}
+          <path d="M 30 30 A 20 20 0 0 1 30 10" fill="#eab308" /> {/* Yellow */}
+          <path d="M 30 30 A 20 20 0 0 1 43 14" fill="#65a30d" /> {/* Green */}
+          <path d="M 30 30 A 20 20 0 0 1 50 30" fill="#22c55e" /> {/* Green */}
           
-          {/* Orange section */}
-          <path 
-            d="M 50 50 A 40 40 0 0 1 25 14.6" 
-            fill="none" 
-            stroke="#f97316" 
-            strokeWidth="8"
-          />
-          
-          {/* Yellow section */}
-          <path 
-            d="M 50 50 A 40 40 0 0 1 75 14.6" 
-            fill="none" 
-            stroke="#eab308" 
-            strokeWidth="8"
-          />
-          
-          {/* Green section */}
-          <path 
-            d="M 50 50 A 40 40 0 0 1 90 50" 
-            fill="none" 
-            stroke="#22c55e" 
-            strokeWidth="8"
-          />
+          {/* Center white circle */}
+          <circle cx="30" cy="30" r="10" fill="white" />
           
           {/* Needle */}
-          <g transform={`rotate(${needleRotation}, 50, 50)`}>
-            <line x1="50" y1="50" x2="50" y2="20" stroke="#000" strokeWidth="2" />
-            <circle cx="50" cy="50" r="3" fill="#000" />
+          <g transform={`rotate(${needleRotation}, 30, 30)`}>
+            <line x1="30" y1="30" x2="30" y2="12" stroke="#000" strokeWidth="1.5" />
+            <circle cx="30" cy="30" r="2" fill="#000" />
           </g>
         </svg>
       </div>
-      
-      {/* Value */}
-      <div className="text-sm font-semibold mt-1" style={{ color: getColor(value) }}>
+      <div className="ml-2 text-sm font-medium" 
+           style={{ 
+             color: value < 40 ? '#ef4444' : 
+                    value < 60 ? '#f97316' : 
+                    value < 75 ? '#eab308' : '#22c55e' 
+           }}>
         {value.toFixed(1)}%
       </div>
     </div>
@@ -416,22 +387,8 @@ export default function LiveHeartbeat() {
                     </Button>
                   </div>
 
-                  {/* Uptime percentage display positioned to the right */}
-                  <div className="flex items-center">
-                    <div className="text-sm font-medium text-muted-foreground mr-1">
-                      Uptime:
-                    </div>
-                    <div 
-                      className="font-medium text-sm"
-                      style={{ 
-                        color: uptimeStats.current < 40 ? '#ef4444' : 
-                               uptimeStats.current < 60 ? '#f97316' : 
-                               uptimeStats.current < 75 ? '#eab308' : '#22c55e' 
-                      }}
-                    >
-                      {uptimeStats.current.toFixed(1)}%
-                    </div>
-                  </div>
+                  {/* Uptime gauge positioned to the right */}
+                  <UptimeGauge value={uptimeStats.current} />
                 </div>
               </div>
             </CardContent>
