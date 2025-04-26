@@ -88,29 +88,50 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
       
       // Convert mouse X position to timestamp
       const posRatio = x / width;
-      const timeAtPosition = firstTimestamp + (posRatio * timeRange);
+      const exactTimestamp = firstTimestamp + (posRatio * timeRange);
       
-      // Find the nearest data point to the cursor
-      let closestPoint = sortedData[0];
-      let smallestDiff = Math.abs(sortedData[0].timestamp - timeAtPosition);
+      // Find the nearest data point that would show at this position
+      // This matches how we draw the line on the canvas
+      let pointInfo = {
+        timestamp: new Date(exactTimestamp),
+        isAvailable: false,
+        gameMinute: undefined
+      };
       
-      for (let i = 1; i < sortedData.length; i++) {
-        const diff = Math.abs(sortedData[i].timestamp - timeAtPosition);
-        if (diff < smallestDiff) {
-          smallestDiff = diff;
-          closestPoint = sortedData[i];
+      // Find which segment of the timeline we're in
+      let currentStatus = null;
+      let currentGameMinute = undefined;
+      
+      // Go through the data points in order to determine the status at hover position
+      for (let i = 0; i < sortedData.length; i++) {
+        const point = sortedData[i];
+        
+        // If this point is past our hover position, stop looking
+        if (point.timestamp > exactTimestamp) {
+          break;
         }
+        
+        // Use the status and game minute from this point
+        currentStatus = point.isAvailable === true;
+        currentGameMinute = point.gameMinute;
       }
       
-      // Update hover information with correct boolean conversion
-      const isAvailable = closestPoint.isAvailable === true; // Force boolean conversion
+      // If we found a status, use it
+      if (currentStatus !== null) {
+        pointInfo.isAvailable = currentStatus;
+        pointInfo.gameMinute = currentGameMinute;
+      } else {
+        // If we didn't find a status (we're before the first point), use the first point's status
+        pointInfo.isAvailable = sortedData[0].isAvailable === true;
+        pointInfo.gameMinute = sortedData[0].gameMinute;
+      }
       
       setHoverInfo({
         x, 
         y,
-        timestamp: new Date(closestPoint.timestamp),
-        isAvailable,
-        gameMinute: closestPoint.gameMinute
+        timestamp: pointInfo.timestamp,
+        isAvailable: pointInfo.isAvailable,
+        gameMinute: pointInfo.gameMinute
       });
       
       // Add a visible cursor
