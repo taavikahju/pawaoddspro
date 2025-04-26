@@ -257,14 +257,19 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
         // Find the market status for this position by searching through timestamps
         let marketAvailable = isAvailable;
         
-        // Every few beats, check the data status
-        if (i % 3 === 0 && timestamps.length > 0) {
+        // Check data status for every beat to ensure we don't miss suspension changes
+        if (timestamps.length > 0) {
           // Get a timestamp index based on our position in the game
           const timestampIndex = Math.min(
             Math.floor((i / beatsToShow) * timestamps.length), 
             timestamps.length - 1
           );
           marketAvailable = timestamps[timestampIndex].isAvailable;
+          
+          // Log suspended status for debugging
+          if (!marketAvailable && i % 10 === 0) {
+            console.log(`Detected suspended market at beat ${i}, timestamp index ${timestampIndex}`);
+          }
         }
         
         // If market status changed, end current path and start a new one with different color

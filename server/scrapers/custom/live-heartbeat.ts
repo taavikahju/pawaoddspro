@@ -659,7 +659,12 @@ async function processEvents(events: any[]): Promise<void> {
       let marketStatus = 'ACTIVE';
       
       // Check different properties that might indicate if a market is suspended
-      if (event.markets && event.markets.length > 0) {
+      if (event.suspended === true) {
+        // Directly use the suspended flag from the event (set by betpawa_direct.cjs)
+        isAvailable = false;
+        marketStatus = 'SUSPENDED';
+        console.log(`Event ${event.id || event.eventId} is marked as suspended by zero odds detection`);
+      } else if (event.markets && event.markets.length > 0) {
         isAvailable = !event.markets[0].suspended;
         marketStatus = event.markets[0].suspended ? 'SUSPENDED' : 'ACTIVE';
       } else if (event.status === 'SUSPENDED' || event.bettingStatus === 'SUSPENDED') {
