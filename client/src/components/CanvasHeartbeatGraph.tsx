@@ -838,30 +838,31 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
                 style={{
                   left: `${hoverInfo.x}px`,
                   top: '0',
-                  width: '1px',
+                  width: '2px',
                   height: '100%',
-                  backgroundColor: hoverInfo.isAvailable ? 'rgba(0, 255, 0, 0.5)' : 'rgba(255, 0, 0, 0.5)',
+                  backgroundColor: hoverInfo.isAvailable ? 'rgba(0, 255, 0, 0.8)' : 'rgba(255, 0, 0, 0.8)',
                   zIndex: 10,
+                  transform: 'translateX(-50%)', // Center the line on the exact mouse position
                 }}
               />
               
               {/* Tooltip */}
               <div 
-                className={`absolute px-2 py-1 text-xs rounded pointer-events-none ${hoverInfo.isAvailable ? 'bg-green-700/80' : 'bg-red-700/80'} text-white border border-white/30`}
+                className={`absolute px-3 py-2 text-xs rounded pointer-events-none ${hoverInfo.isAvailable ? 'bg-green-700/90' : 'bg-red-700/90'} text-white border-2 border-white/40 shadow-lg`}
                 style={{ 
                   left: `${hoverInfo.x}px`, 
-                  top: `${Math.max(10, hoverInfo.y - 40)}px`,
+                  top: `${Math.max(10, hoverInfo.y - 45)}px`,
                   transform: 'translateX(-50%)',
                   zIndex: 20,
                   whiteSpace: 'nowrap'
                 }}
               >
-                <div className="font-bold">
+                <div className="font-bold text-sm">
                   {hoverInfo.timestamp.toLocaleTimeString()} 
                   {hoverInfo.gameMinute && <span className="ml-2">(Min {hoverInfo.gameMinute})</span>}
                 </div>
-                <div>
-                  Status: {hoverInfo.isAvailable ? 'Available' : 'Suspended'}
+                <div className="mt-1">
+                  Status: <span className="font-semibold">{hoverInfo.isAvailable ? 'Available' : 'Suspended'}</span>
                 </div>
               </div>
             </>
