@@ -215,7 +215,47 @@ export default function LiveHeartbeat() {
     enabled: !!selectedEventId,
   });
   
-  // Calculate uptime statistics from event stats data
+  // Fetch market history for each event to calculate overall average uptime
+  const fetchAverageUptime = async () => {
+    if (filteredEvents.length === 0) return;
+    
+    try {
+      // Get uptime percentages for all events by making API calls
+      const uptimePromises = filteredEvents.map(async (event) => {
+        try {
+          const response = await fetch(`/api/live-heartbeat/data/${event.id}`);
+          if (!response.ok) return null;
+          
+          const data = await response.json();
+          return data.uptimePercentage || 0;
+        } catch (error) {
+          console.error(`Error fetching uptime for event ${event.id}:`, error);
+          return null;
+        }
+      });
+      
+      // Wait for all promises to complete
+      const uptimeValues = await Promise.all(uptimePromises);
+      
+      // Calculate the average, filtering out null values
+      const validValues = uptimeValues.filter(val => val !== null);
+      const averageUptime = validValues.length > 0 
+        ? validValues.reduce((sum, val) => sum + val, 0) / validValues.length 
+        : 0;
+      
+      console.log(`Calculated average uptime across ${validValues.length} events: ${averageUptime.toFixed(1)}%`);
+      
+      // Update uptime stats
+      setUptimeStats({
+        current: averageUptime,
+        events: filteredEvents.length
+      });
+    } catch (error) {
+      console.error('Error calculating average uptime:', error);
+    }
+  };
+
+  // Calculate uptime statistics from event stats data for the selected event
   useEffect(() => {
     if (eventStatsData?.success && eventStatsData.data?.length > 0) {
       const stats = eventStatsData.data;
@@ -223,12 +263,16 @@ export default function LiveHeartbeat() {
       const availableCount = stats.filter(stat => stat.isAvailable).length;
       const uptime = totalCount > 0 ? (availableCount / totalCount) * 100 : 0;
 
-      setUptimeStats({
-        current: uptime,
-        events: filteredEvents.length // Count of filtered events
-      });
+      // We don't update the overall uptime here anymore, just log the selected event uptime
+      console.log(`Selected event ${selectedEventId} uptime: ${uptime.toFixed(1)}%`);
     }
-  }, [eventStatsData, selectedEventId, filteredEvents.length]);
+  }, [eventStatsData, selectedEventId]);
+  
+  // Calculate average uptime across all filtered events
+  useEffect(() => {
+    fetchAverageUptime();
+    // Run this calculation whenever the filtered events list changes
+  }, [filteredEvents]);
 
   // Format date to "DD MMM HH:MM" format 
   const formatDate = (dateString: string) => {
