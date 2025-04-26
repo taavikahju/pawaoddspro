@@ -188,11 +188,16 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     // Green for normal heartbeat
     ctx.strokeStyle = '#00ff00';
     
-    // Draw a series of heartbeats from 0 to current minute
-    const beatWidth = 20;  // Width of each heartbeat pattern in pixels
+    // Draw a series of heartbeats from 0 to current minute with reduced frequency
+    const beatWidth = 40;  // Doubled width to reduce frequency (was 20)
     const beatCount = Math.floor(currentGameMinute * pixelsPerMinute / beatWidth);
     
     console.log(`Drawing ${beatCount} heartbeats`);
+    
+    // Add some sections of normal heartbeat and some sections with no heartbeat (suspended)
+    // to demonstrate how it looks when the market is suspended
+    
+    // For demonstration, we'll simulate market suspension between minutes 15-30 and 45-60
     
     ctx.beginPath();
     ctx.moveTo(0, height / 2);  // Start at the left edge, middle height
@@ -200,18 +205,51 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     for (let i = 0; i < beatCount; i++) {
       const x = i * beatWidth;
       
-      // Draw baseline up to this beat
-      ctx.lineTo(x, height / 2);
+      // Calculate which game minute this heartbeat represents
+      const currentBeatMinute = Math.floor(x / pixelsPerMinute);
       
-      // Draw heartbeat pattern (simple ECG-like) with smaller spikes
-      ctx.lineTo(x + 5, height / 2 - 3);      // Small P wave (smaller)
-      ctx.lineTo(x + 7, height / 2);          // Back to baseline
-      ctx.lineTo(x + 9, height / 2 + 3);      // Q dip (smaller)
-      ctx.lineTo(x + 10, height / 2 - 25);    // R spike (reduced height)
-      ctx.lineTo(x + 12, height / 2 + 5);     // S dip (smaller)
-      ctx.lineTo(x + 14, height / 2);         // Back to baseline
-      ctx.lineTo(x + 16, height / 2 - 6);     // T wave (smaller)
-      ctx.lineTo(x + 18, height / 2);         // Back to baseline
+      // Check if we're in a suspended section (15-30 or 45-60 minutes)
+      const isInSuspendedSection = 
+        (currentBeatMinute >= 15 && currentBeatMinute < 30) || 
+        (currentBeatMinute >= 45 && currentBeatMinute < 60);
+        
+      if (isInSuspendedSection) {
+        // If we're in a suspended section, switch to red and draw a flat line at 3/4 height
+        ctx.stroke(); // End the current path
+        
+        // Start a new red path
+        ctx.beginPath();
+        ctx.strokeStyle = '#ff3333'; // Red for suspended
+        ctx.moveTo(x, (height * 3) / 4); // Move to the suspended line position (3/4 down)
+        
+        // Draw a fairly straight line with small variations for the suspended section
+        const suspendedEndX = Math.min(x + beatWidth, currentGameMinute * pixelsPerMinute);
+        for (let sx = x; sx <= suspendedEndX; sx += 4) {
+          const y = (height * 3) / 4 + Math.sin(sx * 0.1) * 2; // Small variations
+          ctx.lineTo(sx, y);
+        }
+        
+        ctx.stroke(); // Draw the suspended section
+        
+        // Start a new green path for any remaining heartbeat after suspension
+        ctx.beginPath();
+        ctx.strokeStyle = '#00ff00'; // Back to green
+        ctx.moveTo(suspendedEndX, height / 2); // Move back to center line
+      } else {
+        // Regular heartbeat pattern
+        // Draw baseline up to this beat
+        ctx.lineTo(x, height / 2);
+        
+        // Draw heartbeat pattern (simple ECG-like) with smaller spikes
+        ctx.lineTo(x + 10, height / 2 - 3);      // Small P wave (smaller)
+        ctx.lineTo(x + 14, height / 2);          // Back to baseline
+        ctx.lineTo(x + 18, height / 2 + 3);      // Q dip (smaller)
+        ctx.lineTo(x + 20, height / 2 - 20);     // R spike (reduced height)
+        ctx.lineTo(x + 24, height / 2 + 5);      // S dip (smaller)
+        ctx.lineTo(x + 28, height / 2);          // Back to baseline
+        ctx.lineTo(x + 32, height / 2 - 5);      // T wave (smaller)
+        ctx.lineTo(x + 36, height / 2);          // Back to baseline
+      }
     }
     
     // Draw remaining line to current minute position
