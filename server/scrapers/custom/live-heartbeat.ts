@@ -909,7 +909,11 @@ async function processEvents(events: any[]): Promise<void> {
     };
     
     // Log event details for debugging
-    console.log(`Processing event: ${eventName} (${eventId}), Country: ${country}, Tournament: ${tournament}, Market Available: ${isMarketAvailable}, Minute: ${gameMinute}`);
+    if (homeTeam && awayTeam) {
+      console.log(`Processing event: ${homeTeam} vs ${awayTeam} (${eventId}), Country: ${country}, Tournament: ${tournament}, Market Available: ${isMarketAvailable}, Minute: ${gameMinute}`);
+    } else {
+      console.log(`Processing event: ${eventName || "Unknown"} (${eventId}), Country: ${country}, Tournament: ${tournament}, Market Available: ${isMarketAvailable}, Minute: ${gameMinute}`);
+    }
     
     // Update market history
     updateMarketHistory(heartbeatEvent);
