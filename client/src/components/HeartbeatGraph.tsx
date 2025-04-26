@@ -160,8 +160,8 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     // Start from left side (0 minute) to current game minute
     const endX = Math.min(currentGameMinute * pixelsPerMinute, width);
     
-    // Setup heartbeat line style with thinner line (like in the drawing)
-    ctx.lineWidth = 2; 
+    // Set up line style with a more prominent line
+    ctx.lineWidth = 4; // Increased thickness to make it more visible
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     
@@ -287,21 +287,33 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
           
           // Draw the points for this beat
           if (beatPoints.length > 0) {
+            // Start a new path for each beat to ensure continuity
+            ctx.beginPath();
             ctx.moveTo(beatPoints[0].x, beatPoints[0].y);
+            
             for (let i = 1; i < beatPoints.length; i++) {
               ctx.lineTo(beatPoints[i].x, beatPoints[i].y);
             }
+            
+            // Stroke each beat segment to ensure visibility
+            ctx.stroke();
           }
         }
       } else {
         // For unavailable segments, draw a flat line with small variations
-        for (let x = startX; x <= segmentEndX; x += 3) {
+        ctx.beginPath();
+        ctx.moveTo(startX, baselineY);
+        
+        for (let x = startX + 3; x <= segmentEndX; x += 3) {
           const y = baselineY + (Math.sin(x * 0.1) * 2);
           ctx.lineTo(x, y);
         }
+        
+        // Immediately stroke the unavailable segment
+        ctx.stroke();
       }
       
-      ctx.stroke();
+      // No need for an additional stroke since we're stroking each segment individually
     }
     
     // Draw minute indicator at the current position
