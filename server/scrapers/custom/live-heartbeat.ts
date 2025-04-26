@@ -984,37 +984,160 @@ async function processEvents(events: any[]): Promise<void> {
     
     // Extract market status
     if (market1X2) {
-      // First check overall market suspension
-      isMarketAvailable = !(market1X2.suspended === true || market1X2.status === 'SUSPENDED');
+      // Per new requirements:
+      // Market is available if ANY of the types 3744, 3745, 3746 have suspended=false
+      // Market is suspended only if ALL prices are suspended
       
-      // According to requirements:
-      // An event has a heartbeat if at least one of the marketType 3743 prices has suspended=false
-      // If all 3 prices are suspended, then there is no heartbeat
+      // Default to suspended until we find an available price
+      isMarketAvailable = false;
       
-      // Check prices array first
+      // Log market details for debugging - but keep it concise to avoid log spam
       if (market1X2.prices && market1X2.prices.length > 0) {
-        // Market is suspended only if ALL THREE prices are suspended
-        const allPricesSuspended = market1X2.prices.length >= 3 && 
-          market1X2.prices.every((p: any) => p.suspended === true);
+        // Just log the essential price information rather than the entire market object
+        console.log(`Checking market suspension for event ${eventId} - Prices available:`, 
+          market1X2.prices.map((p: any) => ({
+            typeId: p.typeId || p.type,
+            name: p.name,
+            suspended: p.suspended,
+            price: p.price || p.odds
+          }))
+        );
+      } else {
+        console.log(`Checking market suspension for event ${eventId} - No prices found in market`);
+      }
+      
+      // First check overall market suspension
+      if (market1X2.suspended === false && market1X2.status !== 'SUSPENDED') {
+        // Initially consider available if the overall market isn't suspended
+        isMarketAvailable = true;
+      }
+      
+      // Check prices array first - look for any available price
+      if (market1X2.prices && market1X2.prices.length > 0) {
+        // Find the home, draw, and away selections (types 3744, 3745, 3746)
+        const homeSelections = market1X2.prices.filter((p: any) => 
+          (p.typeId === 3744 || p.typeId === "3744" || p.type === 3744 || p.type === "3744" || p.name === "1"));
         
-        isMarketAvailable = !allPricesSuspended;
+        const drawSelections = market1X2.prices.filter((p: any) => 
+          (p.typeId === 3745 || p.typeId === "3745" || p.type === 3745 || p.type === "3745" || p.name === "X"));
+        
+        const awaySelections = market1X2.prices.filter((p: any) => 
+          (p.typeId === 3746 || p.typeId === "3746" || p.type === 3746 || p.type === "3746" || p.name === "2"));
+        
+        // Check if ANY of the market selection types (home, draw, away) is available
+        const homeAvailable = homeSelections.some((p: any) => p.suspended === false);
+        const drawAvailable = drawSelections.some((p: any) => p.suspended === false);
+        const awayAvailable = awaySelections.some((p: any) => p.suspended === false);
+        
+        console.log(`Market availability check for ${eventId}:`, {
+          homeAvailable,
+          drawAvailable,
+          awayAvailable
+        });
+        
+        // If ANY of the three selection types is available, the market is available
+        if (homeAvailable || drawAvailable || awayAvailable) {
+          isMarketAvailable = true;
+          console.log(`Found available selection(s) for event ${eventId} - Market is AVAILABLE`);
+        } else {
+          console.log(`All selections suspended for event ${eventId} - Market is SUSPENDED`);
+        }
+        
+        // Fallback: if we didn't find specific selection types, check if ANY price is available
+        if (homeSelections.length === 0 && drawSelections.length === 0 && awaySelections.length === 0) {
+          const anyPriceAvailable = market1X2.prices.some((p: any) => p.suspended === false);
+          
+          if (anyPriceAvailable) {
+            isMarketAvailable = true;
+            console.log(`Using fallback: Found available price for event ${eventId}`);
+          }
+        }
       } 
-      // Check outcomes array
+      // Check outcomes array (alternative API format)
       else if (market1X2.outcomes && market1X2.outcomes.length > 0) {
-        // Same logic for outcomes - ALL outcomes must be suspended
-        const allOutcomesSuspended = market1X2.outcomes.length >= 3 && 
-          market1X2.outcomes.every((o: any) => o.suspended === true);
+        // Try to identify the home, draw, away outcomes by name or type
+        const homeOutcomes = market1X2.outcomes.filter((o: any) => 
+          o.name === "1" || o.name === "Home" || o.type === "3744" || o.type === 3744 || o.typeId === "3744" || o.typeId === 3744);
         
-        isMarketAvailable = !allOutcomesSuspended;
+        const drawOutcomes = market1X2.outcomes.filter((o: any) => 
+          o.name === "X" || o.name === "Draw" || o.type === "3745" || o.type === 3745 || o.typeId === "3745" || o.typeId === 3745);
+        
+        const awayOutcomes = market1X2.outcomes.filter((o: any) => 
+          o.name === "2" || o.name === "Away" || o.type === "3746" || o.type === 3746 || o.typeId === "3746" || o.typeId === 3746);
+        
+        // Check if ANY of them is available
+        const homeAvailable = homeOutcomes.some((o: any) => o.suspended === false);
+        const drawAvailable = drawOutcomes.some((o: any) => o.suspended === false);
+        const awayAvailable = awayOutcomes.some((o: any) => o.suspended === false);
+        
+        console.log(`Outcome availability check for ${eventId}:`, {
+          homeAvailable,
+          drawAvailable,
+          awayAvailable
+        });
+        
+        if (homeAvailable || drawAvailable || awayAvailable) {
+          isMarketAvailable = true;
+          console.log(`Found available outcome(s) for event ${eventId} - Market is AVAILABLE`);
+        } else {
+          console.log(`All outcomes suspended for event ${eventId} - Market is SUSPENDED`);
+        }
+        
+        // Fallback if we didn't identify specific outcome types
+        if (homeOutcomes.length === 0 && drawOutcomes.length === 0 && awayOutcomes.length === 0) {
+          const anyOutcomeAvailable = market1X2.outcomes.some((o: any) => o.suspended === false);
+          
+          if (anyOutcomeAvailable) {
+            isMarketAvailable = true;
+            console.log(`Using fallback: Found available outcome for event ${eventId}`);
+          }
+        }
       }
       // In v2 API, the selections might be under a different property
       else if (market1X2.selections && market1X2.selections.length > 0) {
-        // Same logic for selections - ALL selections must be suspended
-        const allSelectionsSuspended = market1X2.selections.length >= 3 && 
-          market1X2.selections.every((s: any) => s.suspended === true);
+        // Try to identify the home, draw, away selections by name or type
+        const homeSelections = market1X2.selections.filter((s: any) => 
+          s.name === "1" || s.name === "Home" || s.type === "3744" || s.type === 3744 || s.typeId === "3744" || s.typeId === 3744);
         
-        isMarketAvailable = !allSelectionsSuspended;
+        const drawSelections = market1X2.selections.filter((s: any) => 
+          s.name === "X" || s.name === "Draw" || s.type === "3745" || s.type === 3745 || s.typeId === "3745" || s.typeId === 3745);
+        
+        const awaySelections = market1X2.selections.filter((s: any) => 
+          s.name === "2" || s.name === "Away" || s.type === "3746" || s.type === 3746 || s.typeId === "3746" || s.typeId === 3746);
+        
+        // Check if ANY of them is available
+        const homeAvailable = homeSelections.some((s: any) => s.suspended === false);
+        const drawAvailable = drawSelections.some((s: any) => s.suspended === false);
+        const awayAvailable = awaySelections.some((s: any) => s.suspended === false);
+        
+        console.log(`Selection availability check for ${eventId}:`, {
+          homeAvailable,
+          drawAvailable,
+          awayAvailable
+        });
+        
+        if (homeAvailable || drawAvailable || awayAvailable) {
+          isMarketAvailable = true;
+          console.log(`Found available selection(s) for event ${eventId} - Market is AVAILABLE`);
+        } else {
+          console.log(`All selections suspended for event ${eventId} - Market is SUSPENDED`);
+        }
+        
+        // Fallback if we didn't identify specific selection types
+        if (homeSelections.length === 0 && drawSelections.length === 0 && awaySelections.length === 0) {
+          const anySelectionAvailable = market1X2.selections.some((s: any) => s.suspended === false);
+          
+          if (anySelectionAvailable) {
+            isMarketAvailable = true;
+            console.log(`Using fallback: Found available selection for event ${eventId}`);
+          }
+        }
       }
+      
+      // Log the final market availability decision
+      console.log(`Market availability for event ${eventId}: ${isMarketAvailable ? 'AVAILABLE' : 'SUSPENDED'}`);
+    } else {
+      console.log(`No 1X2 market found for event ${eventId}`);
     }
     
     // Extract game minute from scoreboard - various paths based on API version
