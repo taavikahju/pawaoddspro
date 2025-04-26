@@ -140,33 +140,47 @@ export function stopHeartbeatTracker(): void {
 // Run a single heartbeat tracker cycle
 async function runHeartbeatTracker(url: string, storage: IStorage): Promise<void> {
   try {
-    // Try to fetch data from API using our updated direct implementation
+    // Try to fetch data from API using our new dedicated live events scraper
     let events = [];
     try {
-      console.log('Using BetPawa direct implementation for live events...');
+      console.log('Using dedicated BetPawa live events scraper...');
       
-      // Import betpawa_direct module
-      const betpawaDirect = require('./betpawa_direct');
+      // Import our new dedicated scraper for live events
+      const betpawaGhScraper = require('./betpawa_gh_scraper');
       
-      // Try all the domains in sequence via our new implementation
-      events = await betpawaDirect.scrapeWithAlternateDomains();
+      // Use our multi-domain scraper that specifically formats data for the heartbeat tracker
+      events = await betpawaGhScraper.scrapeWithAlternateDomains();
       
       // If we successfully got events, use them
       if (events && events.length > 0) {
-        console.log(`Success! Found ${events.length} events using direct implementation`);
+        console.log(`Success! Found ${events.length} live events using dedicated scraper`);
+        
+        // These events are already in the correct format for the heartbeat tracker
+        return await processEvents(events);
       } else {
-        // If direct implementation failed, fall back to standard API approach
-        console.log('Direct implementation failed. Trying standard API...');
-        events = await scrapeEvents(url);
+        // If our dedicated implementation failed, try the original approach
+        console.log('Dedicated scraper found no live events. Trying alternative approach...');
+        
+        // Try the betpawa_direct module which has a different implementation
+        const betpawaDirect = require('./betpawa_direct');
+        events = await betpawaDirect.scrapeWithAlternateDomains();
+        
+        if (events && events.length > 0) {
+          console.log(`Found ${events.length} events using betpawa_direct implementation`);
+        } else {
+          // If all dedicated scrapers failed, try the standard API approach
+          console.log('All dedicated scrapers failed. Trying standard API...');
+          events = await scrapeEvents(url);
+        }
       }
     } catch (error) {
-      console.error('Error scraping live events, trying fallback approach:', error);
+      console.error('Error with dedicated scrapers, trying fallback approach:', error);
       try {
-        // Try the standard API approach as a fallback
+        // Try the standard API approach as a final fallback
         events = await scrapeEvents(url);
       } catch (fallbackError) {
         console.error('All live event scraping approaches failed, using mock data:', fallbackError);
-        // If API fails, generate mock data for testing
+        // If all API approaches fail, generate mock data for testing
         events = generateMockEvents();
       }
     }
@@ -692,12 +706,14 @@ async function processEvents(events: any[]): Promise<void> {
     return;
   }
 
+  console.log(`Processing ${events.length} live events...`);
+
   // Extract relevant data from events - specifically tailored for the BetPawa Uganda API format
   const processedEvents: HeartbeatEvent[] = events.map((event) => {
     // The BetPawa Uganda API (v2) returns event ID in a different format
     const eventId = (event.id || event.eventId || event.siteEventId || '').toString();
     
-    // Get event name - in v2 API, the data structure is different
+    // Get event name - support multiple API formats
     let eventName = "Unknown Event";
     
     // V2 API specific format - competitors array
@@ -712,20 +728,33 @@ async function processEvents(events: any[]): Promise<void> {
     else if (event.name) {
       eventName = event.name;
     }
+    // Direct event property (from our dedicated scraper)
+    else if (event.event) {
+      eventName = event.event;
+    }
     
     // Get country and tournament info from the correct path in v2 API
     // In the v2 API, the category is usually the country
     let country = 'Unknown';
     let tournament = 'Unknown';
     
-    // Try different paths based on the API response structure
-    if (event.category && typeof event.category === 'object') {
+    // First check for direct country/tournament properties from our dedicated scraper
+    if (event.country && typeof event.country === 'string') {
+      country = event.country;
+    } 
+    // Then try different paths based on the API response structure
+    else if (event.category && typeof event.category === 'object') {
       country = event.category.name || 'Unknown';
     } else if (event.region && typeof event.region === 'object') {
       country = event.region.name || 'Unknown';
     }
     
-    if (event.competition && typeof event.competition === 'object') {
+    // First check direct tournament property from our dedicated scraper
+    if (event.tournament && typeof event.tournament === 'string') {
+      tournament = event.tournament;
+    }
+    // Then try different paths based on API response structure
+    else if (event.competition && typeof event.competition === 'object') {
       tournament = event.competition.name || 'Unknown';
     } else if (event.league && typeof event.league === 'object') {
       tournament = event.league.name || 'Unknown';
