@@ -99,6 +99,13 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
           const apiData = await response.json();
           
           if (apiData && apiData.timestamps) {
+            // Debug log to check for suspended events
+            const suspendedPoints = apiData.timestamps.filter(p => !p.isAvailable);
+            console.log(`HEARTBEAT DATA: ${apiData.timestamps.length} total data points, ${suspendedPoints.length} suspended points`);
+            if (suspendedPoints.length > 0) {
+              console.log(`DEBUG - Found suspended data points:`, suspendedPoints.slice(0, 3));
+            }
+            
             // Set the data points
             setData(apiData.timestamps);
             

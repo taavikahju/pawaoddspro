@@ -1445,16 +1445,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Add a game minute to the response for the frontend if not present
       if (history.timestamps.length > 0) {
-        // Find the current event from the heartbeat state to get the game minute
+        // Find the current event from the heartbeat state to get the game minute and check suspension
         const status = getHeartbeatStatus();
         const event = status.events.find(e => e.id === eventId);
         
-        if (event && event.gameMinute) {
-          console.log(`Found matching event with game minute: ${event.gameMinute}`);
-          // Add game minute to the most recent 10 data points
-          const recentTimestamps = history.timestamps.slice(-10);
-          for (const timestamp of recentTimestamps) {
-            (timestamp as any).gameMinute = event.gameMinute;
+        if (event) {
+          if (event.gameMinute) {
+            console.log(`Found matching event with game minute: ${event.gameMinute}`);
+            // Add game minute to the most recent 10 data points
+            const recentTimestamps = history.timestamps.slice(-10);
+            for (const timestamp of recentTimestamps) {
+              (timestamp as any).gameMinute = event.gameMinute;
+            }
+          }
+          
+          // Check if the current event is suspended and log this information
+          if (!event.currentlyAvailable) {
+            console.log(`Event ${eventId} is currently SUSPENDED, marketAvailability: ${event.marketAvailability}`);
+            
+            // Force the most recent timestamp to be suspended for immediate visualization
+            if (history.timestamps.length > 0) {
+              const latestTimestamp = history.timestamps[history.timestamps.length - 1];
+              latestTimestamp.isAvailable = false;
+              (latestTimestamp as any).marketStatus = event.marketAvailability || 'SUSPENDED';
+              console.log(`Updated latest timestamp to suspended state`);
+            }
           }
         }
       }

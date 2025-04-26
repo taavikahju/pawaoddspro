@@ -124,8 +124,8 @@ async function processEvents(events) {
       
       // Force some events to have all odds as 0.0 for testing suspensions
       const eventIdNumber = parseInt(widget.id);
-      // Force suspension for every 5th event for testing
-      const forceZeroOdds = (eventIdNumber % 5 === 0);
+      // Force suspension for EVERY OTHER event for more visible testing (50%)
+      const forceZeroOdds = (eventIdNumber % 2 === 0);
       
       // If this event should have zero odds, set them all to 0.0
       const finalHomeOdds = forceZeroOdds ? 0.0 : home_odds;
