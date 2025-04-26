@@ -61,6 +61,7 @@ interface MarketHistory {
   timestamps: {
     timestamp: number;
     isAvailable: boolean;
+    marketStatus?: string; // Optional to maintain backward compatibility
   }[];
 }
 
@@ -791,11 +792,18 @@ function updateMarketHistory(event: HeartbeatEvent): void {
     marketHistories.push(history);
   }
   
-  // Add the current timestamp
+  // Add the current timestamp with more detailed information
+  const timestamp = Date.now();
   history.timestamps.push({
-    timestamp: Date.now(),
-    isAvailable: event.currentlyAvailable
+    timestamp: timestamp,
+    isAvailable: event.currentlyAvailable,
+    marketStatus: event.marketAvailability // Include the exact market status for better debugging
   });
+  
+  // Log timestamp data for debugging when market is not available
+  if (!event.currentlyAvailable) {
+    console.log(`Added suspended market data point for event ${event.id} at timestamp ${new Date(timestamp).toISOString()}`);
+  }
   
   // Limit history size to avoid memory issues (keep last 1000 points per event)
   if (history.timestamps.length > 1000) {

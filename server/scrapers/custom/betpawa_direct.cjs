@@ -134,10 +134,10 @@ async function processEvents(events) {
       
       const isSuspended = finalHomeOdds === 0.0 && finalDrawOdds === 0.0 && finalAwayOdds === 0.0;
       
-      // Log information about forced suspended events
+      // Log information about forced suspended events to stderr instead of stdout
       if (forceZeroOdds) {
-        console.log(`[TEST] Forcing suspension for event ${widget.id} (${event.name}) with all odds set to 0.0`);
-        console.log(`[TEST] Suspension status: ${isSuspended}`);
+        process.stderr.write(`[TEST] Forcing suspension for event ${widget.id} (${event.name}) with all odds set to 0.0\n`);
+        process.stderr.write(`[TEST] Suspension status: ${isSuspended}\n`);
       }
 
       // Create an event object

@@ -1518,8 +1518,8 @@
     "time": "13:15",
     "odds": {
       "home": 1.57,
-      "draw": 4.63,
-      "away": 5.97
+      "draw": 4.67,
+      "away": 5.92
     },
     "raw": {
       "eventId": "50955893",
@@ -1528,8 +1528,8 @@
       "event": "RC Lens - AJ Auxerre",
       "market": "1X2",
       "home_odds": "1.57",
-      "draw_odds": "4.63",
-      "away_odds": "5.97",
+      "draw_odds": "4.67",
+      "away_odds": "5.92",
       "start_time": "2025-04-27 15:15"
     }
   },
@@ -9447,9 +9447,9 @@
     "date": "2025-04-26",
     "time": "16:00",
     "odds": {
-      "home": 1.86,
+      "home": 1.83,
       "draw": 3.6,
-      "away": 3.9
+      "away": 4
     },
     "raw": {
       "eventId": "57380245",
@@ -9457,9 +9457,9 @@
       "tournament": "Primera Division",
       "event": "Cobresal - Deportes Limache",
       "market": "1X2",
-      "home_odds": "1.86",
+      "home_odds": "1.83",
       "draw_odds": "3.60",
-      "away_odds": "3.90",
+      "away_odds": "4.00",
       "start_time": "2025-04-26 18:00"
     }
   },
@@ -18001,9 +18001,9 @@
     "date": "2025-04-27",
     "time": "12:00",
     "odds": {
-      "home": 3.7,
-      "draw": 3.75,
-      "away": 1.85
+      "home": 3.6,
+      "draw": 3.8,
+      "away": 1.87
     },
     "raw": {
       "eventId": "57129575",
@@ -18011,9 +18011,9 @@
       "tournament": "Arabian Gulf League",
       "event": "Al Jazira (UAE) - Sharjah FC",
       "market": "1X2",
-      "home_odds": "3.70",
-      "draw_odds": "3.75",
-      "away_odds": "1.85",
+      "home_odds": "3.60",
+      "draw_odds": "3.80",
+      "away_odds": "1.87",
       "start_time": "2025-04-27 14:00"
     }
   },
@@ -19431,9 +19431,9 @@
     "date": "2025-04-26",
     "time": "16:45",
     "odds": {
-      "home": 2.45,
+      "home": 2.4,
       "draw": 3.4,
-      "away": 2.75
+      "away": 2.8
     },
     "raw": {
       "eventId": "56525701",
@@ -19441,9 +19441,9 @@
       "tournament": "Premier Division",
       "event": "Sligo Rovers FC - Cork City FC",
       "market": "1X2",
-      "home_odds": "2.45",
+      "home_odds": "2.40",
       "draw_odds": "3.40",
-      "away_odds": "2.75",
+      "away_odds": "2.80",
       "start_time": "2025-04-26 18:45"
     }
   },
@@ -19835,6 +19835,32 @@
       "draw_odds": "3.33",
       "away_odds": "4.30",
       "start_time": "2025-04-27 15:30"
+    }
+  },
+  {
+    "id": "51829961",
+    "eventId": "51829961",
+    "teams": "Zamora CF - RC Celta de Vigo B",
+    "league": "Primera Federacion",
+    "sport": "football",
+    "country": "Spain",
+    "date": "2025-04-27",
+    "time": "15:30",
+    "odds": {
+      "home": 2.15,
+      "draw": 3.1,
+      "away": 3.2
+    },
+    "raw": {
+      "eventId": "51829961",
+      "country": "Spain",
+      "tournament": "Primera Federacion",
+      "event": "Zamora CF - RC Celta de Vigo B",
+      "market": "1X2",
+      "home_odds": "2.15",
+      "draw_odds": "3.10",
+      "away_odds": "3.20",
+      "start_time": "2025-04-27 17:30"
     }
   },
   {
@@ -24580,8 +24606,8 @@
     "time": "12:00",
     "odds": {
       "home": 2.15,
-      "draw": 3,
-      "away": 3.3
+      "draw": 3.2,
+      "away": 3.2
     },
     "raw": {
       "eventId": "58870729",
@@ -24590,8 +24616,8 @@
       "event": "KF Gostivari - FK Rabotnicki Skopje",
       "market": "1X2",
       "home_odds": "2.15",
-      "draw_odds": "3.00",
-      "away_odds": "3.30",
+      "draw_odds": "3.20",
+      "away_odds": "3.20",
       "start_time": "2025-04-27 14:00"
     }
   },
@@ -24826,32 +24852,6 @@
       "home_odds": "2.55",
       "draw_odds": "3.00",
       "away_odds": "2.80",
-      "start_time": "2025-04-26 20:00"
-    }
-  },
-  {
-    "id": "58473109",
-    "eventId": "58473109",
-    "teams": "Londrina EC PR - Maringa FC",
-    "league": "Brasileiro Serie C",
-    "sport": "football",
-    "country": "Brazil",
-    "date": "2025-04-26",
-    "time": "18:00",
-    "odds": {
-      "home": 2.25,
-      "draw": 2.85,
-      "away": 3.5
-    },
-    "raw": {
-      "eventId": "58473109",
-      "country": "Brazil",
-      "tournament": "Brasileiro Serie C",
-      "event": "Londrina EC PR - Maringa FC",
-      "market": "1X2",
-      "home_odds": "2.25",
-      "draw_odds": "2.85",
-      "away_odds": "3.50",
       "start_time": "2025-04-26 20:00"
     }
   }

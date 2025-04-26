@@ -268,7 +268,8 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
           
           // Log suspended status for debugging
           if (!marketAvailable && i % 10 === 0) {
-            console.log(`Detected suspended market at beat ${i}, timestamp index ${timestampIndex}`);
+            console.log(`Detected suspended market at beat ${i}, timestamp index ${timestampIndex}`, 
+              timestamps[timestampIndex]);
           }
         }
         
