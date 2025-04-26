@@ -733,24 +733,58 @@ async function processEvents(events: any[]): Promise<void> {
     // The BetPawa Uganda API (v2) returns event ID in a different format
     const eventId = (event.id || event.eventId || event.siteEventId || '').toString();
     
-    // Get event name - support multiple API formats
+    // Get event name and team names - support multiple API formats
     let eventName = "Unknown Event";
+    let homeTeam = "";
+    let awayTeam = "";
     
     // V2 API specific format - competitors array
     if (event.competitors && event.competitors.length >= 2) {
-      eventName = `${event.competitors[0].name} vs ${event.competitors[1].name}`;
+      homeTeam = event.competitors[0].name || "";
+      awayTeam = event.competitors[1].name || "";
+      eventName = `${homeTeam} vs ${awayTeam}`;
     } 
-    // Some versions use homeTeam/awayTeam
-    else if (event.homeTeam && event.awayTeam) { 
-      eventName = `${event.homeTeam.name} vs ${event.awayTeam.name}`;
+    // Some versions use homeTeam/awayTeam objects
+    else if (event.homeTeam && event.awayTeam) {
+      if (typeof event.homeTeam === 'object' && event.homeTeam.name) {
+        homeTeam = event.homeTeam.name;
+      } else if (typeof event.homeTeam === 'string') {
+        homeTeam = event.homeTeam;
+      }
+      
+      if (typeof event.awayTeam === 'object' && event.awayTeam.name) {
+        awayTeam = event.awayTeam.name;
+      } else if (typeof event.awayTeam === 'string') {
+        awayTeam = event.awayTeam;
+      }
+      
+      if (homeTeam && awayTeam) {
+        eventName = `${homeTeam} vs ${awayTeam}`;
+      }
     }
     // Direct name property
     else if (event.name) {
       eventName = event.name;
+      // Try to extract team names from event name if it contains "vs"
+      if (eventName.includes(" vs ")) {
+        const parts = eventName.split(" vs ");
+        if (parts.length === 2) {
+          homeTeam = parts[0].trim();
+          awayTeam = parts[1].trim();
+        }
+      }
     }
     // Direct event property (from our dedicated scraper)
     else if (event.event) {
       eventName = event.event;
+      // Try to extract team names from event name if it contains "vs"
+      if (eventName.includes(" vs ")) {
+        const parts = eventName.split(" vs ");
+        if (parts.length === 2) {
+          homeTeam = parts[0].trim();
+          awayTeam = parts[1].trim();
+        }
+      }
     }
     
     // Get country and tournament info from the correct path in v2 API
@@ -873,39 +907,24 @@ async function processEvents(events: any[]): Promise<void> {
     // Format UTC start time - try different paths
     const startTime = event.startTime || event.startDate || event.date || new Date().toISOString();
     
-    // Check for home_team and away_team from our enhanced scraper
-    let homeTeam = '';
-    let awayTeam = '';
-    
+    // Check for home_team and away_team direct properties
     if (event.home_team && event.away_team) {
       homeTeam = event.home_team;
       awayTeam = event.away_team;
-    } else if (event.competitors && event.competitors.length >= 2) {
-      homeTeam = event.competitors[0].name || '';
-      awayTeam = event.competitors[1].name || '';
-    } else if (eventName && eventName.includes(' vs ')) {
-      const teams = eventName.split(' vs ');
-      if (teams.length === 2) {
-        homeTeam = teams[0].trim();
-        awayTeam = teams[1].trim();
-      }
     }
     
-    // If we still don't have team names, try to extract them from other sources
-    if (!homeTeam && !awayTeam) {
-      // Try to use the event name itself
-      if (eventName) {
-        // Common separators for team names in event names: 'vs', 'v', '-', '/'
-        const separators = [' vs ', ' v ', ' - ', '/'];
-        
-        for (const separator of separators) {
-          if (eventName.includes(separator)) {
-            const parts = eventName.split(separator);
-            if (parts.length === 2) {
-              homeTeam = parts[0].trim();
-              awayTeam = parts[1].trim();
-              break;
-            }
+    // Additional check for common separators if we don't have team names
+    if (!homeTeam || !awayTeam) {
+      // Try to use the event name with other common separators: 'v', '-', '/'
+      const separators = [' v ', ' - ', '/'];
+      
+      for (const separator of separators) {
+        if (eventName.includes(separator)) {
+          const parts = eventName.split(separator);
+          if (parts.length === 2) {
+            if (!homeTeam) homeTeam = parts[0].trim();
+            if (!awayTeam) awayTeam = parts[1].trim();
+            break;
           }
         }
       }
