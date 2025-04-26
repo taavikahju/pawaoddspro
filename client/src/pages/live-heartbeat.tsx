@@ -145,6 +145,10 @@ export default function LiveHeartbeat() {
     events: 0
   });
   
+  // Track state for suspended events
+  const [lastDataFetchTime, setLastDataFetchTime] = useState<Record<string, number>>({});
+  const [consecutiveSuspensionCounts, setConsecutiveSuspensionCounts] = useState<Record<string, number>>({});
+  
   // Fetch live heartbeat data
   const { data: heartbeatData, isLoading: isLoadingLive, error: liveError, refetch: refetchLive } = useQuery<{
     events: HeartbeatEvent[];
@@ -192,6 +196,47 @@ export default function LiveHeartbeat() {
       setSelectedEventId(heartbeatData.events[0].id);
     }
   }, [heartbeatData, selectedEventId]);
+  
+  // Update suspension count tracking - moved from useMemo
+  useEffect(() => {
+    const events = activeTab === 'live' 
+      ? heartbeatData?.events || []
+      : (historicalData?.success ? historicalData.data : []);
+      
+    if (!events || events.length === 0) return;
+    
+    const newSuspensionCounts = {...consecutiveSuspensionCounts};
+    const now = Date.now();
+    
+    events.forEach(event => {
+      // If event is suspended, increment counter
+      if (event.suspended || !event.currentlyAvailable) {
+        newSuspensionCounts[event.id] = (newSuspensionCounts[event.id] || 0) + 1;
+      } else {
+        // If event is available, reset counter
+        newSuspensionCounts[event.id] = 0;
+      }
+      
+      // Track when we last saw this event
+      setLastDataFetchTime(prev => ({
+        ...prev,
+        [event.id]: now
+      }));
+    });
+    
+    setConsecutiveSuspensionCounts(newSuspensionCounts);
+    
+    // Log any events that have been suspended for a long time
+    const longSuspendedEvents = events.filter(e => 
+      (e.suspended || !e.currentlyAvailable) && 
+      (newSuspensionCounts[e.id] || 0) >= 5
+    );
+    
+    if (longSuspendedEvents.length > 0) {
+      console.log(`DEBUG: ${longSuspendedEvents.length} events have been suspended for 5+ consecutive checks:`);
+      console.log(longSuspendedEvents.map(e => `${e.id} (${e.name}): ${newSuspensionCounts[e.id]} checks`));
+    }
+  }, [heartbeatData, historicalData, activeTab]);
 
   // Filter events based on selected country and tournament
   const filteredEvents = React.useMemo(() => {
@@ -200,23 +245,35 @@ export default function LiveHeartbeat() {
       ? heartbeatData?.events || []
       : (historicalData?.success ? historicalData.data : []);
     
-    // Remove finished events
-    // A finished event is one that is suspended (not in the current API response) 
-    // and has a start time more than 3 hours ago
+    // Remove finished events using more sophisticated checks:
+    // An event is likely finished if:
+    // 1. It is suspended (not in the current API response) AND has a start time more than 3 hours ago
+    // 2. It has recordCount of 0 or very low (indicating it's not being actively tracked anymore)
+    // 3. It has been suspended for multiple scraping cycles
+    
     const threeHoursAgo = new Date();
     threeHoursAgo.setHours(threeHoursAgo.getHours() - 3);
     
+    // The suspension count tracking logic is now in a separate useEffect hook at component level
+    
     const activeEvents = events.filter(event => {
-      // Keep non-suspended events
+      // Always keep non-suspended events
       if (!event.suspended && event.currentlyAvailable !== false) {
         return true;
       }
       
-      // For suspended events, check if they're recent
+      // For suspended events, perform multiple checks
       const eventStartTime = new Date(event.startTime);
       const isRecentEvent = eventStartTime > threeHoursAgo;
       
-      return isRecentEvent;
+      // Check if it has a reasonable record count (indicating active tracking)
+      const hasLowRecordCount = event.recordCount < 3;
+      
+      // Check if it's been suspended for multiple consecutive checks 
+      const longSuspended = (consecutiveSuspensionCounts[event.id] || 0) >= 10;
+      
+      // Keep the event only if it's recent AND has sufficient records AND isn't long suspended
+      return isRecentEvent && !hasLowRecordCount && !longSuspended;
     });
     
     console.log(`DEBUG: Filtered out ${events.length - activeEvents.length} likely finished events (suspended & older than 3 hours)`);
@@ -269,7 +326,7 @@ export default function LiveHeartbeat() {
     console.log("✅ Events sorted by startTime (ascending)");
     
     return sortedEvents;
-  }, [heartbeatData, historicalData, selectedCountry, selectedTournament, activeTab]);
+  }, [heartbeatData, historicalData, selectedCountry, selectedTournament, activeTab, consecutiveSuspensionCounts]);
   
   // Fetch heartbeat stats for the selected event
   const { data: eventStatsData } = useQuery<{
