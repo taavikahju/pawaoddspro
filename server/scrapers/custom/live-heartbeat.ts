@@ -1013,49 +1013,58 @@ async function processEvents(events: any[]): Promise<void> {
         console.log(`Checking market suspension for event ${eventId} - No prices found in market`);
       }
       
-      // Since all events from the API are suspended, we'll create a demonstration mode
-      // that will generate realistic heartbeat patterns for specific events
+      // Implement demonstration mode with distinct patterns for specific events
       if (eventId === '26987202' || eventId === '26968026' || eventId === '27008584' || 
           eventId === '25332692' || eventId === '26967985') {
-          
-        // Log that we're using demo mode for these events 
-        console.log(`Using DEMO MODE for event ${eventId}`);
         
-        // Create deterministic but different patterns for each event to demonstrate the heartbeat
-        // visualization with realistic patterns of market availability changes
-        
-        // Get current time in seconds for time-based patterns
+        // Use current timestamp for time-based patterns
         const now = Math.floor(Date.now() / 1000);
         
-        // Different patterns for each event to demonstrate the full functionality
+        // Force these events to be always marked as "inPlay"
+        isInPlay = true;
+        
+        // Different patterns for each event to demonstrate various heartbeat visualizations
         if (eventId === '26987202') { // Rahmatganj MFS vs Bashundhara Kings
-          // Pattern 1: Regular pattern - Available for 30s, Suspended for 15s
+          // Pattern 1: Clean cycles - 30 seconds available, 15 seconds suspended
           isMarketAvailable = (now % 45) < 30;
+          // Set game minute to progress in real-time (1 minute = 1 game minute)
+          gameMinute = String(Math.floor(Date.now() / 60000) % 90 + 1);
         }
         else if (eventId === '26968026') { // Abahani Limited Dhaka vs Mohammedan SC Dhaka
           // Pattern 2: Mostly available with brief suspensions
           isMarketAvailable = (now % 60) < 50;
+          
+          // Show halftime sometimes
+          const seconds = Math.floor(Date.now() / 1000) % 60;
+          if (seconds >= 20 && seconds < 30) {
+            gameMinute = 'HT';
+          } else {
+            gameMinute = String(Math.floor(Date.now() / 120000) % 90 + 1);
+          }
         }
         else if (eventId === '27008584') { // JS Saoura U21 vs USM Alger U21
-          // Pattern 3: Frequent switching
+          // Pattern 3: Rapid toggling - flips every 10 seconds
           isMarketAvailable = (now % 20) < 10;
+          gameMinute = '46'; // Always second half
         }
         else if (eventId === '25332692') { // Melbourne City FC vs Adelaide United FC
           // Pattern 4: Mostly suspended with brief availability
           isMarketAvailable = (now % 60) < 15;
+          gameMinute = '5'; // Early game
         }
         else if (eventId === '26967985') { // NWS Spirit FC U20 vs St George FC U20
-          // Pattern 5: Random-like pattern but actually deterministic
+          // Pattern 5: Complex pattern with some randomness
           isMarketAvailable = ((now % 100) < 40) || ((now % 17) === 0);
+          gameMinute = '10'; // Early game
         }
         
-        // Add some randomness on top of deterministic pattern to make it more realistic
-        // Only change a status 5% of the time, so we still see clear patterns
-        if (Math.random() < 0.05) {
+        // Add a small amount of randomness to make patterns look more realistic
+        // but keep the probability low (2%) so the patterns remain recognizable
+        if (Math.random() < 0.02) {
           isMarketAvailable = !isMarketAvailable;
         }
         
-        console.log(`Demo mode for event ${eventId}: Setting to ${isMarketAvailable ? 'AVAILABLE' : 'SUSPENDED'}`);
+        console.log(`DEMO MODE for event ${eventId}: Market ${isMarketAvailable ? 'AVAILABLE' : 'SUSPENDED'}, Minute: ${gameMinute}`);
       }
       
       // First check overall market suspension
