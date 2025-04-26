@@ -212,7 +212,7 @@ export default function SimpleHeartbeatGraph({ eventId, eventData }: HeartbeatGr
     };
   }, [eventId]);
   
-  // Creates a simple visual display of heartbeat data
+  // Creates a visual display of heartbeat data that resembles an ECG monitor
   const renderHeartbeatDisplay = () => {
     if (data.length === 0) {
       return (
@@ -225,17 +225,20 @@ export default function SimpleHeartbeatGraph({ eventId, eventData }: HeartbeatGr
     // Sort data points by timestamp
     const sortedData = [...data].sort((a, b) => a.timestamp - b.timestamp);
     
+    // Background image for football field effect (faded green)
+    const footballFieldBackground = `
+      radial-gradient(circle at center, rgba(0, 255, 0, 0.05) 0%, rgba(0, 0, 0, 0) 70%),
+      linear-gradient(to right, rgba(0, 50, 0, 0.2) 0%, rgba(0, 20, 0, 0.1) 50%, rgba(0, 50, 0, 0.2) 100%)
+    `;
+    
     return (
-      <div className="relative w-full h-[200px] bg-black/80 rounded-md overflow-hidden">
+      <div 
+        className="relative w-full h-[200px] bg-black rounded-md overflow-hidden" 
+        style={{ background: footballFieldBackground }}
+      >
         {/* Grid lines */}
-        <div className="absolute inset-0 grid grid-cols-12 grid-rows-6">
-          {Array.from({ length: 13 }).map((_, i) => (
-            <div 
-              key={`v-${i}`}
-              className="absolute h-full w-px bg-green-500/10" 
-              style={{ left: `${(i/12) * 100}%` }}
-            />
-          ))}
+        <div className="absolute inset-0">
+          {/* Horizontal grid lines */}
           {Array.from({ length: 7 }).map((_, i) => (
             <div 
               key={`h-${i}`}
@@ -244,7 +247,16 @@ export default function SimpleHeartbeatGraph({ eventId, eventData }: HeartbeatGr
             />
           ))}
           
-          {/* Center line */}
+          {/* Vertical grid lines */}
+          {Array.from({ length: 13 }).map((_, i) => (
+            <div 
+              key={`v-${i}`}
+              className="absolute h-full w-px bg-green-500/10" 
+              style={{ left: `${(i/12) * 100}%` }}
+            />
+          ))}
+          
+          {/* Major grid lines */}
           <div className="absolute w-full h-px bg-green-500/30" style={{ top: '50%' }} />
           
           {/* Time markers */}
@@ -263,9 +275,22 @@ export default function SimpleHeartbeatGraph({ eventId, eventData }: HeartbeatGr
           ))}
         </div>
         
-        {/* Heartbeat visualization */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-full h-[50px] relative">
+        {/* SVG-based ECG heartbeat visualization */}
+        <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
+          {/* Create a custom ECG pattern that looks more realistic */}
+          <defs>
+            <pattern id="availablePattern" patternUnits="userSpaceOnUse" width="60" height="200" patternTransform="scale(1 1)">
+              <path 
+                d="M0,100 L5,100 L10,95 L15,105 L20,100 L25,100 L30,80 L35,120 L40,100 L45,100 L55,100 L60,100" 
+                fill="none" 
+                stroke="#00ff00" 
+                strokeWidth="2"
+              />
+            </pattern>
+          </defs>
+          
+          {/* Draw a green line when market is available */}
+          <g>
             {sortedData.map((point, index) => {
               if (index === 0) return null; // Skip first point
               
@@ -276,36 +301,59 @@ export default function SimpleHeartbeatGraph({ eventId, eventData }: HeartbeatGr
               // Calculate position percentage
               const startPercent = ((prevPoint.timestamp - startTime) / totalDuration) * 100;
               const endPercent = ((point.timestamp - startTime) / totalDuration) * 100;
-              const width = Math.max(0.5, endPercent - startPercent); // Min width for visibility
               
-              return (
-                <div 
-                  key={index}
-                  className={`absolute h-[2px] ${point.isAvailable ? 'bg-green-500' : 'bg-red-500'}`}
-                  style={{
-                    left: `${startPercent}%`,
-                    width: `${width}%`,
-                    top: '50%'
-                  }}
-                >
-                  {/* Add heartbeat spike for available status */}
-                  {point.isAvailable && (index % 3 === 0) && (
-                    <div 
-                      className="absolute bg-green-500"
-                      style={{
-                        left: '50%',
-                        height: '15px',
-                        width: '2px',
-                        bottom: '0px',
-                        transform: 'translateX(-50%)'
-                      }}
+              // Skip if segment is too small
+              if (endPercent - startPercent < 0.5) return null;
+              
+              // Create heart monitor appearance
+              if (point.isAvailable) {
+                // Draw the available heartbeat pattern
+                return (
+                  <g key={index}>
+                    {/* Base line */}
+                    <line 
+                      x1={`${startPercent}%`} 
+                      y1="50%" 
+                      x2={`${endPercent}%`} 
+                      y2="50%" 
+                      stroke="#00ff00" 
+                      strokeWidth="2"
                     />
-                  )}
-                </div>
-              );
+                    
+                    {/* ECG peaks (every few segments) */}
+                    {(index % 3 === 0) && (
+                      <path 
+                        d={`
+                          M ${startPercent + (endPercent-startPercent)/2 - 10}%,50% 
+                          L ${startPercent + (endPercent-startPercent)/2 - 5}%,45% 
+                          L ${startPercent + (endPercent-startPercent)/2}%,35% 
+                          L ${startPercent + (endPercent-startPercent)/2 + 3}%,55% 
+                          L ${startPercent + (endPercent-startPercent)/2 + 6}%,50%
+                        `}
+                        fill="none"
+                        stroke="#00ff00"
+                        strokeWidth="2"
+                      />
+                    )}
+                  </g>
+                );
+              } else {
+                // Draw a flat red line for suspended status
+                return (
+                  <line 
+                    key={index}
+                    x1={`${startPercent}%`} 
+                    y1="50%" 
+                    x2={`${endPercent}%`} 
+                    y2="50%" 
+                    stroke="#ff3333" 
+                    strokeWidth="2"
+                  />
+                );
+              }
             })}
-          </div>
-        </div>
+          </g>
+        </svg>
       </div>
     );
   };
