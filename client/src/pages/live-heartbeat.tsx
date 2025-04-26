@@ -65,16 +65,28 @@ const UptimeGauge = ({ value }: { value: number }) => {
             
             {/* Needle */}
             <g transform={`rotate(${rotation}, 50, 50)`}>
+              {/* Main needle with highlight for visibility in dark mode */}
               <line 
                 x1="50" 
                 y1="50" 
                 x2="50" 
                 y2="15" 
-                stroke="black" 
-                strokeWidth="2" 
+                stroke="white" 
+                strokeWidth="5" 
                 strokeLinecap="round"
               />
-              <circle cx="50" cy="50" r="3" fill="black" />
+              <line 
+                x1="50" 
+                y1="50" 
+                x2="50" 
+                y2="15" 
+                stroke="red" 
+                strokeWidth="3" 
+                strokeLinecap="round"
+              />
+              {/* Center point with highlight */}
+              <circle cx="50" cy="50" r="6" fill="white" />
+              <circle cx="50" cy="50" r="4" fill="red" />
             </g>
           </svg>
         </div>
