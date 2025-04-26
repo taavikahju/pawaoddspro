@@ -9,9 +9,9 @@
     "date": "2025-04-26",
     "time": "09:30",
     "odds": {
-      "home": 1.46,
-      "draw": 5.01,
-      "away": 7.41
+      "home": 1.45,
+      "draw": 5.04,
+      "away": 7.47
     },
     "raw": {
       "eventId": "50850641",
@@ -19,9 +19,9 @@
       "tournament": "Premier League",
       "event": "Chelsea - Everton",
       "market": "1X2",
-      "home_odds": "1.46",
-      "draw_odds": "5.01",
-      "away_odds": "7.41",
+      "home_odds": "1.45",
+      "draw_odds": "5.04",
+      "away_odds": "7.47",
       "start_time": "2025-04-26 11:30"
     }
   },
@@ -165,9 +165,9 @@
     "date": "2025-04-27",
     "time": "13:30",
     "odds": {
-      "home": 1.27,
-      "draw": 7.17,
-      "away": 10.51
+      "home": 1.28,
+      "draw": 7.13,
+      "away": 10.39
     },
     "raw": {
       "eventId": "50850643",
@@ -175,9 +175,9 @@
       "tournament": "Premier League",
       "event": "Liverpool - Tottenham",
       "market": "1X2",
-      "home_odds": "1.27",
-      "draw_odds": "7.17",
-      "away_odds": "10.51",
+      "home_odds": "1.28",
+      "draw_odds": "7.13",
+      "away_odds": "10.39",
       "start_time": "2025-04-27 15:30"
     }
   },
@@ -3302,6 +3302,32 @@
     }
   },
   {
+    "id": "51270249",
+    "eventId": "51270249",
+    "teams": "1. FC Magdeburg - SC Preussen 06 Munster",
+    "league": "2. Bundesliga",
+    "sport": "football",
+    "country": "Germany",
+    "date": "2025-05-02",
+    "time": "14:30",
+    "odds": {
+      "home": 1.61,
+      "draw": 4.3,
+      "away": 4.9
+    },
+    "raw": {
+      "eventId": "51270249",
+      "country": "Germany",
+      "tournament": "2. Bundesliga",
+      "event": "1. FC Magdeburg - SC Preussen 06 Munster",
+      "market": "1X2",
+      "home_odds": "1.61",
+      "draw_odds": "4.30",
+      "away_odds": "4.90",
+      "start_time": "2025-05-02 16:30"
+    }
+  },
+  {
     "id": "58856131",
     "eventId": "58856131",
     "teams": "Al Ahli Saudi FC - Buriram United",
@@ -4273,9 +4299,9 @@
     "date": "2025-04-26",
     "time": "10:00",
     "odds": {
-      "home": 3.1,
-      "draw": 3.6,
-      "away": 2.2
+      "home": 3,
+      "draw": 3.5,
+      "away": 2.25
     },
     "raw": {
       "eventId": "50956887",
@@ -4283,9 +4309,9 @@
       "tournament": "Ligue 2",
       "event": "Rodez Aveyron - Paris FC",
       "market": "1X2",
-      "home_odds": "3.10",
-      "draw_odds": "3.60",
-      "away_odds": "2.20",
+      "home_odds": "3.00",
+      "draw_odds": "3.50",
+      "away_odds": "2.25",
       "start_time": "2025-04-26 12:00"
     }
   },
@@ -5027,9 +5053,9 @@
     "date": "2025-04-26",
     "time": "15:00",
     "odds": {
-      "home": 6.9,
-      "draw": 4.6,
-      "away": 1.43
+      "home": 7.1,
+      "draw": 4.7,
+      "away": 1.42
     },
     "raw": {
       "eventId": "60000947",
@@ -5037,9 +5063,9 @@
       "tournament": "1. Liga",
       "event": "SK Sigma Olomouc - Slavia Prague",
       "market": "1X2",
-      "home_odds": "6.90",
-      "draw_odds": "4.60",
-      "away_odds": "1.43",
+      "home_odds": "7.10",
+      "draw_odds": "4.70",
+      "away_odds": "1.42",
       "start_time": "2025-04-26 17:00"
     }
   },
@@ -6445,32 +6471,6 @@
       "draw_odds": "3.30",
       "away_odds": "3.15",
       "start_time": "2025-05-03 20:30"
-    }
-  },
-  {
-    "id": "56690557",
-    "eventId": "56690557",
-    "teams": "CF Montreal - Philadelphia Union",
-    "league": "MLS",
-    "sport": "football",
-    "country": "USA",
-    "date": "2025-05-03",
-    "time": "21:30",
-    "odds": {
-      "home": 3.38,
-      "draw": 3.3,
-      "away": 2.17
-    },
-    "raw": {
-      "eventId": "56690557",
-      "country": "USA",
-      "tournament": "MLS",
-      "event": "CF Montreal - Philadelphia Union",
-      "market": "1X2",
-      "home_odds": "3.38",
-      "draw_odds": "3.30",
-      "away_odds": "2.17",
-      "start_time": "2025-05-03 23:30"
     }
   },
   {
@@ -11657,9 +11657,9 @@
     "date": "2025-04-26",
     "time": "09:30",
     "odds": {
-      "home": 3.1,
-      "draw": 3.3,
-      "away": 2.35
+      "home": 3.25,
+      "draw": 3.33,
+      "away": 2.25
     },
     "raw": {
       "eventId": "51094139",
@@ -11667,9 +11667,9 @@
       "tournament": "League One",
       "event": "Leyton Orient London - Wycombe Wanderers",
       "market": "1X2",
-      "home_odds": "3.10",
-      "draw_odds": "3.30",
-      "away_odds": "2.35",
+      "home_odds": "3.25",
+      "draw_odds": "3.33",
+      "away_odds": "2.25",
       "start_time": "2025-04-26 11:30"
     }
   },
@@ -17992,32 +17992,6 @@
     }
   },
   {
-    "id": "51866511",
-    "eventId": "51866511",
-    "teams": "CD Subiza - SD Gernika Club",
-    "league": "Segunda Federacion",
-    "sport": "football",
-    "country": "Spain",
-    "date": "2025-04-27",
-    "time": "08:00",
-    "odds": {
-      "home": 5.8,
-      "draw": 4.1,
-      "away": 1.4
-    },
-    "raw": {
-      "eventId": "51866511",
-      "country": "Spain",
-      "tournament": "Segunda Federacion",
-      "event": "CD Subiza - SD Gernika Club",
-      "market": "1X2",
-      "home_odds": "5.80",
-      "draw_odds": "4.10",
-      "away_odds": "1.40",
-      "start_time": "2025-04-27 10:00"
-    }
-  },
-  {
     "id": "59694207",
     "eventId": "59694207",
     "teams": "Crvena Zvezda - OFK Belgrade",
@@ -18885,9 +18859,9 @@
     "date": "2025-04-27",
     "time": "09:00",
     "odds": {
-      "home": 2.5,
+      "home": 2.3,
       "draw": 2.8,
-      "away": 2.65
+      "away": 2.95
     },
     "raw": {
       "eventId": "59038949",
@@ -18895,36 +18869,10 @@
       "tournament": "China League 2",
       "event": "Chengdu Rongcheng B - Hainan Star",
       "market": "1X2",
-      "home_odds": "2.50",
+      "home_odds": "2.30",
       "draw_odds": "2.80",
-      "away_odds": "2.65",
+      "away_odds": "2.95",
       "start_time": "2025-04-27 11:00"
-    }
-  },
-  {
-    "id": "60046653",
-    "eventId": "60046653",
-    "teams": "Caernarfon Town FC - Barry Town United FC",
-    "league": "Cymru Premier",
-    "sport": "football",
-    "country": "Wales",
-    "date": "2025-04-26",
-    "time": "09:15",
-    "odds": {
-      "home": 2.1,
-      "draw": 3.8,
-      "away": 3
-    },
-    "raw": {
-      "eventId": "60046653",
-      "country": "Wales",
-      "tournament": "Cymru Premier",
-      "event": "Caernarfon Town FC - Barry Town United FC",
-      "market": "1X2",
-      "home_odds": "2.10",
-      "draw_odds": "3.80",
-      "away_odds": "3.00",
-      "start_time": "2025-04-26 11:15"
     }
   },
   {
@@ -20289,9 +20237,9 @@
     "date": "2025-04-26",
     "time": "12:00",
     "odds": {
-      "home": 1.46,
+      "home": 1.48,
       "draw": 4.4,
-      "away": 6
+      "away": 5.8
     },
     "raw": {
       "eventId": "51449739",
@@ -20299,9 +20247,9 @@
       "tournament": "National League South",
       "event": "Truro City - St Albans City",
       "market": "1X2",
-      "home_odds": "1.46",
+      "home_odds": "1.48",
       "draw_odds": "4.40",
-      "away_odds": "6.00",
+      "away_odds": "5.80",
       "start_time": "2025-04-26 14:00"
     }
   },
@@ -21017,9 +20965,9 @@
     "date": "2025-04-26",
     "time": "13:00",
     "odds": {
-      "home": 1.5,
+      "home": 1.48,
       "draw": 4.1,
-      "away": 5.3
+      "away": 5.5
     },
     "raw": {
       "eventId": "51829973",
@@ -21027,9 +20975,9 @@
       "tournament": "Primera Federacion",
       "event": "FC Barcelona Atletic - SD Amorebieta",
       "market": "1X2",
-      "home_odds": "1.50",
+      "home_odds": "1.48",
       "draw_odds": "4.10",
-      "away_odds": "5.30",
+      "away_odds": "5.50",
       "start_time": "2025-04-26 15:00"
     }
   },

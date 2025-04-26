@@ -375,12 +375,22 @@ export default function LiveHeartbeat() {
                                   <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" 
                                     title="Live event" />
                                 )}
-                                <Badge 
-                                  variant={event.currentlyAvailable ? 'outline' : 'destructive'}
-                                  className="text-[10px] h-5 ml-1"
-                                >
-                                  {event.currentlyAvailable ? 'Available' : 'Suspended'}
-                                </Badge>
+                                {/* Only show market availability for live events, not historical ones */}
+                                {activeTab === 'live' ? (
+                                  <Badge 
+                                    variant={event.currentlyAvailable ? 'outline' : 'destructive'}
+                                    className="text-[10px] h-5 ml-1"
+                                  >
+                                    {event.currentlyAvailable ? 'Available' : 'Suspended'}
+                                  </Badge>
+                                ) : (
+                                  <Badge 
+                                    variant="secondary"
+                                    className="text-[10px] h-5 ml-1"
+                                  >
+                                    Completed
+                                  </Badge>
+                                )}
                                 {event.gameMinute && (
                                   <Badge variant="secondary" className="text-[10px] h-5 ml-1">
                                     {event.gameMinute === 'HT' || event.gameMinute?.toLowerCase() === 'ht' 
