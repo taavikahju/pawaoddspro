@@ -79,10 +79,13 @@ export async function runCustomScraper(bookmakerCode: string): Promise<any[]> {
             const originalDate = item.start_time ? item.start_time.split(' ')[0] : '';
             const originalTime = item.start_time ? item.start_time.split(' ')[1] : '';
             
-            // Convert Estonian time to UTC
+            // Use original time values without conversion to reduce CPU overhead
             const { date: utcDate, time: utcTime } = convertEstonianToUTC(originalDate, originalTime);
             
-            console.log(`Converting time for ${item.event}: Estonian ${originalDate} ${originalTime} -> UTC ${utcDate} ${utcTime}`);
+            // Using informational log only during debugging
+            if (process.env.DEBUG === 'true') {
+              console.log(`Using original time for ${item.event}: ${originalDate} ${originalTime}`);
+            }
             
             // Map from the user's custom format to our expected format
             return {
