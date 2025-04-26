@@ -755,13 +755,37 @@ async function processEvents(events: any[]): Promise<void> {
     });
     
     // Update the heartbeat state with the new events
-    heartbeatState.events = normalizedEvents;
+    // CRITICAL FIX: Don't replace all events, as this would remove events that are suspended
+    // and not returned by the API. Instead, update existing events and add new ones.
+    
+    // First, identify which events we already have in our state
+    const existingEventIds = new Set(heartbeatState.events.map(e => e.id));
+    
+    // Create a map of the new events
+    const newEventsMap = new Map(normalizedEvents.map(e => [e.id, e]));
+    
+    // Update the heartbeat state by:
+    // 1. Keeping existing events that are not in the new set (these are suspended events no longer returned by API)
+    // 2. Adding all new events from the current API response
+    const updatedEvents = [
+      // Keep existing suspended events that are not in the current API response
+      ...heartbeatState.events.filter(e => 
+        e.suspended === true && !newEventsMap.has(e.id)
+      ),
+      // Add all new events from the current API response
+      ...normalizedEvents
+    ];
+    
+    // Update the state
+    heartbeatState.events = updatedEvents;
     
     // Extract countries and tournaments for filtering
+    // Use ALL events, including suspended ones, for countries and tournaments
     const countries = new Set<string>();
     const tournaments: Record<string, string[]> = {};
     
-    for (const event of normalizedEvents) {
+    // Use the updatedEvents array which now includes both new events and retained suspended events
+    for (const event of heartbeatState.events) {
       if (event.country) {
         countries.add(event.country);
         
@@ -782,8 +806,9 @@ async function processEvents(events: any[]): Promise<void> {
     heartbeatState.countries = Array.from(countries).sort();
     heartbeatState.tournaments = tournaments;
     
-    // Update market history
-    for (const event of normalizedEvents) {
+    // Update market history for ALL events, including suspended ones
+    // This ensures we continue to track suspended events in the history
+    for (const event of heartbeatState.events) {
       updateMarketHistory(event);
     }
     
