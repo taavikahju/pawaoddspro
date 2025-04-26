@@ -86,23 +86,18 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
       const lastTimestamp = sortedData[sortedData.length - 1].timestamp;
       const timeRange = lastTimestamp - firstTimestamp;
       
-      // Convert mouse X position to timestamp
+      // Convert mouse X position to exact timestamp
       const posRatio = x / width;
       const exactTimestamp = firstTimestamp + (posRatio * timeRange);
       
-      // Find the nearest data point that would show at this position
-      // This matches how we draw the line on the canvas
-      let pointInfo = {
-        timestamp: new Date(exactTimestamp),
-        isAvailable: false,
-        gameMinute: undefined as string | undefined
-      };
+      // This is the exact timestamp under the mouse cursor
+      const hoverTimestamp = new Date(exactTimestamp);
       
-      // Find which segment of the timeline we're in
-      let currentStatus: boolean | null = null;
-      let currentGameMinute: string | undefined = undefined;
+      // Find the status at this timestamp by finding the last status change before this point
+      let isAvailable = false; // Default
+      let gameMinute: string | undefined = undefined;
       
-      // Go through the data points in order to determine the status at hover position
+      // Go through all data points to find the last status before our hover point
       for (let i = 0; i < sortedData.length; i++) {
         const point = sortedData[i];
         
@@ -111,20 +106,17 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
           break;
         }
         
-        // Use the status and game minute from this point
-        currentStatus = point.isAvailable === true;
-        currentGameMinute = point.gameMinute;
+        // Update status and game minute as we pass each data point
+        isAvailable = point.isAvailable === true;
+        gameMinute = point.gameMinute;
       }
       
-      // If we found a status, use it
-      if (currentStatus !== null) {
-        pointInfo.isAvailable = currentStatus;
-        pointInfo.gameMinute = currentGameMinute;
-      } else {
-        // If we didn't find a status (we're before the first point), use the first point's status
-        pointInfo.isAvailable = sortedData[0].isAvailable === true;
-        pointInfo.gameMinute = sortedData[0].gameMinute;
-      }
+      // Create the final point info for display
+      let pointInfo = {
+        timestamp: hoverTimestamp,
+        isAvailable: isAvailable,
+        gameMinute: gameMinute
+      };
       
       setHoverInfo({
         x, 
@@ -355,17 +347,19 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
       // COMPLETELY NEW APPROACH: Draw directly based on the actual timeline data
       // Instead of creating artificial beats, we'll draw the actual data points
       
-      // Calculate how to map timestamp positions to the canvas width
-      const firstTimestamp = timestamps[0].timestamp;
-      const lastTimestamp = timestamps[timestamps.length - 1].timestamp;
-      const timeRange = lastTimestamp - firstTimestamp;
-      
-      // Function to convert a timestamp to x position on canvas
-      const getXPosition = (timestamp: number) => {
-        return Math.max(0, Math.min(width, 
-          ((timestamp - firstTimestamp) / timeRange) * width
-        ));
-      };
+      // We'll make sure the first timestamp is at x=0 and the last is at x=width
+    // This ensures the line spans the entire graph horizontally
+    const firstTimestamp = timestamps[0].timestamp;
+    const lastTimestamp = timestamps[timestamps.length - 1].timestamp;
+    const timeRange = lastTimestamp - firstTimestamp;
+    
+    // Function to convert a timestamp to x position on canvas
+    // This maps the exact timestamp to its precise horizontal position
+    const getXPosition = (timestamp: number) => {
+      return Math.max(0, Math.min(width, 
+        ((timestamp - firstTimestamp) / timeRange) * width
+      ));
+    };
       
       // Set up paths for available and suspended segments
       let paths: {
@@ -835,26 +829,42 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
             style={{ background: '#111', borderRadius: '0.5rem' }}
           />
           
-          {/* Timestamp tooltip */}
+          {/* Vertical guideline and timestamp tooltip */}
           {hoverInfo && (
-            <div 
-              className={`absolute px-2 py-1 text-xs rounded pointer-events-none ${hoverInfo.isAvailable ? 'bg-green-700/80' : 'bg-red-700/80'} text-white border border-white/30`}
-              style={{ 
-                left: `${hoverInfo.x}px`, 
-                top: `${Math.max(10, hoverInfo.y - 40)}px`,
-                transform: 'translateX(-50%)',
-                zIndex: 20,
-                whiteSpace: 'nowrap'
-              }}
-            >
-              <div className="font-bold">
-                {hoverInfo.timestamp.toLocaleTimeString()} 
-                {hoverInfo.gameMinute && <span className="ml-2">(Min {hoverInfo.gameMinute})</span>}
+            <>
+              {/* Vertical guideline */}
+              <div 
+                className="absolute pointer-events-none" 
+                style={{
+                  left: `${hoverInfo.x}px`,
+                  top: '0',
+                  width: '1px',
+                  height: '100%',
+                  backgroundColor: hoverInfo.isAvailable ? 'rgba(0, 255, 0, 0.5)' : 'rgba(255, 0, 0, 0.5)',
+                  zIndex: 10,
+                }}
+              />
+              
+              {/* Tooltip */}
+              <div 
+                className={`absolute px-2 py-1 text-xs rounded pointer-events-none ${hoverInfo.isAvailable ? 'bg-green-700/80' : 'bg-red-700/80'} text-white border border-white/30`}
+                style={{ 
+                  left: `${hoverInfo.x}px`, 
+                  top: `${Math.max(10, hoverInfo.y - 40)}px`,
+                  transform: 'translateX(-50%)',
+                  zIndex: 20,
+                  whiteSpace: 'nowrap'
+                }}
+              >
+                <div className="font-bold">
+                  {hoverInfo.timestamp.toLocaleTimeString()} 
+                  {hoverInfo.gameMinute && <span className="ml-2">(Min {hoverInfo.gameMinute})</span>}
+                </div>
+                <div>
+                  Status: {hoverInfo.isAvailable ? 'Available' : 'Suspended'}
+                </div>
               </div>
-              <div>
-                Status: {hoverInfo.isAvailable ? 'Available' : 'Suspended'}
-              </div>
-            </div>
+            </>
           )}
           
           {status === 'loading' && (
