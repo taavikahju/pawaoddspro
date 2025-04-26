@@ -99,9 +99,10 @@ async function fetchEventsPage(skip) {
       // Since we don't have any real suspended events, let's create some for testing
       // Modify some events in this batch to have totalMarketCount=0
       if (events.length > 0) {
-        // Create suspended test events - set every 5th event to have totalMarketCount=0
+        // Create suspended test events - set every 4th event to have totalMarketCount=0
+        // Using more frequent suspension (every 4th instead of 5th) to increase visibility
         const modifiedEvents = events.map((event, index) => {
-          if (index % 5 === 0) {
+          if (index % 4 === 0) {
             const modifiedEvent = { ...event, totalMarketCount: 0 };
             process.stderr.write(`[TEST] Modified event ${modifiedEvent.widgets?.[0]?.id || 'unknown'}: ${modifiedEvent.name} to have totalMarketCount=0\n`);
             return modifiedEvent;
@@ -219,6 +220,7 @@ async function processEvents(events) {
       }
       
       // Use any method to detect suspension, but prioritize totalMarketCount=0
+      // Always mark events with totalMarketCount=0 as suspended 
       const isSuspended = noMarketsAvailable || marketSuspendedFlag || allOddsZero || anyPriceSuspended;
       
       // For testing - force a few specific events to show as suspended so we can verify the visualization
