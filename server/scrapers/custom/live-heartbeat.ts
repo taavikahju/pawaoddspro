@@ -291,11 +291,37 @@ async function scrapeEvents(apiUrl: string): Promise<any[]> {
   try {
     console.log('Scraping BetPawa Ghana live events...');
     
-    // Use direct API URL format for live football events - simpler approach with higher success rate
-    const apiEndpoint = 'https://www.betpawa.com.gh/api/sportsbook/events/live/all/football';
+    // Try multiple potential API endpoints to increase chances of success
+    // The endpoint format seems to change occasionally
+    const potentialEndpoints = [
+      'https://www.betpawa.com.gh/api/sportsbook/eventList?categoryIds=1',  // Football category ID
+      'https://ke.betpawa.com/api/sportsbook/eventList?categoryIds=1',      // Try Kenya subdomain
+      'https://www.betpawa.com.gh/api/sportsbook/events/live/all/football',
+      'https://www.betpawa.com.gh/api/sportsbook/live',
+      'https://www.betpawa.com.gh/api/sportsbook/live?sport=football',
+      'https://www.betpawa.com.gh/api/sportsbook/inplay',
+      'https://www.betpawa.com.gh/api/sportsbook/events?type=inplay&sportId=1',
+      'https://www.betpawa.com.gh/api/events/football/live'
+    ];
     
-    // Just use the endpoint directly
-    return await scrapePagedEvents(apiEndpoint);
+    for (const endpoint of potentialEndpoints) {
+      try {
+        console.log(`Trying API endpoint: ${endpoint}`);
+        const events = await scrapePagedEvents(endpoint);
+        
+        // If we got events, return them immediately
+        if (events && events.length > 0) {
+          console.log(`Success! Found ${events.length} events from endpoint: ${endpoint}`);
+          return events;
+        }
+      } catch (endpointError: any) {
+        console.log(`Endpoint ${endpoint} failed: ${endpointError.message || String(endpointError)}`);
+        // Continue to next endpoint
+      }
+    }
+    
+    // If all endpoints failed, throw an error to trigger mock data
+    throw new Error('All BetPawa Ghana API endpoints failed');
   } catch (error: any) {
     console.error('Error scraping BetPawa Ghana live events:', error.message || String(error));
     return [];
@@ -309,13 +335,13 @@ async function scrapePagedEvents(apiUrl: string): Promise<any[]> {
   try {
     console.log(`Fetching data from BetPawa Ghana API: ${apiUrl}`);
     
-    // Make an actual API call to BetPawa Ghana API with updated headers
+    // Make an actual API call to BetPawa Ghana API with enhanced headers that more closely match a browser
     const response = await axios.get(apiUrl, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         'Accept': 'application/json, text/plain, */*',
         'Accept-Language': 'en-US,en;q=0.9',
-        'Referer': 'https://www.betpawa.com.gh/sport/football',
+        'Referer': 'https://www.betpawa.com.gh/sport/football/live',
         'Origin': 'https://www.betpawa.com.gh',
         'Connection': 'keep-alive',
         'sec-ch-ua': '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
@@ -326,23 +352,50 @@ async function scrapePagedEvents(apiUrl: string): Promise<any[]> {
         'Sec-Fetch-Site': 'same-origin',
         'Cache-Control': 'no-cache',
         'Pragma': 'no-cache',
-        'X-Requested-With': 'XMLHttpRequest'
+        'X-Requested-With': 'XMLHttpRequest',
+        'Cookie': 'VISITOR_ID=1690028199; VISITOR_COUNTRY_CODE=GH; betPawaSport=football; betPawaHasVisitedSport=true'
       },
-      timeout: 20000 // 20-second timeout
+      timeout: 30000 // 30-second timeout
     });
     
     if (!response.data) {
       throw new Error('No data returned from API');
     }
     
-    // Extract and return the events from the API response
+    let events: any[] = [];
+    
+    // Try multiple paths to extract events based on API response format
+    // This handles different API response structures
     if (response.data?.queries?.[0]?.events) {
-      return response.data.queries[0].events;
+      events = response.data.queries[0].events;
+    } else if (response.data?.events) {
+      events = response.data.events;
+    } else if (response.data?.data?.events) {
+      events = response.data.data.events;
+    } else if (Array.isArray(response.data)) {
+      events = response.data.filter(item => item.status === 'LIVE' || item.isLive);
+    } else if (response.data?.sports) {
+      // Extract events from sports array
+      const football = response.data.sports.find((s: any) => 
+        s.name?.toLowerCase().includes('football') || s.name?.toLowerCase().includes('soccer')
+      );
+      if (football && football.events) {
+        events = football.events;
+      }
     }
     
-    // If no data was found, but the request succeeded
+    // If we got events, return them
+    if (events && events.length > 0) {
+      console.log(`Found ${events.length} events from API`);
+      return events;
+    }
+    
+    // If no events were found
     console.log('API request succeeded but no events found in the response.');
+    // Dump response structure to help debug
+    console.log('Response structure:', Object.keys(response.data));
     return [];
+    
   } catch (error: any) {
     console.error('Error scraping page of BetPawa Ghana events:', error.message || String(error));
     
