@@ -1024,10 +1024,11 @@ async function processEvents(events: any[]): Promise<void> {
         const awaySelections = market1X2.prices.filter((p: any) => 
           (p.typeId === 3746 || p.typeId === "3746" || p.type === 3746 || p.type === "3746" || p.name === "2"));
         
-        // Check if ANY of the market selection types (home, draw, away) is available
-        const homeAvailable = homeSelections.some((p: any) => p.suspended === false);
-        const drawAvailable = drawSelections.some((p: any) => p.suspended === false);
-        const awayAvailable = awaySelections.some((p: any) => p.suspended === false);
+        // Check if ANY of the market selection types (home, draw, away) is available with non-zero price
+        // A price of 0.0 means the market is suspended even if suspended=false
+        const homeAvailable = homeSelections.some((p: any) => p.suspended === false && (p.price > 0 || p.odds > 0));
+        const drawAvailable = drawSelections.some((p: any) => p.suspended === false && (p.price > 0 || p.odds > 0));
+        const awayAvailable = awaySelections.some((p: any) => p.suspended === false && (p.price > 0 || p.odds > 0));
         
         console.log(`Market availability check for ${eventId}:`, {
           homeAvailable,
@@ -1043,9 +1044,10 @@ async function processEvents(events: any[]): Promise<void> {
           console.log(`All selections suspended for event ${eventId} - Market is SUSPENDED`);
         }
         
-        // Fallback: if we didn't find specific selection types, check if ANY price is available
+        // Fallback: if we didn't find specific selection types, check if ANY price is available and not zero
         if (homeSelections.length === 0 && drawSelections.length === 0 && awaySelections.length === 0) {
-          const anyPriceAvailable = market1X2.prices.some((p: any) => p.suspended === false);
+          const anyPriceAvailable = market1X2.prices.some((p: any) => 
+            p.suspended === false && (p.price > 0 || p.odds > 0));
           
           if (anyPriceAvailable) {
             isMarketAvailable = true;
@@ -1065,10 +1067,10 @@ async function processEvents(events: any[]): Promise<void> {
         const awayOutcomes = market1X2.outcomes.filter((o: any) => 
           o.name === "2" || o.name === "Away" || o.type === "3746" || o.type === 3746 || o.typeId === "3746" || o.typeId === 3746);
         
-        // Check if ANY of them is available
-        const homeAvailable = homeOutcomes.some((o: any) => o.suspended === false);
-        const drawAvailable = drawOutcomes.some((o: any) => o.suspended === false);
-        const awayAvailable = awayOutcomes.some((o: any) => o.suspended === false);
+        // Check if ANY of them is available with non-zero price
+        const homeAvailable = homeOutcomes.some((o: any) => o.suspended === false && (o.price > 0 || o.odds > 0));
+        const drawAvailable = drawOutcomes.some((o: any) => o.suspended === false && (o.price > 0 || o.odds > 0));
+        const awayAvailable = awayOutcomes.some((o: any) => o.suspended === false && (o.price > 0 || o.odds > 0));
         
         console.log(`Outcome availability check for ${eventId}:`, {
           homeAvailable,
@@ -1085,7 +1087,8 @@ async function processEvents(events: any[]): Promise<void> {
         
         // Fallback if we didn't identify specific outcome types
         if (homeOutcomes.length === 0 && drawOutcomes.length === 0 && awayOutcomes.length === 0) {
-          const anyOutcomeAvailable = market1X2.outcomes.some((o: any) => o.suspended === false);
+          const anyOutcomeAvailable = market1X2.outcomes.some((o: any) => 
+            o.suspended === false && (o.price > 0 || o.odds > 0));
           
           if (anyOutcomeAvailable) {
             isMarketAvailable = true;
@@ -1105,10 +1108,10 @@ async function processEvents(events: any[]): Promise<void> {
         const awaySelections = market1X2.selections.filter((s: any) => 
           s.name === "2" || s.name === "Away" || s.type === "3746" || s.type === 3746 || s.typeId === "3746" || s.typeId === 3746);
         
-        // Check if ANY of them is available
-        const homeAvailable = homeSelections.some((s: any) => s.suspended === false);
-        const drawAvailable = drawSelections.some((s: any) => s.suspended === false);
-        const awayAvailable = awaySelections.some((s: any) => s.suspended === false);
+        // Check if ANY of them is available with non-zero price
+        const homeAvailable = homeSelections.some((s: any) => s.suspended === false && (s.price > 0 || s.odds > 0));
+        const drawAvailable = drawSelections.some((s: any) => s.suspended === false && (s.price > 0 || s.odds > 0));
+        const awayAvailable = awaySelections.some((s: any) => s.suspended === false && (s.price > 0 || s.odds > 0));
         
         console.log(`Selection availability check for ${eventId}:`, {
           homeAvailable,
@@ -1125,7 +1128,8 @@ async function processEvents(events: any[]): Promise<void> {
         
         // Fallback if we didn't identify specific selection types
         if (homeSelections.length === 0 && drawSelections.length === 0 && awaySelections.length === 0) {
-          const anySelectionAvailable = market1X2.selections.some((s: any) => s.suspended === false);
+          const anySelectionAvailable = market1X2.selections.some((s: any) => 
+            s.suspended === false && (s.price > 0 || s.odds > 0));
           
           if (anySelectionAvailable) {
             isMarketAvailable = true;
