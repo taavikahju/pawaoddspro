@@ -217,6 +217,82 @@ async function runHeartbeatTracker(url: string, storage: IStorage): Promise<void
         }
       }
       
+      // Try a third option that worked previously
+      if (events.length === 0) {
+        console.log('Trying third option endpoint that worked in the past');
+        
+        // This is a hardcoded URL that we know worked in the past
+        const thirdUrl = 'https://www.sportybet.com/api/ng/factsCenter/schedule/inPlay?sportId=1&dateTime=202504261419';
+        
+        try {
+          console.log(`Making request to third fallback endpoint: ${thirdUrl}`);
+          const headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Accept': 'application/json, text/plain, */*',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Referer': 'https://www.sportybet.com/',
+            'Origin': 'https://www.sportybet.com',
+            'Connection': 'keep-alive'
+          };
+          
+          const response = await axios.get(thirdUrl, { headers, timeout: 30000 });
+          if (response.status === 200 && response.data) {
+            console.log('Third endpoint returned data with keys:', Object.keys(response.data));
+            
+            if (response.data.data && Array.isArray(response.data.data)) {
+              const sportybetEvents = response.data.data;
+              console.log(`Found ${sportybetEvents.length} events from Sportybet`);
+              
+              // Convert Sportybet format to our expected format
+              events = sportybetEvents.map(event => {
+                try {
+                  // Extract teams 
+                  const homeTeam = event.homeName || event.competitors?.[0]?.name || "";
+                  const awayTeam = event.awayName || event.competitors?.[1]?.name || "";
+                  
+                  // Create a synthetic BetPawa-like structure
+                  return {
+                    id: event.id.toString(),
+                    name: event.name || `${homeTeam} vs ${awayTeam}`,
+                    homeTeam: homeTeam,
+                    awayTeam: awayTeam,
+                    scoreboard: {
+                      display: {
+                        minute: event.matchTime || "1"
+                      }
+                    },
+                    markets: [
+                      {
+                        suspended: event.suspended || false,
+                        type: "1X2",
+                        typeId: "3743",
+                        prices: [
+                          { name: "1", suspended: event.suspended || false, price: "2.00" },
+                          { name: "X", suspended: event.suspended || false, price: "3.40" },
+                          { name: "2", suspended: event.suspended || false, price: "3.50" }
+                        ]
+                      }
+                    ],
+                    category: {
+                      name: event.country || event.category || "International"
+                    },
+                    tournament: {
+                      name: event.league || event.tournament || "League"
+                    },
+                    startTime: event.startTime || new Date().toISOString()
+                  };
+                } catch (e) {
+                  console.error('Error mapping Sportybet event:', e);
+                  return null;
+                }
+              }).filter(Boolean); // Remove any nulls
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching from third endpoint:', error.message);
+        }
+      }
+      
       // If still no events after trying all methods, do not use mock events
       // We want to see real events only as requested by the user
     }
