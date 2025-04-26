@@ -240,7 +240,8 @@ async function processEvents(events) {
         gameMinute: event.scoreboard?.display?.minute || "1",
         suspended: isSuspended, // Use the all-0.0 check for suspension status
         homeTeam: event.name.split(" vs ")[0],
-        awayTeam: event.name.split(" vs ")[1]
+        awayTeam: event.name.split(" vs ")[1],
+        totalMarketCount: totalMarketCount // Include the total market count for proper status tracking
       });
     } catch (e) {
       // Skip this event if there's an error
