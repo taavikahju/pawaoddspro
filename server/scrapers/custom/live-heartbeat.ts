@@ -296,28 +296,54 @@ function buildApiUrl(host: string, path: string, params: Record<string, any> = {
   return url.toString();
 }
 
-// Scrape events from the API - adapted from bp_gh_live_scraper.js
+// Scrape events from the API
 async function scrapeEvents(apiUrl: string): Promise<any[]> {
   try {
-    console.log('Scraping BetPawa Ghana live events...');
+    console.log('Scraping BetPawa live events...');
     
-    // Current timestamp for fresh requests
-    const timestamp = Date.now();
+    // Using the exact URL format confirmed by you that works for the heartbeat project
+    // This URL includes the query parameter with proper structure for the BetPawa Uganda API
     
-    // Try multiple potential API endpoints with various configurations
+    // Create the specific query object for the v2 API with pagination support
+    const createQueryParam = (skip: number, take: number) => {
+      // Using exactly the structure from the URL you provided
+      const queryObj = {
+        queries: [
+          {
+            query: {
+              eventType: "LIVE",
+              categories: ["2"], // Football category ID (2 is their code for football)
+              zones: {}
+            },
+            view: {
+              marketTypes: ["3743"] // Match Result (1X2) market type ID
+            },
+            skip: skip,
+            sort: {
+              competitionPriority: "DESC"
+            },
+            take: take
+          }
+        ]
+      };
+      
+      return `q=${encodeURIComponent(JSON.stringify(queryObj))}`;
+    };
+    
+    // Using the exact endpoint URL you confirmed works
+    const mainEndpoint = 'https://www.betpawa.ug/api/sportsbook/v2/events/lists/by-queries';
+    
+    // Prioritize the working URL with different page sizes to ensure we get all events
     const potentialEndpoints = [
-      // Directly use the dashboard endpoint with LIVE instead of UPCOMING as you suggested
-      'https://www.betpawa.com.gh/api/events/football/LIVE',
+      // Primary endpoint with the confirmed working URL format and a larger page size (50)
+      `${mainEndpoint}?${createQueryParam(0, 50)}`,
       
-      // A list of other potential endpoints using different paths and query parameters
-      buildApiUrl('www.betpawa.com.gh', '/api/events/football/LIVE', { _t: timestamp }),
-      buildApiUrl('www.betpawa.com.gh', '/api/sportsbook/eventList', { categoryIds: 1, type: 'LIVE', _t: timestamp }),
-      buildApiUrl('ke.betpawa.com', '/api/events/football/LIVE', { _t: timestamp }),
-      buildApiUrl('www.betpawa.com.gh', '/api/events/football/all', { status: 'LIVE', _t: timestamp }),
+      // Try with a smaller page size as fallback
+      `${mainEndpoint}?${createQueryParam(0, 20)}`,
       
-      // Try API URLs that fetch all events
-      'https://www.betpawa.com.gh/api/sportsbook/events/all',
-      'https://www.betpawa.com.gh/api/sportsbook/events?type=inplay&sportId=1'
+      // Also try alternative domains with same API structure
+      `https://www.betpawa.com.gh/api/sportsbook/v2/events/lists/by-queries?${createQueryParam(0, 50)}`,
+      `https://ke.betpawa.com/api/sportsbook/v2/events/lists/by-queries?${createQueryParam(0, 50)}`
     ];
     
     for (const endpoint of potentialEndpoints) {
@@ -345,24 +371,33 @@ async function scrapeEvents(apiUrl: string): Promise<any[]> {
 }
 
 /**
- * Fetch a single page of events from the API
+ * Fetch events from the API with pagination support
  */
 async function scrapePagedEvents(apiUrl: string): Promise<any[]> {
   try {
-    console.log(`Fetching data from BetPawa Ghana API: ${apiUrl}`);
+    console.log(`Fetching data from BetPawa API: ${apiUrl}`);
     
-    // Use a unique visitor ID for each request to avoid possible caching issues
-    const visitorId = Date.now().toString();
-    const timestamp = Date.now();
+    // Create a properly formatted date for headers
+    const now = new Date();
+    const visitorId = now.getTime().toString();
+    const timestamp = now.getTime();
     
-    // Make an actual API call to BetPawa Ghana API with enhanced headers that more closely match a browser
+    // Determine which domain we're using
+    const domain = new URL(apiUrl).hostname;
+    
+    // Extract base URL and check if it uses the sportsbook/v2 format 
+    // which would need pagination support
+    const isV2Endpoint = apiUrl.includes('sportsbook/v2');
+    const baseEndpoint = apiUrl.split('?')[0]; // Get base URL without query params
+    
+    // Make an actual API call with enhanced headers that more closely match a browser
     const response = await axios.get(apiUrl, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
         'Accept': 'application/json, text/plain, */*',
         'Accept-Language': 'en-US,en;q=0.9',
-        'Referer': 'https://www.betpawa.com.gh/sport/football/live',
-        'Origin': 'https://www.betpawa.com.gh',
+        'Referer': `https://${domain}/sport/football/live`,
+        'Origin': `https://${domain}`,
         'Connection': 'keep-alive',
         'sec-ch-ua': '"Chromium";v="123", "Not_A Brand";v="24"',
         'sec-ch-ua-mobile': '?0',
@@ -373,12 +408,8 @@ async function scrapePagedEvents(apiUrl: string): Promise<any[]> {
         'Cache-Control': 'no-cache',
         'Pragma': 'no-cache',
         'X-Requested-With': 'XMLHttpRequest',
-        'Cookie': `VISITOR_ID=${visitorId}; VISITOR_COUNTRY_CODE=GH; betPawaSport=football; betPawaHasVisitedSport=true; pageLoadAt=${timestamp}`
-      },
-      params: {
-        // Add additional query parameters that might help authenticate the request
-        _t: timestamp, // Add timestamp to avoid caching
-        isLive: true
+        'X-Timestamp': timestamp.toString(),
+        'Cookie': `VISITOR_ID=${visitorId}; VISITOR_COUNTRY_CODE=UG; betPawaSport=football; betPawaHasVisitedSport=true; pageLoadAt=${timestamp}`
       },
       timeout: 30000 // 30-second timeout
     });
@@ -388,12 +419,70 @@ async function scrapePagedEvents(apiUrl: string): Promise<any[]> {
     }
     
     let events: any[] = [];
+    let totalEvents = 0;
+    let hasMorePages = false;
+    let currentSkip = 0;
+    const pageSize = 50; // Default page size
+    
+    // Function to extract query object from URL for pagination
+    const extractQueryFromUrl = (url: string): any => {
+      const queryParams = new URLSearchParams(url.split('?')[1]);
+      if (queryParams.has('q')) {
+        try {
+          return JSON.parse(decodeURIComponent(queryParams.get('q') || '{}'));
+        } catch (e) {
+          console.log('Error parsing query object:', e);
+          return null;
+        }
+      }
+      return null;
+    };
     
     // Try multiple paths to extract events based on API response format
-    // This handles different API response structures
+    // Handle v2 sportsbook API format first (confirmed format from the user)
     if (response.data?.queries?.[0]?.events) {
       events = response.data.queries[0].events;
+      
+      // Check if we need to handle pagination
+      if (isV2Endpoint && events.length === pageSize) {
+        // Extract query object for pagination
+        const queryObj = extractQueryFromUrl(apiUrl);
+        if (queryObj && queryObj.queries && queryObj.queries.length > 0) {
+          currentSkip = queryObj.queries[0].skip || 0;
+          totalEvents = response.data.queries[0].total || 0;
+          
+          // Determine if there are more pages
+          hasMorePages = (currentSkip + pageSize) < totalEvents;
+          
+          // If we have more pages, fetch them
+          if (hasMorePages) {
+            console.log(`Found ${events.length} events, but there are more. Fetching next page...`);
+            
+            // Update skip parameter for next page
+            const nextSkip = currentSkip + pageSize;
+            
+            // Create query for next page
+            const nextQueryObj = { ...queryObj };
+            nextQueryObj.queries[0].skip = nextSkip;
+            
+            // Build URL for next page
+            const nextPageUrl = `${baseEndpoint}?q=${encodeURIComponent(JSON.stringify(nextQueryObj))}`;
+            
+            try {
+              // Recursively fetch next page
+              const nextPageEvents = await scrapePagedEvents(nextPageUrl);
+              
+              // Combine with current events
+              events = [...events, ...nextPageEvents];
+            } catch (paginationError) {
+              console.error('Error fetching next page:', paginationError);
+              // Continue with what we have
+            }
+          }
+        }
+      }
     } else if (response.data?.events) {
+      // Handle other common response formats
       events = response.data.events;
     } else if (response.data?.data?.events) {
       events = response.data.data.events;
@@ -415,17 +504,75 @@ async function scrapePagedEvents(apiUrl: string): Promise<any[]> {
       return events;
     }
     
-    // If no events were found
+    // If no events were found but the request was successful
     console.log('API request succeeded but no events found in the response.');
-    // Dump response structure to help debug
     console.log('Response structure:', Object.keys(response.data));
+    
+    // For debugging, if we have a queries array but no events, check why
+    if (response.data?.queries && response.data.queries.length > 0) {
+      console.log('Query result properties:', Object.keys(response.data.queries[0]));
+      if (response.data.queries[0].total !== undefined) {
+        console.log(`Total events reported by API: ${response.data.queries[0].total}`);
+      }
+    }
+    
     return [];
     
   } catch (error: any) {
-    console.error('Error scraping page of BetPawa Ghana events:', error.message || String(error));
+    console.error('Error scraping page of BetPawa events:', error.message || String(error));
     
-    // Only generate mock data if we can't connect to the API
-    console.log('Switching to mock event generation since API connection is failing');
+    // Only generate mock data as an absolute last resort
+    // First try a retry with different headers and parameters
+    try {
+      console.log('Trying one more time with alternative headers...');
+      
+      // Create alternative request headers that might bypass any restrictions
+      const alternativeHeaders = {
+        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1',
+        'Accept': '*/*',
+        'Accept-Language': 'en-GB,en;q=0.9',
+        'Origin': 'https://www.betpawa.ug',
+        'Referer': 'https://www.betpawa.ug/sport/football',
+        'Connection': 'keep-alive'
+      };
+      
+      // Try with a simple GET request as fallback
+      const retryUrl = apiUrl.includes('?') ? apiUrl.split('?')[0] : apiUrl;
+      
+      const response = await axios.get(retryUrl, {
+        headers: alternativeHeaders,
+        timeout: 20000
+      });
+      
+      if (response.data) {
+        // Try to extract any events
+        let events: any[] = [];
+        
+        if (response.data.events) {
+          events = response.data.events;
+        } else if (Array.isArray(response.data)) {
+          events = response.data;
+        } else if (typeof response.data === 'object') {
+          // Look for events array in any property
+          for (const key in response.data) {
+            if (Array.isArray(response.data[key])) {
+              events = response.data[key];
+              break;
+            }
+          }
+        }
+        
+        if (events.length > 0) {
+          console.log(`Fallback request succeeded! Found ${events.length} events.`);
+          return events;
+        }
+      }
+    } catch (retryError) {
+      console.error('Retry also failed:', retryError.message || String(retryError));
+    }
+    
+    // As a last resort, generate mock data
+    console.log('All API attempts failed. Switching to mock event generation for demonstration purposes.');
     return generateMockEvents();
   }
 }
@@ -436,38 +583,70 @@ async function processEvents(events: any[]): Promise<void> {
     return;
   }
 
-  // Extract relevant data from events - using same logic as bp_gh_live_scraper.js
+  // Extract relevant data from events - specifically tailored for the BetPawa Uganda API format
   const processedEvents: HeartbeatEvent[] = events.map((event) => {
-    // Event ID - using both siteEventId and id for compatibility
-    const eventId = (event.siteEventId || event.id || '').toString();
+    // The BetPawa Uganda API (v2) returns event ID in a different format
+    const eventId = (event.id || event.eventId || event.siteEventId || '').toString();
     
-    // Get event name from competitors or direct name property
+    // Get event name - in v2 API, the data structure is different
     let eventName = "Unknown Event";
+    
+    // V2 API specific format - competitors array
     if (event.competitors && event.competitors.length >= 2) {
-      eventName = `${event.competitors[0].name} v ${event.competitors[1].name}`;
-    } else if (event.name) {
+      eventName = `${event.competitors[0].name} vs ${event.competitors[1].name}`;
+    } 
+    // Some versions use homeTeam/awayTeam
+    else if (event.homeTeam && event.awayTeam) { 
+      eventName = `${event.homeTeam.name} vs ${event.awayTeam.name}`;
+    }
+    // Direct name property
+    else if (event.name) {
       eventName = event.name;
     }
     
-    // Get country and tournament info
-    const country = event.category?.name || event.region?.name || 'Unknown';
-    const tournament = event.competition?.name || 'Unknown';
+    // Get country and tournament info from the correct path in v2 API
+    // In the v2 API, the category is usually the country
+    let country = 'Unknown';
+    let tournament = 'Unknown';
+    
+    // Try different paths based on the API response structure
+    if (event.category && typeof event.category === 'object') {
+      country = event.category.name || 'Unknown';
+    } else if (event.region && typeof event.region === 'object') {
+      country = event.region.name || 'Unknown';
+    }
+    
+    if (event.competition && typeof event.competition === 'object') {
+      tournament = event.competition.name || 'Unknown';
+    } else if (event.league && typeof event.league === 'object') {
+      tournament = event.league.name || 'Unknown';
+    }
     
     // Check if there's a 1X2 market (Match Result - usually market type 3743)
     let market1X2 = null;
     let isMarketAvailable = false;
     
-    // Check for market in mainMarkets first
-    if (event.mainMarkets) {
+    // In v2 API, markets might be in several different paths
+    // First check in mainMarkets
+    if (event.mainMarkets && Array.isArray(event.mainMarkets)) {
       market1X2 = event.mainMarkets.find((m: any) => 
-        m.typeId === '3743' || m.type?.id === '3743' || m.name?.includes('1X2')
+        m.typeId === '3743' || m.type?.id === '3743' || m.name?.includes('1X2') || m.description?.includes('Match Result')
       );
     }
     
-    // If not found, check in regular markets
-    if (!market1X2 && event.markets) {
+    // Then check in regular markets
+    if (!market1X2 && event.markets && Array.isArray(event.markets)) {
       market1X2 = event.markets.find((m: any) => 
-        m.typeId === '3743' || m.type?.id === '3743' || m.name?.includes('1X2')
+        m.typeId === '3743' || m.type?.id === '3743' || m.name?.includes('1X2') || m.description?.includes('Match Result')
+      );
+    }
+    
+    // For v2 API, market info might be in a different structure
+    // In some API responses, the markets are under a "markets" property with market ID as the key
+    if (!market1X2 && event.markets && typeof event.markets === 'object' && !Array.isArray(event.markets)) {
+      const marketValues = Object.values(event.markets);
+      market1X2 = marketValues.find((m: any) => 
+        m.id === '3743' || m.typeId === '3743' || m.name?.includes('1X2') || m.description?.includes('Match Result')
       );
     }
     
@@ -479,31 +658,46 @@ async function processEvents(events: any[]): Promise<void> {
       // According to requirements:
       // An event has a heartbeat if at least one of the marketType 3743 prices has suspended=false
       // If all 3 prices are suspended, then there is no heartbeat
+      
+      // Check prices array first
       if (market1X2.prices && market1X2.prices.length > 0) {
         // Check if at least one price is not suspended
         const allPricesSuspended = market1X2.prices.every((p: any) => p.suspended === true);
         // Market is available only if at least one price is not suspended
         isMarketAvailable = !allPricesSuspended;
-      } else if (market1X2.outcomes && market1X2.outcomes.length > 0) {
+      } 
+      // Check outcomes array
+      else if (market1X2.outcomes && market1X2.outcomes.length > 0) {
         // Same logic for outcomes if that's what the API returns
         const allOutcomesSuspended = market1X2.outcomes.every((o: any) => o.suspended === true);
         isMarketAvailable = !allOutcomesSuspended;
       }
+      // In v2 API, the selections might be under a different property
+      else if (market1X2.selections && market1X2.selections.length > 0) {
+        const allSelectionsSuspended = market1X2.selections.every((s: any) => s.suspended === true);
+        isMarketAvailable = !allSelectionsSuspended;
+      }
     }
     
-    // Extract game minute from scoreboard if available
+    // Extract game minute from scoreboard - various paths based on API version
     let gameMinute = '';
+    
+    // Try different paths for the game minute
     if (event.scoreboard?.display?.minute) {
       gameMinute = event.scoreboard.display.minute;
     } else if (event.score?.period) {
       gameMinute = event.score.period;
+    } else if (event.inPlayMatchDetails?.minute) {
+      gameMinute = event.inPlayMatchDetails.minute.toString();
+    } else if (event.currentMinute) {
+      gameMinute = event.currentMinute.toString();
     }
     
-    // Extract widget ID (SPORTRADAR)
-    const widgetId = event.widget?.id || '';
+    // Extract widget ID if available for visualizations
+    const widgetId = event.widget?.id || event.widgetId || '';
     
-    // Format UTC start time
-    const startTime = event.startTime || event.startDate || new Date().toISOString();
+    // Format UTC start time - try different paths
+    const startTime = event.startTime || event.startDate || event.date || new Date().toISOString();
     
     // Create event object
     const heartbeatEvent: HeartbeatEvent = {
@@ -511,7 +705,7 @@ async function processEvents(events: any[]): Promise<void> {
       name: eventName,
       country,
       tournament,
-      isInPlay: event.status === 'LIVE' || event.isLive || false,
+      isInPlay: event.status === 'LIVE' || event.isLive || event.inPlay === true || false,
       startTime,
       currentlyAvailable: isMarketAvailable,
       marketAvailability: isMarketAvailable ? 'Available' : 'Suspended',
@@ -519,6 +713,9 @@ async function processEvents(events: any[]): Promise<void> {
       gameMinute,
       widgetId
     };
+    
+    // Log event details for debugging
+    console.log(`Processing event: ${eventName} (${eventId}), Country: ${country}, Tournament: ${tournament}, Market Available: ${isMarketAvailable}, Minute: ${gameMinute}`);
     
     // Update market history
     updateMarketHistory(heartbeatEvent);
