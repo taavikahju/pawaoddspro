@@ -604,12 +604,29 @@ async function scrapePagedEvents(apiUrl: string): Promise<any[]> {
                 // Get the 1X2 market (market type 3743)
                 const market = event.markets?.find((m: any) => m.marketType?.id === '3743');
                 
+                // Process event name to extract home/away team
+                let homeTeam = '';
+                let awayTeam = '';
+                
+                if (event.name) {
+                  // BetPawa API uses " - " as separator between teams
+                  if (event.name.includes(' - ')) {
+                    const parts = event.name.split(' - ');
+                    homeTeam = parts[0].trim();
+                    awayTeam = parts[1].trim();
+                    console.log(`Extracted teams from name: ${homeTeam} vs ${awayTeam}`);
+                  }
+                }
+                
                 // Extract basic event data
                 const eventData: any = {
                   eventId: widgetId || event.id || '',
                   country: event.region?.name || event.category?.name || 'Unknown',
                   tournament: event.competition?.name || event.league?.name || 'Unknown',
                   event: event.name || '',
+                  // Add home_team and away_team to be used by processEvents
+                  home_team: homeTeam,
+                  away_team: awayTeam,
                   market: market?.marketType?.name || '1X2',
                   isInPlay: true,
                   startTime: event.startTime || new Date().toISOString(),
@@ -738,8 +755,15 @@ async function processEvents(events: any[]): Promise<void> {
     let homeTeam = "";
     let awayTeam = "";
     
+    // First check if we already have home_team and away_team from our customized scraper
+    if (event.home_team && event.away_team) {
+      homeTeam = event.home_team;
+      awayTeam = event.away_team;
+      eventName = `${homeTeam} vs ${awayTeam}`;
+      console.log(`Using teams from direct home_team/away_team properties: ${homeTeam} vs ${awayTeam}`);
+    }
     // V2 API specific format - competitors array
-    if (event.competitors && event.competitors.length >= 2) {
+    else if (event.competitors && event.competitors.length >= 2) {
       homeTeam = event.competitors[0].name || "";
       awayTeam = event.competitors[1].name || "";
       eventName = `${homeTeam} vs ${awayTeam}`;
@@ -762,27 +786,38 @@ async function processEvents(events: any[]): Promise<void> {
         eventName = `${homeTeam} vs ${awayTeam}`;
       }
     }
-    // Direct name property
-    else if (event.name) {
+    // Direct name property with separator "-"
+    else if (event.name && event.name.includes(" - ")) {
       eventName = event.name;
-      // Try to extract team names from event name if it contains "vs"
-      if (eventName.includes(" vs ")) {
-        const parts = eventName.split(" vs ");
-        if (parts.length === 2) {
-          homeTeam = parts[0].trim();
-          awayTeam = parts[1].trim();
-        }
+      const parts = event.name.split(" - ");
+      if (parts.length === 2) {
+        homeTeam = parts[0].trim();
+        awayTeam = parts[1].trim();
+      }
+    }
+    // Direct name property with separator "vs"
+    else if (event.name && event.name.includes(" vs ")) {
+      eventName = event.name;
+      const parts = event.name.split(" vs ");
+      if (parts.length === 2) {
+        homeTeam = parts[0].trim();
+        awayTeam = parts[1].trim();
       }
     }
     // Direct event property (from our dedicated scraper)
     else if (event.event) {
       eventName = event.event;
-      // Try to extract team names from event name if it contains "vs"
-      if (eventName.includes(" vs ")) {
-        const parts = eventName.split(" vs ");
-        if (parts.length === 2) {
-          homeTeam = parts[0].trim();
-          awayTeam = parts[1].trim();
+      
+      // Try different separators to extract team names
+      const separators = [" vs ", " - ", " v ", "/"];
+      for (const separator of separators) {
+        if (eventName.includes(separator)) {
+          const parts = eventName.split(separator);
+          if (parts.length === 2) {
+            homeTeam = parts[0].trim();
+            awayTeam = parts[1].trim();
+            break;
+          }
         }
       }
     }
