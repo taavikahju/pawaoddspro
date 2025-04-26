@@ -1,68 +1,42 @@
-import EventEmitter from 'events';
-import axios from 'axios';
-import fs from 'fs/promises';
+import axios, { AxiosResponse } from 'axios';
+import { EventEmitter } from 'events';
+import fs from 'fs';
 import path from 'path';
 import { IStorage } from '../../storage';
-import { URL } from 'url';
+// Import path and fileURLToPath for ES Modules directory path handling
+import { fileURLToPath } from 'url';
 
-// Debug utility function to dump API response
+// Debug utility function to save API responses for analysis
 function debugDumpApiResponse(event: any, source: string) {
   try {
-    console.log(`[DEBUG-${source}] Event ID: ${event.id}`);
-    console.log(`[DEBUG-${source}] Event Name: ${event.name}`);
+    const logDir = path.join(process.cwd(), 'data', 'logs');
     
-    // Log different paths where team information might be
-    if (event.name) {
-      console.log(`[DEBUG-${source}] Found event.name: ${event.name}`);
+    // Ensure log directory exists
+    if (!fs.existsSync(logDir)) {
+      fs.mkdirSync(logDir, { recursive: true });
     }
     
-    if (event.competitors) {
-      console.log(`[DEBUG-${source}] Found event.competitors:`, 
-        JSON.stringify(event.competitors.map((c: any) => c.name || c))
-      );
-    }
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const filePath = path.join(logDir, `${source}-event-${event.id || 'unknown'}-${timestamp}.json`);
     
-    if (event.homeTeam || event.awayTeam) {
-      console.log(`[DEBUG-${source}] Found homeTeam/awayTeam:`, 
-        JSON.stringify({home: event.homeTeam, away: event.awayTeam})
-      );
-    }
-    
-    // Log any teams information in results
-    if (event.results && event.results.teams) {
-      console.log(`[DEBUG-${source}] Found event.results.teams:`, 
-        JSON.stringify(event.results.teams)
-      );
-    }
-    
-    // Log any display/scoreboard info that might have team data
-    if (event.scoreboard) {
-      console.log(`[DEBUG-${source}] Found event.scoreboard:`, 
-        JSON.stringify(event.scoreboard)
-      );
-    }
-    
-    if (event.results && event.results.display) {
-      console.log(`[DEBUG-${source}] Found event.results.display:`, 
-        JSON.stringify(event.results.display)
-      );
-    }
+    fs.writeFileSync(filePath, JSON.stringify(event, null, 2));
+    console.log(`Dumped ${source} event to ${filePath}`);
   } catch (error) {
-    console.error(`Error in debugDumpApiResponse for ${source}:`, error);
+    console.error('Error dumping event for debugging:', error);
   }
 }
 
-// Event emitter for live heartbeat updates
+// Create an event emitter to handle heartbeat events
 export const heartbeatEvents = new EventEmitter();
 
-// Event types
+// Define event types
 export const HEARTBEAT_EVENTS = {
-  STATUS_UPDATED: 'heartbeat_status_updated',
+  STATUS_UPDATED: 'status_updated',
   MARKET_CHANGED: 'market_changed',
   HEARTBEAT: 'heartbeat'
 };
 
-// Interface for heartbeat events
+// Define the shape of a heartbeat event
 interface HeartbeatEvent {
   id: string;
   name: string;
@@ -79,7 +53,7 @@ interface HeartbeatEvent {
   awayTeam?: string;
 }
 
-// Interface for market history tracking
+// Define the structure for market history
 interface MarketHistory {
   eventId: string;
   timestamps: {
@@ -88,7 +62,7 @@ interface MarketHistory {
   }[];
 }
 
-// Interface for the heartbeat state
+// Heartbeat state interface
 interface HeartbeatState {
   isRunning: boolean;
   events: HeartbeatEvent[];
@@ -97,10 +71,10 @@ interface HeartbeatState {
   lastUpdate: number;
 }
 
-// Market history for tracking availability over time
-let marketHistories: MarketHistory[] = [];
+// In-memory storage for market availability history
+const marketHistories: MarketHistory[] = [];
 
-// Global heartbeat state
+// Initialize heartbeat state
 let heartbeatState: HeartbeatState = {
   isRunning: false,
   events: [],
@@ -109,267 +83,205 @@ let heartbeatState: HeartbeatState = {
   lastUpdate: 0
 };
 
-// Ensure data directory exists
+// Get the directory path for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Make sure data directory exists
 async function ensureDataDirectory() {
-  try {
-    const dataDir = path.join(process.cwd(), 'data');
-    await fs.mkdir(dataDir, { recursive: true });
-    return dataDir;
-  } catch (error) {
-    console.error('Error creating data directory:', error);
-    throw error;
+  const dataDir = path.join(process.cwd(), 'data');
+  const historyDir = path.join(dataDir, 'heartbeat-history');
+  
+  if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir, { recursive: true });
   }
+  
+  if (!fs.existsSync(historyDir)) {
+    fs.mkdirSync(historyDir, { recursive: true });
+  }
+  
+  return historyDir;
 }
 
-// Start the heartbeat tracker
+// Tracker state
+let trackerInterval: NodeJS.Timeout | null = null;
+let isTrackerRunning = false;
+
+// Start tracking live events
 export function startHeartbeatTracker(url: string, storage: IStorage): void {
-  if (heartbeatState.isRunning) {
-    console.log('Heartbeat tracker is already running');
+  if (isTrackerRunning) {
+    console.log("Heartbeat tracker is already running");
     return;
   }
-
-  console.log('Starting heartbeat tracker');
+  
   heartbeatState.isRunning = true;
-  runHeartbeatTracker(url, storage).catch(error => {
-    console.error('Error in heartbeat tracker:', error);
-    heartbeatState.isRunning = false;
-  });
+  isTrackerRunning = true;
+  
+  // Immediately run once
+  runHeartbeatTracker(url, storage);
+  
+  // Then set up interval (every 20 seconds)
+  trackerInterval = setInterval(() => {
+    console.log("Running heartbeat tracker cycle");
+    runHeartbeatTracker(url, storage);
+  }, 20000); // 20 seconds
+  
+  // Load historical data on startup
+  loadHistoryData();
 }
 
-// Stop the heartbeat tracker
+// Stop tracking live events
 export function stopHeartbeatTracker(): void {
-  console.log('Stopping heartbeat tracker');
+  if (trackerInterval) {
+    clearInterval(trackerInterval);
+    trackerInterval = null;
+  }
+  
   heartbeatState.isRunning = false;
+  isTrackerRunning = false;
+  
+  // Save history data when stopping
+  saveHistoryData();
 }
 
-// Main heartbeat tracker function
+// Main tracker function
 async function runHeartbeatTracker(url: string, storage: IStorage): Promise<void> {
   try {
-    await loadHistoryData();
+    // Update last update timestamp
+    heartbeatState.lastUpdate = Date.now();
+    
+    // Import our specialized betpawa API module using dynamic import (ES modules)
+    const betpawaApi = await import('./betpawa_live_api');
+    const { fetchBetPawaLiveEvents, fetchBetPawaFootballLive, parseEventsForHeartbeat } = betpawaApi;
+    
+    // Try to get events using our specialized API functions
+    console.log('Using specialized BetPawa API module...');
+    let events: any[] = [];
+    
+    // Try the main implementation first
+    events = await fetchBetPawaLiveEvents();
+    
+    // If no events, try the football endpoint
+    if (events.length === 0) {
+      console.log('No events from main endpoint, trying football endpoint...');
+      const footballData = await fetchBetPawaFootballLive();
+      
+      if (footballData) {
+        // Parse the football data according to its structure
+        if (Array.isArray(footballData)) {
+          events = footballData;
+        } else if (footballData.events && Array.isArray(footballData.events)) {
+          events = footballData.events;
+        }
+      }
+    }
+    
+    // If still no events, fall back to the original scraper
+    if (events.length === 0) {
+      console.log('No events from specialized API, falling back to original scraper...');
+      events = await scrapeEvents(url);
+    }
+    
+    console.log(`Total events collected: ${events.length}`);
+    
+    // Process the events
+    await processEvents(events);
+    
+    // Save the market history data periodically
+    await saveHistoryData();
+    
+    // Clean up old data
+    cleanupOldData();
+    
+    // Emit a heartbeat event
+    heartbeatEvents.emit(HEARTBEAT_EVENTS.HEARTBEAT, {
+      timestamp: Date.now(),
+      eventCount: events.length
+    });
   } catch (error) {
-    console.error('Error loading history data:', error);
-    // Continue running even if we can't load history data
-  }
-
-  let lastSuccessfulScrape = 0;
-  
-  // Loop until stopped
-  while (heartbeatState.isRunning) {
-    try {
-      console.log('Running heartbeat tracker cycle');
-      
-      // Fetch real events from the API
-      const events = await scrapeEvents(url);
-      
-      // Process events
-      await processEvents(events);
-      
-      lastSuccessfulScrape = Date.now();
-      heartbeatState.lastUpdate = lastSuccessfulScrape;
-      
-      // Save history data periodically
-      try {
-        await saveHistoryData();
-      } catch (error) {
-        console.error('Error saving history data:', error);
-        // Continue running even if we can't save history data
-      }
-      
-      // Clean up old data
-      cleanupOldData();
-      
-      // Emit event for UI updates
-      heartbeatEvents.emit(HEARTBEAT_EVENTS.STATUS_UPDATED, heartbeatState);
-      
-      // Wait 10 seconds before next cycle
-      await new Promise(resolve => setTimeout(resolve, 10000));
-    } catch (error) {
-      console.error('Error in heartbeat cycle:', error);
-      
-      // If we haven't had a successful scrape in 5 minutes, reset events
-      if (Date.now() - lastSuccessfulScrape > 5 * 60 * 1000) {
-        console.log('No successful scrape in 5 minutes, resetting events');
-        heartbeatState.events = [];
-      }
-      
-      // Wait before retrying
-      await new Promise(resolve => setTimeout(resolve, 30000));
-    }
+    console.error('Error in heartbeat tracker:', error);
   }
 }
 
-// Generate mock events for demo mode
+// Generate mock events for testing
 function generateMockEvents(): any[] {
-  console.log('Generating mock events for demo');
+  const mockEvents = [];
   
-  // Demo events with different teams and properties
-  const events = [
-    {
-      id: '26987202',
-      name: 'Rahmatganj MFS vs Bashundhara Kings',
-      category: { name: 'Bangladesh' },
-      competition: { name: 'Premier League' },
-      startTime: new Date().toISOString(),
-      scoreboard: {
-        display: {
-          minute: String(Math.floor(Date.now() / 60000) % 90 + 1)
-        }
-      },
-      markets: [
-        {
-          typeId: '3743',
-          name: '1X2',
-          suspended: (Math.floor(Date.now() / 1000) % 45) >= 30,
-          prices: [
-            { typeId: '3744', name: '1', suspended: false, price: 3.5 },
-            { typeId: '3745', name: 'X', suspended: false, price: 3.4 },
-            { typeId: '3746', name: '2', suspended: false, price: 1.9 }
-          ]
-        }
-      ]
-    },
-    {
-      id: '26968026',
-      name: 'Abahani Limited Dhaka vs Mohammedan SC Dhaka',
-      category: { name: 'Bangladesh' },
-      competition: { name: 'Premier League' },
-      startTime: new Date().toISOString(),
-      scoreboard: {
-        display: {
-          minute: Math.floor(Date.now() / 1000) % 60 >= 20 && Math.floor(Date.now() / 1000) % 60 < 30 
-            ? 'HT' 
-            : String(Math.floor(Date.now() / 120000) % 90 + 1)
-        }
-      },
-      markets: [
-        {
-          typeId: '3743',
-          name: '1X2',
-          suspended: (Math.floor(Date.now() / 1000) % 60) >= 50,
-          prices: [
-            { typeId: '3744', name: '1', suspended: false, price: 2.1 },
-            { typeId: '3745', name: 'X', suspended: false, price: 3.2 },
-            { typeId: '3746', name: '2', suspended: false, price: 3.0 }
-          ]
-        }
-      ]
-    },
-    {
-      id: '27008584',
-      name: 'JS Saoura U21 vs USM Alger U21',
-      category: { name: 'Algeria' },
-      competition: { name: 'U21 League' },
-      startTime: new Date().toISOString(),
-      scoreboard: {
-        display: {
-          minute: '46'
-        }
-      },
-      markets: [
-        {
-          typeId: '3743',
-          name: '1X2',
-          suspended: (Math.floor(Date.now() / 1000) % 20) >= 10,
-          prices: [
-            { typeId: '3744', name: '1', suspended: false, price: 1.5 },
-            { typeId: '3745', name: 'X', suspended: false, price: 4.2 },
-            { typeId: '3746', name: '2', suspended: false, price: 5.5 }
-          ]
-        }
-      ]
-    },
-    {
-      id: '25332692',
-      name: 'Melbourne City FC vs Adelaide United FC',
-      category: { name: 'Australia' },
-      competition: { name: 'A-League' },
-      startTime: new Date().toISOString(),
-      scoreboard: {
-        display: {
-          minute: '5'
-        }
-      },
-      markets: [
-        {
-          typeId: '3743',
-          name: '1X2',
-          suspended: (Math.floor(Date.now() / 1000) % 60) >= 15,
-          prices: [
-            { typeId: '3744', name: '1', suspended: false, price: 1.8 },
-            { typeId: '3745', name: 'X', suspended: false, price: 3.5 },
-            { typeId: '3746', name: '2', suspended: false, price: 4.0 }
-          ]
-        }
-      ]
-    },
-    {
-      id: '26967985',
-      name: 'NWS Spirit FC U20 vs St George FC U20',
-      category: { name: 'Australia' },
-      competition: { name: 'NSW NPL Youth' },
-      startTime: new Date().toISOString(),
-      scoreboard: {
-        display: {
-          minute: '10'
-        }
-      },
-      markets: [
-        {
-          typeId: '3743',
-          name: '1X2',
-          suspended: ((Math.floor(Date.now() / 1000) % 100) >= 40) && ((Math.floor(Date.now() / 1000) % 17) !== 0),
-          prices: [
-            { typeId: '3744', name: '1', suspended: false, price: 1.6 },
-            { typeId: '3745', name: 'X', suspended: false, price: 3.8 },
-            { typeId: '3746', name: '2', suspended: false, price: 4.5 }
-          ]
-        }
-      ]
-    }
-  ];
+  // Generate 2-5 random events
+  const eventCount = 2 + Math.floor(Math.random() * 4);
   
-  console.log(`Generated ${events.length} mock events`);
-  return events;
+  for (let i = 0; i < eventCount; i++) {
+    const eventId = `${26987200 + i}`;
+    const homeTeam = `Home Team ${i+1}`;
+    const awayTeam = `Away Team ${i+1}`;
+    const suspended = Math.random() > 0.7; // 30% chance of being suspended
+    const minute = Math.floor(Math.random() * 90) + 1;
+    
+    mockEvents.push({
+      id: eventId,
+      name: `${homeTeam} vs ${awayTeam}`,
+      homeTeam: homeTeam,
+      awayTeam: awayTeam,
+      scoreboard: {
+        display: {
+          minute: minute.toString()
+        }
+      },
+      markets: [
+        {
+          suspended: suspended,
+          type: "1X2",
+          typeId: "3743",
+          prices: [
+            { name: "1", suspended: suspended, price: "1.95" },
+            { name: "X", suspended: suspended, price: "3.50" },
+            { name: "2", suspended: suspended, price: "3.80" }
+          ]
+        }
+      ],
+      category: {
+        name: `Country ${i % 3 + 1}`
+      },
+      tournament: {
+        name: `League ${i % 5 + 1}`
+      },
+      startTime: new Date().toISOString()
+    });
+  }
+  
+  return mockEvents;
 }
 
-// Helper function to build API URLs
+// Build the API URL with parameters
 function buildApiUrl(host: string, path: string, params: Record<string, any> = {}): string {
   const url = new URL(path, host);
+  
+  // Add each parameter to the URL
   Object.entries(params).forEach(([key, value]) => {
     url.searchParams.append(key, value.toString());
   });
+  
   return url.toString();
 }
 
-// Scrape events from API
+// Scrape events from the API
 async function scrapeEvents(apiUrl: string): Promise<any[]> {
-  console.log(`Scraping events from ${apiUrl}`);
-  
   try {
-    // For BetPawa API, we need specific headers and a specific query format
-    // Using the same configuration from the working scraper
-    const domain = 'www.betpawa.com.gh';
-    const brand = 'ghana';
-    
-    // Try with the provided URL first
     let url = apiUrl;
-    let headers: Record<string, string> = {
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-    };
+    let headers: Record<string, string> = {};
+    const isBetPawa = url.includes('betpawa');
     
-    // Check if this is the BetPawa domain
-    const isBetPawa = apiUrl.includes('betpawa');
-    
+    // If this is BetPawa, use custom API format with specific query structure
     if (isBetPawa) {
-      console.log('Using BetPawa-specific configuration');
+      console.log("Using BetPawa-specific configuration");
       
-      // Construct a query for live events with football (category 2)
-      const take = 20;
-      const skip = 0;
-      const encodedQuery = `%7B%22queries%22%3A%5B%7B%22query%22%3A%7B%22eventType%22%3A%22LIVE%22%2C%22categories%22%3A%5B2%5D%2C%22zones%22%3A%7B%7D%2C%22hasOdds%22%3Atrue%7D%2C%22view%22%3A%7B%22marketTypes%22%3A%5B%223743%22%5D%7D%2C%22skip%22%3A${skip}%2C%22take%22%3A${take}%7D%5D%7D`;
+      // Extract domain and country code from URL
+      const urlObj = new URL(url);
+      const domain = urlObj.hostname;
+      const brand = domain.includes('ghana') ? 'ghana' : (domain.includes('kenya') ? 'kenya' : 'uganda');
       
-      // Use the exact endpoint and query format from betpawa_gh_scraper.js that's known to work
-      url = `https://${domain}/api/sportsbook/v2/events/lists/by-queries?q=${encodedQuery}&cacheBust=${Date.now()}`;
+      // Use the exact endpoint URL provided by the user
+      url = `https://www.betpawa.com.gh/api/sportsbook/v2/events/lists/by-queries?q=%7B%22queries%22%3A%5B%7B%22query%22%3A%7B%22eventType%22%3A%22LIVE%22%2C%22categories%22%3A%5B%222%22%5D%2C%22zones%22%3A%7B%7D%7D%2C%22view%22%3A%7B%22marketTypes%22%3A%5B%223743%22%5D%7D%2C%22skip%22%3A0%2C%22sort%22%3A%7B%22competitionPriority%22%3A%22DESC%22%7D%2C%22take%22%3A20%7D%5D%7D`;
       
       // Use the exact headers from bp_gh_live_scraper.js that we know are working
       headers = {
@@ -388,24 +300,8 @@ async function scrapeEvents(apiUrl: string): Promise<any[]> {
         "x-pawa-brand": `betpawa-${brand}`
       };
       
-      // Use the cookies from the working implementation
-      const cookies = {
-        "_ga": "GA1.1.459857438.1713161475",
-        "_ga_608WPEPCC3": "GS1.1.1731480684.7.0.1731480684.0.0.0",
-        "aff_cookie": "F60",
-        "_gcl_au": "1.1.1725251410.1738666716",
-        "PHPSESSID": "b0694dabe05179bc223abcdf8f7bf83e",
-        "tracingId": "0f5927de-e30d-4228-b29c-c92210017a62",
-        "x-pawa-token": "b4c6eda2ae319f4b-8a3075ba3c9d9984"
-      };
-      
-      // Convert cookies to string format
-      const cookieString = Object.entries(cookies)
-        .map(([key, value]) => `${key}=${value}`)
-        .join('; ');
-      
       // Add cookies to headers
-      headers['cookie'] = cookieString;
+      headers['cookie'] = '_ga=GA1.1.459857438.1713161475; _ga_608WPEPCC3=GS1.1.1731480684.7.0.1731480684.0.0.0; aff_cookie=F60; _gcl_au=1.1.1725251410.1738666716; PHPSESSID=b0694dabe05179bc223abcdf8f7bf83e; tracingId=0f5927de-e30d-4228-b29c-c92210017a62; x-pawa-token=b4c6eda2ae319f4b-8a3075ba3c9d9984';
     }
     
     console.log(`Scraping using URL: ${url}`);
@@ -413,89 +309,102 @@ async function scrapeEvents(apiUrl: string): Promise<any[]> {
     console.log(`Making request to: ${url}`);
     console.log(`Using headers with cookie length: ${headers.cookie ? headers.cookie.length : 0} chars`);
     
-    const response = await axios.get(url, {
-      headers,
-      timeout: 30000,
-      // Important: Force a fresh response to avoid cache issues with 304 responses
-      params: {
-        _t: Date.now() // Add timestamp to prevent caching
+    try {
+      // Add cache-busting timestamp parameter
+      const timestamp = Date.now();
+      const urlWithTimestamp = `${url}&_t=${timestamp}`;
+      
+      const response = await axios.get(urlWithTimestamp, {
+        headers,
+        timeout: 60000,
+      });
+      
+      if (response.status !== 200) {
+        throw new Error(`HTTP error ${response.status}: ${response.statusText}`);
       }
-    });
-    
-    if (response.status !== 200) {
-      throw new Error(`HTTP error ${response.status}: ${response.statusText}`);
+      
+      const data = response.data;
+      
+      // Log the API response structure
+      console.log('API response structure:', Object.keys(data));
+      
+      let events: any[] = [];
+      
+      // Extract events based on the response structure
+      if (isBetPawa && data.events && Array.isArray(data.events)) {
+        // Handle BetPawa v2 API response format
+        console.log(`Scraped ${data.events.length} events from BetPawa API (events array)`);
+        events = data.events;
+      } else if (isBetPawa && data.results && Array.isArray(data.results)) {
+        // Handle BetPawa v1 API response format
+        console.log(`Scraped ${data.results.length} events from BetPawa API (results array)`);
+        events = data.results;
+      } else if (isBetPawa && data.queries && Array.isArray(data.queries)) {
+        // Handle the queries format (lists/by-queries endpoint)
+        for (const query of data.queries) {
+          if (query.events && Array.isArray(query.events)) {
+            events.push(...query.events);
+          }
+        }
+        console.log(`Scraped ${events.length} events from BetPawa API (queries format)`);
+      } else if (isBetPawa && data.data && data.data.events && Array.isArray(data.data.events)) {
+        // Handle nested data structure
+        console.log(`Scraped ${data.data.events.length} events from BetPawa API (nested data.events)`);
+        events = data.data.events;
+      } else if (isBetPawa && data.responses && Array.isArray(data.responses)) {
+        // Handle 'responses' structure
+        console.log('Responses structure found');
+        
+        for (const response of data.responses) {
+          if (response.events && Array.isArray(response.events)) {
+            console.log(`Found ${response.events.length} events in response.events`);
+            events.push(...response.events);
+          } else if (response.data && response.data.events && Array.isArray(response.data.events)) {
+            console.log(`Found ${response.data.events.length} events in response.data.events`);
+            events.push(...response.data.events);
+          } else if (response.queries && Array.isArray(response.queries)) {
+            // Handle nested queries structure
+            console.log(`Found queries array with ${response.queries.length} items`);
+            for (const query of response.queries) {
+              if (query.events && Array.isArray(query.events)) {
+                console.log(`Found ${query.events.length} events in query.events`);
+                events.push(...query.events);
+              }
+            }
+          }
+        }
+        
+        console.log(`Scraped ${events.length} events from BetPawa API (responses format)`);
+      } else if (Array.isArray(data)) {
+        // Handle standard array response
+        console.log(`Scraped ${data.length} events from standard array response`);
+        events = data;
+      } else {
+        // Last resort fallback: try to find anything that could be events
+        console.error('Unrecognized data format, attempting to extract any array data');
+        for (const key in data) {
+          if (Array.isArray(data[key])) {
+            console.log(`Found possible events array in key '${key}' with ${data[key].length} items`);
+            events = data[key];
+            break;
+          }
+        }
+        
+        if (events.length === 0) {
+          console.error('Could not parse response data into events array');
+        }
+      }
+      
+      return events;
+    } catch (error: any) {
+      console.error('Error with API request:', error.message);
+      return [];
     }
-    
-    const data = response.data;
-    
-    // Log the full API response for debugging
-    console.log('API response structure:', Object.keys(data));
-    
-    // BetPawa API returns different structures based on the endpoint
-    if (isBetPawa && data.events && Array.isArray(data.events)) {
-      // Handle BetPawa v2 API response format
-      console.log(`Scraped ${data.events.length} events from BetPawa API (events array)`);
-      return data.events;
-    } else if (isBetPawa && data.results && Array.isArray(data.results)) {
-      // Handle BetPawa v1 API response format
-      console.log(`Scraped ${data.results.length} events from BetPawa API (results array)`);
-      return data.results;
-    } else if (isBetPawa && data.queries && Array.isArray(data.queries)) {
-      // Handle the queries format (lists/by-queries endpoint)
-      const allEvents = [];
-      for (const query of data.queries) {
-        if (query.events && Array.isArray(query.events)) {
-          allEvents.push(...query.events);
-        }
-      }
-      console.log(`Scraped ${allEvents.length} events from BetPawa API (queries format)`);
-      return allEvents;
-    } else if (isBetPawa && data.data && data.data.events && Array.isArray(data.data.events)) {
-      // Handle nested data structure
-      console.log(`Scraped ${data.data.events.length} events from BetPawa API (nested data.events)`);
-      return data.data.events;
-    } else if (isBetPawa && data.responses && Array.isArray(data.responses)) {
-      // Handle 'responses' structure
-      const allEvents = [];
-      for (const response of data.responses) {
-        if (response.events && Array.isArray(response.events)) {
-          allEvents.push(...response.events);
-        } else if (response.data && response.data.events && Array.isArray(response.data.events)) {
-          allEvents.push(...response.data.events);
-        }
-      }
-      console.log(`Scraped ${allEvents.length} events from BetPawa API (responses format)`);
-      return allEvents;
-    } else if (Array.isArray(data)) {
-      // Handle standard array response
-      console.log(`Scraped ${data.length} events from standard array response`);
-      return data;
-    } else {
-      // Since we received a response but couldn't parse it, log it for debugging
-      console.error('Unrecognized data format. Raw response data:', JSON.stringify(data).substring(0, 1000) + '...');
-      
-      // Log a specific error if we see a BRAND_HEADER_IS_MISSING message
-      if (data && data.error === 'BRAND_HEADER_IS_MISSING') {
-        console.error('Authentication error: BRAND_HEADER_IS_MISSING. Need to set the x-pawa-brand header correctly.');
-        throw new Error('BetPawa API authentication error: Missing brand header');
-      }
-      
-      // Last resort fallback: try to find anything that could be events
-      for (const key in data) {
-        if (Array.isArray(data[key])) {
-          console.log(`Found possible events array in key '${key}' with ${data[key].length} items`);
-          return data[key];
-        }
-      }
-      
-      throw new Error('Could not parse response data into events array');
-    }
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error scraping events:', error);
     if (axios.isAxiosError(error) && error.response) {
       console.error('Response data:', error.response.data);
       console.error('Response status:', error.response.status);
-      console.error('Response headers:', error.response.headers);
     }
     
     // Return empty array on error
@@ -512,40 +421,12 @@ async function processEvents(events: any[]): Promise<void> {
 
   console.log(`Processing ${events.length} live events for heartbeat tracking...`);
   
-  // For each real event, log its structure and market status
-  for (const event of events) {
-    console.log(`LIVE EVENT: ID=${event.id}, Name=${event.name}, Market status=${event.markets?.[0]?.suspended ? "SUSPENDED" : "ACTIVE"}`);
-    
-    // Debug: log the scoreboard and market info for each event
-    if (event.scoreboard?.display) {
-      console.log(`    Minute: ${event.scoreboard.display.minute}`);
-    }
-    
-    if (event.markets && event.markets.length > 0) {
-      const market = event.markets[0];
-      console.log(`    Market: typeId=${market.typeId || market.type}, suspended=${market.suspended}, prices=${market.prices?.length || 0}`);
-      
-      // Print price status (only first 2 prices to reduce log noise)
-      if (market.prices && market.prices.length > 0) {
-        market.prices.slice(0, 2).forEach((price: any, index: number) => {
-          console.log(`      Price ${index + 1}: name=${price.name}, suspended=${price.suspended}, value=${price.price}`);
-        });
-        if (market.prices.length > 2) {
-          console.log(`      ... and ${market.prices.length - 2} more prices`);
-        }
-      }
-    }
-  }
-
   // Convert real events to HeartbeatEvents
   const processedEvents: HeartbeatEvent[] = [];
   
   // Process each live event
   for (const event of events) {
     try {
-      // Debug: Print the raw event structure to better understand the API's format
-      console.log("Processing event:", JSON.stringify(event, null, 2).substring(0, 500) + "...");
-
       // Extract event ID - BetPawa API may use different structures
       const eventId = event.id?.toString() || 
                      event.eventId?.toString() || 
@@ -648,7 +529,7 @@ async function processEvents(events: any[]): Promise<void> {
       // Update market history for each event as we go
       updateMarketHistory(heartbeatEvent);
     } catch (error) {
-      console.error(`Error processing demo event:`, error);
+      console.error(`Error processing event:`, error);
     }
   }
   
@@ -725,56 +606,35 @@ export function getAllEventHistories(): any[] {
       let awayTeam = '';
       
       // Try to extract team names from event data if possible
-      const eventId = history.eventId;
-      if (eventId.includes('vs')) {
-        const nameParts = eventId.split('vs');
-        homeTeam = nameParts[0].trim();
-        awayTeam = nameParts[1].trim();
+      const activeEvent = heartbeatState.events.find(e => e.id === history.eventId);
+      if (activeEvent) {
+        homeTeam = activeEvent.homeTeam || '';
+        awayTeam = activeEvent.awayTeam || '';
       }
       
-      // Create a proper name from the event ID
-      let eventName = history.eventId;
-      if (eventId.includes('-')) {
-        eventName = eventId.replace(/-/g, ' vs ');
+      // Construct a name for the historical event
+      let name = `Event ${history.eventId}`;
+      if (homeTeam && awayTeam) {
+        name = `${homeTeam} vs ${awayTeam}`;
       }
       
-      // Get the first timestamp to use as the start time
-      const firstTimestamp = history.timestamps[0]?.timestamp || Date.now();
-      const lastTimestamp = history.timestamps[history.timestamps.length - 1]?.timestamp || Date.now();
-      
-      // Calculate game duration in minutes
-      const durationMs = lastTimestamp - firstTimestamp;
-      const durationMinutes = Math.floor(durationMs / (1000 * 60));
-      
-      // Construct the historical event object
-      const basicEventData = {
+      historicalEvents.push({
         id: history.eventId,
-        name: eventName,
+        name: name,
         country: "Historical",
-        tournament: `Game duration: ${durationMinutes} min`,
-        isInPlay: false,
-        startTime: new Date(firstTimestamp).toISOString(),
-        currentlyAvailable: false,
-        marketAvailability: "COMPLETED",
-        recordCount: history.timestamps.length,
-        lastUpdate: lastTimestamp,
-        homeTeam,
-        awayTeam,
-        gameMinute: 'FT'  // Full Time
-      };
-      historicalEvents.push(basicEventData);
+        tournament: "Completed",
+        timestamps: history.timestamps
+      });
     }
   });
   
-  // Sort by lastUpdate, most recent first
-  return historicalEvents.sort((a, b) => b.lastUpdate - a.lastUpdate);
+  return historicalEvents;
 }
 
+// Get market history for a specific event
 export function getEventMarketHistory(eventId: string): { 
-  timestamps: { timestamp: number; isAvailable: boolean; gameMinute?: string }[],
-  uptimePercentage: number,
-  totalMinutes: number,
-  suspendedMinutes: number
+  timestamps: { timestamp: number; isAvailable: boolean; }[]; 
+  statistics: { totalPoints: number; availablePoints: number; uptimePercentage: number; }
 } {
   console.log(`Getting market history for event ID: ${eventId}`);
   console.log(`Total market histories available: ${marketHistories.length}`);
@@ -784,144 +644,126 @@ export function getEventMarketHistory(eventId: string): {
   }
   
   const history = marketHistories.find(h => h.eventId === eventId);
-  const event = heartbeatState.events.find(e => e.id === eventId);
   
-  if (!history || history.timestamps.length === 0) {
+  if (!history) {
     console.log(`No history found for event ID: ${eventId}`);
-    return {
-      timestamps: [],
-      uptimePercentage: 0,
-      totalMinutes: 0,
-      suspendedMinutes: 0
+    return { 
+      timestamps: [], 
+      statistics: { totalPoints: 0, availablePoints: 0, uptimePercentage: 0 } 
     };
   }
   
-  // Add game minute to each timestamp if available
-  const timestampsWithGameMinute = history.timestamps.map(timestamp => {
-    // If event is found, add the current game minute to all timestamps
-    if (event && event.gameMinute) {
-      return {
-        ...timestamp,
-        gameMinute: event.gameMinute
-      };
-    }
-    return timestamp;
-  });
-  
   console.log(`Found history for event ID: ${eventId} with ${history.timestamps.length} data points`);
   
-  // Calculate statistics based on actual time periods instead of just counts
-  let availableTimeMs = 0;
-  let totalTimeMs = 0;
-  
-  // Sort timestamps to ensure they're in chronological order
-  const sortedTimestamps = [...history.timestamps].sort((a, b) => a.timestamp - b.timestamp);
-  
-  // Calculate time periods between consecutive measurements
-  for (let i = 0; i < sortedTimestamps.length - 1; i++) {
-    const currentTimestamp = sortedTimestamps[i];
-    const nextTimestamp = sortedTimestamps[i + 1];
-    
-    // Time difference between this measurement and the next one (in milliseconds)
-    const timeDiffMs = nextTimestamp.timestamp - currentTimestamp.timestamp;
-    
-    // Only count reasonable time differences (less than 5 minutes)
-    // This prevents outliers when scraping was paused or irregular
-    if (timeDiffMs > 0 && timeDiffMs < 300000) {
-      totalTimeMs += timeDiffMs;
-      
-      // If market was available at this timestamp, add this time period to available time
-      if (currentTimestamp.isAvailable) {
-        availableTimeMs += timeDiffMs;
-      }
-    }
-  }
-  
-  // Calculate uptime percentage based on time periods
-  const uptimePercentage = totalTimeMs > 0 ? (availableTimeMs / totalTimeMs) * 100 : 0;
-  
-  // For backward compatibility, still provide these metrics
+  // Calculate uptime statistics
   const totalPoints = history.timestamps.length;
-  const availableCount = history.timestamps.filter(t => t.isAvailable).length;
+  const availablePoints = history.timestamps.filter(t => t.isAvailable).length;
+  const uptimePercentage = totalPoints > 0 ? (availablePoints / totalPoints) * 100 : 0;
   
-  // Convert milliseconds to minutes
-  const totalMinutes = Math.round(totalTimeMs / 60000);
-  const suspendedMinutes = Math.round(totalMinutes * (1 - (uptimePercentage / 100)));
+  console.log(`Statistics for event ID ${eventId}: ${availablePoints}/${totalPoints} available (${uptimePercentage.toFixed(1)}% uptime)`);
   
-  console.log(`Statistics for event ID ${eventId}: ${availableCount}/${totalPoints} available (${uptimePercentage.toFixed(1)}% uptime)`);
-  
-  // Create a simpler representation of the history with only a few data points for debugging
-  const simplifiedTimestamps = history.timestamps.slice(0, 5).map(t => ({
-    timestamp: t.timestamp,
-    isAvailable: t.isAvailable,
+  // Add actual timestamp string for easier debugging
+  const enhancedTimestamps = history.timestamps.map(t => ({
+    ...t,
     time: new Date(t.timestamp).toISOString()
   }));
   
-  console.log(`Sample timestamps: ${JSON.stringify(simplifiedTimestamps)}`);
+  // Log a small sample of the timestamps for debugging
+  console.log(`Sample timestamps: ${JSON.stringify(enhancedTimestamps.slice(0, 5))}`);
   
-  return {
-    timestamps: timestampsWithGameMinute,
-    uptimePercentage: Math.round(uptimePercentage * 10) / 10, // Round to 1 decimal place
-    totalMinutes,
-    suspendedMinutes
+  // Return the history timestamps and statistics
+  return { 
+    timestamps: history.timestamps, 
+    statistics: { 
+      totalPoints, 
+      availablePoints, 
+      uptimePercentage 
+    } 
   };
 }
 
-// Get current heartbeat status
+// Get the current heartbeat status
 export function getHeartbeatStatus(): HeartbeatState {
   return heartbeatState;
 }
 
-// Save history data to file
+// Save the history data to disk for persistence
 async function saveHistoryData(): Promise<void> {
   try {
-    const dataDir = await ensureDataDirectory();
-    const filePath = path.join(dataDir, 'heartbeat-history.json');
+    const historyDir = await ensureDataDirectory();
+    const historyPath = path.join(historyDir, 'market-history.json');
     
-    await fs.writeFile(filePath, JSON.stringify(marketHistories), 'utf-8');
+    // Only keep recent history to avoid large files
+    const recentHistories = marketHistories.map(history => {
+      const now = Date.now();
+      const oneDayAgo = now - 24 * 60 * 60 * 1000;
+      
+      return {
+        eventId: history.eventId,
+        timestamps: history.timestamps.filter(t => t.timestamp >= oneDayAgo)
+      };
+    }).filter(history => history.timestamps.length > 0);
+    
+    fs.writeFileSync(historyPath, JSON.stringify(recentHistories, null, 2));
     console.log('Saved heartbeat history data');
   } catch (error) {
-    console.error('Error saving heartbeat history data:', error);
-    throw error;
+    console.error('Error saving history data:', error);
   }
 }
 
-// Load history data from file
+// Load the history data from disk
 async function loadHistoryData(): Promise<void> {
   try {
-    const dataDir = await ensureDataDirectory();
-    const filePath = path.join(dataDir, 'heartbeat-history.json');
+    const historyDir = await ensureDataDirectory();
+    const historyPath = path.join(historyDir, 'market-history.json');
     
-    try {
-      const data = await fs.readFile(filePath, 'utf-8');
-      marketHistories = JSON.parse(data);
-      console.log(`Loaded heartbeat history for ${marketHistories.length} events`);
-    } catch (error) {
-      if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-        console.log('No existing heartbeat history file found, starting fresh');
-        marketHistories = [];
-      } else {
-        throw error;
+    if (fs.existsSync(historyPath)) {
+      const data = fs.readFileSync(historyPath, 'utf8');
+      const histories = JSON.parse(data) as MarketHistory[];
+      
+      // Merge with existing histories
+      for (const history of histories) {
+        const existingIndex = marketHistories.findIndex(h => h.eventId === history.eventId);
+        
+        if (existingIndex >= 0) {
+          // Merge timestamps
+          const existingTimestamps = new Map(marketHistories[existingIndex].timestamps.map(t => [t.timestamp, t]));
+          
+          for (const timestamp of history.timestamps) {
+            if (!existingTimestamps.has(timestamp.timestamp)) {
+              marketHistories[existingIndex].timestamps.push(timestamp);
+            }
+          }
+          
+          // Sort timestamps by time
+          marketHistories[existingIndex].timestamps.sort((a, b) => a.timestamp - b.timestamp);
+        } else {
+          // Add new history
+          marketHistories.push(history);
+        }
       }
+      
+      console.log(`Loaded ${histories.length} event histories from disk`);
     }
   } catch (error) {
-    console.error('Error loading heartbeat history data:', error);
-    throw error;
+    console.error('Error loading history data:', error);
   }
 }
 
-// Clean up old data
+// Clean up old data to prevent memory issues
 function cleanupOldData(): void {
-  const now = Date.now();
-  const oneMonthAgo = now - 30 * 24 * 60 * 60 * 1000;
-  
-  // Remove entries older than a month
-  for (const history of marketHistories) {
-    history.timestamps = history.timestamps.filter(t => t.timestamp >= oneMonthAgo);
+  try {
+    // Keep only the last 5 histories with the most data points
+    if (marketHistories.length > 5) {
+      // Sort by number of data points (descending)
+      marketHistories.sort((a, b) => b.timestamps.length - a.timestamps.length);
+      
+      // Keep only the top 5
+      marketHistories.splice(5);
+      
+      console.log(`Cleaned up old data, keeping ${marketHistories.length} event histories`);
+    }
+  } catch (error) {
+    console.error('Error cleaning up old data:', error);
   }
-  
-  // Remove histories with no timestamps
-  marketHistories = marketHistories.filter(h => h.timestamps.length > 0);
-  
-  console.log(`Cleaned up old data, keeping ${marketHistories.length} event histories`);
 }
