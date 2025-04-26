@@ -116,13 +116,13 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
         }
         
         // Process the result data based on its structure
-        let processedData: DataPoint[] = [];
+        let timestamps: DataPoint[] = [];
         
         if (result) {
           // Check if result is directly an array of data points
           if (Array.isArray(result)) {
             console.log(`Result is a direct array with ${result.length} data points`);
-            processedData = result.map(item => {
+            timestamps = result.map(item => {
               // Make sure each item has all necessary properties
               if (!item.hasOwnProperty('isAvailable')) {
                 console.log(`Data point missing isAvailable property, setting to true by default:`, item);
@@ -142,7 +142,7 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
           else if (result.timestamps && Array.isArray(result.timestamps)) {
             console.log(`Result contains a timestamps array with ${result.timestamps.length} data points`);
             
-            processedData = result.timestamps.map((item: any) => {
+            timestamps = result.timestamps.map((item: any) => {
               // Make sure each item has all necessary properties
               if (!item.hasOwnProperty('isAvailable')) {
                 console.log(`Data point missing isAvailable property, setting to true by default:`, item);
@@ -161,17 +161,17 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
           // Otherwise create an empty array (will be populated with sample data if needed)
           else {
             console.log(`Result has an unexpected format, creating empty array`);
-            processedData = [];
+            timestamps = [];
           }
         }
         
         // Update the state with the processed data
-        console.log(`Setting data state with ${processedData.length} data points`);
-        setData(processedData);
+        console.log(`Setting data state with ${timestamps.length} timestamps`);
+        setData(timestamps);
         
         // Determine current status from the latest data point
-        if (processedData.length > 0) {
-          const latestData = processedData[processedData.length - 1];
+        if (timestamps.length > 0) {
+          const latestData = timestamps[timestamps.length - 1];
           console.log(`Latest data point:`, latestData);
           
           setIsAvailable(latestData.isAvailable);
@@ -214,13 +214,18 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     drawHeartbeat();
   }, [data]);
   
-  // Main drawing function
+  // Function to draw the heartbeat graph
   function drawHeartbeat() {
     console.log("Drawing heartbeat with data points:", data.length);
     
     const canvas = canvasRef.current;
     if (!canvas) {
       console.error("Canvas ref is null");
+      return;
+    }
+    
+    if (data.length === 0) {
+      console.log("No data available to draw");
       return;
     }
     
@@ -253,55 +258,71 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     // Draw game minute labels
     drawMinuteLabels(ctx, width, height);
     
-    // Make a working copy of our data points for rendering
-    const renderData = [...data];
+    // Calculate spacing based on game minutes (1-120)
+    const maxGameMinute = 120; // Extended to 120 minutes as requested
+    const pixelsPerMinute = width / maxGameMinute;
     
-    // Sort data by timestamp (just to be safe)
-    renderData.sort((a, b) => a.timestamp - b.timestamp);
-    
-    // Create sample data if we don't have any real data yet
-    if (renderData.length === 0) {
-      console.log("No data available, creating sample data for visualization");
+    // Helper function to get the game minute as a number
+    const getMinuteNumber = (minuteStr: string | undefined): number => {
+      if (!minuteStr) return 0;
       
-      // Create a series of timestamps over the last 10 minutes to show something
-      const now = Date.now();
-      for (let i = 0; i < 20; i++) {
-        renderData.push({
-          timestamp: now - (20 - i) * 30000, // Every 30 seconds, most recent last
-          isAvailable: i % 3 !== 0 // Make 2/3 of points available for a realistic pattern
-        });
+      // Handle halftime (HT) case
+      if (minuteStr === 'HT' || minuteStr.toLowerCase() === 'ht') {
+        console.log("Detected halftime (HT)");
+        return 45;
       }
-      console.log(`Created ${renderData.length} sample data points`);
-    }
+      
+      // Extract numeric part from strings like "45'" or "45+2'" or just "45"
+      const match = minuteStr.match(/^(\d+)(?:\+(\d+))?/);
+      if (match) {
+        const baseMinute = parseInt(match[1], 10);
+        const addedTime = match[2] ? parseInt(match[2], 10) : 0;
+        return baseMinute + addedTime;
+      }
+      
+      // If we get here, the string format is unexpected
+      console.log(`Unable to parse minute string: ${minuteStr}, defaulting to 45`);
+      return 45; // Default to 45 minutes as a fallback
+    };
     
-    // Find the earliest and latest timestamps to calculate the time range
-    const earliestTimestamp = renderData.length > 0 ? renderData[0].timestamp : Date.now() - 3600000; // 1 hour ago default
-    const latestTimestamp = renderData.length > 0 ? renderData[renderData.length - 1].timestamp : Date.now();
+    // Find the current game minute from event data
+    let currentGameMinute = 45; // Default to 45 minutes
     
-    // Calculate time range in milliseconds
-    const timeRange = latestTimestamp - earliestTimestamp;
-    
-    // Calculate pixels per millisecond - this ensures the line grows as time passes
-    const pixelsPerMs = timeRange > 0 ? width / timeRange : 0.001; // Default small value if no range
-    
-    console.log(`Time range: ${timeRange}ms, from ${new Date(earliestTimestamp).toISOString()} to ${new Date(latestTimestamp).toISOString()}`);
-    console.log(`Pixels per ms: ${pixelsPerMs}`);
-    
-    // We'll still keep track of game minute for display purposes
-    let currentGameMinute = ""; 
-    
-    // First try to get the game minute from the current event data for display
+    // First try to get the game minute from the current event data
     if (eventDetails && eventDetails.gameMinute) {
       console.log(`Using game minute from event details: ${eventDetails.gameMinute}`);
-      currentGameMinute = eventDetails.gameMinute;
-    } else if (renderData.length > 0 && renderData[renderData.length - 1].gameMinute) {
-      // As a fallback, use the game minute from the latest timestamp
-      currentGameMinute = renderData[renderData.length - 1].gameMinute || "";
+      
+      if (eventDetails.gameMinute === 'HT' || eventDetails.gameMinute?.toLowerCase() === 'ht') {
+        currentGameMinute = 45;
+      } else {
+        // Extract numeric part from strings like "45'" or "45+2'" or just "45"
+        const match = eventDetails.gameMinute.match(/^(\d+)(?:\+(\d+))?/);
+        if (match) {
+          const baseMinute = parseInt(match[1], 10);
+          const addedTime = match[2] ? parseInt(match[2], 10) : 0;
+          currentGameMinute = baseMinute + addedTime;
+        }
+      }
+    } else {
+      // As a fallback, extract from data points
+      const extractedMinutes = data
+        .map(point => point.gameMinute)
+        .filter(minute => minute)
+        .map(getMinuteNumber);
+      
+      // Use the max minute if available
+      if (extractedMinutes.length > 0) {
+        currentGameMinute = Math.max(...extractedMinutes);
+      }
     }
     
     console.log("Current game minute:", currentGameMinute);
     
-    // Set up drawing parameters for more pronounced ECG-style spikes
+    // Set up a completely fixed example heartbeat pattern
+    // This ensures we always see something visually on the screen
+    // and ensures our drawing is working
+    
+    // Extremely simple approach - draw a clean heartbeat line
     ctx.lineWidth = 2;  // Thinner line as requested
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
@@ -309,120 +330,121 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
     // Green for normal heartbeat
     ctx.strokeStyle = '#00ff00';
     
-    // Define the heartbeat pattern size in pixels
-    const heartbeatPatternWidth = 40; // Width in pixels for a single heartbeat
+    // Draw a series of heartbeats from 0 to current minute with reduced frequency
+    const beatWidth = 40;  // Doubled width to reduce frequency (was 20)
+    // Ensure we draw heartbeats up to the exact current game minute
+    const beatCount = Math.ceil(currentGameMinute * pixelsPerMinute / beatWidth);
     
-    // Calculate how many beats to fit
-    // We want visible heartbeats approximately every 20 seconds
-    const beatInterval = 20000; // ms between each heartbeat
-    const totalBeats = Math.ceil(timeRange / beatInterval);
+    console.log(`Drawing ${beatCount} heartbeats`);
     
-    console.log(`Drawing up to ${totalBeats} beats for time range of ${timeRange / 1000} seconds`);
+    // Add some sections of normal heartbeat and some sections with no heartbeat (suspended)
+    // to demonstrate how it looks when the market is suspended
     
-    // Start drawing from the left edge
-    ctx.beginPath();
-    ctx.moveTo(0, height / 2);
+    // Use the actual market availability data from our API
+    console.log("Using real market data for heartbeat visualization");
     
-    // Process actual data points to create a continuous line
-    if (renderData.length > 1) {
-      for (let i = 0; i < renderData.length; i++) {
-        const dataPoint = renderData[i];
-        
-        // Calculate x position based on timestamp to ensure line grows as time passes
-        const x = Math.round((dataPoint.timestamp - earliestTimestamp) * pixelsPerMs);
-        
-        // If this is the first point or status changed, we need to handle it specially
-        if (i === 0 || dataPoint.isAvailable !== renderData[i-1].isAvailable) {
-          // If not the first point, complete previous path before changing color
-          if (i > 0) {
-            ctx.lineTo(x, height / 2); // Draw straight line to the status change point
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.moveTo(x, height / 2);
-          }
-          
-          // Set the appropriate color based on availability
-          ctx.strokeStyle = dataPoint.isAvailable ? '#00ff00' : '#ff3333';
-        }
-        
-        // For suspended markets (not available), just draw a straight line
-        if (!dataPoint.isAvailable) {
-          if (i < renderData.length - 1) {
-            const nextX = Math.round((renderData[i+1].timestamp - earliestTimestamp) * pixelsPerMs);
-            ctx.lineTo(nextX, height / 2);
-          } else {
-            ctx.lineTo(width, height / 2); // To the end if it's the last point
-          }
-        } 
-        // For available markets, draw a heartbeat pattern with more pronounced spikes
-        else {
-          // Skip drawing heartbeats if points are too close together (prevents overcrowding)
-          if (i > 0) {
-            const prevX = Math.round((renderData[i-1].timestamp - earliestTimestamp) * pixelsPerMs);
-            const distance = x - prevX;
-            
-            // Only draw heartbeat pattern if there's enough space
-            if (distance >= heartbeatPatternWidth) {
-              // How many beats can fit in this distance
-              const beatsToFit = Math.floor(distance / heartbeatPatternWidth);
-              
-              for (let beat = 0; beat < beatsToFit; beat++) {
-                const beatX = prevX + (beat * heartbeatPatternWidth);
-                
-                // Draw baseline up to this beat
-                ctx.lineTo(beatX, height / 2);
-                
-                // Draw heartbeat pattern (ECG-like) with more pronounced spikes
-                ctx.lineTo(beatX + 8, height / 2 - 4);       // P wave
-                ctx.lineTo(beatX + 12, height / 2);          // Back to baseline
-                ctx.lineTo(beatX + 15, height / 2 + 5);      // Q dip
-                ctx.lineTo(beatX + 18, height / 2 - 30);     // R spike (taller)
-                ctx.lineTo(beatX + 22, height / 2 + 10);     // S dip (deeper)
-                ctx.lineTo(beatX + 26, height / 2);          // Back to baseline
-                ctx.lineTo(beatX + 32, height / 2 - 8);      // T wave
-                ctx.lineTo(beatX + 38, height / 2);          // Back to baseline
-              }
-              
-              // Complete to the current point
-              ctx.lineTo(x, height / 2);
-            } else {
-              // Just draw a straight line if too crowded
-              ctx.lineTo(x, height / 2);
-            }
-          }
-        }
-      }
-    } 
-    // If no data points, create a sample pattern just to show something
-    else {
-      // Sample spacing for the canvas width
-      const sampleBeats = 10;
-      for (let i = 0; i < sampleBeats; i++) {
-        const beatX = (i * width) / sampleBeats;
-        
-        // Draw baseline up to this beat
-        ctx.lineTo(beatX, height / 2);
-        
-        // Draw heartbeat pattern with more pronounced spikes
-        ctx.lineTo(beatX + 8, height / 2 - 4);       // P wave
-        ctx.lineTo(beatX + 12, height / 2);          // Back to baseline
-        ctx.lineTo(beatX + 15, height / 2 + 5);      // Q dip
-        ctx.lineTo(beatX + 18, height / 2 - 30);     // R spike (taller)
-        ctx.lineTo(beatX + 22, height / 2 + 10);     // S dip (deeper)
-        ctx.lineTo(beatX + 26, height / 2);          // Back to baseline
-        ctx.lineTo(beatX + 32, height / 2 - 8);      // T wave
-        ctx.lineTo(beatX + 38, height / 2);          // Back to baseline
+    // Create timestamps array from the data provided
+    let timestamps = Array.isArray(data) ? data : [];
+    
+    console.log(`Data points available: ${timestamps.length}`);
+    
+    // Create sample data if we don't have any real data yet
+    if (timestamps.length === 0) {
+      console.log("No data available, creating sample data for visualization");
+      
+      // Create a series of timestamps over the last 10 minutes to show something
+      const now = Date.now();
+      const sampleData: DataPoint[] = [];
+      
+      // Generate 20 data points, alternating between available and suspended
+      for (let i = 0; i < 20; i++) {
+        sampleData.push({
+          timestamp: now - (20 - i) * 30000, // Every 30 seconds, most recent last
+          isAvailable: i % 3 !== 0 // Make 2/3 of points available for a realistic pattern
+        });
       }
       
-      // Draw to the end
-      ctx.lineTo(width, height / 2);
+      // Use our sample data instead
+      console.log(`Created ${sampleData.length} sample data points`);
+      timestamps = sampleData;
     }
     
-    // Ensure the line extends to the right edge of the canvas
-    ctx.lineTo(width, height / 2);
+    ctx.beginPath();
+    ctx.moveTo(0, height / 2);  // Start at the left edge, middle height
+    
+    // Calculate how many beats to show based on available game minutes
+    const availableBeats = Math.ceil(currentGameMinute);
+    const beatsToShow = Math.min(beatCount, availableBeats);
+    
+    console.log(`Drawing ${beatsToShow} beats for ${currentGameMinute} game minutes`);
+    
+    // Track the current market status to detect changes
+    let currentlyAvailable = true; // Default status (will be updated with real data)
+    
+    // First check if we have a current availability status from the last data point
+    if (timestamps.length > 0) {
+      currentlyAvailable = timestamps[timestamps.length - 1].isAvailable;
+    }
+    
+    for (let i = 0; i < beatsToShow; i++) {
+      const x = i * beatWidth;
+      
+      // Calculate which game minute this heartbeat represents
+      const currentBeatMinute = Math.floor(x / pixelsPerMinute);
+      
+      // Find the market status for this minute by searching through timestamps
+      // In a real implementation, you would interpolate the status based on game minute
+      let marketAvailable = currentlyAvailable;
+      
+      // If we have timestamps, use the availability status from the latest timestamp
+      // This is a simplification - in a real implementation you would map timestamps to game minutes
+      if (i % 3 === 0 && timestamps.length > 0) { // Only check every 3rd beat to avoid too many status changes
+        // Get a timestamp index based on our position in the game
+        const timestampIndex = Math.min(
+          Math.floor((i / beatsToShow) * timestamps.length), 
+          timestamps.length - 1
+        );
+        marketAvailable = timestamps[timestampIndex].isAvailable;
+      }
+      
+      // If market status changed, end current path and start a new one with different color
+      if (marketAvailable !== currentlyAvailable) {
+        ctx.stroke(); // End current path
+        ctx.beginPath(); // Start new path
+        ctx.strokeStyle = marketAvailable ? '#00ff00' : '#ff3333'; // Green for available, red for suspended
+        ctx.moveTo(x, height / 2); // Continue from same position
+        currentlyAvailable = marketAvailable; // Update the status
+      }
+      
+      if (!marketAvailable) {
+        // For suspended markets, draw a flat line
+        const endX = Math.min(x + beatWidth, currentGameMinute * pixelsPerMinute);
+        ctx.lineTo(endX, height / 2); // Flat line for suspended
+      } else {
+        // Regular heartbeat pattern for available markets
+        // Draw baseline up to this beat
+        ctx.lineTo(x, height / 2);
+        
+        // Draw heartbeat pattern (simple ECG-like) with smaller spikes
+        ctx.lineTo(x + 10, height / 2 - 3);      // Small P wave (smaller)
+        ctx.lineTo(x + 14, height / 2);          // Back to baseline
+        ctx.lineTo(x + 18, height / 2 + 3);      // Q dip (smaller)
+        ctx.lineTo(x + 20, height / 2 - 20);     // R spike (reduced height)
+        ctx.lineTo(x + 24, height / 2 + 5);      // S dip (smaller)
+        ctx.lineTo(x + 28, height / 2);          // Back to baseline
+        ctx.lineTo(x + 32, height / 2 - 5);      // T wave (smaller)
+        ctx.lineTo(x + 36, height / 2);          // Back to baseline
+      }
+    }
+    
+    // Draw remaining line to current minute position
+    const endX = currentGameMinute * pixelsPerMinute;
+    ctx.lineTo(endX, height / 2);
     
     // Stroke the path
     ctx.stroke();
+    
+    // Removed heartbeat minute indicator as requested
     
     console.log("Heartbeat drawing completed successfully");
   }
@@ -615,56 +637,48 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
       
       <CardContent className="pt-2">
         {isLoading ? (
-          <div>
-            <Skeleton className="h-40 w-full bg-muted/10" />
+          <div className="w-full h-48 flex items-center justify-center bg-gray-50 dark:bg-slate-900 rounded-md">
+            <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+          </div>
+        ) : data.length === 0 ? (
+          <div className="w-full h-48 flex flex-col items-center justify-center bg-gray-50 dark:bg-slate-900 rounded-md">
+            <BarChart className="h-10 w-10 text-muted-foreground mb-2" />
+            <p className="text-sm text-muted-foreground">No data available yet</p>
           </div>
         ) : (
-          <div className="relative">
+          <div className="w-full rounded-md overflow-hidden" 
+               style={{ backgroundColor: '#002211' }}>
             <canvas 
               ref={canvasRef} 
               width={800} 
               height={200} 
-              className="w-full h-[200px] rounded-md"
+              className="w-full h-48 border border-gray-100/10 rounded-md"
             />
-            
-            {/* Status indicator */}
-            <div className="absolute top-4 right-4 flex gap-2 items-center">
-              {currentStatus === 'available' ? (
-                <Badge variant="outline" className="bg-green-500/20 text-green-400 border-green-800">
-                  <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse mr-2"></div>
-                  Available
-                </Badge>
-              ) : currentStatus === 'suspended' ? (
-                <Badge variant="outline" className="bg-red-500/20 text-red-400 border-red-800">
-                  <div className="w-2 h-2 rounded-full bg-red-400 mr-2"></div>
-                  Suspended
-                </Badge>
-              ) : (
-                <Badge variant="outline" className="bg-yellow-500/20 text-yellow-400 border-yellow-800">
-                  <AlertCircle className="w-3 h-3 mr-1" />
-                  Unknown
-                </Badge>
-              )}
-              
-              {currentMinute && (
-                <Badge variant="outline" className="bg-blue-500/20 text-blue-400 border-blue-800">
-                  {currentMinute}'
-                </Badge>
-              )}
-            </div>
           </div>
         )}
       </CardContent>
       
-      <CardFooter className="pt-0 text-xs text-muted-foreground">
-        <div className="flex w-full justify-between items-center">
-          <div>
-            Available: {stats.availableDurationMinutes} min | Suspended: {stats.suspendedDurationMinutes} min
+      {/* Add CardFooter with heartbeat statistics */}
+      <CardFooter className="pt-0 pb-3 border-t border-gray-100/10">
+        <div className="flex flex-wrap items-center justify-between w-full gap-2 text-sm">
+          <div className="flex items-center gap-2">
+            <Heart className="h-4 w-4 text-green-500" />
+            <span className="text-green-400">
+              {stats.availableDurationMinutes.toFixed(1)} min available
+            </span>
           </div>
-          <div>
-            Last update: {data.length > 0 && data[data.length - 1].time 
-              ? new Date(String(data[data.length - 1].time)).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) 
-              : new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+          
+          <div className="flex items-center gap-2">
+            <AlertCircle className="h-4 w-4 text-red-500" />
+            <span className="text-red-400">
+              {stats.suspendedDurationMinutes.toFixed(1)} min suspended
+            </span>
+          </div>
+          
+          <div className="flex items-center gap-2">
+            <Badge variant="secondary" className="text-xs">
+              Total time: {stats.totalDurationMinutes.toFixed(1)} min
+            </Badge>
           </div>
         </div>
       </CardFooter>
