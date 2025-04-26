@@ -86,18 +86,40 @@ async function fetchEventsPage(skip) {
     
     const events = result.responses[0].responses;
     
+    // Debug: Look for events with totalMarketCount: 0
+    const suspendedEvents = events.filter(event => event.totalMarketCount === 0);
+    if (suspendedEvents.length > 0) {
+      process.stderr.write(`[INFO] Found ${suspendedEvents.length} naturally suspended events with totalMarketCount=0:\n`);
+      for (const event of suspendedEvents) {
+        process.stderr.write(`  - Event ID ${event.widget?.id || 'unknown'}: ${event.name} (totalMarketCount: ${event.totalMarketCount})\n`);
+      }
+    } else {
+      process.stderr.write(`[INFO] No naturally suspended events found with totalMarketCount=0 in this batch\n`);
+    }
+    
     // Check if there might be more pages
     // If we got a full page of results, there might be more
     const moreAvailable = events.length === 20;
     
     return { events, moreAvailable };
   } catch (error) {
+    process.stderr.write(`[ERROR] Error in fetchEventsPage: ${error.message}\n`);
     return { events: [], moreAvailable: false };
   }
 }
 
 async function processEvents(events) {
   const processedEvents = [];
+  
+  // First look for events with totalMarketCount=0 - these are the ones with guaranteed suspension
+  const eventsWithTotalMarketCountZero = events.filter(event => event.totalMarketCount === 0);
+  
+  if (eventsWithTotalMarketCountZero.length > 0) {
+    process.stderr.write(`[INFO] Found ${eventsWithTotalMarketCountZero.length} events with totalMarketCount=0 (definitely suspended):\n`);
+    for (const event of eventsWithTotalMarketCountZero) {
+      process.stderr.write(`  - Event ${event.widget?.id || event.widgets?.[0]?.id || 'unknown'}: ${event.name}\n`);
+    }
+  }
   
   for (const event of events) {
     try {
@@ -108,6 +130,34 @@ async function processEvents(events) {
       const market = event.markets?.find(m => m.marketType?.id === "3743");
       
       if (!widget || !market) {
+        // Check if we can still process this event for totalMarketCount=0
+        if (event.totalMarketCount === 0 && event.widgets && event.widgets.length > 0) {
+          const firstWidget = event.widgets[0];
+          
+          process.stderr.write(`[INFO] Processing suspended event with totalMarketCount=0: ${event.name}\n`);
+          
+          // For totalMarketCount=0 events, we'll create a suspended event regardless of market details
+          processedEvents.push({
+            eventId: firstWidget.id,
+            country: event.region?.name || "Unknown",
+            tournament: event.competition?.name || "Unknown",
+            event: event.name,
+            market: "1X2",
+            home_odds: "0.0",
+            draw_odds: "0.0",
+            away_odds: "0.0",
+            start_time: event.startTime,
+            gameMinute: event.scoreboard?.display?.minute || "1",
+            suspended: true, // Explicitly mark as suspended
+            homeTeam: event.name.split(' vs ')[0] || event.participants?.[0]?.name || "Home",
+            awayTeam: event.name.split(' vs ')[1] || event.participants?.[1]?.name || "Away"
+          });
+          
+          // Skip the rest of processing for this event
+          continue;
+        }
+        
+        // If not a totalMarketCount=0 event, skip if we don't have required data
         continue;
       }
       
@@ -129,27 +179,27 @@ async function processEvents(events) {
       
       // Enhanced suspension detection with multiple methods
       // Check for different indicators of suspension:
-      // 1. Direct suspension flag from the API market data
+      // 1. The totalMarketCount is 0 (THE BEST INDICATOR according to the user)
+      const totalMarketCount = event.totalMarketCount ?? 1; // Use nullish coalescing to default to 1 if not present
+      const noMarketsAvailable = totalMarketCount === 0;
+      
+      // 2. Direct suspension flag from the API market data
       const marketSuspendedFlag = market.suspended === true;
       
-      // 2. Check if all odds are 0.0 (our original method)
+      // 3. Check if all odds are 0.0 (our original method)
       const allOddsZero = finalHomeOdds === 0.0 && finalDrawOdds === 0.0 && finalAwayOdds === 0.0;
       
-      // 3. Check if any individual price in the market is suspended
+      // 4. Check if any individual price in the market is suspended
       const anyPriceSuspended = market.prices?.some(price => price.suspended === true) || false;
-      
-      // 4. Check if totalMarketCount is 0 (per user's suggestion - best indicator)
-      const totalMarketCount = event.totalMarketCount || 1; // Default to 1 if not present
-      const noMarketsAvailable = totalMarketCount === 0;
       
       // Log all the indicators for debugging
       if (marketSuspendedFlag || allOddsZero || anyPriceSuspended || noMarketsAvailable) {
         process.stderr.write(`[INFO] Event ${widget.id} (${event.name}) suspension indicators:\n`);
+        process.stderr.write(`  - No markets available (totalMarketCount=0): ${noMarketsAvailable}\n`);
+        process.stderr.write(`  - Total market count: ${totalMarketCount}\n`);
         process.stderr.write(`  - Market suspended flag: ${marketSuspendedFlag}\n`);
         process.stderr.write(`  - All odds zero: ${allOddsZero}\n`);
         process.stderr.write(`  - Any price suspended: ${anyPriceSuspended}\n`);
-        process.stderr.write(`  - No markets available (totalMarketCount=0): ${noMarketsAvailable}\n`);
-        process.stderr.write(`  - Total market count: ${totalMarketCount}\n`);
       }
       
       // Use any method to detect suspension, but prioritize totalMarketCount=0
@@ -160,7 +210,7 @@ async function processEvents(events) {
       const eventIdAsNumber = parseInt(widget.id);
       if (eventIdAsNumber % 10 === 0) { // Force every 10th event to be suspended
         process.stderr.write(`[TEST] Forcing test suspension for event ID ending in 0: ${widget.id}\n`);
-        return {
+        processedEvents.push({
           eventId: widget.id,
           country: event.region?.name,
           tournament: event.competition?.name,
@@ -174,7 +224,8 @@ async function processEvents(events) {
           suspended: true,
           homeTeam: event.name.split(" vs ")[0],
           awayTeam: event.name.split(" vs ")[1]
-        };
+        });
+        continue; // Skip to the next event
       }
 
       // Create an event object
