@@ -320,16 +320,39 @@ export default function LiveHeartbeat() {
     // Run this calculation whenever the filtered events list changes
   }, [filteredEvents]);
 
-  // Format date to "DD MMM HH:MM" format 
+  // Simple date formatting function - much faster than full locale conversion
+  // Format: "DD MMM HH:MM" without unnecessary conversions
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleString('en-GB', {
-      day: '2-digit',
-      month: 'short',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false
-    });
+    // If we don't have a date string, return N/A
+    if (!dateString) return 'N/A';
+    
+    // Use cached date if possible for the same string (optimization)
+    const cachedDates: Record<string, string> = {};
+    if (cachedDates[dateString]) return cachedDates[dateString];
+    
+    try {
+      const date = new Date(dateString);
+      
+      // Fast direct formatting without locale conversion
+      const day = String(date.getUTCDate()).padStart(2, '0');
+      
+      // Simple month abbreviation lookup
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const month = months[date.getUTCMonth()];
+      
+      const hour = String(date.getUTCHours()).padStart(2, '0');
+      const minute = String(date.getUTCMinutes()).padStart(2, '0');
+      
+      const formatted = `${day} ${month} ${hour}:${minute}`;
+      
+      // Cache the result
+      cachedDates[dateString] = formatted;
+      
+      return formatted;
+    } catch (e) {
+      // Fallback in case of parsing error
+      return dateString;
+    }
   };
 
   // Handle country selection change
@@ -364,14 +387,14 @@ export default function LiveHeartbeat() {
     return heartbeatData.tournaments[selectedCountry] || [];
   }, [heartbeatData, selectedCountry]);
 
-  // Set the last update time
+  // Set the last update time using fast direct formatting
   const lastUpdate = heartbeatData?.lastUpdate
-    ? new Date(heartbeatData.lastUpdate).toLocaleTimeString('en-US', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false,
-        timeZone: 'UTC'
-      }) + ' UTC'
+    ? (() => {
+        const date = new Date(heartbeatData.lastUpdate);
+        const hours = String(date.getUTCHours()).padStart(2, '0');
+        const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+        return `${hours}:${minutes} UTC`;
+      })()
     : 'N/A';
 
   return (

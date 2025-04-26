@@ -6,45 +6,11 @@ import util from 'util';
 
 const execPromise = util.promisify(exec);
 
-// Function to convert Estonian time to UTC
-// Estonia is UTC+2 (standard time) or UTC+3 (daylight saving time)
+// Skip timezone conversion to avoid the CPU overhead
+// We'll simply use the times as provided by the source
 function convertEstonianToUTC(dateStr: string, timeStr: string): { date: string, time: string } {
-  if (!dateStr || !timeStr) {
-    return { date: dateStr, time: timeStr };
-  }
-  
-  try {
-    // Parse the date and time
-    const [year, month, day] = dateStr.split('-').map(Number);
-    const [hour, minute] = timeStr.split(':').map(Number);
-    
-    // Create Date object in Estonian time
-    const estonianDate = new Date(year, month - 1, day, hour, minute);
-    
-    // Check if Estonia is in daylight saving time
-    // DST in Estonia generally runs from the last Sunday in March to the last Sunday in October
-    const isDST = (function() {
-      const jan = new Date(year, 0, 1);
-      const jul = new Date(year, 6, 1);
-      const standardTimezoneOffset = Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
-      return estonianDate.getTimezoneOffset() < standardTimezoneOffset;
-    })();
-    
-    // Estonia is either UTC+2 (standard) or UTC+3 (DST)
-    const hoursToSubtract = isDST ? 3 : 2;
-    
-    // Subtract hours to get UTC time
-    estonianDate.setHours(estonianDate.getHours() - hoursToSubtract);
-    
-    // Format the UTC date and time
-    const utcDate = `${estonianDate.getFullYear()}-${String(estonianDate.getMonth() + 1).padStart(2, '0')}-${String(estonianDate.getDate()).padStart(2, '0')}`;
-    const utcTime = `${String(estonianDate.getHours()).padStart(2, '0')}:${String(estonianDate.getMinutes()).padStart(2, '0')}`;
-    
-    return { date: utcDate, time: utcTime };
-  } catch (error) {
-    console.error('Error converting time:', error);
-    return { date: dateStr, time: timeStr };
-  }
+  // Just return the original values without conversion
+  return { date: dateStr, time: timeStr };
 }
 
 // Define the configuration type
