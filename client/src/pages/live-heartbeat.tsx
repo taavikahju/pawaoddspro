@@ -544,6 +544,10 @@ export default function LiveHeartbeat() {
                             selectedEventId === event.id
                               ? 'bg-accent'
                               : ''
+                          } ${
+                            activeTab === 'live' && !event.currentlyAvailable
+                              ? 'bg-red-100/10 border-l-4 border-red-500 dark:bg-red-950/10'
+                              : ''
                           }`}
                           onClick={() => setSelectedEventId(event.id)}
                         >
@@ -558,9 +562,9 @@ export default function LiveHeartbeat() {
                                 {activeTab === 'live' ? (
                                   <Badge 
                                     variant={event.currentlyAvailable ? 'outline' : 'destructive'}
-                                    className="text-[10px] h-5 ml-1"
+                                    className={`text-[10px] h-5 ml-1 ${!event.currentlyAvailable ? 'font-bold animate-pulse' : ''}`}
                                   >
-                                    {event.currentlyAvailable ? 'Available' : 'Suspended'}
+                                    {event.currentlyAvailable ? 'Available' : 'SUSPENDED'}
                                   </Badge>
                                 ) : (
                                   <Badge 
