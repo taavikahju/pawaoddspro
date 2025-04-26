@@ -991,6 +991,11 @@ async function processEvents(events: any[]): Promise<void> {
       // Default to suspended until we find an available price
       isMarketAvailable = false;
       
+      // Log the entire market1X2 object for a specific test event
+      if (eventId === '26987192') {
+        console.log(`FULL MARKET DATA for test event ${eventId}:`, JSON.stringify(market1X2, null, 2));
+      }
+      
       // Log market details for debugging - but keep it concise to avoid log spam
       if (market1X2.prices && market1X2.prices.length > 0) {
         // Just log the essential price information rather than the entire market object
@@ -999,7 +1004,9 @@ async function processEvents(events: any[]): Promise<void> {
             typeId: p.typeId || p.type,
             name: p.name,
             suspended: p.suspended,
-            price: p.price || p.odds
+            price: p.price || p.odds,
+            displayName: p.displayName,
+            position: p.position
           }))
         );
       } else {
@@ -1015,14 +1022,46 @@ async function processEvents(events: any[]): Promise<void> {
       // Check prices array first - look for any available price
       if (market1X2.prices && market1X2.prices.length > 0) {
         // Find the home, draw, and away selections (types 3744, 3745, 3746)
+        // We need to be very flexible in matching these as APIs format them differently
         const homeSelections = market1X2.prices.filter((p: any) => 
-          (p.typeId === 3744 || p.typeId === "3744" || p.type === 3744 || p.type === "3744" || p.name === "1"));
+          (p.typeId === 3744 || p.typeId === "3744" || 
+           p.type === 3744 || p.type === "3744" || 
+           p.name === "1" || p.name === "Home" ||
+           p.displayName === "1" || p.displayName === "Home" ||
+           p.position === 0 || p.position === "0"));
         
         const drawSelections = market1X2.prices.filter((p: any) => 
-          (p.typeId === 3745 || p.typeId === "3745" || p.type === 3745 || p.type === "3745" || p.name === "X"));
+          (p.typeId === 3745 || p.typeId === "3745" || 
+           p.type === 3745 || p.type === "3745" || 
+           p.name === "X" || p.name === "Draw" ||
+           p.displayName === "X" || p.displayName === "Draw" ||
+           p.position === 1 || p.position === "1"));
         
         const awaySelections = market1X2.prices.filter((p: any) => 
-          (p.typeId === 3746 || p.typeId === "3746" || p.type === 3746 || p.type === "3746" || p.name === "2"));
+          (p.typeId === 3746 || p.typeId === "3746" || 
+           p.type === 3746 || p.type === "3746" || 
+           p.name === "2" || p.name === "Away" ||
+           p.displayName === "2" || p.displayName === "Away" ||
+           p.position === 2 || p.position === "2"));
+        
+        // Print actual price values for debugging
+        console.log(`Event ${eventId} HOME selections:`, JSON.stringify(homeSelections.map(p => ({
+          suspended: p.suspended,
+          price: p.price,
+          odds: p.odds
+        }))));
+        
+        console.log(`Event ${eventId} DRAW selections:`, JSON.stringify(drawSelections.map(p => ({
+          suspended: p.suspended,
+          price: p.price,
+          odds: p.odds
+        }))));
+        
+        console.log(`Event ${eventId} AWAY selections:`, JSON.stringify(awaySelections.map(p => ({
+          suspended: p.suspended,
+          price: p.price,
+          odds: p.odds
+        }))));
         
         // Check if ANY of the market selection types (home, draw, away) is available with non-zero price
         // A price of 0.0 means the market is suspended even if suspended=false
@@ -1059,13 +1098,25 @@ async function processEvents(events: any[]): Promise<void> {
       else if (market1X2.outcomes && market1X2.outcomes.length > 0) {
         // Try to identify the home, draw, away outcomes by name or type
         const homeOutcomes = market1X2.outcomes.filter((o: any) => 
-          o.name === "1" || o.name === "Home" || o.type === "3744" || o.type === 3744 || o.typeId === "3744" || o.typeId === 3744);
+          o.name === "1" || o.name === "Home" || 
+          o.type === "3744" || o.type === 3744 || 
+          o.typeId === "3744" || o.typeId === 3744 || 
+          o.displayName === "1" || o.displayName === "Home" ||
+          o.position === 0 || o.position === "0");
         
         const drawOutcomes = market1X2.outcomes.filter((o: any) => 
-          o.name === "X" || o.name === "Draw" || o.type === "3745" || o.type === 3745 || o.typeId === "3745" || o.typeId === 3745);
+          o.name === "X" || o.name === "Draw" || 
+          o.type === "3745" || o.type === 3745 || 
+          o.typeId === "3745" || o.typeId === 3745 || 
+          o.displayName === "X" || o.displayName === "Draw" ||
+          o.position === 1 || o.position === "1");
         
         const awayOutcomes = market1X2.outcomes.filter((o: any) => 
-          o.name === "2" || o.name === "Away" || o.type === "3746" || o.type === 3746 || o.typeId === "3746" || o.typeId === 3746);
+          o.name === "2" || o.name === "Away" || 
+          o.type === "3746" || o.type === 3746 || 
+          o.typeId === "3746" || o.typeId === 3746 || 
+          o.displayName === "2" || o.displayName === "Away" ||
+          o.position === 2 || o.position === "2");
         
         // Check if ANY of them is available with non-zero price
         const homeAvailable = homeOutcomes.some((o: any) => o.suspended === false && (o.price > 0 || o.odds > 0));
@@ -1100,13 +1151,25 @@ async function processEvents(events: any[]): Promise<void> {
       else if (market1X2.selections && market1X2.selections.length > 0) {
         // Try to identify the home, draw, away selections by name or type
         const homeSelections = market1X2.selections.filter((s: any) => 
-          s.name === "1" || s.name === "Home" || s.type === "3744" || s.type === 3744 || s.typeId === "3744" || s.typeId === 3744);
+          s.name === "1" || s.name === "Home" || 
+          s.type === "3744" || s.type === 3744 || 
+          s.typeId === "3744" || s.typeId === 3744 || 
+          s.displayName === "1" || s.displayName === "Home" ||
+          s.position === 0 || s.position === "0");
         
         const drawSelections = market1X2.selections.filter((s: any) => 
-          s.name === "X" || s.name === "Draw" || s.type === "3745" || s.type === 3745 || s.typeId === "3745" || s.typeId === 3745);
+          s.name === "X" || s.name === "Draw" || 
+          s.type === "3745" || s.type === 3745 || 
+          s.typeId === "3745" || s.typeId === 3745 || 
+          s.displayName === "X" || s.displayName === "Draw" ||
+          s.position === 1 || s.position === "1");
         
         const awaySelections = market1X2.selections.filter((s: any) => 
-          s.name === "2" || s.name === "Away" || s.type === "3746" || s.type === 3746 || s.typeId === "3746" || s.typeId === 3746);
+          s.name === "2" || s.name === "Away" || 
+          s.type === "3746" || s.type === 3746 || 
+          s.typeId === "3746" || s.typeId === 3746 || 
+          s.displayName === "2" || s.displayName === "Away" ||
+          s.position === 2 || s.position === "2");
         
         // Check if ANY of them is available with non-zero price
         const homeAvailable = homeSelections.some((s: any) => s.suspended === false && (s.price > 0 || s.odds > 0));
