@@ -1033,8 +1033,18 @@ async function processEvents(events: any[]): Promise<void> {
         if (eventName.includes(separator)) {
           const parts = eventName.split(separator);
           if (parts.length === 2) {
-            homeTeam = parts[0].trim() || homeTeam || "Unknown";
-            awayTeam = parts[1].trim() || awayTeam || "Unknown";
+            // Make sure we don't set generic placeholders like "Unknown"
+            const extractedHome = parts[0].trim();
+            const extractedAway = parts[1].trim();
+            
+            if (extractedHome && extractedHome !== "Unknown" && extractedHome !== "Home") {
+              homeTeam = extractedHome;
+            }
+            
+            if (extractedAway && extractedAway !== "Unknown" && extractedAway !== "Away") {
+              awayTeam = extractedAway;
+            }
+            
             console.log(`Extracted team names from event name using "${separator}": ${homeTeam} ${separator} ${awayTeam}`);
             break;
           }
@@ -1220,15 +1230,21 @@ export function getHeartbeatStatus(): HeartbeatState {
         }
       }
       
-      // Ensure we have valid team names (not empty strings)
-      homeTeam = homeTeam || "Home";
-      awayTeam = awayTeam || "Away";
-      
       // Update the display name based on what we've found
-      if (homeTeam !== "Home" || awayTeam !== "Away") {
+      if (homeTeam && awayTeam && 
+          homeTeam !== "Home" && homeTeam !== "Unknown" && 
+          awayTeam !== "Away" && awayTeam !== "Unknown") {
+        // Only use team names if they are actual team names, not placeholders
         displayName = `${homeTeam} vs ${awayTeam}`;
-      } else if (event.name && event.name.trim() !== "" && event.name !== " vs ") {
+      } else if (event.name && event.name.trim() !== "" && 
+                 event.name !== " vs " && 
+                 event.name !== "Home vs Away" && 
+                 event.name !== "Unknown vs Unknown") {
+        // Use the event name if it's meaningful
         displayName = event.name;
+      } else {
+        // If nothing else works, use the tournament name as part of the match description
+        displayName = `Match from ${event.tournament || event.country || "Unknown League"}`;
       }
       
       return {

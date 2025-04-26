@@ -544,13 +544,20 @@ export default function HeartbeatGraph({ eventId, eventData }: HeartbeatGraphPro
                   })()}
                 </>
               )}
-              <span>
+              <span className="font-medium">
+                {/* First priority: Valid homeTeam and awayTeam */}
                 {eventDetails?.homeTeam && eventDetails?.awayTeam && 
-                 (eventDetails.homeTeam !== "Home" || eventDetails.awayTeam !== "Away")
+                 eventDetails.homeTeam !== "Home" && eventDetails.homeTeam !== "Unknown" &&
+                 eventDetails.awayTeam !== "Away" && eventDetails.awayTeam !== "Unknown"
                   ? `${eventDetails.homeTeam} vs ${eventDetails.awayTeam}`
-                  : (eventDetails?.name && eventDetails.name !== "Home vs Away") 
-                    ? eventDetails.name 
-                    : "Match Heartbeat"}
+                  : /* Second priority: Valid event name */
+                    (eventDetails?.name && 
+                     eventDetails.name !== "Home vs Away" && 
+                     eventDetails.name !== "Unknown vs Unknown" &&
+                     eventDetails.name !== "Match Details Unavailable")
+                      ? eventDetails.name 
+                      : /* Third priority: Tournament/country based description */
+                        `Match from ${eventDetails?.tournament || eventDetails?.country || "Unknown League"}`}
               </span>
             </div>
             
