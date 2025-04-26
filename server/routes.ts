@@ -747,7 +747,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json({
         success: true,
-        message: 'Live heartbeat tracker started successfully'
+        message: 'Live heartbeat tracker started successfully with real data'
+      });
+      
+      // Broadcast an event to connected clients
+      broadcast({
+        type: 'notification',
+        data: {
+          title: 'Heartbeat Tracker',
+          message: 'Live heartbeat tracker started with real-time data',
+          type: 'success'
+        }
       });
     } catch (error) {
       console.error('Error starting heartbeat tracker:', error);

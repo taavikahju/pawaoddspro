@@ -158,8 +158,8 @@ async function runHeartbeatTracker(url: string, storage: IStorage): Promise<void
     try {
       console.log('Running heartbeat tracker cycle');
       
-      // Generate demo events instead of fetching from API
-      const events = generateMockEvents();
+      // Fetch real events from the API
+      const events = await scrapeEvents(url);
       
       // Process events
       await processEvents(events);
@@ -378,11 +378,11 @@ async function processEvents(events: any[]): Promise<void> {
     return;
   }
 
-  console.log(`Processing ${events.length} live events for demo heartbeat...`);
+  console.log(`Processing ${events.length} live events for heartbeat tracking...`);
   
-  // For each demo event, log its structure and market status
+  // For each real event, log its structure and market status
   for (const event of events) {
-    console.log(`DEMO EVENT: ID=${event.id}, Name=${event.name}, Market status=${event.markets?.[0]?.suspended ? "SUSPENDED" : "ACTIVE"}`);
+    console.log(`LIVE EVENT: ID=${event.id}, Name=${event.name}, Market status=${event.markets?.[0]?.suspended ? "SUSPENDED" : "ACTIVE"}`);
     
     // Debug: log the scoreboard and market info for each event
     if (event.scoreboard?.display) {
@@ -393,34 +393,48 @@ async function processEvents(events: any[]): Promise<void> {
       const market = event.markets[0];
       console.log(`    Market: typeId=${market.typeId || market.type}, suspended=${market.suspended}, prices=${market.prices?.length || 0}`);
       
-      // Print price status
+      // Print price status (only first 2 prices to reduce log noise)
       if (market.prices && market.prices.length > 0) {
-        market.prices.forEach((price: any, index: number) => {
+        market.prices.slice(0, 2).forEach((price: any, index: number) => {
           console.log(`      Price ${index + 1}: name=${price.name}, suspended=${price.suspended}, value=${price.price}`);
         });
+        if (market.prices.length > 2) {
+          console.log(`      ... and ${market.prices.length - 2} more prices`);
+        }
       }
     }
   }
 
-  // For our demo implementation, convert mock events directly to HeartbeatEvents
+  // Convert real events to HeartbeatEvents
   const processedEvents: HeartbeatEvent[] = [];
   
-  // Process each demo event
+  // Process each live event
   for (const event of events) {
     try {
-      const eventId = event.id.toString();
-      const eventName = event.name;
+      const eventId = event.id?.toString();
+      if (!eventId) {
+        console.log("Skipping event with no ID");
+        continue;
+      }
+      
+      const eventName = event.name || (event.homeTeam && event.awayTeam 
+                         ? `${event.homeTeam} vs ${event.awayTeam}` 
+                         : "Unknown Event");
+      
       const country = event.category?.name || event.region?.name || "Unknown";
-      const tournament = event.competition?.name || "Unknown";
+      const tournament = event.competition?.name || event.tournament?.name || "Unknown";
       
       // Check if the market is available from the suspended flag
       const isMarketAvailable = event.markets && event.markets.length > 0 ? 
         !event.markets[0].suspended : false;
       
-      // Get the game minute directly from the mock event
-      const gameMinute = event.scoreboard?.display?.minute || "1";
+      // Get the game minute from the event data
+      const gameMinute = event.scoreboard?.display?.minute || 
+                       event.minute?.toString() || 
+                       event.time?.toString() || 
+                       "1";
       
-      // Create a HeartbeatEvent directly from our mock event
+      // Create a HeartbeatEvent from the real event data
       const heartbeatEvent: HeartbeatEvent = {
         id: eventId,
         name: eventName,
@@ -433,12 +447,12 @@ async function processEvents(events: any[]): Promise<void> {
         recordCount: 1,
         gameMinute: gameMinute,
         widgetId: event.widget?.id || "",
-        homeTeam: eventName.split(" vs ")[0],
-        awayTeam: eventName.split(" vs ")[1]
+        homeTeam: eventName.includes(" vs ") ? eventName.split(" vs ")[0] : event.homeTeam,
+        awayTeam: eventName.includes(" vs ") ? eventName.split(" vs ")[1] : event.awayTeam
       };
       
       processedEvents.push(heartbeatEvent);
-      console.log(`Added demo event to processed events: ${eventId} - ${eventName}`);
+      console.log(`Added live event to processed events: ${eventId} - ${eventName}`);
       
       // Update market history for each event as we go
       updateMarketHistory(heartbeatEvent);
