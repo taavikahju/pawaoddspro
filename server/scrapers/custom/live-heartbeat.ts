@@ -269,127 +269,217 @@ async function runHeartbeatTracker(url: string, storage: IStorage): Promise<void
 
 // Generate mock events for testing when API is unavailable - without using crypto
 function generateMockEvents(): any[] {
-  // Add a list of realistic soccer/football events
-  const teams: Record<string, Array<{team1: string, team2: string}>> = {
-    'England': [
-      { team1: 'Manchester United', team2: 'Liverpool' },
-      { team1: 'Arsenal', team2: 'Chelsea' },
-      { team1: 'Manchester City', team2: 'Tottenham' },
-      { team1: 'Newcastle', team2: 'Aston Villa' },
-      { team1: 'Everton', team2: 'Crystal Palace' }
-    ],
-    'Spain': [
-      { team1: 'Real Madrid', team2: 'Barcelona' },
-      { team1: 'Atletico Madrid', team2: 'Sevilla' },
-      { team1: 'Valencia', team2: 'Villarreal' }
-    ],
-    'Germany': [
-      { team1: 'Bayern Munich', team2: 'Borussia Dortmund' },
-      { team1: 'RB Leipzig', team2: 'Bayer Leverkusen' }
-    ],
-    'Italy': [
-      { team1: 'Juventus', team2: 'Inter Milan' },
-      { team1: 'AC Milan', team2: 'Napoli' },
-      { team1: 'Roma', team2: 'Lazio' }
-    ],
-    'France': [
-      { team1: 'PSG', team2: 'Marseille' },
-      { team1: 'Lyon', team2: 'Monaco' }
-    ]
-  };
+  console.log("Generating special demo events with dynamic market availability");
   
-  const tournaments: Record<string, string> = {
-    'England': 'Premier League',
-    'Spain': 'La Liga',
-    'Germany': 'Bundesliga',
-    'Italy': 'Serie A',
-    'France': 'Ligue 1'
-  };
-  
-  // Generate between 5 and 15 mock events
-  const numEvents = Math.floor(Math.random() * 10) + 5;
+  // Current timestamp for time-based patterns
+  const now = Math.floor(Date.now() / 1000);
   const mockEvents = [];
   
-  // Generate simple unique IDs without using crypto
-  const baseTimestamp = Date.now();
-  const usedIds = new Set<number>();
+  // Demo event #1: Rahmatganj MFS vs Bashundhara Kings
+  const event1MarketAvailable = (now % 45) < 30; // Available for 30s, suspended for 15s
+  const event1Minute = String(Math.floor(Date.now() / 60000) % 90 + 1);
   
-  for (let i = 0; i < numEvents; i++) {
-    // Pick a random country
-    const countryKeys = Object.keys(teams);
-    const countryKey = countryKeys[Math.floor(Math.random() * countryKeys.length)];
-    
-    // Pick a random match from that country (with proper type assertion)
-    const countryMatches = teams[countryKey as keyof typeof teams];
-    const match = countryMatches[Math.floor(Math.random() * countryMatches.length)];
-    
-    // Generate a unique ID
-    let id;
-    do {
-      id = Math.floor(Math.random() * 90000000) + 10000000; // 8-digit number
-    } while (usedIds.has(id));
-    usedIds.add(id);
-    
-    // Generate a random game minute between 1 and 90
-    const gameMinute = Math.floor(Math.random() * 90) + 1;
-    
-    // Per user requirements: an event has a heartbeat if at least one of the marketType 3743 prices has suspended=false
-    // Individual price suspension chances (different for each price)
-    const price1SuspensionChance = gameMinute > 75 ? 0.4 : (gameMinute > 45 ? 0.25 : 0.15);
-    const priceXSuspensionChance = gameMinute > 75 ? 0.35 : (gameMinute > 45 ? 0.2 : 0.1);
-    const price2SuspensionChance = gameMinute > 75 ? 0.45 : (gameMinute > 45 ? 0.3 : 0.2);
-    
-    // Determine suspension for each individual price
-    const price1Suspended = Math.random() < price1SuspensionChance;
-    const priceXSuspended = Math.random() < priceXSuspensionChance;
-    const price2Suspended = Math.random() < price2SuspensionChance;
-    
-    // Market is suspended only if ALL prices are suspended (no heartbeat)
-    const allPricesSuspended = price1Suspended && priceXSuspended && price2Suspended;
-    
-    // Create price objects with prices and suspension status
-    const price1 = { name: '1', suspended: price1Suspended, price: (Math.random() * 3 + 1.5).toFixed(2) };
-    const priceX = { name: 'X', suspended: priceXSuspended, price: (Math.random() * 3 + 2).toFixed(2) };
-    const price2 = { name: '2', suspended: price2Suspended, price: (Math.random() * 3 + 1.5).toFixed(2) };
-    
-    // Get tournament name with proper type assertion
-    const tournamentName = tournaments[countryKey as keyof typeof tournaments];
-    
-    mockEvents.push({
-      id: id.toString(),
-      name: `${match.team1} vs ${match.team2}`,
-      category: { name: countryKey },
-      competition: { name: tournamentName },
-      region: { name: countryKey },
-      status: 'LIVE',
-      isLive: true,
-      startTime: new Date(Date.now() - (gameMinute * 60 * 1000)).toISOString(), // Start time is gameMinute minutes ago
-      markets: [
-        {
-          type: '3743',
-          typeId: '3743',
-          name: '1X2',
-          status: allPricesSuspended ? 'SUSPENDED' : 'ACTIVE',
-          suspended: allPricesSuspended,
-          prices: [
-            price1,
-            priceX,
-            price2
-          ]
-        }
-      ],
-      scoreboard: {
-        display: {
-          minute: `${gameMinute}'`
-        }
-      },
-      widget: {
-        id: `SR${Math.floor(Math.random() * 90000) + 10000}` // Random 5-digit widget ID with SR prefix
+  mockEvents.push({
+    id: "26987202",
+    name: "Rahmatganj MFS vs Bashundhara Kings",
+    category: { name: "Bangladesh" },
+    competition: { name: "Premier League" },
+    region: { name: "Bangladesh" },
+    status: 'LIVE',
+    isLive: true,
+    isInPlay: true,
+    startTime: new Date(Date.now() - (30 * 60 * 1000)).toISOString(),
+    markets: [
+      {
+        type: '3743',
+        typeId: '3743',
+        name: '1X2',
+        marketType: { name: "1X2" },
+        status: event1MarketAvailable ? 'ACTIVE' : 'SUSPENDED',
+        suspended: !event1MarketAvailable,
+        prices: [
+          { name: '1', suspended: !event1MarketAvailable, price: event1MarketAvailable ? "2.10" : "0.0" },
+          { name: 'X', suspended: !event1MarketAvailable, price: event1MarketAvailable ? "3.25" : "0.0" },
+          { name: '2', suspended: !event1MarketAvailable, price: event1MarketAvailable ? "2.80" : "0.0" }
+        ]
       }
-    });
-  }
+    ],
+    scoreboard: {
+      display: {
+        minute: event1Minute
+      }
+    },
+    widget: {
+      id: "SR12345"
+    }
+  });
   
-  console.log(`Generated ${mockEvents.length} mock events for testing`);
+  // Demo event #2: Abahani Limited Dhaka vs Mohammedan SC Dhaka
+  const event2MarketAvailable = (now % 60) < 50; // Mostly available with brief suspensions
+  
+  // Show halftime sometimes
+  const seconds = Math.floor(Date.now() / 1000) % 60;
+  const event2Minute = (seconds >= 20 && seconds < 30) 
+    ? 'HT' 
+    : String(Math.floor(Date.now() / 120000) % 90 + 1);
+  
+  mockEvents.push({
+    id: "26968026",
+    name: "Abahani Limited Dhaka vs Mohammedan SC Dhaka",
+    category: { name: "Bangladesh" },
+    competition: { name: "Premier League" },
+    region: { name: "Bangladesh" },
+    status: 'LIVE',
+    isLive: true,
+    isInPlay: true,
+    startTime: new Date(Date.now() - (45 * 60 * 1000)).toISOString(),
+    markets: [
+      {
+        type: '3743',
+        typeId: '3743',
+        name: '1X2',
+        marketType: { name: "1X2" },
+        status: event2MarketAvailable ? 'ACTIVE' : 'SUSPENDED',
+        suspended: !event2MarketAvailable,
+        prices: [
+          { name: '1', suspended: !event2MarketAvailable, price: event2MarketAvailable ? "1.90" : "0.0" },
+          { name: 'X', suspended: !event2MarketAvailable, price: event2MarketAvailable ? "3.50" : "0.0" },
+          { name: '2', suspended: !event2MarketAvailable, price: event2MarketAvailable ? "3.10" : "0.0" }
+        ]
+      }
+    ],
+    scoreboard: {
+      display: {
+        minute: event2Minute
+      }
+    },
+    widget: {
+      id: "SR23456"
+    }
+  });
+  
+  // Demo event #3: JS Saoura U21 vs USM Alger U21
+  const event3MarketAvailable = (now % 20) < 10; // Rapid toggling every 10 seconds
+  
+  mockEvents.push({
+    id: "27008584",
+    name: "JS Saoura U21 vs USM Alger U21",
+    category: { name: "Algeria" },
+    competition: { name: "U21 League" },
+    region: { name: "Algeria" },
+    status: 'LIVE',
+    isLive: true,
+    isInPlay: true,
+    startTime: new Date(Date.now() - (60 * 60 * 1000)).toISOString(),
+    markets: [
+      {
+        type: '3743',
+        typeId: '3743',
+        name: '1X2',
+        marketType: { name: "1X2" },
+        status: event3MarketAvailable ? 'ACTIVE' : 'SUSPENDED',
+        suspended: !event3MarketAvailable,
+        prices: [
+          { name: '1', suspended: !event3MarketAvailable, price: event3MarketAvailable ? "2.00" : "0.0" },
+          { name: 'X', suspended: !event3MarketAvailable, price: event3MarketAvailable ? "3.30" : "0.0" },
+          { name: '2', suspended: !event3MarketAvailable, price: event3MarketAvailable ? "2.70" : "0.0" }
+        ]
+      }
+    ],
+    scoreboard: {
+      display: {
+        minute: "46"
+      }
+    },
+    widget: {
+      id: "SR34567"
+    }
+  });
+  
+  // Demo event #4: Melbourne City FC vs Adelaide United FC
+  const event4MarketAvailable = (now % 60) < 15; // Mostly suspended with brief availability
+  
+  mockEvents.push({
+    id: "25332692",
+    name: "Melbourne City FC vs Adelaide United FC",
+    category: { name: "Australia" },
+    competition: { name: "A-League" },
+    region: { name: "Australia" },
+    status: 'LIVE',
+    isLive: true,
+    isInPlay: true,
+    startTime: new Date(Date.now() - (10 * 60 * 1000)).toISOString(),
+    markets: [
+      {
+        type: '3743',
+        typeId: '3743',
+        name: '1X2',
+        marketType: { name: "1X2" },
+        status: event4MarketAvailable ? 'ACTIVE' : 'SUSPENDED',
+        suspended: !event4MarketAvailable,
+        prices: [
+          { name: '1', suspended: !event4MarketAvailable, price: event4MarketAvailable ? "1.85" : "0.0" },
+          { name: 'X', suspended: !event4MarketAvailable, price: event4MarketAvailable ? "3.70" : "0.0" },
+          { name: '2', suspended: !event4MarketAvailable, price: event4MarketAvailable ? "3.20" : "0.0" }
+        ]
+      }
+    ],
+    scoreboard: {
+      display: {
+        minute: "5"
+      }
+    },
+    widget: {
+      id: "SR45678"
+    }
+  });
+  
+  // Demo event #5: NWS Spirit FC U20 vs St George FC U20
+  const event5MarketAvailable = ((now % 100) < 40) || ((now % 17) === 0); // Complex pattern
+  
+  mockEvents.push({
+    id: "26967985",
+    name: "NWS Spirit FC U20 vs St George FC U20",
+    category: { name: "Australia" },
+    competition: { name: "U20 NSW NPL" },
+    region: { name: "Australia" },
+    status: 'LIVE',
+    isLive: true,
+    isInPlay: true,
+    startTime: new Date(Date.now() - (15 * 60 * 1000)).toISOString(),
+    markets: [
+      {
+        type: '3743',
+        typeId: '3743',
+        name: '1X2',
+        marketType: { name: "1X2" },
+        status: event5MarketAvailable ? 'ACTIVE' : 'SUSPENDED',
+        suspended: !event5MarketAvailable,
+        prices: [
+          { name: '1', suspended: !event5MarketAvailable, price: event5MarketAvailable ? "2.30" : "0.0" },
+          { name: 'X', suspended: !event5MarketAvailable, price: event5MarketAvailable ? "3.10" : "0.0" },
+          { name: '2', suspended: !event5MarketAvailable, price: event5MarketAvailable ? "2.50" : "0.0" }
+        ]
+      }
+    ],
+    scoreboard: {
+      display: {
+        minute: "10"
+      }
+    },
+    widget: {
+      id: "SR56789"
+    }
+  });
+  
+  console.log(`Generated ${mockEvents.length} special demo events with dynamic market status`);
+  
+  // Print our generated events for debugging
+  mockEvents.forEach(event => {
+    const marketStatus = event.markets[0].suspended ? "SUSPENDED" : "AVAILABLE";
+    console.log(`DEMO EVENT: ${event.id} - ${event.name} - Market: ${marketStatus}, Minute: ${event.scoreboard.display.minute}`);
+  });
+  
   return mockEvents;
 }
 
@@ -1013,58 +1103,70 @@ async function processEvents(events: any[]): Promise<void> {
         console.log(`Checking market suspension for event ${eventId} - No prices found in market`);
       }
       
-      // Implement demonstration mode with distinct patterns for specific events
-      if (eventId === '26987202' || eventId === '26968026' || eventId === '27008584' || 
-          eventId === '25332692' || eventId === '26967985') {
+      // Let's generate mock data for specific demo events
+      const demoEventIds = ['26987202', '26968026', '27008584', '25332692', '26967985'];
+      
+      if (demoEventIds.includes(eventId)) {
+        console.log(`Processing demo event ${eventId}: ${eventName}`);
         
-        // Use current timestamp for time-based patterns
+        // Use timestamp for deterministic but dynamic patterns
         const now = Math.floor(Date.now() / 1000);
+        let demoMinute = '';
         
-        // Force these events to be always marked as "inPlay"
-        isInPlay = true;
-        
-        // Different patterns for each event to demonstrate various heartbeat visualizations
-        if (eventId === '26987202') { // Rahmatganj MFS vs Bashundhara Kings
-          // Pattern 1: Clean cycles - 30 seconds available, 15 seconds suspended
-          isMarketAvailable = (now % 45) < 30;
-          // Set game minute to progress in real-time (1 minute = 1 game minute)
-          gameMinute = String(Math.floor(Date.now() / 60000) % 90 + 1);
-        }
-        else if (eventId === '26968026') { // Abahani Limited Dhaka vs Mohammedan SC Dhaka
-          // Pattern 2: Mostly available with brief suspensions
-          isMarketAvailable = (now % 60) < 50;
-          
-          // Show halftime sometimes
-          const seconds = Math.floor(Date.now() / 1000) % 60;
-          if (seconds >= 20 && seconds < 30) {
-            gameMinute = 'HT';
-          } else {
-            gameMinute = String(Math.floor(Date.now() / 120000) % 90 + 1);
-          }
-        }
-        else if (eventId === '27008584') { // JS Saoura U21 vs USM Alger U21
-          // Pattern 3: Rapid toggling - flips every 10 seconds
-          isMarketAvailable = (now % 20) < 10;
-          gameMinute = '46'; // Always second half
-        }
-        else if (eventId === '25332692') { // Melbourne City FC vs Adelaide United FC
-          // Pattern 4: Mostly suspended with brief availability
-          isMarketAvailable = (now % 60) < 15;
-          gameMinute = '5'; // Early game
-        }
-        else if (eventId === '26967985') { // NWS Spirit FC U20 vs St George FC U20
-          // Pattern 5: Complex pattern with some randomness
-          isMarketAvailable = ((now % 100) < 40) || ((now % 17) === 0);
-          gameMinute = '10'; // Early game
+        // Force these events to always be in-play for demo purposes
+        if (typeof isInPlay !== 'undefined') {
+          isInPlay = true;
         }
         
-        // Add a small amount of randomness to make patterns look more realistic
-        // but keep the probability low (2%) so the patterns remain recognizable
+        // Demo patterns - each event has a different pattern
+        switch(eventId) {
+          case '26987202': // Rahmatganj MFS vs Bashundhara Kings
+            // Pattern 1: Clean cycles - 30s available, 15s suspended
+            isMarketAvailable = (now % 45) < 30;
+            demoMinute = String(Math.floor(Date.now() / 60000) % 90 + 1);
+            break;
+            
+          case '26968026': // Abahani Limited Dhaka vs Mohammedan SC Dhaka
+            // Pattern 2: Mostly available with brief suspensions
+            isMarketAvailable = (now % 60) < 50;
+            
+            // Show halftime during certain seconds
+            const seconds = Math.floor(Date.now() / 1000) % 60;
+            demoMinute = (seconds >= 20 && seconds < 30) 
+              ? 'HT' 
+              : String(Math.floor(Date.now() / 120000) % 90 + 1);
+            break;
+            
+          case '27008584': // JS Saoura U21 vs USM Alger U21
+            // Pattern 3: Rapid toggling - flips every 10 seconds
+            isMarketAvailable = (now % 20) < 10;
+            demoMinute = '46'; // Always second half
+            break;
+            
+          case '25332692': // Melbourne City FC vs Adelaide United FC
+            // Pattern 4: Mostly suspended with brief availability
+            isMarketAvailable = (now % 60) < 15;
+            demoMinute = '5'; // Early game
+            break;
+            
+          case '26967985': // NWS Spirit FC U20 vs St George FC U20
+            // Pattern 5: Complex pattern
+            isMarketAvailable = ((now % 100) < 40) || ((now % 17) === 0);
+            demoMinute = '10'; // Early game
+            break;
+        }
+        
+        // Small chance of randomness for realism (2%)
         if (Math.random() < 0.02) {
           isMarketAvailable = !isMarketAvailable;
         }
         
-        console.log(`DEMO MODE for event ${eventId}: Market ${isMarketAvailable ? 'AVAILABLE' : 'SUSPENDED'}, Minute: ${gameMinute}`);
+        console.log(`DEMO EVENT: ${eventId} - Market: ${isMarketAvailable ? 'AVAILABLE' : 'SUSPENDED'}, Minute: ${demoMinute}`);
+        
+        // Assign game minute if we have one from the demo logic
+        if (demoMinute && demoMinute !== '') {
+          gameMinute = demoMinute;
+        }
       }
       
       // First check overall market suspension
