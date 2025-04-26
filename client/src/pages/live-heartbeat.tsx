@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Activity, Calendar, Map, Filter, RefreshCw, History } from 'lucide-react';
+import { Activity, Calendar, Map, Filter, History, Gauge } from 'lucide-react';
+import { RadialBarChart, RadialBar, ResponsiveContainer, PolarAngleAxis } from 'recharts';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -144,29 +145,6 @@ export default function LiveHeartbeat() {
               <p className="text-muted-foreground text-sm">
                 Monitor market availability for live events
               </p>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={handleRefresh} 
-                className="gap-1"
-              >
-                <RefreshCw className="h-3.5 w-3.5" />
-                Refresh
-              </Button>
-              <Badge 
-                variant={heartbeatData?.isRunning ? "outline" : "destructive"}
-                className="px-2 py-1 h-9"
-              >
-                Tracker: {heartbeatData?.isRunning ? 'Running' : 'Stopped'}
-              </Badge>
-              <Badge 
-                variant="outline"
-                className="px-2 py-1 h-9"
-              >
-                Last Update: {lastUpdate}
-              </Badge>
             </div>
           </div>
 
