@@ -257,6 +257,27 @@ if (fs.existsSync(sportyWrapperPath)) {
   };
 }
 
+// Force register the updated BetPawa scrapers with our new CommonJS versions
+const betpawaGhScraperPath = path.join(process.cwd(), 'server', 'scrapers', 'custom', 'betpawa_gh_scraper.cjs');
+if (fs.existsSync(betpawaGhScraperPath)) {
+  console.log('🌟 Registering BetPawa Ghana 15-minute scraper (CommonJS version)');
+  SCRIPT_CONFIG['betpawa_gh'] = {
+    scriptPath: betpawaGhScraperPath,
+    command: 'node',
+    outputFormat: 'json'
+  };
+}
+
+const betpawaKeScraperPath = path.join(process.cwd(), 'server', 'scrapers', 'custom', 'betpawa_ke_scraper.cjs');
+if (fs.existsSync(betpawaKeScraperPath)) {
+  console.log('🌟 Registering BetPawa Kenya 15-minute scraper (CommonJS version)');
+  SCRIPT_CONFIG['betpawa_ke'] = {
+    scriptPath: betpawaKeScraperPath,
+    command: 'node',
+    outputFormat: 'json'
+  };
+}
+
 // Export a function that checks if a custom scraper exists for a bookmaker
 export function hasCustomScraper(bookmakerCode: string): boolean {
   return !!SCRIPT_CONFIG[bookmakerCode] && 
