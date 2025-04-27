@@ -827,6 +827,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/live-scraper/status', async (req, res) => {
     try {
       const status = getLiveScraperStatus();
+      
+      // Debug log the first event to see if uptimePercentage is present
+      if (status.marketStats?.eventDetails?.length > 0) {
+        console.log('BACKEND DEBUG: First event in live scraper status:', JSON.stringify(status.marketStats.eventDetails[0], null, 2));
+        
+        // Check for suspended events with uptime percentages
+        const suspendedEvents = status.marketStats.eventDetails.filter(e => !e.currentlyAvailable);
+        if (suspendedEvents.length > 0) {
+          console.log(`BACKEND DEBUG: Suspended event: ${suspendedEvents[0].id} (${suspendedEvents[0].name}) - currentlyAvailable: ${suspendedEvents[0].currentlyAvailable}, suspended: ${!suspendedEvents[0].currentlyAvailable}, finished: ${suspendedEvents[0].gameMinute === 'FT'}`);
+        }
+      }
+      
       res.json(status);
     } catch (error) {
       console.error('Error fetching live scraper status:', error);

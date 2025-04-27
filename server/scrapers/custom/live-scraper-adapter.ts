@@ -109,9 +109,23 @@ export function stopLiveScraper(): void {
  * Get the current status of the live scraper
  */
 export function getLiveScraperStatus() {
+  const marketStats = getMarketAvailabilityStats();
+  
+  // Debug logging to check if uptime percentages are in the response data
+  if (marketStats?.eventDetails?.length > 0) {
+    console.log('ADAPTER DEBUG: Sample event data:', JSON.stringify({
+      id: marketStats.eventDetails[0].id,
+      name: marketStats.eventDetails[0].name,
+      uptime: marketStats.eventDetails[0].uptimePercentage,
+      uptimeType: typeof marketStats.eventDetails[0].uptimePercentage,
+      marketAvailability: marketStats.eventDetails[0].marketAvailability,
+      allKeys: Object.keys(marketStats.eventDetails[0])
+    }, null, 2));
+  }
+  
   return {
     isRunning,
-    marketStats: getMarketAvailabilityStats()
+    marketStats
   };
 }
 

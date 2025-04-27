@@ -141,15 +141,19 @@ export default function LiveScraperPanel({ isAdmin }: LiveScraperPanelProps) {
     
     const updatedUptimeData: Record<string, number> = {};
     
-    // Debug the incoming event data
-    console.log('Event details received:', status.marketStats.eventDetails.map(event => ({
-      id: event.id,
-      name: event.name,
-      uptimePercentage: event.uptimePercentage,
-      marketAvailability: event.marketAvailability,
-      homeScore: event.homeScore,
-      awayScore: event.awayScore
-    })));
+    // Debug the incoming event data in full detail
+    console.log('FULL EVENT DETAILS RECEIVED:', JSON.stringify(status.marketStats.eventDetails, null, 2));
+    
+    // Log specific fields to debug
+    console.log('First event uptime details:', 
+      status.marketStats.eventDetails.length > 0 ? {
+        id: status.marketStats.eventDetails[0].id,
+        name: status.marketStats.eventDetails[0].name,
+        marketAvailability: status.marketStats.eventDetails[0].marketAvailability,
+        uptimePercentage: status.marketStats.eventDetails[0].uptimePercentage,
+        uptimeType: typeof status.marketStats.eventDetails[0].uptimePercentage,
+        allKeys: Object.keys(status.marketStats.eventDetails[0])
+      } : 'No events');
     
     // Get the uptimePercentage directly from the event details
     status.marketStats.eventDetails.forEach((event) => {
@@ -431,27 +435,56 @@ export default function LiveScraperPanel({ isAdmin }: LiveScraperPanelProps) {
                     </TableCell>
                     {/* Uptime Percentage Column */}
                     <TableCell>
-                      {console.log(`Event ${event.id} uptime: event.uptimePercentage=${event.uptimePercentage}, eventUptimeData=${eventUptimeData[event.id]}`)}
-                      {(event.uptimePercentage !== undefined || eventUptimeData[event.id] !== undefined) ? (
-                        <div className="flex items-center">
-                          <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mr-2">
-                            <div 
-                              className="h-2.5 rounded-full" 
-                              style={{
-                                width: `${event.uptimePercentage !== undefined ? event.uptimePercentage : eventUptimeData[event.id]}%`,
-                                backgroundColor: (event.uptimePercentage || eventUptimeData[event.id]) > 75 ? '#16a34a' : 
-                                                (event.uptimePercentage || eventUptimeData[event.id]) > 50 ? '#eab308' : 
-                                                (event.uptimePercentage || eventUptimeData[event.id]) > 30 ? '#f97316' : '#ef4444'
-                              }}
-                            ></div>
-                          </div>
-                          <span className="text-xs font-medium">
-                            {(event.uptimePercentage !== undefined ? event.uptimePercentage : eventUptimeData[event.id]).toFixed(1)}%
-                          </span>
-                        </div>
-                      ) : (
-                        <span className="text-xs text-muted-foreground">Calculating...</span>
-                      )}
+                      {(() => {
+                        // Convert from marketAvailability string directly if no uptime data available
+                        let uptimeValue: number | undefined;
+                        
+                        // Try to use direct uptime percentage first
+                        if (typeof event.uptimePercentage === 'number' && !isNaN(event.uptimePercentage)) {
+                          uptimeValue = event.uptimePercentage;
+                        } 
+                        // Then try the cached uptime data
+                        else if (eventUptimeData[event.id] !== undefined) {
+                          uptimeValue = eventUptimeData[event.id];
+                        }
+                        // Fallback to marketAvailability string
+                        else if (event.marketAvailability) {
+                          try {
+                            const percentValue = parseFloat(event.marketAvailability.replace('%', ''));
+                            if (!isNaN(percentValue)) {
+                              uptimeValue = percentValue;
+                            }
+                          } catch (e) {
+                            console.error(`Error parsing marketAvailability for event ${event.id}:`, e);
+                          }
+                        }
+                        
+                        // For debugging
+                        console.log(`Event ${event.id} uptime: calculated=${uptimeValue}, event.uptimePercentage=${event.uptimePercentage}, marketAvailability=${event.marketAvailability}`);
+                        
+                        if (uptimeValue !== undefined) {
+                          return (
+                            <div className="flex items-center">
+                              <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mr-2">
+                                <div 
+                                  className="h-2.5 rounded-full" 
+                                  style={{
+                                    width: `${uptimeValue}%`,
+                                    backgroundColor: uptimeValue > 75 ? '#16a34a' : 
+                                                    uptimeValue > 50 ? '#eab308' : 
+                                                    uptimeValue > 30 ? '#f97316' : '#ef4444'
+                                  }}
+                                ></div>
+                              </div>
+                              <span className="text-xs font-medium">
+                                {uptimeValue.toFixed(1)}%
+                              </span>
+                            </div>
+                          );
+                        } else {
+                          return <span className="text-xs text-muted-foreground">Calculating...</span>;
+                        }
+                      })()}
                     </TableCell>
                     <TableCell className="text-right">{event.recordCount}</TableCell>
                   </TableRow>
