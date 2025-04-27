@@ -57,6 +57,8 @@ interface HeartbeatEvent {
   finished?: boolean; // Flag to mark events that are finished
   lastSeen?: number; // Timestamp of when we last saw this event in API responses
   totalMarketCount?: number; // Added to track the actual number of markets available
+  homeScore?: number; // Score for home team
+  awayScore?: number; // Score for away team
 }
 
 // Define the structure for market history
@@ -759,8 +761,10 @@ async function processEvents(events: any[]): Promise<void> {
       };
       
       // Debug the raw event data to see where the totalMarketCount is coming from
-      if (event.id?.toString() === "56525701" || event.eventId?.toString() === "56525701") {
-        console.log("DEBUG RAW EVENT STRUCTURE:", JSON.stringify(event, null, 2));
+      // Debug the first BetGenius event to see its structure for score extraction
+      if (event.widgetId && (event.widgetId.startsWith('12') || event.widgetId.startsWith('11'))) {
+        console.log("BETGENIUS EVENT STRUCTURE:", JSON.stringify(event, null, 2));
+        return;  // We just need to see one event structure, then we can exit
       }
     });
     
