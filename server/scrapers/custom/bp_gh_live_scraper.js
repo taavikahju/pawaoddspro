@@ -535,6 +535,22 @@ function getMarketAvailabilityStats() {
       const availableRecords = event.history.filter(record => record.market1X2Available).length;
       const availabilityPercentage = totalRecords > 0 ? (availableRecords / totalRecords) * 100 : 0;
       
+      // Get the latest score if available
+      let homeScore, awayScore, gameMinute;
+      const latestWithScore = [...event.history].reverse().find(record => record.score);
+      if (latestWithScore && latestWithScore.score) {
+        homeScore = latestWithScore.score.home;
+        awayScore = latestWithScore.score.away;
+        
+        // Extract game minute from period if available
+        if (latestWithScore.score.period) {
+          const match = latestWithScore.score.period.match(/(\d+)/);
+          if (match && match[1]) {
+            gameMinute = match[1];
+          }
+        }
+      }
+      
       stats.eventDetails.push({
         id: event.id,
         name: event.name,
@@ -542,7 +558,11 @@ function getMarketAvailabilityStats() {
         tournament: event.tournament,
         marketAvailability: Math.round(availabilityPercentage) + '%',
         currentlyAvailable: lastRecord.market1X2Available,
-        recordCount: totalRecords
+        recordCount: totalRecords,
+        uptimePercentage: parseFloat(availabilityPercentage.toFixed(1)),
+        homeScore,
+        awayScore,
+        gameMinute
       });
     }
   });

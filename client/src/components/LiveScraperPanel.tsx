@@ -135,35 +135,23 @@ export default function LiveScraperPanel({ isAdmin }: LiveScraperPanelProps) {
     }
   }, [error, toast]);
   
-  // Calculate uptime percentages for events
+  // Use the uptimePercentage provided by the backend directly
   useEffect(() => {
-    const fetchUptimeStats = async () => {
-      if (!status?.marketStats?.eventDetails?.length) return;
-      
-      const updatedUptimeData: Record<string, number> = {};
-      const promises = status.marketStats.eventDetails.map(async (event) => {
-        try {
-          const response = await fetch(`/api/live-heartbeat/data/${event.id}`);
-          if (response.ok) {
-            const data = await response.json();
-            if (data.timestamps?.length > 0) {
-              // Calculate uptime based on available vs. total data points
-              const totalDataPoints = data.timestamps.length;
-              const availableDataPoints = data.timestamps.filter((t: any) => t.isAvailable).length;
-              const uptimePercentage = (availableDataPoints / totalDataPoints) * 100;
-              updatedUptimeData[event.id] = uptimePercentage;
-            }
-          }
-        } catch (err) {
-          console.error(`Error fetching data for event ${event.id}:`, err);
-        }
-      });
-      
-      await Promise.all(promises);
-      setEventUptimeData(updatedUptimeData);
-    };
+    if (!status?.marketStats?.eventDetails?.length) return;
     
-    fetchUptimeStats();
+    const updatedUptimeData: Record<string, number> = {};
+    
+    // Get the uptimePercentage directly from the event details
+    status.marketStats.eventDetails.forEach((event) => {
+      if (event.uptimePercentage !== undefined) {
+        updatedUptimeData[event.id] = event.uptimePercentage;
+      }
+    });
+    
+    // Only update the state if we have data
+    if (Object.keys(updatedUptimeData).length > 0) {
+      setEventUptimeData(updatedUptimeData);
+    }
   }, [status?.marketStats?.eventDetails]);
 
   if (isLoading) {
