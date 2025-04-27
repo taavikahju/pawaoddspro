@@ -47,7 +47,20 @@ async function fetchPage(pageNum) {
     });
     
     if (response.status === 200 && response.data && response.data.data) {
-      const { events = [], totalPage = 1 } = response.data.data;
+      // The API returns tournaments that contain events
+      const { totalNum = 0, tournaments = [] } = response.data.data;
+      
+      // Extract all events from all tournaments
+      const events = [];
+      tournaments.forEach(tournament => {
+        if (tournament.events && Array.isArray(tournament.events)) {
+          events.push(...tournament.events);
+        }
+      });
+      
+      // Calculate total pages based on totalNum and pageSize
+      const totalPage = Math.ceil(totalNum / params.pageSize) || 1;
+      
       console.error(`✅ Successfully fetched page ${pageNum}/${totalPage} with ${events.length} events`);
       return { events, totalPage };
     } else {
@@ -67,27 +80,40 @@ async function fetchPage(pageNum) {
  */
 function parseEvent(event) {
   try {
-    // Extract relevant data
-    const { matchId, matchName, leagueName, countryName, kickOffTime, markets } = event;
+    // Extract relevant data based on the new API response structure
+    const { 
+      eventId, 
+      homeTeamName, 
+      awayTeamName, 
+      estimateStartTime,
+      markets = [] 
+    } = event;
     
-    // Find the main 1X2 market
-    const market1X2 = markets.find(m => m.marketType === 1) || {};
+    // Get tournament data from the parent object if possible
+    const tournamentName = event.tournament?.name || "";
+    const categoryName = event.categoryName || "Ghana";
+    
+    // Format the event name as "Home Team - Away Team"
+    const eventName = `${homeTeamName} - ${awayTeamName}`;
+    
+    // Find the main 1X2 market (id = 1)
+    const market1X2 = markets.find(m => m.id === "1") || {};
     const outcomes = market1X2.outcomes || [];
     
-    // Extract odds
-    const homeOdds = outcomes.find(o => o.type === 1)?.odds || 0;
-    const drawOdds = outcomes.find(o => o.type === 2)?.odds || 0;
-    const awayOdds = outcomes.find(o => o.type === 3)?.odds || 0;
+    // Extract odds - desc values should be "Home", "Draw", "Away"
+    const homeOdds = outcomes.find(o => o.desc === "Home")?.odds || 0;
+    const drawOdds = outcomes.find(o => o.desc === "Draw")?.odds || 0;
+    const awayOdds = outcomes.find(o => o.desc === "Away")?.odds || 0;
     
-    // Convert time format
-    const startTime = new Date(kickOffTime).toISOString().replace('T', ' ').substring(0, 16);
+    // Convert time format - API returns milliseconds timestamp
+    const startTime = new Date(estimateStartTime).toISOString().replace('T', ' ').substring(0, 16);
     
     return {
-      id: `sporty-${matchId}`,
-      eventId: `${matchId}`,
-      event: matchName,
-      country: countryName || "Ghana",
-      tournament: leagueName || "",
+      id: `sporty-${eventId}`,
+      eventId: `${eventId}`,
+      event: eventName,
+      country: categoryName,
+      tournament: tournamentName,
       sport: "football",
       start_time: startTime,
       home_odds: parseFloat(homeOdds) || 0,
