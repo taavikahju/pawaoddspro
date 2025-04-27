@@ -87,12 +87,28 @@ function parseEvent(event, tournamentInfo = {}) {
       homeTeamName, 
       awayTeamName, 
       estimateStartTime,
-      markets = [] 
+      markets = [],
+      categoryName: eventCategoryName, // Some events have category directly
+      tournament: eventTournament // Some events have tournament directly
     } = event;
     
-    // Get tournament and category data from the parent tournament object
-    const tournamentName = tournamentInfo.name || "";
-    const categoryName = tournamentInfo.categoryName || "Ghana";
+    // Use more intelligent country and tournament detection
+    // Priority: 1. Direct event data, 2. Tournament info, 3. Infer from team names, 4. Default
+    
+    // Get tournament data with a hierarchy of sources
+    const tournamentName = 
+      (eventTournament && eventTournament.name) || // Direct from event
+      tournamentInfo.name || // From tournament mapping
+      guessLeagueFromTeamNames(homeTeamName, awayTeamName) || // Guess from team names
+      ""; // Default to empty
+    
+    // Get country data with a hierarchy of sources
+    const categoryName = 
+      (eventTournament && eventTournament.country && eventTournament.country.name) || // Direct country from event tournament
+      eventCategoryName || // Direct category from event
+      tournamentInfo.categoryName || // From tournament mapping
+      guessCountryFromTeamNames(homeTeamName, awayTeamName, tournamentName) || // Guess from team names
+      "Ghana"; // Default to Ghana
     
     // Format the event name as "Home Team - Away Team"
     const eventName = `${homeTeamName} - ${awayTeamName}`;
@@ -127,6 +143,111 @@ function parseEvent(event, tournamentInfo = {}) {
     console.error(`❌ Error parsing event: ${error.message}`);
     return null;
   }
+}
+
+/**
+ * Try to guess the country based on team names and tournament
+ * @param {string} homeTeam - Home team name
+ * @param {string} awayTeam - Away team name
+ * @param {string} tournament - Tournament name if available
+ * @returns {string|null} - Country name or null if can't determine
+ */
+function guessCountryFromTeamNames(homeTeam, awayTeam, tournament) {
+  // Create a combined text to search for country indicators
+  const combinedText = `${homeTeam} ${awayTeam} ${tournament}`.toLowerCase();
+  
+  // Define common country indicators in team and tournament names
+  const countryIndicators = {
+    'england': ['premier league', 'efl', 'manchester', 'liverpool', 'arsenal', 'chelsea', 'tottenham'],
+    'spain': ['la liga', 'barcelona', 'real madrid', 'atletico', 'sevilla', 'valencia'],
+    'italy': ['serie a', 'juventus', 'milan', 'inter', 'roma', 'napoli', 'lazio', 'atalanta'],
+    'germany': ['bundesliga', 'bayern', 'dortmund', 'leipzig', 'leverkusen', 'frankfurt'],
+    'france': ['ligue 1', 'psg', 'paris', 'monaco', 'marseille', 'lyon'],
+    'portugal': ['primeira', 'benfica', 'porto', 'sporting cp', 'braga'],
+    'netherlands': ['eredivisie', 'ajax', 'psv', 'feyenoord', 'az alkmaar'],
+    'turkey': ['süper lig', 'galatasaray', 'fenerbahce', 'besiktas', 'trabzonspor'],
+    'scotland': ['premiership', 'rangers', 'celtic', 'aberdeen', 'hibernian'],
+    'brazil': ['brasileirão', 'flamengo', 'palmeiras', 'santos', 'corinthians', 'são paulo'],
+    'argentina': ['superliga', 'boca juniors', 'river plate', 'racing', 'independiente'],
+    'ghana': ['accra', 'ashanti', 'asante kotoko', 'hearts of oak']
+  };
+  
+  // Check for indicators in the combined text
+  for (const [country, indicators] of Object.entries(countryIndicators)) {
+    for (const indicator of indicators) {
+      if (combinedText.includes(indicator.toLowerCase())) {
+        return country.charAt(0).toUpperCase() + country.slice(1); // Capitalize first letter
+      }
+    }
+  }
+  
+  // Check team name suffixes (FC, United, etc.) to infer European vs non-European
+  if (/\b(FC|United|City|Rovers|Town|Athletic)\b/i.test(combinedText)) {
+    return "Europe"; // Generic European country
+  }
+  
+  return null; // Can't determine
+}
+
+/**
+ * Try to guess the league/tournament based on team names
+ * @param {string} homeTeam - Home team name
+ * @param {string} awayTeam - Away team name
+ * @returns {string|null} - Tournament name or null if can't determine
+ */
+function guessLeagueFromTeamNames(homeTeam, awayTeam) {
+  // Create a combined text to search for league indicators
+  const combinedText = `${homeTeam} ${awayTeam}`.toLowerCase();
+  
+  // Big teams mapping to their leagues
+  const teamToLeague = {
+    // England
+    'manchester united': 'Premier League',
+    'manchester city': 'Premier League',
+    'liverpool': 'Premier League',
+    'chelsea': 'Premier League',
+    'arsenal': 'Premier League',
+    'tottenham': 'Premier League',
+    
+    // Spain
+    'barcelona': 'La Liga',
+    'real madrid': 'La Liga',
+    'atletico madrid': 'La Liga',
+    'sevilla': 'La Liga',
+    
+    // Italy
+    'juventus': 'Serie A',
+    'ac milan': 'Serie A',
+    'inter': 'Serie A',
+    'napoli': 'Serie A',
+    'roma': 'Serie A',
+    
+    // Germany
+    'bayern': 'Bundesliga',
+    'dortmund': 'Bundesliga',
+    'leipzig': 'Bundesliga',
+    'leverkusen': 'Bundesliga',
+    
+    // France
+    'psg': 'Ligue 1',
+    'paris': 'Ligue 1',
+    'marseille': 'Ligue 1',
+    'lyon': 'Ligue 1',
+    
+    // Ghana
+    'accra hearts': 'Ghana Premier League',
+    'asante kotoko': 'Ghana Premier League',
+    'ashanti gold': 'Ghana Premier League'
+  };
+  
+  // Check if any key team is in the combined text
+  for (const [team, league] of Object.entries(teamToLeague)) {
+    if (combinedText.includes(team.toLowerCase())) {
+      return league;
+    }
+  }
+  
+  return null; // Can't determine
 }
 
 /**
@@ -368,17 +489,64 @@ async function main() {
         console.error(`📊 Sample event IDs: ${allEvents.slice(0, 3).map(e => e.eventId).join(', ')}`);
       }
       
+      // First, try to find any categories from the API response that we can use
+      const categoryData = {};
+      try {
+        // Get the categories from the API response
+        const firstPageResponse = await axios.get(BASE_URL, {
+          params: {
+            ...params,
+            pageNum: 1,
+            _t: Date.now()
+          },
+          headers,
+          timeout: 10000
+        });
+        
+        // Extract tournament and category information from the API response
+        if (firstPageResponse.data?.data?.categories) {
+          firstPageResponse.data.data.categories.forEach(category => {
+            if (category.tournaments && Array.isArray(category.tournaments)) {
+              category.tournaments.forEach(tournament => {
+                if (tournament.events && Array.isArray(tournament.events)) {
+                  tournament.events.forEach(event => {
+                    categoryData[event.eventId] = {
+                      country: category.name || category.categoryName || null,
+                      tournament: tournament.name || null
+                    };
+                  });
+                }
+              });
+            }
+          });
+        }
+        
+        console.error(`📊 Extracted category data for ${Object.keys(categoryData).length} events from API response`);
+      } catch (err) {
+        console.error(`❌ Error extracting category data: ${err.message}`);
+      }
+      
       parsedEvents = allEvents
         .map(event => {
-          // Look up tournament info for this event
+          // Gather all tournament information from different sources
           const tournamentInfo = eventToTournamentMap.get(event.eventId) || {};
+          const categoryInfo = categoryData[event.eventId] || {};
+          
+          // Combine the info, giving priority to direct category data
+          const combinedInfo = {
+            name: categoryInfo.tournament || tournamentInfo.name || "",
+            categoryName: categoryInfo.country || tournamentInfo.categoryName || "",
+            // Include original references for debugging
+            originalTournamentInfo: tournamentInfo,
+            originalCategoryInfo: categoryInfo
+          };
           
           // Log about 5% of event mappings for debugging
           if (Math.random() < 0.05) {
-            console.error(`📊 Event mapping: EventID ${event.eventId}, Has tournament info: ${!!tournamentInfo.name}, Country: ${tournamentInfo.categoryName || 'Unknown'}`);
+            console.error(`📊 Event mapping: EventID ${event.eventId}, Category: ${combinedInfo.categoryName || 'Unknown'}, Tournament: ${combinedInfo.name || 'Unknown'}`);
           }
           
-          const parsedEvent = parseEvent(event, tournamentInfo);
+          const parsedEvent = parseEvent(event, combinedInfo);
           
           // Log sample events with their country and tournament info
           if (parsedEvent && Math.random() < 0.05) { // Log ~5% of events
