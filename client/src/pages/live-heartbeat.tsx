@@ -262,14 +262,13 @@ export default function LiveHeartbeat() {
     // The suspension count tracking logic is now in a separate useEffect hook at component level
     
     const activeEvents = events.filter(event => {
-      // Always keep non-suspended events
+      // CRITICAL FIX: Never filter out suspended events that are still active
+      // This ensures all suspended (but not finished) events remain visible in the UI
+      
+      // For non-suspended events, we can keep them all
       if (!event.suspended && event.currentlyAvailable !== false) {
         return true;
       }
-      
-      // For suspended events, perform multiple checks
-      const eventStartTime = new Date(event.startTime);
-      const isRecentEvent = eventStartTime > threeHoursAgo;
       
       // Special check for BetGenius events (widget IDs starting with "12" or "11")
       // These are events like Marist Fire vs KOSSA FC that weren't showing up
@@ -279,18 +278,17 @@ export default function LiveHeartbeat() {
         return true;
       }
       
-      // Check if it has a reasonable record count (indicating active tracking)
-      // For BetGenius events, we'll relax this requirement since they have their own tracking
-      const hasLowRecordCount = event.recordCount < 3;
+      // For suspended events, we'll check if they're actually marked as finished
+      // Only filter out events that are explicitly finished
+      if (event.finished === true) {
+        console.log(`Filtering out finished event: ${event.id} (${event.name})`);
+        return false;
+      }
       
-      // Check if it's been suspended for multiple consecutive checks 
-      // Note: We still track this for debugging but don't filter out suspended events anymore
-      const longSuspended = (consecutiveSuspensionCounts[event.id] || 0) >= 10;
-      
-      // Keep the event if it's recent AND has sufficient records
-      // We no longer filter out suspended events based on their suspension duration
-      // This ensures suspended events remain visible in the UI
-      return isRecentEvent && !hasLowRecordCount;
+      // For all other suspended events, ALWAYS keep them visible
+      // This is crucial to ensure suspended (but not finished) events remain in the UI
+      console.log(`Keeping suspended event in UI: ${event.id} (${event.name})`);
+      return true;
     });
     
     console.log(`DEBUG: Filtered out ${events.length - activeEvents.length} likely finished events (suspended & older than 3 hours)`);
