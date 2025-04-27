@@ -15,6 +15,20 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     const allBookmakerData = await storage.getAllBookmakersData();
     const bookmakerCodes = Object.keys(allBookmakerData);
     
+    // Log available bookmakers
+    console.log(`Available bookmakers: ${bookmakerCodes.join(', ')}`);
+    
+    // Check specifically for SportyBet data
+    if (allBookmakerData['sporty']) {
+      console.log(`✅ SportyBet data found with ${allBookmakerData['sporty'].length} events`);
+      // Log a sample of the first event to validate format
+      if (allBookmakerData['sporty'].length > 0) {
+        console.log(`SportyBet sample event: ${JSON.stringify(allBookmakerData['sporty'][0])}`);
+      }
+    } else {
+      console.log(`❌ No SportyBet data found with code 'sporty'`);
+    }
+    
     // Use maps to track events by their eventId (for exact matching across bookmakers)
     const eventMap = new Map<string, any>();
     const processedEvents = new Set<string>(); // Track which eventIds we've processed
@@ -39,6 +53,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     let eventsWith2Bookmakers = 0;
     let eventsWith3Bookmakers = 0;
     let eventsWith4Bookmakers = 0;
+    let sportyBetEvents = 0; // Counter for SportyBet events specifically
     
     // Second pass: Process each bookmaker's data and group by eventId
     for (const eventId of Array.from(allEventIds)) {
@@ -55,6 +70,12 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
         const event = bookmakerData.find(e => e.eventId === eventId);
         if (!event) continue;
         
+        // Debug SportyBet specifically
+        if (bookmakerCode === 'sporty') {
+          console.log(`🔎 Found SportyBet event for eventId ${eventId}: ${JSON.stringify(event)}`);
+          sportyBetEvents++; // Increment SportyBet event counter
+        }
+        
         // Use first match as the base event data
         if (!firstMatch) {
           firstMatch = event;
@@ -65,9 +86,11 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
         let hasOdds = false;
         
         if (event.odds) {
+          console.log(`📊 Event ${eventId} from ${bookmakerCode} has odds in 'odds' field: ${JSON.stringify(event.odds)}`);
           bookmakerOdds[bookmakerCode] = event.odds;
           hasOdds = true;
-        } else if (event.home_odds && event.draw_odds && event.away_odds) {
+        } else if (event.home_odds !== undefined && event.draw_odds !== undefined && event.away_odds !== undefined) {
+          console.log(`📊 Event ${eventId} from ${bookmakerCode} has direct odds fields: home=${event.home_odds}, draw=${event.draw_odds}, away=${event.away_odds}`);
           // Format for scrapers that provide odds directly
           bookmakerOdds[bookmakerCode] = {
             home: parseFloat(event.home_odds),
@@ -75,11 +98,19 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
             away: parseFloat(event.away_odds)
           };
           hasOdds = true;
+        } else {
+          console.log(`⚠️ Event ${eventId} from ${bookmakerCode} is missing odds. Raw event: ${JSON.stringify(event)}`);
         }
         
         // If this bookmaker has odds for this event, increment the counter
         if (hasOdds) {
           bookmakerCount++;
+          // Debug SportyBet counting
+          if (bookmakerCode === 'sporty') {
+            console.log(`✅ SportyBet odds counted for event ${eventId}`);
+          } 
+        } else if (bookmakerCode === 'sporty') {
+          console.log(`❌ SportyBet odds NOT counted for event ${eventId}`);
         }
       }
       
@@ -89,8 +120,13 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       else if (bookmakerCount === 3) eventsWith3Bookmakers++;
       else if (bookmakerCount >= 4) eventsWith4Bookmakers++;
 
-      // Only process events where at least 3 bookmakers have odds
-      if (firstMatch && bookmakerCount >= 3) {
+      // Allow SportyBet events for debugging
+      if (firstMatch && (bookmakerCount >= 3 || 
+         (bookmakerCount >= 1 && Object.keys(bookmakerOdds).includes('sporty')))) {
+        
+        if (bookmakerCount < 3 && Object.keys(bookmakerOdds).includes('sporty')) {
+          console.log(`🎯 Including SportyBet event ${eventId} with only ${bookmakerCount} bookmakers for debugging`);
+        }
         // Extract country and tournament, checking raw data first
         let country = '';
         let tournament = '';
@@ -260,7 +296,8 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     console.log(`- Events with 2 bookmakers: ${eventsWith2Bookmakers}`);
     console.log(`- Events with 3 bookmakers: ${eventsWith3Bookmakers}`);
     console.log(`- Events with 4 bookmakers: ${eventsWith4Bookmakers}`);
-    console.log(`Processed and mapped ${eventMap.size} events with at least 3 bookmakers`);
+    console.log(`- SportyBet events found: ${sportyBetEvents}`);
+    console.log(`Processed and mapped ${eventMap.size} events with at least 3 bookmakers or SportyBet events`);
     
     // Get all events and delete any that don't meet our criteria anymore
     // This ensures events that previously had 3+ bookmakers but now have fewer are removed

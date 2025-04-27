@@ -367,10 +367,24 @@ async function tryAlternativeEndpoint() {
           const { id, name, tournament, kickOffTime } = match;
           const startTime = new Date(kickOffTime).toISOString().replace('T', ' ').substring(0, 16);
           
+          // Extract home and away team names from the event name
+          const teamParts = name.split(' vs ');
+          const homeTeam = teamParts[0] || '';
+          const awayTeam = teamParts[1] || '';
+          
+          // Generate a stable eventId format similar to other bookmakers
+          // Format: numeric hash of normalized team names
+          // This approach has better chances of matching with other bookmakers
+          const normalizedTeams = `${homeTeam.toLowerCase().replace(/\s+/g, '')}${awayTeam.toLowerCase().replace(/\s+/g, '')}`;
+          const eventIdNum = Math.abs(hashCode(normalizedTeams)) % 100000000;
+          
           return {
             id: `sporty-${id}`,
-            eventId: `${id}`,
+            eventId: `${eventIdNum}`, // More stable eventId based on team names
             event: name,
+            teams: name, // Include the full team names
+            home_team: homeTeam,
+            away_team: awayTeam,
             country: tournament?.country?.name || 'Ghana',
             tournament: tournament?.name || '',
             sport: 'football',
@@ -379,7 +393,13 @@ async function tryAlternativeEndpoint() {
             draw_odds: 3.0, // Placeholder - need to fetch actual odds
             away_odds: 2.5, // Placeholder - need to fetch actual odds
             bookmaker: 'sporty',
-            region: 'gh'
+            region: 'gh',
+            // Include raw information for debugging
+            raw: {
+              id: id,
+              country: tournament?.country?.name || 'Ghana',
+              tournament: tournament?.name || ''
+            }
           };
         } catch (err) {
           console.error(`Failed to parse match: ${err.message}`);
