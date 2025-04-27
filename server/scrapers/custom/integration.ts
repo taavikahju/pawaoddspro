@@ -221,7 +221,7 @@ export function loadAllCustomScrapers(): void {
 loadAllCustomScrapers();
 
 // Use our new SportyBet wrapper instead of the direct enhanced scraper
-const sportyWrapperPath = path.join(process.cwd(), 'server', 'scrapers', 'custom', 'sporty_scraper_wrapper.js');
+const sportyWrapperPath = path.join(process.cwd(), 'server', 'scrapers', 'custom', 'sporty_scraper_wrapper.cjs');
 if (fs.existsSync(sportyWrapperPath)) {
   console.log('🌟 Registering SportyBet scraper wrapper with guaranteed data format');
   SCRIPT_CONFIG['sporty'] = {
@@ -237,16 +237,21 @@ if (fs.existsSync(sportyWrapperPath)) {
     if (bookmakerCode === 'sporty') {
       console.log('🔄 Running SportyBet scraper wrapper...');
       
-      // Run the original function to get the data - now using our wrapper
-      const events = await originalRunCustomScraper(bookmakerCode);
-      
-      // Log detailed information about what we got
-      console.log(`📊 SportyBet scraper wrapper returned ${events.length} events`);
-      if (events.length > 0) {
-        console.log(`📊 First event sample from SportyBet: ${JSON.stringify(events[0])}`);
+      try {
+        // Run the original function to get the data - now using our wrapper
+        const events = await originalRunCustomScraper(bookmakerCode);
+        
+        // Log detailed information about what we got
+        console.log(`📊 SportyBet scraper wrapper returned ${events.length} events`);
+        if (events.length > 0) {
+          console.log(`📊 First event sample from SportyBet: ${JSON.stringify(events[0])}`);
+        }
+        
+        return events;
+      } catch (error) {
+        console.error('Error running SportyBet wrapper:', error);
+        return []; // Return empty array on error
       }
-      
-      return events;
     }
     return originalRunCustomScraper(bookmakerCode);
   };
