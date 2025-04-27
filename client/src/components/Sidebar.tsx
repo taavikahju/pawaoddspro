@@ -68,17 +68,14 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
   
   // Function to detect if a specific filter is active based on selected bookmakers
   React.useEffect(() => {
+    // Fixed: Updated bookmaker codes to match the exact values in the database
     const ghanaBookmakers = bookmakers
-      .filter(b => b.code === 'bp GH' || b.code === 'sporty')
+      .filter(b => b.code === 'betpawa_gh' || b.code === 'sporty')
       .map(b => b.code);
       
     const kenyaBookmakers = bookmakers
-      .filter(b => b.code === 'bp KE' || b.code === 'betika KE')
+      .filter(b => b.code === 'betpawa_ke' || b.code === 'betika KE')
       .map(b => b.code);
-    
-    console.log('Effect - Selected bookmakers:', selectedBookmakers);
-    console.log('Effect - Ghana bookmakers:', ghanaBookmakers);
-    console.log('Effect - Kenya bookmakers:', kenyaBookmakers);
     
     // Check if Ghana filter is active
     const isGhanaActive = ghanaBookmakers.every(code => selectedBookmakers.includes(code)) && 
@@ -90,8 +87,6 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
       
     // Check if all bookmakers are selected
     const isAllActive = bookmakers.every(b => selectedBookmakers.includes(b.code));
-    
-    console.log('Ghana active:', isGhanaActive, 'Kenya active:', isKenyaActive, 'All active:', isAllActive);
     
     if (isGhanaActive) {
       setActiveFilter('ghana');
@@ -251,7 +246,8 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
                 // Since we can access the bookmakers array directly, 
                 // we can determine the exact state we want to have
                 const allCodes = bookmakers.map(b => b.code);
-                const ghanaCodes = ["bp GH", "sporty"];
+                // Fixed: Include both BetPawa Ghana and SportyBet for Ghana filter
+                const ghanaCodes = ["betpawa_gh", "sporty"];
                 
                 // For each bookmaker, determine whether it should be selected or not
                 // If it's already in the correct state, don't toggle it
@@ -285,7 +281,8 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
                 // Since we can access the bookmakers array directly, 
                 // we can determine the exact state we want to have
                 const allCodes = bookmakers.map(b => b.code);
-                const kenyaCodes = ["bp KE", "betika KE"];
+                // Fixed: Include both BetPawa Kenya and Betika KE for Kenya filter
+                const kenyaCodes = ["betpawa_ke", "betika"];
                 
                 // For each bookmaker, determine whether it should be selected or not
                 // If it's already in the correct state, don't toggle it
