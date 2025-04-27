@@ -4,9 +4,18 @@
  * This script creates a simple direct SQL query to get event counts by bookmaker
  */
 
-import { db } from '../server/db.js';
-import { events } from '@shared/schema';
+import { Pool, neonConfig } from '@neondatabase/serverless';
+import { drizzle } from 'drizzle-orm/neon-serverless';
 import { eq, sql } from 'drizzle-orm';
+import * as schema from '../shared/schema.js';
+import ws from 'ws';
+
+// Configure Neon to use WebSocket
+neonConfig.webSocketConstructor = ws;
+
+// Setup database connection
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const db = drizzle(pool, { schema });
 
 async function main() {
   try {
