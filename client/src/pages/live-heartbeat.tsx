@@ -786,6 +786,20 @@ export default function LiveHeartbeat() {
                                   Score: {event.homeScore} - {event.awayScore}
                                 </div>
                               )}
+                              
+                              {/* Display uptime percentage if available */}
+                              {event.uptimePercentage !== undefined && (
+                                <div className="mt-1 text-xs flex items-center">
+                                  <span className="font-medium mr-1">Uptime:</span>
+                                  <span className={`font-semibold ${
+                                    event.uptimePercentage >= 80 ? 'text-green-600 dark:text-green-400' :
+                                    event.uptimePercentage >= 50 ? 'text-amber-600 dark:text-amber-400' :
+                                    'text-red-600 dark:text-red-400'
+                                  }`}>
+                                    {event.uptimePercentage.toFixed(1)}%
+                                  </span>
+                                </div>
+                              )}
                             </div>
                           </div>
                           <div className="flex items-center text-xs text-muted-foreground">
