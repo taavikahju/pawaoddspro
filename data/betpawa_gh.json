@@ -1,257 +1,5 @@
 [
   {
-    "id": "26967611",
-    "eventId": "59998987",
-    "country": "Belgium",
-    "tournament": "Pro League",
-    "event": "RWD Molenbeek 47 - KSC Lokeren-Temse",
-    "name": "RWD Molenbeek 47 - KSC Lokeren-Temse",
-    "home_odds": 1.57,
-    "draw_odds": 4.2,
-    "away_odds": 5.5,
-    "start_time": "2025-04-27T17:15:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 1.57
-          },
-          {
-            "name": "X",
-            "price": 4.2
-          },
-          {
-            "name": "2",
-            "price": 5.5
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "Belgium"
-    },
-    "region": {
-      "name": "Belgium"
-    },
-    "competition": {
-      "name": "Pro League"
-    },
-    "league": {
-      "name": "Pro League"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
-    "id": "26967612",
-    "eventId": "59998993",
-    "country": "Belgium",
-    "tournament": "Pro League",
-    "event": "SK Beveren - Patro Eisden Maasmechelen",
-    "name": "SK Beveren - Patro Eisden Maasmechelen",
-    "home_odds": 2.14,
-    "draw_odds": 3.45,
-    "away_odds": 3.3,
-    "start_time": "2025-04-27T17:15:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 2.14
-          },
-          {
-            "name": "X",
-            "price": 3.45
-          },
-          {
-            "name": "2",
-            "price": 3.3
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "Belgium"
-    },
-    "region": {
-      "name": "Belgium"
-    },
-    "competition": {
-      "name": "Pro League"
-    },
-    "league": {
-      "name": "Pro League"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
-    "id": "26390246",
-    "eventId": "56677277",
-    "country": "Norway",
-    "tournament": "Eliteserien",
-    "event": "Viking FK - Tromsoe IL",
-    "name": "Viking FK - Tromsoe IL",
-    "home_odds": 1.73,
-    "draw_odds": 4.1,
-    "away_odds": 4.2,
-    "start_time": "2025-04-27T17:15:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 1.73
-          },
-          {
-            "name": "X",
-            "price": 4.1
-          },
-          {
-            "name": "2",
-            "price": 4.2
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "Norway"
-    },
-    "region": {
-      "name": "Norway"
-    },
-    "competition": {
-      "name": "Eliteserien"
-    },
-    "league": {
-      "name": "Eliteserien"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
-    "id": "26918412",
-    "eventId": "58838341",
-    "country": "Israel",
-    "tournament": "Premier League",
-    "event": "Maccabi Netanya FC - Hapoel Be`er Sheva FC",
-    "name": "Maccabi Netanya FC - Hapoel Be`er Sheva FC",
-    "home_odds": 6,
-    "draw_odds": 4.5,
-    "away_odds": 1.44,
-    "start_time": "2025-04-27T17:15:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 6
-          },
-          {
-            "name": "X",
-            "price": 4.5
-          },
-          {
-            "name": "2",
-            "price": 1.44
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "Israel"
-    },
-    "region": {
-      "name": "Israel"
-    },
-    "competition": {
-      "name": "Premier League"
-    },
-    "league": {
-      "name": "Premier League"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
     "id": "27050633",
     "eventId": "53064051",
     "country": "Spain",
@@ -510,9 +258,9 @@
     "tournament": "II Liga",
     "event": "GKS Jastrzebie - Zaglebie Sosnowiec",
     "name": "GKS Jastrzebie - Zaglebie Sosnowiec",
-    "home_odds": 2.3,
-    "draw_odds": 3.3,
-    "away_odds": 2.75,
+    "home_odds": 2.35,
+    "draw_odds": 3.25,
+    "away_odds": 2.7,
     "start_time": "2025-04-27T17:30:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -533,15 +281,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.3
+            "price": 2.35
           },
           {
             "name": "X",
-            "price": 3.3
+            "price": 3.25
           },
           {
             "name": "2",
-            "price": 2.75
+            "price": 2.7
           }
         ]
       }
@@ -636,9 +384,9 @@
     "tournament": "Superliga",
     "event": "FK Partizan Belgrade - FK Radnicki 1923 Kragujevac",
     "name": "FK Partizan Belgrade - FK Radnicki 1923 Kragujevac",
-    "home_odds": 1.81,
-    "draw_odds": 3.65,
-    "away_odds": 3.6,
+    "home_odds": 1.79,
+    "draw_odds": 3.7,
+    "away_odds": 3.65,
     "start_time": "2025-04-27T17:30:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -659,15 +407,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.81
+            "price": 1.79
           },
           {
             "name": "X",
-            "price": 3.65
+            "price": 3.7
           },
           {
             "name": "2",
-            "price": 3.6
+            "price": 3.65
           }
         ]
       }
@@ -2589,9 +2337,9 @@
     "tournament": "Ligue 1",
     "event": "Olympique Marseille - Stade Brest 29",
     "name": "Olympique Marseille - Stade Brest 29",
-    "home_odds": 1.42,
-    "draw_odds": 5.5,
-    "away_odds": 7,
+    "home_odds": 1.41,
+    "draw_odds": 5.75,
+    "away_odds": 7.25,
     "start_time": "2025-04-27T18:45:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -2612,15 +2360,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.42
+            "price": 1.41
           },
           {
             "name": "X",
-            "price": 5.5
+            "price": 5.75
           },
           {
             "name": "2",
-            "price": 7
+            "price": 7.25
           }
         ]
       }
@@ -2715,9 +2463,9 @@
     "tournament": "Serie A",
     "event": "Atalanta BC - US Lecce",
     "name": "Atalanta BC - US Lecce",
-    "home_odds": 1.35,
-    "draw_odds": 6,
-    "away_odds": 8.75,
+    "home_odds": 1.37,
+    "draw_odds": 5.75,
+    "away_odds": 8.5,
     "start_time": "2025-04-27T18:45:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -2738,15 +2486,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.35
+            "price": 1.37
           },
           {
             "name": "X",
-            "price": 6
+            "price": 5.75
           },
           {
             "name": "2",
-            "price": 8.75
+            "price": 8.5
           }
         ]
       }
@@ -3219,9 +2967,9 @@
     "tournament": "Campeonato Brasileiro, Women",
     "event": "3B Sport AM - Real Brasilia FC DF",
     "name": "3B Sport AM - Real Brasilia FC DF",
-    "home_odds": 3.95,
-    "draw_odds": 4.1,
-    "away_odds": 1.65,
+    "home_odds": 3.5,
+    "draw_odds": 4.2,
+    "away_odds": 1.73,
     "start_time": "2025-04-27T19:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -3242,15 +2990,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 3.95
+            "price": 3.5
           },
           {
             "name": "X",
-            "price": 4.1
+            "price": 4.2
           },
           {
             "name": "2",
-            "price": 1.65
+            "price": 1.73
           }
         ]
       }
@@ -3597,9 +3345,9 @@
     "tournament": "Brasileiro Serie A2, Women",
     "event": "Minas Brasilia DF - CR Vasco da Gama RJ",
     "name": "Minas Brasilia DF - CR Vasco da Gama RJ",
-    "home_odds": 3.1,
-    "draw_odds": 3.4,
-    "away_odds": 2.06,
+    "home_odds": 2.85,
+    "draw_odds": 3.35,
+    "away_odds": 2.21,
     "start_time": "2025-04-27T19:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -3620,15 +3368,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 3.1
+            "price": 2.85
           },
           {
             "name": "X",
-            "price": 3.4
+            "price": 3.35
           },
           {
             "name": "2",
-            "price": 2.06
+            "price": 2.21
           }
         ]
       }
@@ -15252,9 +15000,9 @@
     "tournament": "Eerste Divisie",
     "event": "Jong PSV Eindhoven YOUTH - FC Eindhoven",
     "name": "Jong PSV Eindhoven YOUTH - FC Eindhoven",
-    "home_odds": 2.17,
-    "draw_odds": 3.7,
-    "away_odds": 2.85,
+    "home_odds": 2.13,
+    "draw_odds": 3.75,
+    "away_odds": 2.9,
     "start_time": "2025-04-28T18:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -15275,15 +15023,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.17
+            "price": 2.13
           },
           {
             "name": "X",
-            "price": 3.7
+            "price": 3.75
           },
           {
             "name": "2",
-            "price": 2.85
+            "price": 2.9
           }
         ]
       }
@@ -37046,6 +36794,69 @@
     }
   },
   {
+    "id": "26689225",
+    "eventId": "50603399",
+    "country": "Croatia",
+    "tournament": "HNL",
+    "event": "HNK Hajduk Split - GNK Dinamo Zagreb",
+    "name": "HNK Hajduk Split - GNK Dinamo Zagreb",
+    "home_odds": 2.7,
+    "draw_odds": 3.05,
+    "away_odds": 2.55,
+    "start_time": "2025-05-03T14:00:00Z",
+    "gameMinute": "",
+    "sport": "football",
+    "competitors": [
+      {
+        "name": ""
+      },
+      {
+        "name": ""
+      }
+    ],
+    "markets": [
+      {
+        "marketType": {
+          "id": "3743",
+          "name": "1X2"
+        },
+        "prices": [
+          {
+            "name": "1",
+            "price": 2.7
+          },
+          {
+            "name": "X",
+            "price": 3.05
+          },
+          {
+            "name": "2",
+            "price": 2.55
+          }
+        ]
+      }
+    ],
+    "category": {
+      "name": "Croatia"
+    },
+    "region": {
+      "name": "Croatia"
+    },
+    "competition": {
+      "name": "HNL"
+    },
+    "league": {
+      "name": "HNL"
+    },
+    "isInPlay": false,
+    "status": "UPCOMING",
+    "scoreboard": {
+      "display": {
+        "minute": ""
+      }
+    }
+  },
+  {
     "id": "26970348",
     "eventId": "51099891",
     "country": "England",
@@ -49778,9 +49589,9 @@
     "tournament": "Ligue 1",
     "event": "Olympique Lyon - RC Lens",
     "name": "Olympique Lyon - RC Lens",
-    "home_odds": 1.77,
+    "home_odds": 1.76,
     "draw_odds": 4.1,
-    "away_odds": 4.1,
+    "away_odds": 4.2,
     "start_time": "2025-05-04T15:15:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -49801,7 +49612,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.77
+            "price": 1.76
           },
           {
             "name": "X",
@@ -49809,7 +49620,7 @@
           },
           {
             "name": "2",
-            "price": 4.1
+            "price": 4.2
           }
         ]
       }
