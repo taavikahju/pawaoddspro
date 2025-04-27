@@ -739,21 +739,20 @@ export default function LiveHeartbeat() {
                             setSelectedEventId(event.id);
                           }}
                         >
-                          {/* Uptime percentage in absolute top right position */}
-                          {event.uptimePercentage !== undefined && (
-                            <div className="absolute top-2 right-2">
-                              <Badge className={`text-xs font-semibold ${
-                                event.uptimePercentage >= 80 ? 'bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/30 dark:text-green-400 dark:hover:bg-green-900/30' :
-                                event.uptimePercentage >= 50 ? 'bg-amber-100 text-amber-800 hover:bg-amber-100 dark:bg-amber-900/30 dark:text-amber-400 dark:hover:bg-amber-900/30' :
-                                'bg-red-100 text-red-800 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/30'
-                              }`}>
-                                {event.uptimePercentage.toFixed(1)}%
-                              </Badge>
-                            </div>
-                          )}
+                          {/* Moved uptime percentage to be part of the header */}
                           
                           <div className="flex flex-col mb-1">
                             <div className="flex items-center justify-between mb-1">
+                              {/* Add uptime percentage to the right */}
+                              {event.uptimePercentage !== undefined && (
+                                <Badge className={`text-xs font-semibold ml-auto ${
+                                  event.uptimePercentage >= 80 ? 'bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/30 dark:text-green-400 dark:hover:bg-green-900/30' :
+                                  event.uptimePercentage >= 50 ? 'bg-amber-100 text-amber-800 hover:bg-amber-100 dark:bg-amber-900/30 dark:text-amber-400 dark:hover:bg-amber-900/30' :
+                                  'bg-red-100 text-red-800 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/30'
+                                }`}>
+                                  {event.uptimePercentage.toFixed(1)}%
+                                </Badge>
+                              )}
                               
                               <div className="flex items-center gap-1.5">
                                 {event.isInPlay && (
