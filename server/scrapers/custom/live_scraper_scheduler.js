@@ -29,16 +29,16 @@ function startLiveScraper(apiUrl) {
     console.log('Live scraper is already running');
     return;
   }
-  
+
   console.log('Starting BetPawa Ghana live scraper...');
   liveScraperEvents.emit(LIVE_SCRAPER_EVENTS.STARTED, {
     timestamp: new Date().toISOString(),
     message: 'Live scraper started with 10-second interval'
   });
-  
+
   // Run first scrape immediately
   runLiveScrape(apiUrl);
-  
+
   // Set up interval to run every 10 seconds
   liveScrapeInterval = setInterval(() => {
     runLiveScrape(apiUrl);
@@ -69,17 +69,17 @@ async function runLiveScrape(apiUrl) {
     console.log('Previous live scrape still running, skipping this run');
     return;
   }
-  
+
   isLiveScraping = true;
-  
+
   try {
     const events = await bpGhLiveScraper.scrapeLiveEvents(apiUrl);
-    
+
     // Check for market status changes
     checkForMarketChanges(events);
-    
+
     isLiveScraping = false;
-    
+
     liveScraperEvents.emit(LIVE_SCRAPER_EVENTS.COMPLETED, {
       timestamp: new Date().toISOString(),
       message: `Live scrape completed, fetched ${events.length} events`
@@ -87,7 +87,7 @@ async function runLiveScrape(apiUrl) {
   } catch (error) {
     isLiveScraping = false;
     console.error('Error running live scrape:', error.message);
-    
+
     liveScraperEvents.emit(LIVE_SCRAPER_EVENTS.ERROR, {
       timestamp: new Date().toISOString(),
       message: `Live scrape error: ${error.message}`
@@ -102,7 +102,7 @@ function checkForMarketChanges(events) {
   events.forEach(event => {
     const eventId = event.id;
     const previousStatus = previousMarketStatus[eventId];
-    
+
     // If we have a previous status and it's different from current, emit change event
     if (previousStatus !== undefined && previousStatus !== event.market1X2Available) {
       liveScraperEvents.emit(LIVE_SCRAPER_EVENTS.MARKET_CHANGE, {
@@ -114,7 +114,7 @@ function checkForMarketChanges(events) {
         message: `Market status changed for ${event.name}: ${previousStatus ? 'Available' : 'Suspended'} → ${event.market1X2Available ? 'Available' : 'Suspended'}`
       });
     }
-    
+
     // Update previous status
     previousMarketStatus[eventId] = event.market1X2Available;
   });
