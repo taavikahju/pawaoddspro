@@ -6,6 +6,7 @@ const { execSync } = require('child_process');
 const SAMPLE_DATA_PATH = path.join(__dirname, 'sporty_sample_data.json');
 // List of all scrapers to try - will attempt each one in order until success
 const SCRAPERS = [
+  { name: 'SportyBet Axios', path: 'sporty_axios_scraper.cjs' },
   { name: 'SportyBet Better', path: 'sporty_better_scraper.cjs' },
   { name: 'SportyBet New', path: 'sporty_new_scraper.cjs' },
   { name: 'SportyBet Original', path: 'sporty_scraper.cjs' },
@@ -19,8 +20,10 @@ function runSportyScrapers() {
   for (const scraper of SCRAPERS) {
     try {
       console.error(`🔄 Trying ${scraper.name} scraper...`);
+      // For the axios scraper, increase the timeout to 45 seconds
+      const timeout = scraper.name === 'SportyBet Axios' ? 45000 : 30000;
       const result = execSync('node ' + path.join(__dirname, scraper.path), { 
-        timeout: 30000 
+        timeout: timeout
       }).toString();
       
       try {
