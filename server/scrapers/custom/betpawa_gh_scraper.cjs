@@ -86,12 +86,12 @@ async function scrapeBetPawaGhana() {
   try {
     // Parameters
     const allEvents = [];
-    const take = 20;
+    const take = 60; // Increased from 20 to 60 for more efficient pagination
     let skip = 0;
     let totalPages = 0;
     
     // We need to scrape UPCOMING matches for the 15-minute scraper (not live ones)
-    while (totalPages < 50) { // Increased from 15 to 50 pages to collect all events
+    while (totalPages < 20) { // Reduced max pages since we fetch more per page now (60 instead of 20)
       logger.log(`Fetching upcoming events with skip=${skip}`);
       
       // Build query parameter - specifically for UPCOMING events with football (category 2)

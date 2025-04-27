@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 const BASE_URL = 'https://www.sportybet.com/api/gh/factsCenter/pcUpcomingEvents';
-const QUERY = 'sportId=sr%3Asport%3A1&marketId=1%2C18%2C10%2C29%2C11%2C26%2C36%2C14%2C60100&pageSize=100&option=1';
+const QUERY = 'sportId=sr%3Asport%3A1&marketId=1%2C18%2C10%2C29%2C11%2C26%2C36%2C14%2C60100&pageSize=200&option=1';
 const HEADERS = {
   'User-Agent': 'Mozilla/5.0',
   'Accept': 'application/json'
