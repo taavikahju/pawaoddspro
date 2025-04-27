@@ -211,7 +211,7 @@ export default function ScraperStatusPage() {
       <div className="mb-8">
         <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
           <Clock className="h-4 w-4 mr-2 text-primary" />
-          BetPawa Ghana Live Scraper (10-second intervals)
+          Live Market Tracker
         </h3>
         <LiveScraperPanel isAdmin={isAdmin} />
       </div>

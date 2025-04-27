@@ -148,10 +148,10 @@ export default function LiveScraperPanel({ isAdmin }: LiveScraperPanelProps) {
           <div>
             <CardTitle className="flex items-center text-lg">
               <Activity className="h-5 w-5 mr-2 text-primary" />
-              BetPawa Ghana Live Market Tracker
+              Live Market Tracker
             </CardTitle>
             <CardDescription>
-              Monitors market availability during live events every 10 seconds
+              Monitors market availability during live events in real-time
             </CardDescription>
           </div>
           <Badge 
@@ -180,7 +180,7 @@ export default function LiveScraperPanel({ isAdmin }: LiveScraperPanelProps) {
             
             <div className="flex flex-col sm:flex-row gap-2">
               <Input
-                placeholder="Enter BetPawa Ghana API URL"
+                placeholder="Enter API URL for market tracking"
                 value={apiUrl}
                 onChange={(e) => setApiUrl(e.target.value)}
                 className="flex-1"
@@ -368,7 +368,7 @@ export default function LiveScraperPanel({ isAdmin }: LiveScraperPanelProps) {
       <CardFooter className="border-t bg-slate-50 dark:bg-slate-900/40 py-2 px-4 text-xs text-muted-foreground">
         <div className="flex items-center justify-between w-full">
           <span>
-            {status?.isRunning ? 'Updated every 10 seconds' : 'Scraper stopped'}
+            {status?.isRunning ? 'Updated in real-time' : 'Scraper stopped'}
           </span>
           <span className="flex items-center">
             <Clock className="h-3 w-3 mr-1" />
