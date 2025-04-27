@@ -315,9 +315,9 @@
     "date": "2025-05-04",
     "time": "15:30",
     "odds": {
-      "home": 2.22,
-      "draw": 3.64,
-      "away": 3.08
+      "home": 2.17,
+      "draw": 3.69,
+      "away": 3.15
     },
     "raw": {
       "id": "sporty-sr:match:50850663",
@@ -327,15 +327,15 @@
       "tournament": "Premier League",
       "sport": "football",
       "start_time": "2025-05-04 15:30",
-      "home_odds": 2.22,
-      "draw_odds": 3.64,
-      "away_odds": 3.08,
+      "home_odds": 2.17,
+      "draw_odds": 3.69,
+      "away_odds": 3.15,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 2.22,
-        "draw": 3.64,
-        "away": 3.08
+        "home": 2.17,
+        "draw": 3.69,
+        "away": 3.15
       }
     }
   },
@@ -349,9 +349,9 @@
     "date": "2025-05-05",
     "time": "19:00",
     "odds": {
-      "home": 2.44,
+      "home": 2.42,
       "draw": 3.37,
-      "away": 2.91
+      "away": 2.93
     },
     "raw": {
       "id": "sporty-sr:match:50850665",
@@ -361,15 +361,15 @@
       "tournament": "Premier League",
       "sport": "football",
       "start_time": "2025-05-05 19:00",
-      "home_odds": 2.44,
+      "home_odds": 2.42,
       "draw_odds": 3.37,
-      "away_odds": 2.91,
+      "away_odds": 2.93,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 2.44,
+        "home": 2.42,
         "draw": 3.37,
-        "away": 2.91
+        "away": 2.93
       }
     }
   },
@@ -1845,9 +1845,9 @@
     "date": "2025-04-27",
     "time": "18:45",
     "odds": {
-      "home": 1.38,
-      "draw": 5.52,
-      "away": 8.84
+      "home": 1.32,
+      "draw": 6,
+      "away": 10.25
     },
     "raw": {
       "id": "sporty-sr:match:51273471",
@@ -1857,15 +1857,15 @@
       "tournament": "Serie A",
       "sport": "football",
       "start_time": "2025-04-27 18:45",
-      "home_odds": 1.38,
-      "draw_odds": 5.52,
-      "away_odds": 8.84,
+      "home_odds": 1.32,
+      "draw_odds": 6,
+      "away_odds": 10.25,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 1.38,
-        "draw": 5.52,
-        "away": 8.84
+        "home": 1.32,
+        "draw": 6,
+        "away": 10.25
       }
     }
   },
@@ -1879,9 +1879,9 @@
     "date": "2025-04-27",
     "time": "18:45",
     "odds": {
-      "home": 1.44,
-      "draw": 4.88,
-      "away": 8.42
+      "home": 1.43,
+      "draw": 4.9,
+      "away": 8.48
     },
     "raw": {
       "id": "sporty-sr:match:51273485",
@@ -1891,15 +1891,15 @@
       "tournament": "Serie A",
       "sport": "football",
       "start_time": "2025-04-27 18:45",
-      "home_odds": 1.44,
-      "draw_odds": 4.88,
-      "away_odds": 8.42,
+      "home_odds": 1.43,
+      "draw_odds": 4.9,
+      "away_odds": 8.48,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 1.44,
-        "draw": 4.88,
-        "away": 8.42
+        "home": 1.43,
+        "draw": 4.9,
+        "away": 8.48
       }
     }
   },
@@ -2423,9 +2423,9 @@
     "date": "2025-04-27",
     "time": "18:45",
     "odds": {
-      "home": 1.41,
-      "draw": 5.62,
-      "away": 7.47
+      "home": 1.4,
+      "draw": 5.72,
+      "away": 7.67
     },
     "raw": {
       "id": "sporty-sr:match:50955899",
@@ -2435,15 +2435,15 @@
       "tournament": "Ligue 1",
       "sport": "football",
       "start_time": "2025-04-27 18:45",
-      "home_odds": 1.41,
-      "draw_odds": 5.62,
-      "away_odds": 7.47,
+      "home_odds": 1.4,
+      "draw_odds": 5.72,
+      "away_odds": 7.67,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 1.41,
-        "draw": 5.62,
-        "away": 7.47
+        "home": 1.4,
+        "draw": 5.72,
+        "away": 7.67
       }
     }
   },
@@ -3546,7 +3546,7 @@
     "time": "16:00",
     "odds": {
       "home": 1.39,
-      "draw": 5.33,
+      "draw": 5.29,
       "away": 6.96
     },
     "raw": {
@@ -3558,13 +3558,13 @@
       "sport": "football",
       "start_time": "2025-04-30 16:00",
       "home_odds": 1.39,
-      "draw_odds": 5.33,
+      "draw_odds": 5.29,
       "away_odds": 6.96,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
         "home": 1.39,
-        "draw": 5.33,
+        "draw": 5.29,
         "away": 6.96
       }
     }
@@ -3668,6 +3668,40 @@
         "home": 2.66,
         "draw": 3.76,
         "away": 2.39
+      }
+    }
+  },
+  {
+    "id": "56677289",
+    "eventId": "56677289",
+    "teams": "Tromsoe IL - Sandefjord Fotball",
+    "league": "",
+    "sport": "football",
+    "country": "Ghana",
+    "date": "2025-05-04",
+    "time": "15:00",
+    "odds": {
+      "home": 1.91,
+      "draw": 3.85,
+      "away": 3.63
+    },
+    "raw": {
+      "id": "sporty-sr:match:56677289",
+      "eventId": "56677289",
+      "event": "Tromsoe IL - Sandefjord Fotball",
+      "country": "Ghana",
+      "tournament": "",
+      "sport": "football",
+      "start_time": "2025-05-04 15:00",
+      "home_odds": 1.91,
+      "draw_odds": 3.85,
+      "away_odds": 3.63,
+      "bookmaker": "sporty",
+      "region": "gh",
+      "odds": {
+        "home": 1.91,
+        "draw": 3.85,
+        "away": 3.63
       }
     }
   },
@@ -6052,40 +6086,6 @@
     }
   },
   {
-    "id": "59879194",
-    "eventId": "59879194",
-    "teams": "Egypt - South Africa",
-    "league": "",
-    "sport": "football",
-    "country": "Ghana",
-    "date": "2025-04-27",
-    "time": "18:00",
-    "odds": {
-      "home": 2.15,
-      "draw": 3,
-      "away": 3.4
-    },
-    "raw": {
-      "id": "sporty-sr:match:59879194",
-      "eventId": "59879194",
-      "event": "Egypt - South Africa",
-      "country": "Ghana",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 18:00",
-      "home_odds": 2.15,
-      "draw_odds": 3,
-      "away_odds": 3.4,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 2.15,
-        "draw": 3,
-        "away": 3.4
-      }
-    }
-  },
-  {
     "id": "57436677",
     "eventId": "57436677",
     "teams": "FC Tokyo - Shimizu S-Pulse",
@@ -6436,8 +6436,8 @@
     "time": "16:00",
     "odds": {
       "home": 1.15,
-      "draw": 8.09,
-      "away": 15.71
+      "draw": 8.11,
+      "away": 15.13
     },
     "raw": {
       "id": "sporty-sr:match:51472401",
@@ -6448,14 +6448,14 @@
       "sport": "football",
       "start_time": "2025-05-03 16:00",
       "home_odds": 1.15,
-      "draw_odds": 8.09,
-      "away_odds": 15.71,
+      "draw_odds": 8.11,
+      "away_odds": 15.13,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
         "home": 1.15,
-        "draw": 8.09,
-        "away": 15.71
+        "draw": 8.11,
+        "away": 15.13
       }
     }
   },
@@ -6605,9 +6605,9 @@
     "date": "2025-05-03",
     "time": "14:00",
     "odds": {
-      "home": 1.46,
-      "draw": 4.4,
-      "away": 6.4
+      "home": 1.56,
+      "draw": 4.1,
+      "away": 5.4
     },
     "raw": {
       "id": "sporty-sr:match:60000953",
@@ -6617,15 +6617,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-05-03 14:00",
-      "home_odds": 1.46,
-      "draw_odds": 4.4,
-      "away_odds": 6.4,
+      "home_odds": 1.56,
+      "draw_odds": 4.1,
+      "away_odds": 5.4,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 1.46,
-        "draw": 4.4,
-        "away": 6.4
+        "home": 1.56,
+        "draw": 4.1,
+        "away": 5.4
       }
     }
   },
@@ -7047,9 +7047,9 @@
     "date": "2025-04-29",
     "time": "17:00",
     "odds": {
-      "home": 1.29,
-      "draw": 5.7,
-      "away": 10
+      "home": 1.3,
+      "draw": 5.6,
+      "away": 9.6
     },
     "raw": {
       "id": "sporty-sr:match:56523505",
@@ -7059,15 +7059,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-04-29 17:00",
-      "home_odds": 1.29,
-      "draw_odds": 5.7,
-      "away_odds": 10,
+      "home_odds": 1.3,
+      "draw_odds": 5.6,
+      "away_odds": 9.6,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 1.29,
-        "draw": 5.7,
-        "away": 10
+        "home": 1.3,
+        "draw": 5.6,
+        "away": 9.6
       }
     }
   },
@@ -7285,9 +7285,9 @@
     "date": "2025-04-27",
     "time": "21:30",
     "odds": {
-      "home": 2.2,
-      "draw": 3.2,
-      "away": 3.5
+      "home": 2.25,
+      "draw": 3.1,
+      "away": 3.4
     },
     "raw": {
       "id": "sporty-sr:match:58052505",
@@ -7297,15 +7297,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-04-27 21:30",
-      "home_odds": 2.2,
-      "draw_odds": 3.2,
-      "away_odds": 3.5,
+      "home_odds": 2.25,
+      "draw_odds": 3.1,
+      "away_odds": 3.4,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 2.2,
-        "draw": 3.2,
-        "away": 3.5
+        "home": 2.25,
+        "draw": 3.1,
+        "away": 3.4
       }
     }
   },
@@ -8203,9 +8203,9 @@
     "date": "2025-05-01",
     "time": "11:00",
     "odds": {
-      "home": 1.68,
+      "home": 1.71,
       "draw": 4.1,
-      "away": 4.5
+      "away": 4.4
     },
     "raw": {
       "id": "sporty-sr:match:57605175",
@@ -8215,15 +8215,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-05-01 11:00",
-      "home_odds": 1.68,
+      "home_odds": 1.71,
       "draw_odds": 4.1,
-      "away_odds": 4.5,
+      "away_odds": 4.4,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 1.68,
+        "home": 1.71,
         "draw": 4.1,
-        "away": 4.5
+        "away": 4.4
       }
     }
   },
@@ -10073,9 +10073,9 @@
     "date": "2025-04-27",
     "time": "18:30",
     "odds": {
-      "home": 1.89,
+      "home": 1.88,
       "draw": 3,
-      "away": 4.1
+      "away": 4.3
     },
     "raw": {
       "id": "sporty-sr:match:56743145",
@@ -10085,15 +10085,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-04-27 18:30",
-      "home_odds": 1.89,
+      "home_odds": 1.88,
       "draw_odds": 3,
-      "away_odds": 4.1,
+      "away_odds": 4.3,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 1.89,
+        "home": 1.88,
         "draw": 3,
-        "away": 4.1
+        "away": 4.3
       }
     }
   },
@@ -10549,9 +10549,9 @@
     "date": "2025-05-01",
     "time": "14:00",
     "odds": {
-      "home": 1.31,
-      "draw": 5.89,
-      "away": 8.36
+      "home": 1.3,
+      "draw": 5.84,
+      "away": 8.95
     },
     "raw": {
       "id": "sporty-sr:match:59017041",
@@ -10561,15 +10561,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-05-01 14:00",
-      "home_odds": 1.31,
-      "draw_odds": 5.89,
-      "away_odds": 8.36,
+      "home_odds": 1.3,
+      "draw_odds": 5.84,
+      "away_odds": 8.95,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 1.31,
-        "draw": 5.89,
-        "away": 8.36
+        "home": 1.3,
+        "draw": 5.84,
+        "away": 8.95
       }
     }
   },
@@ -11127,9 +11127,9 @@
     "date": "2025-05-04",
     "time": "16:00",
     "odds": {
-      "home": 2.05,
-      "draw": 3.6,
-      "away": 3.4
+      "home": 1.98,
+      "draw": 3.7,
+      "away": 3.5
     },
     "raw": {
       "id": "sporty-sr:match:59082453",
@@ -11139,15 +11139,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-05-04 16:00",
-      "home_odds": 2.05,
-      "draw_odds": 3.6,
-      "away_odds": 3.4,
+      "home_odds": 1.98,
+      "draw_odds": 3.7,
+      "away_odds": 3.5,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 2.05,
-        "draw": 3.6,
-        "away": 3.4
+        "home": 1.98,
+        "draw": 3.7,
+        "away": 3.5
       }
     }
   },
@@ -13745,9 +13745,9 @@
     "date": "2025-04-27",
     "time": "19:00",
     "odds": {
-      "home": 1.34,
-      "draw": 4.6,
-      "away": 9.2
+      "home": 1.33,
+      "draw": 4.7,
+      "away": 9.75
     },
     "raw": {
       "id": "sporty-sr:match:57310891",
@@ -13757,15 +13757,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-04-27 19:00",
-      "home_odds": 1.34,
-      "draw_odds": 4.6,
-      "away_odds": 9.2,
+      "home_odds": 1.33,
+      "draw_odds": 4.7,
+      "away_odds": 9.75,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 1.34,
-        "draw": 4.6,
-        "away": 9.2
+        "home": 1.33,
+        "draw": 4.7,
+        "away": 9.75
       }
     }
   },
@@ -13813,9 +13813,9 @@
     "date": "2025-04-27",
     "time": "23:20",
     "odds": {
-      "home": 1.86,
+      "home": 1.83,
       "draw": 3.33,
-      "away": 4.3
+      "away": 4.4
     },
     "raw": {
       "id": "sporty-sr:match:57310893",
@@ -13825,15 +13825,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-04-27 23:20",
-      "home_odds": 1.86,
+      "home_odds": 1.83,
       "draw_odds": 3.33,
-      "away_odds": 4.3,
+      "away_odds": 4.4,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 1.86,
+        "home": 1.83,
         "draw": 3.33,
-        "away": 4.3
+        "away": 4.4
       }
     }
   },
@@ -13983,9 +13983,9 @@
     "date": "2025-04-27",
     "time": "21:30",
     "odds": {
-      "home": 2.45,
+      "home": 2.35,
       "draw": 3.4,
-      "away": 2.75
+      "away": 2.85
     },
     "raw": {
       "id": "sporty-sr:match:57380249",
@@ -13995,15 +13995,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-04-27 21:30",
-      "home_odds": 2.45,
+      "home_odds": 2.35,
       "draw_odds": 3.4,
-      "away_odds": 2.75,
+      "away_odds": 2.85,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 2.45,
+        "home": 2.35,
         "draw": 3.4,
-        "away": 2.75
+        "away": 2.85
       }
     }
   },
@@ -14960,40 +14960,6 @@
     }
   },
   {
-    "id": "58787777",
-    "eventId": "58787777",
-    "teams": "Rapid Bucuresti 1923 - Fotbal Club FCSB",
-    "league": "",
-    "sport": "football",
-    "country": "Ghana",
-    "date": "2025-04-27",
-    "time": "18:00",
-    "odds": {
-      "home": 3.7,
-      "draw": 3.5,
-      "away": 1.99
-    },
-    "raw": {
-      "id": "sporty-sr:match:58787777",
-      "eventId": "58787777",
-      "event": "Rapid Bucuresti 1923 - Fotbal Club FCSB",
-      "country": "Ghana",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 18:00",
-      "home_odds": 3.7,
-      "draw_odds": 3.5,
-      "away_odds": 1.99,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 3.7,
-        "draw": 3.5,
-        "away": 1.99
-      }
-    }
-  },
-  {
     "id": "58818243",
     "eventId": "58818243",
     "teams": "FC Petrolul Ploiesti - FC Farul Constanta",
@@ -15242,7 +15208,7 @@
     "time": "17:45",
     "odds": {
       "home": 2.25,
-      "draw": 2.9,
+      "draw": 2.95,
       "away": 3.25
     },
     "raw": {
@@ -15254,13 +15220,13 @@
       "sport": "football",
       "start_time": "2025-05-04 17:45",
       "home_odds": 2.25,
-      "draw_odds": 2.9,
+      "draw_odds": 2.95,
       "away_odds": 3.25,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
         "home": 2.25,
-        "draw": 2.9,
+        "draw": 2.95,
         "away": 3.25
       }
     }
@@ -15547,9 +15513,9 @@
     "date": "2025-05-02",
     "time": "18:15",
     "odds": {
-      "home": 2.2,
+      "home": 2.05,
       "draw": 3.4,
-      "away": 3
+      "away": 3.4
     },
     "raw": {
       "id": "sporty-sr:match:56617045",
@@ -15559,15 +15525,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-05-02 18:15",
-      "home_odds": 2.2,
+      "home_odds": 2.05,
       "draw_odds": 3.4,
-      "away_odds": 3,
+      "away_odds": 3.4,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 2.2,
+        "home": 2.05,
         "draw": 3.4,
-        "away": 3
+        "away": 3.4
       }
     }
   },
@@ -16014,6 +15980,40 @@
     }
   },
   {
+    "id": "59009373",
+    "eventId": "59009373",
+    "teams": "CD Once Caldas - Union Espanola",
+    "league": "",
+    "sport": "football",
+    "country": "Ghana",
+    "date": "2025-05-08",
+    "time": "02:00",
+    "odds": {
+      "home": 1.89,
+      "draw": 3.2,
+      "away": 4.2
+    },
+    "raw": {
+      "id": "sporty-sr:match:59009373",
+      "eventId": "59009373",
+      "event": "CD Once Caldas - Union Espanola",
+      "country": "Ghana",
+      "tournament": "",
+      "sport": "football",
+      "start_time": "2025-05-08 02:00",
+      "home_odds": 1.89,
+      "draw_odds": 3.2,
+      "away_odds": 4.2,
+      "bookmaker": "sporty",
+      "region": "gh",
+      "odds": {
+        "home": 1.89,
+        "draw": 3.2,
+        "away": 4.2
+      }
+    }
+  },
+  {
     "id": "59009315",
     "eventId": "59009315",
     "teams": "Deportes Iquique - Atletico Mineiro MG",
@@ -16112,40 +16112,6 @@
         "home": 3.2,
         "draw": 3.5,
         "away": 2.1
-      }
-    }
-  },
-  {
-    "id": "59009373",
-    "eventId": "59009373",
-    "teams": "CD Once Caldas - Union Espanola",
-    "league": "",
-    "sport": "football",
-    "country": "Ghana",
-    "date": "2025-05-09",
-    "time": "02:00",
-    "odds": {
-      "home": 1.89,
-      "draw": 3.2,
-      "away": 4.2
-    },
-    "raw": {
-      "id": "sporty-sr:match:59009373",
-      "eventId": "59009373",
-      "event": "CD Once Caldas - Union Espanola",
-      "country": "Ghana",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-05-09 02:00",
-      "home_odds": 1.89,
-      "draw_odds": 3.2,
-      "away_odds": 4.2,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 1.89,
-        "draw": 3.2,
-        "away": 4.2
       }
     }
   },
@@ -16431,9 +16397,9 @@
     "date": "2025-04-30",
     "time": "18:45",
     "odds": {
-      "home": 3.5,
+      "home": 3.6,
       "draw": 3.6,
-      "away": 2.05
+      "away": 1.98
     },
     "raw": {
       "id": "sporty-sr:match:59072413",
@@ -16443,15 +16409,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-04-30 18:45",
-      "home_odds": 3.5,
+      "home_odds": 3.6,
       "draw_odds": 3.6,
-      "away_odds": 2.05,
+      "away_odds": 1.98,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 3.5,
+        "home": 3.6,
         "draw": 3.6,
-        "away": 2.05
+        "away": 1.98
       }
     }
   },
@@ -18165,9 +18131,9 @@
     "date": "2025-05-03",
     "time": "14:00",
     "odds": {
-      "home": 2.8,
+      "home": 2.75,
       "draw": 3.33,
-      "away": 2.4
+      "away": 2.5
     },
     "raw": {
       "id": "sporty-sr:match:51099889",
@@ -18177,15 +18143,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-05-03 14:00",
-      "home_odds": 2.8,
+      "home_odds": 2.75,
       "draw_odds": 3.33,
-      "away_odds": 2.4,
+      "away_odds": 2.5,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 2.8,
+        "home": 2.75,
         "draw": 3.33,
-        "away": 2.4
+        "away": 2.5
       }
     }
   },
@@ -18322,74 +18288,6 @@
         "home": 1.75,
         "draw": 3.9,
         "away": 4.1
-      }
-    }
-  },
-  {
-    "id": "57822513",
-    "eventId": "57822513",
-    "teams": "Colorado Rapids 2 - Sporting Kansas City II",
-    "league": "",
-    "sport": "football",
-    "country": "Europe",
-    "date": "2025-04-27",
-    "time": "18:00",
-    "odds": {
-      "home": 1.41,
-      "draw": 5.1,
-      "away": 5.7
-    },
-    "raw": {
-      "id": "sporty-sr:match:57822513",
-      "eventId": "57822513",
-      "event": "Colorado Rapids 2 - Sporting Kansas City II",
-      "country": "Europe",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 18:00",
-      "home_odds": 1.41,
-      "draw_odds": 5.1,
-      "away_odds": 5.7,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 1.41,
-        "draw": 5.1,
-        "away": 5.7
-      }
-    }
-  },
-  {
-    "id": "57822503",
-    "eventId": "57822503",
-    "teams": "FC Cincinnati 2 - Atlanta United 2",
-    "league": "",
-    "sport": "football",
-    "country": "Europe",
-    "date": "2025-04-27",
-    "time": "18:00",
-    "odds": {
-      "home": 2,
-      "draw": 3.8,
-      "away": 3.2
-    },
-    "raw": {
-      "id": "sporty-sr:match:57822503",
-      "eventId": "57822503",
-      "event": "FC Cincinnati 2 - Atlanta United 2",
-      "country": "Europe",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 18:00",
-      "home_odds": 2,
-      "draw_odds": 3.8,
-      "away_odds": 3.2,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 2,
-        "draw": 3.8,
-        "away": 3.2
       }
     }
   },
@@ -19219,9 +19117,9 @@
     "date": "2025-05-03",
     "time": "22:00",
     "odds": {
-      "home": 3.5,
-      "draw": 3.7,
-      "away": 1.95
+      "home": 3.25,
+      "draw": 3.6,
+      "away": 2.1
     },
     "raw": {
       "id": "sporty-sr:match:59130667",
@@ -19231,15 +19129,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-05-03 22:00",
-      "home_odds": 3.5,
-      "draw_odds": 3.7,
-      "away_odds": 1.95,
+      "home_odds": 3.25,
+      "draw_odds": 3.6,
+      "away_odds": 2.1,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 3.5,
-        "draw": 3.7,
-        "away": 1.95
+        "home": 3.25,
+        "draw": 3.6,
+        "away": 2.1
       }
     }
   },
@@ -19389,9 +19287,9 @@
     "date": "2025-05-03",
     "time": "22:00",
     "odds": {
-      "home": 1.69,
+      "home": 1.75,
       "draw": 3.9,
-      "away": 4.4
+      "away": 4.2
     },
     "raw": {
       "id": "sporty-sr:match:59130519",
@@ -19401,15 +19299,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-05-03 22:00",
-      "home_odds": 1.69,
+      "home_odds": 1.75,
       "draw_odds": 3.9,
-      "away_odds": 4.4,
+      "away_odds": 4.2,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 1.69,
+        "home": 1.75,
         "draw": 3.9,
-        "away": 4.4
+        "away": 4.2
       }
     }
   },
@@ -20647,9 +20545,9 @@
     "date": "2025-04-27",
     "time": "18:15",
     "odds": {
-      "home": 3.6,
-      "draw": 3.33,
-      "away": 2
+      "home": 3.5,
+      "draw": 3.4,
+      "away": 2.05
     },
     "raw": {
       "id": "sporty-sr:match:59295981",
@@ -20659,15 +20557,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-04-27 18:15",
-      "home_odds": 3.6,
-      "draw_odds": 3.33,
-      "away_odds": 2,
+      "home_odds": 3.5,
+      "draw_odds": 3.4,
+      "away_odds": 2.05,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 3.6,
-        "draw": 3.33,
-        "away": 2
+        "home": 3.5,
+        "draw": 3.4,
+        "away": 2.05
       }
     }
   },
@@ -21293,9 +21191,9 @@
     "date": "2025-04-27",
     "time": "18:15",
     "odds": {
-      "home": 3.75,
+      "home": 3.9,
       "draw": 3.6,
-      "away": 1.91
+      "away": 1.87
     },
     "raw": {
       "id": "sporty-sr:match:59934209",
@@ -21305,15 +21203,15 @@
       "tournament": "Premier League",
       "sport": "football",
       "start_time": "2025-04-27 18:15",
-      "home_odds": 3.75,
+      "home_odds": 3.9,
       "draw_odds": 3.6,
-      "away_odds": 1.91,
+      "away_odds": 1.87,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 3.75,
+        "home": 3.9,
         "draw": 3.6,
-        "away": 1.91
+        "away": 1.87
       }
     }
   },
@@ -21416,40 +21314,6 @@
         "home": 2.6,
         "draw": 3,
         "away": 2.75
-      }
-    }
-  },
-  {
-    "id": "59694209",
-    "eventId": "59694209",
-    "teams": "FK Vojvodina Novi Sad - Backa Topola",
-    "league": "",
-    "sport": "football",
-    "country": "Ghana",
-    "date": "2025-04-27",
-    "time": "18:00",
-    "odds": {
-      "home": 1.93,
-      "draw": 3.6,
-      "away": 3.6
-    },
-    "raw": {
-      "id": "sporty-sr:match:59694209",
-      "eventId": "59694209",
-      "event": "FK Vojvodina Novi Sad - Backa Topola",
-      "country": "Ghana",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 18:00",
-      "home_odds": 1.93,
-      "draw_odds": 3.6,
-      "away_odds": 3.6,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 1.93,
-        "draw": 3.6,
-        "away": 3.6
       }
     }
   },
@@ -21599,9 +21463,9 @@
     "date": "2025-05-04",
     "time": "13:00",
     "odds": {
-      "home": 1.1,
-      "draw": 8.25,
-      "away": 19
+      "home": 1.08,
+      "draw": 8.8,
+      "away": 23
     },
     "raw": {
       "id": "sporty-sr:match:51857255",
@@ -21611,15 +21475,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-05-04 13:00",
-      "home_odds": 1.1,
-      "draw_odds": 8.25,
-      "away_odds": 19,
+      "home_odds": 1.08,
+      "draw_odds": 8.8,
+      "away_odds": 23,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 1.1,
-        "draw": 8.25,
-        "away": 19
+        "home": 1.08,
+        "draw": 8.8,
+        "away": 23
       }
     }
   },
@@ -21633,9 +21497,9 @@
     "date": "2025-05-04",
     "time": "13:00",
     "odds": {
-      "home": 2.45,
-      "draw": 3.5,
-      "away": 2.55
+      "home": 2.7,
+      "draw": 3.6,
+      "away": 2.35
     },
     "raw": {
       "id": "sporty-sr:match:51857243",
@@ -21645,15 +21509,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-05-04 13:00",
-      "home_odds": 2.45,
-      "draw_odds": 3.5,
-      "away_odds": 2.55,
+      "home_odds": 2.7,
+      "draw_odds": 3.6,
+      "away_odds": 2.35,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 2.45,
-        "draw": 3.5,
-        "away": 2.55
+        "home": 2.7,
+        "draw": 3.6,
+        "away": 2.35
       }
     }
   },
@@ -21667,9 +21531,9 @@
     "date": "2025-05-04",
     "time": "13:00",
     "odds": {
-      "home": 1.69,
+      "home": 1.72,
       "draw": 3.7,
-      "away": 4.6
+      "away": 4.4
     },
     "raw": {
       "id": "sporty-sr:match:51857241",
@@ -21679,15 +21543,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-05-04 13:00",
-      "home_odds": 1.69,
+      "home_odds": 1.72,
       "draw_odds": 3.7,
-      "away_odds": 4.6,
+      "away_odds": 4.4,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 1.69,
+        "home": 1.72,
         "draw": 3.7,
-        "away": 4.6
+        "away": 4.4
       }
     }
   },
@@ -22508,40 +22372,6 @@
     }
   },
   {
-    "id": "60022129",
-    "eventId": "60022129",
-    "teams": "Leones Negros UDEG - Tepatitlan FC",
-    "league": "",
-    "sport": "football",
-    "country": "Europe",
-    "date": "2025-04-27",
-    "time": "18:00",
-    "odds": {
-      "home": 1.82,
-      "draw": 3.5,
-      "away": 3.4
-    },
-    "raw": {
-      "id": "sporty-sr:match:60022129",
-      "eventId": "60022129",
-      "event": "Leones Negros UDEG - Tepatitlan FC",
-      "country": "Europe",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 18:00",
-      "home_odds": 1.82,
-      "draw_odds": 3.5,
-      "away_odds": 3.4,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 1.82,
-        "draw": 3.5,
-        "away": 3.4
-      }
-    }
-  },
-  {
     "id": "60022131",
     "eventId": "60022131",
     "teams": "CD Mineros de Zacatecas - Venados  FC",
@@ -22776,40 +22606,6 @@
         "home": 2,
         "draw": 3.3,
         "away": 3.6
-      }
-    }
-  },
-  {
-    "id": "57381267",
-    "eventId": "57381267",
-    "teams": "SD Aucas - Mushuc Runa SC",
-    "league": "",
-    "sport": "football",
-    "country": "Ghana",
-    "date": "2025-04-27",
-    "time": "18:00",
-    "odds": {
-      "home": 2.05,
-      "draw": 3.33,
-      "away": 3.5
-    },
-    "raw": {
-      "id": "sporty-sr:match:57381267",
-      "eventId": "57381267",
-      "event": "SD Aucas - Mushuc Runa SC",
-      "country": "Ghana",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 18:00",
-      "home_odds": 2.05,
-      "draw_odds": 3.33,
-      "away_odds": 3.5,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 2.05,
-        "draw": 3.33,
-        "away": 3.5
       }
     }
   },
@@ -23290,40 +23086,6 @@
     }
   },
   {
-    "id": "57251299",
-    "eventId": "57251299",
-    "teams": "Almirante Brown - Agropecuario Argentino",
-    "league": "",
-    "sport": "football",
-    "country": "Ghana",
-    "date": "2025-04-27",
-    "time": "18:00",
-    "odds": {
-      "home": 2.55,
-      "draw": 2.8,
-      "away": 3
-    },
-    "raw": {
-      "id": "sporty-sr:match:57251299",
-      "eventId": "57251299",
-      "event": "Almirante Brown - Agropecuario Argentino",
-      "country": "Ghana",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 18:00",
-      "home_odds": 2.55,
-      "draw_odds": 2.8,
-      "away_odds": 3,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 2.55,
-        "draw": 2.8,
-        "away": 3
-      }
-    }
-  },
-  {
     "id": "57251307",
     "eventId": "57251307",
     "teams": "CA Temperley - Estudiantes Rio Cuarto",
@@ -23728,74 +23490,6 @@
         "home": 2.85,
         "draw": 3.4,
         "away": 2.3
-      }
-    }
-  },
-  {
-    "id": "60089903",
-    "eventId": "60089903",
-    "teams": "CA Artigas - Albion FC",
-    "league": "",
-    "sport": "football",
-    "country": "Europe",
-    "date": "2025-04-27",
-    "time": "18:00",
-    "odds": {
-      "home": 4,
-      "draw": 3.2,
-      "away": 1.87
-    },
-    "raw": {
-      "id": "sporty-sr:match:60089903",
-      "eventId": "60089903",
-      "event": "CA Artigas - Albion FC",
-      "country": "Europe",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 18:00",
-      "home_odds": 4,
-      "draw_odds": 3.2,
-      "away_odds": 1.87,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 4,
-        "draw": 3.2,
-        "away": 1.87
-      }
-    }
-  },
-  {
-    "id": "60089913",
-    "eventId": "60089913",
-    "teams": "CS Cerrito - Club Atletico Rentistas",
-    "league": "",
-    "sport": "football",
-    "country": "Spain",
-    "date": "2025-04-27",
-    "time": "18:00",
-    "odds": {
-      "home": 3.7,
-      "draw": 3.1,
-      "away": 1.98
-    },
-    "raw": {
-      "id": "sporty-sr:match:60089913",
-      "eventId": "60089913",
-      "event": "CS Cerrito - Club Atletico Rentistas",
-      "country": "Spain",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 18:00",
-      "home_odds": 3.7,
-      "draw_odds": 3.1,
-      "away_odds": 1.98,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 3.7,
-        "draw": 3.1,
-        "away": 1.98
       }
     }
   },
@@ -24353,9 +24047,9 @@
     "date": "2025-05-03",
     "time": "12:00",
     "odds": {
-      "home": 1.59,
-      "draw": 3.9,
-      "away": 5.4
+      "home": 1.56,
+      "draw": 4,
+      "away": 5.6
     },
     "raw": {
       "id": "sporty-sr:match:57159245",
@@ -24365,15 +24059,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-05-03 12:00",
-      "home_odds": 1.59,
-      "draw_odds": 3.9,
-      "away_odds": 5.4,
+      "home_odds": 1.56,
+      "draw_odds": 4,
+      "away_odds": 5.6,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 1.59,
-        "draw": 3.9,
-        "away": 5.4
+        "home": 1.56,
+        "draw": 4,
+        "away": 5.6
       }
     }
   },
@@ -25781,9 +25475,9 @@
     "date": "2025-05-03",
     "time": "14:00",
     "odds": {
-      "home": 3.9,
+      "home": 3.7,
       "draw": 3.2,
-      "away": 1.98
+      "away": 2
     },
     "raw": {
       "id": "sporty-sr:match:51241151",
@@ -25793,15 +25487,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-05-03 14:00",
-      "home_odds": 3.9,
+      "home_odds": 3.7,
       "draw_odds": 3.2,
-      "away_odds": 1.98,
+      "away_odds": 2,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 3.9,
+        "home": 3.7,
         "draw": 3.2,
-        "away": 1.98
+        "away": 2
       }
     }
   },
@@ -26214,40 +25908,6 @@
     }
   },
   {
-    "id": "58178553",
-    "eventId": "58178553",
-    "teams": "York United FC - Forge FC Hamilton",
-    "league": "",
-    "sport": "football",
-    "country": "Europe",
-    "date": "2025-04-27",
-    "time": "18:00",
-    "odds": {
-      "home": 2.95,
-      "draw": 3.3,
-      "away": 2.3
-    },
-    "raw": {
-      "id": "sporty-sr:match:58178553",
-      "eventId": "58178553",
-      "event": "York United FC - Forge FC Hamilton",
-      "country": "Europe",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 18:00",
-      "home_odds": 2.95,
-      "draw_odds": 3.3,
-      "away_odds": 2.3,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 2.95,
-        "draw": 3.3,
-        "away": 2.3
-      }
-    }
-  },
-  {
     "id": "59947845",
     "eventId": "59947845",
     "teams": "Sportivo Luqueno - Club General Caballero JLM",
@@ -26384,6 +26044,40 @@
     }
   },
   {
+    "id": "59947857",
+    "eventId": "59947857",
+    "teams": "Cerro Porteno - Club Olimpia",
+    "league": "",
+    "sport": "football",
+    "country": "Ghana",
+    "date": "2025-05-03",
+    "time": "20:30",
+    "odds": {
+      "home": 2.2,
+      "draw": 3.25,
+      "away": 3
+    },
+    "raw": {
+      "id": "sporty-sr:match:59947857",
+      "eventId": "59947857",
+      "event": "Cerro Porteno - Club Olimpia",
+      "country": "Ghana",
+      "tournament": "",
+      "sport": "football",
+      "start_time": "2025-05-03 20:30",
+      "home_odds": 2.2,
+      "draw_odds": 3.25,
+      "away_odds": 3,
+      "bookmaker": "sporty",
+      "region": "gh",
+      "odds": {
+        "home": 2.2,
+        "draw": 3.25,
+        "away": 3
+      }
+    }
+  },
+  {
     "id": "58954879",
     "eventId": "58954879",
     "teams": "Metaloglobus Bucuresti - ACS Champions FC Arges",
@@ -26461,9 +26155,9 @@
     "date": "2025-04-30",
     "time": "16:00",
     "odds": {
-      "home": 1.63,
-      "draw": 3.12,
-      "away": 3.23
+      "home": 3.27,
+      "draw": 4.22,
+      "away": 3.39
     },
     "raw": {
       "id": "sporty-sr:match:58954877",
@@ -26473,15 +26167,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-04-30 16:00",
-      "home_odds": 1.63,
-      "draw_odds": 3.12,
-      "away_odds": 3.23,
+      "home_odds": 3.27,
+      "draw_odds": 4.22,
+      "away_odds": 3.39,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 1.63,
-        "draw": 3.12,
-        "away": 3.23
+        "home": 3.27,
+        "draw": 4.22,
+        "away": 3.39
       }
     }
   },
@@ -26903,9 +26597,9 @@
     "date": "2025-05-03",
     "time": "18:15",
     "odds": {
-      "home": 1.83,
-      "draw": 3.25,
-      "away": 4.5
+      "home": 1.86,
+      "draw": 3.2,
+      "away": 4.3
     },
     "raw": {
       "id": "sporty-sr:match:51170759",
@@ -26915,15 +26609,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-05-03 18:15",
-      "home_odds": 1.83,
-      "draw_odds": 3.25,
-      "away_odds": 4.5,
+      "home_odds": 1.86,
+      "draw_odds": 3.2,
+      "away_odds": 4.3,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 1.83,
-        "draw": 3.25,
-        "away": 4.5
+        "home": 1.86,
+        "draw": 3.2,
+        "away": 4.3
       }
     }
   },
@@ -27302,6 +26996,40 @@
     }
   },
   {
+    "id": "51447349",
+    "eventId": "51447349",
+    "teams": "VfB Stuttgart II - Alemannia Aachen",
+    "league": "",
+    "sport": "football",
+    "country": "Ghana",
+    "date": "2025-05-03",
+    "time": "12:00",
+    "odds": {
+      "home": 2.8,
+      "draw": 3.33,
+      "away": 2.4
+    },
+    "raw": {
+      "id": "sporty-sr:match:51447349",
+      "eventId": "51447349",
+      "event": "VfB Stuttgart II - Alemannia Aachen",
+      "country": "Ghana",
+      "tournament": "",
+      "sport": "football",
+      "start_time": "2025-05-03 12:00",
+      "home_odds": 2.8,
+      "draw_odds": 3.33,
+      "away_odds": 2.4,
+      "bookmaker": "sporty",
+      "region": "gh",
+      "odds": {
+        "home": 2.8,
+        "draw": 3.33,
+        "away": 2.4
+      }
+    }
+  },
+  {
     "id": "51447355",
     "eventId": "51447355",
     "teams": "Arminia Bielefeld - Dynamo Dresden",
@@ -27332,6 +27060,40 @@
         "home": 2.05,
         "draw": 3.4,
         "away": 3.6
+      }
+    }
+  },
+  {
+    "id": "51447363",
+    "eventId": "51447363",
+    "teams": "Energie Cottbus - SV Waldhof Mannheim 07",
+    "league": "",
+    "sport": "football",
+    "country": "Ghana",
+    "date": "2025-05-04",
+    "time": "11:30",
+    "odds": {
+      "home": 1.98,
+      "draw": 3.7,
+      "away": 3.4
+    },
+    "raw": {
+      "id": "sporty-sr:match:51447363",
+      "eventId": "51447363",
+      "event": "Energie Cottbus - SV Waldhof Mannheim 07",
+      "country": "Ghana",
+      "tournament": "",
+      "sport": "football",
+      "start_time": "2025-05-04 11:30",
+      "home_odds": 1.98,
+      "draw_odds": 3.7,
+      "away_odds": 3.4,
+      "bookmaker": "sporty",
+      "region": "gh",
+      "odds": {
+        "home": 1.98,
+        "draw": 3.7,
+        "away": 3.4
       }
     }
   },
@@ -29453,9 +29215,9 @@
     "date": "2025-04-28",
     "time": "17:45",
     "odds": {
-      "home": 1.87,
-      "draw": 4,
-      "away": 3.33
+      "home": 1.89,
+      "draw": 4.1,
+      "away": 3.4
     },
     "raw": {
       "id": "sporty-sr:match:56958131",
@@ -29465,15 +29227,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-04-28 17:45",
-      "home_odds": 1.87,
-      "draw_odds": 4,
-      "away_odds": 3.33,
+      "home_odds": 1.89,
+      "draw_odds": 4.1,
+      "away_odds": 3.4,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 1.87,
-        "draw": 4,
-        "away": 3.33
+        "home": 1.89,
+        "draw": 4.1,
+        "away": 3.4
       }
     }
   },
@@ -29623,9 +29385,9 @@
     "date": "2025-04-27",
     "time": "23:30",
     "odds": {
-      "home": 1.13,
-      "draw": 8.2,
-      "away": 14
+      "home": 1.12,
+      "draw": 8.3,
+      "away": 14.5
     },
     "raw": {
       "id": "sporty-sr:match:59722620",
@@ -29635,15 +29397,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-04-27 23:30",
-      "home_odds": 1.13,
-      "draw_odds": 8.2,
-      "away_odds": 14,
+      "home_odds": 1.12,
+      "draw_odds": 8.3,
+      "away_odds": 14.5,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 1.13,
-        "draw": 8.2,
-        "away": 14
+        "home": 1.12,
+        "draw": 8.3,
+        "away": 14.5
       }
     }
   },
@@ -29780,40 +29542,6 @@
         "home": 2.6,
         "draw": 3.33,
         "away": 2.5
-      }
-    }
-  },
-  {
-    "id": "58473451",
-    "eventId": "58473451",
-    "teams": "Tuna Luso PA - Trem AP",
-    "league": "",
-    "sport": "football",
-    "country": "Ghana",
-    "date": "2025-04-27",
-    "time": "18:00",
-    "odds": {
-      "home": 1.47,
-      "draw": 4.1,
-      "away": 6.4
-    },
-    "raw": {
-      "id": "sporty-sr:match:58473451",
-      "eventId": "58473451",
-      "event": "Tuna Luso PA - Trem AP",
-      "country": "Ghana",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 18:00",
-      "home_odds": 1.47,
-      "draw_odds": 4.1,
-      "away_odds": 6.4,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 1.47,
-        "draw": 4.1,
-        "away": 6.4
       }
     }
   },
@@ -29997,9 +29725,9 @@
     "date": "2025-04-27",
     "time": "21:00",
     "odds": {
-      "home": 1.92,
-      "draw": 3.1,
-      "away": 4.1
+      "home": 1.94,
+      "draw": 3.2,
+      "away": 3.9
     },
     "raw": {
       "id": "sporty-sr:match:58474401",
@@ -30009,15 +29737,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-04-27 21:00",
-      "home_odds": 1.92,
-      "draw_odds": 3.1,
-      "away_odds": 4.1,
+      "home_odds": 1.94,
+      "draw_odds": 3.2,
+      "away_odds": 3.9,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 1.92,
-        "draw": 3.1,
-        "away": 4.1
+        "home": 1.94,
+        "draw": 3.2,
+        "away": 3.9
       }
     }
   },
@@ -30439,9 +30167,9 @@
     "date": "2025-04-30",
     "time": "17:30",
     "odds": {
-      "home": 1.66,
+      "home": 1.67,
       "draw": 3.33,
-      "away": 5.6
+      "away": 5.5
     },
     "raw": {
       "id": "sporty-sr:match:60045401",
@@ -30451,15 +30179,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-04-30 17:30",
-      "home_odds": 1.66,
+      "home_odds": 1.67,
       "draw_odds": 3.33,
-      "away_odds": 5.6,
+      "away_odds": 5.5,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 1.66,
+        "home": 1.67,
         "draw": 3.33,
-        "away": 5.6
+        "away": 5.5
       }
     }
   },
@@ -30494,278 +30222,6 @@
         "home": 1.79,
         "draw": 3.3,
         "away": 4.2
-      }
-    }
-  },
-  {
-    "id": "51549089",
-    "eventId": "51549089",
-    "teams": "ACR Messina - Juventus FC",
-    "league": "Serie A",
-    "sport": "football",
-    "country": "Italy",
-    "date": "2025-04-27",
-    "time": "18:00",
-    "odds": {
-      "home": 1.72,
-      "draw": 3.5,
-      "away": 4.7
-    },
-    "raw": {
-      "id": "sporty-sr:match:51549089",
-      "eventId": "51549089",
-      "event": "ACR Messina - Juventus FC",
-      "country": "Italy",
-      "tournament": "Serie A",
-      "sport": "football",
-      "start_time": "2025-04-27 18:00",
-      "home_odds": 1.72,
-      "draw_odds": 3.5,
-      "away_odds": 4.7,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 1.72,
-        "draw": 3.5,
-        "away": 4.7
-      }
-    }
-  },
-  {
-    "id": "51549091",
-    "eventId": "51549091",
-    "teams": "Audace Cerignola - Latina Calcio",
-    "league": "",
-    "sport": "football",
-    "country": "Ghana",
-    "date": "2025-04-27",
-    "time": "18:00",
-    "odds": {
-      "home": 1.41,
-      "draw": 4.5,
-      "away": 6.75
-    },
-    "raw": {
-      "id": "sporty-sr:match:51549091",
-      "eventId": "51549091",
-      "event": "Audace Cerignola - Latina Calcio",
-      "country": "Ghana",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 18:00",
-      "home_odds": 1.41,
-      "draw_odds": 4.5,
-      "away_odds": 6.75,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 1.41,
-        "draw": 4.5,
-        "away": 6.75
-      }
-    }
-  },
-  {
-    "id": "51549087",
-    "eventId": "51549087",
-    "teams": "AZ Picerno - Calcio Foggia",
-    "league": "",
-    "sport": "football",
-    "country": "Ghana",
-    "date": "2025-04-27",
-    "time": "18:00",
-    "odds": {
-      "home": 2,
-      "draw": 3.3,
-      "away": 3.6
-    },
-    "raw": {
-      "id": "sporty-sr:match:51549087",
-      "eventId": "51549087",
-      "event": "AZ Picerno - Calcio Foggia",
-      "country": "Ghana",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 18:00",
-      "home_odds": 2,
-      "draw_odds": 3.3,
-      "away_odds": 3.6,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 2,
-        "draw": 3.3,
-        "away": 3.6
-      }
-    }
-  },
-  {
-    "id": "51549095",
-    "eventId": "51549095",
-    "teams": "Cavese 1919 - ASD Sorrento 1945",
-    "league": "",
-    "sport": "football",
-    "country": "Ghana",
-    "date": "2025-04-27",
-    "time": "18:00",
-    "odds": {
-      "home": 1.55,
-      "draw": 3.9,
-      "away": 5.6
-    },
-    "raw": {
-      "id": "sporty-sr:match:51549095",
-      "eventId": "51549095",
-      "event": "Cavese 1919 - ASD Sorrento 1945",
-      "country": "Ghana",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 18:00",
-      "home_odds": 1.55,
-      "draw_odds": 3.9,
-      "away_odds": 5.6,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 1.55,
-        "draw": 3.9,
-        "away": 5.6
-      }
-    }
-  },
-  {
-    "id": "51549081",
-    "eventId": "51549081",
-    "teams": "FC Giugliano 1928 - Benevento",
-    "league": "",
-    "sport": "football",
-    "country": "Europe",
-    "date": "2025-04-27",
-    "time": "18:00",
-    "odds": {
-      "home": 2.75,
-      "draw": 2.75,
-      "away": 2.85
-    },
-    "raw": {
-      "id": "sporty-sr:match:51549081",
-      "eventId": "51549081",
-      "event": "FC Giugliano 1928 - Benevento",
-      "country": "Europe",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 18:00",
-      "home_odds": 2.75,
-      "draw_odds": 2.75,
-      "away_odds": 2.85,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 2.75,
-        "draw": 2.75,
-        "away": 2.85
-      }
-    }
-  },
-  {
-    "id": "51549085",
-    "eventId": "51549085",
-    "teams": "Potenza Calcio - Calcio Catania",
-    "league": "",
-    "sport": "football",
-    "country": "Ghana",
-    "date": "2025-04-27",
-    "time": "18:00",
-    "odds": {
-      "home": 2.6,
-      "draw": 3,
-      "away": 2.7
-    },
-    "raw": {
-      "id": "sporty-sr:match:51549085",
-      "eventId": "51549085",
-      "event": "Potenza Calcio - Calcio Catania",
-      "country": "Ghana",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 18:00",
-      "home_odds": 2.6,
-      "draw_odds": 3,
-      "away_odds": 2.7,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 2.6,
-        "draw": 3,
-        "away": 2.7
-      }
-    }
-  },
-  {
-    "id": "51549083",
-    "eventId": "51549083",
-    "teams": "Trapani Calcio - Casertana FC",
-    "league": "",
-    "sport": "football",
-    "country": "Europe",
-    "date": "2025-04-27",
-    "time": "18:00",
-    "odds": {
-      "home": 2.05,
-      "draw": 3.4,
-      "away": 3.33
-    },
-    "raw": {
-      "id": "sporty-sr:match:51549083",
-      "eventId": "51549083",
-      "event": "Trapani Calcio - Casertana FC",
-      "country": "Europe",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 18:00",
-      "home_odds": 2.05,
-      "draw_odds": 3.4,
-      "away_odds": 3.33,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 2.05,
-        "draw": 3.4,
-        "away": 3.33
-      }
-    }
-  },
-  {
-    "id": "51549099",
-    "eventId": "51549099",
-    "teams": "US Avellino - Asd Team Altamura",
-    "league": "",
-    "sport": "football",
-    "country": "Ghana",
-    "date": "2025-04-27",
-    "time": "18:00",
-    "odds": {
-      "home": 1.3,
-      "draw": 5.2,
-      "away": 8.6
-    },
-    "raw": {
-      "id": "sporty-sr:match:51549099",
-      "eventId": "51549099",
-      "event": "US Avellino - Asd Team Altamura",
-      "country": "Ghana",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 18:00",
-      "home_odds": 1.3,
-      "draw_odds": 5.2,
-      "away_odds": 8.6,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 1.3,
-        "draw": 5.2,
-        "away": 8.6
       }
     }
   },
@@ -31086,8 +30542,8 @@
     "time": "17:45",
     "odds": {
       "home": 3.6,
-      "draw": 2.55,
-      "away": 2.3
+      "draw": 2.5,
+      "away": 2.4
     },
     "raw": {
       "id": "sporty-sr:match:60142859",
@@ -31098,14 +30554,14 @@
       "sport": "football",
       "start_time": "2025-04-28 17:45",
       "home_odds": 3.6,
-      "draw_odds": 2.55,
-      "away_odds": 2.3,
+      "draw_odds": 2.5,
+      "away_odds": 2.4,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
         "home": 3.6,
-        "draw": 2.55,
-        "away": 2.3
+        "draw": 2.5,
+        "away": 2.4
       }
     }
   },
@@ -31187,9 +30643,9 @@
     "date": "2025-04-28",
     "time": "14:00",
     "odds": {
-      "home": 2.5,
+      "home": 2.6,
       "draw": 3,
-      "away": 2.7
+      "away": 2.6
     },
     "raw": {
       "id": "sporty-sr:match:58521521",
@@ -31199,15 +30655,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-04-28 14:00",
-      "home_odds": 2.5,
+      "home_odds": 2.6,
       "draw_odds": 3,
-      "away_odds": 2.7,
+      "away_odds": 2.6,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 2.5,
+        "home": 2.6,
         "draw": 3,
-        "away": 2.7
+        "away": 2.6
       }
     }
   },
@@ -31697,9 +31153,9 @@
     "date": "2025-04-27",
     "time": "21:00",
     "odds": {
-      "home": 1.48,
-      "draw": 4.1,
-      "away": 5.5
+      "home": 1.69,
+      "draw": 3.8,
+      "away": 4.1
     },
     "raw": {
       "id": "sporty-sr:match:60134597",
@@ -31709,15 +31165,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-04-27 21:00",
-      "home_odds": 1.48,
-      "draw_odds": 4.1,
-      "away_odds": 5.5,
+      "home_odds": 1.69,
+      "draw_odds": 3.8,
+      "away_odds": 4.1,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 1.48,
-        "draw": 4.1,
-        "away": 5.5
+        "home": 1.69,
+        "draw": 3.8,
+        "away": 4.1
       }
     }
   },
@@ -31756,108 +31212,6 @@
     }
   },
   {
-    "id": "111111111999212",
-    "eventId": "111111111999212",
-    "teams": "Criciuma EC U20 - Joinville EC U20",
-    "league": "",
-    "sport": "football",
-    "country": "Ghana",
-    "date": "2025-04-27",
-    "time": "18:00",
-    "odds": {
-      "home": 1.61,
-      "draw": 3.8,
-      "away": 4.6
-    },
-    "raw": {
-      "id": "sporty-sr:match:111111111999212",
-      "eventId": "111111111999212",
-      "event": "Criciuma EC U20 - Joinville EC U20",
-      "country": "Ghana",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 18:00",
-      "home_odds": 1.61,
-      "draw_odds": 3.8,
-      "away_odds": 4.6,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 1.61,
-        "draw": 3.8,
-        "away": 4.6
-      }
-    }
-  },
-  {
-    "id": "59716888",
-    "eventId": "59716888",
-    "teams": "Sertaozinho FC SP - SC Corinthians SP",
-    "league": "",
-    "sport": "football",
-    "country": "Brazil",
-    "date": "2025-04-27",
-    "time": "18:00",
-    "odds": {
-      "home": 6.9,
-      "draw": 4.9,
-      "away": 1.37
-    },
-    "raw": {
-      "id": "sporty-sr:match:59716888",
-      "eventId": "59716888",
-      "event": "Sertaozinho FC SP - SC Corinthians SP",
-      "country": "Brazil",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 18:00",
-      "home_odds": 6.9,
-      "draw_odds": 4.9,
-      "away_odds": 1.37,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 6.9,
-        "draw": 4.9,
-        "away": 1.37
-      }
-    }
-  },
-  {
-    "id": "59716890",
-    "eventId": "59716890",
-    "teams": "Uniao Suzano AC SP - SE Palmeiras SP",
-    "league": "",
-    "sport": "football",
-    "country": "Brazil",
-    "date": "2025-04-27",
-    "time": "18:00",
-    "odds": {
-      "home": 15.5,
-      "draw": 7.4,
-      "away": 1.14
-    },
-    "raw": {
-      "id": "sporty-sr:match:59716890",
-      "eventId": "59716890",
-      "event": "Uniao Suzano AC SP - SE Palmeiras SP",
-      "country": "Brazil",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 18:00",
-      "home_odds": 15.5,
-      "draw_odds": 7.4,
-      "away_odds": 1.14,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 15.5,
-        "draw": 7.4,
-        "away": 1.14
-      }
-    }
-  },
-  {
     "id": "60151725",
     "eventId": "60151725",
     "teams": "FC Viktoria Plzen - FK Mlada Boleslav",
@@ -31888,40 +31242,6 @@
         "home": 1.39,
         "draw": 5,
         "away": 5.5
-      }
-    }
-  },
-  {
-    "id": "60084201",
-    "eventId": "60084201",
-    "teams": "Pumas Unam - CD Guadalajara",
-    "league": "",
-    "sport": "football",
-    "country": "Ghana",
-    "date": "2025-04-27",
-    "time": "18:00",
-    "odds": {
-      "home": 2.15,
-      "draw": 3.4,
-      "away": 2.95
-    },
-    "raw": {
-      "id": "sporty-sr:match:60084201",
-      "eventId": "60084201",
-      "event": "Pumas Unam - CD Guadalajara",
-      "country": "Ghana",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 18:00",
-      "home_odds": 2.15,
-      "draw_odds": 3.4,
-      "away_odds": 2.95,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 2.15,
-        "draw": 3.4,
-        "away": 2.95
       }
     }
   },
@@ -32105,9 +31425,9 @@
     "date": "2025-04-28",
     "time": "16:00",
     "odds": {
-      "home": 1.36,
-      "draw": 4.75,
-      "away": 6.6
+      "home": 1.37,
+      "draw": 4.7,
+      "away": 6.3
     },
     "raw": {
       "id": "sporty-sr:match:51773613",
@@ -32117,15 +31437,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-04-28 16:00",
-      "home_odds": 1.36,
-      "draw_odds": 4.75,
-      "away_odds": 6.6,
+      "home_odds": 1.37,
+      "draw_odds": 4.7,
+      "away_odds": 6.3,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 1.36,
-        "draw": 4.75,
-        "away": 6.6
+        "home": 1.37,
+        "draw": 4.7,
+        "away": 6.3
       }
     }
   },
@@ -32164,40 +31484,6 @@
     }
   },
   {
-    "id": "58796767",
-    "eventId": "58796767",
-    "teams": "SC Recife PE - America MG",
-    "league": "",
-    "sport": "football",
-    "country": "Ghana",
-    "date": "2025-04-27",
-    "time": "18:00",
-    "odds": {
-      "home": 8.25,
-      "draw": 4.75,
-      "away": 1.25
-    },
-    "raw": {
-      "id": "sporty-sr:match:58796767",
-      "eventId": "58796767",
-      "event": "SC Recife PE - America MG",
-      "country": "Ghana",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 18:00",
-      "home_odds": 8.25,
-      "draw_odds": 4.75,
-      "away_odds": 1.25,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 8.25,
-        "draw": 4.75,
-        "away": 1.25
-      }
-    }
-  },
-  {
     "id": "58796773",
     "eventId": "58796773",
     "teams": "3B Sport AM - Real Brasilia FC DF",
@@ -32207,8 +31493,8 @@
     "date": "2025-04-27",
     "time": "19:00",
     "odds": {
-      "home": 3.2,
-      "draw": 4.1,
+      "home": 3.3,
+      "draw": 3.9,
       "away": 1.75
     },
     "raw": {
@@ -32219,14 +31505,14 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-04-27 19:00",
-      "home_odds": 3.2,
-      "draw_odds": 4.1,
+      "home_odds": 3.3,
+      "draw_odds": 3.9,
       "away_odds": 1.75,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 3.2,
-        "draw": 4.1,
+        "home": 3.3,
+        "draw": 3.9,
         "away": 1.75
       }
     }
@@ -32538,40 +31824,6 @@
     }
   },
   {
-    "id": "59456259",
-    "eventId": "59456259",
-    "teams": "Clube Do Remo PA - Rio Negro RR",
-    "league": "",
-    "sport": "football",
-    "country": "Ghana",
-    "date": "2025-04-27",
-    "time": "18:00",
-    "odds": {
-      "home": 1.45,
-      "draw": 4.3,
-      "away": 4.8
-    },
-    "raw": {
-      "id": "sporty-sr:match:59456259",
-      "eventId": "59456259",
-      "event": "Clube Do Remo PA - Rio Negro RR",
-      "country": "Ghana",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 18:00",
-      "home_odds": 1.45,
-      "draw_odds": 4.3,
-      "away_odds": 4.8,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 1.45,
-        "draw": 4.3,
-        "away": 4.8
-      }
-    }
-  },
-  {
     "id": "59456023",
     "eventId": "59456023",
     "teams": "Minas Brasilia DF - CR Vasco da Gama RJ",
@@ -32615,9 +31867,9 @@
     "date": "2025-04-28",
     "time": "19:00",
     "odds": {
-      "home": 9.1,
-      "draw": 6.3,
-      "away": 1.2
+      "home": 10,
+      "draw": 6.6,
+      "away": 1.18
     },
     "raw": {
       "id": "sporty-sr:match:60151111",
@@ -32627,15 +31879,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-04-28 19:00",
-      "home_odds": 9.1,
-      "draw_odds": 6.3,
-      "away_odds": 1.2,
+      "home_odds": 10,
+      "draw_odds": 6.6,
+      "away_odds": 1.18,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 9.1,
-        "draw": 6.3,
-        "away": 1.2
+        "home": 10,
+        "draw": 6.6,
+        "away": 1.18
       }
     }
   },
@@ -32683,9 +31935,9 @@
     "date": "2025-04-28",
     "time": "17:30",
     "odds": {
-      "home": 1.35,
-      "draw": 5,
-      "away": 6.3
+      "home": 1.4,
+      "draw": 4.7,
+      "away": 5.9
     },
     "raw": {
       "id": "sporty-sr:match:60003279",
@@ -32695,15 +31947,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-04-28 17:30",
-      "home_odds": 1.35,
-      "draw_odds": 5,
-      "away_odds": 6.3,
+      "home_odds": 1.4,
+      "draw_odds": 4.7,
+      "away_odds": 5.9,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 1.35,
-        "draw": 5,
-        "away": 6.3
+        "home": 1.4,
+        "draw": 4.7,
+        "away": 5.9
       }
     }
   },
@@ -32772,40 +32024,6 @@
         "home": 4.75,
         "draw": 4.5,
         "away": 1.5
-      }
-    }
-  },
-  {
-    "id": "60085739",
-    "eventId": "60085739",
-    "teams": "FC Killas - Flamengo FBC",
-    "league": "",
-    "sport": "football",
-    "country": "Brazil",
-    "date": "2025-04-27",
-    "time": "18:00",
-    "odds": {
-      "home": 2.65,
-      "draw": 3.5,
-      "away": 2.15
-    },
-    "raw": {
-      "id": "sporty-sr:match:60085739",
-      "eventId": "60085739",
-      "event": "FC Killas - Flamengo FBC",
-      "country": "Brazil",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 18:00",
-      "home_odds": 2.65,
-      "draw_odds": 3.5,
-      "away_odds": 2.15,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 2.65,
-        "draw": 3.5,
-        "away": 2.15
       }
     }
   },
@@ -33364,8 +32582,8 @@
     "time": "22:00",
     "odds": {
       "home": 2.35,
-      "draw": 3,
-      "away": 2.9
+      "draw": 2.95,
+      "away": 3
     },
     "raw": {
       "id": "sporty-sr:match:60047721",
@@ -33376,14 +32594,14 @@
       "sport": "football",
       "start_time": "2025-04-27 22:00",
       "home_odds": 2.35,
-      "draw_odds": 3,
-      "away_odds": 2.9,
+      "draw_odds": 2.95,
+      "away_odds": 3,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
         "home": 2.35,
-        "draw": 3,
-        "away": 2.9
+        "draw": 2.95,
+        "away": 3
       }
     }
   },
@@ -33694,74 +32912,6 @@
     }
   },
   {
-    "id": "59319387",
-    "eventId": "59319387",
-    "teams": "Ivoti RS - Ypiranga RS",
-    "league": "",
-    "sport": "football",
-    "country": "Ghana",
-    "date": "2025-04-27",
-    "time": "18:00",
-    "odds": {
-      "home": 4.4,
-      "draw": 3.8,
-      "away": 1.56
-    },
-    "raw": {
-      "id": "sporty-sr:match:59319387",
-      "eventId": "59319387",
-      "event": "Ivoti RS - Ypiranga RS",
-      "country": "Ghana",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 18:00",
-      "home_odds": 4.4,
-      "draw_odds": 3.8,
-      "away_odds": 1.56,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 4.4,
-        "draw": 3.8,
-        "away": 1.56
-      }
-    }
-  },
-  {
-    "id": "59319391",
-    "eventId": "59319391",
-    "teams": "Ser Caxias RS - Apafut Caxias Do Sul RS U20",
-    "league": "",
-    "sport": "football",
-    "country": "Ghana",
-    "date": "2025-04-27",
-    "time": "18:00",
-    "odds": {
-      "home": 3.1,
-      "draw": 3.3,
-      "away": 1.99
-    },
-    "raw": {
-      "id": "sporty-sr:match:59319391",
-      "eventId": "59319391",
-      "event": "Ser Caxias RS - Apafut Caxias Do Sul RS U20",
-      "country": "Ghana",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 18:00",
-      "home_odds": 3.1,
-      "draw_odds": 3.3,
-      "away_odds": 1.99,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 3.1,
-        "draw": 3.3,
-        "away": 1.99
-      }
-    }
-  },
-  {
     "id": "111111112041579",
     "eventId": "111111112041579",
     "teams": "Al Ain U23 - Dibba Al-Hisn U23",
@@ -33807,7 +32957,7 @@
     "odds": {
       "home": 1.62,
       "draw": 4,
-      "away": 4.25
+      "away": 4.3
     },
     "raw": {
       "id": "sporty-sr:match:60111523",
@@ -33819,47 +32969,13 @@
       "start_time": "2025-04-28 14:00",
       "home_odds": 1.62,
       "draw_odds": 4,
-      "away_odds": 4.25,
+      "away_odds": 4.3,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
         "home": 1.62,
         "draw": 4,
-        "away": 4.25
-      }
-    }
-  },
-  {
-    "id": "59747752",
-    "eventId": "59747752",
-    "teams": "Westchester SC - Rhode Island FC",
-    "league": "",
-    "sport": "football",
-    "country": "Europe",
-    "date": "2025-04-27",
-    "time": "18:00",
-    "odds": {
-      "home": 3,
-      "draw": 3.6,
-      "away": 2.15
-    },
-    "raw": {
-      "id": "sporty-sr:match:59747752",
-      "eventId": "59747752",
-      "event": "Westchester SC - Rhode Island FC",
-      "country": "Europe",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 18:00",
-      "home_odds": 3,
-      "draw_odds": 3.6,
-      "away_odds": 2.15,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 3,
-        "draw": 3.6,
-        "away": 2.15
+        "away": 4.3
       }
     }
   },

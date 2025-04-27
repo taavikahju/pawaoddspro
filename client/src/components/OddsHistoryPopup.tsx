@@ -104,9 +104,9 @@ export default function OddsHistoryPopup({
     );
   }, [data, oddsType]);
   
-  // Generate colors for each bookmaker
+  // Generate colors for each bookmaker - use consistent colors for all charts
   const bookmakerColors: Record<string, string> = {
-    'bp GH': '#FFA500', // Orange
+    'bp GH': '#FF9800', // Orange
     'bp KE': '#4CAF50', // Green
     'sporty': '#2196F3', // Blue
     'betika KE': '#E91E63', // Pink
