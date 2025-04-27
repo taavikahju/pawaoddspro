@@ -232,51 +232,51 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
   }
 
   return (
-    <div className={cn("overflow-x-auto bg-[#1e2a3b] rounded-b-lg shadow", className)}>
+    <div className={cn("overflow-x-auto bg-white dark:bg-slate-800 rounded-b-lg shadow", className)}>
       <Table className="w-full border-collapse">
-        <TableHeader className="bg-[#101824]">
-          <TableRow className="border-b border-[#2e3a4a]">
-            <TableHead className="w-24 px-2 py-2 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
-              <div className="flex items-center justify-center">
+        <TableHeader className="bg-gray-100 dark:bg-slate-700/50">
+          <TableRow className="border-b border-gray-200 dark:border-gray-700">
+            <TableHead className="w-24 px-2 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+              <div className="flex items-center">
                 <Globe className="w-3 h-3 mr-1" />
                 Country
               </div>
             </TableHead>
-            <TableHead className="w-28 px-2 py-2 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
-              <div className="flex items-center justify-center">
+            <TableHead className="w-28 px-2 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+              <div className="flex items-center">
                 <Trophy className="w-3 h-3 mr-1" />
                 Tournament
               </div>
             </TableHead>
-            <TableHead className="w-24 px-2 py-2 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
-              <div className="flex items-center justify-center">
+            <TableHead className="w-24 px-2 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+              <div className="flex items-center">
                 <Clock className="w-3 h-3 mr-1" />
                 Start
               </div>
             </TableHead>
-            <TableHead className="w-48 px-2 py-2 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
+            <TableHead className="w-48 px-2 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               Fixture
             </TableHead>
-            <TableHead className="w-20 px-2 py-2 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
+            <TableHead className="w-20 px-2 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               Market
             </TableHead>
-            <TableHead className="w-20 px-2 py-2 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
+            <TableHead className="w-20 px-2 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               Source
             </TableHead>
-            <TableHead className="w-16 px-2 py-2 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
+            <TableHead className="w-16 px-2 py-2 text-center text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               Home
             </TableHead>
-            <TableHead className="w-16 px-2 py-2 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
+            <TableHead className="w-16 px-2 py-2 text-center text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               Draw
             </TableHead>
-            <TableHead className="w-16 px-2 py-2 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
+            <TableHead className="w-16 px-2 py-2 text-center text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               Away
             </TableHead>
-            <TableHead className="w-20 px-2 py-2 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
+            <TableHead className="w-20 px-2 py-2 text-center text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               Margin
             </TableHead>
             {isComparisonAvailable && (
-              <TableHead className="w-20 px-2 py-2 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
+              <TableHead className="w-20 px-2 py-2 text-center text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
                 Fav. Odds Δ%
               </TableHead>
             )}
@@ -285,37 +285,37 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
         
         <TableBody>
           {events.map((event, eventIndex) => (
-            <div key={`event-group-${eventIndex}`}>
+            <React.Fragment key={eventIndex}>
               {filteredBookmakers.map((bookmaker, bookmakerIndex) => {
                 const isFirstBookmaker = bookmakerIndex === 0;
                 const isLastBookmaker = bookmakerIndex === filteredBookmakers.length - 1;
                 // Use alternating background colors for events
                 const isEvenEvent = eventIndex % 2 === 0;
                 // If this is the last bookmaker for an event, add a thicker bottom border
-                const bottomBorderClass = isLastBookmaker ? 'border-b-2 border-[#2e3a4a]' : 'border-b border-[#2e3a4a]';
+                const bottomBorderClass = isLastBookmaker ? 'border-b-2 border-gray-300 dark:border-gray-600' : 'border-b border-gray-200 dark:border-gray-700';
                 
                 return (
                   <TableRow 
                     key={`${eventIndex}-${bookmakerIndex}`} 
-                    className={`hover:bg-[#283648] ${bottomBorderClass}
-                      ${isEvenEvent ? 'bg-[#1e2a3b]' : 'bg-[#1a2535]'}`}
+                    className={`hover:bg-gray-100 dark:hover:bg-slate-700/40 ${bottomBorderClass}
+                      ${isEvenEvent ? 'bg-white dark:bg-slate-800' : 'bg-gray-50 dark:bg-slate-800/60'}`}
                   >
                     {isFirstBookmaker && (
                       <>
                         <TableCell 
-                          className="px-2 py-1 whitespace-nowrap border-r border-[#2e3a4a] text-center" 
+                          className="px-2 py-1 whitespace-nowrap border-r border-gray-200 dark:border-gray-700" 
                           rowSpan={filteredBookmakers.length}
                         >
-                          <span className="text-sm text-gray-300">
+                          <span className="text-sm text-gray-600 dark:text-gray-300">
                             {event.country || event.league?.split(' ')[0] || 'Unknown'}
                           </span>
                         </TableCell>
                         
                         <TableCell 
-                          className="px-2 py-1 whitespace-nowrap border-r border-[#2e3a4a] text-center" 
+                          className="px-2 py-1 whitespace-nowrap border-r border-gray-200 dark:border-gray-700" 
                           rowSpan={filteredBookmakers.length}
                         >
-                          <span className="text-sm text-gray-300">
+                          <span className="text-sm text-gray-600 dark:text-gray-300">
                             {(() => {
                               // First check if we have tournament data directly
                               if (event.tournament) {
@@ -336,50 +336,50 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                         </TableCell>
                         
                         <TableCell 
-                          className="px-2 py-1 whitespace-nowrap border-r border-[#2e3a4a] text-center" 
+                          className="px-2 py-1 whitespace-nowrap border-r border-gray-200 dark:border-gray-700" 
                           rowSpan={filteredBookmakers.length}
                         >
-                          <div className="flex flex-col items-center">
-                            <span className="text-sm font-medium text-gray-200">{event.date}</span>
-                            <span className="text-sm text-gray-400">{event.time}</span>
+                          <div className="flex flex-col">
+                            <span className="text-sm font-medium text-gray-800 dark:text-gray-200">{event.date}</span>
+                            <span className="text-sm text-gray-500 dark:text-gray-400">{event.time}</span>
                           </div>
                         </TableCell>
                         
                         <TableCell 
-                          className="px-2 py-1 whitespace-nowrap border-r border-[#2e3a4a] text-center" 
+                          className="px-2 py-1 whitespace-nowrap border-r border-gray-200 dark:border-gray-700" 
                           rowSpan={filteredBookmakers.length}
                         >
-                          <span className="text-sm font-medium text-gray-200">
+                          <span className="text-sm font-medium text-gray-800 dark:text-gray-200">
                             {event.teams}
                           </span>
                         </TableCell>
                         
                         <TableCell 
-                          className="px-2 py-1 whitespace-nowrap border-r border-[#2e3a4a] text-center" 
+                          className="px-2 py-1 whitespace-nowrap border-r border-gray-200 dark:border-gray-700" 
                           rowSpan={filteredBookmakers.length}
                         >
-                          <span className="text-sm text-gray-300">
+                          <span className="text-sm text-gray-600 dark:text-gray-300">
                             Match Result
                           </span>
                         </TableCell>
                       </>
                     )}
                     
-                    <TableCell className="px-2 py-1 whitespace-nowrap border-r border-[#2e3a4a] text-center">
-                      <span className="text-sm font-medium text-gray-300">
+                    <TableCell className="px-2 py-1 whitespace-nowrap border-r border-gray-200 dark:border-gray-700">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                         {bookmaker.code}
                       </span>
                     </TableCell>
                     
-                    <TableCell className="px-2 py-1 whitespace-nowrap text-center border-r border-[#2e3a4a]">
+                    <TableCell className="px-2 py-1 whitespace-nowrap text-center border-r border-gray-200 dark:border-gray-700">
                       <span 
                         className={cn(
                           "text-sm font-medium px-1 py-0.5 rounded",
                           getOddsHighlightType(event, 'home', bookmaker.code) === 'highest' 
-                            ? "bg-green-800/20 text-green-300" 
+                            ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300" 
                             : getOddsHighlightType(event, 'home', bookmaker.code) === 'lowest'
-                              ? "bg-red-800/20 text-red-300"
-                              : "bg-[#1e2a3b] text-gray-300"
+                              ? "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300"
+                              : "bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300"
                         )}
                       >
                         {event.oddsData?.[bookmaker.code]?.home ? (
@@ -398,15 +398,15 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                       </span>
                     </TableCell>
                     
-                    <TableCell className="px-2 py-1 whitespace-nowrap text-center border-r border-[#2e3a4a]">
+                    <TableCell className="px-2 py-1 whitespace-nowrap text-center border-r border-gray-200 dark:border-gray-700">
                       <span 
                         className={cn(
                           "text-sm font-medium px-1 py-0.5 rounded",
                           getOddsHighlightType(event, 'draw', bookmaker.code) === 'highest' 
-                            ? "bg-green-800/20 text-green-300" 
+                            ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300" 
                             : getOddsHighlightType(event, 'draw', bookmaker.code) === 'lowest'
-                              ? "bg-red-800/20 text-red-300"
-                              : "bg-[#1e2a3b] text-gray-300"
+                              ? "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300"
+                              : "bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300"
                         )}
                       >
                         {event.oddsData?.[bookmaker.code]?.draw ? (
@@ -425,15 +425,15 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                       </span>
                     </TableCell>
                     
-                    <TableCell className="px-2 py-1 whitespace-nowrap text-center border-r border-[#2e3a4a]">
+                    <TableCell className="px-2 py-1 whitespace-nowrap text-center border-r border-gray-200 dark:border-gray-700">
                       <span 
                         className={cn(
                           "text-sm font-medium px-1 py-0.5 rounded",
                           getOddsHighlightType(event, 'away', bookmaker.code) === 'highest' 
-                            ? "bg-green-800/20 text-green-300" 
+                            ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300" 
                             : getOddsHighlightType(event, 'away', bookmaker.code) === 'lowest'
-                              ? "bg-red-800/20 text-red-300"
-                              : "bg-[#1e2a3b] text-gray-300"
+                              ? "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300"
+                              : "bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300"
                         )}
                       >
                         {event.oddsData?.[bookmaker.code]?.away ? (
@@ -452,7 +452,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                       </span>
                     </TableCell>
                     
-                    <TableCell className="px-2 py-1 whitespace-nowrap text-center border-r border-[#2e3a4a]">
+                    <TableCell className="px-2 py-1 whitespace-nowrap text-center border-r border-gray-200 dark:border-gray-700">
                       {(() => {
                         const homeOdds = event.oddsData?.[bookmaker.code]?.home;
                         const drawOdds = event.oddsData?.[bookmaker.code]?.draw;
@@ -462,19 +462,19 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                         const marginPercentage = margin ? ((margin - 1) * 100).toFixed(2) : '-';
                         
                         // Determine margin color based on value
-                        let marginColorClass = 'text-gray-300';
+                        let marginColorClass = 'text-gray-800 dark:text-gray-300';
                         if (marginPercentage !== '-') {
                           const marginValue = parseFloat(marginPercentage);
                           if (marginValue < 5) {
-                            marginColorClass = 'text-green-300';
+                            marginColorClass = 'text-green-600';
                           } else if (marginValue < 7.5) {
-                            marginColorClass = 'text-lime-300';
+                            marginColorClass = 'text-lime-600';
                           } else if (marginValue < 10) {
-                            marginColorClass = 'text-amber-300';
+                            marginColorClass = 'text-amber-600';
                           } else if (marginValue < 12.5) {
-                            marginColorClass = 'text-orange-300';
+                            marginColorClass = 'text-orange-600';
                           } else {
-                            marginColorClass = 'text-red-300';
+                            marginColorClass = 'text-red-600';
                           }
                         }
                         
@@ -487,7 +487,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                                 eventName: event.teams,
                                 isOpen: true
                               })}
-                              className={`text-sm font-medium px-2 py-1 rounded bg-[#283648] hover:bg-[#324254] ${marginColorClass} cursor-pointer transition-colors duration-150 ease-in-out`}
+                              className={`text-sm font-medium px-2 py-1 rounded bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 ${marginColorClass} cursor-pointer transition-colors duration-150 ease-in-out`}
                             >
                               {marginPercentage}%
                             </button>
@@ -495,7 +495,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                         }
                         
                         return (
-                          <span className="text-sm font-medium px-1 py-0.5 rounded bg-[#283648] text-gray-300">
+                          <span className="text-sm font-medium px-1 py-0.5 rounded bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300">
                             {marginPercentage !== '-' ? `${marginPercentage}%` : '-'}
                           </span>
                         );
@@ -514,7 +514,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                           
                           if (comparison === null) {
                             return (
-                              <span className="text-sm font-medium px-1 py-0.5 rounded bg-[#283648] text-gray-300">
+                              <span className="text-sm font-medium px-1 py-0.5 rounded bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300">
                                 -
                               </span>
                             );
@@ -529,7 +529,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                           
                           if (isEffectivelyZero) {
                             return (
-                              <span className="text-sm font-medium px-1 py-0.5 rounded bg-[#283648] text-gray-300 flex items-center justify-center">
+                              <span className="text-sm font-medium px-1 py-0.5 rounded bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300 flex items-center justify-center">
                                 {displayValue}
                               </span>
                             );
@@ -540,8 +540,8 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                             <span className={cn(
                               "text-sm font-medium px-1 py-0.5 rounded flex items-center justify-center",
                               isBetter
-                                ? "bg-green-800/20 text-green-300" 
-                                : "bg-red-800/20 text-red-300"
+                                ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300" 
+                                : "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300"
                             )}>
                               {displayValue}
                             </span>
@@ -552,7 +552,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                   </TableRow>
                 );
               })}
-            </div>
+            </React.Fragment>
           ))}
         </TableBody>
       </Table>
