@@ -803,52 +803,42 @@ async function processEvents(events: any[]): Promise<void> {
         // Mark the last time we saw this event
         existingEvent.lastSeen = existingEvent.lastSeen || Date.now();
         
-        // Mark events as finished when:
-        // 1. An event has been suspended (not in API response) for 10+ minutes
-        // 2. OR it has reached game minute 90+ at any point in history
-        // 3. OR it hasn't been seen for 30+ minutes (regardless of game minute)
-
-        const tenMinutesMs = 10 * 60 * 1000;
-        const thirtyMinutesMs = 30 * 60 * 1000;
+        // Per user requirements, an event is finished if:
+        // 1. Latest game minute is 91 or higher (post-match)
+        // 2. Event hasn't been seen by scraper for 2+ minutes
+        
+        const twoMinutesMs = 2 * 60 * 1000;
         
         // Get the game minute from the event or history
-        let gameMinuteNumber = parseInt(existingEvent.gameMinute || '0');
-        let maxGameMinute = gameMinuteNumber;
-        let pastMinute90 = gameMinuteNumber >= 90;
+        let latestGameMinute = parseInt(existingEvent.gameMinute || '0');
         
-        // Check history for minute information and maximum game minute
+        // Check history for minute information and get the latest game minute
         const history = marketHistories.find(h => h.eventId === existingEvent.id);
         if (history && history.timestamps.length > 0) {
-          // Calculate time since first seen (total tracked match duration)
-          const firstTimestamp = history.timestamps[0].timestamp;
-          const matchDuration = Date.now() - firstTimestamp;
+          // Sort timestamps by time (newest first)
+          const sortedTimestamps = [...history.timestamps].sort((a, b) => b.timestamp - a.timestamp);
           
-          // Look through the history timestamps to find the highest game minute
-          for (const timePoint of history.timestamps) {
+          // Try to find the latest game minute from the most recent entries
+          for (let i = 0; i < Math.min(10, sortedTimestamps.length); i++) {
+            const timePoint = sortedTimestamps[i];
             if (timePoint.gameMinute) {
-              const historyMinute = parseInt(timePoint.gameMinute);
-              if (!isNaN(historyMinute) && historyMinute > maxGameMinute) {
-                maxGameMinute = historyMinute;
-                if (maxGameMinute >= 90) {
-                  pastMinute90 = true;
-                }
+              const minute = parseInt(timePoint.gameMinute);
+              if (!isNaN(minute)) {
+                latestGameMinute = minute;
+                break; // Found the latest minute, stop looking
               }
             }
           }
           
-          // Mark as finished if any of these conditions are met:
+          // Mark as finished if both conditions are met:
           if (
-            // 1. Event reached 90+ minutes at any point
-            pastMinute90 || 
-            // 2. Event has been tracking for over 120 minutes total (typical match length)
-            matchDuration > 120 * 60 * 1000 || 
-            // 3. Event has been suspended and not seen for 10+ minutes
-            (Date.now() - existingEvent.lastSeen > tenMinutesMs && existingEvent.suspended) ||
-            // 4. Event hasn't been seen for 30+ minutes (regardless of status)
-            (Date.now() - existingEvent.lastSeen > thirtyMinutesMs)
+            // 1. Latest game minute is 91+ (post-match)
+            latestGameMinute >= 91 && 
+            // 2. Event hasn't been seen for 2+ minutes
+            (Date.now() - existingEvent.lastSeen > twoMinutesMs)
           ) {
             if (!existingEvent.finished) {
-              console.log(`⚽ Marking event ${existingEvent.id} (${existingEvent.name}) as FINISHED - max minute was ${maxGameMinute}, suspended=${existingEvent.suspended}, lastSeen=${Math.round((Date.now() - existingEvent.lastSeen) / (60 * 1000))}m ago`);
+              console.log(`⚽ Marking event ${existingEvent.id} (${existingEvent.name}) as FINISHED - latest minute was ${latestGameMinute}, lastSeen=${Math.round((Date.now() - existingEvent.lastSeen) / (60 * 1000))}m ago`);
               existingEvent.finished = true;
             }
           } else {
@@ -856,15 +846,8 @@ async function processEvents(events: any[]): Promise<void> {
             existingEvent.finished = false;
           }
         } else {
-          // If no history is found, use a simpler rule - mark finished if not seen for 30+ minutes
-          if (Date.now() - existingEvent.lastSeen > thirtyMinutesMs) {
-            if (!existingEvent.finished) {
-              console.log(`⚽ Marking event ${existingEvent.id} (${existingEvent.name}) as FINISHED - no history found and not seen for 30+ minutes`);
-              existingEvent.finished = true;
-            }
-          } else {
-            existingEvent.finished = false;
-          }
+          // If no history is found, we can't determine game minute, so keep it active
+          existingEvent.finished = false;
         }
         
         updatedEvents.push(existingEvent);
@@ -1179,20 +1162,16 @@ function cleanupOldData(): void {
     marketHistories.push(...filteredHistories);
   }
   
-  // Now process heartbeatState to actually remove finished events
-  // if they've been finished for more than 1 hour
-  const oneHourMs = 60 * 60 * 1000;
-  
+  // Now process heartbeatState to immediately remove finished events
   if (finishedEventIds.length > 0) {
     const beforeCount = heartbeatState.events.length;
-    heartbeatState.events = heartbeatState.events.filter(event => {
-      // Keep if not finished OR finished recently (within last hour)
-      return !event.finished || (event.lastSeen && now - event.lastSeen < oneHourMs);
-    });
+    
+    // Filter out all finished events
+    heartbeatState.events = heartbeatState.events.filter(event => !event.finished);
     
     const removedCount = beforeCount - heartbeatState.events.length;
     if (removedCount > 0) {
-      console.log(`🧹 Removed ${removedCount} finished events from heartbeat state that were older than 1 hour`);
+      console.log(`🧹 Removed ${removedCount} finished events from heartbeat state immediately`);
     }
   }
 }
