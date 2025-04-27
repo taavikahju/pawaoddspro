@@ -594,16 +594,9 @@ function getMarketAvailabilityStats() {
   return stats;
 }
 
-// Export both CommonJS and ESM formats
-module.exports = {
-  scrapeLiveEvents,
-  getMarketAvailabilityStats,
-  runLiveScraper: scrapeLiveEvents // Add runLiveScraper as an alias for scrapeLiveEvents
-};
-
-// ESM exports
+// ESM exports only
 export {
   scrapeLiveEvents,
   getMarketAvailabilityStats,
-  scrapeLiveEvents as runLiveScraper // Export runLiveScraper for ESM
+  scrapeLiveEvents as runLiveScraper
 };
