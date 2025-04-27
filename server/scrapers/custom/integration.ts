@@ -278,6 +278,43 @@ if (fs.existsSync(betpawaKeScraperPath)) {
   };
 }
 
+// Add enhanced logging and error handling for BetPawa scrapers
+const originalRunCustomScraper = runCustomScraper;
+// @ts-ignore - we're monkey patching this function to add additional logging
+runCustomScraper = async function(bookmakerCode: string): Promise<any[]> {
+  if (bookmakerCode === 'betpawa_gh' || bookmakerCode === 'betpawa_ke') {
+    console.log(`🔄 Running ${bookmakerCode} scraper with enhanced logging...`);
+    
+    try {
+      // Run the original function to get the data
+      const events = await originalRunCustomScraper(bookmakerCode);
+      
+      // Log detailed information about what we got
+      console.log(`📊 ${bookmakerCode} scraper returned ${events?.length || 0} events`);
+      if (events && events.length > 0) {
+        console.log(`📊 First event sample from ${bookmakerCode}: ${JSON.stringify(events[0])}`);
+      } else {
+        console.error(`⚠️ ${bookmakerCode} scraper returned no events or undefined`);
+        if (events === undefined) {
+          console.error(`⚠️ ${bookmakerCode} returned undefined instead of an array`);
+        }
+        if (events === null) {
+          console.error(`⚠️ ${bookmakerCode} returned null instead of an array`);
+        }
+        if (Array.isArray(events) && events.length === 0) {
+          console.error(`⚠️ ${bookmakerCode} returned an empty array`);
+        }
+      }
+      
+      return events || [];
+    } catch (error) {
+      console.error(`Error running ${bookmakerCode}:`, error);
+      return []; // Return empty array on error
+    }
+  }
+  return originalRunCustomScraper(bookmakerCode);
+};
+
 // Export a function that checks if a custom scraper exists for a bookmaker
 export function hasCustomScraper(bookmakerCode: string): boolean {
   return !!SCRIPT_CONFIG[bookmakerCode] && 
