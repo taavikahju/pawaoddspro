@@ -1080,6 +1080,60 @@ export function getEventMarketHistory(eventId: string): {
 }
 
 // Get the current heartbeat status
+// Global helper functions to identify problematic events
+// Make these global so they're accessible from all functions
+function isKoreanEvent(event: HeartbeatEvent): boolean {
+  // List of specific Korean event IDs we know cause problems
+  const specificKoreanEventIds = ['11893816', '11893815', '11918154', '11893817', '11918156'];
+  
+  // Check if it's in the specific list
+  if (specificKoreanEventIds.includes(event.id)) {
+    return true;
+  }
+  
+  // All events with IDs starting with certain prefixes (Korean leagues)
+  if (event.id.startsWith('1189') || event.id.startsWith('1191')) {
+    return true;
+  }
+  
+  return false;
+}
+
+// Function to identify Korean event IDs from the history data
+function isKoreanEventId(eventId: string): boolean {
+  // All events with IDs starting with 117 or 118 (Korean leagues)
+  if (eventId.startsWith('117') || eventId.startsWith('118')) {
+    return true;
+  }
+  
+  // Specific Korean event IDs we know cause problems
+  const specificKoreanEventIds = ['11893816', '11893815', '11918154', '11893817', '11918156'];
+  return specificKoreanEventIds.includes(eventId);
+}
+
+// Function to detect problematic events that should be excluded from UI
+function shouldExcludeEvent(event: HeartbeatEvent): boolean {
+  // First check if it's a Korean event
+  if (isKoreanEvent(event)) {
+    return true;
+  }
+  
+  // List of problematic Hong Kong event IDs showing minute "1" but should be finished
+  // These events had game minute 91 in the past
+  const hongKongFinishedEventIds = ['11709071', '11709070', '11709069'];
+  if (hongKongFinishedEventIds.includes(event.id)) {
+    return true;
+  }
+  
+  // Check specific event characteristics - any event showing minute "1" that has been suspended
+  // is likely a glitched finished event incorrectly showing as live again
+  if (event.gameMinute === '1' && (!event.currentlyAvailable || event.suspended)) {
+    return true;
+  }
+  
+  return false;
+}
+
 export function getHeartbeatStatus(): HeartbeatState {
   // Debug suspensions
   const suspendedEvents = heartbeatState.events.filter(e => (!e.currentlyAvailable || e.suspended) && !e.finished);
@@ -1090,38 +1144,12 @@ export function getHeartbeatStatus(): HeartbeatState {
     });
   }
   
-  // Function to detect problematic events that should be excluded
-  function shouldExcludeEvent(event: HeartbeatEvent): boolean {
-    // List of specific Korean event IDs we always want to exclude
-    const specificKoreanEventIds = ['11893816', '11893815', '11918154', '11893817', '11918156'];
-    
-    // Check if it's in the specific blacklist
-    if (specificKoreanEventIds.includes(event.id)) {
-      return true;
-    }
-    
-    // List of problematic Hong Kong event IDs that are showing minute "1" but should be finished
-    // These events had game minute 91 in the past
-    const hongKongFinishedEventIds = ['11709071', '11709070', '11709069'];
-    if (hongKongFinishedEventIds.includes(event.id)) {
-      return true;
-    }
-    
-    // Check specific event characteristics - any event showing minute "1" that has been suspended
-    // is likely a glitched finished event incorrectly showing as live again
-    if (event.gameMinute === '1' && (!event.currentlyAvailable || event.suspended)) {
-      return true;
-    }
-    
-    return false;
-  }
-  
   // Create a new state object with the correct data
-  // Filter out finished events and Korean events from the API response
+  // Filter out finished events and problematic events from the API response
   const filteredEvents = heartbeatState.events.filter(event => {
-    // Remove Korean events, regardless of status
-    if (isKoreanEvent(event)) {
-      console.log(`🇰🇷 FORCE-REMOVING Korean event from API response: ${event.id} (${event.name})`);
+    // Remove problematic events - especially those showing minute 1 after being 90+
+    if (shouldExcludeEvent(event)) {
+      console.log(`🚫 FORCE-REMOVING problematic event from API response: ${event.id} (${event.name})`);
       return false;
     }
     
@@ -1176,25 +1204,19 @@ function cleanupOldData(): void {
   const timestamp = Date.now();
   const oneDay = 24 * 60 * 60 * 1000; // 1 day in milliseconds
   
-  // Function to identify Korean event IDs from the history data
-  function isKoreanEventId(eventId: string): boolean {
-    // All events with IDs starting with 117 or 118 (Korean leagues)
-    if (eventId.startsWith('117') || eventId.startsWith('118')) {
-      return true;
-    }
-    
-    // Specific Korean event IDs we know cause problems
-    const specificKoreanEventIds = ['11893816', '11893815', '11918154', '11893817', '11918156'];
-    return specificKoreanEventIds.includes(eventId);
+  // Helper function that combines the detection of any problematic event type
+  function isProblematicEvent(event: HeartbeatEvent): boolean {
+    return isKoreanEvent(event) || 
+           event.gameMinute === '1' && (!event.currentlyAvailable || event.suspended);
   }
   
   // Get lists of active, suspended, and finished events
   const suspendedEventIds = heartbeatState.events
-    .filter(e => (!e.currentlyAvailable || e.suspended) && !e.finished && !isKoreanEvent(e))
+    .filter(e => (!e.currentlyAvailable || e.suspended) && !e.finished && !isProblematicEvent(e))
     .map(e => e.id);
   
   const finishedEventIds = heartbeatState.events
-    .filter(e => e.finished || isKoreanEvent(e))
+    .filter(e => e.finished || isProblematicEvent(e))
     .map(e => e.id);
     
   if (suspendedEventIds.length > 0) {
@@ -1206,11 +1228,11 @@ function cleanupOldData(): void {
     console.log(`CLEANUP: Found ${finishedEventIds.length} finished events that can be cleaned up`);
   }
   
-  // Log Korean events that will be force-removed
-  const koreanEventsInState = heartbeatState.events.filter(e => isKoreanEvent(e));
-  if (koreanEventsInState.length > 0) {
-    console.log(`CLEANUP: Force-removing ${koreanEventsInState.length} problematic Korean events:`);
-    koreanEventsInState.forEach(e => console.log(`  - ${e.id}: ${e.name}`));
+  // Log problematic events that will be force-removed
+  const problematicEventsInState = heartbeatState.events.filter(e => shouldExcludeEvent(e));
+  if (problematicEventsInState.length > 0) {
+    console.log(`CLEANUP: Force-removing ${problematicEventsInState.length} problematic events:`);
+    problematicEventsInState.forEach(e => console.log(`  - ${e.id}: ${e.name}`));
   }
   
   // Process each history
