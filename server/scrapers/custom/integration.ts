@@ -220,6 +220,17 @@ export function loadAllCustomScrapers(): void {
 // Immediately load all custom scrapers when this module is imported
 loadAllCustomScrapers();
 
+// Manually register enhanced SportyBet scraper - replacing the default one
+const enhancedSportyScraperPath = path.join(process.cwd(), 'server', 'scrapers', 'custom', 'sporty_scraper_enhanced.cjs');
+if (fs.existsSync(enhancedSportyScraperPath)) {
+  console.log('🌟 Registering enhanced SportyBet scraper with improved event coverage');
+  SCRIPT_CONFIG['sporty'] = {
+    scriptPath: enhancedSportyScraperPath,
+    command: 'node',
+    outputFormat: 'json'
+  };
+}
+
 // Export a function that checks if a custom scraper exists for a bookmaker
 export function hasCustomScraper(bookmakerCode: string): boolean {
   return !!SCRIPT_CONFIG[bookmakerCode] && 
