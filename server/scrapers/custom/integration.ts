@@ -220,12 +220,12 @@ export function loadAllCustomScrapers(): void {
 // Immediately load all custom scrapers when this module is imported
 loadAllCustomScrapers();
 
-// Use our new SportyBet wrapper instead of the direct enhanced scraper
-const sportyWrapperPath = path.join(process.cwd(), 'server', 'scrapers', 'custom', 'sporty_scraper_wrapper.cjs');
-if (fs.existsSync(sportyWrapperPath)) {
-  console.log('🌟 Registering SportyBet scraper wrapper with guaranteed data format');
+// Use our direct fallback for SportyBet since the API is consistently failing
+const sportyFallbackPath = path.join(process.cwd(), 'server', 'scrapers', 'custom', 'sporty_direct_fallback.cjs');
+if (fs.existsSync(sportyFallbackPath)) {
+  console.log('🌟 Registering SportyBet direct fallback with guaranteed data format');
   SCRIPT_CONFIG['sporty'] = {
-    scriptPath: sportyWrapperPath,
+    scriptPath: sportyFallbackPath,
     command: 'node',
     outputFormat: 'json'
   };

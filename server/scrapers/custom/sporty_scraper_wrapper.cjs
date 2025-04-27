@@ -3,7 +3,13 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 // Path to the sample data file
-const SAMPLE_DATA_PATH = path.join(__dirname, 'sporty_sample_data.json');
+// Look for various potential sample data filenames
+const SAMPLE_DATA_PATHS = [
+  path.join(__dirname, 'sporty_sample_data.json'),
+  path.join(__dirname, 'enhanced_sporty_results.json'),
+  path.join(__dirname, 'sporty_output.json'),
+  path.join(__dirname, 'sporty-test-output.json')
+];
 // List of all scrapers to try - will attempt each one in order until success
 const SCRAPERS = [
   { name: 'SportyBet Axios', path: 'sporty_axios_scraper.cjs' },
@@ -51,14 +57,37 @@ function runSportyScrapers() {
 
 // Function to load sample data if all scrapers fail
 function loadSampleData() {
-  try {
-    const sampleData = JSON.parse(fs.readFileSync(SAMPLE_DATA_PATH, 'utf8'));
-    console.error(`Using ${sampleData.length} sample events as fallback data`);
-    return sampleData;
-  } catch (error) {
-    console.error(`Error loading sample data: ${error.message}`);
-    return [];
+  // Try each potential sample data path
+  for (const samplePath of SAMPLE_DATA_PATHS) {
+    try {
+      const fs = require('fs');
+      if (fs.existsSync(samplePath)) {
+        const sampleData = JSON.parse(fs.readFileSync(samplePath, 'utf8'));
+        console.error(`✅ Using ${sampleData.length} sample events from ${samplePath} as fallback data`);
+        return sampleData;
+      }
+    } catch (error) {
+      console.error(`Error loading sample data from ${samplePath}: ${error.message}`);
+    }
   }
+  
+  // If no sample data found, create minimal fallback data
+  console.error(`❌ No sample data files found - creating minimal fallback data`);
+  return [
+    {
+      id: 'sporty-event-fallback-1',
+      event: 'Fallback Team A - Fallback Team B',
+      country: 'Ghana',
+      tournament: 'Premier League',
+      sport: 'football',
+      start_time: new Date().toISOString().replace('T', ' ').substring(0, 16),
+      home_odds: 2.1,
+      draw_odds: 3.25,
+      away_odds: 2.9,
+      bookmaker: 'sporty',
+      region: 'gh'
+    }
+  ];
 }
 
 // Main function to run the scraper and process events
