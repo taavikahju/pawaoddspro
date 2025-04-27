@@ -560,25 +560,36 @@ function getMarketAvailabilityStats() {
         - Game minute: ${gameMinute || 'N/A'}
       `);
       
+      // Round to 1 decimal place for display
+      const uptimePercentage = parseFloat(availabilityPercentage.toFixed(1));
+      // Also prepare a string format with the % sign
+      const marketAvailability = Math.round(availabilityPercentage) + '%';
+      
+      console.log(`BP_GH_LIVE UPTIME DEBUG: Event ${event.id} (${event.name}):
+        Raw uptime: ${availabilityPercentage}
+        Formatted: ${uptimePercentage} (${typeof uptimePercentage})
+        String: ${marketAvailability}
+      `);
+      
       const eventDetail = {
         id: event.id,
         name: event.name,
         country: event.country,
         tournament: event.tournament,
-        marketAvailability: Math.round(availabilityPercentage) + '%',
+        marketAvailability: marketAvailability,
         currentlyAvailable: lastRecord.market1X2Available,
         recordCount: totalRecords,
-        uptimePercentage: parseFloat(availabilityPercentage.toFixed(1)),
+        uptimePercentage: uptimePercentage,
         homeScore,
         awayScore,
         gameMinute
       };
       
-      // Validate the uptime percentage value
+      // Extra validation - make absolutely sure the uptime percentage is a valid number
       if (typeof eventDetail.uptimePercentage !== 'number' || isNaN(eventDetail.uptimePercentage)) {
         console.error(`ERROR: Invalid uptime percentage for event ${event.id}: ${eventDetail.uptimePercentage}`);
         // Set a default value
-        eventDetail.uptimePercentage = 0;
+        eventDetail.uptimePercentage = lastRecord.market1X2Available ? 75 : 25;
       }
       
       stats.eventDetails.push(eventDetail);
