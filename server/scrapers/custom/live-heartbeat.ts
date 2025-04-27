@@ -1090,13 +1090,25 @@ export function getHeartbeatStatus(): HeartbeatState {
     });
   }
   
+  // List of Korean event IDs that we forcibly want to exclude
+  const koreanEventIds = ['11893816', '11893815', '11918154', '11893817', '11918156'];
+  
   // Create a new state object with the correct data
-  // Filter out finished events from the API response
-  const filteredEvents = heartbeatState.events.filter(event => !event.finished);
+  // Filter out finished events and Korean events from the API response
+  const filteredEvents = heartbeatState.events.filter(event => {
+    // Remove Korean events by ID, regardless of status
+    if (koreanEventIds.includes(event.id)) {
+      console.log(`🇰🇷 FORCE-REMOVING Korean event from API response: ${event.id} (${event.name})`);
+      return false;
+    }
+    
+    // Also remove any finished events
+    return !event.finished;
+  });
   
   return {
     ...heartbeatState,
-    events: filteredEvents // Return everything except finished events
+    events: filteredEvents // Return everything except finished and Korean events
   };
 }
 
@@ -1138,16 +1150,19 @@ async function loadHistoryData(): Promise<void> {
 
 // Clean up old data to save memory/disk space
 function cleanupOldData(): void {
-  const now = Date.now();
+  const timestamp = Date.now();
   const oneDay = 24 * 60 * 60 * 1000; // 1 day in milliseconds
+  
+  // Force remove Korean events before any other processing
+  const koreanEventIdsToForceRemove = ['11893816', '11893815', '11918154', '11893817', '11918156'];
   
   // Get lists of active, suspended, and finished events
   const suspendedEventIds = heartbeatState.events
-    .filter(e => (!e.currentlyAvailable || e.suspended) && !e.finished)
+    .filter(e => (!e.currentlyAvailable || e.suspended) && !e.finished && !koreanEventIdsToForceRemove.includes(e.id))
     .map(e => e.id);
   
   const finishedEventIds = heartbeatState.events
-    .filter(e => e.finished)
+    .filter(e => e.finished || koreanEventIdsToForceRemove.includes(e.id))
     .map(e => e.id);
     
   if (suspendedEventIds.length > 0) {
@@ -1159,24 +1174,38 @@ function cleanupOldData(): void {
     console.log(`CLEANUP: Found ${finishedEventIds.length} finished events that can be cleaned up`);
   }
   
+  // Log Korean events that will be force-removed
+  const koreanEventsInState = heartbeatState.events.filter(e => koreanEventIdsToForceRemove.includes(e.id));
+  if (koreanEventsInState.length > 0) {
+    console.log(`CLEANUP: Force-removing ${koreanEventsInState.length} problematic Korean events:`);
+    koreanEventsInState.forEach(e => console.log(`  - ${e.id}: ${e.name}`));
+  }
+  
   // Process each history
   for (const history of marketHistories) {
-    if (finishedEventIds.includes(history.eventId)) {
+    if (koreanEventIdsToForceRemove.includes(history.eventId)) {
+      // Korean events - purge completely
+      history.timestamps = [];
+    } else if (finishedEventIds.includes(history.eventId)) {
       // Only keep the last hour of data for finished events
       const oneHourMs = 60 * 60 * 1000;
-      history.timestamps = history.timestamps.filter(t => now - t.timestamp < oneHourMs);
+      history.timestamps = history.timestamps.filter(t => timestamp - t.timestamp < oneHourMs);
     } else if (suspendedEventIds.includes(history.eventId)) {
       // Keep 3 days of data for suspended events
-      history.timestamps = history.timestamps.filter(t => now - t.timestamp < 3 * oneDay);
+      history.timestamps = history.timestamps.filter(t => timestamp - t.timestamp < 3 * oneDay);
     } else {
       // Keep 1 day of data for active events
-      history.timestamps = history.timestamps.filter(t => now - t.timestamp < oneDay);
+      history.timestamps = history.timestamps.filter(t => timestamp - t.timestamp < oneDay);
     }
   }
   
   // Remove histories with no data points, while preserving suspended event histories
   const initialCount = marketHistories.length;
   const filteredHistories = marketHistories.filter(h => {
+    // Remove Korean events completely
+    if (koreanEventIdsToForceRemove.includes(h.eventId)) {
+      return false;
+    }
     // Keep if it has timestamps OR is a suspended event
     return h.timestamps.length > 0 || suspendedEventIds.includes(h.eventId);
   });
@@ -1191,31 +1220,33 @@ function cleanupOldData(): void {
   // and also explicitly remove Korean events that are causing issues
   const beforeCount = heartbeatState.events.length;
   
-  // First mark Korean events as finished if they're over 5 minutes old
-  const now = Date.now();
-  const fiveMinutesMs = 5 * 60 * 1000;
-  
   // Extract list of Korean event IDs to be removed for clarity in logs
-  const koreanEventIds = ['11893816', '11893815', '11918154', '11893817', '11918156'];
-  const koreanEventsToRemove = heartbeatState.events.filter(event => 
-    koreanEventIds.includes(event.id)
-  );
+  const koreanEventIdsToRemove = ['11893816', '11893815', '11918154', '11893817', '11918156'];
   
-  if (koreanEventsToRemove.length > 0) {
-    console.log(`🇰🇷 Explicitly removing ${koreanEventsToRemove.length} Korean events that are causing issues:`);
-    koreanEventsToRemove.forEach(event => {
+  // DIRECTLY remove the Korean events from the heartbeat state array
+  // This is the most aggressive approach - directly manipulate the array
+  const koreanEvents = heartbeatState.events.filter(event => koreanEventIdsToRemove.includes(event.id));
+  
+  if (koreanEvents.length > 0) {
+    console.log(`🇰🇷 DIRECTLY removing ${koreanEvents.length} Korean events that are causing issues:`);
+    koreanEvents.forEach(event => {
       console.log(`  - ${event.id}: ${event.name}`);
-      // Mark them as finished so they get removed
-      event.finished = true;
-      finishedEventIds.push(event.id);
+      
+      // Find the index of this event in the events array
+      const index = heartbeatState.events.findIndex(e => e.id === event.id);
+      if (index !== -1) {
+        // Directly splice it out of the array
+        heartbeatState.events.splice(index, 1);
+        console.log(`    → Directly removed from index ${index}`);
+      }
     });
   }
   
-  // Now filter out all finished events
+  // After direct removal, also filter out all finished events
   heartbeatState.events = heartbeatState.events.filter(event => !event.finished);
   
   const removedCount = beforeCount - heartbeatState.events.length;
   if (removedCount > 0) {
-    console.log(`🧹 Removed ${removedCount} events from heartbeat state (${finishedEventIds.length} finished + Korean events)`);
+    console.log(`🧹 Removed ${removedCount} events from heartbeat state`);
   }
 }
