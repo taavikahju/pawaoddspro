@@ -43,7 +43,7 @@ async function fetchPage(pageNum) {
         _t: Date.now() // Update timestamp for each request
       },
       headers,
-      timeout: 10000 // 10 second timeout
+      timeout: 30000 // 30 second timeout (increased from 10s to handle large data volumes)
     });
     
     if (response.status === 200 && response.data && response.data.data) {
@@ -415,7 +415,7 @@ async function tryAlternativeEndpoint() {
     
     const response = await axios.get(url, {
       headers,
-      timeout: 10000
+      timeout: 30000 // 30 second timeout (increased from 10s to handle large data volumes)
     });
     
     if (response.status === 200 && response.data && response.data.data) {
@@ -551,7 +551,7 @@ function hashCode(str) {
  */
 async function main() {
   try {
-    console.error('🔄 Starting SportyBet direct API scraper...');
+    console.error('🔄 Starting SportyBet direct API scraper with 30 second timeout...');
     
     // Add performance measurement
     const startTime = performance.now();
@@ -571,7 +571,7 @@ async function main() {
           _t: Date.now()
         },
         headers,
-        timeout: 10000
+        timeout: 30000 // 30 second timeout (increased from 10s)
       });
       
       if (response.status === 200 && response.data && response.data.data && response.data.data.tournaments) {
@@ -652,7 +652,7 @@ async function main() {
             _t: Date.now()
           },
           headers,
-          timeout: 10000
+          timeout: 30000 // 30 second timeout (increased from 10s)
         });
         
         // Extract tournament and category information from the API response
