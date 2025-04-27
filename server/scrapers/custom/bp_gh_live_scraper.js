@@ -23,124 +23,20 @@ const WRITE_INTERVAL = 60000; // Write to disk every minute
 /**
  * Scrape live events from BetPawa Ghana API with improved pagination support
  */
-async function scrapeLiveEvents(apiUrl) {
+async function scrapeLiveEvents() {
   try {
-    console.log('Scraping BetPawa Ghana live events...');
-    
-    // Parse the current URL
-    const url = new URL(apiUrl);
-    
-    // Check if URL is in the new format (with sport and category parameters)
-    const isNewFormat = url.pathname.includes('/events/inplay');
-    
-    if (isNewFormat) {
-      // Use new API format with simpler pagination
-      // The new API uses page and size parameters directly
-      
-      const allEvents = [];
-      let hasMoreResults = true;
-      let page = 1;
-      const pageSize = 20;
-      
-      while (hasMoreResults) {
-        // Create the new URL with pagination
-        const pagedUrl = new URL(apiUrl);
-        pagedUrl.searchParams.set('page', page.toString());
-        pagedUrl.searchParams.set('size', pageSize.toString());
-        
-        // Fetch the current page of results
-        console.log(`Fetching page ${page}...`);
-        const pageEvents = await scrapePagedEvents(pagedUrl.toString());
-        
-        if (pageEvents && pageEvents.length > 0) {
-          allEvents.push(...pageEvents);
-          // Move to the next page
-          page++;
-        } else {
-          // No more results, stop pagination
-          hasMoreResults = false;
-        }
-        
-        // Limit to 5 pages maximum to avoid excessive requests
-        if (page > 5) {
-          hasMoreResults = false;
-        }
-      }
-      
-      console.log(`Fetched a total of ${allEvents.length} events across multiple pages`);
-      
-      return extractEvents(allEvents, new Date().toISOString());
-    } else {
-      // Handle old format API (legacy support)
-      const queryParams = url.searchParams.get('q');
-      
-      // If no query params found, use the URL as-is
-      if (!queryParams) {
-        return await scrapePagedEvents(apiUrl);
-      }
-      
-      // Parse the query JSON to modify for pagination
-      let queryObj;
-      try {
-        queryObj = JSON.parse(queryParams);
-      } catch (err) {
-        console.error('Error parsing query parameters:', err);
-        return await scrapePagedEvents(apiUrl);
-      }
-      
-      // Get all pages of results
-      const allEvents = [];
-      let hasMoreResults = true;
-      let skip = 0;
-      const pageSize = 20;
-      
-      while (hasMoreResults) {
-        // Update the skip parameter in the query for pagination
-        if (queryObj.queries && queryObj.queries.length > 0) {
-          queryObj.queries[0].skip = skip;
-        }
-        
-        // Create the new URL with updated pagination
-        const updatedQueryParams = JSON.stringify(queryObj);
-        url.searchParams.set('q', updatedQueryParams);
-        const pagedUrl = url.toString();
-        
-        // Fetch the current page of results
-        console.log(`Fetching page ${skip / pageSize + 1} (skip=${skip})...`);
-        const pageEvents = await scrapePagedEvents(pagedUrl);
-        
-        if (pageEvents.length > 0) {
-          allEvents.push(...pageEvents);
-          // Move to the next page
-          skip += pageSize;
-        } else {
-          // No more results, stop pagination
-          hasMoreResults = false;
-        }
-        
-        // Limit to 5 pages maximum to avoid excessive requests
-        if (skip >= 100) {
-          hasMoreResults = false;
-        }
-      }
-      
-      const timestamp = new Date().toISOString();
-      
-      // Update market history for all events
-      updateMarketHistory(allEvents, timestamp);
-      
-      // Write to disk periodically to avoid excessive I/O
-      const currentTime = Date.now();
-      if (currentTime - lastWriteTime > WRITE_INTERVAL) {
-        await writeMarketHistoryToFile();
-        lastWriteTime = currentTime;
-      }
-      
-      console.log(`Fetched a total of ${allEvents.length} events across multiple pages`);
-      return allEvents;
+    const response = await axios.get('https://www.betpawa.com.gh/api/sportsbook/v2/events/lists/by-queries?q=%7B%22queries%22%3A%5B%7B%22query%22%3A%7B%22eventType%22%3A%22LIVE%22%2C%22categories%22%3A%5B%222%22%5D%2C%22zones%22%3A%7B%7D%7D%2C%22view%22%3A%7B%22marketTypes%22%3A%5B%223743%22%5D%7D%2C%22skip%22%3A0%2C%22sort%22%3A%7B%22competitionPriority%22%3A%22DESC%22%7D%2C%22take%22%3A20%7D%5D%7D');
+    const events = response.data?.queries?.[0]?.events || [];
+    const timestamp = new Date().toISOString();
+    updateMarketHistory(events, timestamp);
+    const currentTime = Date.now();
+    if (currentTime - lastWriteTime > WRITE_INTERVAL) {
+      await writeMarketHistoryToFile();
+      lastWriteTime = currentTime;
     }
+    return events;
   } catch (error) {
-    console.error('Error scraping BetPawa Ghana live events:', error.message);
+    console.error('Error scraping live events:', error);
     return [];
   }
 }
@@ -168,14 +64,14 @@ async function scrapePagedEvents(apiUrl) {
       },
       timeout: 15000 // 15-second timeout to allow for slower connections
     });
-    
+
     if (!response.data) {
       throw new Error('No data returned from API');
     }
-    
+
     // Check if we're getting the expected data format
     const timestamp = new Date().toISOString();
-    
+
     // Handle different API response structures
     if (Array.isArray(response.data)) {
       // New API format returns events directly in an array
@@ -195,7 +91,7 @@ async function scrapePagedEvents(apiUrl) {
     }
   } catch (error) {
     console.error('Error scraping page of BetPawa Ghana events:', error.message);
-    
+
     // Generate mock data for testing purposes
     console.log('Switching to mock event generation since API connection is failing');
     return generateMockEvents(5 + Math.floor(Math.random() * 10)); // Generate 5-15 mock events
@@ -219,12 +115,12 @@ function generateMockEvents(count = 10) {
     ['Celtic', 'Rangers'],
     ['Boca Juniors', 'River Plate']
   ];
-  
+
   for (let i = 0; i < count; i++) {
     const match = teams[i % teams.length];
     const eventId = Math.floor(Math.random() * 90000000) + 10000000;
     const isSuspended = Math.random() > 0.7; // 30% chance of suspension
-    
+
     mockEvents.push({
       id: eventId,
       name: `${match[0]} v ${match[1]}`,
@@ -251,7 +147,7 @@ function generateMockEvents(count = 10) {
       }
     });
   }
-  
+
   console.log(`Generated ${mockEvents.length} mock events for testing`);
   return mockEvents;
 }
@@ -261,7 +157,7 @@ function generateMockEvents(count = 10) {
  */
 function extractEvents(data, timestamp) {
   const events = [];
-  
+
   try {
     // Check if data is an array (for new API format)
     if (Array.isArray(data)) {
@@ -269,7 +165,7 @@ function extractEvents(data, timestamp) {
         // Process each event from the new API format
         // Event ID - using both siteEventId and id for compatibility
         const eventId = event.siteEventId || event.id;
-        
+
         // Get event name from competitors or name field
         let eventName = "Unknown Event";
         if (event.competitors && event.competitors.length >= 2) {
@@ -279,29 +175,29 @@ function extractEvents(data, timestamp) {
         } else if (event.homeTeam && event.awayTeam) {
           eventName = `${event.homeTeam} v ${event.awayTeam}`;
         }
-        
+
         // Get country and tournament info
         const country = event.category?.name || event.sport?.country || 'Unknown';
         const tournament = event.competition?.name || event.competition || 'Unknown';
-        
+
         // Check if there's a 1X2 market (Match Result)
         let market1X2 = null;
         let isSuspended = true;
         let homeOdds = null;
         let drawOdds = null;
         let awayOdds = null;
-        
+
         // Check in different market locations based on API structure
         if (event.markets) {
-          market1X2 = event.markets.find(m => 
+          market1X2 = event.markets.find(m =>
             m.typeId === '3743' || m.type?.id === '3743' || m.name?.includes('1X2')
           );
         }
-        
+
         // Extract market status and odds
         if (market1X2) {
           isSuspended = market1X2.suspended === true || market1X2.status === 'SUSPENDED';
-          
+
           // Extract outcomes if available
           if (market1X2.outcomes && market1X2.outcomes.length >= 3) {
             // Sort by outcome type if available (1, X, 2)
@@ -313,13 +209,13 @@ function extractEvents(data, timestamp) {
               // Otherwise use the order as is
               return 0;
             });
-            
+
             homeOdds = sortedOutcomes[0]?.decimal || sortedOutcomes[0]?.price;
             drawOdds = sortedOutcomes[1]?.decimal || sortedOutcomes[1]?.price;
             awayOdds = sortedOutcomes[2]?.decimal || sortedOutcomes[2]?.price;
           }
         }
-        
+
         // Create score object if available
         let score = null;
         if (event.score) {
@@ -329,7 +225,7 @@ function extractEvents(data, timestamp) {
             period: event.score.period || ''
           };
         }
-        
+
         events.push({
           id: eventId,
           eventId: eventId,
@@ -352,7 +248,7 @@ function extractEvents(data, timestamp) {
       data.queries[0].events.forEach(event => {
         // Event ID - using both siteEventId and id for compatibility
         const eventId = event.siteEventId || event.id;
-        
+
         // Get event name from competitors
         let eventName = "Unknown Event";
         if (event.competitors && event.competitors.length >= 2) {
@@ -360,36 +256,36 @@ function extractEvents(data, timestamp) {
         } else if (event.name) {
           eventName = event.name;
         }
-        
+
         // Get country and tournament info
         const country = event.category?.name || 'Unknown';
         const tournament = event.competition?.name || 'Unknown';
-        
+
         // Check if there's a 1X2 market (Match Result - usually market type 3743)
         let market1X2 = null;
         let isSuspended = true;
         let homeOdds = null;
         let drawOdds = null;
         let awayOdds = null;
-        
+
         // Check for market in mainMarkets first
         if (event.mainMarkets) {
-          market1X2 = event.mainMarkets.find(m => 
+          market1X2 = event.mainMarkets.find(m =>
             m.typeId === '3743' || m.type?.id === '3743' || m.name?.includes('1X2')
           );
         }
-        
+
         // If not found, check in regular markets
         if (!market1X2 && event.markets) {
-          market1X2 = event.markets.find(m => 
+          market1X2 = event.markets.find(m =>
             m.typeId === '3743' || m.type?.id === '3743' || m.name?.includes('1X2')
           );
         }
-        
+
         // Extract market status and odds
         if (market1X2) {
           isSuspended = market1X2.suspended === true || market1X2.status === 'SUSPENDED';
-          
+
           // Extract outcomes if available
           if (market1X2.outcomes && market1X2.outcomes.length >= 3) {
             // Sort by outcome type if available (1, X, 2)
@@ -401,13 +297,13 @@ function extractEvents(data, timestamp) {
               // Otherwise use the order as is
               return 0;
             });
-            
+
             homeOdds = sortedOutcomes[0]?.decimal || sortedOutcomes[0]?.price;
             drawOdds = sortedOutcomes[1]?.decimal || sortedOutcomes[1]?.price;
             awayOdds = sortedOutcomes[2]?.decimal || sortedOutcomes[2]?.price;
           }
         }
-        
+
         // Create score object if available
         let score = null;
         if (event.score) {
@@ -417,7 +313,7 @@ function extractEvents(data, timestamp) {
             period: event.score.period || ''
           };
         }
-        
+
         events.push({
           id: eventId,
           eventId: eventId,
@@ -435,12 +331,12 @@ function extractEvents(data, timestamp) {
         });
       });
     }
-    
+
     console.log(`Extracted ${events.length} events from API response`);
   } catch (err) {
     console.error('Error extracting events:', err.message);
   }
-  
+
   return events;
 }
 
@@ -459,7 +355,7 @@ function updateMarketHistory(events, timestamp) {
         history: []
       };
     }
-    
+
     // Add current status to history
     marketHistoryData[event.id].history.push({
       timestamp: timestamp,
@@ -469,22 +365,22 @@ function updateMarketHistory(events, timestamp) {
       awayOdds: event.awayOdds,
       score: event.score
     });
-    
+
     // Keep history size reasonable (max 2 hours of 10-second intervals = 720 entries)
     if (marketHistoryData[event.id].history.length > 720) {
       marketHistoryData[event.id].history.shift();
     }
   });
-  
+
   // Prune old events (keep for 24 hours max)
   const twentyFourHoursAgo = new Date();
   twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
-  
+
   Object.keys(marketHistoryData).forEach(eventId => {
-    const lastUpdate = marketHistoryData[eventId].history.length > 0 
+    const lastUpdate = marketHistoryData[eventId].history.length > 0
       ? new Date(marketHistoryData[eventId].history[marketHistoryData[eventId].history.length - 1].timestamp)
       : null;
-    
+
     if (lastUpdate && lastUpdate < twentyFourHoursAgo) {
       delete marketHistoryData[eventId];
     }
@@ -497,15 +393,15 @@ function updateMarketHistory(events, timestamp) {
 async function writeMarketHistoryToFile() {
   try {
     const dataDir = path.join(process.cwd(), 'data');
-    
+
     // Create data directory if it doesn't exist
     if (!fs.existsSync(dataDir)) {
       fs.mkdirSync(dataDir, { recursive: true });
     }
-    
+
     const filePath = path.join(dataDir, 'betpawa_gh_live_market_history.json');
     await fs.promises.writeFile(filePath, JSON.stringify(marketHistoryData, null, 2));
-    
+
     console.log(`Wrote BetPawa Ghana live market history to ${filePath}`);
   } catch (error) {
     console.error('Error writing market history file:', error.message);
@@ -516,82 +412,7 @@ async function writeMarketHistoryToFile() {
  * Get market availability statistics
  */
 function getMarketAvailabilityStats() {
-  const stats = {
-    totalEvents: 0,
-    availableMarkets: 0,
-    suspendedMarkets: 0,
-    eventDetails: []
-  };
-  
-  Object.values(marketHistoryData).forEach(event => {
-    stats.totalEvents++;
-    
-    // Get the last status record
-    const lastRecord = event.history[event.history.length - 1];
-    if (lastRecord) {
-      if (lastRecord.market1X2Available) {
-        stats.availableMarkets++;
-      } else {
-        stats.suspendedMarkets++;
-      }
-      
-      // Calculate percentage of time market was available
-      const totalRecords = event.history.length;
-      const availableRecords = event.history.filter(record => record.market1X2Available).length;
-      const availabilityPercentage = totalRecords > 0 ? (availableRecords / totalRecords) * 100 : 0;
-      
-      // Get the latest score if available
-      let homeScore, awayScore, gameMinute;
-      const latestWithScore = [...event.history].reverse().find(record => record.score);
-      if (latestWithScore && latestWithScore.score) {
-        homeScore = latestWithScore.score.home;
-        awayScore = latestWithScore.score.away;
-        
-        // Extract game minute from period if available
-        if (latestWithScore.score.period) {
-          const match = latestWithScore.score.period.match(/(\d+)/);
-          if (match && match[1]) {
-            gameMinute = match[1];
-          }
-        }
-      }
-      
-      // Round to 1 decimal place for display
-      const uptimePercentage = parseFloat(availabilityPercentage.toFixed(1));
-      // Also prepare a string format with the % sign
-      const marketAvailability = Math.round(availabilityPercentage) + '%';
-      
-      // Only log low uptime events (less than 75%) which might indicate issues
-      if (availabilityPercentage < 75) {
-        console.log(`⚠️ LOW UPTIME: Event ${event.id} (${event.name}): ${availabilityPercentage.toFixed(1)}% uptime`);
-      }
-      
-      const eventDetail = {
-        id: event.id,
-        name: event.name,
-        country: event.country,
-        tournament: event.tournament,
-        marketAvailability: marketAvailability,
-        currentlyAvailable: lastRecord.market1X2Available,
-        recordCount: totalRecords,
-        uptimePercentage: uptimePercentage,
-        homeScore,
-        awayScore,
-        gameMinute
-      };
-      
-      // Extra validation - make absolutely sure the uptime percentage is a valid number
-      if (typeof eventDetail.uptimePercentage !== 'number' || isNaN(eventDetail.uptimePercentage)) {
-        console.error(`ERROR: Invalid uptime percentage for event ${event.id}: ${eventDetail.uptimePercentage}`);
-        // Set a default value
-        eventDetail.uptimePercentage = lastRecord.market1X2Available ? 75 : 25;
-      }
-      
-      stats.eventDetails.push(eventDetail);
-    }
-  });
-  
-  return stats;
+  return marketHistoryData;
 }
 
 // Export both CommonJS and ESM formats
