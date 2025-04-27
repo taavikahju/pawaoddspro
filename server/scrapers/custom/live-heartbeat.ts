@@ -799,6 +799,17 @@ async function processEvents(events: any[]): Promise<void> {
           existingEvent.suspended = true;
           existingEvent.currentlyAvailable = false;
         }
+        
+        // Mark the last time we saw this event
+        existingEvent.lastSeen = existingEvent.lastSeen || Date.now();
+        
+        // Only consider an event finished if we haven't seen it for more than 6 hours
+        const sixHoursMs = 6 * 60 * 60 * 1000;
+        if (Date.now() - existingEvent.lastSeen > sixHoursMs) {
+          existingEvent.finished = true;
+          console.log(`📆 Marking event ${existingEvent.id} (${existingEvent.name}) as FINISHED - not seen for over 6 hours`);
+        }
+        
         updatedEvents.push(existingEvent);
       }
     }
@@ -818,6 +829,12 @@ async function processEvents(events: any[]): Promise<void> {
           }
           newEvent.suspended = false;
           newEvent.currentlyAvailable = true;
+          
+          // Event is seen again, clear any finished status
+          newEvent.finished = false;
+          
+          // Update last seen timestamp
+          newEvent.lastSeen = Date.now();
         } else {
           // No markets, ALWAYS mark as suspended
           if (!existingEvent.suspended) {
@@ -825,7 +842,19 @@ async function processEvents(events: any[]): Promise<void> {
           }
           newEvent.suspended = true;
           newEvent.currentlyAvailable = false;
+          
+          // Update last seen timestamp
+          newEvent.lastSeen = Date.now();
         }
+      } else {
+        // This is a newly discovered event
+        // Make sure it has the lastSeen timestamp
+        newEvent.lastSeen = Date.now();
+        
+        // And it's definitely not finished
+        newEvent.finished = false;
+        
+        console.log(`📌 NEW EVENT DISCOVERED: ${newEvent.id} (${newEvent.name}) - totalMarketCount=${newEvent.totalMarketCount || 0}`);
       }
       
       updatedEvents.push(newEvent);
@@ -988,15 +1017,22 @@ export function getEventMarketHistory(eventId: string): {
 // Get the current heartbeat status
 export function getHeartbeatStatus(): HeartbeatState {
   // Debug suspensions
-  const suspendedEvents = heartbeatState.events.filter(e => !e.currentlyAvailable || e.suspended);
+  const suspendedEvents = heartbeatState.events.filter(e => (!e.currentlyAvailable || e.suspended) && !e.finished);
   if (suspendedEvents.length > 0) {
     console.log(`BACKEND DEBUG: Found ${suspendedEvents.length} suspended events in heartbeatState. Total events: ${heartbeatState.events.length}`);
     suspendedEvents.forEach(e => {
-      console.log(`BACKEND DEBUG: Suspended event: ${e.id} (${e.name}) - currentlyAvailable: ${e.currentlyAvailable}, suspended: ${e.suspended}`);
+      console.log(`BACKEND DEBUG: Suspended event: ${e.id} (${e.name}) - currentlyAvailable: ${e.currentlyAvailable}, suspended: ${e.suspended}, finished: ${e.finished || false}`);
     });
   }
   
-  return heartbeatState;
+  // Create a new state object with the correct data
+  // Filter out finished events from the API response
+  const filteredEvents = heartbeatState.events.filter(event => !event.finished);
+  
+  return {
+    ...heartbeatState,
+    events: filteredEvents // Return everything except finished events
+  };
 }
 
 // Save history data to disk
