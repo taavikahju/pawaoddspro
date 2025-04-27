@@ -5,11 +5,11 @@
 
 const axios = require('axios');
 
-// Create logger that only logs when not called programmatically
+// Create logger that only logs to stderr when called programmatically
 const logger = {
   log: function(...args) {
     if (require.main === module) {
-      console.log(...args);
+      console.error(...args); // Use console.error to avoid polluting stdout
     }
   },
   error: function(...args) {
