@@ -431,7 +431,8 @@ export default function LiveScraperPanel({ isAdmin }: LiveScraperPanelProps) {
                     </TableCell>
                     {/* Uptime Percentage Column */}
                     <TableCell>
-                      {(eventUptimeData[event.id] !== undefined || event.uptimePercentage !== undefined) ? (
+                      {console.log(`Event ${event.id} uptime: event.uptimePercentage=${event.uptimePercentage}, eventUptimeData=${eventUptimeData[event.id]}`)}
+                      {(event.uptimePercentage !== undefined || eventUptimeData[event.id] !== undefined) ? (
                         <div className="flex items-center">
                           <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mr-2">
                             <div 

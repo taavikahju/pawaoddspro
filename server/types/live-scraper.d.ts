@@ -26,6 +26,10 @@ declare module './scrapers/custom/live_scraper_scheduler' {
         marketAvailability: string;
         currentlyAvailable: boolean;
         recordCount: number;
+        uptimePercentage?: number;
+        homeScore?: number;
+        awayScore?: number;
+        gameMinute?: string;
       }>;
     };
   };
