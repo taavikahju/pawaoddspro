@@ -373,22 +373,32 @@ export default function LiveScraperPanel({ isAdmin }: LiveScraperPanelProps) {
                   <TableRow key={event.id} className="hover:bg-slate-50 dark:hover:bg-slate-900/20">
                     <TableCell className="font-medium">
                       <div className="truncate max-w-[200px]">{event.name}</div>
-                      {/* Display game minute and score if available */}
-                      {(event.gameMinute || event.homeScore !== undefined || event.awayScore !== undefined) && (
-                        <div className="text-xs text-muted-foreground mt-1 flex items-center">
-                          {event.gameMinute && (
-                            <span className="bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded mr-2">
-                              {event.gameMinute}'
-                            </span>
-                          )}
-                          
-                          {(event.homeScore !== undefined && event.awayScore !== undefined) && (
-                            <span className="font-medium">
-                              {event.homeScore} - {event.awayScore}
-                            </span>
-                          )}
-                        </div>
-                      )}
+                      {/* Display game minute, uptime and score if available */}
+                      <div className="text-xs text-muted-foreground mt-1 flex items-center">
+                        {event.gameMinute && (
+                          <span className="bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded mr-2">
+                            {event.gameMinute}'
+                          </span>
+                        )}
+                        
+                        {/* Uptime percentage badge */}
+                        {eventUptimeData[event.id] !== undefined && (
+                          <span className={`px-1 py-0.5 rounded mr-2 ${
+                            eventUptimeData[event.id] > 75 ? 'bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400' : 
+                            eventUptimeData[event.id] > 50 ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400' : 
+                            eventUptimeData[event.id] > 30 ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/20 dark:text-orange-400' : 
+                            'bg-red-100 text-red-700 dark:bg-red-900/20 dark:text-red-400'
+                          }`}>
+                            Uptime: {eventUptimeData[event.id].toFixed(1)}%
+                          </span>
+                        )}
+                        
+                        {(event.homeScore !== undefined && event.awayScore !== undefined) && (
+                          <span className="font-medium">
+                            {event.homeScore} - {event.awayScore}
+                          </span>
+                        )}
+                      </div>
                     </TableCell>
                     <TableCell>
                       <span className="text-xs text-muted-foreground block">{event.country}</span>
