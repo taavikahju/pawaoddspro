@@ -11,41 +11,51 @@ const axios = require('axios');
 async function scrapeBetPawaKenya() {
   console.log('Starting BetPawa Kenya 15-minute scraper (CommonJS version)');
   
-  // Define constants
-  const DOMAIN = 'ke.betpawa.com';
+  // Define constants - updated to correct domain
+  const DOMAIN = 'www.betpawa.co.ke';
   const BRAND = 'kenya';
   
-  // Create headers
+  // Generate a unique cache-busting timestamp
+  const cacheBuster = Date.now();
+  
+  // Create headers - Important changes to fix 304 Not Modified responses:
+  // 1. Remove the if-modified-since header
+  // 2. Add cache control headers to prevent caching
+  // 3. Add a random timestamp parameter to ensure fresh content
   const headers = {
     "accept": "*/*",
     "accept-language": "en-GB,en-US;q=0.9,en;q=0.8",
     "baggage": "sentry-environment=production,sentry-release=1.203.58",
     "devicetype": "web",
-    "if-modified-since": new Date().toUTCString(),
+    "cache-control": "no-cache, no-store",
+    "pragma": "no-cache",
     "priority": "u=1, i",
-    "referer": `https://${DOMAIN}/events?marketId=1X2&categoryId=2`,
+    "referer": `https://${DOMAIN}/events?marketId=1X2&categoryId=2&_t=${cacheBuster}`,
     "sec-ch-ua": "\"Google Chrome\";v=\"135\", \"Not-A.Brand\";v=\"8\", \"Chromium\";v=\"135\"",
     "sec-ch-ua-mobile": "?0",
     "sec-ch-ua-platform": "\"macOS\"",
     "sec-fetch-dest": "empty",
     "sec-fetch-mode": "cors",
     "sec-fetch-site": "same-origin",
-    "sentry-trace": "69dc4eced394402e8b4842078bf03b47-982bacd1c87283b4-0",
+    "sentry-trace": `${Math.random().toString(36).substring(2)}-${Math.random().toString(36).substring(2)}-0`,
     "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36",
     "vuejs": "true",
     "x-pawa-brand": `betpawa-${BRAND}`,
     "x-pawa-language": "en"
   };
   
-  // Use fixed cookies instead of random ones to avoid crypto dependency problems
+  // Generate a new session ID for each request to avoid caching
+  const sessionId = Math.random().toString(36).substring(2);
+  
+  // Use updated cookies with timestamp to prevent caching
   const cookies = {
-    "_ga": "GA1.1.459857438.1713161475",
-    "_ga_608WPEPCC3": "GS1.1.1731480684.7.0.1731480684.0.0.0",
+    "_ga": `GA1.1.${Math.floor(Math.random() * 1000000000)}.${Date.now()}`,
+    "_ga_608WPEPCC3": `GS1.1.${Date.now()}.${Math.floor(Math.random() * 10)}.0.${Date.now()}.0.0.0`,
     "aff_cookie": "F60",
-    "_gcl_au": "1.1.1725251410.1738666716",
-    "PHPSESSID": "b0694dabe05179bc223abcdf8f7bf83e",
-    "tracingId": "0f5927de-e30d-4228-b29c-c92210017a62",
-    "x-pawa-token": "b4c6eda2ae319f4b-8a3075ba3c9d9984"
+    "_gcl_au": `1.1.${Math.floor(Math.random() * 1000000000)}.${Date.now()}`,
+    "PHPSESSID": sessionId,
+    "tracingId": `${Math.random().toString(36).substring(2)}-${Math.random().toString(36).substring(2)}`,
+    "x-pawa-token": `${Math.random().toString(36).substring(2)}-${Math.random().toString(36).substring(2)}`
   };
   
   // Convert cookies to string format for axios
