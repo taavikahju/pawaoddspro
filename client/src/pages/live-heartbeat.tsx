@@ -739,54 +739,56 @@ export default function LiveHeartbeat() {
                             setSelectedEventId(event.id);
                           }}
                         >
-                          {/* Moved uptime percentage to be part of the header */}
-                          
                           <div className="flex flex-col mb-1">
                             <div className="flex items-center justify-between mb-1">
-                              {/* Add uptime percentage to the right */}
-                              {event.uptimePercentage !== undefined && (
-                                <Badge className={`text-xs font-semibold ml-auto ${
-                                  event.uptimePercentage >= 80 ? 'bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/30 dark:text-green-400 dark:hover:bg-green-900/30' :
-                                  event.uptimePercentage >= 50 ? 'bg-amber-100 text-amber-800 hover:bg-amber-100 dark:bg-amber-900/30 dark:text-amber-400 dark:hover:bg-amber-900/30' :
-                                  'bg-red-100 text-red-800 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/30'
-                                }`}>
-                                  {event.uptimePercentage.toFixed(1)}%
-                                </Badge>
-                              )}
-                              
-                              <div className="flex items-center gap-1.5">
+                              <div className="flex items-center gap-2">
+                                {/* Uptime percentage - green text like screenshot */}
+                                {event.uptimePercentage !== undefined && (
+                                  <span className={`text-sm font-semibold ${
+                                    event.uptimePercentage >= 80 ? 'text-green-500 dark:text-green-400' :
+                                    event.uptimePercentage >= 50 ? 'text-amber-500 dark:text-amber-400' :
+                                    'text-red-500 dark:text-red-400'
+                                  }`}>
+                                    {event.uptimePercentage.toFixed(1)}%
+                                  </span>
+                                )}
+                                
+                                {/* Green dot */}
                                 {event.isInPlay && (
-                                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" 
+                                  <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse mx-1" 
                                     title="Live event" />
                                 )}
-                                {/* Only show market availability for live events, not historical ones */}
+                                
+                                {/* Status badge - SUSPENDED or Available */}
                                 {activeTab === 'live' ? (
                                   <Badge 
                                     variant={event.currentlyAvailable ? 'outline' : 'destructive'}
-                                    className={`text-[10px] h-5 ml-1 ${!event.currentlyAvailable ? 'text-white' : ''}`}
+                                    className={`text-[10px] h-5 ${!event.currentlyAvailable ? 'text-white' : ''}`}
                                   >
                                     {event.currentlyAvailable ? 'Available' : 'SUSPENDED'}
                                   </Badge>
                                 ) : (
                                   <Badge 
                                     variant={event.suspended ? "destructive" : "secondary"}
-                                    className={`text-[10px] h-5 ml-1 ${event.suspended ? 'text-white' : ''}`}
+                                    className={`text-[10px] h-5 ${event.suspended ? 'text-white' : ''}`}
                                   >
                                     {event.suspended ? 'SUSPENDED' : 'Completed'}
                                   </Badge>
                                 )}
-                                {event.gameMinute && (
-                                  <Badge variant="secondary" className="text-[10px] h-5 ml-1">
-                                    {event.gameMinute === 'HT' || (typeof event.gameMinute === 'string' && event.gameMinute.toLowerCase() === 'ht')
-                                      ? 'HT' 
-                                      : typeof event.gameMinute === 'string' && !event.gameMinute.includes("'")
-                                        ? `${event.gameMinute}'` 
-                                        : typeof event.gameMinute === 'number'
-                                          ? `${event.gameMinute}'`
-                                          : event.gameMinute}
-                                  </Badge>
-                                )}
                               </div>
+                              
+                              {/* Game minute pushed to the right side */}
+                              {event.gameMinute && (
+                                <Badge variant="secondary" className="text-[10px] h-5 ml-auto">
+                                  {event.gameMinute === 'HT' || (typeof event.gameMinute === 'string' && event.gameMinute.toLowerCase() === 'ht')
+                                    ? 'HT' 
+                                    : typeof event.gameMinute === 'string' && !event.gameMinute.includes("'")
+                                      ? `${event.gameMinute}'` 
+                                      : typeof event.gameMinute === 'number'
+                                        ? `${event.gameMinute}'`
+                                        : event.gameMinute}
+                                </Badge>
+                              )}
                             </div>
                             <div className="font-medium text-sm w-full" style={{wordWrap: 'break-word'}}>
                               {event.homeTeam && event.awayTeam 
