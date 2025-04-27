@@ -59,6 +59,7 @@ interface HeartbeatEvent {
   totalMarketCount?: number; // Added to track the actual number of markets available
   homeScore?: number; // Score for home team
   awayScore?: number; // Score for away team
+  uptimePercentage?: number; // Percentage of time the market has been available
 }
 
 // Define the structure for market history
@@ -1303,11 +1304,29 @@ export function getHeartbeatStatus(): HeartbeatState {
     
     // Also remove any finished events
     return !event.finished;
+  }).map(event => {
+    // Calculate uptime percentage for each event
+    // Find the history for this event to calculate uptime
+    const history = marketHistories.find(h => h.eventId === event.id);
+    
+    if (history && history.timestamps.length > 0) {
+      const totalPoints = history.timestamps.length;
+      const availablePoints = history.timestamps.filter(t => t.isAvailable).length;
+      const uptimePercentage = totalPoints > 0 ? (availablePoints / totalPoints) * 100 : 0;
+      
+      // Add uptime percentage to the event
+      return {
+        ...event,
+        uptimePercentage: Math.round(uptimePercentage * 10) / 10 // Round to 1 decimal place
+      };
+    }
+    
+    return event;
   });
   
   return {
     ...heartbeatState,
-    events: filteredEvents // Return everything except finished and Korean events
+    events: filteredEvents // Return events with uptime percentage added
   };
 }
 
