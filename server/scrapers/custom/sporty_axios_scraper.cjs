@@ -77,26 +77,22 @@ const processRegionData = (tournaments, region) => {
 
       // Only add events that have all three odds
       if (homeOdds && drawOdds && awayOdds) {
+        // Format using the EXACT format expected by the integration.ts parser
+        // This matches the format in line 77-84 of integration.ts
         flatEvents.push({
-          id: event.eventId.replace(/\D/g, ''),
-          teams: `${event.homeTeamName} - ${event.awayTeamName}`,
-          league: tournamentName,
-          sport: 'football',
+          eventId: event.eventId.replace(/\D/g, ''),
+          event: `${event.homeTeamName} - ${event.awayTeamName}`,
           country: country,
           tournament: tournamentName,
-          date: event.estimateStartTime 
-            ? new Date(event.estimateStartTime).toISOString().split('T')[0]
+          sport: 'football',
+          start_time: event.estimateStartTime 
+            ? new Date(event.estimateStartTime).toISOString().replace('T', ' ').substring(0, 16)
             : null,
-          time: event.estimateStartTime
-            ? new Date(event.estimateStartTime).toISOString().split('T')[1].substring(0, 5)
-            : null,
-          bookmakerCode: 'sporty',
-          region: region,
-          odds: {
-            home: parseFloat(homeOdds),
-            draw: parseFloat(drawOdds),
-            away: parseFloat(awayOdds)
-          }
+          home_odds: homeOdds,
+          draw_odds: drawOdds,
+          away_odds: awayOdds,
+          bookmaker: 'sporty',
+          region: region
         });
       }
     });
