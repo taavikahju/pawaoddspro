@@ -229,6 +229,15 @@ if (fs.existsSync(enhancedSportyScraperPath)) {
     command: 'node',
     outputFormat: 'json'
   };
+  // Also log enhanced scraper info when scraper is run
+  const originalRunCustomScraper = runCustomScraper;
+  // @ts-ignore - we're monkey patching this function to add logging
+  runCustomScraper = async function(bookmakerCode: string): Promise<any[]> {
+    if (bookmakerCode === 'sporty') {
+      console.log('🔄 Running ENHANCED SportyBet scraper...');
+    }
+    return originalRunCustomScraper(bookmakerCode);
+  };
 }
 
 // Export a function that checks if a custom scraper exists for a bookmaker
