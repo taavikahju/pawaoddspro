@@ -5424,9 +5424,9 @@
     "tournament": "Indonesia Liga 1",
     "event": "Madura United FC - Persik Kediri",
     "name": "Madura United FC - Persik Kediri",
-    "home_odds": 2.07,
+    "home_odds": 1.97,
     "draw_odds": 3.55,
-    "away_odds": 3.35,
+    "away_odds": 3.65,
     "start_time": "2025-04-28T12:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -5447,7 +5447,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.07
+            "price": 1.97
           },
           {
             "name": "X",
@@ -5455,7 +5455,7 @@
           },
           {
             "name": "2",
-            "price": 3.35
+            "price": 3.65
           }
         ]
       }
@@ -26462,69 +26462,6 @@
     }
   },
   {
-    "id": "26331061",
-    "eventId": "59017229",
-    "country": "Belgium",
-    "tournament": "Pro League",
-    "event": "KVC Westerlo - FCV Dender EH",
-    "name": "KVC Westerlo - FCV Dender EH",
-    "home_odds": 1.76,
-    "draw_odds": 3.95,
-    "away_odds": 4.2,
-    "start_time": "2025-05-02T18:45:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 1.76
-          },
-          {
-            "name": "X",
-            "price": 3.95
-          },
-          {
-            "name": "2",
-            "price": 4.2
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "Belgium"
-    },
-    "region": {
-      "name": "Belgium"
-    },
-    "competition": {
-      "name": "Pro League"
-    },
-    "league": {
-      "name": "Pro League"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
     "id": "26672905",
     "eventId": "50955907",
     "country": "France",
@@ -30232,6 +30169,69 @@
     },
     "league": {
       "name": "Championship"
+    },
+    "isInPlay": false,
+    "status": "UPCOMING",
+    "scoreboard": {
+      "display": {
+        "minute": ""
+      }
+    }
+  },
+  {
+    "id": "26908801",
+    "eventId": "60000995",
+    "country": "Czech Republic",
+    "tournament": "1. Liga",
+    "event": "FC Hradec Kralove - MFK Karvina",
+    "name": "FC Hradec Kralove - MFK Karvina",
+    "home_odds": 1.88,
+    "draw_odds": 3.5,
+    "away_odds": 3.65,
+    "start_time": "2025-05-03T11:30:00Z",
+    "gameMinute": "",
+    "sport": "football",
+    "competitors": [
+      {
+        "name": ""
+      },
+      {
+        "name": ""
+      }
+    ],
+    "markets": [
+      {
+        "marketType": {
+          "id": "3743",
+          "name": "1X2"
+        },
+        "prices": [
+          {
+            "name": "1",
+            "price": 1.88
+          },
+          {
+            "name": "X",
+            "price": 3.5
+          },
+          {
+            "name": "2",
+            "price": 3.65
+          }
+        ]
+      }
+    ],
+    "category": {
+      "name": "Czech Republic"
+    },
+    "region": {
+      "name": "Czech Republic"
+    },
+    "competition": {
+      "name": "1. Liga"
+    },
+    "league": {
+      "name": "1. Liga"
     },
     "isInPlay": false,
     "status": "UPCOMING",
@@ -35414,9 +35414,9 @@
     "tournament": "3. Liga",
     "event": "Arminia Bielefeld - Dynamo Dresden",
     "name": "Arminia Bielefeld - Dynamo Dresden",
-    "home_odds": 2.01,
+    "home_odds": 2.07,
     "draw_odds": 3.35,
-    "away_odds": 3.5,
+    "away_odds": 3.35,
     "start_time": "2025-05-03T14:30:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -35437,7 +35437,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.01
+            "price": 2.07
           },
           {
             "name": "X",
@@ -35445,7 +35445,7 @@
           },
           {
             "name": "2",
-            "price": 3.5
+            "price": 3.35
           }
         ]
       }
