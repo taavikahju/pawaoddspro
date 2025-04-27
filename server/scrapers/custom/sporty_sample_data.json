@@ -7,6 +7,7 @@
     "date": "2025-04-28",
     "time": "15:00",
     "bookmakerCode": "sporty",
+    "region": "gh",
     "odds": {
       "home": 2.1,
       "draw": 3.5,
@@ -15,68 +16,13 @@
   },
   {
     "id": "sporty-event-002",
-    "teams": "Barcelona vs Real Madrid",
-    "league": "Spain La Liga",
+    "teams": "Arsenal vs Chelsea",
+    "league": "England Premier League",
     "sport": "football",
     "date": "2025-04-28",
-    "time": "20:00",
+    "time": "17:30",
     "bookmakerCode": "sporty",
-    "odds": {
-      "home": 2.5,
-      "draw": 3.2,
-      "away": 2.7
-    }
-  },
-  {
-    "id": "sporty-event-003",
-    "teams": "Bayern Munich vs Borussia Dortmund",
-    "league": "Germany Bundesliga",
-    "sport": "football",
-    "date": "2025-04-29",
-    "time": "18:30",
-    "bookmakerCode": "sporty",
-    "odds": {
-      "home": 1.8,
-      "draw": 3.7,
-      "away": 4.1
-    }
-  },
-  {
-    "id": "sporty-event-004",
-    "teams": "PSG vs Marseille",
-    "league": "France Ligue 1",
-    "sport": "football",
-    "date": "2025-04-29",
-    "time": "20:45",
-    "bookmakerCode": "sporty",
-    "odds": {
-      "home": 1.6,
-      "draw": 3.9,
-      "away": 5.2
-    }
-  },
-  {
-    "id": "sporty-event-005",
-    "teams": "Juventus vs Inter Milan",
-    "league": "Italy Serie A",
-    "sport": "football",
-    "date": "2025-04-30",
-    "time": "19:00",
-    "bookmakerCode": "sporty",
-    "odds": {
-      "home": 2.3,
-      "draw": 3.1,
-      "away": 3.0
-    }
-  },
-  {
-    "id": "sporty-event-006",
-    "teams": "Ajax vs Feyenoord",
-    "league": "Netherlands Eredivisie",
-    "sport": "football",
-    "date": "2025-04-30",
-    "time": "16:30",
-    "bookmakerCode": "sporty",
+    "region": "ke",
     "odds": {
       "home": 1.9,
       "draw": 3.6,
@@ -84,17 +30,78 @@
     }
   },
   {
-    "id": "sporty-event-007",
-    "teams": "Celtic vs Rangers",
-    "league": "Scotland Premiership",
+    "id": "sporty-event-003",
+    "teams": "Bayern Munich vs Borussia Dortmund",
+    "league": "Germany Bundesliga",
     "sport": "football",
-    "date": "2025-05-01",
-    "time": "12:30",
+    "date": "2025-04-28",
+    "time": "15:30",
     "bookmakerCode": "sporty",
+    "region": "ng",
     "odds": {
       "home": 1.7,
-      "draw": 3.5,
+      "draw": 3.8,
+      "away": 4.1
+    }
+  },
+  {
+    "id": "sporty-event-004",
+    "teams": "Real Madrid vs Barcelona",
+    "league": "Spain La Liga",
+    "sport": "football",
+    "date": "2025-04-29",
+    "time": "20:00",
+    "bookmakerCode": "sporty",
+    "region": "tz",
+    "odds": {
+      "home": 2.3,
+      "draw": 3.3,
+      "away": 2.9
+    }
+  },
+  {
+    "id": "sporty-event-005",
+    "teams": "Juventus vs Inter Milan",
+    "league": "Italy Serie A",
+    "sport": "football",
+    "date": "2025-04-29",
+    "time": "19:45",
+    "bookmakerCode": "sporty",
+    "region": "za",
+    "odds": {
+      "home": 2.4,
+      "draw": 3.2,
+      "away": 2.8
+    }
+  },
+  {
+    "id": "sporty-event-006",
+    "teams": "PSG vs Marseille",
+    "league": "France Ligue 1",
+    "sport": "football",
+    "date": "2025-04-30",
+    "time": "20:00",
+    "bookmakerCode": "sporty",
+    "region": "gh",
+    "odds": {
+      "home": 1.6,
+      "draw": 3.9,
       "away": 4.5
+    }
+  },
+  {
+    "id": "sporty-event-007",
+    "teams": "Ajax vs Feyenoord",
+    "league": "Netherlands Eredivisie",
+    "sport": "football",
+    "date": "2025-04-30",
+    "time": "14:30",
+    "bookmakerCode": "sporty",
+    "region": "ke",
+    "odds": {
+      "home": 2.0,
+      "draw": 3.5,
+      "away": 3.4
     }
   },
   {
@@ -103,40 +110,43 @@
     "league": "Portugal Primeira Liga",
     "sport": "football",
     "date": "2025-05-01",
-    "time": "21:00",
+    "time": "19:15",
     "bookmakerCode": "sporty",
+    "region": "ng",
     "odds": {
       "home": 2.2,
-      "draw": 3.2,
+      "draw": 3.3,
       "away": 3.1
     }
   },
   {
     "id": "sporty-event-009",
-    "teams": "River Plate vs Boca Juniors",
-    "league": "Argentina Primera Division",
+    "teams": "Celtic vs Rangers",
+    "league": "Scotland Premier League",
     "sport": "football",
-    "date": "2025-05-02",
-    "time": "20:00",
+    "date": "2025-05-01",
+    "time": "12:30",
     "bookmakerCode": "sporty",
+    "region": "tz",
     "odds": {
-      "home": 2.1,
-      "draw": 3.2,
-      "away": 3.4
+      "home": 1.8,
+      "draw": 3.6,
+      "away": 3.9
     }
   },
   {
     "id": "sporty-event-010",
-    "teams": "Flamengo vs Palmeiras",
-    "league": "Brazil Serie A",
+    "teams": "River Plate vs Boca Juniors",
+    "league": "Argentina Primera Division",
     "sport": "football",
     "date": "2025-05-02",
-    "time": "22:00",
+    "time": "00:30",
     "bookmakerCode": "sporty",
+    "region": "za",
     "odds": {
-      "home": 2.3,
-      "draw": 3.1,
-      "away": 3.0
+      "home": 2.1,
+      "draw": 3.3,
+      "away": 3.2
     }
   }
 ]

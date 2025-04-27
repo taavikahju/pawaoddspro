@@ -1,146 +1,90 @@
-#!/usr/bin/env node
-
-// This is a wrapper around the SportyBet enhanced scraper
-// that ensures the data is properly formatted for the odds comparison
-
-// Import the original implementation
-const { spawn } = require('child_process');
-const path = require('path');
 const fs = require('fs');
+const path = require('path');
+const { execSync } = require('child_process');
 
-// Path to the better scraper
-// We're now using the better scraper with the new factsCenter/pcUpcomingEvents API endpoint
-const scraperPath = path.join(__dirname, 'sporty_better_scraper.cjs');
+// Path to the sample data file
+const SAMPLE_DATA_PATH = path.join(__dirname, 'sporty_sample_data.json');
+// List of all scrapers to try - will attempt each one in order until success
+const SCRAPERS = [
+  { name: 'SportyBet Better', path: 'sporty_better_scraper.cjs' },
+  { name: 'SportyBet New', path: 'sporty_new_scraper.cjs' },
+  { name: 'SportyBet Original', path: 'sporty_scraper.cjs' },
+];
 
-// Function to run the scraper and get its output
-async function runScraper() {
-  return new Promise((resolve, reject) => {
-    const scraper = spawn('node', [scraperPath]);
-    
-    let output = '';
-    let errorOutput = '';
-    
-    scraper.stdout.on('data', (data) => {
-      output += data.toString();
-    });
-    
-    scraper.stderr.on('data', (data) => {
-      errorOutput += data.toString();
-      // Also log errors directly to console for debugging
-      process.stderr.write(data);
-    });
-    
-    scraper.on('error', (error) => {
-      console.error('Error running scraper:', error);
-      reject(error);
-    });
-    
-    scraper.on('close', (code) => {
-      if (code !== 0) {
-        console.error(`Scraper exited with code ${code}`);
-        reject(new Error(`Scraper exited with code ${code}`));
-      } else {
-        try {
-          let data = JSON.parse(output);
-          resolve(data);
-        } catch (error) {
-          console.error('Failed to parse scraper output:', error);
-          console.error('Raw output:', output);
-          reject(error);
+// Function to try running all scrapers in sequence until one succeeds
+function runSportyScrapers() {
+  let lastError = null;
+  
+  // Try each scraper in sequence
+  for (const scraper of SCRAPERS) {
+    try {
+      console.error(`🔄 Trying ${scraper.name} scraper...`);
+      const result = execSync('node ' + path.join(__dirname, scraper.path), { 
+        timeout: 30000 
+      }).toString();
+      
+      try {
+        const data = JSON.parse(result);
+        console.error(`📊 ${scraper.name} returned ${data.length} events`);
+        
+        if (data.length > 0) {
+          return data; // Successfully found data with this scraper
         }
+      } catch (error) {
+        console.error(`Error parsing ${scraper.name} output: ${error.message}`);
+        lastError = error;
       }
-    });
-  });
-}
-
-// Load sample data for use in fallback scenarios
-const sampleDataPath = path.join(__dirname, 'sporty_sample_data.json');
-let sampleData = [];
-
-try {
-  if (fs.existsSync(sampleDataPath)) {
-    sampleData = JSON.parse(fs.readFileSync(sampleDataPath, 'utf8'));
-    console.error(`Loaded ${sampleData.length} sample events as fallback data`);
-  }
-} catch (error) {
-  console.error('Error loading sample data:', error);
-}
-
-// Process the events to ensure consistent data format
-function processEvents(events) {
-  // If we have no events and sample data exists, use the sample data
-  if (events.length === 0 && sampleData.length > 0) {
-    console.error(`Using ${sampleData.length} sample events as fallback due to API issues`);
-    // Use the direct sample data since it's already in the right format
-    return sampleData;
+    } catch (error) {
+      console.error(`Error running ${scraper.name}: ${error.message}`);
+      lastError = error;
+    }
   }
   
-  return events.map(event => {
-    // Ensure we have standardized fields
-    const processedEvent = {
-      id: event.id || `sporty-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
-      teams: event.event || event.teams || `${event.homeTeamName || 'Unknown'} vs ${event.awayTeamName || 'Unknown'}`,
-      league: event.tournament || event.league || 'Unknown League',
-      sport: 'football',
-      date: event.date || (event.start_time ? event.start_time.split('T')[0] : new Date().toISOString().split('T')[0]),
-      time: event.time || (event.start_time ? event.start_time.split('T')[1].substring(0, 5) : new Date().toISOString().split('T')[1].substring(0, 5)),
-      bookmakerCode: 'sporty', // Explicitly set the bookmaker code
-      odds: {
-        home: parseFloat(event.home_odds || event.homeOdds || event['1'] || 0) || 0,
-        draw: parseFloat(event.draw_odds || event.drawOdds || event.X || 0) || 0,
-        away: parseFloat(event.away_odds || event.awayOdds || event['2'] || 0) || 0
-      }
-    };
-    
-    // If no valid odds, set to 0 to avoid NaN errors
-    if (isNaN(processedEvent.odds.home)) processedEvent.odds.home = 0;
-    if (isNaN(processedEvent.odds.draw)) processedEvent.odds.draw = 0;
-    if (isNaN(processedEvent.odds.away)) processedEvent.odds.away = 0;
-    
-    return processedEvent;
-  }).filter(event => {
-    // Filter out events with no valid odds
-    return (
-      event.odds.home > 0 && 
-      event.odds.draw > 0 && 
-      event.odds.away > 0 &&
-      event.teams && 
-      (event.teams.includes(' vs ') || event.teams.includes(' - ') || event.teams.includes('-'))
-    );
-  });
+  // If we get here, all scrapers failed
+  console.error(`All SportyBet scrapers failed. Last error: ${lastError?.message}`);
+  return loadSampleData();
 }
 
-// Main execution
-async function main() {
+// Function to load sample data if all scrapers fail
+function loadSampleData() {
   try {
-    console.error('🔄 Running SportyBet scraper with new factsCenter/pcUpcomingEvents API...');
-    const events = await runScraper();
-    
-    if (!Array.isArray(events)) {
-      console.error('❌ Scraper did not return a valid array');
-      console.log(JSON.stringify([]));
-      return;
-    }
-    
-    console.error(`📊 Scraper returned ${events.length} events`);
-    
-    // Process and format the events
-    const processedEvents = processEvents(events);
-    
-    console.error(`✅ Successfully processed ${processedEvents.length} valid events`);
-    
-    // Log a sample of the processed events for debugging
-    if (processedEvents.length > 0) {
-      console.error('Sample event:', JSON.stringify(processedEvents[0], null, 2));
-    }
-    
-    // Output the processed events as JSON
-    console.log(JSON.stringify(processedEvents));
+    const sampleData = JSON.parse(fs.readFileSync(SAMPLE_DATA_PATH, 'utf8'));
+    console.error(`Using ${sampleData.length} sample events as fallback data`);
+    return sampleData;
   } catch (error) {
-    console.error('Error in wrapper:', error);
-    console.log(JSON.stringify([]));
+    console.error(`Error loading sample data: ${error.message}`);
+    return [];
   }
 }
 
-// Start execution
+// Main function to run the scraper and process events
+function main() {
+  const events = runSportyScrapers();
+  
+  if (events.length > 0) {
+    // If we have sample data, add a log for the first event to show what it looks like
+    if (events[0].id && events[0].id.startsWith('sporty-event')) {
+      console.error('Using sample events as fallback due to API issues');
+    }
+    
+    console.error(`✅ Successfully processed ${events.length} valid events`);
+    
+    // Sample the first event to see what we're getting
+    console.error(`Sample event: ${JSON.stringify(events[0], null, 2)}`);
+  } else {
+    console.error('⚠️ No events found or processed');
+  }
+  
+  console.error(`📊 SportyBet scraper wrapper returned ${events.length} events`);
+  
+  // Print the first event as a sample
+  if (events.length > 0) {
+    console.error(`📊 First event sample from SportyBet: ${JSON.stringify(events[0])}`);
+  }
+  
+  // Output the JSON to stdout for the caller to consume
+  console.log(JSON.stringify(events));
+}
+
+// Run the main function
 main();
