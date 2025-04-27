@@ -286,8 +286,34 @@ runCustomScraper = async function(bookmakerCode: string): Promise<any[]> {
     console.log(`🔄 Running ${bookmakerCode} scraper with enhanced logging...`);
     
     try {
-      // Run the original function to get the data
-      const events = await originalRunCustomScraper(bookmakerCode);
+      // Run the direct function instead of going through the original runCustomScraper
+      let events = [];
+      const config = SCRIPT_CONFIG[bookmakerCode];
+      
+      if (!config) {
+        throw new Error(`No configuration found for bookmaker: ${bookmakerCode}`);
+      }
+      
+      console.log(`📡 Running scraper directly: ${config.command} ${config.scriptPath}`);
+      
+      // Execute the script directly
+      const { stdout, stderr } = await execPromise(`${config.command} "${config.scriptPath}"`);
+      
+      if (stderr) {
+        console.error(`⚠️ Error running ${bookmakerCode} scraper:`, stderr);
+      }
+      
+      try {
+        events = JSON.parse(stdout.trim());
+        if (!Array.isArray(events)) {
+          console.error(`⚠️ ${bookmakerCode} scraper output is not an array:`, typeof events);
+          events = [];
+        }
+      } catch (parseError) {
+        console.error(`⚠️ Error parsing ${bookmakerCode} scraper output:`, parseError);
+        console.error(`⚠️ First 500 chars of output: ${stdout.substring(0, 500)}`);
+        events = [];
+      }
       
       // Log detailed information about what we got
       console.log(`📊 ${bookmakerCode} scraper returned ${events?.length || 0} events`);
