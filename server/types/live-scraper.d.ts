@@ -45,6 +45,10 @@ declare module './scrapers/custom/bp_gh_live_scraper' {
       marketAvailability: string;
       currentlyAvailable: boolean;
       recordCount: number;
+      uptimePercentage?: number;
+      homeScore?: number;
+      awayScore?: number;
+      gameMinute?: string;
     }>;
   };
 }
