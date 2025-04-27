@@ -885,41 +885,79 @@ async function processEvents(events: any[]): Promise<void> {
       const existingEvent = heartbeatState.events.find(e => e.id === newEvent.id);
       
       if (existingEvent) {
-        // COMPLETELY SIMPLIFIED: ONLY check totalMarketCount
-        // Don't look at any other flag
-        if (newEvent.totalMarketCount && newEvent.totalMarketCount > 0) {
-          // EVENT HAS MARKETS, ALWAYS MARK AS AVAILABLE
-          if (existingEvent.suspended) {
-            console.log(`🟢 MARKET RESUMED: Event ${newEvent.id} (${newEvent.name}) now has ${newEvent.totalMarketCount} markets available. FORCING AVAILABLE STATE.`);
+        // CRITICAL CHECK: if the event had high minutes (85+) in the past but now shows minute "1"
+        // This is a key indicator of a glitched event that has actually finished
+        let shouldMarkAsFinished = false;
+        
+        // Get the market history for this event to check for problematic patterns
+        const history = marketHistories.find(h => h.eventId === newEvent.id);
+        
+        if (history && (newEvent.gameMinute === '1' || newEvent.gameMinute === '0')) {
+          // Look for evidence this event had high minutes in the past
+          const hadHighMinutes = history.timestamps.some(t => {
+            if (!t.gameMinute) return false;
+            const minute = parseInt(t.gameMinute || '0');
+            return !isNaN(minute) && minute >= 85; // Any event that was near the end (85+ min)
+          });
+          
+          if (hadHighMinutes) {
+            console.log(`🚨 DETECTED GLITCHED FINISHED EVENT NOW SHOWING MINUTE ${newEvent.gameMinute}: ${newEvent.id} (${newEvent.name})`);
+            console.log(`  This event previously showed high minutes (85+) but now shows minute ${newEvent.gameMinute}.`);
+            console.log(`  Marking as finished to prevent it from appearing in the UI.`);
+            
+            // Set finished flag on both objects (existing and new)
+            existingEvent.finished = true;
+            newEvent.finished = true;
+            shouldMarkAsFinished = true;
           }
-          newEvent.suspended = false;
-          newEvent.currentlyAvailable = true;
-          
-          // Event is seen again, clear any finished status
-          newEvent.finished = false;
-          
-          // Update last seen timestamp
-          newEvent.lastSeen = Date.now();
-        } else {
-          // No markets, ALWAYS mark as suspended
-          if (!existingEvent.suspended) {
-            console.log(`🚨 MARKET SUSPENDED: Event ${newEvent.id} (${newEvent.name}) has no markets available. FORCING SUSPENDED STATE.`);
-          }
-          newEvent.suspended = true;
-          newEvent.currentlyAvailable = false;
-          
-          // Update last seen timestamp
-          newEvent.lastSeen = Date.now();
         }
-      } else {
-        // This is a newly discovered event
-        // Make sure it has the lastSeen timestamp
+        
+        // Only continue with normal update if we didn't mark as finished
+        if (!shouldMarkAsFinished) {
+          // COMPLETELY SIMPLIFIED: ONLY check totalMarketCount
+          // Don't look at any other flag
+          if (newEvent.totalMarketCount && newEvent.totalMarketCount > 0) {
+            // EVENT HAS MARKETS, ALWAYS MARK AS AVAILABLE
+            if (existingEvent.suspended) {
+              console.log(`🟢 MARKET RESUMED: Event ${newEvent.id} (${newEvent.name}) now has ${newEvent.totalMarketCount} markets available. FORCING AVAILABLE STATE.`);
+            }
+            newEvent.suspended = false;
+            newEvent.currentlyAvailable = true;
+            
+            // This event is active and has markets, so it's not finished
+            newEvent.finished = false;
+          } else {
+            // No markets, ALWAYS mark as suspended
+            if (!existingEvent.suspended) {
+              console.log(`🚨 MARKET SUSPENDED: Event ${newEvent.id} (${newEvent.name}) has no markets available. FORCING SUSPENDED STATE.`);
+            }
+            newEvent.suspended = true;
+            newEvent.currentlyAvailable = false;
+          }
+        }
+        
+        // Always update the lastSeen timestamp regardless of status
         newEvent.lastSeen = Date.now();
         
-        // And it's definitely not finished
-        newEvent.finished = false;
+      } else {
+        // This is a newly discovered event - check if it's suspicious
+        // An event showing minute "1" but already suspended is suspicious
+        const isSuspiciousNewEvent = (newEvent.gameMinute === '1' || newEvent.gameMinute === '0') && 
+                                     (newEvent.suspended || !newEvent.currentlyAvailable);
         
-        console.log(`📌 NEW EVENT DISCOVERED: ${newEvent.id} (${newEvent.name}) - totalMarketCount=${newEvent.totalMarketCount || 0}`);
+        if (isSuspiciousNewEvent) {
+          // Some bookmakers show finished events as minute "1" and suspended
+          console.log(`⚠️ IGNORING SUSPICIOUS NEW EVENT: ${newEvent.id} (${newEvent.name})`);
+          console.log(`  Event is showing minute ${newEvent.gameMinute} but is already suspended, which is unusual for new events.`);
+          
+          // Mark as finished to prevent it from appearing in live events
+          newEvent.finished = true;
+        } else {
+          // Normal new event - add timestamps and initialize
+          newEvent.lastSeen = Date.now();
+          newEvent.finished = false;
+          console.log(`📌 NEW EVENT DISCOVERED: ${newEvent.id} (${newEvent.name}) - totalMarketCount=${newEvent.totalMarketCount || 0}`);
+        }
       }
       
       updatedEvents.push(newEvent);
@@ -1229,7 +1267,7 @@ function cleanupOldData(): void {
   }
   
   // Log problematic events that will be force-removed
-  const problematicEventsInState = heartbeatState.events.filter(e => shouldExcludeEvent(e));
+  const problematicEventsInState = heartbeatState.events.filter(e => isProblematicEvent(e));
   if (problematicEventsInState.length > 0) {
     console.log(`CLEANUP: Force-removing ${problematicEventsInState.length} problematic events:`);
     problematicEventsInState.forEach(e => console.log(`  - ${e.id}: ${e.name}`));
@@ -1237,7 +1275,12 @@ function cleanupOldData(): void {
   
   // Process each history
   for (const history of marketHistories) {
-    if (isKoreanEventId(history.eventId)) {
+    // Check if this is a Korean event (using our global helper)
+    const isKorean = history.eventId.startsWith('117') || 
+                     history.eventId.startsWith('118') || 
+                     ['11893816', '11893815', '11918154', '11893817', '11918156'].includes(history.eventId);
+                     
+    if (isKorean) {
       // Korean events - purge completely
       history.timestamps = [];
     } else if (finishedEventIds.includes(history.eventId)) {
@@ -1256,8 +1299,13 @@ function cleanupOldData(): void {
   // Remove histories with no data points, while preserving suspended event histories
   const initialCount = marketHistories.length;
   const filteredHistories = marketHistories.filter(h => {
+    // Check if this is a Korean event (using our global helper)
+    const isKorean = h.eventId.startsWith('117') || 
+                     h.eventId.startsWith('118') || 
+                     ['11893816', '11893815', '11918154', '11893817', '11918156'].includes(h.eventId);
+    
     // Remove Korean events completely
-    if (isKoreanEventId(h.eventId)) {
+    if (isKorean) {
       return false;
     }
     // Keep if it has timestamps OR is a suspended event
