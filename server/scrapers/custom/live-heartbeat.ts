@@ -806,11 +806,14 @@ async function processEvents(events: any[]): Promise<void> {
         // Per user requirements, an event is finished if:
         // 1. Latest game minute is 91 or higher (post-match)
         // 2. Event hasn't been seen by scraper for 2+ minutes
+        // 3. OR it has EVER had minute 91+ in history and is suspended for over 5 minutes
         
         const twoMinutesMs = 2 * 60 * 1000;
+        const fiveMinutesMs = 5 * 60 * 1000;
         
         // Get the game minute from the event or history
         let latestGameMinute = parseInt(existingEvent.gameMinute || '0');
+        let everReachedMinute91 = false;
         
         // Check history for minute information and get the latest game minute
         const history = marketHistories.find(h => h.eventId === existingEvent.id);
@@ -830,15 +833,37 @@ async function processEvents(events: any[]): Promise<void> {
             }
           }
           
-          // Mark as finished if both conditions are met:
+          // Also check if it has EVER reached minute 91+
+          everReachedMinute91 = history.timestamps.some(t => {
+            const minute = parseInt(t.gameMinute || '0');
+            return !isNaN(minute) && minute >= 91;
+          });
+          
+          // SPECIAL HANDLING FOR KOREAN EVENTS:
+          // Events IDs starting with "11" (Korean football) often revert to minute "1"
+          // instead of showing the actual game time. Check if suspended and 
+          // event name contains known Korean teams
+          const isKoreanEvent = existingEvent.id.startsWith('11') && (
+            existingEvent.name.includes('Gyeongju') || 
+            existingEvent.name.includes('Namyangju') || 
+            existingEvent.name.includes('Mokpo') ||
+            existingEvent.name.includes('Ulsan') ||
+            existingEvent.name.includes('Sejong')
+          );
+          
+          // Mark as finished if any of these conditions are met:
           if (
-            // 1. Latest game minute is 91+ (post-match)
-            latestGameMinute >= 91 && 
-            // 2. Event hasn't been seen for 2+ minutes
-            (Date.now() - existingEvent.lastSeen > twoMinutesMs)
+            // Normal conditions from user requirements:
+            (latestGameMinute >= 91 && Date.now() - existingEvent.lastSeen > twoMinutesMs) ||
+            
+            // Special condition for events that had 91+ but now show lower:
+            (everReachedMinute91 && Date.now() - existingEvent.lastSeen > fiveMinutesMs) ||
+            
+            // Special handling for Korean events:
+            (isKoreanEvent && existingEvent.suspended && Date.now() - existingEvent.lastSeen > fiveMinutesMs)
           ) {
             if (!existingEvent.finished) {
-              console.log(`⚽ Marking event ${existingEvent.id} (${existingEvent.name}) as FINISHED - latest minute was ${latestGameMinute}, lastSeen=${Math.round((Date.now() - existingEvent.lastSeen) / (60 * 1000))}m ago`);
+              console.log(`⚽ Marking event ${existingEvent.id} (${existingEvent.name}) as FINISHED - latest minute was ${latestGameMinute}, everReachedMinute91=${everReachedMinute91}, lastSeen=${Math.round((Date.now() - existingEvent.lastSeen) / (60 * 1000))}m ago`);
               existingEvent.finished = true;
             }
           } else {
