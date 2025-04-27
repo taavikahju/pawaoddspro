@@ -231,10 +231,43 @@ if (fs.existsSync(enhancedSportyScraperPath)) {
   };
   // Also log enhanced scraper info when scraper is run
   const originalRunCustomScraper = runCustomScraper;
-  // @ts-ignore - we're monkey patching this function to add logging
+  // @ts-ignore - we're monkey patching this function to add logging and processing
   runCustomScraper = async function(bookmakerCode: string): Promise<any[]> {
     if (bookmakerCode === 'sporty') {
       console.log('🔄 Running ENHANCED SportyBet scraper...');
+      
+      // Run the original function to get the data
+      const events = await originalRunCustomScraper(bookmakerCode);
+      
+      // Log detailed information about what we got
+      console.log(`📊 Enhanced SportyBet scraper returned ${events.length} events`);
+      if (events.length > 0) {
+        console.log(`📊 First event sample: ${JSON.stringify(events[0])}`);
+      }
+      
+      // Ensure the odds format is correct and bookmaker code is properly set
+      return events.map(event => {
+        // Make sure we have an odds object in the expected format
+        if (!event.odds && event.home_odds && event.draw_odds && event.away_odds) {
+          event.odds = {
+            home: parseFloat(event.home_odds),
+            draw: parseFloat(event.draw_odds),
+            away: parseFloat(event.away_odds)
+          };
+        }
+        
+        // Make sure the bookmaker code is properly set
+        if (!event.bookmakerCode) {
+          event.bookmakerCode = 'sporty';
+        }
+        
+        // Log individual events for debugging
+        if (events.length <= 3 || Math.random() < 0.05) {
+          console.log(`Sport event: ${event.id} - ${event.teams} - Odds: ${JSON.stringify(event.odds)}`);
+        }
+        
+        return event;
+      });
     }
     return originalRunCustomScraper(bookmakerCode);
   };
