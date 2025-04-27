@@ -594,7 +594,15 @@ function getMarketAvailabilityStats() {
   return stats;
 }
 
-// ESM exports only
+// Export both CommonJS and ESM formats
+if (typeof module !== 'undefined') {
+  module.exports = {
+    scrapeLiveEvents,
+    getMarketAvailabilityStats,
+    runLiveScraper: scrapeLiveEvents
+  };
+}
+
 export {
   scrapeLiveEvents,
   getMarketAvailabilityStats,
