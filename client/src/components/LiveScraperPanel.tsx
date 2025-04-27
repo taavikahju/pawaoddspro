@@ -141,24 +141,37 @@ export default function LiveScraperPanel({ isAdmin }: LiveScraperPanelProps) {
     
     const updatedUptimeData: Record<string, number> = {};
     
+    // Debug the incoming event data
     console.log('Event details received:', status.marketStats.eventDetails.map(event => ({
       id: event.id,
       name: event.name,
       uptimePercentage: event.uptimePercentage,
+      marketAvailability: event.marketAvailability,
       homeScore: event.homeScore,
       awayScore: event.awayScore
     })));
     
     // Get the uptimePercentage directly from the event details
     status.marketStats.eventDetails.forEach((event) => {
-      if (event.uptimePercentage !== undefined) {
+      // First check for a proper uptimePercentage from the backend
+      if (typeof event.uptimePercentage === 'number' && !isNaN(event.uptimePercentage)) {
         updatedUptimeData[event.id] = event.uptimePercentage;
-      } else {
-        // Fallback calculation if not provided by backend
-        const availabilityString = event.marketAvailability || "0%";
-        const percentageValue = parseFloat(availabilityString.replace('%', ''));
-        if (!isNaN(percentageValue)) {
-          updatedUptimeData[event.id] = percentageValue;
+      } 
+      // Fallback to calculating from marketAvailability string
+      else if (event.marketAvailability) {
+        const availabilityString = event.marketAvailability;
+        let percentageValue = 0;
+        
+        try {
+          // Remove percentage sign and parse as number
+          percentageValue = parseFloat(availabilityString.replace('%', ''));
+          
+          // Only use if it's a valid number
+          if (!isNaN(percentageValue)) {
+            updatedUptimeData[event.id] = percentageValue;
+          }
+        } catch (e) {
+          console.error(`Error parsing marketAvailability for event ${event.id}:`, e);
         }
       }
     });
@@ -418,21 +431,21 @@ export default function LiveScraperPanel({ isAdmin }: LiveScraperPanelProps) {
                     </TableCell>
                     {/* Uptime Percentage Column */}
                     <TableCell>
-                      {(eventUptimeData[event.id] !== undefined) ? (
+                      {(eventUptimeData[event.id] !== undefined || event.uptimePercentage !== undefined) ? (
                         <div className="flex items-center">
                           <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mr-2">
                             <div 
                               className="h-2.5 rounded-full" 
                               style={{
-                                width: `${eventUptimeData[event.id]}%`,
-                                backgroundColor: eventUptimeData[event.id] > 75 ? '#16a34a' : 
-                                                eventUptimeData[event.id] > 50 ? '#eab308' : 
-                                                eventUptimeData[event.id] > 30 ? '#f97316' : '#ef4444'
+                                width: `${event.uptimePercentage !== undefined ? event.uptimePercentage : eventUptimeData[event.id]}%`,
+                                backgroundColor: (event.uptimePercentage || eventUptimeData[event.id]) > 75 ? '#16a34a' : 
+                                                (event.uptimePercentage || eventUptimeData[event.id]) > 50 ? '#eab308' : 
+                                                (event.uptimePercentage || eventUptimeData[event.id]) > 30 ? '#f97316' : '#ef4444'
                               }}
                             ></div>
                           </div>
                           <span className="text-xs font-medium">
-                            {eventUptimeData[event.id].toFixed(1)}%
+                            {(event.uptimePercentage !== undefined ? event.uptimePercentage : eventUptimeData[event.id]).toFixed(1)}%
                           </span>
                         </div>
                       ) : (
