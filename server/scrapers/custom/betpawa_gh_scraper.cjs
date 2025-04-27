@@ -249,7 +249,10 @@ async function scrapeBetPawaGhana() {
 // For direct execution
 if (require.main === module) {
   scrapeBetPawaGhana().then(events => {
+    console.error(`BETPAWA GHANA SCRAPER STATS: Found ${events.length} events`);
     console.log(JSON.stringify(events));
+  }).catch(err => {
+    console.error(`BETPAWA GHANA SCRAPER ERROR: ${err.message}`);
   });
 } else {
   // When called as a module, don't output anything to console
