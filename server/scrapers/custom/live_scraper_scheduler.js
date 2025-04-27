@@ -3,7 +3,7 @@
  * Runs the BetPawa Ghana live scraper every 10 seconds
  */
 
-const bpGhLiveScraper = require('./bp_gh_live_scraper');
+const bpGhLiveScraper = require('./bp_gh_live_scraper.js');
 const EventEmitter = require('events');
 
 // Create event emitter for live scraper events
