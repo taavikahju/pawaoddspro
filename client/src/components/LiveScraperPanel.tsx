@@ -148,7 +148,7 @@ export default function LiveScraperPanel({ isAdmin }: LiveScraperPanelProps) {
           <div>
             <CardTitle className="flex items-center text-lg">
               <Activity className="h-5 w-5 mr-2 text-primary" />
-              Live Market Tracker
+              Live Event Market Status
             </CardTitle>
             <CardDescription>
               Monitors market availability during live events in real-time
