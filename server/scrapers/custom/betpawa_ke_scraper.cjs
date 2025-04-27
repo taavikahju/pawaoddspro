@@ -91,7 +91,7 @@ async function scrapeBetPawaKenya() {
     let totalPages = 0;
     
     // We need to scrape UPCOMING matches for the 15-minute scraper (not live ones)
-    while (totalPages < 15) { // Limit to 15 pages max to avoid timeout
+    while (totalPages < 50) { // Increased from 15 to 50 pages to collect all events
       logger.log(`Fetching upcoming events with skip=${skip}`);
       
       // Build query parameter - specifically for UPCOMING events with football (category 2)
@@ -232,7 +232,13 @@ async function scrapeBetPawaKenya() {
       }
     }
     
-    logger.log(`Total upcoming events scraped: ${allEvents.length}`);
+    logger.log(`Total upcoming events scraped: ${allEvents.length} from ${totalPages} pages`);
+    
+    // If running directly, print detailed stats
+    if (require.main === module) {
+      console.error(`BETPAWA KENYA STATS: Found ${allEvents.length} events across ${totalPages} pages`);
+    }
+    
     return allEvents;
   } catch (error) {
     logger.error(`Error in BetPawa Kenya scraper: ${error.message}`);
