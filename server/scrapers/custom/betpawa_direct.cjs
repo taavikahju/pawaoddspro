@@ -27,8 +27,12 @@ function buildQueryString(skip, take = 20) {
 
 async function fetchEventsPage(skip) {
   try {
-    const encoded_q = buildQueryString(skip);
+    // Use a higher take value to get more events per request
+    // Default was 20, try to increase to 50
+    const encoded_q = buildQueryString(skip, 50);
     const url = `https://www.betpawa.com.gh/api/sportsbook/v2/events/lists/by-queries?q=${encoded_q}`;
+    
+    process.stderr.write(`[DEBUG] Fetching page ${skip/50} from BetPawa API\n`);
     
     const headers = {
       "accept": "*/*",
@@ -116,7 +120,10 @@ async function fetchEventsPage(skip) {
     
     // Check if there might be more pages
     // If we got a full page of results, there might be more
-    const moreAvailable = events.length === 20;
+    // Since we're now using take=50, compare with 50 instead of 20
+    const moreAvailable = events.length === 50;
+    
+    process.stderr.write(`[DEBUG] Found ${events.length} events on this page, moreAvailable=${moreAvailable}\n`);
     
     return { events, moreAvailable };
   } catch (error) {
@@ -269,8 +276,8 @@ async function scrapeRealEvents() {
     const allEvents = [];
     let currentPage = 0;
     let moreAvailable = true;
-    const PAGE_SIZE = 20;
-    const MAX_PAGES = 5; // Limit to 5 pages to avoid excessive requests (up to 100 events)
+    const PAGE_SIZE = 50;  // Match the page size for fetching (changed from 20)
+    const MAX_PAGES = 5; // Limit to 5 pages to avoid excessive requests (up to 250 events now)
     
     // Fetch pages until we've got all events or reached the maximum page limit
     while (moreAvailable && currentPage < MAX_PAGES) {
