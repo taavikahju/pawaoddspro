@@ -51,7 +51,8 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
   
   // Show the comparison column only if we have a specific Ghana or Kenya filter active
   // Specifically dont show for "All Bookmakers" filter
-  const isComparisonAvailable = (isGhanaFilterActive || isKenyaFilterActive);
+  const isAllBookmakersSelected = bookmakers.length === selectedBookmakers.length;
+  const isComparisonAvailable = (isGhanaFilterActive || isKenyaFilterActive) && !isAllBookmakersSelected;
   
   console.log('Selected Bookmakers:', selectedBookmakers);
   console.log('betPawa GH present:', hasBetPawaGH, 'Sportybet present:', hasSportybet);
