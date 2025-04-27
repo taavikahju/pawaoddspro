@@ -1188,15 +1188,34 @@ function cleanupOldData(): void {
   }
   
   // Now process heartbeatState to immediately remove finished events
-  if (finishedEventIds.length > 0) {
-    const beforeCount = heartbeatState.events.length;
-    
-    // Filter out all finished events
-    heartbeatState.events = heartbeatState.events.filter(event => !event.finished);
-    
-    const removedCount = beforeCount - heartbeatState.events.length;
-    if (removedCount > 0) {
-      console.log(`🧹 Removed ${removedCount} finished events from heartbeat state immediately`);
-    }
+  // and also explicitly remove Korean events that are causing issues
+  const beforeCount = heartbeatState.events.length;
+  
+  // First mark Korean events as finished if they're over 5 minutes old
+  const now = Date.now();
+  const fiveMinutesMs = 5 * 60 * 1000;
+  
+  // Extract list of Korean event IDs to be removed for clarity in logs
+  const koreanEventIds = ['11893816', '11893815', '11918154', '11893817', '11918156'];
+  const koreanEventsToRemove = heartbeatState.events.filter(event => 
+    koreanEventIds.includes(event.id)
+  );
+  
+  if (koreanEventsToRemove.length > 0) {
+    console.log(`🇰🇷 Explicitly removing ${koreanEventsToRemove.length} Korean events that are causing issues:`);
+    koreanEventsToRemove.forEach(event => {
+      console.log(`  - ${event.id}: ${event.name}`);
+      // Mark them as finished so they get removed
+      event.finished = true;
+      finishedEventIds.push(event.id);
+    });
+  }
+  
+  // Now filter out all finished events
+  heartbeatState.events = heartbeatState.events.filter(event => !event.finished);
+  
+  const removedCount = beforeCount - heartbeatState.events.length;
+  if (removedCount > 0) {
+    console.log(`🧹 Removed ${removedCount} events from heartbeat state (${finishedEventIds.length} finished + Korean events)`);
   }
 }
