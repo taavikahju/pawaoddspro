@@ -285,7 +285,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
         
         <TableBody>
           {events.map((event, eventIndex) => (
-            <React.Fragment key={eventIndex}>
+            <div key={`event-group-${eventIndex}`}>
               {filteredBookmakers.map((bookmaker, bookmakerIndex) => {
                 const isFirstBookmaker = bookmakerIndex === 0;
                 const isLastBookmaker = bookmakerIndex === filteredBookmakers.length - 1;
@@ -552,7 +552,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                   </TableRow>
                 );
               })}
-            </React.Fragment>
+            </div>
           ))}
         </TableBody>
       </Table>
