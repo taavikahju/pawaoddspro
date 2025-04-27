@@ -966,7 +966,8 @@ async function processEvents(events: any[]): Promise<void> {
           // IMPORTANT: We've found that some events like 60111363 (Subiaco AFC vs Hyundai Ntc)
           // are being kept as suspended when they should be finished
           const minutesSinceLastSeen = Math.round((Date.now() - existingEvent.lastSeen) / (60 * 1000));
-          const longerThanTenMinutes = minutesSinceLastSeen > 10;
+          const longerThanTwoMinutes = minutesSinceLastSeen >= 2;
+          const isLateGameMinute = latestGameMinute >= 90;
           
           if (
             // Normal conditions from user requirements:
@@ -978,9 +979,11 @@ async function processEvents(events: any[]): Promise<void> {
             // Special handling for Korean events:
             (isKoreanEvent && existingEvent.suspended && Date.now() - existingEvent.lastSeen > fiveMinutesMs) ||
             
-            // Extra condition: Any suspended event not seen for over 10 minutes
-            // This helps clean up events that are technically finished but not marked as such
-            (existingEvent.suspended && longerThanTenMinutes)
+            // Extra condition: Any suspended event not seen for over 2 minutes AND with a late game minute (90+)
+            (existingEvent.suspended && longerThanTwoMinutes && isLateGameMinute) ||
+            
+            // Fallback condition: Any suspended event not seen for over 2 minutes, even without minute info
+            (existingEvent.suspended && longerThanTwoMinutes && !latestGameMinute)
           ) {
             if (!existingEvent.finished) {
               console.log(`⚽ Marking event ${existingEvent.id} (${existingEvent.name}) as FINISHED - latest minute: ${latestGameMinute}, everReachedMinute91: ${everReachedMinute91}, lastSeen: ${minutesSinceLastSeen}m ago, suspended: ${existingEvent.suspended}`);
