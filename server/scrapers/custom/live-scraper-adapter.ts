@@ -7,7 +7,7 @@ import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 
 // Use require to import the CommonJS module
-const { scrapeLiveEvents, getMarketAvailabilityStats } = require('./bp_gh_live_scraper');
+const { scrapeLiveEvents, getMarketAvailabilityStats } = require('./bp_gh_live_scraper.js');
 
 // Event emitter for live scraper events
 export const liveScraperEvents = new EventEmitter();

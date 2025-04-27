@@ -3,22 +3,15 @@
  * Scrapes live events every 10 seconds to track market availability
  */
 
-import axios from 'axios';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
-import fs from 'fs/promises';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const axios = require('axios');
+const fs = require('fs').promises;
+const path = require('path');
 
 // Store history of market availability
 let marketHistoryData = {};
 let lastWriteTime = 0;
 const WRITE_INTERVAL = 60000; // Write to disk every minute
 
-/**
- * Scrape live events from BetPawa Ghana API
- */
 /**
  * Scrape live events from BetPawa Ghana API with improved pagination support
  */
@@ -161,7 +154,6 @@ function extractEvents(data, timestamp) {
     // Check if data is an array (for new API format)
     if (Array.isArray(data)) {
       data.forEach(event => {
-        // Process each event from the new API format
         // Event ID - using both siteEventId and id for compatibility
         const eventId = event.siteEventId || event.id;
 
@@ -389,14 +381,10 @@ function updateMarketHistory(events, timestamp) {
  */
 async function writeMarketHistoryToFile() {
   try {
-    const dataDir = join(__dirname, '..', '..', 'data');
-
-    // Create data directory if it doesn't exist
-    await fs.mkdir(dataDir, { recursive: true }).catch(() => {});
-
-    const filePath = join(dataDir, 'betpawa_gh_live_market_history.json');
+    const dataDir = path.join(process.cwd(), 'data');
+    await fs.mkdir(dataDir, { recursive: true });
+    const filePath = path.join(dataDir, 'betpawa_gh_live_market_history.json');
     await fs.writeFile(filePath, JSON.stringify(marketHistoryData, null, 2));
-
     console.log(`Wrote BetPawa Ghana live market history to ${filePath}`);
   } catch (error) {
     console.error('Error writing market history file:', error.message);
@@ -406,7 +394,7 @@ async function writeMarketHistoryToFile() {
 /**
  * Get market availability statistics
  */
-async function getMarketAvailabilityStats() {
+function getMarketAvailabilityStats() {
   try {
     const stats = Object.values(marketHistoryData).map(history => ({
       eventId: history.eventId,
@@ -421,7 +409,7 @@ async function getMarketAvailabilityStats() {
 }
 
 
-export {
+module.exports = {
   scrapeLiveEvents,
   getMarketAvailabilityStats,
   scrapeLiveEvents as runLiveScraper
