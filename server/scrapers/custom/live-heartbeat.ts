@@ -199,6 +199,44 @@ async function runHeartbeatTracker(url: string, storage: IStorage): Promise<void
                 console.log(`🟢 RESUMED EVENT: ${event.eventId} has totalMarketCount=${event.totalMarketCount || 'N/A'}`);
               }
               
+              // Extract scores if available (format varies by source)
+              let homeScore = undefined;
+              let awayScore = undefined;
+              
+              // Try to extract scores from different possible data structures
+              if (event.score) {
+                // Direct score object format: { home: 1, away: 0 }
+                if (typeof event.score.home === 'number' && typeof event.score.away === 'number') {
+                  homeScore = event.score.home;
+                  awayScore = event.score.away;
+                } 
+                // Score string format: "1-0"
+                else if (typeof event.score === 'string' && event.score.includes('-')) {
+                  const parts = event.score.split('-');
+                  if (parts.length === 2) {
+                    homeScore = parseInt(parts[0].trim());
+                    awayScore = parseInt(parts[1].trim());
+                  }
+                }
+              } 
+              // Try scores array format
+              else if (event.scores && Array.isArray(event.scores) && event.scores.length >= 2) {
+                homeScore = parseInt(event.scores[0]);
+                awayScore = parseInt(event.scores[1]);
+              }
+              // Try extracting from scoreboard structure
+              else if (event.scoreboard && event.scoreboard.score) {
+                if (typeof event.scoreboard.score.home === 'number' && typeof event.scoreboard.score.away === 'number') {
+                  homeScore = event.scoreboard.score.home;
+                  awayScore = event.scoreboard.score.away;
+                }
+              }
+              
+              // Debug any event with score for logging
+              if (homeScore !== undefined || awayScore !== undefined) {
+                console.log(`SCORE DATA for ${event.event || `${homeTeam} vs ${awayTeam}`}: ${homeScore || 0} - ${awayScore || 0}`);
+              }
+              
               return {
                 id: event.eventId || '',
                 name: event.event || `${homeTeam} vs ${awayTeam}`,
@@ -214,6 +252,8 @@ async function runHeartbeatTracker(url: string, storage: IStorage): Promise<void
                 gameMinute: event.gameMinute || '1',
                 recordCount: 1,
                 widgetId: event.eventId || '',
+                homeScore: !isNaN(homeScore) ? homeScore : undefined,
+                awayScore: !isNaN(awayScore) ? awayScore : undefined,
                 totalMarketCount: event.totalMarketCount || 0 // Store the actual market count for better tracking
               };
             });
@@ -713,12 +753,76 @@ async function processEvents(events: any[]): Promise<void> {
       // Extract gameMinute from different possible structures
       let gameMinute = '1';
       
-      if (event.scoreboard?.display?.minute) {
-        gameMinute = event.scoreboard.display.minute;
+      // Also extract scores if available
+      let homeScore: number | undefined = undefined;
+      let awayScore: number | undefined = undefined;
+      
+      if (event.scoreboard) {
+        // Extract minute
+        if (event.scoreboard.display?.minute) {
+          gameMinute = event.scoreboard.display.minute;
+        }
+        
+        // Extract score from scoreboard
+        if (event.scoreboard.score) {
+          if (typeof event.scoreboard.score.home === 'number') {
+            homeScore = event.scoreboard.score.home;
+          }
+          if (typeof event.scoreboard.score.away === 'number') {
+            awayScore = event.scoreboard.score.away;
+          }
+        }
       } else if (event.gameMinute) {
         gameMinute = event.gameMinute;
       } else if (event.matchTime) {
         gameMinute = event.matchTime.toString();
+      }
+      
+      // Try to extract scores from different formats if not found yet
+      if (homeScore === undefined || awayScore === undefined) {
+        // Try direct score object
+        if (event.score) {
+          if (typeof event.score === 'object') {
+            if (typeof event.score.home === 'number') {
+              homeScore = event.score.home;
+            }
+            if (typeof event.score.away === 'number') {
+              awayScore = event.score.away;
+            }
+          }
+          // Try score string format like "1-0"
+          else if (typeof event.score === 'string' && event.score.includes('-')) {
+            const parts = event.score.split('-');
+            if (parts.length === 2) {
+              const home = parseInt(parts[0].trim());
+              const away = parseInt(parts[1].trim());
+              if (!isNaN(home)) homeScore = home;
+              if (!isNaN(away)) awayScore = away;
+            }
+          }
+        }
+        
+        // Try direct homeScore/awayScore properties
+        if (homeScore === undefined && typeof event.homeScore === 'number') {
+          homeScore = event.homeScore;
+        }
+        if (awayScore === undefined && typeof event.awayScore === 'number') {
+          awayScore = event.awayScore;
+        }
+        
+        // Try scores array
+        if ((homeScore === undefined || awayScore === undefined) && 
+            event.scores && Array.isArray(event.scores) && event.scores.length >= 2) {
+          const home = parseInt(event.scores[0]);
+          const away = parseInt(event.scores[1]);
+          if (!isNaN(home)) homeScore = home;
+          if (!isNaN(away)) awayScore = away;
+        }
+      }
+      
+      // Log if we found scores
+      if (homeScore !== undefined && awayScore !== undefined) {
+        console.log(`📊 SCORE for ${event.id || event.eventId} (${name}): ${homeScore}-${awayScore}`);
       }
       
       // Extract country and tournament from different possible structures
@@ -757,6 +861,8 @@ async function processEvents(events: any[]): Promise<void> {
         widgetId: event.widgetId || event.id?.toString() || '',
         homeTeam: homeTeam,
         awayTeam: awayTeam,
+        homeScore: homeScore, // Include score data if available
+        awayScore: awayScore,
         totalMarketCount: event.totalMarketCount || 0 // CRITICAL: Make sure totalMarketCount is passed through!
       };
       

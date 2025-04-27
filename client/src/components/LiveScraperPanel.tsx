@@ -19,6 +19,11 @@ interface LiveScraperEvent {
   marketAvailability: string;
   currentlyAvailable: boolean;
   recordCount: number;
+  gameMinute?: string;
+  homeTeam?: string;
+  awayTeam?: string;
+  homeScore?: number;
+  awayScore?: number;
 }
 
 interface LiveScraperStats {
