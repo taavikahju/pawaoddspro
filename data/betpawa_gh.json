@@ -69,8 +69,8 @@
     "tournament": "Segunda Division",
     "event": "Bolivar SC - CS Maritimo de la Guaira",
     "name": "Bolivar SC - CS Maritimo de la Guaira",
-    "home_odds": 3.1,
-    "draw_odds": 3.15,
+    "home_odds": 3.15,
+    "draw_odds": 3.05,
     "away_odds": 2.18,
     "start_time": "2025-04-27T19:00:00Z",
     "gameMinute": "",
@@ -92,11 +92,11 @@
         "prices": [
           {
             "name": "1",
-            "price": 3.1
+            "price": 3.15
           },
           {
             "name": "X",
-            "price": 3.15
+            "price": 3.05
           },
           {
             "name": "2",
@@ -447,9 +447,9 @@
     "tournament": "Campeonato Brasileiro, Women",
     "event": "3B Sport AM - Real Brasilia FC DF",
     "name": "3B Sport AM - Real Brasilia FC DF",
-    "home_odds": 3.45,
-    "draw_odds": 3.8,
-    "away_odds": 1.82,
+    "home_odds": 3.4,
+    "draw_odds": 3.9,
+    "away_odds": 1.81,
     "start_time": "2025-04-27T19:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -470,15 +470,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 3.45
+            "price": 3.4
           },
           {
             "name": "X",
-            "price": 3.8
+            "price": 3.9
           },
           {
             "name": "2",
-            "price": 1.82
+            "price": 1.81
           }
         ]
       }
@@ -636,9 +636,9 @@
     "tournament": "Primera Nacional",
     "event": "Gimnasia y Esgrima Mendoza - Nueva Chicago",
     "name": "Gimnasia y Esgrima Mendoza - Nueva Chicago",
-    "home_odds": 1.53,
-    "draw_odds": 3.45,
-    "away_odds": 6.25,
+    "home_odds": 1.51,
+    "draw_odds": 3.5,
+    "away_odds": 6.5,
     "start_time": "2025-04-27T19:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -659,15 +659,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.53
+            "price": 1.51
           },
           {
             "name": "X",
-            "price": 3.45
+            "price": 3.5
           },
           {
             "name": "2",
-            "price": 6.25
+            "price": 6.5
           }
         ]
       }
@@ -762,9 +762,9 @@
     "tournament": "Brasileiro Serie A",
     "event": "CR Flamengo RJ - SC Corinthians SP",
     "name": "CR Flamengo RJ - SC Corinthians SP",
-    "home_odds": 1.48,
+    "home_odds": 1.47,
     "draw_odds": 4.2,
-    "away_odds": 6.75,
+    "away_odds": 7,
     "start_time": "2025-04-27T19:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -785,7 +785,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.48
+            "price": 1.47
           },
           {
             "name": "X",
@@ -793,7 +793,7 @@
           },
           {
             "name": "2",
-            "price": 6.75
+            "price": 7
           }
         ]
       }
@@ -1077,9 +1077,9 @@
     "tournament": "Bolivia Primera Division",
     "event": "Nacional Potosi - Club Jorge Wilstermann",
     "name": "Nacional Potosi - Club Jorge Wilstermann",
-    "home_odds": 1.45,
-    "draw_odds": 4.4,
-    "away_odds": 6.5,
+    "home_odds": 1.42,
+    "draw_odds": 4.5,
+    "away_odds": 7,
     "start_time": "2025-04-27T19:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -1100,15 +1100,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.45
+            "price": 1.42
           },
           {
             "name": "X",
-            "price": 4.4
+            "price": 4.5
           },
           {
             "name": "2",
-            "price": 6.5
+            "price": 7
           }
         ]
       }
@@ -32573,6 +32573,69 @@
     }
   },
   {
+    "id": "25527434",
+    "eventId": "51472413",
+    "country": "Turkey",
+    "tournament": "Super Lig",
+    "event": "Caykur Rizespor - Gaziantep FK",
+    "name": "Caykur Rizespor - Gaziantep FK",
+    "home_odds": 1.98,
+    "draw_odds": 3.85,
+    "away_odds": 3.4,
+    "start_time": "2025-05-03T13:00:00Z",
+    "gameMinute": "",
+    "sport": "football",
+    "competitors": [
+      {
+        "name": ""
+      },
+      {
+        "name": ""
+      }
+    ],
+    "markets": [
+      {
+        "marketType": {
+          "id": "3743",
+          "name": "1X2"
+        },
+        "prices": [
+          {
+            "name": "1",
+            "price": 1.98
+          },
+          {
+            "name": "X",
+            "price": 3.85
+          },
+          {
+            "name": "2",
+            "price": 3.4
+          }
+        ]
+      }
+    ],
+    "category": {
+      "name": "Turkey"
+    },
+    "region": {
+      "name": "Turkey"
+    },
+    "competition": {
+      "name": "Super Lig"
+    },
+    "league": {
+      "name": "Super Lig"
+    },
+    "isInPlay": false,
+    "status": "UPCOMING",
+    "scoreboard": {
+      "display": {
+        "minute": ""
+      }
+    }
+  },
+  {
     "id": "26918425",
     "eventId": "51273505",
     "country": "Italy",
@@ -46360,6 +46423,69 @@
     },
     "league": {
       "name": "1. Liga"
+    },
+    "isInPlay": false,
+    "status": "UPCOMING",
+    "scoreboard": {
+      "display": {
+        "minute": ""
+      }
+    }
+  },
+  {
+    "id": "26994652",
+    "eventId": "60129537",
+    "country": "Uruguay",
+    "tournament": "Primera Division",
+    "event": "Montevideo City Torque - CA Progreso",
+    "name": "Montevideo City Torque - CA Progreso",
+    "home_odds": 1.71,
+    "draw_odds": 3.85,
+    "away_odds": 4.2,
+    "start_time": "2025-05-04T13:45:00Z",
+    "gameMinute": "",
+    "sport": "football",
+    "competitors": [
+      {
+        "name": ""
+      },
+      {
+        "name": ""
+      }
+    ],
+    "markets": [
+      {
+        "marketType": {
+          "id": "3743",
+          "name": "1X2"
+        },
+        "prices": [
+          {
+            "name": "1",
+            "price": 1.71
+          },
+          {
+            "name": "X",
+            "price": 3.85
+          },
+          {
+            "name": "2",
+            "price": 4.2
+          }
+        ]
+      }
+    ],
+    "category": {
+      "name": "Uruguay"
+    },
+    "region": {
+      "name": "Uruguay"
+    },
+    "competition": {
+      "name": "Primera Division"
+    },
+    "league": {
+      "name": "Primera Division"
     },
     "isInPlay": false,
     "status": "UPCOMING",
