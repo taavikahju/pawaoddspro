@@ -963,6 +963,11 @@ async function processEvents(events: any[]): Promise<void> {
           );
           
           // Mark as finished if any of these conditions are met:
+          // IMPORTANT: We've found that some events like 60111363 (Subiaco AFC vs Hyundai Ntc)
+          // are being kept as suspended when they should be finished
+          const minutesSinceLastSeen = Math.round((Date.now() - existingEvent.lastSeen) / (60 * 1000));
+          const longerThanTenMinutes = minutesSinceLastSeen > 10;
+          
           if (
             // Normal conditions from user requirements:
             (latestGameMinute >= 91 && Date.now() - existingEvent.lastSeen > twoMinutesMs) ||
@@ -971,13 +976,21 @@ async function processEvents(events: any[]): Promise<void> {
             (everReachedMinute91 && Date.now() - existingEvent.lastSeen > fiveMinutesMs) ||
             
             // Special handling for Korean events:
-            (isKoreanEvent && existingEvent.suspended && Date.now() - existingEvent.lastSeen > fiveMinutesMs)
+            (isKoreanEvent && existingEvent.suspended && Date.now() - existingEvent.lastSeen > fiveMinutesMs) ||
+            
+            // Extra condition: Any suspended event not seen for over 10 minutes
+            // This helps clean up events that are technically finished but not marked as such
+            (existingEvent.suspended && longerThanTenMinutes)
           ) {
             if (!existingEvent.finished) {
-              console.log(`⚽ Marking event ${existingEvent.id} (${existingEvent.name}) as FINISHED - latest minute was ${latestGameMinute}, everReachedMinute91=${everReachedMinute91}, lastSeen=${Math.round((Date.now() - existingEvent.lastSeen) / (60 * 1000))}m ago`);
+              console.log(`⚽ Marking event ${existingEvent.id} (${existingEvent.name}) as FINISHED - latest minute: ${latestGameMinute}, everReachedMinute91: ${everReachedMinute91}, lastSeen: ${minutesSinceLastSeen}m ago, suspended: ${existingEvent.suspended}`);
               existingEvent.finished = true;
             }
           } else {
+            // Special debug logging for suspended events that are not marked as finished
+            if (existingEvent.suspended) {
+              console.log(`🔍 Suspended event ${existingEvent.id} (${existingEvent.name}) NOT marked as finished - latest minute: ${latestGameMinute}, lastSeen: ${minutesSinceLastSeen}m ago`);
+            }
             // Not enough evidence to mark as finished, keep it as suspended
             existingEvent.finished = false;
           }
