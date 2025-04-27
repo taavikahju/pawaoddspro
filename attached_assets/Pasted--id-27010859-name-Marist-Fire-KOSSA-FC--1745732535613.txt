@@ -1,0 +1,211 @@
+{
+                    "id": "27010859",
+                    "name": "Marist Fire - KOSSA FC",
+                    "results": {
+                        "display": {
+                            "minute": "47",
+                            "currentPeriod": {
+                                "id": "3012",
+                                "name": "Second Half",
+                                "slug": "SECOND_HALF"
+                            },
+                            "currentServer": null
+                        },
+                        "participantPeriodResults": [
+                            {
+                                "participant": {
+                                    "id": "54050447",
+                                    "type": "HOME"
+                                },
+                                "periodResults": [
+                                    {
+                                        "period": {
+                                            "id": "3012",
+                                            "name": "Second Half",
+                                            "slug": "SECOND_HALF"
+                                        },
+                                        "result": "0",
+                                        "type": "SCORE"
+                                    },
+                                    {
+                                        "period": {
+                                            "id": "3010",
+                                            "name": "Full Time (Excluding Overtime)",
+                                            "slug": "FULL_TIME_EXCLUDING_OVERTIME"
+                                        },
+                                        "result": "0",
+                                        "type": "SCORE"
+                                    },
+                                    {
+                                        "period": {
+                                            "id": "3007",
+                                            "name": "First Half",
+                                            "slug": "FIRST_HALF"
+                                        },
+                                        "result": "0",
+                                        "type": "SCORE"
+                                    }
+                                ]
+                            },
+                            {
+                                "participant": {
+                                    "id": "54050448",
+                                    "type": "AWAY"
+                                },
+                                "periodResults": [
+                                    {
+                                        "period": {
+                                            "id": "3012",
+                                            "name": "Second Half",
+                                            "slug": "SECOND_HALF"
+                                        },
+                                        "result": "0",
+                                        "type": "SCORE"
+                                    },
+                                    {
+                                        "period": {
+                                            "id": "3010",
+                                            "name": "Full Time (Excluding Overtime)",
+                                            "slug": "FULL_TIME_EXCLUDING_OVERTIME"
+                                        },
+                                        "result": "2",
+                                        "type": "SCORE"
+                                    },
+                                    {
+                                        "period": {
+                                            "id": "3007",
+                                            "name": "First Half",
+                                            "slug": "FIRST_HALF"
+                                        },
+                                        "result": "2",
+                                        "type": "SCORE"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "scoreboard": {
+                        "matchState": {
+                            "minute": 46,
+                            "second": 14
+                        },
+                        "matchScore": {
+                            "scoreHome": "0",
+                            "scoreAway": "2"
+                        },
+                        "display": {
+                            "minute": 47
+                        },
+                        "currentPeriod": {
+                            "historicId": null
+                        }
+                    },
+                    "widget": null,
+                    "widgets": [
+                        {
+                            "id": "12171000",
+                            "type": "GENIUSSPORTS"
+                        }
+                    ],
+                    "participants": [
+                        {
+                            "id": "714609",
+                            "name": "Marist Fire",
+                            "position": 1
+                        },
+                        {
+                            "id": "714610",
+                            "name": "KOSSA FC",
+                            "position": 2
+                        }
+                    ],
+                    "startTime": "2025-04-27T04:34:00Z",
+                    "markets": [
+                        {
+                            "marketType": {
+                                "id": "3743",
+                                "name": "1X2 - FT",
+                                "displayName": "1X2 | Full Time",
+                                "explainer": "Pick what the result will be for the stated period: 1 (home win), X (draw), 2 (away win).",
+                                "priority": 0,
+                                "tabs": [
+                                    "popular",
+                                    "all"
+                                ],
+                                "priceColumnCount": 3,
+                                "priceSortingMethod": "PRICE_TYPE_ID"
+                            },
+                            "handicap": null,
+                            "handicapType": "",
+                            "pricePresentation": "TYPE_SHORT",
+                            "prices": [
+                                {
+                                    "id": "1190781317",
+                                    "name": "1",
+                                    "typeId": "3744",
+                                    "price": 10.0,
+                                    "suspended": false,
+                                    "handicap": null,
+                                    "position": 1,
+                                    "displayName": "1",
+                                    "additionalInfo": {
+                                        "hot": false
+                                    },
+                                    "probability": "eyJ3aW4iOjg4MTEwMTE2NTY4MzE1MTY0NzAsInJlZnVuZCI6NTA0MDg2NTcyMjI5NDMwODExMCwia2V5IjotMjYxMTAzOTg2NDIyNDYxNjE2NX0="
+                                },
+                                {
+                                    "id": "1190781318",
+                                    "name": "X",
+                                    "typeId": "3745",
+                                    "price": 5.0,
+                                    "suspended": false,
+                                    "handicap": null,
+                                    "position": 2,
+                                    "displayName": "X",
+                                    "additionalInfo": {
+                                        "hot": false
+                                    },
+                                    "probability": "eyJ3aW4iOi05MTE3Nzc1NTM1MDcwMzkyMDU0LCJyZWZ1bmQiOi00NzA0OTg4MTI4ODA1Mzg1MjAwLCJrZXkiOjIzNDI5OTcxNjAyOTk3NTM0Nzd9"
+                                },
+                                {
+                                    "id": "1190781319",
+                                    "name": "2",
+                                    "typeId": "3746",
+                                    "price": 1.25,
+                                    "suspended": false,
+                                    "handicap": null,
+                                    "position": 3,
+                                    "displayName": "2",
+                                    "additionalInfo": {
+                                        "hot": false
+                                    },
+                                    "probability": "eyJ3aW4iOjc3NjIxNzEyMzE4MDEyOTIzNDEsInJlZnVuZCI6NjA3NTQ1NTA4MjkzNzYyMTg1OSwia2V5IjotMzg2MjA3OTA3MTA0MTI5ODA1OH0="
+                                }
+                            ],
+                            "additionalInfo": {
+                                "boosted": false,
+                                "cashoutable": true,
+                                "twoUp": false
+                            }
+                        }
+                    ],
+                    "totalMarketCount": 19,
+                    "category": {
+                        "id": "2",
+                        "name": "Football"
+                    },
+                    "region": {
+                        "id": "254",
+                        "name": "Solomon Islands"
+                    },
+                    "competition": {
+                        "id": "17269",
+                        "name": "Solomon Islands S league"
+                    },
+                    "additionalInfo": {
+                        "live": true
+                    },
+                    "score": 3.5339922039904677,
+                    "neutralVenue": false,
+                    "version": 233
+                },
