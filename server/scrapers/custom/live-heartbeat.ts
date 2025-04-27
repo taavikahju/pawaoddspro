@@ -250,7 +250,7 @@ async function runHeartbeatTracker(url: string, storage: IStorage): Promise<void
                 currentlyAvailable: !isSuspended,
                 marketAvailability: isSuspended ? 'SUSPENDED' : 'ACTIVE',
                 suspended: isSuspended, // Explicit suspended property that matches totalMarketCount = 0
-                gameMinute: event.gameMinute || '1',
+                gameMinute: processGameMinute(event.gameMinute) || '1',
                 recordCount: 1,
                 widgetId: event.eventId || '',
                 homeScore: !isNaN(homeScore) ? homeScore : undefined,
@@ -435,6 +435,31 @@ async function runHeartbeatTracker(url: string, storage: IStorage): Promise<void
 }
 
 // Generate mock events for testing
+/**
+ * Process game minute to standardize halftime representation
+ * This helps detect and properly display halftime status
+ */
+function processGameMinute(minute: any): string {
+  if (!minute) return '1';
+  
+  const minuteStr = String(minute).trim().toLowerCase();
+  
+  // Check for common halftime indicators
+  if (
+    minuteStr === 'ht' || 
+    minuteStr === 'half time' || 
+    minuteStr === 'halftime' ||
+    minuteStr === 'half-time' ||
+    minuteStr === 'half' ||
+    minuteStr === '45+0' ||  // Sometimes halftime is shown as 45+0
+    (minuteStr.includes('half') && minuteStr.includes('time'))
+  ) {
+    return 'HT';
+  }
+  
+  return minuteStr;
+}
+
 function generateMockEvents(): any[] {
   const mockEvents = [];
   

@@ -229,12 +229,32 @@ export function parseEventsForHeartbeat(events: any[]) {
       }
       
       // Get the game minute from the event data - check multiple possible structures
-      const gameMinute = event.scoreboard?.display?.minute || 
+      let gameMinute = event.scoreboard?.display?.minute || 
                       event.fixture?.timer?.minute?.toString() || 
                       event.minute?.toString() || 
                       event.time?.toString() || 
                       event.matchTime?.toString() || 
                       "1";
+      
+      // Check for halftime special values
+      // HT can be represented as "HT", "ht", or sometimes a specific value like "45" with status "halftime"
+      if (
+        gameMinute === "ht" || 
+        gameMinute === "HT" || 
+        gameMinute === "Ht" || 
+        gameMinute === "hT" ||
+        (event.scoreboard?.display?.status === "halftime") ||
+        (event.fixture?.timer?.status === "halftime") ||
+        (event.status === "halftime") ||
+        (event.matchStatus === "halftime") ||
+        (event.period === "halftime") ||
+        // Sometimes halftime is indicated by period = "2" and minute = "0"
+        (gameMinute === "0" && event.period === "2") ||
+        // Some APIs use "Half Time" text
+        (gameMinute.toLowerCase().includes("half") && gameMinute.toLowerCase().includes("time"))
+      ) {
+        gameMinute = "HT";
+      }
       
       // Return the standardized event
       return {
