@@ -141,12 +141,29 @@ export default function LiveScraperPanel({ isAdmin }: LiveScraperPanelProps) {
     
     const updatedUptimeData: Record<string, number> = {};
     
+    console.log('Event details received:', status.marketStats.eventDetails.map(event => ({
+      id: event.id,
+      name: event.name,
+      uptimePercentage: event.uptimePercentage,
+      homeScore: event.homeScore,
+      awayScore: event.awayScore
+    })));
+    
     // Get the uptimePercentage directly from the event details
     status.marketStats.eventDetails.forEach((event) => {
       if (event.uptimePercentage !== undefined) {
         updatedUptimeData[event.id] = event.uptimePercentage;
+      } else {
+        // Fallback calculation if not provided by backend
+        const availabilityString = event.marketAvailability || "0%";
+        const percentageValue = parseFloat(availabilityString.replace('%', ''));
+        if (!isNaN(percentageValue)) {
+          updatedUptimeData[event.id] = percentageValue;
+        }
       }
     });
+    
+    console.log('Uptime data calculated:', updatedUptimeData);
     
     // Only update the state if we have data
     if (Object.keys(updatedUptimeData).length > 0) {
