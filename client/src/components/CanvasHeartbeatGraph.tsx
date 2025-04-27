@@ -810,15 +810,17 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
             <div className="flex items-center gap-2">
               <span className="font-medium">
                 {!eventDetails ? (
-                  `Match ID: ${eventId}`
+                  "Loading match details..."
                 ) : eventDetails.homeTeam && eventDetails.awayTeam && 
                    eventDetails.homeTeam !== "Home" && eventDetails.homeTeam !== "Unknown" &&
                    eventDetails.awayTeam !== "Away" && eventDetails.awayTeam !== "Unknown" ? (
                   <>
                     {eventDetails.homeTeam} vs {eventDetails.awayTeam}
                   </>
-                ) : (
+                ) : eventDetails.name && eventDetails.name !== "Unknown" ? (
                   eventDetails.name
+                ) : (
+                  `Match from ${eventDetails?.tournament || eventDetails?.country || "Unknown League"}`
                 )}
               </span>
               
