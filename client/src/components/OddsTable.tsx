@@ -38,8 +38,8 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
   const filteredBookmakers = bookmakers.filter(b => selectedBookmakers.includes(b.code));
   
   // Always show the comparison column if betPawa is selected along with either Sportybet or Betika KE
-  const hasBetPawaGH = selectedBookmakers.includes('bp GH');
-  const hasBetPawaKE = selectedBookmakers.includes('bp KE');
+  const hasBetPawaGH = selectedBookmakers.includes('betpawa_gh');
+  const hasBetPawaKE = selectedBookmakers.includes('betpawa_ke');
   const hasSportybet = selectedBookmakers.includes('sporty');
   const hasBetikaKE = selectedBookmakers.includes('betika KE');
   
@@ -51,7 +51,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
   
   // Show the comparison column only if we have a specific Ghana or Kenya filter active
   // Specifically dont show for "All Bookmakers" filter
-  const isComparisonAvailable = (isGhanaFilterActive || isKenyaFilterActive) && !(selectedBookmakers.length >= 4);
+  const isComparisonAvailable = (isGhanaFilterActive || isKenyaFilterActive);
   
   console.log('Selected Bookmakers:', selectedBookmakers);
   console.log('betPawa GH present:', hasBetPawaGH, 'Sportybet present:', hasSportybet);
@@ -96,8 +96,8 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
     if (currentOdd === highestOdd) {
       // Special case: if exactly 2 bookmakers have the same highest value and they are both betPawa variants
       if (bookiesWithHighest.length === 2 && 
-          bookiesWithHighest.includes('bp GH') && 
-          bookiesWithHighest.includes('bp KE')) {
+          bookiesWithHighest.includes('betpawa_gh') && 
+          bookiesWithHighest.includes('betpawa_ke')) {
         return 'highest';
       }
       
@@ -111,8 +111,8 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
     if (currentOdd === lowestOdd) {
       // Special case: if exactly 2 bookmakers have the same lowest value and they are both betPawa variants
       if (bookiesWithLowest.length === 2 && 
-          bookiesWithLowest.includes('bp GH') && 
-          bookiesWithLowest.includes('bp KE')) {
+          bookiesWithLowest.includes('betpawa_gh') && 
+          bookiesWithLowest.includes('betpawa_ke')) {
         return 'lowest';
       }
       
@@ -142,7 +142,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
     if (!event.oddsData) return { comparison: null, isBetter: null, favorite: null };
     
     // Get the appropriate betPawa code based on the active filter
-    const betPawaCode = isGhanaFilterActive ? 'bp GH' : isKenyaFilterActive ? 'bp KE' : null;
+    const betPawaCode = isGhanaFilterActive ? 'betpawa_gh' : isKenyaFilterActive ? 'betpawa_ke' : null;
     
     // Get the appropriate competitor code based on the active filter
     const competitorCode = isGhanaFilterActive ? 'sporty' : isKenyaFilterActive ? 'betika KE' : null;
