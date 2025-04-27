@@ -803,11 +803,39 @@ async function processEvents(events: any[]): Promise<void> {
         // Mark the last time we saw this event
         existingEvent.lastSeen = existingEvent.lastSeen || Date.now();
         
-        // Only consider an event finished if we haven't seen it for more than 6 hours
-        const sixHoursMs = 6 * 60 * 60 * 1000;
-        if (Date.now() - existingEvent.lastSeen > sixHoursMs) {
-          existingEvent.finished = true;
-          console.log(`📆 Marking event ${existingEvent.id} (${existingEvent.name}) as FINISHED - not seen for over 6 hours`);
+        // Consider the event finished only if:
+        // 1. It has a game minute of 90 or higher (or last known minute was 90+)
+        // 2. It hasn't been seen for at least 1 hour
+        const oneHourMs = 1 * 60 * 60 * 1000;
+        
+        // Get the game minute from the event or history
+        let gameMinuteNumber = parseInt(existingEvent.gameMinute || '0');
+        
+        // If the game minute is less than 90, check the history for a higher game minute
+        if (gameMinuteNumber < 90) {
+          // Find the history for this event
+          const history = marketHistories.find(h => h.eventId === existingEvent.id);
+          if (history && history.timestamps.length > 0) {
+            // Look through the history timestamps to find the highest game minute
+            for (const timePoint of history.timestamps) {
+              if (timePoint.gameMinute) {
+                const historyMinute = parseInt(timePoint.gameMinute);
+                if (!isNaN(historyMinute) && historyMinute > gameMinuteNumber) {
+                  gameMinuteNumber = historyMinute;
+                }
+              }
+            }
+          }
+        }
+        
+        if (gameMinuteNumber >= 90 && (Date.now() - existingEvent.lastSeen > oneHourMs)) {
+          if (!existingEvent.finished) {
+            console.log(`⚽ Marking event ${existingEvent.id} (${existingEvent.name}) as FINISHED - game minute was ${gameMinuteNumber} and not seen for 1+ hour`);
+            existingEvent.finished = true;
+          }
+        } else {
+          // Not enough evidence to mark as finished, keep it as suspended
+          existingEvent.finished = false;
         }
         
         updatedEvents.push(existingEvent);
