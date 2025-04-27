@@ -54,6 +54,8 @@ interface HeartbeatEvent {
   homeTeam?: string;
   awayTeam?: string;
   suspended?: boolean; // Explicit suspended flag for better TypeScript type safety
+  finished?: boolean; // Flag to mark events that are finished
+  lastSeen?: number; // Timestamp of when we last saw this event in API responses
   totalMarketCount?: number; // Added to track the actual number of markets available
 }
 

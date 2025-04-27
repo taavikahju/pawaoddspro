@@ -818,7 +818,7 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
               <span className="font-medium">
                 {eventData?.homeTeam && eventData?.awayTeam 
                   ? `${eventData.homeTeam} vs ${eventData.awayTeam}` 
-                  : eventData?.name || `Event ID: ${eventId}`
+                  : eventData?.name || `${eventId}`
                 }
               </span>
               
