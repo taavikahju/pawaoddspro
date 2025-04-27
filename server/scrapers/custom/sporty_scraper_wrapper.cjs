@@ -21,7 +21,7 @@ function runSportyScrapers() {
     try {
       console.error(`🔄 Trying ${scraper.name} scraper...`);
       // For the axios scraper, increase the timeout to 45 seconds
-      const timeout = scraper.name === 'SportyBet Axios' ? 45000 : 30000;
+      const timeout = scraper.name === 'SportyBet Axios' ? 60000 : 40000; // Increased timeouts
       const result = execSync('node ' + path.join(__dirname, scraper.path), { 
         timeout: timeout
       }).toString();
@@ -43,8 +43,9 @@ function runSportyScrapers() {
     }
   }
   
-  // If we get here, all scrapers failed
-  console.error(`All SportyBet scrapers failed. Last error: ${lastError?.message}`);
+  // If we get here, all scrapers failed or returned 0 events
+  console.error(`All SportyBet scrapers failed or returned 0 events. Last error: ${lastError?.message}`);
+  console.error(`Using fallback sample data since real SportyBet data couldn't be retrieved`);
   return loadSampleData();
 }
 
@@ -72,10 +73,13 @@ function main() {
     
     console.error(`✅ Successfully processed ${events.length} valid events`);
     
-    // Sample the first event to see what we're getting
-    console.error(`Sample event: ${JSON.stringify(events[0], null, 2)}`);
+    // Sample the first 5 events to see what we're getting
+    const sampleCount = Math.min(5, events.length);
+    for (let i = 0; i < sampleCount; i++) {
+      console.error(`📊 Event sample ${i+1} from SportyBet: ${JSON.stringify(events[i])}`);
+    }
   } else {
-    console.error('⚠️ No events found or processed');
+    console.error('⚠️ No events found or processed - check SportyBet Ghana API access');
   }
   
   console.error(`📊 SportyBet scraper wrapper returned ${events.length} events`);

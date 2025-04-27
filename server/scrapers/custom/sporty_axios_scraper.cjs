@@ -7,14 +7,9 @@ const HEADERS = {
   'Accept': 'application/json'
 };
 
-// Countries supported by SportyBet
+// Only use SportyBet Ghana as requested
 const REGIONS = [
-  { code: 'gh', name: 'Ghana' },
-  { code: 'ke', name: 'Kenya' },
-  { code: 'ng', name: 'Nigeria' },
-  { code: 'tz', name: 'Tanzania' },
-  { code: 'ug', name: 'Uganda' },
-  { code: 'za', name: 'South Africa' }
+  { code: 'gh', name: 'Ghana' }
 ];
 
 const fetchAllPages = async (region) => {
@@ -40,7 +35,7 @@ const fetchAllPages = async (region) => {
 
       if (pageNum === 1) {
         const totalNum = data.totalNum || 0;
-        totalPages = Math.ceil(totalNum / 100);
+        totalPages = Math.ceil(totalNum / 200); // Updated to match pageSize=200
         console.error(`📊 Found ${totalNum} events in ${totalPages} pages for ${region}`);
       }
 
@@ -103,18 +98,35 @@ const processRegionData = (tournaments, region) => {
 
 const run = async () => {
   let allEvents = [];
+  const region = REGIONS[0]; // Always use Ghana
 
-  // Try each region in sequence
-  for (const region of REGIONS) {
-    try {
-      console.error(`📊 Processing ${region.name} (${region.code})...`);
-      const tournaments = await fetchAllPages(region.code);
-      const events = processRegionData(tournaments, region.code);
-      console.error(`✅ Processed ${events.length} events from ${region.name}`);
-      allEvents = allEvents.concat(events);
-    } catch (err) {
-      console.error(`❌ Error processing ${region.name}:`, err.message);
+  try {
+    console.error(`📊 Processing ${region.name} (${region.code})...`);
+    
+    // Increase attempts to fetch more data
+    const maxRetries = 3;
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        console.error(`Attempt ${attempt}/${maxRetries} to fetch SportyBet Ghana data...`);
+        const tournaments = await fetchAllPages(region.code);
+        const events = processRegionData(tournaments, region.code);
+        console.error(`✅ Processed ${events.length} events from ${region.name}`);
+        allEvents = allEvents.concat(events);
+        
+        if (events.length > 0) {
+          break; // Stop if we successfully got events
+        }
+      } catch (err) {
+        console.error(`❌ Attempt ${attempt} failed: ${err.message}`);
+        if (attempt < maxRetries) {
+          // Wait a bit between attempts (3 seconds)
+          console.error('Waiting 3 seconds before next attempt...');
+          await new Promise(resolve => setTimeout(resolve, 3000));
+        }
+      }
     }
+  } catch (err) {
+    console.error(`❌ Error processing ${region.name}:`, err.message);
   }
 
   console.error(`✅ Total events collected: ${allEvents.length}`);
