@@ -36,6 +36,17 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     const eventMap = new Map<string, any>();
     const processedEvents = new Set<string>(); // Track which eventIds we've processed
     
+    // Create a SportyBet event map for faster lookups
+    const sportyEventMap = new Map<string, any>();
+    if (allBookmakerData['sporty'] && Array.isArray(allBookmakerData['sporty'])) {
+      for (const event of allBookmakerData['sporty']) {
+        if (event.eventId) {
+          sportyEventMap.set(event.eventId, event);
+        }
+      }
+      console.log(`Created SportyBet event map with ${sportyEventMap.size} events for faster lookups`);
+    }
+    
     // First pass: collect all eventIds from all bookmakers
     const allEventIds = new Set<string>();
     for (const bookmakerCode of bookmakerCodes) {
@@ -73,9 +84,9 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
         const event = bookmakerData.find(e => e.eventId === eventId);
         if (!event) continue;
         
-        // Debug SportyBet specifically
+        // Debug SportyBet specifically (reduced logging)
         if (bookmakerCode === 'sporty') {
-          console.log(`🔎 Found SportyBet event for eventId ${eventId}: ${JSON.stringify(event)}`);
+          console.log(`🔎 Found SportyBet event for eventId ${eventId}`);
           sportyBetEvents++; // Increment SportyBet event counter
         }
         
@@ -89,11 +100,17 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
         let hasOdds = false;
         
         if (event.odds) {
-          console.log(`📊 Event ${eventId} from ${bookmakerCode} has odds in 'odds' field: ${JSON.stringify(event.odds)}`);
+          // Reduce logging - only log sporty events for debugging
+          if (bookmakerCode === 'sporty') {
+            console.log(`📊 Event ${eventId} from ${bookmakerCode} has odds in 'odds' field: ${JSON.stringify(event.odds)}`);
+          }
           bookmakerOdds[bookmakerCode] = event.odds;
           hasOdds = true;
         } else if (event.home_odds !== undefined && event.draw_odds !== undefined && event.away_odds !== undefined) {
-          console.log(`📊 Event ${eventId} from ${bookmakerCode} has direct odds fields: home=${event.home_odds}, draw=${event.draw_odds}, away=${event.away_odds}`);
+          // Reduce logging - only log sporty events for debugging
+          if (bookmakerCode === 'sporty') {
+            console.log(`📊 Event ${eventId} from ${bookmakerCode} has direct odds fields: home=${event.home_odds}, draw=${event.draw_odds}, away=${event.away_odds}`);
+          }
           // Format for scrapers that provide odds directly
           bookmakerOdds[bookmakerCode] = {
             home: parseFloat(event.home_odds),
@@ -102,7 +119,10 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
           };
           hasOdds = true;
         } else {
-          console.log(`⚠️ Event ${eventId} from ${bookmakerCode} is missing odds. Raw event: ${JSON.stringify(event)}`);
+          // Only log missing odds for sporty
+          if (bookmakerCode === 'sporty') {
+            console.log(`⚠️ Event ${eventId} from ${bookmakerCode} is missing odds.`);
+          }
         }
         
         // If this bookmaker has odds for this event, increment the counter
@@ -149,7 +169,10 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
           league = firstMatch.league || 'Unknown';
         }
         
-        console.log(`Event ${eventId} - Country: [${country}], Tournament: [${tournament}], League: [${league}]`);
+        // Reduce logging - only log some events for debugging
+        if (Math.random() < 0.05) { // Log ~5% of events
+          console.log(`Event ${eventId} - Country: [${country}], Tournament: [${tournament}], League: [${league}]`);
+        }
         
         // Create the teams field if not already available
         let teams = firstMatch.teams;
@@ -246,7 +269,10 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
             date: eventData.date,
             time: eventData.time
           });
-          console.log(`Updated event ${existingEvent.id} with eventId ${eventData.eventId}`);
+          // Reduce logging volume
+          if (Math.random() < 0.1) { // Only log ~10% of events
+            console.log(`Updated event ${existingEvent.id} with eventId ${eventData.eventId}`);
+          }
         } else {
           // Create new event
           const insertData: InsertEvent = {
@@ -268,7 +294,10 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
           
           // Insert new event
           const createdEvent = await storage.createEvent(validatedData);
-          console.log(`Created new event with eventId ${eventData.eventId}`);
+          // Reduce logging volume for new events too
+          if (Math.random() < 0.2) { // Log ~20% of new events (higher percentage since these are more important)
+            console.log(`Created new event with eventId ${eventData.eventId}`);
+          }
           
           // Save initial historical odds data for each bookmaker for new events too
           const newOdds = eventData.oddsData;

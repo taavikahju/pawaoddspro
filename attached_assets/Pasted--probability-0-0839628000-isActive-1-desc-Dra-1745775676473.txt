@@ -1,0 +1,134 @@
+              "probability": "0.0839628000",
+              "isActive": 1,
+              "desc": "Draw (1:0)"
+            },
+            {
+              "id": "1713",
+              "odds": "19.50",
+              "probability": "0.0366048000",
+              "isActive": 1,
+              "desc": "Away (1:0)"
+            }
+          ],
+          "farNearOdds": 0,
+          "sourceType": "BET_RADAR",
+          "lastOddsChangeTime": 1745775033000,
+          "banned": false
+        },
+        {
+          "id": "14",
+          "specifier": "hcp=2:0",
+          "product": 3,
+          "desc": "Handicap 2:0",
+          "status": 0,
+          "group": "Main",
+          "groupId": "171121135724MGI11262166",
+          "marketGuide": "Predict the winner in regular time taking in consideration the handicap in brackets. ",
+          "title": "Handicap,1,X,2",
+          "name": "Handicap",
+          "favourite": 0,
+          "outcomes": [
+            {
+              "id": "1711",
+              "odds": "1.01",
+              "probability": "0.9631099270",
+              "isActive": 1,
+              "desc": "Home (2:0)"
+            },
+            {
+              "id": "1712",
+              "odds": "14.00",
+              "probability": "0.0282211113",
+              "isActive": 1,
+              "desc": "Draw (2:0)"
+            },
+            {
+              "id": "1713",
+              "odds": "44.00",
+              "probability": "0.0086687993",
+              "isActive": 1,
+              "desc": "Away (2:0)"
+            }
+          ],
+          "farNearOdds": -1,
+          "sourceType": "BET_RADAR",
+          "lastOddsChangeTime": 1745775033000,
+          "banned": false
+        },
+        {
+          "id": "29",
+          "product": 3,
+          "desc": "GG/NG",
+          "status": 0,
+          "group": "Main",
+          "groupId": "171121135724MGI11262166",
+          "marketGuide": "Predict whether both teams will score in the match at regular time. *Yes (GG both teams score) *No (NG any team not to score ).",
+          "title": "GG,NG",
+          "name": "GG/NG",
+          "favourite": 0,
+          "outcomes": [
+            {
+              "id": "74",
+              "odds": "1.83",
+              "probability": "0.5208200000",
+              "isActive": 1,
+              "desc": "Yes"
+            },
+            {
+              "id": "76",
+              "odds": "1.98",
+              "probability": "0.4791790000",
+              "isActive": 1,
+              "desc": "No"
+            }
+          ],
+          "farNearOdds": 0,
+          "sourceType": "BET_RADAR",
+          "lastOddsChangeTime": 1745775033268,
+          "banned": false
+        },
+        {
+          "id": "11",
+          "product": 3,
+          "desc": "Draw No Bet",
+          "status": 0,
+          "group": "Main",
+          "groupId": "171121135724MGI11262166",
+          "marketGuide": "Predict the winner of the match. If the teams draw, the selection will be voided.",
+          "title": "1,2",
+          "name": "Draw No Bet",
+          "favourite": 0,
+          "outcomes": [
+            {
+              "id": "4",
+              "odds": "1.14",
+              "probability": "0.8535280000",
+              "isActive": 1,
+              "desc": "Home"
+            },
+            {
+              "id": "5",
+              "odds": "5.60",
+              "probability": "0.1464720000",
+              "isActive": 1,
+              "desc": "Away"
+            }
+          ],
+          "farNearOdds": 0,
+          "sourceType": "BET_RADAR",
+          "lastOddsChangeTime": 1745775033268,
+          "banned": false
+        },
+        {
+          "id": "26",
+          "product": 3,
+          "desc": "Odd/Even",
+          "status": 0,
+          "group": "Main",
+          "groupId": "171121135724MGI11262166",
+          "marketGuide": "Predict whether the total number of goals in the match will be odd or even. No goal counts as even.",
+          "title": "Odd,Even",
+          "name": "Odd/Even",
+          "favourite": 0,
+          "outcomes": [
+            {
