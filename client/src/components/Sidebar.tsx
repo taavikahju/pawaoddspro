@@ -282,7 +282,7 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
                 // we can determine the exact state we want to have
                 const allCodes = bookmakers.map(b => b.code);
                 // Fixed: Include both BetPawa Kenya and Betika KE for Kenya filter
-                const kenyaCodes = ["betpawa_ke", "betika"];
+                const kenyaCodes = ["betpawa_ke", "betika KE"];
                 
                 // For each bookmaker, determine whether it should be selected or not
                 // If it's already in the correct state, don't toggle it
