@@ -279,10 +279,13 @@ export default function LiveHeartbeat() {
       const hasLowRecordCount = event.recordCount < 3;
       
       // Check if it's been suspended for multiple consecutive checks 
+      // Note: We still track this for debugging but don't filter out suspended events anymore
       const longSuspended = (consecutiveSuspensionCounts[event.id] || 0) >= 10;
       
-      // Keep the event only if it's recent AND has sufficient records AND isn't long suspended
-      return isRecentEvent && !hasLowRecordCount && !longSuspended;
+      // Keep the event if it's recent AND has sufficient records
+      // We no longer filter out suspended events based on their suspension duration
+      // This ensures suspended events remain visible in the UI
+      return isRecentEvent && !hasLowRecordCount;
     });
     
     console.log(`DEBUG: Filtered out ${events.length - activeEvents.length} likely finished events (suspended & older than 3 hours)`);
