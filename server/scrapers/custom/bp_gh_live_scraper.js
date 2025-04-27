@@ -4,10 +4,9 @@
  */
 
 import axios from 'axios';
-import fs from 'fs';
-import path from 'path';
 import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+import { dirname, join } from 'path';
+import fs from 'fs/promises';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -25,8 +24,8 @@ const WRITE_INTERVAL = 60000; // Write to disk every minute
  */
 async function scrapeLiveEvents() {
   try {
-    const response = await axios.get('https://www.betpawa.com.gh/api/sportsbook/v2/events/lists/by-queries?q=%7B%22queries%22%3A%5B%7B%22query%22%3A%7B%22eventType%22%3A%22LIVE%22%2C%22categories%22%3A%5B%222%22%5D%2C%22zones%22%3A%7B%7D%7D%2C%22view%22%3A%7B%22marketTypes%22%3A%5B%223743%22%5D%7D%2C%22skip%22%3A0%2C%22sort%22%3A%7B%22competitionPriority%22%3A%22DESC%22%7D%2C%22take%22%3A20%7D%5D%7D');
-    const events = response.data?.queries?.[0]?.events || [];
+    const response = await axios.get('https://gh.betpawa.com/api/events');
+    const events = response.data;
     const timestamp = new Date().toISOString();
     updateMarketHistory(events, timestamp);
     const currentTime = Date.now();
@@ -36,7 +35,7 @@ async function scrapeLiveEvents() {
     }
     return events;
   } catch (error) {
-    console.error('Error scraping live events:', error);
+    console.error('Error scraping live events:', error.message);
     return [];
   }
 }
@@ -345,21 +344,19 @@ function extractEvents(data, timestamp) {
  */
 function updateMarketHistory(events, timestamp) {
   events.forEach(event => {
-    if (!marketHistoryData[event.id]) {
-      marketHistoryData[event.id] = {
-        id: event.id,
+    const eventId = event.id;
+    if (!marketHistoryData[eventId]) {
+      marketHistoryData[eventId] = {
+        eventId: eventId,
         name: event.name,
-        country: event.country,
-        tournament: event.tournament,
-        startTime: event.startTime,
-        history: []
+        availability: []
       };
     }
 
     // Add current status to history
-    marketHistoryData[event.id].history.push({
+    marketHistoryData[eventId].availability.push({
       timestamp: timestamp,
-      market1X2Available: event.market1X2Available,
+      market1X2Available: event.market1X2Available || false, //Adding default false
       homeOdds: event.homeOdds,
       drawOdds: event.drawOdds,
       awayOdds: event.awayOdds,
@@ -367,8 +364,8 @@ function updateMarketHistory(events, timestamp) {
     });
 
     // Keep history size reasonable (max 2 hours of 10-second intervals = 720 entries)
-    if (marketHistoryData[event.id].history.length > 720) {
-      marketHistoryData[event.id].history.shift();
+    if (marketHistoryData[eventId].availability.length > 720) {
+      marketHistoryData[eventId].availability.shift();
     }
   });
 
@@ -377,8 +374,8 @@ function updateMarketHistory(events, timestamp) {
   twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
 
   Object.keys(marketHistoryData).forEach(eventId => {
-    const lastUpdate = marketHistoryData[eventId].history.length > 0
-      ? new Date(marketHistoryData[eventId].history[marketHistoryData[eventId].history.length - 1].timestamp)
+    const lastUpdate = marketHistoryData[eventId].availability.length > 0
+      ? new Date(marketHistoryData[eventId].availability[marketHistoryData[eventId].availability.length - 1].timestamp)
       : null;
 
     if (lastUpdate && lastUpdate < twentyFourHoursAgo) {
@@ -392,15 +389,13 @@ function updateMarketHistory(events, timestamp) {
  */
 async function writeMarketHistoryToFile() {
   try {
-    const dataDir = path.join(process.cwd(), 'data');
+    const dataDir = join(__dirname, '..', '..', 'data');
 
     // Create data directory if it doesn't exist
-    if (!fs.existsSync(dataDir)) {
-      fs.mkdirSync(dataDir, { recursive: true });
-    }
+    await fs.mkdir(dataDir, { recursive: true }).catch(() => {});
 
-    const filePath = path.join(dataDir, 'betpawa_gh_live_market_history.json');
-    await fs.promises.writeFile(filePath, JSON.stringify(marketHistoryData, null, 2));
+    const filePath = join(dataDir, 'betpawa_gh_live_market_history.json');
+    await fs.writeFile(filePath, JSON.stringify(marketHistoryData, null, 2));
 
     console.log(`Wrote BetPawa Ghana live market history to ${filePath}`);
   } catch (error) {
@@ -411,18 +406,20 @@ async function writeMarketHistoryToFile() {
 /**
  * Get market availability statistics
  */
-function getMarketAvailabilityStats() {
-  return marketHistoryData;
+async function getMarketAvailabilityStats() {
+  try {
+    const stats = Object.values(marketHistoryData).map(history => ({
+      eventId: history.eventId,
+      name: history.name,
+      availability: history.availability
+    }));
+    return stats;
+  } catch (error) {
+    console.error('Error getting market stats:', error);
+    return [];
+  }
 }
 
-// Export both CommonJS and ESM formats
-if (typeof module !== 'undefined') {
-  module.exports = {
-    scrapeLiveEvents,
-    getMarketAvailabilityStats,
-    runLiveScraper: scrapeLiveEvents
-  };
-}
 
 export {
   scrapeLiveEvents,
