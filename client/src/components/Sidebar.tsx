@@ -253,11 +253,16 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
                   .filter(b => b.code === 'bp GH' || b.code === 'sporty')
                   .map(b => b.code);
                 
-                // Deselect all bookmakers
+                // First ensure all Ghana bookmakers are selected
+                ghanaBookmakers.forEach(code => {
+                  if (!selectedBookmakers.includes(code)) {
+                    toggleBookmaker(code);
+                  }
+                });
+                
+                // Then deselect all non-Ghana bookmakers
                 bookmakers.forEach(b => {
                   if (selectedBookmakers.includes(b.code) && !ghanaBookmakers.includes(b.code)) {
-                    toggleBookmaker(b.code);
-                  } else if (!selectedBookmakers.includes(b.code) && ghanaBookmakers.includes(b.code)) {
                     toggleBookmaker(b.code);
                   }
                 });
@@ -285,11 +290,16 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
                   .filter(b => b.code === 'bp KE' || b.code === 'betika KE')
                   .map(b => b.code);
                 
-                // Deselect all bookmakers
+                // First ensure all Kenya bookmakers are selected
+                kenyaBookmakers.forEach(code => {
+                  if (!selectedBookmakers.includes(code)) {
+                    toggleBookmaker(code);
+                  }
+                });
+                
+                // Then deselect all non-Kenya bookmakers
                 bookmakers.forEach(b => {
                   if (selectedBookmakers.includes(b.code) && !kenyaBookmakers.includes(b.code)) {
-                    toggleBookmaker(b.code);
-                  } else if (!selectedBookmakers.includes(b.code) && kenyaBookmakers.includes(b.code)) {
                     toggleBookmaker(b.code);
                   }
                 });
