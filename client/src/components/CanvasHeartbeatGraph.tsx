@@ -194,29 +194,36 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
       try {
         setStatus('loading');
         
-        // First fetch event details
-        const detailsResponse = await fetch(`/api/events/${eventId}`);
-        if (detailsResponse.ok) {
-          const eventDetailsData = await detailsResponse.json();
+        // Use the event data passed as prop instead of fetching
+        if (eventData) {
+          // If homeTeam and awayTeam are already split, use them
+          let homeTeam = eventData.homeTeam || 'Home';
+          let awayTeam = eventData.awayTeam || 'Away';
           
-          // Calculate teams from the event data
-          let homeTeam = 'Home';
-          let awayTeam = 'Away';
-          
-          if (eventDetailsData.teams) {
-            const teamParts = eventDetailsData.teams.split(' v ');
-            if (teamParts.length === 2) {
-              homeTeam = teamParts[0].trim();
-              awayTeam = teamParts[1].trim();
+          // If homeTeam and awayTeam aren't provided but name is in format "Team A vs Team B"
+          if ((!eventData.homeTeam || !eventData.awayTeam) && eventData.name) {
+            // Try to parse teams from name field
+            if (eventData.name.includes(' vs ')) {
+              const teamParts = eventData.name.split(' vs ');
+              if (teamParts.length === 2) {
+                homeTeam = teamParts[0].trim();
+                awayTeam = teamParts[1].trim();
+              }
+            } else if (eventData.name.includes(' - ')) {
+              const teamParts = eventData.name.split(' - ');
+              if (teamParts.length === 2) {
+                homeTeam = teamParts[0].trim();
+                awayTeam = teamParts[1].trim();
+              }
             }
           }
           
           setEventDetails({
-            name: eventDetailsData.teams || 'Unknown Event',
+            name: eventData.name || `Event ${eventId}`,
             homeTeam,
             awayTeam,
-            country: eventDetailsData.country || null,
-            tournament: eventDetailsData.tournament || null,
+            country: eventData.country || null,
+            tournament: eventData.tournament || null,
             // Game minute will be updated from the heartbeat data
           });
         }
