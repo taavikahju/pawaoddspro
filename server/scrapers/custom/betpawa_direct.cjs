@@ -149,7 +149,52 @@ async function processEvents(events) {
   
   for (const event of events) {
     try {
-      // Find the widget with type SPORTRADAR
+      // Special handling for BetGenius events
+      const isBetGeniusEvent = event.widgets?.some(w => w.type === "GENIUSSPORTS" || 
+        (w.id && (w.id.startsWith('11') || w.id.startsWith('12'))));
+      
+      if (isBetGeniusEvent) {
+        process.stderr.write(`[INFO] Detected BetGenius event: ${event.name}\n`);
+        
+        // For BetGenius events, check the actual totalMarketCount from the event
+        // The problem is that totalMarketCount isn't being respected properly in our original code
+        const actualTotalMarketCount = event.totalMarketCount || 0;
+        
+        // Get the widget ID to use for the event
+        const betGeniusWidget = event.widgets?.find(w => w.type === "GENIUSSPORTS") || event.widgets?.[0];
+        
+        // Get team names from different possible sources
+        const homeTeam = event.participants?.[0]?.name || event.name.split(' - ')[0] || event.name.split(' vs ')[0] || "Home";
+        const awayTeam = event.participants?.[1]?.name || event.name.split(' - ')[1] || event.name.split(' vs ')[1] || "Away";
+        
+        process.stderr.write(`[INFO] BetGenius event ${event.name} has totalMarketCount=${actualTotalMarketCount}\n`);
+        
+        // Create special event object for BetGenius event, respecting actual market count
+        processedEvents.push({
+          eventId: betGeniusWidget.id,
+          country: event.region?.name || "Unknown",
+          tournament: event.competition?.name || "Unknown",
+          event: event.name,
+          market: event.markets?.[0]?.marketType?.name || "1X2",
+          // Use actual odds if available, otherwise default to 0
+          home_odds: event.markets?.[0]?.prices?.find(p => p.name === "1")?.price || "0.0",
+          draw_odds: event.markets?.[0]?.prices?.find(p => p.name === "X")?.price || "0.0",
+          away_odds: event.markets?.[0]?.prices?.find(p => p.name === "2")?.price || "0.0",
+          start_time: event.startTime,
+          gameMinute: event.scoreboard?.display?.minute || "1",
+          // If totalMarketCount is actually 0, mark as suspended, otherwise available
+          suspended: actualTotalMarketCount === 0,
+          homeTeam: homeTeam,
+          awayTeam: awayTeam,
+          totalMarketCount: actualTotalMarketCount, // Use the actual market count
+          widgetType: "GENIUSSPORTS"
+        });
+        
+        // Skip the rest of the processing for this event
+        continue;
+      }
+      
+      // Normal processing for SPORTRADAR events
       const widget = event.widgets?.find(w => w.type === "SPORTRADAR");
       
       // Find the market with id "3743" (1X2 market)
