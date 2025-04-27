@@ -871,6 +871,9 @@ async function processEvents(events: any[]): Promise<void> {
         tournament = event.competition.name;
       }
       
+      // Process the gameMinute to standardize halftime display
+      gameMinute = processGameMinute(gameMinute);
+      
       // Create a standardized event object with explicit totalMarketCount
       return {
         id: event.id?.toString() || event.eventId?.toString() || '',
