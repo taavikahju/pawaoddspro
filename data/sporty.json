@@ -607,9 +607,9 @@
     "date": "2025-04-27",
     "time": "15:30",
     "odds": {
-      "home": 2.05,
-      "draw": 3.7,
-      "away": 3.84
+      "home": 2.06,
+      "draw": 3.67,
+      "away": 3.82
     },
     "raw": {
       "eventId": "51269561",
@@ -617,9 +617,9 @@
       "tournament": "Bundesliga",
       "event": "Werder - FC St. Pauli",
       "market": "1X2",
-      "home_odds": "2.05",
-      "draw_odds": "3.70",
-      "away_odds": "3.84",
+      "home_odds": "2.06",
+      "draw_odds": "3.67",
+      "away_odds": "3.82",
       "start_time": "2025-04-27 15:30"
     }
   },
@@ -1232,8 +1232,8 @@
     "time": "18:45",
     "odds": {
       "home": 1.26,
-      "draw": 6.83,
-      "away": 12.88
+      "draw": 6.74,
+      "away": 12.63
     },
     "raw": {
       "eventId": "51273471",
@@ -1242,8 +1242,8 @@
       "event": "Atalanta - US Lecce",
       "market": "1X2",
       "home_odds": "1.26",
-      "draw_odds": "6.83",
-      "away_odds": "12.88",
+      "draw_odds": "6.74",
+      "away_odds": "12.63",
       "start_time": "2025-04-27 18:45"
     }
   },
@@ -1413,9 +1413,9 @@
     "date": "2025-04-27",
     "time": "13:00",
     "odds": {
-      "home": 6.94,
-      "draw": 4.49,
-      "away": 1.53
+      "home": 6.77,
+      "draw": 4.44,
+      "away": 1.55
     },
     "raw": {
       "eventId": "50955895",
@@ -1423,9 +1423,9 @@
       "tournament": "Ligue 1",
       "event": "Angers - Lille",
       "market": "1X2",
-      "home_odds": "6.94",
-      "draw_odds": "4.49",
-      "away_odds": "1.53",
+      "home_odds": "6.77",
+      "draw_odds": "4.44",
+      "away_odds": "1.55",
       "start_time": "2025-04-27 13:00"
     }
   },
@@ -6873,9 +6873,9 @@
     "date": "2025-04-27",
     "time": "21:30",
     "odds": {
-      "home": 1.8,
-      "draw": 3.2,
-      "away": 4.3
+      "home": 1.84,
+      "draw": 3.1,
+      "away": 4.2
     },
     "raw": {
       "eventId": "57250101",
@@ -6883,9 +6883,9 @@
       "tournament": "Primera Division",
       "event": "Ucv FC - Caracas FC",
       "market": "1X2",
-      "home_odds": "1.80",
-      "draw_odds": "3.20",
-      "away_odds": "4.30",
+      "home_odds": "1.84",
+      "draw_odds": "3.10",
+      "away_odds": "4.20",
       "start_time": "2025-04-27 21:30"
     }
   },
@@ -11362,6 +11362,32 @@
     }
   },
   {
+    "id": "52588335",
+    "eventId": "52588335",
+    "teams": "ASD Borgaro 1965 - AC Bra",
+    "league": "Serie D, Group A",
+    "sport": "football",
+    "country": "Italy",
+    "date": "2025-04-27",
+    "time": "13:00",
+    "odds": {
+      "home": 3.25,
+      "draw": 3.6,
+      "away": 1.94
+    },
+    "raw": {
+      "eventId": "52588335",
+      "country": "Italy",
+      "tournament": "Serie D, Group A",
+      "event": "ASD Borgaro 1965 - AC Bra",
+      "market": "1X2",
+      "home_odds": "3.25",
+      "draw_odds": "3.60",
+      "away_odds": "1.94",
+      "start_time": "2025-04-27 13:00"
+    }
+  },
+  {
     "id": "52588333",
     "eventId": "52588333",
     "teams": "Asti Calcio - Chisola Calcio",
@@ -15340,162 +15366,6 @@
     }
   },
   {
-    "id": "59295981",
-    "eventId": "59295981",
-    "teams": "Los Chankas CYC - FBC Melgar",
-    "league": "Liga 1",
-    "sport": "football",
-    "country": "Peru",
-    "date": "2025-04-27",
-    "time": "18:15",
-    "odds": {
-      "home": 3.5,
-      "draw": 3.33,
-      "away": 2.05
-    },
-    "raw": {
-      "eventId": "59295981",
-      "country": "Peru",
-      "tournament": "Liga 1",
-      "event": "Los Chankas CYC - FBC Melgar",
-      "market": "1X2",
-      "home_odds": "3.50",
-      "draw_odds": "3.33",
-      "away_odds": "2.05",
-      "start_time": "2025-04-27 18:15"
-    }
-  },
-  {
-    "id": "59295977",
-    "eventId": "59295977",
-    "teams": "Atletico Grau - Sport Boys Association",
-    "league": "Liga 1",
-    "sport": "football",
-    "country": "Peru",
-    "date": "2025-04-27",
-    "time": "20:30",
-    "odds": {
-      "home": 1.8,
-      "draw": 3.4,
-      "away": 4.5
-    },
-    "raw": {
-      "eventId": "59295977",
-      "country": "Peru",
-      "tournament": "Liga 1",
-      "event": "Atletico Grau - Sport Boys Association",
-      "market": "1X2",
-      "home_odds": "1.80",
-      "draw_odds": "3.40",
-      "away_odds": "4.50",
-      "start_time": "2025-04-27 20:30"
-    }
-  },
-  {
-    "id": "59295987",
-    "eventId": "59295987",
-    "teams": "Universitario de Deportes - UTC de Cajamarca",
-    "league": "Liga 1",
-    "sport": "football",
-    "country": "Peru",
-    "date": "2025-04-27",
-    "time": "23:00",
-    "odds": {
-      "home": 1.18,
-      "draw": 6.6,
-      "away": 13.5
-    },
-    "raw": {
-      "eventId": "59295987",
-      "country": "Peru",
-      "tournament": "Liga 1",
-      "event": "Universitario de Deportes - UTC de Cajamarca",
-      "market": "1X2",
-      "home_odds": "1.18",
-      "draw_odds": "6.60",
-      "away_odds": "13.50",
-      "start_time": "2025-04-27 23:00"
-    }
-  },
-  {
-    "id": "59295973",
-    "eventId": "59295973",
-    "teams": "Sporting Cristal - Juan Pablo II College",
-    "league": "Liga 1",
-    "sport": "football",
-    "country": "Peru",
-    "date": "2025-04-28",
-    "time": "18:00",
-    "odds": {
-      "home": 1.34,
-      "draw": 5.2,
-      "away": 7.2
-    },
-    "raw": {
-      "eventId": "59295973",
-      "country": "Peru",
-      "tournament": "Liga 1",
-      "event": "Sporting Cristal - Juan Pablo II College",
-      "market": "1X2",
-      "home_odds": "1.34",
-      "draw_odds": "5.20",
-      "away_odds": "7.20",
-      "start_time": "2025-04-28 18:00"
-    }
-  },
-  {
-    "id": "59295991",
-    "eventId": "59295991",
-    "teams": "Asociacion Deportiva Tarma - Cusco FC",
-    "league": "Liga 1",
-    "sport": "football",
-    "country": "Peru",
-    "date": "2025-04-28",
-    "time": "20:30",
-    "odds": {
-      "home": 1.98,
-      "draw": 3.4,
-      "away": 3.6
-    },
-    "raw": {
-      "eventId": "59295991",
-      "country": "Peru",
-      "tournament": "Liga 1",
-      "event": "Asociacion Deportiva Tarma - Cusco FC",
-      "market": "1X2",
-      "home_odds": "1.98",
-      "draw_odds": "3.40",
-      "away_odds": "3.60",
-      "start_time": "2025-04-28 20:30"
-    }
-  },
-  {
-    "id": "59295997",
-    "eventId": "59295997",
-    "teams": "CS Cienciano - Sport Huancayo",
-    "league": "Liga 1",
-    "sport": "football",
-    "country": "Peru",
-    "date": "2025-04-29",
-    "time": "00:00",
-    "odds": {
-      "home": 2.1,
-      "draw": 3.4,
-      "away": 3.2
-    },
-    "raw": {
-      "eventId": "59295997",
-      "country": "Peru",
-      "tournament": "Liga 1",
-      "event": "CS Cienciano - Sport Huancayo",
-      "market": "1X2",
-      "home_odds": "2.10",
-      "draw_odds": "3.40",
-      "away_odds": "3.20",
-      "start_time": "2025-04-29 00:00"
-    }
-  },
-  {
     "id": "52325089",
     "eventId": "52325089",
     "teams": "Arema FC - Persebaya Surabaya",
@@ -15649,6 +15519,162 @@
       "draw_odds": "3.25",
       "away_odds": "2.10",
       "start_time": "2025-05-03 12:00"
+    }
+  },
+  {
+    "id": "59295981",
+    "eventId": "59295981",
+    "teams": "Los Chankas CYC - FBC Melgar",
+    "league": "Liga 1",
+    "sport": "football",
+    "country": "Peru",
+    "date": "2025-04-27",
+    "time": "18:15",
+    "odds": {
+      "home": 3.5,
+      "draw": 3.33,
+      "away": 2.05
+    },
+    "raw": {
+      "eventId": "59295981",
+      "country": "Peru",
+      "tournament": "Liga 1",
+      "event": "Los Chankas CYC - FBC Melgar",
+      "market": "1X2",
+      "home_odds": "3.50",
+      "draw_odds": "3.33",
+      "away_odds": "2.05",
+      "start_time": "2025-04-27 18:15"
+    }
+  },
+  {
+    "id": "59295977",
+    "eventId": "59295977",
+    "teams": "Atletico Grau - Sport Boys Association",
+    "league": "Liga 1",
+    "sport": "football",
+    "country": "Peru",
+    "date": "2025-04-27",
+    "time": "20:30",
+    "odds": {
+      "home": 1.8,
+      "draw": 3.4,
+      "away": 4.5
+    },
+    "raw": {
+      "eventId": "59295977",
+      "country": "Peru",
+      "tournament": "Liga 1",
+      "event": "Atletico Grau - Sport Boys Association",
+      "market": "1X2",
+      "home_odds": "1.80",
+      "draw_odds": "3.40",
+      "away_odds": "4.50",
+      "start_time": "2025-04-27 20:30"
+    }
+  },
+  {
+    "id": "59295987",
+    "eventId": "59295987",
+    "teams": "Universitario de Deportes - UTC de Cajamarca",
+    "league": "Liga 1",
+    "sport": "football",
+    "country": "Peru",
+    "date": "2025-04-27",
+    "time": "23:00",
+    "odds": {
+      "home": 1.18,
+      "draw": 6.6,
+      "away": 13.5
+    },
+    "raw": {
+      "eventId": "59295987",
+      "country": "Peru",
+      "tournament": "Liga 1",
+      "event": "Universitario de Deportes - UTC de Cajamarca",
+      "market": "1X2",
+      "home_odds": "1.18",
+      "draw_odds": "6.60",
+      "away_odds": "13.50",
+      "start_time": "2025-04-27 23:00"
+    }
+  },
+  {
+    "id": "59295973",
+    "eventId": "59295973",
+    "teams": "Sporting Cristal - Juan Pablo II College",
+    "league": "Liga 1",
+    "sport": "football",
+    "country": "Peru",
+    "date": "2025-04-28",
+    "time": "18:00",
+    "odds": {
+      "home": 1.34,
+      "draw": 5.2,
+      "away": 7.2
+    },
+    "raw": {
+      "eventId": "59295973",
+      "country": "Peru",
+      "tournament": "Liga 1",
+      "event": "Sporting Cristal - Juan Pablo II College",
+      "market": "1X2",
+      "home_odds": "1.34",
+      "draw_odds": "5.20",
+      "away_odds": "7.20",
+      "start_time": "2025-04-28 18:00"
+    }
+  },
+  {
+    "id": "59295991",
+    "eventId": "59295991",
+    "teams": "Asociacion Deportiva Tarma - Cusco FC",
+    "league": "Liga 1",
+    "sport": "football",
+    "country": "Peru",
+    "date": "2025-04-28",
+    "time": "20:30",
+    "odds": {
+      "home": 1.98,
+      "draw": 3.4,
+      "away": 3.6
+    },
+    "raw": {
+      "eventId": "59295991",
+      "country": "Peru",
+      "tournament": "Liga 1",
+      "event": "Asociacion Deportiva Tarma - Cusco FC",
+      "market": "1X2",
+      "home_odds": "1.98",
+      "draw_odds": "3.40",
+      "away_odds": "3.60",
+      "start_time": "2025-04-28 20:30"
+    }
+  },
+  {
+    "id": "59295997",
+    "eventId": "59295997",
+    "teams": "CS Cienciano - Sport Huancayo",
+    "league": "Liga 1",
+    "sport": "football",
+    "country": "Peru",
+    "date": "2025-04-29",
+    "time": "00:00",
+    "odds": {
+      "home": 2.1,
+      "draw": 3.4,
+      "away": 3.2
+    },
+    "raw": {
+      "eventId": "59295997",
+      "country": "Peru",
+      "tournament": "Liga 1",
+      "event": "CS Cienciano - Sport Huancayo",
+      "market": "1X2",
+      "home_odds": "2.10",
+      "draw_odds": "3.40",
+      "away_odds": "3.20",
+      "start_time": "2025-04-29 00:00"
     }
   },
   {
@@ -16467,9 +16493,9 @@
     "date": "2025-04-27",
     "time": "13:00",
     "odds": {
-      "home": 1.77,
-      "draw": 3.75,
-      "away": 4.25
+      "home": 1.8,
+      "draw": 3.7,
+      "away": 4.1
     },
     "raw": {
       "eventId": "51857219",
@@ -16477,9 +16503,9 @@
       "tournament": "1. Lig",
       "event": "Kocaelispor - Boluspor",
       "market": "1X2",
-      "home_odds": "1.77",
-      "draw_odds": "3.75",
-      "away_odds": "4.25",
+      "home_odds": "1.80",
+      "draw_odds": "3.70",
+      "away_odds": "4.10",
       "start_time": "2025-04-27 13:00"
     }
   },
@@ -20263,9 +20289,9 @@
     "date": "2025-04-27",
     "time": "14:00",
     "odds": {
-      "home": 3.6,
-      "draw": 3.2,
-      "away": 2.1
+      "home": 3.5,
+      "draw": 3.1,
+      "away": 2.15
     },
     "raw": {
       "eventId": "57477507",
@@ -20273,9 +20299,9 @@
       "tournament": "Primera C",
       "event": "Deportivo Muniz - Justo Jose de Urquiza",
       "market": "1X2",
-      "home_odds": "3.60",
-      "draw_odds": "3.20",
-      "away_odds": "2.10",
+      "home_odds": "3.50",
+      "draw_odds": "3.10",
+      "away_odds": "2.15",
       "start_time": "2025-04-27 14:00"
     }
   },
@@ -22941,9 +22967,9 @@
     "date": "2025-04-27",
     "time": "08:15",
     "odds": {
-      "home": 2.1,
+      "home": 2.2,
       "draw": 3.6,
-      "away": 2.8
+      "away": 2.75
     },
     "raw": {
       "eventId": "56009385",
@@ -22951,9 +22977,9 @@
       "tournament": "CFL",
       "event": "Dukla Prague B - Sokol Hostoun",
       "market": "1X2",
-      "home_odds": "2.10",
+      "home_odds": "2.20",
       "draw_odds": "3.60",
-      "away_odds": "2.80",
+      "away_odds": "2.75",
       "start_time": "2025-04-27 08:15"
     }
   },

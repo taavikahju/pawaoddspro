@@ -332,7 +332,25 @@ export default function LiveScraperPanel({ isAdmin }: LiveScraperPanelProps) {
               <TableBody>
                 {status?.marketStats?.eventDetails?.map((event) => (
                   <TableRow key={event.id} className="hover:bg-slate-50 dark:hover:bg-slate-900/20">
-                    <TableCell className="font-medium truncate max-w-[200px]">{event.name}</TableCell>
+                    <TableCell className="font-medium">
+                      <div className="truncate max-w-[200px]">{event.name}</div>
+                      {/* Display game minute and score if available */}
+                      {(event.gameMinute || event.homeScore !== undefined || event.awayScore !== undefined) && (
+                        <div className="text-xs text-muted-foreground mt-1 flex items-center">
+                          {event.gameMinute && (
+                            <span className="bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded mr-2">
+                              {event.gameMinute}'
+                            </span>
+                          )}
+                          
+                          {(event.homeScore !== undefined && event.awayScore !== undefined) && (
+                            <span className="font-medium">
+                              {event.homeScore} - {event.awayScore}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </TableCell>
                     <TableCell>
                       <span className="text-xs text-muted-foreground block">{event.country}</span>
                       {event.tournament}

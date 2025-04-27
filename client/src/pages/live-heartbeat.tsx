@@ -131,6 +131,11 @@ interface HeartbeatEvent {
   homeTeam?: string;
   awayTeam?: string;
   suspended?: boolean; // Added suspended property for historical events
+  homeScore?: number;  // Home team score
+  awayScore?: number;  // Away team score
+  totalMarketCount?: number; // Total number of markets available
+  finished?: boolean;  // Flag to mark events that are finished
+  lastSeen?: number;   // Timestamp of when we last saw this event in API responses
 }
 
 export default function LiveHeartbeat() {
@@ -774,6 +779,13 @@ export default function LiveHeartbeat() {
                               {event.homeTeam && event.awayTeam 
                                 ? `${event.homeTeam} vs ${event.awayTeam}` 
                                 : event.name}
+                              
+                              {/* Display score if available */}
+                              {(event.homeScore !== undefined && event.awayScore !== undefined) && (
+                                <div className="mt-1 font-semibold text-sm">
+                                  Score: {event.homeScore} - {event.awayScore}
+                                </div>
+                              )}
                             </div>
                           </div>
                           <div className="flex items-center text-xs text-muted-foreground">
