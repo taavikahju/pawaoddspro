@@ -269,8 +269,8 @@
     "date": "2025-04-27",
     "time": "11:15",
     "odds": {
-      "home": 2.25,
-      "draw": 3.55,
+      "home": 2.3,
+      "draw": 3.35,
       "away": 2.7
     },
     "raw": {
@@ -279,8 +279,8 @@
       "tournament": "CFL",
       "event": "Dukla Prague B - Sokol Hostoun",
       "market": "1X2",
-      "home_odds": "2.25",
-      "draw_odds": "3.55",
+      "home_odds": "2.30",
+      "draw_odds": "3.35",
       "away_odds": "2.70",
       "start_time": "2025-04-27 11:15"
     }
@@ -4169,9 +4169,9 @@
     "date": "2025-04-27",
     "time": "14:00",
     "odds": {
-      "home": 1.94,
-      "draw": 3.85,
-      "away": 3.5
+      "home": 1.98,
+      "draw": 3.8,
+      "away": 3.45
     },
     "raw": {
       "eventId": "50937201",
@@ -4179,9 +4179,9 @@
       "tournament": "Premier League",
       "event": "Krylia Sovetov Samara - FC Orenburg",
       "market": "1X2",
-      "home_odds": "1.94",
-      "draw_odds": "3.85",
-      "away_odds": "3.50",
+      "home_odds": "1.98",
+      "draw_odds": "3.80",
+      "away_odds": "3.45",
       "start_time": "2025-04-27 14:00"
     }
   },
@@ -5508,6 +5508,32 @@
       "home_odds": "1.32",
       "draw_odds": "4.90",
       "away_odds": "7.20",
+      "start_time": "2025-04-27 14:00"
+    }
+  },
+  {
+    "id": "53802721",
+    "eventId": "53802721",
+    "teams": "Panathinaikos - Gpo Kastorias",
+    "league": "Super League, Women",
+    "sport": "football",
+    "country": "Greece",
+    "date": "2025-04-27",
+    "time": "14:00",
+    "odds": {
+      "home": 1.08,
+      "draw": 10,
+      "away": 13
+    },
+    "raw": {
+      "eventId": "53802721",
+      "country": "Greece",
+      "tournament": "Super League, Women",
+      "event": "Panathinaikos - Gpo Kastorias",
+      "market": "1X2",
+      "home_odds": "1.08",
+      "draw_odds": "10.00",
+      "away_odds": "13.00",
       "start_time": "2025-04-27 14:00"
     }
   },
@@ -8227,7 +8253,7 @@
     "odds": {
       "home": 6.6,
       "draw": 4.3,
-      "away": 1.52
+      "away": 1.51
     },
     "raw": {
       "eventId": "50955895",
@@ -8237,7 +8263,7 @@
       "market": "1X2",
       "home_odds": "6.60",
       "draw_odds": "4.30",
-      "away_odds": "1.52",
+      "away_odds": "1.51",
       "start_time": "2025-04-27 16:00"
     }
   },
@@ -8667,9 +8693,9 @@
     "date": "2025-04-27",
     "time": "16:00",
     "odds": {
-      "home": 5,
-      "draw": 4.5,
-      "away": 1.52
+      "home": 5.2,
+      "draw": 4.6,
+      "away": 1.49
     },
     "raw": {
       "eventId": "59326367",
@@ -8677,9 +8703,9 @@
       "tournament": "UEFA Champions League Women",
       "event": "Chelsea Women - FC Barcelona",
       "market": "1X2",
-      "home_odds": "5.00",
-      "draw_odds": "4.50",
-      "away_odds": "1.52",
+      "home_odds": "5.20",
+      "draw_odds": "4.60",
+      "away_odds": "1.49",
       "start_time": "2025-04-27 16:00"
     }
   },
@@ -10374,28 +10400,28 @@
     }
   },
   {
-    "id": "51578963",
-    "eventId": "51578963",
-    "teams": "Vllaznia Shkoder - KF Laci",
-    "league": "Kategoria Superiore",
+    "id": "57129739",
+    "eventId": "57129739",
+    "teams": "Levanger FK - Grorud IL",
+    "league": "2nd Division Group 2",
     "sport": "football",
-    "country": "Albania",
+    "country": "Norway",
     "date": "2025-04-27",
     "time": "16:30",
     "odds": {
-      "home": 1.6,
-      "draw": 3.5,
-      "away": 5.6
+      "home": 1.85,
+      "draw": 3.8,
+      "away": 3.35
     },
     "raw": {
-      "eventId": "51578963",
-      "country": "Albania",
-      "tournament": "Kategoria Superiore",
-      "event": "Vllaznia Shkoder - KF Laci",
+      "eventId": "57129739",
+      "country": "Norway",
+      "tournament": "2nd Division Group 2",
+      "event": "Levanger FK - Grorud IL",
       "market": "1X2",
-      "home_odds": "1.60",
-      "draw_odds": "3.50",
-      "away_odds": "5.60",
+      "home_odds": "1.85",
+      "draw_odds": "3.80",
+      "away_odds": "3.35",
       "start_time": "2025-04-27 16:30"
     }
   },
@@ -11553,9 +11579,9 @@
     "date": "2025-04-27",
     "time": "17:00",
     "odds": {
-      "home": 1.27,
-      "draw": 5,
-      "away": 9.6
+      "home": 1.29,
+      "draw": 4.9,
+      "away": 9.2
     },
     "raw": {
       "eventId": "58870731",
@@ -11563,9 +11589,9 @@
       "tournament": "1. MFL",
       "event": "Shkendija Tetovo - Shkupi Cair",
       "market": "1X2",
-      "home_odds": "1.27",
-      "draw_odds": "5.00",
-      "away_odds": "9.60",
+      "home_odds": "1.29",
+      "draw_odds": "4.90",
+      "away_odds": "9.20",
       "start_time": "2025-04-27 17:00"
     }
   },
@@ -12281,8 +12307,8 @@
     "date": "2025-04-27",
     "time": "17:00",
     "odds": {
-      "home": 2.25,
-      "draw": 2.8,
+      "home": 2.3,
+      "draw": 2.7,
       "away": 3.5
     },
     "raw": {
@@ -12291,8 +12317,8 @@
       "tournament": "Stars League",
       "event": "AL Minaa - Al Kahrabaa SC",
       "market": "1X2",
-      "home_odds": "2.25",
-      "draw_odds": "2.80",
+      "home_odds": "2.30",
+      "draw_odds": "2.70",
       "away_odds": "3.50",
       "start_time": "2025-04-27 17:00"
     }
@@ -15349,9 +15375,9 @@
     "date": "2025-04-27",
     "time": "18:30",
     "odds": {
-      "home": 2.07,
-      "draw": 3.55,
-      "away": 3.65
+      "home": 2.03,
+      "draw": 3.6,
+      "away": 3.75
     },
     "raw": {
       "eventId": "51269561",
@@ -15359,9 +15385,9 @@
       "tournament": "Bundesliga",
       "event": "Werder Bremen - St. Pauli",
       "market": "1X2",
-      "home_odds": "2.07",
-      "draw_odds": "3.55",
-      "away_odds": "3.65",
+      "home_odds": "2.03",
+      "draw_odds": "3.60",
+      "away_odds": "3.75",
       "start_time": "2025-04-27 18:30"
     }
   },
@@ -15375,9 +15401,9 @@
     "date": "2025-04-27",
     "time": "18:30",
     "odds": {
-      "home": 3.9,
-      "draw": 3.6,
-      "away": 1.83
+      "home": 3.75,
+      "draw": 3.55,
+      "away": 1.88
     },
     "raw": {
       "eventId": "57410659",
@@ -15385,9 +15411,9 @@
       "tournament": "Ykkosliiga",
       "event": "SalPa - PK-35 Helsinki",
       "market": "1X2",
-      "home_odds": "3.90",
-      "draw_odds": "3.60",
-      "away_odds": "1.83",
+      "home_odds": "3.75",
+      "draw_odds": "3.55",
+      "away_odds": "1.88",
       "start_time": "2025-04-27 18:30"
     }
   },
@@ -17507,9 +17533,9 @@
     "date": "2025-04-27",
     "time": "20:00",
     "odds": {
-      "home": 1.45,
-      "draw": 4.5,
-      "away": 6.8
+      "home": 1.44,
+      "draw": 4.6,
+      "away": 7
     },
     "raw": {
       "eventId": "51389311",
@@ -17517,9 +17543,9 @@
       "tournament": "Liga Portugal",
       "event": "Vitoria SC Guimaraes - Rio Ave FC",
       "market": "1X2",
-      "home_odds": "1.45",
-      "draw_odds": "4.50",
-      "away_odds": "6.80",
+      "home_odds": "1.44",
+      "draw_odds": "4.60",
+      "away_odds": "7.00",
       "start_time": "2025-04-27 20:00"
     }
   },
@@ -18079,9 +18105,9 @@
     "date": "2025-04-27",
     "time": "20:45",
     "odds": {
-      "home": 1.25,
-      "draw": 5,
-      "away": 11
+      "home": 1.22,
+      "draw": 5.2,
+      "away": 12
     },
     "raw": {
       "eventId": "59224389",
@@ -18089,9 +18115,9 @@
       "tournament": "Premijer Liga",
       "event": "HSK Zrinjski Mostar - NK Siroki Brijeg",
       "market": "1X2",
-      "home_odds": "1.25",
-      "draw_odds": "5.00",
-      "away_odds": "11.00",
+      "home_odds": "1.22",
+      "draw_odds": "5.20",
+      "away_odds": "12.00",
       "start_time": "2025-04-27 20:45"
     }
   },
@@ -20783,9 +20809,9 @@
     "date": "2025-04-28",
     "time": "00:15",
     "odds": {
-      "home": 1.36,
-      "draw": 4.1,
-      "away": 8.8
+      "home": 1.35,
+      "draw": 4.2,
+      "away": 9
     },
     "raw": {
       "eventId": "59934235",
@@ -20793,9 +20819,9 @@
       "tournament": "Primera Division",
       "event": "Penarol Montevideo - CA Cerro",
       "market": "1X2",
-      "home_odds": "1.36",
-      "draw_odds": "4.10",
-      "away_odds": "8.80",
+      "home_odds": "1.35",
+      "draw_odds": "4.20",
+      "away_odds": "9.00",
       "start_time": "2025-04-28 00:15"
     }
   },
@@ -23565,9 +23591,9 @@
     "date": "2025-04-28",
     "time": "20:45",
     "odds": {
-      "home": 1.78,
+      "home": 1.81,
       "draw": 4.1,
-      "away": 3.65
+      "away": 3.55
     },
     "raw": {
       "eventId": "56958131",
@@ -23575,9 +23601,9 @@
       "tournament": "Besta deild",
       "event": "Stjarnan Gardabae - IBV Vestmannaeyjar",
       "market": "1X2",
-      "home_odds": "1.78",
+      "home_odds": "1.81",
       "draw_odds": "4.10",
-      "away_odds": "3.65",
+      "away_odds": "3.55",
       "start_time": "2025-04-28 20:45"
     }
   },
