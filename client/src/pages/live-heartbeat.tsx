@@ -533,6 +533,9 @@ export default function LiveHeartbeat() {
               <TabsTrigger value="historical" className="flex items-center gap-2">
                 <History className="h-4 w-4" />
                 Historical Events
+                <span className="ml-2 bg-yellow-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded">
+                  WIP
+                </span>
               </TabsTrigger>
             </TabsList>
           </Tabs>
@@ -703,6 +706,11 @@ export default function LiveHeartbeat() {
                 <CardTitle className="text-md">Events</CardTitle>
                 <CardDescription>
                   {filteredEvents.length} events found
+                  {activeTab === 'historical' && (
+                    <div className="mt-1 p-1.5 bg-yellow-100 text-yellow-800 dark:bg-yellow-800/20 dark:text-yellow-500 text-xs rounded">
+                      <span className="font-bold">Note:</span> Historical events are view-only and cannot be selected yet.
+                    </div>
+                  )}
                 </CardDescription>
               </CardHeader>
               <CardContent className="p-0">
@@ -720,14 +728,24 @@ export default function LiveHeartbeat() {
                       {filteredEvents.map(event => (
                         <div
                           key={event.id}
-                          className={`p-2 cursor-pointer ${
+                          className={`p-2 ${
+                            // Only live events are clickable
+                            activeTab === 'historical' 
+                              ? 'cursor-not-allowed opacity-80' 
+                              : 'cursor-pointer hover:bg-accent'
+                          } ${
                             // Priority 1: Selected event
                             selectedEventId === event.id
                               ? 'bg-accent hover:bg-accent/80'
                               // All events except selected have the same style
-                              : 'hover:bg-accent'
+                              : ''
                           }`}
                           onClick={() => {
+                            // Only allow clicking live events
+                            if (activeTab === 'historical') {
+                              return;
+                            }
+                            
                             console.log(`Selecting event:`, {
                               id: event.id,
                               name: event.name,
