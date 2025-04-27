@@ -276,11 +276,14 @@ async function processEvents(events) {
       // 2. We have access to event.markets.length which is the actual count
       const totalMarketCount = marketsFromAPI || widgetsMarketCount || 1; // Default to 1 (NOT suspended) if we can't determine count
       
-      // Force check debug logging to see what values we actually have
-      process.stderr.write(`[MARKET DEBUG] Event ${widget.id} (${event.name}):\n`);
-      process.stderr.write(`  - API Markets Count: ${marketsFromAPI}\n`);
-      process.stderr.write(`  - Widget Markets Count: ${widgetsMarketCount}\n`);
-      process.stderr.write(`  - Final totalMarketCount: ${totalMarketCount}\n`);
+      // Only log market debug info for problematic events (when there are no markets or possible suspension)
+      if (marketsFromAPI === 0 || (market1X2 && market1X2.suspended)) {
+        process.stderr.write(`[MARKET WARNING] Potential issue with event ${widget.id} (${event.name}):\n`);
+        process.stderr.write(`  - API Markets Count: ${marketsFromAPI}\n`);
+        process.stderr.write(`  - Widget Markets Count: ${widgetsMarketCount}\n`);
+        process.stderr.write(`  - Final totalMarketCount: ${totalMarketCount}\n`);
+        process.stderr.write(`  - Market suspended: ${market1X2 && market1X2.suspended ? 'Yes' : 'No'}\n`);
+      }
       
       // 2. Direct suspension flag from the API market data
       const marketSuspendedFlag = market.suspended === true;

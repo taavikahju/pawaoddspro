@@ -551,25 +551,15 @@ function getMarketAvailabilityStats() {
         }
       }
       
-      // Log uptime calculation for debugging - check what's being sent to the frontend
-      console.log(`BP_GH_LIVE: Event ${event.id} (${event.name}) uptime calculation:
-        - Total records: ${totalRecords}
-        - Available records: ${availableRecords}
-        - Uptime %: ${availabilityPercentage.toFixed(1)}%
-        - Score: ${homeScore || 0}-${awayScore || 0}
-        - Game minute: ${gameMinute || 'N/A'}
-      `);
-      
       // Round to 1 decimal place for display
       const uptimePercentage = parseFloat(availabilityPercentage.toFixed(1));
       // Also prepare a string format with the % sign
       const marketAvailability = Math.round(availabilityPercentage) + '%';
       
-      console.log(`BP_GH_LIVE UPTIME DEBUG: Event ${event.id} (${event.name}):
-        Raw uptime: ${availabilityPercentage}
-        Formatted: ${uptimePercentage} (${typeof uptimePercentage})
-        String: ${marketAvailability}
-      `);
+      // Only log low uptime events (less than 75%) which might indicate issues
+      if (availabilityPercentage < 75) {
+        console.log(`⚠️ LOW UPTIME: Event ${event.id} (${event.name}): ${availabilityPercentage.toFixed(1)}% uptime`);
+      }
       
       const eventDetail = {
         id: event.id,

@@ -1,68 +1,5 @@
 [
   {
-    "id": "27018134",
-    "eventId": "27018134",
-    "country": "Bosnia and Herzegovina",
-    "tournament": "Bosnia-Herzegovina Premier Liga",
-    "event": "Zrinjski Mostar - Široki Brijeg",
-    "name": "Zrinjski Mostar - Široki Brijeg",
-    "home_odds": 1.16,
-    "draw_odds": 5.75,
-    "away_odds": 15.5,
-    "start_time": "2025-04-27T17:45:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 1.16
-          },
-          {
-            "name": "X",
-            "price": 5.75
-          },
-          {
-            "name": "2",
-            "price": 15.5
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "Bosnia and Herzegovina"
-    },
-    "region": {
-      "name": "Bosnia and Herzegovina"
-    },
-    "competition": {
-      "name": "Bosnia-Herzegovina Premier Liga"
-    },
-    "league": {
-      "name": "Bosnia-Herzegovina Premier Liga"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
     "id": "26953926",
     "eventId": "51549085",
     "country": "Italy",
@@ -321,9 +258,9 @@
     "tournament": "Serie C, Group C",
     "event": "ACR Messina - Juventus Next Gen U23",
     "name": "ACR Messina - Juventus Next Gen U23",
-    "home_odds": 1.71,
-    "draw_odds": 3.4,
-    "away_odds": 4.45,
+    "home_odds": 1.69,
+    "draw_odds": 3.45,
+    "away_odds": 4.55,
     "start_time": "2025-04-27T18:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -344,15 +281,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.71
+            "price": 1.69
           },
           {
             "name": "X",
-            "price": 3.4
+            "price": 3.45
           },
           {
             "name": "2",
-            "price": 4.45
+            "price": 4.55
           }
         ]
       }
@@ -510,9 +447,9 @@
     "tournament": "Canadian Premier League",
     "event": "York United FC - Forge FC Hamilton",
     "name": "York United FC - Forge FC Hamilton",
-    "home_odds": 2.8,
+    "home_odds": 2.85,
     "draw_odds": 3.2,
-    "away_odds": 2.3,
+    "away_odds": 2.25,
     "start_time": "2025-04-27T18:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -533,7 +470,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.8
+            "price": 2.85
           },
           {
             "name": "X",
@@ -541,7 +478,7 @@
           },
           {
             "name": "2",
-            "price": 2.3
+            "price": 2.25
           }
         ]
       }
@@ -636,9 +573,9 @@
     "tournament": "U20 Paulista",
     "event": "Uniao Suzano AC SP U20 - SE Palmeiras SP U20",
     "name": "Uniao Suzano AC SP U20 - SE Palmeiras SP U20",
-    "home_odds": 16,
-    "draw_odds": 7.25,
-    "away_odds": 1.11,
+    "home_odds": 14,
+    "draw_odds": 7,
+    "away_odds": 1.12,
     "start_time": "2025-04-27T18:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -659,15 +596,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 16
+            "price": 14
           },
           {
             "name": "X",
-            "price": 7.25
+            "price": 7
           },
           {
             "name": "2",
-            "price": 1.11
+            "price": 1.12
           }
         ]
       }
@@ -1140,9 +1077,9 @@
     "tournament": "Liga I",
     "event": "Rapid Bucuresti 1923 - Fotbal Club FCSB",
     "name": "Rapid Bucuresti 1923 - Fotbal Club FCSB",
-    "home_odds": 3.55,
-    "draw_odds": 3.4,
-    "away_odds": 1.99,
+    "home_odds": 3.65,
+    "draw_odds": 3.45,
+    "away_odds": 1.95,
     "start_time": "2025-04-27T18:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -1163,15 +1100,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 3.55
+            "price": 3.65
           },
           {
             "name": "X",
-            "price": 3.4
+            "price": 3.45
           },
           {
             "name": "2",
-            "price": 1.99
+            "price": 1.95
           }
         ]
       }
@@ -1329,9 +1266,9 @@
     "tournament": "Superliga",
     "event": "FK Vojvodina Novi Sad - FK TSC Backa Topola",
     "name": "FK Vojvodina Novi Sad - FK TSC Backa Topola",
-    "home_odds": 1.94,
-    "draw_odds": 3.4,
-    "away_odds": 3.4,
+    "home_odds": 1.89,
+    "draw_odds": 3.5,
+    "away_odds": 3.45,
     "start_time": "2025-04-27T18:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -1352,15 +1289,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.94
+            "price": 1.89
           },
           {
             "name": "X",
-            "price": 3.4
+            "price": 3.5
           },
           {
             "name": "2",
-            "price": 3.4
+            "price": 3.45
           }
         ]
       }
@@ -1959,8 +1896,8 @@
     "tournament": "Serie A",
     "event": "SSC Napoli - Torino FC",
     "name": "SSC Napoli - Torino FC",
-    "home_odds": 1.45,
-    "draw_odds": 4.9,
+    "home_odds": 1.44,
+    "draw_odds": 5,
     "away_odds": 8.5,
     "start_time": "2025-04-27T18:45:00Z",
     "gameMinute": "",
@@ -1982,11 +1919,11 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.45
+            "price": 1.44
           },
           {
             "name": "X",
-            "price": 4.9
+            "price": 5
           },
           {
             "name": "2",
@@ -2024,7 +1961,7 @@
     "name": "Atalanta BC - US Lecce",
     "home_odds": 1.38,
     "draw_odds": 5.5,
-    "away_odds": 9,
+    "away_odds": 9.25,
     "start_time": "2025-04-27T18:45:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -2053,7 +1990,7 @@
           },
           {
             "name": "2",
-            "price": 9
+            "price": 9.25
           }
         ]
       }
@@ -15000,9 +14937,9 @@
     "tournament": "NB II",
     "event": "Szeged-Csanad Grosics Akademia - Kazincbarcikai SC",
     "name": "Szeged-Csanad Grosics Akademia - Kazincbarcikai SC",
-    "home_odds": 2.5,
+    "home_odds": 2.55,
     "draw_odds": 3.3,
-    "away_odds": 2.55,
+    "away_odds": 2.45,
     "start_time": "2025-04-28T18:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -15023,7 +14960,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.5
+            "price": 2.55
           },
           {
             "name": "X",
@@ -15031,7 +14968,7 @@
           },
           {
             "name": "2",
-            "price": 2.55
+            "price": 2.45
           }
         ]
       }
@@ -21048,9 +20985,9 @@
     "tournament": "Eliteserien",
     "event": "Viking FK - FK Haugesund",
     "name": "Viking FK - FK Haugesund",
-    "home_odds": 1.34,
-    "draw_odds": 5.5,
-    "away_odds": 7.5,
+    "home_odds": 1.38,
+    "draw_odds": 5.25,
+    "away_odds": 6.75,
     "start_time": "2025-04-30T16:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -21071,15 +21008,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.34
+            "price": 1.38
           },
           {
             "name": "X",
-            "price": 5.5
+            "price": 5.25
           },
           {
             "name": "2",
-            "price": 7.5
+            "price": 6.75
           }
         ]
       }
@@ -21427,8 +21364,8 @@
     "event": "Mamelodi Sundowns - Richards Bay FC",
     "name": "Mamelodi Sundowns - Richards Bay FC",
     "home_odds": 1.38,
-    "draw_odds": 4.2,
-    "away_odds": 10,
+    "draw_odds": 4.25,
+    "away_odds": 9.5,
     "start_time": "2025-04-30T17:30:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -21453,11 +21390,11 @@
           },
           {
             "name": "X",
-            "price": 4.2
+            "price": 4.25
           },
           {
             "name": "2",
-            "price": 10
+            "price": 9.5
           }
         ]
       }
@@ -21615,9 +21552,9 @@
     "tournament": "League One",
     "event": "Blackpool FC - Birmingham City",
     "name": "Blackpool FC - Birmingham City",
-    "home_odds": 3.3,
-    "draw_odds": 3.55,
-    "away_odds": 2.03,
+    "home_odds": 3.4,
+    "draw_odds": 3.5,
+    "away_odds": 2,
     "start_time": "2025-04-30T18:45:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -21638,15 +21575,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 3.3
+            "price": 3.4
           },
           {
             "name": "X",
-            "price": 3.55
+            "price": 3.5
           },
           {
             "name": "2",
-            "price": 2.03
+            "price": 2
           }
         ]
       }
@@ -24893,7 +24830,7 @@
     "name": "Djurgardens IF - Chelsea FC",
     "home_odds": 7.5,
     "draw_odds": 5,
-    "away_odds": 1.38,
+    "away_odds": 1.37,
     "start_time": "2025-05-01T19:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -24922,7 +24859,7 @@
           },
           {
             "name": "2",
-            "price": 1.38
+            "price": 1.37
           }
         ]
       }
@@ -26970,9 +26907,9 @@
     "tournament": "Superliga",
     "event": "Randers FC - FC Nordsjaelland",
     "name": "Randers FC - FC Nordsjaelland",
-    "home_odds": 2.5,
+    "home_odds": 2.45,
     "draw_odds": 3.65,
-    "away_odds": 2.6,
+    "away_odds": 2.65,
     "start_time": "2025-05-02T17:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -26993,7 +26930,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.5
+            "price": 2.45
           },
           {
             "name": "X",
@@ -27001,7 +26938,7 @@
           },
           {
             "name": "2",
-            "price": 2.6
+            "price": 2.65
           }
         ]
       }
@@ -33995,6 +33932,69 @@
           {
             "name": "2",
             "price": 3
+          }
+        ]
+      }
+    ],
+    "category": {
+      "name": "Germany"
+    },
+    "region": {
+      "name": "Germany"
+    },
+    "competition": {
+      "name": "3. Liga"
+    },
+    "league": {
+      "name": "3. Liga"
+    },
+    "isInPlay": false,
+    "status": "UPCOMING",
+    "scoreboard": {
+      "display": {
+        "minute": ""
+      }
+    }
+  },
+  {
+    "id": "25485855",
+    "eventId": "51447349",
+    "country": "Germany",
+    "tournament": "3. Liga",
+    "event": "VfB Stuttgart II U21 - Alemannia Aachen",
+    "name": "VfB Stuttgart II U21 - Alemannia Aachen",
+    "home_odds": 2.8,
+    "draw_odds": 3.3,
+    "away_odds": 2.4,
+    "start_time": "2025-05-03T12:00:00Z",
+    "gameMinute": "",
+    "sport": "football",
+    "competitors": [
+      {
+        "name": ""
+      },
+      {
+        "name": ""
+      }
+    ],
+    "markets": [
+      {
+        "marketType": {
+          "id": "3743",
+          "name": "1X2"
+        },
+        "prices": [
+          {
+            "name": "1",
+            "price": 2.8
+          },
+          {
+            "name": "X",
+            "price": 3.3
+          },
+          {
+            "name": "2",
+            "price": 2.4
           }
         ]
       }
@@ -44988,9 +44988,9 @@
     "tournament": "1. Liga",
     "event": "1. FC Slovacko Uherske Hradiste - SK Dynamo Ceske Budejovice",
     "name": "1. FC Slovacko Uherske Hradiste - SK Dynamo Ceske Budejovice",
-    "home_odds": 1.48,
-    "draw_odds": 4.1,
-    "away_odds": 5.75,
+    "home_odds": 1.45,
+    "draw_odds": 4.2,
+    "away_odds": 6,
     "start_time": "2025-05-04T11:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -45011,15 +45011,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.48
+            "price": 1.45
           },
           {
             "name": "X",
-            "price": 4.1
+            "price": 4.2
           },
           {
             "name": "2",
-            "price": 5.75
+            "price": 6
           }
         ]
       }
@@ -45350,6 +45350,69 @@
     },
     "league": {
       "name": "2nd Bundesliga"
+    },
+    "isInPlay": false,
+    "status": "UPCOMING",
+    "scoreboard": {
+      "display": {
+        "minute": ""
+      }
+    }
+  },
+  {
+    "id": "25485852",
+    "eventId": "51447363",
+    "country": "Germany",
+    "tournament": "3. Liga",
+    "event": "Energie Cottbus - SV Waldhof Mannheim 07",
+    "name": "Energie Cottbus - SV Waldhof Mannheim 07",
+    "home_odds": 1.95,
+    "draw_odds": 3.65,
+    "away_odds": 3.4,
+    "start_time": "2025-05-04T11:30:00Z",
+    "gameMinute": "",
+    "sport": "football",
+    "competitors": [
+      {
+        "name": ""
+      },
+      {
+        "name": ""
+      }
+    ],
+    "markets": [
+      {
+        "marketType": {
+          "id": "3743",
+          "name": "1X2"
+        },
+        "prices": [
+          {
+            "name": "1",
+            "price": 1.95
+          },
+          {
+            "name": "X",
+            "price": 3.65
+          },
+          {
+            "name": "2",
+            "price": 3.4
+          }
+        ]
+      }
+    ],
+    "category": {
+      "name": "Germany"
+    },
+    "region": {
+      "name": "Germany"
+    },
+    "competition": {
+      "name": "3. Liga"
+    },
+    "league": {
+      "name": "3. Liga"
     },
     "isInPlay": false,
     "status": "UPCOMING",
@@ -49014,6 +49077,69 @@
     }
   },
   {
+    "id": "26390251",
+    "eventId": "56677289",
+    "country": "Norway",
+    "tournament": "Eliteserien",
+    "event": "Tromsoe IL - Sandefjord Fotball",
+    "name": "Tromsoe IL - Sandefjord Fotball",
+    "home_odds": 2.03,
+    "draw_odds": 3.65,
+    "away_odds": 3.4,
+    "start_time": "2025-05-04T15:00:00Z",
+    "gameMinute": "",
+    "sport": "football",
+    "competitors": [
+      {
+        "name": ""
+      },
+      {
+        "name": ""
+      }
+    ],
+    "markets": [
+      {
+        "marketType": {
+          "id": "3743",
+          "name": "1X2"
+        },
+        "prices": [
+          {
+            "name": "1",
+            "price": 2.03
+          },
+          {
+            "name": "X",
+            "price": 3.65
+          },
+          {
+            "name": "2",
+            "price": 3.4
+          }
+        ]
+      }
+    ],
+    "category": {
+      "name": "Norway"
+    },
+    "region": {
+      "name": "Norway"
+    },
+    "competition": {
+      "name": "Eliteserien"
+    },
+    "league": {
+      "name": "Eliteserien"
+    },
+    "isInPlay": false,
+    "status": "UPCOMING",
+    "scoreboard": {
+      "display": {
+        "minute": ""
+      }
+    }
+  },
+  {
     "id": "26767666",
     "eventId": "51158477",
     "country": "Ukraine",
@@ -49398,7 +49524,7 @@
     "tournament": "Premier League",
     "event": "Chelsea FC - Liverpool FC",
     "name": "Chelsea FC - Liverpool FC",
-    "home_odds": 2.2,
+    "home_odds": 2.21,
     "draw_odds": 3.65,
     "away_odds": 3.1,
     "start_time": "2025-05-04T15:30:00Z",
@@ -49421,7 +49547,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.2
+            "price": 2.21
           },
           {
             "name": "X",
@@ -49650,9 +49776,9 @@
     "tournament": "Superliga",
     "event": "FC Midtjylland - AGF Aarhus",
     "name": "FC Midtjylland - AGF Aarhus",
-    "home_odds": 2.1,
-    "draw_odds": 3.6,
-    "away_odds": 3.25,
+    "home_odds": 2.03,
+    "draw_odds": 3.65,
+    "away_odds": 3.4,
     "start_time": "2025-05-04T16:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -49673,15 +49799,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.1
+            "price": 2.03
           },
           {
             "name": "X",
-            "price": 3.6
+            "price": 3.65
           },
           {
             "name": "2",
-            "price": 3.25
+            "price": 3.4
           }
         ]
       }
