@@ -24,6 +24,7 @@ interface LiveScraperEvent {
   awayTeam?: string;
   homeScore?: number;
   awayScore?: number;
+  uptimePercentage?: number; // Added for uptime tracking
 }
 
 interface LiveScraperStats {
@@ -44,6 +45,7 @@ interface LiveScraperPanelProps {
 
 export default function LiveScraperPanel({ isAdmin }: LiveScraperPanelProps) {
   const [apiUrl, setApiUrl] = useState<string>('');
+  const [eventUptimeData, setEventUptimeData] = useState<Record<string, number>>({});
   const queryClient = useQueryClient();
   const { toast } = useToast();
   
@@ -132,6 +134,37 @@ export default function LiveScraperPanel({ isAdmin }: LiveScraperPanelProps) {
       });
     }
   }, [error, toast]);
+  
+  // Calculate uptime percentages for events
+  useEffect(() => {
+    const fetchUptimeStats = async () => {
+      if (!status?.marketStats?.eventDetails?.length) return;
+      
+      const updatedUptimeData: Record<string, number> = {};
+      const promises = status.marketStats.eventDetails.map(async (event) => {
+        try {
+          const response = await fetch(`/api/live-heartbeat/data/${event.id}`);
+          if (response.ok) {
+            const data = await response.json();
+            if (data.timestamps?.length > 0) {
+              // Calculate uptime based on available vs. total data points
+              const totalDataPoints = data.timestamps.length;
+              const availableDataPoints = data.timestamps.filter((t: any) => t.isAvailable).length;
+              const uptimePercentage = (availableDataPoints / totalDataPoints) * 100;
+              updatedUptimeData[event.id] = uptimePercentage;
+            }
+          }
+        } catch (err) {
+          console.error(`Error fetching data for event ${event.id}:`, err);
+        }
+      });
+      
+      await Promise.all(promises);
+      setEventUptimeData(updatedUptimeData);
+    };
+    
+    fetchUptimeStats();
+  }, [status?.marketStats?.eventDetails]);
 
   if (isLoading) {
     return (
@@ -322,10 +355,11 @@ export default function LiveScraperPanel({ isAdmin }: LiveScraperPanelProps) {
             <Table>
               <TableHeader>
                 <TableRow className="bg-slate-50 dark:bg-slate-900/40">
-                  <TableHead className="w-[40%]">Event</TableHead>
+                  <TableHead className="w-[30%]">Event</TableHead>
                   <TableHead className="w-[20%]">Tournament</TableHead>
-                  <TableHead className="w-[15%]">Availability</TableHead>
-                  <TableHead className="w-[15%]">Status</TableHead>
+                  <TableHead className="w-[12%]">Availability</TableHead>
+                  <TableHead className="w-[12%]">Status</TableHead>
+                  <TableHead className="w-[16%]">Uptime</TableHead>
                   <TableHead className="w-[10%] text-right">History</TableHead>
                 </TableRow>
               </TableHeader>
@@ -365,6 +399,29 @@ export default function LiveScraperPanel({ isAdmin }: LiveScraperPanelProps) {
                         <Badge variant="outline" className="bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-400 border-red-200 dark:border-red-800/50">
                           Suspended
                         </Badge>
+                      )}
+                    </TableCell>
+                    {/* Uptime Percentage Column */}
+                    <TableCell>
+                      {(eventUptimeData[event.id] !== undefined) ? (
+                        <div className="flex items-center">
+                          <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mr-2">
+                            <div 
+                              className="h-2.5 rounded-full" 
+                              style={{
+                                width: `${eventUptimeData[event.id]}%`,
+                                backgroundColor: eventUptimeData[event.id] > 75 ? '#16a34a' : 
+                                                eventUptimeData[event.id] > 50 ? '#eab308' : 
+                                                eventUptimeData[event.id] > 30 ? '#f97316' : '#ef4444'
+                              }}
+                            ></div>
+                          </div>
+                          <span className="text-xs font-medium">
+                            {eventUptimeData[event.id].toFixed(1)}%
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="text-xs text-muted-foreground">Calculating...</span>
                       )}
                     </TableCell>
                     <TableCell className="text-right">{event.recordCount}</TableCell>
