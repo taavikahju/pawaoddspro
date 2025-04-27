@@ -551,7 +551,16 @@ function getMarketAvailabilityStats() {
         }
       }
       
-      stats.eventDetails.push({
+      // Log uptime calculation for debugging - check what's being sent to the frontend
+      console.log(`BP_GH_LIVE: Event ${event.id} (${event.name}) uptime calculation:
+        - Total records: ${totalRecords}
+        - Available records: ${availableRecords}
+        - Uptime %: ${availabilityPercentage.toFixed(1)}%
+        - Score: ${homeScore || 0}-${awayScore || 0}
+        - Game minute: ${gameMinute || 'N/A'}
+      `);
+      
+      const eventDetail = {
         id: event.id,
         name: event.name,
         country: event.country,
@@ -563,7 +572,16 @@ function getMarketAvailabilityStats() {
         homeScore,
         awayScore,
         gameMinute
-      });
+      };
+      
+      // Validate the uptime percentage value
+      if (typeof eventDetail.uptimePercentage !== 'number' || isNaN(eventDetail.uptimePercentage)) {
+        console.error(`ERROR: Invalid uptime percentage for event ${event.id}: ${eventDetail.uptimePercentage}`);
+        // Set a default value
+        eventDetail.uptimePercentage = 0;
+      }
+      
+      stats.eventDetails.push(eventDetail);
     }
   });
   

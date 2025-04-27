@@ -135,55 +135,49 @@ export default function LiveScraperPanel({ isAdmin }: LiveScraperPanelProps) {
     }
   }, [error, toast]);
   
-  // Use the uptimePercentage provided by the backend directly
+  // Update uptime data when event details change - simpler implementation
   useEffect(() => {
     if (!status?.marketStats?.eventDetails?.length) return;
     
     const updatedUptimeData: Record<string, number> = {};
     
-    // Debug the incoming event data in full detail
-    console.log('FULL EVENT DETAILS RECEIVED:', JSON.stringify(status.marketStats.eventDetails, null, 2));
-    
-    // Log specific fields to debug
-    console.log('First event uptime details:', 
-      status.marketStats.eventDetails.length > 0 ? {
-        id: status.marketStats.eventDetails[0].id,
-        name: status.marketStats.eventDetails[0].name,
-        marketAvailability: status.marketStats.eventDetails[0].marketAvailability,
-        uptimePercentage: status.marketStats.eventDetails[0].uptimePercentage,
-        uptimeType: typeof status.marketStats.eventDetails[0].uptimePercentage,
-        allKeys: Object.keys(status.marketStats.eventDetails[0])
-      } : 'No events');
-    
-    // Get the uptimePercentage directly from the event details
-    status.marketStats.eventDetails.forEach((event) => {
-      // First check for a proper uptimePercentage from the backend
-      if (typeof event.uptimePercentage === 'number' && !isNaN(event.uptimePercentage)) {
-        updatedUptimeData[event.id] = event.uptimePercentage;
-      } 
-      // Fallback to calculating from marketAvailability string
-      else if (event.marketAvailability) {
-        const availabilityString = event.marketAvailability;
-        let percentageValue = 0;
-        
+    // Process each event to extract and validate uptime percentage
+    for (const event of status.marketStats.eventDetails) {
+      let uptimeValue: number | undefined;
+      
+      // Try direct uptime percentage (should be available if backend is working correctly)
+      if (event.uptimePercentage !== undefined) {
+        if (typeof event.uptimePercentage === 'number' && !isNaN(event.uptimePercentage)) {
+          uptimeValue = event.uptimePercentage;
+        } else if (typeof event.uptimePercentage === 'string') {
+          const parsed = parseFloat(event.uptimePercentage as string);
+          if (!isNaN(parsed)) {
+            uptimeValue = parsed;
+          }
+        }
+      }
+      
+      // If no direct value, try parsing from marketAvailability string
+      if (uptimeValue === undefined && event.marketAvailability) {
         try {
-          // Remove percentage sign and parse as number
-          percentageValue = parseFloat(availabilityString.replace('%', ''));
-          
-          // Only use if it's a valid number
-          if (!isNaN(percentageValue)) {
-            updatedUptimeData[event.id] = percentageValue;
+          const parsed = parseFloat(event.marketAvailability.replace('%', ''));
+          if (!isNaN(parsed)) {
+            uptimeValue = parsed;
           }
         } catch (e) {
           console.error(`Error parsing marketAvailability for event ${event.id}:`, e);
         }
       }
-    });
+      
+      // Only add valid values to the data object
+      if (uptimeValue !== undefined && !isNaN(uptimeValue)) {
+        updatedUptimeData[event.id] = uptimeValue;
+      }
+    }
     
-    console.log('Uptime data calculated:', updatedUptimeData);
-    
-    // Only update the state if we have data
+    // Update state with the new values
     if (Object.keys(updatedUptimeData).length > 0) {
+      console.log('Updated uptime data:', updatedUptimeData);
       setEventUptimeData(updatedUptimeData);
     }
   }, [status?.marketStats?.eventDetails]);
@@ -436,16 +430,33 @@ export default function LiveScraperPanel({ isAdmin }: LiveScraperPanelProps) {
                     {/* Uptime Percentage Column */}
                     <TableCell>
                       {(() => {
+                        console.log(`DEBUG EVENT DATA for ${event.id}:`, event);
+                        
                         // Convert from marketAvailability string directly if no uptime data available
                         let uptimeValue: number | undefined;
                         
-                        // Try to use direct uptime percentage first
-                        if (typeof event.uptimePercentage === 'number' && !isNaN(event.uptimePercentage)) {
-                          uptimeValue = event.uptimePercentage;
+                        // Try to use direct uptime percentage first - make sure to handle both direct number and string formats
+                        if (event.uptimePercentage !== undefined) {
+                          if (typeof event.uptimePercentage === 'number' && !isNaN(event.uptimePercentage)) {
+                            uptimeValue = event.uptimePercentage;
+                            console.log(`Event ${event.id}: Using direct number uptime=${uptimeValue}`);
+                          } else if (typeof event.uptimePercentage === 'string') {
+                            // Handle string format if it comes through as a string
+                            try {
+                              const parsed = parseFloat(event.uptimePercentage);
+                              if (!isNaN(parsed)) {
+                                uptimeValue = parsed;
+                                console.log(`Event ${event.id}: Parsed string uptime=${uptimeValue}`);
+                              }
+                            } catch (e) {
+                              console.error(`Error parsing uptime percentage string for event ${event.id}:`, e);
+                            }
+                          }
                         } 
                         // Then try the cached uptime data
                         else if (eventUptimeData[event.id] !== undefined) {
                           uptimeValue = eventUptimeData[event.id];
+                          console.log(`Event ${event.id}: Using cached uptime=${uptimeValue}`);
                         }
                         // Fallback to marketAvailability string
                         else if (event.marketAvailability) {
@@ -453,6 +464,7 @@ export default function LiveScraperPanel({ isAdmin }: LiveScraperPanelProps) {
                             const percentValue = parseFloat(event.marketAvailability.replace('%', ''));
                             if (!isNaN(percentValue)) {
                               uptimeValue = percentValue;
+                              console.log(`Event ${event.id}: Using marketAvailability uptime=${uptimeValue}`);
                             }
                           } catch (e) {
                             console.error(`Error parsing marketAvailability for event ${event.id}:`, e);
@@ -460,7 +472,12 @@ export default function LiveScraperPanel({ isAdmin }: LiveScraperPanelProps) {
                         }
                         
                         // For debugging
-                        console.log(`Event ${event.id} uptime: calculated=${uptimeValue}, event.uptimePercentage=${event.uptimePercentage}, marketAvailability=${event.marketAvailability}`);
+                        console.log(`Event ${event.id} uptime summary: 
+                          calculated=${uptimeValue}, 
+                          event.uptimePercentage=${event.uptimePercentage} (${typeof event.uptimePercentage}), 
+                          marketAvailability=${event.marketAvailability},
+                          cached=${eventUptimeData[event.id]}
+                        `);
                         
                         if (uptimeValue !== undefined) {
                           return (
