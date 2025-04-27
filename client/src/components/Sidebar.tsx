@@ -139,10 +139,10 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
   // Get bookmaker color
   const getBookmakerColor = (bookmakerCode: string) => {
     const colorMap: Record<string, string> = {
-      'bet365': 'text-blue-600 dark:text-blue-400',
-      'williamhill': 'text-green-600 dark:text-green-400',
-      'betfair': 'text-orange-600 dark:text-orange-400',
-      'paddypower': 'text-red-600 dark:text-red-400',
+      'bp GH': 'text-orange-600 dark:text-orange-400',
+      'bp KE': 'text-green-600 dark:text-green-400',
+      'sporty': 'text-blue-600 dark:text-blue-400',
+      'betika KE': 'text-pink-600 dark:text-pink-400',
     };
     
     return colorMap[bookmakerCode] || '';
