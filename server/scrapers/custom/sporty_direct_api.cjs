@@ -76,9 +76,10 @@ async function fetchPage(pageNum) {
 /**
  * Parse SportyBet event data into the standard format
  * @param {Object} event - The raw event data from SportyBet API
+ * @param {Object} tournamentInfo - The tournament information for this event
  * @returns {Object} - The parsed event in our standard format
  */
-function parseEvent(event) {
+function parseEvent(event, tournamentInfo = {}) {
   try {
     // Extract relevant data based on the new API response structure
     const { 
@@ -89,9 +90,9 @@ function parseEvent(event) {
       markets = [] 
     } = event;
     
-    // Get tournament data from the parent object if possible
-    const tournamentName = event.tournament?.name || "";
-    const categoryName = event.categoryName || "Ghana";
+    // Get tournament and category data from the parent tournament object
+    const tournamentName = tournamentInfo.name || "";
+    const categoryName = tournamentInfo.categoryName || "Ghana";
     
     // Format the event name as "Home Team - Away Team"
     const eventName = `${homeTeamName} - ${awayTeamName}`;
@@ -286,6 +287,26 @@ async function main() {
     const { events: firstPageEvents, totalPage } = await fetchPage(1);
     
     let allEvents = [...firstPageEvents];
+    let allTournaments = [];
+    
+    // Get the first page tournament data from the API response
+    try {
+      const response = await axios.get(BASE_URL, {
+        params: {
+          ...params,
+          pageNum: 1,
+          _t: Date.now()
+        },
+        headers,
+        timeout: 10000
+      });
+      
+      if (response.status === 200 && response.data && response.data.data && response.data.data.tournaments) {
+        allTournaments = response.data.data.tournaments;
+      }
+    } catch (err) {
+      console.error(`❌ Error fetching tournaments: ${err.message}`);
+    }
     
     // Fetch remaining pages if any
     if (totalPage > 1) {
@@ -316,8 +337,56 @@ async function main() {
     let parsedEvents = [];
     
     if (allEvents.length > 0) {
+      // Create a map from event to its tournament info for quick lookup
+      const eventToTournamentMap = new Map();
+      
+      // Log tournament data for debugging
+      console.error(`📊 Found ${allTournaments.length} tournaments in the API response`);
+      
+      if (allTournaments.length > 0) {
+        // Log a sample tournament to see its structure
+        console.error(`📊 Sample tournament structure: ${JSON.stringify(allTournaments[0], null, 2)}`);
+      }
+      
+      allTournaments.forEach(tournament => {
+        if (tournament.events && Array.isArray(tournament.events)) {
+          console.error(`📊 Tournament: ${tournament.name || 'Unknown'}, Country: ${tournament.categoryName || 'Unknown'}, Events: ${tournament.events.length}`);
+          tournament.events.forEach(event => {
+            eventToTournamentMap.set(event.eventId, {
+              name: tournament.name || '',
+              categoryName: tournament.categoryName || 'Ghana'
+            });
+          });
+        }
+      });
+      
+      // Also log how many events have tournament mappings
+      console.error(`📊 Tournament mapping coverage: ${eventToTournamentMap.size}/${allEvents.length} events have tournament info`);
+      
+      // Log a few event IDs to debug
+      if (allEvents.length > 0) {
+        console.error(`📊 Sample event IDs: ${allEvents.slice(0, 3).map(e => e.eventId).join(', ')}`);
+      }
+      
       parsedEvents = allEvents
-        .map(parseEvent)
+        .map(event => {
+          // Look up tournament info for this event
+          const tournamentInfo = eventToTournamentMap.get(event.eventId) || {};
+          
+          // Log about 5% of event mappings for debugging
+          if (Math.random() < 0.05) {
+            console.error(`📊 Event mapping: EventID ${event.eventId}, Has tournament info: ${!!tournamentInfo.name}, Country: ${tournamentInfo.categoryName || 'Unknown'}`);
+          }
+          
+          const parsedEvent = parseEvent(event, tournamentInfo);
+          
+          // Log sample events with their country and tournament info
+          if (parsedEvent && Math.random() < 0.05) { // Log ~5% of events
+            console.error(`📊 Parsed event: ${parsedEvent.event}, Country: ${parsedEvent.country}, Tournament: ${parsedEvent.tournament}`);
+          }
+          
+          return parsedEvent;
+        })
         .filter(event => event !== null && event.home_odds > 0 && event.draw_odds > 0 && event.away_odds > 0);
     }
     
