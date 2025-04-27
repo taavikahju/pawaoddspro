@@ -789,9 +789,8 @@ export default function LiveHeartbeat() {
                               </div>
                             </div>
                             <div className="font-medium text-sm w-full" style={{wordWrap: 'break-word'}}>
-                              {event.homeTeam && event.awayTeam 
-                                ? `${event.homeTeam} vs ${event.awayTeam}` 
-                                : event.name}
+                              {/* Fix for duplicate team names: Display only event.name as it already contains team names */}
+                              {event.name}
                               
                               {/* Display score if available */}
                               {(event.homeScore !== undefined && event.awayScore !== undefined) && (
