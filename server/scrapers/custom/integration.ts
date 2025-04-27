@@ -317,8 +317,22 @@ runCustomScraper = async function(bookmakerCode: string): Promise<any[]> {
       
       // Log detailed information about what we got
       console.log(`📊 ${bookmakerCode} scraper returned ${events?.length || 0} events`);
+      
+      // Add more detailed stats about events
       if (events && events.length > 0) {
         console.log(`📊 First event sample from ${bookmakerCode}: ${JSON.stringify(events[0])}`);
+        
+        // Log stats about data distribution
+        const countriesCount = new Set(events.filter(e => e.country).map(e => e.country)).size;
+        const tournamentsCount = new Set(events.filter(e => e.tournament || e.league).map(e => e.tournament || e.league)).size;
+        
+        console.log(`📊 ${bookmakerCode} DATA STATS: ${events.length} events from ${countriesCount} countries across ${tournamentsCount} tournaments`);
+        
+        // Check for events without odds
+        const eventsWithoutOdds = events.filter(e => !e.odds || !e.odds.home || !e.odds.draw || !e.odds.away).length;
+        if (eventsWithoutOdds > 0) {
+          console.warn(`⚠️ ${bookmakerCode} has ${eventsWithoutOdds} events without complete odds`);
+        }
       } else {
         console.error(`⚠️ ${bookmakerCode} scraper returned no events or undefined`);
         if (events === undefined) {

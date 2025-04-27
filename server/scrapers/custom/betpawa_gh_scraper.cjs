@@ -250,9 +250,28 @@ async function scrapeBetPawaGhana() {
 if (require.main === module) {
   scrapeBetPawaGhana().then(events => {
     console.error(`BETPAWA GHANA SCRAPER STATS: Found ${events.length} events`);
-    console.log(JSON.stringify(events));
+    
+    // Output events in chunks to avoid EPIPE errors with large datasets
+    if (events.length > 0) {
+      // First output summary to stderr (which doesn't get piped to the parent process)
+      console.error(`BETPAWA GHANA STATS: Total upcoming events scraped: ${events.length}`);
+      
+      // Then output the data in smaller chunks to stdout
+      const CHUNK_SIZE = 100;
+      const output = JSON.stringify(events);
+      
+      // Using process.stdout.write instead of console.log to avoid additional newlines
+      for (let i = 0; i < output.length; i += CHUNK_SIZE) {
+        process.stdout.write(output.substring(i, i + CHUNK_SIZE));
+      }
+    } else {
+      // If no events, just output an empty array
+      console.log("[]");
+    }
   }).catch(err => {
     console.error(`BETPAWA GHANA SCRAPER ERROR: ${err.message}`);
+    // Output empty array on error so parent process can continue
+    console.log("[]");
   });
 } else {
   // When called as a module, don't output anything to console
