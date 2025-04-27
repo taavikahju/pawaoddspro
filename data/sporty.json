@@ -1,41 +1,147 @@
 [
   {
-    "id": "sporty-event-fallback-1",
-    "event": "Ashanti Gold - Accra Hearts of Oak",
-    "country": "Ghana",
-    "tournament": "Premier League",
+    "id": "fallback-1",
+    "eventId": "fallback-1",
+    "teams": "Ashanti Gold - Accra Hearts of Oak",
+    "league": "Premier League",
     "sport": "football",
-    "start_time": "2025-04-27 14:45",
-    "home_odds": 2.1,
-    "draw_odds": 3.25,
-    "away_odds": 2.9,
-    "bookmaker": "sporty",
-    "region": "gh"
+    "country": "Ghana",
+    "date": "2025-04-27",
+    "time": "14:56",
+    "odds": {
+      "home": 2.1,
+      "draw": 3.25,
+      "away": 2.9
+    },
+    "raw": {
+      "id": "sporty-event-fallback-1",
+      "eventId": "fallback-1",
+      "event": "Ashanti Gold - Accra Hearts of Oak",
+      "country": "Ghana",
+      "tournament": "Premier League",
+      "sport": "football",
+      "start_time": "2025-04-27 14:56",
+      "home_odds": 2.1,
+      "draw_odds": 3.25,
+      "away_odds": 2.9,
+      "bookmaker": "sporty",
+      "region": "gh"
+    }
   },
   {
-    "id": "sporty-event-fallback-2",
-    "event": "Asante Kotoko - Liberty Professionals",
-    "country": "Ghana",
-    "tournament": "Premier League",
+    "id": "fallback-2",
+    "eventId": "fallback-2",
+    "teams": "Asante Kotoko - Liberty Professionals",
+    "league": "Premier League",
     "sport": "football",
-    "start_time": "2025-04-28 14:45",
-    "home_odds": 1.9,
-    "draw_odds": 3.4,
-    "away_odds": 3.1,
-    "bookmaker": "sporty",
-    "region": "gh"
+    "country": "Ghana",
+    "date": "2025-04-28",
+    "time": "14:56",
+    "odds": {
+      "home": 1.9,
+      "draw": 3.4,
+      "away": 3.1
+    },
+    "raw": {
+      "id": "sporty-event-fallback-2",
+      "eventId": "fallback-2",
+      "event": "Asante Kotoko - Liberty Professionals",
+      "country": "Ghana",
+      "tournament": "Premier League",
+      "sport": "football",
+      "start_time": "2025-04-28 14:56",
+      "home_odds": 1.9,
+      "draw_odds": 3.4,
+      "away_odds": 3.1,
+      "bookmaker": "sporty",
+      "region": "gh"
+    }
   },
   {
-    "id": "sporty-event-fallback-3",
-    "event": "Bechem United - Medeama SC",
-    "country": "Ghana",
-    "tournament": "Premier League",
+    "id": "fallback-3",
+    "eventId": "fallback-3",
+    "teams": "Bechem United - Medeama SC",
+    "league": "Premier League",
     "sport": "football",
-    "start_time": "2025-04-29 14:45",
-    "home_odds": 2.25,
-    "draw_odds": 3.2,
-    "away_odds": 2.7,
-    "bookmaker": "sporty",
-    "region": "gh"
+    "country": "Ghana",
+    "date": "2025-04-29",
+    "time": "14:56",
+    "odds": {
+      "home": 2.25,
+      "draw": 3.2,
+      "away": 2.7
+    },
+    "raw": {
+      "id": "sporty-event-fallback-3",
+      "eventId": "fallback-3",
+      "event": "Bechem United - Medeama SC",
+      "country": "Ghana",
+      "tournament": "Premier League",
+      "sport": "football",
+      "start_time": "2025-04-29 14:56",
+      "home_odds": 2.25,
+      "draw_odds": 3.2,
+      "away_odds": 2.7,
+      "bookmaker": "sporty",
+      "region": "gh"
+    }
+  },
+  {
+    "id": "fallback-4",
+    "eventId": "fallback-4",
+    "teams": "Dreams FC - Aduana Stars",
+    "league": "Premier League",
+    "sport": "football",
+    "country": "Ghana",
+    "date": "2025-04-30",
+    "time": "14:56",
+    "odds": {
+      "home": 2.4,
+      "draw": 3.1,
+      "away": 2.8
+    },
+    "raw": {
+      "id": "sporty-event-fallback-4",
+      "eventId": "fallback-4",
+      "event": "Dreams FC - Aduana Stars",
+      "country": "Ghana",
+      "tournament": "Premier League",
+      "sport": "football",
+      "start_time": "2025-04-30 14:56",
+      "home_odds": 2.4,
+      "draw_odds": 3.1,
+      "away_odds": 2.8,
+      "bookmaker": "sporty",
+      "region": "gh"
+    }
+  },
+  {
+    "id": "fallback-5",
+    "eventId": "fallback-5",
+    "teams": "Berekum Chelsea - King Faisal Babes",
+    "league": "Premier League",
+    "sport": "football",
+    "country": "Ghana",
+    "date": "2025-05-01",
+    "time": "14:56",
+    "odds": {
+      "home": 1.85,
+      "draw": 3.3,
+      "away": 3.6
+    },
+    "raw": {
+      "id": "sporty-event-fallback-5",
+      "eventId": "fallback-5",
+      "event": "Berekum Chelsea - King Faisal Babes",
+      "country": "Ghana",
+      "tournament": "Premier League",
+      "sport": "football",
+      "start_time": "2025-05-01 14:56",
+      "home_odds": 1.85,
+      "draw_odds": 3.3,
+      "away_odds": 3.6,
+      "bookmaker": "sporty",
+      "region": "gh"
+    }
   }
 ]
