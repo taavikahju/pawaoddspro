@@ -266,7 +266,16 @@ export default function LiveHeartbeat() {
       const eventStartTime = new Date(event.startTime);
       const isRecentEvent = eventStartTime > threeHoursAgo;
       
+      // Special check for BetGenius events (widget IDs starting with "12" or "11")
+      // These are events like Marist Fire vs KOSSA FC that weren't showing up
+      if (event.widgetId && (event.widgetId.startsWith('12') || event.widgetId.startsWith('11'))) {
+        console.log(`Including BetGenius event: ${event.id} (${event.name})`);
+        // Always include these events regardless of record count
+        return true;
+      }
+      
       // Check if it has a reasonable record count (indicating active tracking)
+      // For BetGenius events, we'll relax this requirement since they have their own tracking
       const hasLowRecordCount = event.recordCount < 3;
       
       // Check if it's been suspended for multiple consecutive checks 
