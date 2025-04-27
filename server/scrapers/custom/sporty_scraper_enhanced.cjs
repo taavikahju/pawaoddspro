@@ -60,21 +60,78 @@ async function fetchData(url) {
 async function getSportyBetEvents(region) {
   try {
     // SportyBet API URL for football events by region
-    const url = `https://www.sportybet.com/${region}/sport/football?tab=upcoming`;
+    const baseUrl = `https://www.sportybet.com`;
     
-    // The API endpoint that lists all available events
-    const apiUrl = `https://www.sportybet.com/api/ng/facets/sport/preMatch`;
+    // The API endpoint varies by region
+    // Try a few different URL patterns to increase our chances of success
+    const apiEndpoints = [
+      `/api/${region}/facets/sport/preMatch`,  // Try with region code
+      `/api/ng/facets/sport/preMatch`,        // Default to Nigeria
+      `/api/facets/sport/preMatch`            // Try without region
+    ];
     
-    // Make the request
-    const response = await fetchData(apiUrl);
+    let response = null;
+    let successfulEndpoint = null;
     
-    if (!response || !response.data || !response.data.tournaments) {
-      console.error(`No tournaments found for ${region}`);
+    // Try each endpoint until we get a valid response
+    for (const endpoint of apiEndpoints) {
+      const apiUrl = `${baseUrl}${endpoint}`;
+      console.error(`Trying SportyBet API endpoint: ${apiUrl}`);
+      
+      try {
+        const result = await fetchData(apiUrl);
+        if (result && result.data && result.data.tournaments) {
+          response = result;
+          successfulEndpoint = apiUrl;
+          console.error(`✅ Success with endpoint: ${apiUrl}`);
+          break;
+        }
+      } catch (endpointError) {
+        console.error(`Failed with endpoint ${endpoint}: ${endpointError.message}`);
+      }
+    }
+    
+    if (!response) {
+      console.error(`All API endpoints failed for ${region}`);
+      
+      // Try a fallback to the static data URL
+      const fallbackUrl = `${baseUrl}/${region}/sport/football/upcoming`;
+      console.error(`Trying fallback URL: ${fallbackUrl}`);
+      
+      try {
+        // This is just to check if the site is accessible, we don't use the result directly
+        await fetchData(fallbackUrl);
+        console.error(`Site is accessible at ${fallbackUrl} but API failed. Possible API format change.`);
+      } catch (fallbackError) {
+        console.error(`Fallback URL also failed for ${region}: ${fallbackError.message}`);
+      }
+      
       return [];
     }
     
+    console.error(`Processing data from ${successfulEndpoint}`);
+    
     // Extract all events
     const allEvents = [];
+    
+    // Log the tournament data structure to help with debugging
+    if (response.data.tournaments && response.data.tournaments.length > 0) {
+      const firstTournament = response.data.tournaments[0];
+      console.error(`Tournament data structure example:`);
+      console.error(`- Sport: ${firstTournament.sport}`);
+      console.error(`- Country: ${firstTournament.country}`);
+      
+      if (firstTournament.tournaments && firstTournament.tournaments.length > 0) {
+        console.error(`- Tournament name: ${firstTournament.tournaments[0].name}`);
+        
+        if (firstTournament.tournaments[0].events && firstTournament.tournaments[0].events.length > 0) {
+          const firstEvent = firstTournament.tournaments[0].events[0];
+          console.error(`- Event ID: ${firstEvent.id}`);
+          console.error(`- Has participants: ${!!firstEvent.participants}`);
+          console.error(`- Has markets: ${!!firstEvent.markets}`);
+        }
+      }
+    }
     
     // Process tournaments to get all events
     for (const tournamentGroup of response.data.tournaments) {
@@ -88,6 +145,12 @@ async function getSportyBetEvents(region) {
         
         for (const event of tournament.events) {
           try {
+            // Skip if no participants data
+            if (!event.participants || event.participants.length < 2) {
+              console.error(`Invalid participants data for event ${event.id}`);
+              continue;
+            }
+            
             // Extract home and away team names
             const homeTeamName = event.participants[0].name || '';
             const awayTeamName = event.participants[1].name || '';
@@ -108,24 +171,36 @@ async function getSportyBetEvents(region) {
               region
             };
             
+            // Default odds (in case we can't find them)
+            eventObj.home_odds = 0;
+            eventObj.draw_odds = 0;
+            eventObj.away_odds = 0;
+            eventObj['1'] = 0;
+            eventObj['X'] = 0;
+            eventObj['2'] = 0;
+            
             // Extract odds if available
             if (event.markets && event.markets.length > 0) {
               // Find the 1X2 market
               const market1X2 = event.markets.find(m => m.name === '1X2');
               
               if (market1X2 && market1X2.selections && market1X2.selections.length === 3) {
-                eventObj.home_odds = market1X2.selections[0].odds;
-                eventObj.draw_odds = market1X2.selections[1].odds;
-                eventObj.away_odds = market1X2.selections[2].odds;
+                eventObj.home_odds = parseFloat(market1X2.selections[0].odds) || 0;
+                eventObj.draw_odds = parseFloat(market1X2.selections[1].odds) || 0;
+                eventObj.away_odds = parseFloat(market1X2.selections[2].odds) || 0;
                 
                 // Also add in numeric format for compatibility
-                eventObj['1'] = market1X2.selections[0].odds;
-                eventObj['X'] = market1X2.selections[1].odds;
-                eventObj['2'] = market1X2.selections[2].odds;
-                
-                // Add to the list
-                allEvents.push(eventObj);
+                eventObj['1'] = eventObj.home_odds;
+                eventObj['X'] = eventObj.draw_odds;
+                eventObj['2'] = eventObj.away_odds;
               }
+            }
+            
+            // Only add if we have valid odds
+            if (eventObj.home_odds > 0 && eventObj.draw_odds > 0 && eventObj.away_odds > 0) {
+              allEvents.push(eventObj);
+            } else {
+              console.error(`Skipping event ${eventObj.id} (${eventObj.event}) due to invalid odds`);
             }
           } catch (err) {
             console.error(`Error processing event ${event.id}:`, err.message);
@@ -137,6 +212,7 @@ async function getSportyBetEvents(region) {
     return allEvents;
   } catch (error) {
     console.error(`Error fetching SportyBet events for ${region}:`, error.message);
+    console.error(`Error stack:`, error.stack);
     return [];
   }
 }
