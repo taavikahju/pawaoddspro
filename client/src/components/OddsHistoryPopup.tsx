@@ -106,10 +106,10 @@ export default function OddsHistoryPopup({
   
   // Generate colors for each bookmaker - use consistent colors for all charts
   const bookmakerColors: Record<string, string> = {
-    'bp GH': '#FF9800', // Orange
-    'bp KE': '#4CAF50', // Green
-    'sporty': '#2196F3', // Blue
-    'betika KE': '#E91E63', // Pink
+    'betpawa_gh': '#FF9800', // Orange for BetPawa Ghana
+    'betpawa_ke': '#4CAF50', // Green for BetPawa Kenya
+    'sporty': '#2196F3', // Blue for SportyBet
+    'betika KE': '#E91E63', // Pink for Betika Kenya
   };
   
   return (
