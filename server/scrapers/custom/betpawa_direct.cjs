@@ -195,7 +195,9 @@ async function processEvents(events) {
       }
       
       // Normal processing for SPORTRADAR events
-      const widget = event.widgets?.find(w => w.type === "SPORTRADAR");
+      // Accept ANY widget type, not just SPORTRADAR
+      // This is important because we're seeing many events with other widget types
+      const widget = event.widgets && event.widgets.length > 0 ? event.widgets[0] : null;
       
       // Find the market with id "3743" (1X2 market)
       let market = event.markets?.find(m => m.marketType?.id === "3743");
@@ -214,7 +216,7 @@ async function processEvents(events) {
           
           // Debug info about the missing market or widget
           if (!widget) {
-            process.stderr.write(`[WARNING] Event ${event.name} missing SPORTRADAR widget, using first available widget\n`);
+            process.stderr.write(`[WARNING] Event ${event.name} missing widget, using first available widget\n`);
           }
           if (!market) {
             process.stderr.write(`[WARNING] Event ${event.name} has no markets available, marking as suspended\n`);
@@ -235,7 +237,8 @@ async function processEvents(events) {
             suspended: true, // Explicitly mark as suspended
             homeTeam: event.name.split(' - ')[0] || event.name.split(' vs ')[0] || event.participants?.[0]?.name || "Home",
             awayTeam: event.name.split(' - ')[1] || event.name.split(' vs ')[1] || event.participants?.[1]?.name || "Away",
-            totalMarketCount: 0 // Force totalMarketCount to 0 for suspended events
+            totalMarketCount: 0, // Force totalMarketCount to 0 for suspended events
+            widgetType: firstWidget.type || "UNKNOWN" // Track widget type for debugging
           });
           
           // Skip the rest of processing for this event
@@ -277,12 +280,12 @@ async function processEvents(events) {
       const totalMarketCount = marketsFromAPI || widgetsMarketCount || 1; // Default to 1 (NOT suspended) if we can't determine count
       
       // Only log market debug info for problematic events (when there are no markets or possible suspension)
-      if (marketsFromAPI === 0 || (market1X2 && market1X2.suspended)) {
+      if (marketsFromAPI === 0 || (market && market.suspended)) {
         process.stderr.write(`[MARKET WARNING] Potential issue with event ${widget.id} (${event.name}):\n`);
         process.stderr.write(`  - API Markets Count: ${marketsFromAPI}\n`);
         process.stderr.write(`  - Widget Markets Count: ${widgetsMarketCount}\n`);
         process.stderr.write(`  - Final totalMarketCount: ${totalMarketCount}\n`);
-        process.stderr.write(`  - Market suspended: ${market1X2 && market1X2.suspended ? 'Yes' : 'No'}\n`);
+        process.stderr.write(`  - Market suspended: ${market && market.suspended ? 'Yes' : 'No'}\n`);
       }
       
       // 2. Direct suspension flag from the API market data
@@ -344,6 +347,9 @@ async function scrapeRealEvents() {
     const PAGE_SIZE = 50;  // Match the page size for fetching (changed from 20)
     const MAX_PAGES = 5; // Limit to 5 pages to avoid excessive requests (up to 250 events now)
     
+    // New array for tracking unique event IDs to prevent duplicates
+    const processedEventIds = new Set();
+    
     // Fetch pages until we've got all events or reached the maximum page limit
     while (moreAvailable && currentPage < MAX_PAGES) {
       const skip = currentPage * PAGE_SIZE;
@@ -352,9 +358,24 @@ async function scrapeRealEvents() {
       if (events.length === 0) {
         break;
       }
+
+      // Log how many events were found on this page
+      process.stderr.write(`[INFO] Processing ${events.length} events from page ${currentPage + 1}\n`);
       
+      // Process each event to extract the details
       const processedEvents = await processEvents(events);
-      allEvents.push(...processedEvents);
+      
+      // Add each event to our overall collection, tracking by ID to avoid duplicates
+      for (const event of processedEvents) {
+        if (!processedEventIds.has(event.eventId)) {
+          processedEventIds.add(event.eventId);
+          allEvents.push(event);
+        }
+      }
+      
+      // Get the widgetTypes in the current batch
+      const widgetTypes = new Set(events.flatMap(e => e.widgets?.map(w => w.type) || []));
+      process.stderr.write(`[INFO] Widget types found: ${Array.from(widgetTypes).join(', ')}\n`);
       
       moreAvailable = hasMore;
       currentPage++;
@@ -365,8 +386,10 @@ async function scrapeRealEvents() {
       }
     }
 
+    process.stderr.write(`[INFO] Total events collected: ${allEvents.length}\n`);
     return allEvents;
   } catch (error) {
+    process.stderr.write(`[ERROR] Error in scrapeRealEvents: ${error.message}\n`);
     return [];
   }
 }

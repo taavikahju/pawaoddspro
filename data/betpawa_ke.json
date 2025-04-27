@@ -1,131 +1,5 @@
 [
   {
-    "id": "26555831",
-    "eventId": "59295981",
-    "country": "Peru",
-    "tournament": "Primera Division",
-    "event": "Los Chankas CYC - FBC Melgar",
-    "name": "Los Chankas CYC - FBC Melgar",
-    "home_odds": 3.4,
-    "draw_odds": 3.25,
-    "away_odds": 1.99,
-    "start_time": "2025-04-27T18:15:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 3.4
-          },
-          {
-            "name": "X",
-            "price": 3.25
-          },
-          {
-            "name": "2",
-            "price": 1.99
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "Peru"
-    },
-    "region": {
-      "name": "Peru"
-    },
-    "competition": {
-      "name": "Primera Division"
-    },
-    "league": {
-      "name": "Primera Division"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
-    "id": "26838872",
-    "eventId": "59934209",
-    "country": "Uruguay",
-    "tournament": "Primera Division",
-    "event": "CA Progreso - Liverpool Montevideo",
-    "name": "CA Progreso - Liverpool Montevideo",
-    "home_odds": 3.85,
-    "draw_odds": 3.55,
-    "away_odds": 1.85,
-    "start_time": "2025-04-27T18:15:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 3.85
-          },
-          {
-            "name": "X",
-            "price": 3.55
-          },
-          {
-            "name": "2",
-            "price": 1.85
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "Uruguay"
-    },
-    "region": {
-      "name": "Uruguay"
-    },
-    "competition": {
-      "name": "Primera Division"
-    },
-    "league": {
-      "name": "Primera Division"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
     "id": "26951646",
     "eventId": "51830335",
     "country": "Spain",
@@ -195,9 +69,9 @@
     "tournament": "Primera B",
     "event": "CD UAI Urquiza - CA Villa San Carlos",
     "name": "CD UAI Urquiza - CA Villa San Carlos",
-    "home_odds": 2.6,
+    "home_odds": 2.65,
     "draw_odds": 2.85,
-    "away_odds": 2.8,
+    "away_odds": 2.75,
     "start_time": "2025-04-27T18:30:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -218,7 +92,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.6
+            "price": 2.65
           },
           {
             "name": "X",
@@ -226,7 +100,7 @@
           },
           {
             "name": "2",
-            "price": 2.8
+            "price": 2.75
           }
         ]
       }
@@ -447,9 +321,9 @@
     "tournament": "Serie A",
     "event": "SSC Napoli - Torino FC",
     "name": "SSC Napoli - Torino FC",
-    "home_odds": 1.44,
+    "home_odds": 1.41,
     "draw_odds": 5,
-    "away_odds": 8.5,
+    "away_odds": 9.5,
     "start_time": "2025-04-27T18:45:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -470,7 +344,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.44
+            "price": 1.41
           },
           {
             "name": "X",
@@ -478,7 +352,7 @@
           },
           {
             "name": "2",
-            "price": 8.5
+            "price": 9.5
           }
         ]
       }
@@ -510,9 +384,9 @@
     "tournament": "Serie A",
     "event": "Atalanta BC - US Lecce",
     "name": "Atalanta BC - US Lecce",
-    "home_odds": 1.33,
-    "draw_odds": 6.25,
-    "away_odds": 10,
+    "home_odds": 1.31,
+    "draw_odds": 6.5,
+    "away_odds": 11,
     "start_time": "2025-04-27T18:45:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -533,15 +407,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.33
+            "price": 1.31
           },
           {
             "name": "X",
-            "price": 6.25
+            "price": 6.5
           },
           {
             "name": "2",
-            "price": 10
+            "price": 11
           }
         ]
       }
@@ -573,9 +447,9 @@
     "tournament": "Major League Soccer",
     "event": "Minnesota United FC - Vancouver Whitecaps FC",
     "name": "Minnesota United FC - Vancouver Whitecaps FC",
-    "home_odds": 1.99,
-    "draw_odds": 3.5,
-    "away_odds": 3.65,
+    "home_odds": 1.74,
+    "draw_odds": 3.7,
+    "away_odds": 4.6,
     "start_time": "2025-04-27T19:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -596,15 +470,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.99
+            "price": 1.74
           },
           {
             "name": "X",
-            "price": 3.5
+            "price": 3.7
           },
           {
             "name": "2",
-            "price": 3.65
+            "price": 4.6
           }
         ]
       }
@@ -699,9 +573,9 @@
     "tournament": "LaLiga 2",
     "event": "Real Zaragoza - SD Huesca",
     "name": "Real Zaragoza - SD Huesca",
-    "home_odds": 1.92,
-    "draw_odds": 3.15,
-    "away_odds": 4.5,
+    "home_odds": 1.9,
+    "draw_odds": 3.1,
+    "away_odds": 4.7,
     "start_time": "2025-04-27T19:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -722,15 +596,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.92
+            "price": 1.9
           },
           {
             "name": "X",
-            "price": 3.15
+            "price": 3.1
           },
           {
             "name": "2",
-            "price": 4.5
+            "price": 4.7
           }
         ]
       }
@@ -1014,9 +888,9 @@
     "tournament": "Campeonato Brasileiro, Women",
     "event": "3B Sport AM - Real Brasilia FC DF",
     "name": "3B Sport AM - Real Brasilia FC DF",
-    "home_odds": 3.4,
-    "draw_odds": 4.1,
-    "away_odds": 1.78,
+    "home_odds": 3.6,
+    "draw_odds": 3.85,
+    "away_odds": 1.77,
     "start_time": "2025-04-27T19:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -1037,15 +911,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 3.4
+            "price": 3.6
           },
           {
             "name": "X",
-            "price": 4.1
+            "price": 3.85
           },
           {
             "name": "2",
-            "price": 1.78
+            "price": 1.77
           }
         ]
       }
@@ -1078,8 +952,8 @@
     "event": "Santa Fe - Boyacá Chicó",
     "name": "Santa Fe - Boyacá Chicó",
     "home_odds": 1.31,
-    "draw_odds": 4.75,
-    "away_odds": 11.5,
+    "draw_odds": 4.8,
+    "away_odds": 11,
     "start_time": "2025-04-27T19:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -1104,11 +978,11 @@
           },
           {
             "name": "X",
-            "price": 4.75
+            "price": 4.8
           },
           {
             "name": "2",
-            "price": 11.5
+            "price": 11
           }
         ]
       }
@@ -1140,9 +1014,9 @@
     "tournament": "Brasileiro Serie B",
     "event": "Athletic Club Sjdr MG - Volta Redonda FC RJ",
     "name": "Athletic Club Sjdr MG - Volta Redonda FC RJ",
-    "home_odds": 1.89,
+    "home_odds": 1.86,
     "draw_odds": 3.35,
-    "away_odds": 3.8,
+    "away_odds": 3.95,
     "start_time": "2025-04-27T19:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -1163,7 +1037,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.89
+            "price": 1.86
           },
           {
             "name": "X",
@@ -1171,7 +1045,7 @@
           },
           {
             "name": "2",
-            "price": 3.8
+            "price": 3.95
           }
         ]
       }
@@ -1518,9 +1392,9 @@
     "tournament": "Chile Primera Division B",
     "event": "Union San Felipe - Magallanes",
     "name": "Union San Felipe - Magallanes",
-    "home_odds": 2.75,
+    "home_odds": 2.5,
     "draw_odds": 3,
-    "away_odds": 2.5,
+    "away_odds": 2.75,
     "start_time": "2025-04-27T19:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -1541,7 +1415,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.75
+            "price": 2.5
           },
           {
             "name": "X",
@@ -1549,7 +1423,7 @@
           },
           {
             "name": "2",
-            "price": 2.5
+            "price": 2.75
           }
         ]
       }
@@ -1581,9 +1455,9 @@
     "tournament": "Chile Primera Division",
     "event": "Palestino - Universidad de Chile",
     "name": "Palestino - Universidad de Chile",
-    "home_odds": 3.85,
+    "home_odds": 4.05,
     "draw_odds": 3.55,
-    "away_odds": 1.92,
+    "away_odds": 1.87,
     "start_time": "2025-04-27T19:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -1604,7 +1478,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 3.85
+            "price": 4.05
           },
           {
             "name": "X",
@@ -1612,7 +1486,7 @@
           },
           {
             "name": "2",
-            "price": 1.92
+            "price": 1.87
           }
         ]
       }
@@ -1644,9 +1518,9 @@
     "tournament": "Bolivia Primera Division",
     "event": "Nacional Potosi - Club Jorge Wilstermann",
     "name": "Nacional Potosi - Club Jorge Wilstermann",
-    "home_odds": 1.45,
-    "draw_odds": 4.4,
-    "away_odds": 6.5,
+    "home_odds": 1.48,
+    "draw_odds": 4.25,
+    "away_odds": 6.25,
     "start_time": "2025-04-27T19:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -1667,15 +1541,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.45
+            "price": 1.48
           },
           {
             "name": "X",
-            "price": 4.4
+            "price": 4.25
           },
           {
             "name": "2",
-            "price": 6.5
+            "price": 6.25
           }
         ]
       }
@@ -2400,8 +2274,8 @@
     "tournament": "Segunda Division",
     "event": "Urena SC - Trujillanos FC",
     "name": "Urena SC - Trujillanos FC",
-    "home_odds": 3,
-    "draw_odds": 2.95,
+    "home_odds": 3.05,
+    "draw_odds": 2.85,
     "away_odds": 2.35,
     "start_time": "2025-04-27T20:00:00Z",
     "gameMinute": "",
@@ -2423,11 +2297,11 @@
         "prices": [
           {
             "name": "1",
-            "price": 3
+            "price": 3.05
           },
           {
             "name": "X",
-            "price": 2.95
+            "price": 2.85
           },
           {
             "name": "2",
@@ -2715,9 +2589,9 @@
     "tournament": "Segunda Division",
     "event": "Mineros de Guayana - Dynamo Puerto FC",
     "name": "Mineros de Guayana - Dynamo Puerto FC",
-    "home_odds": 2.16,
-    "draw_odds": 3.35,
-    "away_odds": 2.95,
+    "home_odds": 2.55,
+    "draw_odds": 3.3,
+    "away_odds": 2.5,
     "start_time": "2025-04-27T20:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -2738,15 +2612,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.16
+            "price": 2.55
           },
           {
             "name": "X",
-            "price": 3.35
+            "price": 3.3
           },
           {
             "name": "2",
-            "price": 2.95
+            "price": 2.5
           }
         ]
       }
@@ -3408,9 +3282,9 @@
     "tournament": "Colombia Categoría Primera B",
     "event": "Deportes Quindío - Real Santander",
     "name": "Deportes Quindío - Real Santander",
-    "home_odds": 1.84,
+    "home_odds": 1.89,
     "draw_odds": 3.4,
-    "away_odds": 3.8,
+    "away_odds": 3.6,
     "start_time": "2025-04-27T21:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -3431,7 +3305,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.84
+            "price": 1.89
           },
           {
             "name": "X",
@@ -3439,7 +3313,7 @@
           },
           {
             "name": "2",
-            "price": 3.8
+            "price": 3.6
           }
         ]
       }
@@ -5172,9 +5046,9 @@
     "tournament": "Brasileiro Serie C",
     "event": "Botafogo FC PB - ABC FC RN",
     "name": "Botafogo FC PB - ABC FC RN",
-    "home_odds": 1.76,
-    "draw_odds": 3.05,
-    "away_odds": 4.9,
+    "home_odds": 1.82,
+    "draw_odds": 3,
+    "away_odds": 4.6,
     "start_time": "2025-04-27T22:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -5195,15 +5069,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.76
+            "price": 1.82
           },
           {
             "name": "X",
-            "price": 3.05
+            "price": 3
           },
           {
             "name": "2",
-            "price": 4.9
+            "price": 4.6
           }
         ]
       }
@@ -5235,9 +5109,9 @@
     "tournament": "TT Premier League",
     "event": "Point Fortin FC - AC Port Of Spain",
     "name": "Point Fortin FC - AC Port Of Spain",
-    "home_odds": 5.5,
-    "draw_odds": 4.4,
-    "away_odds": 1.44,
+    "home_odds": 6.5,
+    "draw_odds": 4.8,
+    "away_odds": 1.35,
     "start_time": "2025-04-27T22:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -5258,15 +5132,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 5.5
+            "price": 6.5
           },
           {
             "name": "X",
-            "price": 4.4
+            "price": 4.8
           },
           {
             "name": "2",
-            "price": 1.44
+            "price": 1.35
           }
         ]
       }
@@ -5481,6 +5355,69 @@
     }
   },
   {
+    "id": "26574652",
+    "eventId": "59456021",
+    "country": "Brazil",
+    "tournament": "Brasileiro Serie A2, Women",
+    "event": "Botafogo Fr RJ - Avai FC SC",
+    "name": "Botafogo Fr RJ - Avai FC SC",
+    "home_odds": 1.33,
+    "draw_odds": 4.2,
+    "away_odds": 8.75,
+    "start_time": "2025-04-27T22:00:00Z",
+    "gameMinute": "",
+    "sport": "football",
+    "competitors": [
+      {
+        "name": ""
+      },
+      {
+        "name": ""
+      }
+    ],
+    "markets": [
+      {
+        "marketType": {
+          "id": "3743",
+          "name": "1X2"
+        },
+        "prices": [
+          {
+            "name": "1",
+            "price": 1.33
+          },
+          {
+            "name": "X",
+            "price": 4.2
+          },
+          {
+            "name": "2",
+            "price": 8.75
+          }
+        ]
+      }
+    ],
+    "category": {
+      "name": "Brazil"
+    },
+    "region": {
+      "name": "Brazil"
+    },
+    "competition": {
+      "name": "Brasileiro Serie A2, Women"
+    },
+    "league": {
+      "name": "Brasileiro Serie A2, Women"
+    },
+    "isInPlay": false,
+    "status": "UPCOMING",
+    "scoreboard": {
+      "display": {
+        "minute": ""
+      }
+    }
+  },
+  {
     "id": "27011040",
     "eventId": "60132587",
     "country": "Nicaragua",
@@ -5613,9 +5550,9 @@
     "tournament": "USL League One Cup",
     "event": "Spokane Velocity FC - Oakland Roots SC",
     "name": "Spokane Velocity FC - Oakland Roots SC",
-    "home_odds": 3,
+    "home_odds": 2.95,
     "draw_odds": 3.3,
-    "away_odds": 2.14,
+    "away_odds": 2.18,
     "start_time": "2025-04-27T23:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -5636,7 +5573,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 3
+            "price": 2.95
           },
           {
             "name": "X",
@@ -5644,7 +5581,7 @@
           },
           {
             "name": "2",
-            "price": 2.14
+            "price": 2.18
           }
         ]
       }
@@ -6244,8 +6181,8 @@
     "event": "Club Bolívar - Blooming Santa Cruz",
     "name": "Club Bolívar - Blooming Santa Cruz",
     "home_odds": 1.12,
-    "draw_odds": 8.25,
-    "away_odds": 17,
+    "draw_odds": 8.5,
+    "away_odds": 18,
     "start_time": "2025-04-27T23:30:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -6270,11 +6207,11 @@
           },
           {
             "name": "X",
-            "price": 8.25
+            "price": 8.5
           },
           {
             "name": "2",
-            "price": 17
+            "price": 18
           }
         ]
       }
@@ -7629,9 +7566,9 @@
     "tournament": "England Professional Development League",
     "event": "Coventry City U21 - AFC Bournemouth U21",
     "name": "Coventry City U21 - AFC Bournemouth U21",
-    "home_odds": 2.85,
-    "draw_odds": 4.4,
-    "away_odds": 1.91,
+    "home_odds": 3.05,
+    "draw_odds": 4.5,
+    "away_odds": 1.82,
     "start_time": "2025-04-28T12:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -7652,15 +7589,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.85
+            "price": 3.05
           },
           {
             "name": "X",
-            "price": 4.4
+            "price": 4.5
           },
           {
             "name": "2",
-            "price": 1.91
+            "price": 1.82
           }
         ]
       }
@@ -7881,9 +7818,9 @@
     "tournament": "Campionato Primavera 2",
     "event": "AC Reggiana 1919 U19 - Venezia FC U19",
     "name": "AC Reggiana 1919 U19 - Venezia FC U19",
-    "home_odds": 2.85,
-    "draw_odds": 3.8,
-    "away_odds": 2.04,
+    "home_odds": 2.9,
+    "draw_odds": 3.85,
+    "away_odds": 2,
     "start_time": "2025-04-28T13:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -7904,15 +7841,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.85
+            "price": 2.9
           },
           {
             "name": "X",
-            "price": 3.8
+            "price": 3.85
           },
           {
             "name": "2",
-            "price": 2.04
+            "price": 2
           }
         ]
       }
@@ -9141,9 +9078,9 @@
     "tournament": "FNL",
     "event": "FC Banik Ostrava B - FC Vlasim",
     "name": "FC Banik Ostrava B - FC Vlasim",
-    "home_odds": 1.75,
+    "home_odds": 1.78,
     "draw_odds": 3.5,
-    "away_odds": 4.1,
+    "away_odds": 3.95,
     "start_time": "2025-04-28T15:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -9164,7 +9101,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.75
+            "price": 1.78
           },
           {
             "name": "X",
@@ -9172,7 +9109,7 @@
           },
           {
             "name": "2",
-            "price": 4.1
+            "price": 3.95
           }
         ]
       }
@@ -10464,8 +10401,8 @@
     "tournament": "Premier League",
     "event": "Sumqayit FK - Neftchi Baku PFC",
     "name": "Sumqayit FK - Neftchi Baku PFC",
-    "home_odds": 2.75,
-    "draw_odds": 3.05,
+    "home_odds": 2.8,
+    "draw_odds": 2.9,
     "away_odds": 2.5,
     "start_time": "2025-04-28T16:00:00Z",
     "gameMinute": "",
@@ -10487,11 +10424,11 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.75
+            "price": 2.8
           },
           {
             "name": "X",
-            "price": 3.05
+            "price": 2.9
           },
           {
             "name": "2",
@@ -10905,9 +10842,9 @@
     "tournament": "Omani League",
     "event": "Al-Seeb - Oman Club",
     "name": "Al-Seeb - Oman Club",
-    "home_odds": 1.32,
+    "home_odds": 1.33,
     "draw_odds": 4.4,
-    "away_odds": 8.5,
+    "away_odds": 8.25,
     "start_time": "2025-04-28T16:20:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -10928,7 +10865,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.32
+            "price": 1.33
           },
           {
             "name": "X",
@@ -10936,7 +10873,7 @@
           },
           {
             "name": "2",
-            "price": 8.5
+            "price": 8.25
           }
         ]
       }
@@ -11283,9 +11220,9 @@
     "tournament": "Erovnuli Liga",
     "event": "FC Torpedo Kutaisi - FC Iberia 1999",
     "name": "FC Torpedo Kutaisi - FC Iberia 1999",
-    "home_odds": 3.25,
+    "home_odds": 3.1,
     "draw_odds": 3.15,
-    "away_odds": 2.12,
+    "away_odds": 2.15,
     "start_time": "2025-04-28T17:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -11306,7 +11243,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 3.25
+            "price": 3.1
           },
           {
             "name": "X",
@@ -11314,7 +11251,7 @@
           },
           {
             "name": "2",
-            "price": 2.12
+            "price": 2.15
           }
         ]
       }
@@ -13488,9 +13425,9 @@
     "tournament": "NB II",
     "event": "Szeged-Csanad Grosics Akademia - Kazincbarcikai SC",
     "name": "Szeged-Csanad Grosics Akademia - Kazincbarcikai SC",
-    "home_odds": 2.55,
-    "draw_odds": 3.3,
-    "away_odds": 2.45,
+    "home_odds": 2.6,
+    "draw_odds": 3.25,
+    "away_odds": 2.4,
     "start_time": "2025-04-28T18:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -13511,15 +13448,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.55
+            "price": 2.6
           },
           {
             "name": "X",
-            "price": 3.3
+            "price": 3.25
           },
           {
             "name": "2",
-            "price": 2.45
+            "price": 2.4
           }
         ]
       }
@@ -13614,9 +13551,9 @@
     "tournament": "England Premier League 2",
     "event": "Crystal Palace U21 - Brighton & Hove Albion U21",
     "name": "Crystal Palace U21 - Brighton & Hove Albion U21",
-    "home_odds": 2.1,
+    "home_odds": 2.18,
     "draw_odds": 4.2,
-    "away_odds": 2.6,
+    "away_odds": 2.45,
     "start_time": "2025-04-28T18:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -13637,7 +13574,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.1
+            "price": 2.18
           },
           {
             "name": "X",
@@ -13645,7 +13582,7 @@
           },
           {
             "name": "2",
-            "price": 2.6
+            "price": 2.45
           }
         ]
       }
@@ -14559,9 +14496,9 @@
     "tournament": "Liga Portugal",
     "event": "Casa Pia Lisbon - Estoril Praia",
     "name": "Casa Pia Lisbon - Estoril Praia",
-    "home_odds": 2.02,
+    "home_odds": 2.07,
     "draw_odds": 3.3,
-    "away_odds": 3.8,
+    "away_odds": 3.65,
     "start_time": "2025-04-28T19:15:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -14582,7 +14519,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.02
+            "price": 2.07
           },
           {
             "name": "X",
@@ -14590,7 +14527,7 @@
           },
           {
             "name": "2",
-            "price": 3.8
+            "price": 3.65
           }
         ]
       }
@@ -19599,9 +19536,9 @@
     "tournament": "DBU Pokalen",
     "event": "Broendby IF - Silkeborg IF",
     "name": "Broendby IF - Silkeborg IF",
-    "home_odds": 1.7,
-    "draw_odds": 4.1,
-    "away_odds": 3.9,
+    "home_odds": 1.68,
+    "draw_odds": 4,
+    "away_odds": 4,
     "start_time": "2025-04-30T16:30:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -19622,15 +19559,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.7
+            "price": 1.68
           },
           {
             "name": "X",
-            "price": 4.1
+            "price": 4
           },
           {
             "name": "2",
-            "price": 3.9
+            "price": 4
           }
         ]
       }
@@ -24192,6 +24129,69 @@
     }
   },
   {
+    "id": "27032002",
+    "eventId": "58956683",
+    "country": "Romania",
+    "tournament": "Liga 2",
+    "event": "FC U Craiova 1948 - FC Bihor Oradea",
+    "name": "FC U Craiova 1948 - FC Bihor Oradea",
+    "home_odds": 1.54,
+    "draw_odds": 3.85,
+    "away_odds": 5.25,
+    "start_time": "2025-05-02T09:00:00Z",
+    "gameMinute": "",
+    "sport": "football",
+    "competitors": [
+      {
+        "name": ""
+      },
+      {
+        "name": ""
+      }
+    ],
+    "markets": [
+      {
+        "marketType": {
+          "id": "3743",
+          "name": "1X2"
+        },
+        "prices": [
+          {
+            "name": "1",
+            "price": 1.54
+          },
+          {
+            "name": "X",
+            "price": 3.85
+          },
+          {
+            "name": "2",
+            "price": 5.25
+          }
+        ]
+      }
+    ],
+    "category": {
+      "name": "Romania"
+    },
+    "region": {
+      "name": "Romania"
+    },
+    "competition": {
+      "name": "Liga 2"
+    },
+    "league": {
+      "name": "Liga 2"
+    },
+    "isInPlay": false,
+    "status": "UPCOMING",
+    "scoreboard": {
+      "display": {
+        "minute": ""
+      }
+    }
+  },
+  {
     "id": "25481253",
     "eventId": "52130767",
     "country": "Australia",
@@ -24387,9 +24387,9 @@
     "tournament": "Chinese Super League",
     "event": "Qingdao West Coast FC - Meizhou Hakka",
     "name": "Qingdao West Coast FC - Meizhou Hakka",
-    "home_odds": 1.86,
-    "draw_odds": 3.7,
-    "away_odds": 3.45,
+    "home_odds": 1.8,
+    "draw_odds": 3.75,
+    "away_odds": 3.6,
     "start_time": "2025-05-02T11:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -24410,15 +24410,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.86
+            "price": 1.8
           },
           {
             "name": "X",
-            "price": 3.7
+            "price": 3.75
           },
           {
             "name": "2",
-            "price": 3.45
+            "price": 3.6
           }
         ]
       }
@@ -25710,9 +25710,9 @@
     "tournament": "Liga Portugal 2",
     "event": "UD Leiria - UD Oliveirense",
     "name": "UD Leiria - UD Oliveirense",
-    "home_odds": 1.87,
-    "draw_odds": 3.7,
-    "away_odds": 3.35,
+    "home_odds": 1.74,
+    "draw_odds": 3.85,
+    "away_odds": 3.75,
     "start_time": "2025-05-02T17:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -25733,15 +25733,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.87
+            "price": 1.74
           },
           {
             "name": "X",
-            "price": 3.7
+            "price": 3.85
           },
           {
             "name": "2",
-            "price": 3.35
+            "price": 3.75
           }
         ]
       }
@@ -25962,9 +25962,9 @@
     "tournament": "National",
     "event": "Football Bourg-En-Bresse Peronnas 01 - FC Villefranche Beaujolais",
     "name": "Football Bourg-En-Bresse Peronnas 01 - FC Villefranche Beaujolais",
-    "home_odds": 2.4,
-    "draw_odds": 2.95,
-    "away_odds": 3.05,
+    "home_odds": 2.35,
+    "draw_odds": 3,
+    "away_odds": 3.15,
     "start_time": "2025-05-02T17:30:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -25985,15 +25985,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.4
+            "price": 2.35
           },
           {
             "name": "X",
-            "price": 2.95
+            "price": 3
           },
           {
             "name": "2",
-            "price": 3.05
+            "price": 3.15
           }
         ]
       }
@@ -26277,9 +26277,9 @@
     "tournament": "National",
     "event": "Quevilly-Rouen Metropole - FC Versailles 78",
     "name": "Quevilly-Rouen Metropole - FC Versailles 78",
-    "home_odds": 2.4,
-    "draw_odds": 3.1,
-    "away_odds": 2.95,
+    "home_odds": 2.35,
+    "draw_odds": 3.15,
+    "away_odds": 3,
     "start_time": "2025-05-02T17:30:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -26300,15 +26300,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.4
+            "price": 2.35
           },
           {
             "name": "X",
-            "price": 3.1
+            "price": 3.15
           },
           {
             "name": "2",
-            "price": 2.95
+            "price": 3
           }
         ]
       }
@@ -28923,9 +28923,9 @@
     "tournament": "Primera Division",
     "event": "CA Boston River - Montevideo Wanderers",
     "name": "CA Boston River - Montevideo Wanderers",
-    "home_odds": 2.6,
+    "home_odds": 2.55,
     "draw_odds": 3,
-    "away_odds": 2.75,
+    "away_odds": 2.8,
     "start_time": "2025-05-02T22:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -28946,7 +28946,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.6
+            "price": 2.55
           },
           {
             "name": "X",
@@ -28954,7 +28954,7 @@
           },
           {
             "name": "2",
-            "price": 2.75
+            "price": 2.8
           }
         ]
       }
@@ -31122,69 +31122,6 @@
     }
   },
   {
-    "id": "27032002",
-    "eventId": "58956683",
-    "country": "Romania",
-    "tournament": "Liga 2",
-    "event": "FC U Craiova 1948 - FC Bihor Oradea",
-    "name": "FC U Craiova 1948 - FC Bihor Oradea",
-    "home_odds": 1.54,
-    "draw_odds": 3.85,
-    "away_odds": 5.25,
-    "start_time": "2025-05-03T11:00:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 1.54
-          },
-          {
-            "name": "X",
-            "price": 3.85
-          },
-          {
-            "name": "2",
-            "price": 5.25
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "Romania"
-    },
-    "region": {
-      "name": "Romania"
-    },
-    "competition": {
-      "name": "Liga 2"
-    },
-    "league": {
-      "name": "Liga 2"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
     "id": "27032003",
     "eventId": "58956951",
     "country": "Romania",
@@ -32326,7 +32263,7 @@
     "event": "IF Gnistan - IFK Mariehamn",
     "name": "IF Gnistan - IFK Mariehamn",
     "home_odds": 1.55,
-    "draw_odds": 3.95,
+    "draw_odds": 4,
     "away_odds": 5.5,
     "start_time": "2025-05-03T12:00:00Z",
     "gameMinute": "",
@@ -32352,7 +32289,7 @@
           },
           {
             "name": "X",
-            "price": 3.95
+            "price": 4
           },
           {
             "name": "2",
@@ -34530,9 +34467,9 @@
     "tournament": "League Two",
     "event": "Morecambe FC - Harrogate Town",
     "name": "Morecambe FC - Harrogate Town",
-    "home_odds": 2.7,
+    "home_odds": 2.55,
     "draw_odds": 3.3,
-    "away_odds": 2.45,
+    "away_odds": 2.6,
     "start_time": "2025-05-03T14:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -34553,7 +34490,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.7
+            "price": 2.55
           },
           {
             "name": "X",
@@ -34561,7 +34498,7 @@
           },
           {
             "name": "2",
-            "price": 2.45
+            "price": 2.6
           }
         ]
       }
@@ -35601,9 +35538,9 @@
     "tournament": "League One",
     "event": "Lincoln City - Wrexham AFC",
     "name": "Lincoln City - Wrexham AFC",
-    "home_odds": 3.05,
-    "draw_odds": 3.3,
-    "away_odds": 2.22,
+    "home_odds": 3,
+    "draw_odds": 3.35,
+    "away_odds": 2.24,
     "start_time": "2025-05-03T14:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -35624,15 +35561,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 3.05
+            "price": 3
           },
           {
             "name": "X",
-            "price": 3.3
+            "price": 3.35
           },
           {
             "name": "2",
-            "price": 2.22
+            "price": 2.24
           }
         ]
       }
@@ -37428,9 +37365,9 @@
     "tournament": "Allsvenskan",
     "event": "Halmstads BK - IFK Varnamo",
     "name": "Halmstads BK - IFK Varnamo",
-    "home_odds": 3.4,
-    "draw_odds": 3.3,
-    "away_odds": 2.17,
+    "home_odds": 3.3,
+    "draw_odds": 3.25,
+    "away_odds": 2.22,
     "start_time": "2025-05-03T15:30:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -37451,15 +37388,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 3.4
-          },
-          {
-            "name": "X",
             "price": 3.3
           },
           {
+            "name": "X",
+            "price": 3.25
+          },
+          {
             "name": "2",
-            "price": 2.17
+            "price": 2.22
           }
         ]
       }
@@ -37806,9 +37743,9 @@
     "tournament": "Super Lig",
     "event": "Galatasaray Istanbul - Sivasspor",
     "name": "Galatasaray Istanbul - Sivasspor",
-    "home_odds": 1.14,
-    "draw_odds": 8.25,
-    "away_odds": 15,
+    "home_odds": 1.16,
+    "draw_odds": 7.75,
+    "away_odds": 13,
     "start_time": "2025-05-03T16:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -37829,15 +37766,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.14
+            "price": 1.16
           },
           {
             "name": "X",
-            "price": 8.25
+            "price": 7.75
           },
           {
             "name": "2",
-            "price": 15
+            "price": 13
           }
         ]
       }
@@ -40887,6 +40824,69 @@
     }
   },
   {
+    "id": "27057704",
+    "eventId": "27057704",
+    "country": "Paraguay",
+    "tournament": "Paraguay Primera Division",
+    "event": "Cerro Porteño - Club Olimpia",
+    "name": "Cerro Porteño - Club Olimpia",
+    "home_odds": 2.25,
+    "draw_odds": 3.25,
+    "away_odds": 3.2,
+    "start_time": "2025-05-03T20:30:00Z",
+    "gameMinute": "",
+    "sport": "football",
+    "competitors": [
+      {
+        "name": ""
+      },
+      {
+        "name": ""
+      }
+    ],
+    "markets": [
+      {
+        "marketType": {
+          "id": "3743",
+          "name": "1X2"
+        },
+        "prices": [
+          {
+            "name": "1",
+            "price": 2.25
+          },
+          {
+            "name": "X",
+            "price": 3.25
+          },
+          {
+            "name": "2",
+            "price": 3.2
+          }
+        ]
+      }
+    ],
+    "category": {
+      "name": "Paraguay"
+    },
+    "region": {
+      "name": "Paraguay"
+    },
+    "competition": {
+      "name": "Paraguay Primera Division"
+    },
+    "league": {
+      "name": "Paraguay Primera Division"
+    },
+    "isInPlay": false,
+    "status": "UPCOMING",
+    "scoreboard": {
+      "display": {
+        "minute": ""
+      }
+    }
+  },
+  {
     "id": "25509030",
     "eventId": "56690549",
     "country": "USA",
@@ -42074,6 +42074,69 @@
     },
     "league": {
       "name": "Bolivia Primera Division"
+    },
+    "isInPlay": false,
+    "status": "UPCOMING",
+    "scoreboard": {
+      "display": {
+        "minute": ""
+      }
+    }
+  },
+  {
+    "id": "26899557",
+    "eventId": "57381281",
+    "country": "Ecuador",
+    "tournament": "LigaPro Primera A",
+    "event": "Mushuc Runa SC - CSD Macara",
+    "name": "Mushuc Runa SC - CSD Macara",
+    "home_odds": 2.19,
+    "draw_odds": 3.1,
+    "away_odds": 3.3,
+    "start_time": "2025-05-04T00:00:00Z",
+    "gameMinute": "",
+    "sport": "football",
+    "competitors": [
+      {
+        "name": ""
+      },
+      {
+        "name": ""
+      }
+    ],
+    "markets": [
+      {
+        "marketType": {
+          "id": "3743",
+          "name": "1X2"
+        },
+        "prices": [
+          {
+            "name": "1",
+            "price": 2.19
+          },
+          {
+            "name": "X",
+            "price": 3.1
+          },
+          {
+            "name": "2",
+            "price": 3.3
+          }
+        ]
+      }
+    ],
+    "category": {
+      "name": "Ecuador"
+    },
+    "region": {
+      "name": "Ecuador"
+    },
+    "competition": {
+      "name": "LigaPro Primera A"
+    },
+    "league": {
+      "name": "LigaPro Primera A"
     },
     "isInPlay": false,
     "status": "UPCOMING",
@@ -43350,9 +43413,9 @@
     "tournament": "Ekstraklasa",
     "event": "GKS Piast Gliwice - RKS Radomiak Radom",
     "name": "GKS Piast Gliwice - RKS Radomiak Radom",
-    "home_odds": 2,
-    "draw_odds": 3.3,
-    "away_odds": 3.65,
+    "home_odds": 2.02,
+    "draw_odds": 3.15,
+    "away_odds": 3.7,
     "start_time": "2025-05-04T10:15:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -43373,15 +43436,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 2
+            "price": 2.02
           },
           {
             "name": "X",
-            "price": 3.3
+            "price": 3.15
           },
           {
             "name": "2",
-            "price": 3.65
+            "price": 3.7
           }
         ]
       }
@@ -45303,9 +45366,9 @@
     "tournament": "1. Lig",
     "event": "Igdir FK - Kocaelispor",
     "name": "Igdir FK - Kocaelispor",
-    "home_odds": 2.06,
-    "draw_odds": 3.25,
-    "away_odds": 3.2,
+    "home_odds": 1.95,
+    "draw_odds": 3.35,
+    "away_odds": 3.4,
     "start_time": "2025-05-04T13:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -45326,15 +45389,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.06
+            "price": 1.95
           },
           {
             "name": "X",
-            "price": 3.25
+            "price": 3.35
           },
           {
             "name": "2",
-            "price": 3.2
+            "price": 3.4
           }
         ]
       }
@@ -45807,9 +45870,9 @@
     "tournament": "1. Lig",
     "event": "Ankara Keciorengucu - MKE Ankaragucu",
     "name": "Ankara Keciorengucu - MKE Ankaragucu",
-    "home_odds": 2.65,
-    "draw_odds": 3.5,
-    "away_odds": 2.3,
+    "home_odds": 3.05,
+    "draw_odds": 3.6,
+    "away_odds": 2.02,
     "start_time": "2025-05-04T13:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -45830,15 +45893,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.65
+            "price": 3.05
           },
           {
             "name": "X",
-            "price": 3.5
+            "price": 3.6
           },
           {
             "name": "2",
-            "price": 2.3
+            "price": 2.02
           }
         ]
       }
@@ -46248,9 +46311,9 @@
     "tournament": "Serie A",
     "event": "AC Monza - Atalanta BC",
     "name": "AC Monza - Atalanta BC",
-    "home_odds": 10,
+    "home_odds": 11,
     "draw_odds": 6,
-    "away_odds": 1.27,
+    "away_odds": 1.26,
     "start_time": "2025-05-04T13:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -46271,7 +46334,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 10
+            "price": 11
           },
           {
             "name": "X",
@@ -46279,7 +46342,7 @@
           },
           {
             "name": "2",
-            "price": 1.27
+            "price": 1.26
           }
         ]
       }
@@ -48768,9 +48831,9 @@
     "tournament": "Ykkonen",
     "event": "KaPa Kapylan Pallo - JIPPO",
     "name": "KaPa Kapylan Pallo - JIPPO",
-    "home_odds": 5,
+    "home_odds": 5.25,
     "draw_odds": 4.1,
-    "away_odds": 1.56,
+    "away_odds": 1.53,
     "start_time": "2025-05-04T16:15:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -48791,7 +48854,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 5
+            "price": 5.25
           },
           {
             "name": "X",
@@ -48799,7 +48862,7 @@
           },
           {
             "name": "2",
-            "price": 1.56
+            "price": 1.53
           }
         ]
       }
