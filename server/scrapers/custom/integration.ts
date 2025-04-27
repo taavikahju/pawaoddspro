@@ -300,18 +300,34 @@ runCustomScraper = async function(bookmakerCode: string): Promise<any[]> {
       const { stdout, stderr } = await execPromise(`${config.command} "${config.scriptPath}"`);
       
       if (stderr) {
-        console.error(`⚠️ Error running ${bookmakerCode} scraper:`, stderr);
+        // Only log a portion of stderr to avoid flooding the logs - this is normal to have logs in stderr
+        console.log(`📊 ${bookmakerCode} scraper stderr output (debug info only):`, 
+          stderr.substring(0, 200) + (stderr.length > 200 ? '...' : ''));
       }
       
       try {
-        events = JSON.parse(stdout.trim());
-        if (!Array.isArray(events)) {
-          console.error(`⚠️ ${bookmakerCode} scraper output is not an array:`, typeof events);
+        // Trim to handle any extra newlines and remove any potential whitespace
+        const cleanOutput = stdout.trim();
+        
+        if (cleanOutput) {
+          events = JSON.parse(cleanOutput);
+          
+          if (!Array.isArray(events)) {
+            console.error(`⚠️ ${bookmakerCode} scraper output is not an array:`, typeof events);
+            events = [];
+          } else if (events.length > 0) {
+            // Log a sample event to verify the data format
+            const sample = events[0];
+            console.log(`📊 Sample event from ${bookmakerCode}: ${sample.id || sample.eventId} - ${sample.name || sample.event || 'Unknown'}`);
+          }
+        } else {
+          console.error(`⚠️ ${bookmakerCode} scraper returned empty output`);
           events = [];
         }
       } catch (parseError) {
         console.error(`⚠️ Error parsing ${bookmakerCode} scraper output:`, parseError);
-        console.error(`⚠️ First 500 chars of output: ${stdout.substring(0, 500)}`);
+        // Only show the start of the output to avoid flooding the logs
+        console.error(`⚠️ Output preview: ${stdout.substring(0, 100)}... [truncated]`);
         events = [];
       }
       
