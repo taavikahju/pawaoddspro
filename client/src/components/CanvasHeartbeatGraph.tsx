@@ -809,19 +809,10 @@ export default function CanvasHeartbeatGraph({ eventId, eventData }: HeartbeatGr
             <Activity className="h-5 w-5 text-primary" />
             <div className="flex items-center gap-2">
               <span className="font-medium">
-                {!eventDetails ? (
-                  eventData?.name || `Event ID: ${eventId}`
-                ) : eventDetails.homeTeam && eventDetails.awayTeam && 
-                   eventDetails.homeTeam !== "Home" && eventDetails.homeTeam !== "Unknown" &&
-                   eventDetails.awayTeam !== "Away" && eventDetails.awayTeam !== "Unknown" ? (
-                  <>
-                    {eventDetails.homeTeam} vs {eventDetails.awayTeam}
-                  </>
-                ) : eventDetails.name && eventDetails.name !== "Unknown" ? (
-                  eventDetails.name
-                ) : (
-                  `Match from ${eventDetails?.tournament || eventDetails?.country || "Unknown League"}`
-                )}
+                {eventData?.homeTeam && eventData?.awayTeam 
+                  ? `${eventData.homeTeam} vs ${eventData.awayTeam}` 
+                  : eventData?.name || `Event ID: ${eventId}`
+                }
               </span>
               
               {eventDetails?.gameMinute && (

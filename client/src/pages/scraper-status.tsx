@@ -207,14 +207,7 @@ export default function ScraperStatusPage() {
         </div>
       </div>
       
-      {/* Live Scraper Panel */}
-      <div className="mb-8">
-        <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
-          <Clock className="h-4 w-4 mr-2 text-primary" />
-          Live Event Market Status
-        </h3>
-        <LiveScraperPanel isAdmin={isAdmin} />
-      </div>
+      {/* Live Scraper Panel Removed as per client request */}
       
       {/* Footer Note */}
       <div className="text-center text-xs text-gray-500 dark:text-gray-400 mb-4">
@@ -223,48 +216,7 @@ export default function ScraperStatusPage() {
         <p className="mt-1">Admin users can trigger manual scraping from the Admin Panel.</p>
       </div>
 
-      {/* Admin key floating button */}
-      <Button
-        variant="outline"
-        size="sm"
-        className="fixed bottom-4 right-4 bg-white dark:bg-slate-800 shadow-md flex items-center gap-2"
-        onClick={() => setIsAdminModalOpen(true)}
-      >
-        <Key className="h-4 w-4" />
-        {isAdmin ? "Admin Key Set" : "Set Admin Key"}
-      </Button>
-
-      {/* Admin key dialog */}
-      <Dialog open={isAdminModalOpen} onOpenChange={setIsAdminModalOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Set Admin Key</DialogTitle>
-            <DialogDescription>
-              Enter your admin key to access admin-only features like controlling the live scraper.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="py-4">
-            <Input
-              placeholder="Enter admin key"
-              value={adminKey}
-              onChange={(e) => setAdminKeyState(e.target.value)}
-              type="password"
-              className="w-full"
-            />
-            <p className="text-xs text-muted-foreground mt-2">
-              Default key is "default-admin-key" if not configured otherwise.
-            </p>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsAdminModalOpen(false)}>
-              Cancel
-            </Button>
-            <Button onClick={setAdminKeyHandler}>
-              Save Key
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      {/* Admin key elements removed as per client request */}
     </Layout>
   );
 }
