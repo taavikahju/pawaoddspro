@@ -360,11 +360,23 @@ export default function LiveHeartbeat() {
   
   // Fetch market history for each event to calculate overall average uptime
   const fetchAverageUptime = async () => {
+    // Skip entirely if no filtered events
     if (filteredEvents.length === 0) return;
     
     try {
-      // Get uptime percentages for all events by making API calls
-      const uptimePromises = filteredEvents.map(async (event) => {
+      // Filter out any events with undefined/null IDs before making API calls
+      const validEvents = filteredEvents.filter(event => !!event.id);
+      
+      // If all events were filtered out (no valid IDs), skip further processing
+      if (validEvents.length === 0) {
+        console.warn("No events with valid IDs found, skipping uptime calculation");
+        return;
+      }
+      
+      console.log(`Making API calls for ${validEvents.length} events with valid IDs`);
+      
+      // Get uptime percentages for all valid events by making API calls
+      const uptimePromises = validEvents.map(async (event) => {
         try {
           const response = await fetch(`/api/live-heartbeat/data/${event.id}`);
           if (!response.ok) return null;
