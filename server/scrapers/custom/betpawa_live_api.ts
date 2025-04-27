@@ -244,6 +244,7 @@ export function parseEventsForHeartbeat(events: any[]) {
         gameMinute === "Ht" || 
         gameMinute === "hT" ||
         (event.scoreboard?.display?.status === "halftime") ||
+        (event.scoreboard?.matchState === null) || // BetPawa uses null matchState to indicate halftime
         (event.fixture?.timer?.status === "halftime") ||
         (event.status === "halftime") ||
         (event.matchStatus === "halftime") ||
@@ -254,6 +255,7 @@ export function parseEventsForHeartbeat(events: any[]) {
         (gameMinute.toLowerCase().includes("half") && gameMinute.toLowerCase().includes("time"))
       ) {
         gameMinute = "HT";
+        console.log(`⚽ Detected HALFTIME for event ${eventId} (${eventName})`);
       }
       
       // Return the standardized event

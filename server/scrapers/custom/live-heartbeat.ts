@@ -784,8 +784,13 @@ async function processEvents(events: any[]): Promise<void> {
       let awayScore: number | undefined = undefined;
       
       if (event.scoreboard) {
+        // Check for halftime indicator - when matchState is null, it's typically halftime
+        if (event.scoreboard.matchState === null && gameMinute === '1') {
+          gameMinute = 'HT';
+          console.log(`⚽ Detected HALFTIME for event ${event.id || event.eventId} based on null matchState`);
+        }
         // Extract minute
-        if (event.scoreboard.display?.minute) {
+        else if (event.scoreboard.display?.minute) {
           gameMinute = event.scoreboard.display.minute;
         }
         
