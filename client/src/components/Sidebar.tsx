@@ -248,22 +248,19 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
                   : "bg-white dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700"
               )}
               onClick={() => {
-                // Find bookmaker IDs for Ghana
-                const ghanaBookmakers = bookmakers
-                  .filter(b => b.code === 'bp GH' || b.code === 'sporty')
-                  .map(b => b.code);
+                // Since we can access the bookmakers array directly, 
+                // we can determine the exact state we want to have
+                const allCodes = bookmakers.map(b => b.code);
+                const ghanaCodes = ["bp GH", "sporty"];
                 
-                // First ensure all Ghana bookmakers are selected
-                ghanaBookmakers.forEach(code => {
-                  if (!selectedBookmakers.includes(code)) {
+                // For each bookmaker, determine whether it should be selected or not
+                // If it's already in the correct state, don't toggle it
+                allCodes.forEach(code => {
+                  const shouldBeSelected = ghanaCodes.includes(code);
+                  const isSelected = selectedBookmakers.includes(code);
+                  
+                  if (shouldBeSelected !== isSelected) {
                     toggleBookmaker(code);
-                  }
-                });
-                
-                // Then deselect all non-Ghana bookmakers
-                bookmakers.forEach(b => {
-                  if (selectedBookmakers.includes(b.code) && !ghanaBookmakers.includes(b.code)) {
-                    toggleBookmaker(b.code);
                   }
                 });
                 
@@ -285,22 +282,19 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
                   : "bg-white dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700"
               )}
               onClick={() => {
-                // Find bookmaker IDs for Kenya
-                const kenyaBookmakers = bookmakers
-                  .filter(b => b.code === 'bp KE' || b.code === 'betika KE')
-                  .map(b => b.code);
+                // Since we can access the bookmakers array directly, 
+                // we can determine the exact state we want to have
+                const allCodes = bookmakers.map(b => b.code);
+                const kenyaCodes = ["bp KE", "betika KE"];
                 
-                // First ensure all Kenya bookmakers are selected
-                kenyaBookmakers.forEach(code => {
-                  if (!selectedBookmakers.includes(code)) {
+                // For each bookmaker, determine whether it should be selected or not
+                // If it's already in the correct state, don't toggle it
+                allCodes.forEach(code => {
+                  const shouldBeSelected = kenyaCodes.includes(code);
+                  const isSelected = selectedBookmakers.includes(code);
+                  
+                  if (shouldBeSelected !== isSelected) {
                     toggleBookmaker(code);
-                  }
-                });
-                
-                // Then deselect all non-Kenya bookmakers
-                bookmakers.forEach(b => {
-                  if (selectedBookmakers.includes(b.code) && !kenyaBookmakers.includes(b.code)) {
-                    toggleBookmaker(b.code);
                   }
                 });
                 
@@ -322,10 +316,17 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
                   : "bg-white dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700"
               )}
               onClick={() => {
-                // Select all bookmakers that aren't already selected
-                bookmakers.forEach(b => {
-                  if (!selectedBookmakers.includes(b.code)) {
-                    toggleBookmaker(b.code);
+                // Since we can access the bookmakers array directly, 
+                // we can determine the exact state we want to have
+                const allCodes = bookmakers.map(b => b.code);
+                
+                // For each bookmaker, make sure it is selected
+                // Only toggle if not already selected
+                allCodes.forEach(code => {
+                  const isSelected = selectedBookmakers.includes(code);
+                  
+                  if (!isSelected) {
+                    toggleBookmaker(code);
                   }
                 });
                 
