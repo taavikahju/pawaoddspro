@@ -741,6 +741,17 @@ export default function LiveHeartbeat() {
                         >
                           <div className="flex flex-col mb-1">
                             <div className="flex items-center justify-between mb-1">
+                              {/* Uptime percentage in upper right */}
+                              {event.uptimePercentage !== undefined && (
+                                <Badge className={`text-xs font-semibold mr-2 ${
+                                  event.uptimePercentage >= 80 ? 'bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/30 dark:text-green-400 dark:hover:bg-green-900/30' :
+                                  event.uptimePercentage >= 50 ? 'bg-amber-100 text-amber-800 hover:bg-amber-100 dark:bg-amber-900/30 dark:text-amber-400 dark:hover:bg-amber-900/30' :
+                                  'bg-red-100 text-red-800 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/30'
+                                }`}>
+                                  {event.uptimePercentage.toFixed(1)}%
+                                </Badge>
+                              )}
+                              
                               <div className="flex items-center gap-1.5">
                                 {event.isInPlay && (
                                   <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" 
@@ -787,19 +798,7 @@ export default function LiveHeartbeat() {
                                 </div>
                               )}
                               
-                              {/* Display uptime percentage if available */}
-                              {event.uptimePercentage !== undefined && (
-                                <div className="mt-1 text-xs flex items-center">
-                                  <span className="font-medium mr-1">Uptime:</span>
-                                  <span className={`font-semibold ${
-                                    event.uptimePercentage >= 80 ? 'text-green-600 dark:text-green-400' :
-                                    event.uptimePercentage >= 50 ? 'text-amber-600 dark:text-amber-400' :
-                                    'text-red-600 dark:text-red-400'
-                                  }`}>
-                                    {event.uptimePercentage.toFixed(1)}%
-                                  </span>
-                                </div>
-                              )}
+{/* Removed uptime percentage from this location */}
                             </div>
                           </div>
                           <div className="flex items-center text-xs text-muted-foreground">
