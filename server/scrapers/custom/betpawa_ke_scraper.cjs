@@ -5,11 +5,25 @@
 
 const axios = require('axios');
 
+// Create logger that only logs when not called programmatically
+const logger = {
+  log: function(...args) {
+    if (require.main === module) {
+      console.log(...args);
+    }
+  },
+  error: function(...args) {
+    if (require.main === module) {
+      console.error(...args);
+    }
+  }
+};
+
 /**
  * Main function to scrape BetPawa Kenya upcoming events
  */
 async function scrapeBetPawaKenya() {
-  console.log('Starting BetPawa Kenya 15-minute scraper (CommonJS version)');
+  logger.log('Starting BetPawa Kenya 15-minute scraper (CommonJS version)');
   
   // Define constants - updated to correct domain
   const DOMAIN = 'www.betpawa.co.ke';
@@ -78,7 +92,7 @@ async function scrapeBetPawaKenya() {
     
     // We need to scrape UPCOMING matches for the 15-minute scraper (not live ones)
     while (totalPages < 15) { // Limit to 15 pages max to avoid timeout
-      console.log(`Fetching upcoming events with skip=${skip}`);
+      logger.log(`Fetching upcoming events with skip=${skip}`);
       
       // Build query parameter - specifically for UPCOMING events with football (category 2)
       const encodedQuery = `%7B%22queries%22%3A%5B%7B%22query%22%3A%7B%22eventType%22%3A%22UPCOMING%22%2C%22categories%22%3A%5B2%5D%2C%22zones%22%3A%7B%7D%2C%22hasOdds%22%3Atrue%7D%2C%22view%22%3A%7B%22marketTypes%22%3A%5B%223743%22%5D%7D%2C%22skip%22%3A${skip}%2C%22take%22%3A${take}%7D%5D%7D`;
@@ -88,7 +102,7 @@ async function scrapeBetPawaKenya() {
       
       try {
         // Make request with timeout - shorter timeout to avoid hanging
-        console.log(`Making request to ${url}`);
+        logger.log(`Making request to ${url}`);
         const response = await axios.get(url, {
           headers: headerWithCookies,
           timeout: 15000 // 15 seconds timeout
@@ -96,7 +110,7 @@ async function scrapeBetPawaKenya() {
         
         // Check for valid response
         if (response.status !== 200) {
-          console.log(`Request failed with status ${response.status}`);
+          logger.log(`Request failed with status ${response.status}`);
           break;
         }
         
@@ -106,22 +120,22 @@ async function scrapeBetPawaKenya() {
         // Different APIs might return data in different structures, handle all possibilities
         if (response.data?.queries?.[0]?.events) {
           events = response.data.queries[0].events;
-          console.log('Found events in queries[0].events');
+          logger.log('Found events in queries[0].events');
         } else if (response.data?.responses?.[0]?.responses) {
           events = response.data.responses[0].responses;
-          console.log('Found events in responses[0].responses');
+          logger.log('Found events in responses[0].responses');
         } else if (response.data?.events) {
           events = response.data.events;
-          console.log('Found events in events');
+          logger.log('Found events in events');
         }
         
         // If no events found, break the loop
         if (!events || events.length === 0) {
-          console.log('No more events found');
+          logger.log('No more events found');
           break;
         }
         
-        console.log(`Found ${events.length} events on this page`);
+        logger.log(`Found ${events.length} events on this page`);
         
         // Process events
         for (const event of events) {
@@ -196,13 +210,13 @@ async function scrapeBetPawaKenya() {
             
             allEvents.push(eventObject);
           } catch (eventError) {
-            console.error(`Error processing event: ${eventError.message}`);
+            logger.error(`Error processing event: ${eventError.message}`);
           }
         }
         
         // Check if we need to paginate
         if (events.length < take) {
-          console.log('Received fewer events than requested, done paginating');
+          logger.log('Received fewer events than requested, done paginating');
           break;
         }
         
@@ -213,15 +227,15 @@ async function scrapeBetPawaKenya() {
         // Small delay to avoid rate limiting
         await new Promise(resolve => setTimeout(resolve, 300));
       } catch (pageError) {
-        console.error(`Error fetching page with skip=${skip}: ${pageError.message}`);
+        logger.error(`Error fetching page with skip=${skip}: ${pageError.message}`);
         break;
       }
     }
     
-    console.log(`Total upcoming events scraped: ${allEvents.length}`);
+    logger.log(`Total upcoming events scraped: ${allEvents.length}`);
     return allEvents;
   } catch (error) {
-    console.error(`Error in BetPawa Kenya scraper: ${error.message}`);
+    logger.error(`Error in BetPawa Kenya scraper: ${error.message}`);
     return [];
   }
 }
@@ -229,8 +243,10 @@ async function scrapeBetPawaKenya() {
 // For direct execution
 if (require.main === module) {
   scrapeBetPawaKenya().then(events => {
-    console.log(JSON.stringify(events, null, 2));
+    console.log(JSON.stringify(events));
   });
+} else {
+  // When called as a module, don't output anything to console
 }
 
 module.exports = scrapeBetPawaKenya;
