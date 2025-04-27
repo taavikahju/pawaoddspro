@@ -9,9 +9,9 @@
     "date": "2025-04-27",
     "time": "15:30",
     "odds": {
-      "home": 1.46,
+      "home": 1.45,
       "draw": 4.8,
-      "away": 6
+      "away": 6.2
     },
     "raw": {
       "eventId": "50868493",
@@ -19,9 +19,9 @@
       "tournament": "Eredivisie",
       "event": "Ajax Amsterdam - Sparta Rotterdam",
       "market": "1X2",
-      "home_odds": "1.46",
+      "home_odds": "1.45",
       "draw_odds": "4.80",
-      "away_odds": "6.00",
+      "away_odds": "6.20",
       "start_time": "2025-04-27 15:30"
     }
   },
@@ -113,9 +113,9 @@
     "date": "2025-04-27",
     "time": "15:30",
     "odds": {
-      "home": 3.75,
-      "draw": 3.7,
-      "away": 1.92
+      "home": 3.9,
+      "draw": 3.75,
+      "away": 1.87
     },
     "raw": {
       "eventId": "59005689",
@@ -123,9 +123,9 @@
       "tournament": "Bundesliga",
       "event": "Wolfsberger AC - FC Salzburg",
       "market": "1X2",
-      "home_odds": "3.75",
-      "draw_odds": "3.70",
-      "away_odds": "1.92",
+      "home_odds": "3.90",
+      "draw_odds": "3.75",
+      "away_odds": "1.87",
       "start_time": "2025-04-27 15:30"
     }
   },
@@ -529,9 +529,9 @@
     "date": "2025-04-27",
     "time": "16:00",
     "odds": {
-      "home": 1.97,
+      "home": 1.98,
       "draw": 3.35,
-      "away": 4.3
+      "away": 4.2
     },
     "raw": {
       "eventId": "51273475",
@@ -539,9 +539,9 @@
       "tournament": "Serie A",
       "event": "ACF Fiorentina - Empoli FC",
       "market": "1X2",
-      "home_odds": "1.97",
+      "home_odds": "1.98",
       "draw_odds": "3.35",
-      "away_odds": "4.30",
+      "away_odds": "4.20",
       "start_time": "2025-04-27 16:00"
     }
   },
@@ -737,9 +737,9 @@
     "date": "2025-04-27",
     "time": "16:00",
     "odds": {
-      "home": 1.66,
-      "draw": 3.85,
-      "away": 4.5
+      "home": 1.58,
+      "draw": 4,
+      "away": 5
     },
     "raw": {
       "eventId": "51857227",
@@ -747,9 +747,9 @@
       "tournament": "1. Lig",
       "event": "Istanbulspor - Pendikspor",
       "market": "1X2",
-      "home_odds": "1.66",
-      "draw_odds": "3.85",
-      "away_odds": "4.50",
+      "home_odds": "1.58",
+      "draw_odds": "4.00",
+      "away_odds": "5.00",
       "start_time": "2025-04-27 16:00"
     }
   },
@@ -867,9 +867,9 @@
     "date": "2025-04-27",
     "time": "16:00",
     "odds": {
-      "home": 18,
-      "draw": 9.4,
-      "away": 1.09
+      "home": 19,
+      "draw": 9.6,
+      "away": 1.08
     },
     "raw": {
       "eventId": "51857223",
@@ -877,9 +877,9 @@
       "tournament": "1. Lig",
       "event": "Adanaspor - Genclerbirligi",
       "market": "1X2",
-      "home_odds": "18.00",
-      "draw_odds": "9.40",
-      "away_odds": "1.09",
+      "home_odds": "19.00",
+      "draw_odds": "9.60",
+      "away_odds": "1.08",
       "start_time": "2025-04-27 16:00"
     }
   },
@@ -2648,6 +2648,58 @@
       "home_odds": "1.70",
       "draw_odds": "3.95",
       "away_odds": "3.85",
+      "start_time": "2025-04-27 16:00"
+    }
+  },
+  {
+    "id": "60166231",
+    "eventId": "60166231",
+    "teams": "KF Drenica Skenderaj - KF Besa Peje",
+    "league": "Liga e Pare",
+    "sport": "football",
+    "country": "Kosovo",
+    "date": "2025-04-27",
+    "time": "16:00",
+    "odds": {
+      "home": 1.78,
+      "draw": 3.35,
+      "away": 4.2
+    },
+    "raw": {
+      "eventId": "60166231",
+      "country": "Kosovo",
+      "tournament": "Liga e Pare",
+      "event": "KF Drenica Skenderaj - KF Besa Peje",
+      "market": "1X2",
+      "home_odds": "1.78",
+      "draw_odds": "3.35",
+      "away_odds": "4.20",
+      "start_time": "2025-04-27 16:00"
+    }
+  },
+  {
+    "id": "60166233",
+    "eventId": "60166233",
+    "teams": "KF Mitrovica - Istogu",
+    "league": "Liga e Pare",
+    "sport": "football",
+    "country": "Kosovo",
+    "date": "2025-04-27",
+    "time": "16:00",
+    "odds": {
+      "home": 3.55,
+      "draw": 3.3,
+      "away": 1.94
+    },
+    "raw": {
+      "eventId": "60166233",
+      "country": "Kosovo",
+      "tournament": "Liga e Pare",
+      "event": "KF Mitrovica - Istogu",
+      "market": "1X2",
+      "home_odds": "3.55",
+      "draw_odds": "3.30",
+      "away_odds": "1.94",
       "start_time": "2025-04-27 16:00"
     }
   },
@@ -8719,9 +8771,9 @@
     "date": "2025-04-27",
     "time": "19:00",
     "odds": {
-      "home": 2,
+      "home": 2.04,
       "draw": 3.2,
-      "away": 3.75
+      "away": 3.65
     },
     "raw": {
       "eventId": "50938201",
@@ -8729,9 +8781,9 @@
       "tournament": "NB I",
       "event": "Zalaegerszeg TE - Kecskemeti TE",
       "market": "1X2",
-      "home_odds": "2.00",
+      "home_odds": "2.04",
       "draw_odds": "3.20",
-      "away_odds": "3.75",
+      "away_odds": "3.65",
       "start_time": "2025-04-27 19:00"
     }
   },
@@ -9048,54 +9100,54 @@
     }
   },
   {
-    "id": "59765360",
-    "eventId": "59765360",
-    "teams": "CS Constantine - Rs Berkane",
-    "league": "CAF Confederations Cup",
+    "id": "53064923",
+    "eventId": "53064923",
+    "teams": "Rotxapea CD - CD Gares",
+    "league": "Tercera Federacion, Group 15",
     "sport": "football",
-    "country": "International Clubs",
+    "country": "Spain Amateur",
     "date": "2025-04-27",
     "time": "19:00",
     "odds": {
-      "home": 2.5,
-      "draw": 2.75,
-      "away": 3.2
+      "home": 2.07,
+      "draw": 3.3,
+      "away": 3.3
     },
     "raw": {
-      "eventId": "59765360",
-      "country": "International Clubs",
-      "tournament": "CAF Confederations Cup",
-      "event": "CS Constantine - Rs Berkane",
+      "eventId": "53064923",
+      "country": "Spain Amateur",
+      "tournament": "Tercera Federacion, Group 15",
+      "event": "Rotxapea CD - CD Gares",
       "market": "1X2",
-      "home_odds": "2.50",
-      "draw_odds": "2.75",
-      "away_odds": "3.20",
+      "home_odds": "2.07",
+      "draw_odds": "3.30",
+      "away_odds": "3.30",
       "start_time": "2025-04-27 19:00"
     }
   },
   {
-    "id": "58435711",
-    "eventId": "58435711",
-    "teams": "Ramtha - AL Ahli",
-    "league": "Jordan League",
+    "id": "53056381",
+    "eventId": "53056381",
+    "teams": "AC Torrellano - Ontinyent",
+    "league": "Tercera Federacion, Group 6",
     "sport": "football",
-    "country": "Jordan",
+    "country": "Spain Amateur",
     "date": "2025-04-27",
     "time": "19:00",
     "odds": {
-      "home": 1.92,
-      "draw": 3.4,
-      "away": 3.8
+      "home": 2.22,
+      "draw": 2.95,
+      "away": 3.35
     },
     "raw": {
-      "eventId": "58435711",
-      "country": "Jordan",
-      "tournament": "Jordan League",
-      "event": "Ramtha - AL Ahli",
+      "eventId": "53056381",
+      "country": "Spain Amateur",
+      "tournament": "Tercera Federacion, Group 6",
+      "event": "AC Torrellano - Ontinyent",
       "market": "1X2",
-      "home_odds": "1.92",
-      "draw_odds": "3.40",
-      "away_odds": "3.80",
+      "home_odds": "2.22",
+      "draw_odds": "2.95",
+      "away_odds": "3.35",
       "start_time": "2025-04-27 19:00"
     }
   },
@@ -10981,9 +11033,9 @@
     "date": "2025-04-27",
     "time": "21:00",
     "odds": {
-      "home": 1.96,
-      "draw": 3.55,
-      "away": 3.35
+      "home": 1.91,
+      "draw": 3.6,
+      "away": 3.5
     },
     "raw": {
       "eventId": "51549083",
@@ -10991,9 +11043,9 @@
       "tournament": "Serie C, Group C",
       "event": "Trapani Calcio - Casertana FC",
       "market": "1X2",
-      "home_odds": "1.96",
-      "draw_odds": "3.55",
-      "away_odds": "3.35",
+      "home_odds": "1.91",
+      "draw_odds": "3.60",
+      "away_odds": "3.50",
       "start_time": "2025-04-27 21:00"
     }
   },
@@ -15610,8 +15662,8 @@
     "time": "17:30",
     "odds": {
       "home": 1.49,
-      "draw": 4.3,
-      "away": 5.6
+      "draw": 4.5,
+      "away": 5.4
     },
     "raw": {
       "eventId": "59694601",
@@ -15620,8 +15672,8 @@
       "event": "FK Napredak Krusevac - FK Jedinstvo UB",
       "market": "1X2",
       "home_odds": "1.49",
-      "draw_odds": "4.30",
-      "away_odds": "5.60",
+      "draw_odds": "4.50",
+      "away_odds": "5.40",
       "start_time": "2025-04-28 17:30"
     }
   },
@@ -16285,9 +16337,9 @@
     "date": "2025-04-28",
     "time": "19:00",
     "odds": {
-      "home": 2.85,
+      "home": 2.9,
       "draw": 3.15,
-      "away": 2.49
+      "away": 2.44
     },
     "raw": {
       "eventId": "59694213",
@@ -16295,9 +16347,9 @@
       "tournament": "Superliga",
       "event": "FK Mladost Lucani - FK Novi Pazar",
       "market": "1X2",
-      "home_odds": "2.85",
+      "home_odds": "2.90",
       "draw_odds": "3.15",
-      "away_odds": "2.49",
+      "away_odds": "2.44",
       "start_time": "2025-04-28 19:00"
     }
   },
