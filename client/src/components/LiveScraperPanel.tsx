@@ -392,15 +392,15 @@ export default function LiveScraperPanel({ isAdmin }: LiveScraperPanelProps) {
                           </span>
                         )}
                         
-                        {/* Uptime percentage badge - use direct uptime percentage if available */}
-                        {(event.uptimePercentage !== undefined || eventUptimeData[event.id] !== undefined) && (
+                        {/* Uptime percentage badge - use our state object for reliability */}
+                        {eventUptimeData[event.id] !== undefined && (
                           <span className={`px-1 py-0.5 rounded mr-2 mb-1 ${
-                            (event.uptimePercentage || eventUptimeData[event.id]) > 75 ? 'bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400' : 
-                            (event.uptimePercentage || eventUptimeData[event.id]) > 50 ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400' : 
-                            (event.uptimePercentage || eventUptimeData[event.id]) > 30 ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/20 dark:text-orange-400' : 
+                            eventUptimeData[event.id] > 75 ? 'bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400' : 
+                            eventUptimeData[event.id] > 50 ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400' : 
+                            eventUptimeData[event.id] > 30 ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/20 dark:text-orange-400' : 
                             'bg-red-100 text-red-700 dark:bg-red-900/20 dark:text-red-400'
                           }`}>
-                            Uptime: {(event.uptimePercentage || eventUptimeData[event.id] || 0).toFixed(1)}%
+                            Uptime: {eventUptimeData[event.id].toFixed(1)}%
                           </span>
                         )}
                         
@@ -430,56 +430,10 @@ export default function LiveScraperPanel({ isAdmin }: LiveScraperPanelProps) {
                     {/* Uptime Percentage Column */}
                     <TableCell>
                       {(() => {
-                        console.log(`DEBUG EVENT DATA for ${event.id}:`, event);
+                        // Simplify: get uptime value from our state object (ensures consistent display)
+                        const uptimeValue = eventUptimeData[event.id];
                         
-                        // Convert from marketAvailability string directly if no uptime data available
-                        let uptimeValue: number | undefined;
-                        
-                        // Try to use direct uptime percentage first - make sure to handle both direct number and string formats
-                        if (event.uptimePercentage !== undefined) {
-                          if (typeof event.uptimePercentage === 'number' && !isNaN(event.uptimePercentage)) {
-                            uptimeValue = event.uptimePercentage;
-                            console.log(`Event ${event.id}: Using direct number uptime=${uptimeValue}`);
-                          } else if (typeof event.uptimePercentage === 'string') {
-                            // Handle string format if it comes through as a string
-                            try {
-                              const parsed = parseFloat(event.uptimePercentage);
-                              if (!isNaN(parsed)) {
-                                uptimeValue = parsed;
-                                console.log(`Event ${event.id}: Parsed string uptime=${uptimeValue}`);
-                              }
-                            } catch (e) {
-                              console.error(`Error parsing uptime percentage string for event ${event.id}:`, e);
-                            }
-                          }
-                        } 
-                        // Then try the cached uptime data
-                        else if (eventUptimeData[event.id] !== undefined) {
-                          uptimeValue = eventUptimeData[event.id];
-                          console.log(`Event ${event.id}: Using cached uptime=${uptimeValue}`);
-                        }
-                        // Fallback to marketAvailability string
-                        else if (event.marketAvailability) {
-                          try {
-                            const percentValue = parseFloat(event.marketAvailability.replace('%', ''));
-                            if (!isNaN(percentValue)) {
-                              uptimeValue = percentValue;
-                              console.log(`Event ${event.id}: Using marketAvailability uptime=${uptimeValue}`);
-                            }
-                          } catch (e) {
-                            console.error(`Error parsing marketAvailability for event ${event.id}:`, e);
-                          }
-                        }
-                        
-                        // For debugging
-                        console.log(`Event ${event.id} uptime summary: 
-                          calculated=${uptimeValue}, 
-                          event.uptimePercentage=${event.uptimePercentage} (${typeof event.uptimePercentage}), 
-                          marketAvailability=${event.marketAvailability},
-                          cached=${eventUptimeData[event.id]}
-                        `);
-                        
-                        if (uptimeValue !== undefined) {
+                        if (uptimeValue !== undefined && !isNaN(uptimeValue)) {
                           return (
                             <div className="flex items-center">
                               <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mr-2">
