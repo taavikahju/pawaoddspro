@@ -2,24 +2,26 @@
 const axios = require('axios');
 
 // Function to build the encoded query string with pagination parameters
-function buildQueryString(skip, take = 20) {
+function buildQueryString(skip, take = 50) {
   const query = {
     queries: [
       {
         query: {
           eventType: "LIVE",
-          categories: [2],
+          categories: [2],  // Soccer/Football category
           zones: {},
           hasOdds: true
         },
         view: {
-          marketTypes: ["3743"]
+          marketTypes: ["3743", "1", "2"]  // Include more market types to ensure we get all events
         },
         skip: skip,
         take: take
       }
     ]
   };
+  
+  process.stderr.write(`[DEBUG] Using query parameters: skip=${skip}, take=${take}\n`);
   
   // Encode the query in the same format as the original
   return encodeURIComponent(JSON.stringify(query));
@@ -151,16 +153,29 @@ async function processEvents(events) {
       const widget = event.widgets?.find(w => w.type === "SPORTRADAR");
       
       // Find the market with id "3743" (1X2 market)
-      const market = event.markets?.find(m => m.marketType?.id === "3743");
+      let market = event.markets?.find(m => m.marketType?.id === "3743");
+      
+      // If no 1X2 market, check for other market types
+      if (!market && event.markets?.length > 0) {
+        process.stderr.write(`[DEBUG] Event ${event.name} missing 1X2 market, checking alternative markets...\n`);
+        market = event.markets[0]; // Use the first available market as fallback
+        process.stderr.write(`[DEBUG] Using alternative market: ${market?.marketType?.name || 'unknown'}\n`);
+      }
       
       if (!widget || !market) {
-        // Check if we can still process this event for totalMarketCount=0
-        if (event.totalMarketCount === 0 && event.widgets && event.widgets.length > 0) {
+        // Try to salvage the event even without proper widget/market
+        if (event.widgets && event.widgets.length > 0) {
           const firstWidget = event.widgets[0];
           
-          process.stderr.write(`[INFO] Processing suspended event with totalMarketCount=0: ${event.name}\n`);
+          // Debug info about the missing market or widget
+          if (!widget) {
+            process.stderr.write(`[WARNING] Event ${event.name} missing SPORTRADAR widget, using first available widget\n`);
+          }
+          if (!market) {
+            process.stderr.write(`[WARNING] Event ${event.name} has no markets available, marking as suspended\n`);
+          }
           
-          // For totalMarketCount=0 events, we'll create a suspended event regardless of market details
+          // Handle events with missing markets/widgets as suspended
           processedEvents.push({
             eventId: firstWidget.id,
             country: event.region?.name || "Unknown",
@@ -173,15 +188,16 @@ async function processEvents(events) {
             start_time: event.startTime,
             gameMinute: event.scoreboard?.display?.minute || "1",
             suspended: true, // Explicitly mark as suspended
-            homeTeam: event.name.split(' vs ')[0] || event.participants?.[0]?.name || "Home",
-            awayTeam: event.name.split(' vs ')[1] || event.participants?.[1]?.name || "Away"
+            homeTeam: event.name.split(' - ')[0] || event.name.split(' vs ')[0] || event.participants?.[0]?.name || "Home",
+            awayTeam: event.name.split(' - ')[1] || event.name.split(' vs ')[1] || event.participants?.[1]?.name || "Away",
+            totalMarketCount: 0 // Force totalMarketCount to 0 for suspended events
           });
           
           // Skip the rest of processing for this event
           continue;
         }
         
-        // If not a totalMarketCount=0 event, skip if we don't have required data
+        // If we can't salvage this event at all, skip it
         continue;
       }
       
@@ -259,8 +275,9 @@ async function processEvents(events) {
         // Add extra fields needed for heartbeat
         gameMinute: event.scoreboard?.display?.minute || "1",
         suspended: isSuspended, // Use the all-0.0 check for suspension status
-        homeTeam: event.name.split(" vs ")[0],
-        awayTeam: event.name.split(" vs ")[1],
+        // Handle multiple possible team name separators (vs, -, etc.)
+        homeTeam: event.name.split(" vs ")[0] || event.name.split(" - ")[0] || event.participants?.[0]?.name || event.name,
+        awayTeam: event.name.split(" vs ")[1] || event.name.split(" - ")[1] || event.participants?.[1]?.name || "",
         totalMarketCount: totalMarketCount // Include the total market count for proper status tracking
       });
     } catch (e) {
