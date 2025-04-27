@@ -3,9 +3,14 @@
  * Scrapes live events every 10 seconds to track market availability
  */
 
-const axios = require('axios');
-const fs = require('fs');
-const path = require('path');
+import axios from 'axios';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // Store history of market availability
 let marketHistoryData = {};
