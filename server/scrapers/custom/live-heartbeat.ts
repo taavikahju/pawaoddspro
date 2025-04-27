@@ -1090,14 +1090,37 @@ export function getHeartbeatStatus(): HeartbeatState {
     });
   }
   
-  // List of Korean event IDs that we forcibly want to exclude
-  const koreanEventIds = ['11893816', '11893815', '11918154', '11893817', '11918156'];
+  // Function to detect problematic events that should be excluded
+  function shouldExcludeEvent(event: HeartbeatEvent): boolean {
+    // List of specific Korean event IDs we always want to exclude
+    const specificKoreanEventIds = ['11893816', '11893815', '11918154', '11893817', '11918156'];
+    
+    // Check if it's in the specific blacklist
+    if (specificKoreanEventIds.includes(event.id)) {
+      return true;
+    }
+    
+    // List of problematic Hong Kong event IDs that are showing minute "1" but should be finished
+    // These events had game minute 91 in the past
+    const hongKongFinishedEventIds = ['11709071', '11709070', '11709069'];
+    if (hongKongFinishedEventIds.includes(event.id)) {
+      return true;
+    }
+    
+    // Check specific event characteristics - any event showing minute "1" that has been suspended
+    // is likely a glitched finished event incorrectly showing as live again
+    if (event.gameMinute === '1' && (!event.currentlyAvailable || event.suspended)) {
+      return true;
+    }
+    
+    return false;
+  }
   
   // Create a new state object with the correct data
   // Filter out finished events and Korean events from the API response
   const filteredEvents = heartbeatState.events.filter(event => {
-    // Remove Korean events by ID, regardless of status
-    if (koreanEventIds.includes(event.id)) {
+    // Remove Korean events, regardless of status
+    if (isKoreanEvent(event)) {
       console.log(`🇰🇷 FORCE-REMOVING Korean event from API response: ${event.id} (${event.name})`);
       return false;
     }
@@ -1153,16 +1176,25 @@ function cleanupOldData(): void {
   const timestamp = Date.now();
   const oneDay = 24 * 60 * 60 * 1000; // 1 day in milliseconds
   
-  // Force remove Korean events before any other processing
-  const koreanEventIdsToForceRemove = ['11893816', '11893815', '11918154', '11893817', '11918156'];
+  // Function to identify Korean event IDs from the history data
+  function isKoreanEventId(eventId: string): boolean {
+    // All events with IDs starting with 117 or 118 (Korean leagues)
+    if (eventId.startsWith('117') || eventId.startsWith('118')) {
+      return true;
+    }
+    
+    // Specific Korean event IDs we know cause problems
+    const specificKoreanEventIds = ['11893816', '11893815', '11918154', '11893817', '11918156'];
+    return specificKoreanEventIds.includes(eventId);
+  }
   
   // Get lists of active, suspended, and finished events
   const suspendedEventIds = heartbeatState.events
-    .filter(e => (!e.currentlyAvailable || e.suspended) && !e.finished && !koreanEventIdsToForceRemove.includes(e.id))
+    .filter(e => (!e.currentlyAvailable || e.suspended) && !e.finished && !isKoreanEvent(e))
     .map(e => e.id);
   
   const finishedEventIds = heartbeatState.events
-    .filter(e => e.finished || koreanEventIdsToForceRemove.includes(e.id))
+    .filter(e => e.finished || isKoreanEvent(e))
     .map(e => e.id);
     
   if (suspendedEventIds.length > 0) {
@@ -1175,7 +1207,7 @@ function cleanupOldData(): void {
   }
   
   // Log Korean events that will be force-removed
-  const koreanEventsInState = heartbeatState.events.filter(e => koreanEventIdsToForceRemove.includes(e.id));
+  const koreanEventsInState = heartbeatState.events.filter(e => isKoreanEvent(e));
   if (koreanEventsInState.length > 0) {
     console.log(`CLEANUP: Force-removing ${koreanEventsInState.length} problematic Korean events:`);
     koreanEventsInState.forEach(e => console.log(`  - ${e.id}: ${e.name}`));
@@ -1183,7 +1215,7 @@ function cleanupOldData(): void {
   
   // Process each history
   for (const history of marketHistories) {
-    if (koreanEventIdsToForceRemove.includes(history.eventId)) {
+    if (isKoreanEventId(history.eventId)) {
       // Korean events - purge completely
       history.timestamps = [];
     } else if (finishedEventIds.includes(history.eventId)) {
@@ -1203,7 +1235,7 @@ function cleanupOldData(): void {
   const initialCount = marketHistories.length;
   const filteredHistories = marketHistories.filter(h => {
     // Remove Korean events completely
-    if (koreanEventIdsToForceRemove.includes(h.eventId)) {
+    if (isKoreanEventId(h.eventId)) {
       return false;
     }
     // Keep if it has timestamps OR is a suspended event
