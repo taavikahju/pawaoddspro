@@ -8,8 +8,9 @@ const { spawn } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 
-// Path to the enhanced scraper
-const scraperPath = path.join(__dirname, 'sporty_scraper_enhanced.cjs');
+// Path to the better scraper
+// We're now using the better scraper with the new factsCenter/pcUpcomingEvents API endpoint
+const scraperPath = path.join(__dirname, 'sporty_better_scraper.cjs');
 
 // Function to run the scraper and get its output
 async function runScraper() {
@@ -112,7 +113,7 @@ function processEvents(events) {
 // Main execution
 async function main() {
   try {
-    console.error('🔄 Running SportyBet enhanced scraper wrapper...');
+    console.error('🔄 Running SportyBet scraper with new factsCenter/pcUpcomingEvents API...');
     const events = await runScraper();
     
     if (!Array.isArray(events)) {
