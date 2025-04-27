@@ -25,6 +25,9 @@ const logger = {
 async function scrapeBetPawaGhana() {
   logger.log('Starting BetPawa Ghana 15-minute scraper (CommonJS version)');
   
+  // Add performance measurement
+  const startTime = performance.now();
+  
   // Define constants
   const DOMAIN = 'www.betpawa.com.gh';
   const BRAND = 'ghana';
@@ -234,9 +237,15 @@ async function scrapeBetPawaGhana() {
     
     logger.log(`Total upcoming events scraped: ${allEvents.length} from ${totalPages} pages`);
     
+    // Report performance metrics
+    const endTime = performance.now();
+    const totalTime = endTime - startTime;
+    logger.log(`⏱️ PERFORMANCE: BetPawa Ghana scraper completed in ${totalTime.toFixed(2)}ms (${(totalTime/1000).toFixed(2)} seconds)`);
+    
     // If running directly, print detailed stats
     if (require.main === module) {
       console.error(`BETPAWA GHANA STATS: Found ${allEvents.length} events across ${totalPages} pages`);
+      console.error(`⏱️ PERFORMANCE: BetPawa Ghana scraper completed in ${totalTime.toFixed(2)}ms (${(totalTime/1000).toFixed(2)} seconds)`);
     }
     
     return allEvents;

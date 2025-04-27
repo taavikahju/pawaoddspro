@@ -553,6 +553,9 @@ async function main() {
   try {
     console.error('🔄 Starting SportyBet direct API scraper...');
     
+    // Add performance measurement
+    const startTime = performance.now();
+    
     // Fetch the first page to get total pages
     const { events: firstPageEvents, totalPage } = await fetchPage(1);
     
@@ -714,6 +717,11 @@ async function main() {
       parsedEvents = generateFallbackEvents();
       console.error(`📊 Using ${parsedEvents.length} fallback events`);
     }
+    
+    // Report performance metrics
+    const endTime = performance.now();
+    const totalTime = endTime - startTime;
+    console.error(`⏱️ PERFORMANCE: SportyBet scraper completed in ${totalTime.toFixed(2)}ms (${(totalTime/1000).toFixed(2)} seconds)`);
     
     // Output the JSON data
     console.log(JSON.stringify(parsedEvents));

@@ -11,6 +11,9 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
   try {
     console.log('Processing and mapping events...');
     
+    // Add performance measurement
+    const startTime = performance.now();
+    
     // Get all bookmaker data
     const allBookmakerData = await storage.getAllBookmakersData();
     const bookmakerCodes = Object.keys(allBookmakerData);
@@ -330,6 +333,11 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     console.log(`Events removed: ${deletedCount}`);
     console.log(`Final events count: ${allEvents.length - deletedCount}`);
     console.log(`===========================================`);
+    
+    // Report performance metrics
+    const endTime = performance.now();
+    const totalTime = endTime - startTime;
+    console.log(`⏱️ PERFORMANCE: Data mapping completed in ${totalTime.toFixed(2)}ms (${(totalTime/1000).toFixed(2)} seconds)`);
   } catch (error) {
     console.error('Error processing and mapping events:', error);
     throw error;
