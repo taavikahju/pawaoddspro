@@ -742,24 +742,13 @@ export default function LiveHeartbeat() {
                           <div className="flex flex-col mb-1">
                             <div className="flex items-center justify-between mb-1">
                               <div className="flex items-center gap-2">
-                                {/* Uptime percentage - green text like screenshot */}
-                                {event.uptimePercentage !== undefined && (
-                                  <span className={`text-sm font-semibold ${
-                                    event.uptimePercentage >= 80 ? 'text-green-500 dark:text-green-400' :
-                                    event.uptimePercentage >= 50 ? 'text-amber-500 dark:text-amber-400' :
-                                    'text-red-500 dark:text-red-400'
-                                  }`}>
-                                    {event.uptimePercentage.toFixed(1)}%
-                                  </span>
-                                )}
-                                
-                                {/* Green dot */}
+                                {/* Green dot - first */}
                                 {event.isInPlay && (
-                                  <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse mx-1" 
+                                  <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse" 
                                     title="Live event" />
                                 )}
                                 
-                                {/* Status badge - SUSPENDED or Available */}
+                                {/* Status badge - second */}
                                 {activeTab === 'live' ? (
                                   <Badge 
                                     variant={event.currentlyAvailable ? 'outline' : 'destructive'}
@@ -775,20 +764,31 @@ export default function LiveHeartbeat() {
                                     {event.suspended ? 'SUSPENDED' : 'Completed'}
                                   </Badge>
                                 )}
+                                
+                                {/* Game minute - third */}
+                                {event.gameMinute && (
+                                  <Badge variant="secondary" className="text-[10px] h-5">
+                                    {event.gameMinute === 'HT' || (typeof event.gameMinute === 'string' && event.gameMinute.toLowerCase() === 'ht')
+                                      ? 'HT' 
+                                      : typeof event.gameMinute === 'string' && !event.gameMinute.includes("'")
+                                        ? `${event.gameMinute}'` 
+                                        : typeof event.gameMinute === 'number'
+                                          ? `${event.gameMinute}'`
+                                          : event.gameMinute}
+                                  </Badge>
+                                )}
+                                
+                                {/* Uptime percentage - fourth (last) */}
+                                {event.uptimePercentage !== undefined && (
+                                  <span className={`text-sm font-semibold ${
+                                    event.uptimePercentage >= 80 ? 'text-green-500 dark:text-green-400' :
+                                    event.uptimePercentage >= 50 ? 'text-amber-500 dark:text-amber-400' :
+                                    'text-red-500 dark:text-red-400'
+                                  }`}>
+                                    {event.uptimePercentage.toFixed(1)}%
+                                  </span>
+                                )}
                               </div>
-                              
-                              {/* Game minute pushed to the right side */}
-                              {event.gameMinute && (
-                                <Badge variant="secondary" className="text-[10px] h-5 ml-auto">
-                                  {event.gameMinute === 'HT' || (typeof event.gameMinute === 'string' && event.gameMinute.toLowerCase() === 'ht')
-                                    ? 'HT' 
-                                    : typeof event.gameMinute === 'string' && !event.gameMinute.includes("'")
-                                      ? `${event.gameMinute}'` 
-                                      : typeof event.gameMinute === 'number'
-                                        ? `${event.gameMinute}'`
-                                        : event.gameMinute}
-                                </Badge>
-                              )}
                             </div>
                             <div className="font-medium text-sm w-full" style={{wordWrap: 'break-word'}}>
                               {event.homeTeam && event.awayTeam 
