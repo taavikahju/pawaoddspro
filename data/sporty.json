@@ -3239,9 +3239,9 @@
     "date": "2025-05-03",
     "time": "11:30",
     "odds": {
-      "home": 3.23,
-      "draw": 3.74,
-      "away": 2.07
+      "home": 3.17,
+      "draw": 3.68,
+      "away": 2.11
     },
     "raw": {
       "id": "sporty-sr:match:51096925",
@@ -3251,15 +3251,15 @@
       "tournament": "Championship",
       "sport": "football",
       "start_time": "2025-05-03 11:30",
-      "home_odds": 3.23,
-      "draw_odds": 3.74,
-      "away_odds": 2.07,
+      "home_odds": 3.17,
+      "draw_odds": 3.68,
+      "away_odds": 2.11,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 3.23,
-        "draw": 3.74,
-        "away": 2.07
+        "home": 3.17,
+        "draw": 3.68,
+        "away": 2.11
       }
     }
   },
@@ -5032,40 +5032,6 @@
     }
   },
   {
-    "id": "51103725",
-    "eventId": "51103725",
-    "teams": "Real Zaragoza - SD Huesca",
-    "league": "",
-    "sport": "football",
-    "country": "Ghana",
-    "date": "2025-04-27",
-    "time": "19:00",
-    "odds": {
-      "home": 1.88,
-      "draw": 3.1,
-      "away": 4.8
-    },
-    "raw": {
-      "id": "sporty-sr:match:51103725",
-      "eventId": "51103725",
-      "event": "Real Zaragoza - SD Huesca",
-      "country": "Ghana",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 19:00",
-      "home_odds": 1.88,
-      "draw_odds": 3.1,
-      "away_odds": 4.8,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 1.88,
-        "draw": 3.1,
-        "away": 4.8
-      }
-    }
-  },
-  {
     "id": "51103709",
     "eventId": "51103709",
     "teams": "UD Almeria - Racing Club de Ferrol",
@@ -6800,6 +6766,40 @@
     }
   },
   {
+    "id": "52130767",
+    "eventId": "52130767",
+    "teams": "Central Coast Mariners - Brisbane Roar FC",
+    "league": "",
+    "sport": "football",
+    "country": "Europe",
+    "date": "2025-05-02",
+    "time": "09:35",
+    "odds": {
+      "home": 2.8,
+      "draw": 3.7,
+      "away": 2.3
+    },
+    "raw": {
+      "id": "sporty-sr:match:52130767",
+      "eventId": "52130767",
+      "event": "Central Coast Mariners - Brisbane Roar FC",
+      "country": "Europe",
+      "tournament": "",
+      "sport": "football",
+      "start_time": "2025-05-02 09:35",
+      "home_odds": 2.8,
+      "draw_odds": 3.7,
+      "away_odds": 2.3,
+      "bookmaker": "sporty",
+      "region": "gh",
+      "odds": {
+        "home": 2.8,
+        "draw": 3.7,
+        "away": 2.3
+      }
+    }
+  },
+  {
     "id": "52130769",
     "eventId": "52130769",
     "teams": "Melbourne City FC - Sydney FC",
@@ -7170,40 +7170,6 @@
         "home": 1.84,
         "draw": 3.75,
         "away": 4
-      }
-    }
-  },
-  {
-    "id": "58052495",
-    "eventId": "58052495",
-    "teams": "CR Flamengo RJ - SC Corinthians SP",
-    "league": "",
-    "sport": "football",
-    "country": "Brazil",
-    "date": "2025-04-27",
-    "time": "19:00",
-    "odds": {
-      "home": 1.48,
-      "draw": 4.25,
-      "away": 7.2
-    },
-    "raw": {
-      "id": "sporty-sr:match:58052495",
-      "eventId": "58052495",
-      "event": "CR Flamengo RJ - SC Corinthians SP",
-      "country": "Brazil",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 19:00",
-      "home_odds": 1.48,
-      "draw_odds": 4.25,
-      "away_odds": 7.2,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 1.48,
-        "draw": 4.25,
-        "away": 7.2
       }
     }
   },
@@ -8500,40 +8466,6 @@
     }
   },
   {
-    "id": "56690537",
-    "eventId": "56690537",
-    "teams": "Minnesota United FC - Vancouver Whitecaps FC",
-    "league": "",
-    "sport": "football",
-    "country": "Europe",
-    "date": "2025-04-27",
-    "time": "19:00",
-    "odds": {
-      "home": 1.65,
-      "draw": 4.08,
-      "away": 5.54
-    },
-    "raw": {
-      "id": "sporty-sr:match:56690537",
-      "eventId": "56690537",
-      "event": "Minnesota United FC - Vancouver Whitecaps FC",
-      "country": "Europe",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 19:00",
-      "home_odds": 1.65,
-      "draw_odds": 4.08,
-      "away_odds": 5.54,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 1.65,
-        "draw": 4.08,
-        "away": 5.54
-      }
-    }
-  },
-  {
     "id": "56690531",
     "eventId": "56690531",
     "teams": "Inter Miami CF - FC Dallas",
@@ -9121,9 +9053,9 @@
     "date": "2025-05-04",
     "time": "23:00",
     "odds": {
-      "home": 2.04,
-      "draw": 3.62,
-      "away": 3.4
+      "home": 2.13,
+      "draw": 3.42,
+      "away": 3.35
     },
     "raw": {
       "id": "sporty-sr:match:56690575",
@@ -9133,15 +9065,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-05-04 23:00",
-      "home_odds": 2.04,
-      "draw_odds": 3.62,
-      "away_odds": 3.4,
+      "home_odds": 2.13,
+      "draw_odds": 3.42,
+      "away_odds": 3.35,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 2.04,
-        "draw": 3.62,
-        "away": 3.4
+        "home": 2.13,
+        "draw": 3.42,
+        "away": 3.35
       }
     }
   },
@@ -10200,40 +10132,6 @@
     }
   },
   {
-    "id": "56743125",
-    "eventId": "56743125",
-    "teams": "Defensa y Justicia - Racing Club Avellaneda",
-    "league": "",
-    "sport": "football",
-    "country": "Argentina",
-    "date": "2025-04-28",
-    "time": "22:30",
-    "odds": {
-      "home": 2.9,
-      "draw": 3.2,
-      "away": 2.25
-    },
-    "raw": {
-      "id": "sporty-sr:match:56743125",
-      "eventId": "56743125",
-      "event": "Defensa y Justicia - Racing Club Avellaneda",
-      "country": "Argentina",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-28 22:30",
-      "home_odds": 2.9,
-      "draw_odds": 3.2,
-      "away_odds": 2.25,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 2.9,
-        "draw": 3.2,
-        "away": 2.25
-      }
-    }
-  },
-  {
     "id": "56743117",
     "eventId": "56743117",
     "teams": "Estudiantes de La Plata - CA Tigre",
@@ -11084,40 +10982,6 @@
     }
   },
   {
-    "id": "58314781",
-    "eventId": "58314781",
-    "teams": "Athletic Club Sjdr MG - Volta Redonda FC RJ",
-    "league": "",
-    "sport": "football",
-    "country": "Europe",
-    "date": "2025-04-27",
-    "time": "19:00",
-    "odds": {
-      "home": 1.9,
-      "draw": 3.5,
-      "away": 4.1
-    },
-    "raw": {
-      "id": "sporty-sr:match:58314781",
-      "eventId": "58314781",
-      "event": "Athletic Club Sjdr MG - Volta Redonda FC RJ",
-      "country": "Europe",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 19:00",
-      "home_odds": 1.9,
-      "draw_odds": 3.5,
-      "away_odds": 4.1,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 1.9,
-        "draw": 3.5,
-        "away": 4.1
-      }
-    }
-  },
-  {
     "id": "58314779",
     "eventId": "58314779",
     "teams": "Amazonas FC AM - AC Goianiense GO",
@@ -11943,9 +11807,9 @@
     "date": "2025-04-30",
     "time": "22:00",
     "odds": {
-      "home": 1.24,
-      "draw": 5.6,
-      "away": 13.5
+      "home": 1.23,
+      "draw": 5.7,
+      "away": 14
     },
     "raw": {
       "id": "sporty-sr:match:59752810",
@@ -11955,15 +11819,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-04-30 22:00",
-      "home_odds": 1.24,
-      "draw_odds": 5.6,
-      "away_odds": 13.5,
+      "home_odds": 1.23,
+      "draw_odds": 5.7,
+      "away_odds": 14,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 1.24,
-        "draw": 5.6,
-        "away": 13.5
+        "home": 1.23,
+        "draw": 5.7,
+        "away": 14
       }
     }
   },
@@ -13668,40 +13532,6 @@
     }
   },
   {
-    "id": "57310891",
-    "eventId": "57310891",
-    "teams": "Independiente Santa Fe - Boyaca Chico FC",
-    "league": "",
-    "sport": "football",
-    "country": "Argentina",
-    "date": "2025-04-27",
-    "time": "19:00",
-    "odds": {
-      "home": 1.33,
-      "draw": 4.7,
-      "away": 9.5
-    },
-    "raw": {
-      "id": "sporty-sr:match:57310891",
-      "eventId": "57310891",
-      "event": "Independiente Santa Fe - Boyaca Chico FC",
-      "country": "Argentina",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 19:00",
-      "home_odds": 1.33,
-      "draw_odds": 4.7,
-      "away_odds": 9.5,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 1.33,
-        "draw": 4.7,
-        "away": 9.5
-      }
-    }
-  },
-  {
     "id": "57310887",
     "eventId": "57310887",
     "teams": "Fortaleza FC - Independiente Medellin",
@@ -13868,40 +13698,6 @@
         "home": 3.9,
         "draw": 3,
         "away": 2.05
-      }
-    }
-  },
-  {
-    "id": "57380237",
-    "eventId": "57380237",
-    "teams": "CD Palestino - Universidad de Chile",
-    "league": "",
-    "sport": "football",
-    "country": "Ghana",
-    "date": "2025-04-27",
-    "time": "19:00",
-    "odds": {
-      "home": 3.9,
-      "draw": 3.6,
-      "away": 1.87
-    },
-    "raw": {
-      "id": "sporty-sr:match:57380237",
-      "eventId": "57380237",
-      "event": "CD Palestino - Universidad de Chile",
-      "country": "Ghana",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 19:00",
-      "home_odds": 3.9,
-      "draw_odds": 3.6,
-      "away_odds": 1.87,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 3.9,
-        "draw": 3.6,
-        "away": 1.87
       }
     }
   },
@@ -17000,6 +16796,40 @@
     }
   },
   {
+    "id": "60010539",
+    "eventId": "60010539",
+    "teams": "PFC Lokomotiv Plovdiv - FC Lokomotiv 1929 Sofia",
+    "league": "",
+    "sport": "football",
+    "country": "Europe",
+    "date": "2025-05-03",
+    "time": "18:00",
+    "odds": {
+      "home": 2,
+      "draw": 3.33,
+      "away": 3.4
+    },
+    "raw": {
+      "id": "sporty-sr:match:60010539",
+      "eventId": "60010539",
+      "event": "PFC Lokomotiv Plovdiv - FC Lokomotiv 1929 Sofia",
+      "country": "Europe",
+      "tournament": "",
+      "sport": "football",
+      "start_time": "2025-05-03 18:00",
+      "home_odds": 2,
+      "draw_odds": 3.33,
+      "away_odds": 3.4,
+      "bookmaker": "sporty",
+      "region": "gh",
+      "odds": {
+        "home": 2,
+        "draw": 3.33,
+        "away": 3.4
+      }
+    }
+  },
+  {
     "id": "60053811",
     "eventId": "60053811",
     "teams": "PFC Slavia Sofia - FC CSKA 1948",
@@ -18186,40 +18016,6 @@
         "home": 1.75,
         "draw": 3.9,
         "away": 4.1
-      }
-    }
-  },
-  {
-    "id": "57822501",
-    "eventId": "57822501",
-    "teams": "Columbus Crew 2 - Chattanooga FC",
-    "league": "",
-    "sport": "football",
-    "country": "Europe",
-    "date": "2025-04-27",
-    "time": "19:00",
-    "odds": {
-      "home": 2.6,
-      "draw": 3.7,
-      "away": 2.4
-    },
-    "raw": {
-      "id": "sporty-sr:match:57822501",
-      "eventId": "57822501",
-      "event": "Columbus Crew 2 - Chattanooga FC",
-      "country": "Europe",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 19:00",
-      "home_odds": 2.6,
-      "draw_odds": 3.7,
-      "away_odds": 2.4,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 2.6,
-        "draw": 3.7,
-        "away": 2.4
       }
     }
   },
@@ -20400,40 +20196,6 @@
     }
   },
   {
-    "id": "51923287",
-    "eventId": "51923287",
-    "teams": "AC Reggiana 1919 - Venezia FC",
-    "league": "",
-    "sport": "football",
-    "country": "Europe",
-    "date": "2025-04-28",
-    "time": "13:00",
-    "odds": {
-      "home": 2.95,
-      "draw": 3.8,
-      "away": 2
-    },
-    "raw": {
-      "id": "sporty-sr:match:51923287",
-      "eventId": "51923287",
-      "event": "AC Reggiana 1919 - Venezia FC",
-      "country": "Europe",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-28 13:00",
-      "home_odds": 2.95,
-      "draw_odds": 3.8,
-      "away_odds": 2,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 2.95,
-        "draw": 3.8,
-        "away": 2
-      }
-    }
-  },
-  {
     "id": "51923291",
     "eventId": "51923291",
     "teams": "Spal - Parma Calcio 1913",
@@ -20570,74 +20332,6 @@
     }
   },
   {
-    "id": "59295991",
-    "eventId": "59295991",
-    "teams": "Asociacion Deportiva Tarma - Cusco FC",
-    "league": "",
-    "sport": "football",
-    "country": "Europe",
-    "date": "2025-04-28",
-    "time": "20:30",
-    "odds": {
-      "home": 1.98,
-      "draw": 3.4,
-      "away": 3.6
-    },
-    "raw": {
-      "id": "sporty-sr:match:59295991",
-      "eventId": "59295991",
-      "event": "Asociacion Deportiva Tarma - Cusco FC",
-      "country": "Europe",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-28 20:30",
-      "home_odds": 1.98,
-      "draw_odds": 3.4,
-      "away_odds": 3.6,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 1.98,
-        "draw": 3.4,
-        "away": 3.6
-      }
-    }
-  },
-  {
-    "id": "59295997",
-    "eventId": "59295997",
-    "teams": "CS Cienciano - Sport Huancayo",
-    "league": "",
-    "sport": "football",
-    "country": "Ghana",
-    "date": "2025-04-29",
-    "time": "00:00",
-    "odds": {
-      "home": 2.1,
-      "draw": 3.4,
-      "away": 3.2
-    },
-    "raw": {
-      "id": "sporty-sr:match:59295997",
-      "eventId": "59295997",
-      "event": "CS Cienciano - Sport Huancayo",
-      "country": "Ghana",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-29 00:00",
-      "home_odds": 2.1,
-      "draw_odds": 3.4,
-      "away_odds": 3.2,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 2.1,
-        "draw": 3.4,
-        "away": 3.2
-      }
-    }
-  },
-  {
     "id": "52325089",
     "eventId": "52325089",
     "teams": "Arema FC - Persebaya Surabaya",
@@ -20693,6 +20387,74 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-04-28 12:00",
+      "home_odds": 2.1,
+      "draw_odds": 3.4,
+      "away_odds": 3.2,
+      "bookmaker": "sporty",
+      "region": "gh",
+      "odds": {
+        "home": 2.1,
+        "draw": 3.4,
+        "away": 3.2
+      }
+    }
+  },
+  {
+    "id": "59295991",
+    "eventId": "59295991",
+    "teams": "Asociacion Deportiva Tarma - Cusco FC",
+    "league": "",
+    "sport": "football",
+    "country": "Europe",
+    "date": "2025-04-28",
+    "time": "20:30",
+    "odds": {
+      "home": 1.98,
+      "draw": 3.4,
+      "away": 3.6
+    },
+    "raw": {
+      "id": "sporty-sr:match:59295991",
+      "eventId": "59295991",
+      "event": "Asociacion Deportiva Tarma - Cusco FC",
+      "country": "Europe",
+      "tournament": "",
+      "sport": "football",
+      "start_time": "2025-04-28 20:30",
+      "home_odds": 1.98,
+      "draw_odds": 3.4,
+      "away_odds": 3.6,
+      "bookmaker": "sporty",
+      "region": "gh",
+      "odds": {
+        "home": 1.98,
+        "draw": 3.4,
+        "away": 3.6
+      }
+    }
+  },
+  {
+    "id": "59295997",
+    "eventId": "59295997",
+    "teams": "CS Cienciano - Sport Huancayo",
+    "league": "",
+    "sport": "football",
+    "country": "Ghana",
+    "date": "2025-04-29",
+    "time": "00:00",
+    "odds": {
+      "home": 2.1,
+      "draw": 3.4,
+      "away": 3.2
+    },
+    "raw": {
+      "id": "sporty-sr:match:59295997",
+      "eventId": "59295997",
+      "event": "CS Cienciano - Sport Huancayo",
+      "country": "Ghana",
+      "tournament": "",
+      "sport": "football",
+      "start_time": "2025-04-29 00:00",
       "home_odds": 2.1,
       "draw_odds": 3.4,
       "away_odds": 3.2,
@@ -20906,40 +20668,6 @@
         "home": 1.83,
         "draw": 3.5,
         "away": 3.8
-      }
-    }
-  },
-  {
-    "id": "57866849",
-    "eventId": "57866849",
-    "teams": "Union San Felipe - Deportes Magallanes",
-    "league": "",
-    "sport": "football",
-    "country": "Ghana",
-    "date": "2025-04-27",
-    "time": "19:00",
-    "odds": {
-      "home": 2.7,
-      "draw": 3,
-      "away": 2.6
-    },
-    "raw": {
-      "id": "sporty-sr:match:57866849",
-      "eventId": "57866849",
-      "event": "Union San Felipe - Deportes Magallanes",
-      "country": "Ghana",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 19:00",
-      "home_odds": 2.7,
-      "draw_odds": 3,
-      "away_odds": 2.6,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 2.7,
-        "draw": 3,
-        "away": 2.6
       }
     }
   },
@@ -22585,9 +22313,9 @@
     "date": "2025-05-03",
     "time": "19:00",
     "odds": {
-      "home": 1.56,
-      "draw": 3.9,
-      "away": 5.2
+      "home": 1.52,
+      "draw": 4,
+      "away": 5.5
     },
     "raw": {
       "id": "sporty-sr:match:57381277",
@@ -22597,15 +22325,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-05-03 19:00",
-      "home_odds": 1.56,
-      "draw_odds": 3.9,
-      "away_odds": 5.2,
+      "home_odds": 1.52,
+      "draw_odds": 4,
+      "away_odds": 5.5,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 1.56,
-        "draw": 3.9,
-        "away": 5.2
+        "home": 1.52,
+        "draw": 4,
+        "away": 5.5
       }
     }
   },
@@ -22619,9 +22347,9 @@
     "date": "2025-05-04",
     "time": "00:00",
     "odds": {
-      "home": 1.88,
-      "draw": 3.3,
-      "away": 3.9
+      "home": 1.81,
+      "draw": 3.5,
+      "away": 4
     },
     "raw": {
       "id": "sporty-sr:match:57381281",
@@ -22631,15 +22359,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-05-04 00:00",
-      "home_odds": 1.88,
-      "draw_odds": 3.3,
-      "away_odds": 3.9,
+      "home_odds": 1.81,
+      "draw_odds": 3.5,
+      "away_odds": 4,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 1.88,
-        "draw": 3.3,
-        "away": 3.9
+        "home": 1.81,
+        "draw": 3.5,
+        "away": 4
       }
     }
   },
@@ -22687,9 +22415,9 @@
     "date": "2025-04-30",
     "time": "18:45",
     "odds": {
-      "home": 1.77,
-      "draw": 3.6,
-      "away": 4.2
+      "home": 1.97,
+      "draw": 3.4,
+      "away": 3.5
     },
     "raw": {
       "id": "sporty-sr:match:60184535",
@@ -22699,15 +22427,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-04-30 18:45",
-      "home_odds": 1.77,
-      "draw_odds": 3.6,
-      "away_odds": 4.2,
+      "home_odds": 1.97,
+      "draw_odds": 3.4,
+      "away_odds": 3.5,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 1.77,
-        "draw": 3.6,
-        "away": 4.2
+        "home": 1.97,
+        "draw": 3.4,
+        "away": 3.5
       }
     }
   },
@@ -22946,74 +22674,6 @@
         "home": 3.1,
         "draw": 3.2,
         "away": 2.25
-      }
-    }
-  },
-  {
-    "id": "57251295",
-    "eventId": "57251295",
-    "teams": "Gimnasia Y Esgrima Mendoza - Nueva Chicago",
-    "league": "",
-    "sport": "football",
-    "country": "Ghana",
-    "date": "2025-04-27",
-    "time": "19:00",
-    "odds": {
-      "home": 1.54,
-      "draw": 3.6,
-      "away": 6.7
-    },
-    "raw": {
-      "id": "sporty-sr:match:57251295",
-      "eventId": "57251295",
-      "event": "Gimnasia Y Esgrima Mendoza - Nueva Chicago",
-      "country": "Ghana",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 19:00",
-      "home_odds": 1.54,
-      "draw_odds": 3.6,
-      "away_odds": 6.7,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 1.54,
-        "draw": 3.6,
-        "away": 6.7
-      }
-    }
-  },
-  {
-    "id": "57250679",
-    "eventId": "57250679",
-    "teams": "Racing de Cordoba - Ferro Carril Oeste",
-    "league": "",
-    "sport": "football",
-    "country": "Argentina",
-    "date": "2025-04-27",
-    "time": "19:00",
-    "odds": {
-      "home": 2.2,
-      "draw": 3,
-      "away": 3.5
-    },
-    "raw": {
-      "id": "sporty-sr:match:57250679",
-      "eventId": "57250679",
-      "event": "Racing de Cordoba - Ferro Carril Oeste",
-      "country": "Argentina",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 19:00",
-      "home_odds": 2.2,
-      "draw_odds": 3,
-      "away_odds": 3.5,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 2.2,
-        "draw": 3,
-        "away": 3.5
       }
     }
   },
@@ -24306,142 +23966,6 @@
         "home": 1.84,
         "draw": 3.5,
         "away": 4.1
-      }
-    }
-  },
-  {
-    "id": "59922011",
-    "eventId": "59922011",
-    "teams": "CA Youssoufia Berrechid - Rapide Oued Zem",
-    "league": "",
-    "sport": "football",
-    "country": "Ghana",
-    "date": "2025-04-27",
-    "time": "19:00",
-    "odds": {
-      "home": 2.5,
-      "draw": 2.5,
-      "away": 3.3
-    },
-    "raw": {
-      "id": "sporty-sr:match:59922011",
-      "eventId": "59922011",
-      "event": "CA Youssoufia Berrechid - Rapide Oued Zem",
-      "country": "Ghana",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 19:00",
-      "home_odds": 2.5,
-      "draw_odds": 2.5,
-      "away_odds": 3.3,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 2.5,
-        "draw": 2.5,
-        "away": 3.3
-      }
-    }
-  },
-  {
-    "id": "59922009",
-    "eventId": "59922009",
-    "teams": "Mouloudia Club of Oujda - KAC Kenitra",
-    "league": "",
-    "sport": "football",
-    "country": "Ghana",
-    "date": "2025-04-27",
-    "time": "19:00",
-    "odds": {
-      "home": 2.05,
-      "draw": 2.8,
-      "away": 3.9
-    },
-    "raw": {
-      "id": "sporty-sr:match:59922009",
-      "eventId": "59922009",
-      "event": "Mouloudia Club of Oujda - KAC Kenitra",
-      "country": "Ghana",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 19:00",
-      "home_odds": 2.05,
-      "draw_odds": 2.8,
-      "away_odds": 3.9,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 2.05,
-        "draw": 2.8,
-        "away": 3.9
-      }
-    }
-  },
-  {
-    "id": "59922013",
-    "eventId": "59922013",
-    "teams": "Olympique Club of Khouribga - Union Sportive Musulmane Oujda",
-    "league": "",
-    "sport": "football",
-    "country": "Ghana",
-    "date": "2025-04-27",
-    "time": "19:00",
-    "odds": {
-      "home": 2.1,
-      "draw": 2.75,
-      "away": 3.9
-    },
-    "raw": {
-      "id": "sporty-sr:match:59922013",
-      "eventId": "59922013",
-      "event": "Olympique Club of Khouribga - Union Sportive Musulmane Oujda",
-      "country": "Ghana",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 19:00",
-      "home_odds": 2.1,
-      "draw_odds": 2.75,
-      "away_odds": 3.9,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 2.1,
-        "draw": 2.75,
-        "away": 3.9
-      }
-    }
-  },
-  {
-    "id": "59922015",
-    "eventId": "59922015",
-    "teams": "Wydad Fes - Racing Athletic Club Casablanca",
-    "league": "",
-    "sport": "football",
-    "country": "Argentina",
-    "date": "2025-04-27",
-    "time": "19:00",
-    "odds": {
-      "home": 2.05,
-      "draw": 2.95,
-      "away": 3.6
-    },
-    "raw": {
-      "id": "sporty-sr:match:59922015",
-      "eventId": "59922015",
-      "event": "Wydad Fes - Racing Athletic Club Casablanca",
-      "country": "Argentina",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 19:00",
-      "home_odds": 2.05,
-      "draw_odds": 2.95,
-      "away_odds": 3.6,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 2.05,
-        "draw": 2.95,
-        "away": 3.6
       }
     }
   },
@@ -26087,9 +25611,9 @@
     "date": "2025-04-30",
     "time": "16:00",
     "odds": {
-      "home": 2.07,
-      "draw": 3.92,
-      "away": 3.72
+      "home": 2.3,
+      "draw": 3.65,
+      "away": 4.49
     },
     "raw": {
       "id": "sporty-sr:match:58954877",
@@ -26099,15 +25623,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-04-30 16:00",
-      "home_odds": 2.07,
-      "draw_odds": 3.92,
-      "away_odds": 3.72,
+      "home_odds": 2.3,
+      "draw_odds": 3.65,
+      "away_odds": 4.49,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 2.07,
-        "draw": 3.92,
-        "away": 3.72
+        "home": 2.3,
+        "draw": 3.65,
+        "away": 4.49
       }
     }
   },
@@ -26584,40 +26108,6 @@
         "home": 1.86,
         "draw": 3.2,
         "away": 4.3
-      }
-    }
-  },
-  {
-    "id": "60093455",
-    "eventId": "60093455",
-    "teams": "Bolivar SC - CS Maritimo de la Guaira",
-    "league": "",
-    "sport": "football",
-    "country": "Ghana",
-    "date": "2025-04-27",
-    "time": "19:00",
-    "odds": {
-      "home": 3.2,
-      "draw": 3.1,
-      "away": 2.2
-    },
-    "raw": {
-      "id": "sporty-sr:match:60093455",
-      "eventId": "60093455",
-      "event": "Bolivar SC - CS Maritimo de la Guaira",
-      "country": "Ghana",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 19:00",
-      "home_odds": 3.2,
-      "draw_odds": 3.1,
-      "away_odds": 2.2,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 3.2,
-        "draw": 3.1,
-        "away": 2.2
       }
     }
   },
@@ -28909,9 +28399,9 @@
     "date": "2025-04-28",
     "time": "17:00",
     "odds": {
-      "home": 2.25,
-      "draw": 3.9,
-      "away": 2.5
+      "home": 2.1,
+      "draw": 3.8,
+      "away": 2.8
     },
     "raw": {
       "id": "sporty-sr:match:57355093",
@@ -28921,15 +28411,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-04-28 17:00",
-      "home_odds": 2.25,
-      "draw_odds": 3.9,
-      "away_odds": 2.5,
+      "home_odds": 2.1,
+      "draw_odds": 3.8,
+      "away_odds": 2.8,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 2.25,
-        "draw": 3.9,
-        "away": 2.5
+        "home": 2.1,
+        "draw": 3.8,
+        "away": 2.8
       }
     }
   },
@@ -29274,40 +28764,6 @@
     }
   },
   {
-    "id": "59722614",
-    "eventId": "59722614",
-    "teams": "CA Nacional Potosi - Jorge Wilstermann",
-    "league": "",
-    "sport": "football",
-    "country": "Ghana",
-    "date": "2025-04-27",
-    "time": "19:00",
-    "odds": {
-      "home": 1.45,
-      "draw": 4.4,
-      "away": 6.1
-    },
-    "raw": {
-      "id": "sporty-sr:match:59722614",
-      "eventId": "59722614",
-      "event": "CA Nacional Potosi - Jorge Wilstermann",
-      "country": "Ghana",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 19:00",
-      "home_odds": 1.45,
-      "draw_odds": 4.4,
-      "away_odds": 6.1,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 1.45,
-        "draw": 4.4,
-        "away": 6.1
-      }
-    }
-  },
-  {
     "id": "59722618",
     "eventId": "59722618",
     "teams": "FC Universitario de Vinto - Always Ready",
@@ -29508,40 +28964,6 @@
         "home": 2.7,
         "draw": 3.33,
         "away": 2.45
-      }
-    }
-  },
-  {
-    "id": "58474397",
-    "eventId": "58474397",
-    "teams": "Guarany de Bage FC - CN Marcilio Dias SC",
-    "league": "",
-    "sport": "football",
-    "country": "Europe",
-    "date": "2025-04-27",
-    "time": "19:00",
-    "odds": {
-      "home": 2.2,
-      "draw": 2.9,
-      "away": 3.6
-    },
-    "raw": {
-      "id": "sporty-sr:match:58474397",
-      "eventId": "58474397",
-      "event": "Guarany de Bage FC - CN Marcilio Dias SC",
-      "country": "Europe",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 19:00",
-      "home_odds": 2.2,
-      "draw_odds": 2.9,
-      "away_odds": 3.6,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 2.2,
-        "draw": 2.9,
-        "away": 3.6
       }
     }
   },
@@ -30133,9 +29555,9 @@
     "date": "2025-04-30",
     "time": "17:30",
     "odds": {
-      "home": 1.67,
-      "draw": 3.33,
-      "away": 5.5
+      "home": 1.7,
+      "draw": 3.25,
+      "away": 5.4
     },
     "raw": {
       "id": "sporty-sr:match:60045401",
@@ -30145,15 +29567,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-04-30 17:30",
-      "home_odds": 1.67,
-      "draw_odds": 3.33,
-      "away_odds": 5.5,
+      "home_odds": 1.7,
+      "draw_odds": 3.25,
+      "away_odds": 5.4,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 1.67,
-        "draw": 3.33,
-        "away": 5.5
+        "home": 1.7,
+        "draw": 3.25,
+        "away": 5.4
       }
     }
   },
@@ -31586,40 +31008,6 @@
     }
   },
   {
-    "id": "58796773",
-    "eventId": "58796773",
-    "teams": "3B Sport AM - Real Brasilia FC DF",
-    "league": "",
-    "sport": "football",
-    "country": "Europe",
-    "date": "2025-04-27",
-    "time": "19:00",
-    "odds": {
-      "home": 3.3,
-      "draw": 3.75,
-      "away": 1.78
-    },
-    "raw": {
-      "id": "sporty-sr:match:58796773",
-      "eventId": "58796773",
-      "event": "3B Sport AM - Real Brasilia FC DF",
-      "country": "Europe",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 19:00",
-      "home_odds": 3.3,
-      "draw_odds": 3.75,
-      "away_odds": 1.78,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 3.3,
-        "draw": 3.75,
-        "away": 1.78
-      }
-    }
-  },
-  {
     "id": "58796775",
     "eventId": "58796775",
     "teams": "Gremio RS - SC Internacional RS",
@@ -31926,40 +31314,6 @@
     }
   },
   {
-    "id": "59456023",
-    "eventId": "59456023",
-    "teams": "Minas Brasilia DF - CR Vasco da Gama RJ",
-    "league": "",
-    "sport": "football",
-    "country": "Ghana",
-    "date": "2025-04-27",
-    "time": "19:00",
-    "odds": {
-      "home": 2.8,
-      "draw": 3.33,
-      "away": 2.1
-    },
-    "raw": {
-      "id": "sporty-sr:match:59456023",
-      "eventId": "59456023",
-      "event": "Minas Brasilia DF - CR Vasco da Gama RJ",
-      "country": "Ghana",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 19:00",
-      "home_odds": 2.8,
-      "draw_odds": 3.33,
-      "away_odds": 2.1,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 2.8,
-        "draw": 3.33,
-        "away": 2.1
-      }
-    }
-  },
-  {
     "id": "59456021",
     "eventId": "59456021",
     "teams": "Botafogo Fr RJ - Avai FC SC",
@@ -32071,9 +31425,9 @@
     "date": "2025-04-28",
     "time": "17:30",
     "odds": {
-      "home": 1.4,
-      "draw": 4.7,
-      "away": 5.9
+      "home": 1.42,
+      "draw": 4.5,
+      "away": 5.8
     },
     "raw": {
       "id": "sporty-sr:match:60003279",
@@ -32083,15 +31437,15 @@
       "tournament": "",
       "sport": "football",
       "start_time": "2025-04-28 17:30",
-      "home_odds": 1.4,
-      "draw_odds": 4.7,
-      "away_odds": 5.9,
+      "home_odds": 1.42,
+      "draw_odds": 4.5,
+      "away_odds": 5.8,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 1.4,
-        "draw": 4.7,
-        "away": 5.9
+        "home": 1.42,
+        "draw": 4.5,
+        "away": 5.8
       }
     }
   },
@@ -32640,40 +31994,6 @@
     }
   },
   {
-    "id": "60076455",
-    "eventId": "60076455",
-    "teams": "Rio Branco FC ES - SC Brasil Capixaba ES",
-    "league": "",
-    "sport": "football",
-    "country": "Europe",
-    "date": "2025-04-27",
-    "time": "19:00",
-    "odds": {
-      "home": 1.12,
-      "draw": 8.1,
-      "away": 12.5
-    },
-    "raw": {
-      "id": "sporty-sr:match:60076455",
-      "eventId": "60076455",
-      "event": "Rio Branco FC ES - SC Brasil Capixaba ES",
-      "country": "Europe",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 19:00",
-      "home_odds": 1.12,
-      "draw_odds": 8.1,
-      "away_odds": 12.5,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 1.12,
-        "draw": 8.1,
-        "away": 12.5
-      }
-    }
-  },
-  {
     "id": "59986985",
     "eventId": "59986985",
     "teams": "Lobos Ulmx - CF Correcaminos Uat II",
@@ -32912,36 +32232,36 @@
     }
   },
   {
-    "id": "58184579",
-    "eventId": "58184579",
-    "teams": "General Velasquez - Deportes Linares",
+    "id": "60129789",
+    "eventId": "60129789",
+    "teams": "CD Inca - Zacatecoluca FC",
     "league": "",
     "sport": "football",
-    "country": "Ghana",
+    "country": "Europe",
     "date": "2025-04-27",
-    "time": "19:00",
+    "time": "21:00",
     "odds": {
-      "home": 2.3,
-      "draw": 3.1,
-      "away": 2.9
+      "home": 2.2,
+      "draw": 3.2,
+      "away": 2.7
     },
     "raw": {
-      "id": "sporty-sr:match:58184579",
-      "eventId": "58184579",
-      "event": "General Velasquez - Deportes Linares",
-      "country": "Ghana",
+      "id": "sporty-sr:match:60129789",
+      "eventId": "60129789",
+      "event": "CD Inca - Zacatecoluca FC",
+      "country": "Europe",
       "tournament": "",
       "sport": "football",
-      "start_time": "2025-04-27 19:00",
-      "home_odds": 2.3,
-      "draw_odds": 3.1,
-      "away_odds": 2.9,
+      "start_time": "2025-04-27 21:00",
+      "home_odds": 2.2,
+      "draw_odds": 3.2,
+      "away_odds": 2.7,
       "bookmaker": "sporty",
       "region": "gh",
       "odds": {
-        "home": 2.3,
-        "draw": 3.1,
-        "away": 2.9
+        "home": 2.2,
+        "draw": 3.2,
+        "away": 2.7
       }
     }
   },
@@ -32976,40 +32296,6 @@
         "home": 3.2,
         "draw": 3.33,
         "away": 2.05
-      }
-    }
-  },
-  {
-    "id": "60129789",
-    "eventId": "60129789",
-    "teams": "CD Inca - Zacatecoluca FC",
-    "league": "",
-    "sport": "football",
-    "country": "Europe",
-    "date": "2025-04-27",
-    "time": "21:00",
-    "odds": {
-      "home": 2.2,
-      "draw": 3.2,
-      "away": 2.7
-    },
-    "raw": {
-      "id": "sporty-sr:match:60129789",
-      "eventId": "60129789",
-      "event": "CD Inca - Zacatecoluca FC",
-      "country": "Europe",
-      "tournament": "",
-      "sport": "football",
-      "start_time": "2025-04-27 21:00",
-      "home_odds": 2.2,
-      "draw_odds": 3.2,
-      "away_odds": 2.7,
-      "bookmaker": "sporty",
-      "region": "gh",
-      "odds": {
-        "home": 2.2,
-        "draw": 3.2,
-        "away": 2.7
       }
     }
   },

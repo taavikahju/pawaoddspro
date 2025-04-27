@@ -1,1139 +1,5 @@
 [
   {
-    "id": "25353489",
-    "eventId": "56690537",
-    "country": "USA",
-    "tournament": "Major League Soccer",
-    "event": "Minnesota United FC - Vancouver Whitecaps FC",
-    "name": "Minnesota United FC - Vancouver Whitecaps FC",
-    "home_odds": 1.61,
-    "draw_odds": 3.9,
-    "away_odds": 5.5,
-    "start_time": "2025-04-27T19:00:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 1.61
-          },
-          {
-            "name": "X",
-            "price": 3.9
-          },
-          {
-            "name": "2",
-            "price": 5.5
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "USA"
-    },
-    "region": {
-      "name": "USA"
-    },
-    "competition": {
-      "name": "Major League Soccer"
-    },
-    "league": {
-      "name": "Major League Soccer"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
-    "id": "27039492",
-    "eventId": "60093455",
-    "country": "Venezuela",
-    "tournament": "Segunda Division",
-    "event": "Bolivar SC - CS Maritimo de la Guaira",
-    "name": "Bolivar SC - CS Maritimo de la Guaira",
-    "home_odds": 3.15,
-    "draw_odds": 3.05,
-    "away_odds": 2.18,
-    "start_time": "2025-04-27T19:00:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 3.15
-          },
-          {
-            "name": "X",
-            "price": 3.05
-          },
-          {
-            "name": "2",
-            "price": 2.18
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "Venezuela"
-    },
-    "region": {
-      "name": "Venezuela"
-    },
-    "competition": {
-      "name": "Segunda Division"
-    },
-    "league": {
-      "name": "Segunda Division"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
-    "id": "25378705",
-    "eventId": "51103725",
-    "country": "Spain",
-    "tournament": "LaLiga 2",
-    "event": "Real Zaragoza - SD Huesca",
-    "name": "Real Zaragoza - SD Huesca",
-    "home_odds": 1.87,
-    "draw_odds": 3.15,
-    "away_odds": 4.8,
-    "start_time": "2025-04-27T19:00:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 1.87
-          },
-          {
-            "name": "X",
-            "price": 3.15
-          },
-          {
-            "name": "2",
-            "price": 4.8
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "Spain"
-    },
-    "region": {
-      "name": "Spain"
-    },
-    "competition": {
-      "name": "LaLiga 2"
-    },
-    "league": {
-      "name": "LaLiga 2"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
-    "id": "27018199",
-    "eventId": "27018199",
-    "country": "Morocco",
-    "tournament": "Morocco Botola 2",
-    "event": "Olympique Khouribga - USM Oujda",
-    "name": "Olympique Khouribga - USM Oujda",
-    "home_odds": 2.12,
-    "draw_odds": 2.7,
-    "away_odds": 3.85,
-    "start_time": "2025-04-27T19:00:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 2.12
-          },
-          {
-            "name": "X",
-            "price": 2.7
-          },
-          {
-            "name": "2",
-            "price": 3.85
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "Morocco"
-    },
-    "region": {
-      "name": "Morocco"
-    },
-    "competition": {
-      "name": "Morocco Botola 2"
-    },
-    "league": {
-      "name": "Morocco Botola 2"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
-    "id": "27018196",
-    "eventId": "27018196",
-    "country": "Morocco",
-    "tournament": "Morocco Botola 2",
-    "event": "Mouloudia Oujda - KAC Kenitra",
-    "name": "Mouloudia Oujda - KAC Kenitra",
-    "home_odds": 2.12,
-    "draw_odds": 2.7,
-    "away_odds": 3.85,
-    "start_time": "2025-04-27T19:00:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 2.12
-          },
-          {
-            "name": "X",
-            "price": 2.7
-          },
-          {
-            "name": "2",
-            "price": 3.85
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "Morocco"
-    },
-    "region": {
-      "name": "Morocco"
-    },
-    "competition": {
-      "name": "Morocco Botola 2"
-    },
-    "league": {
-      "name": "Morocco Botola 2"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
-    "id": "27018197",
-    "eventId": "27018197",
-    "country": "Chile",
-    "tournament": "Chile Segunda División",
-    "event": "CD General Velasquez - Deportes Linares",
-    "name": "CD General Velasquez - Deportes Linares",
-    "home_odds": 2.3,
-    "draw_odds": 3.1,
-    "away_odds": 2.9,
-    "start_time": "2025-04-27T19:00:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 2.3
-          },
-          {
-            "name": "X",
-            "price": 3.1
-          },
-          {
-            "name": "2",
-            "price": 2.9
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "Chile"
-    },
-    "region": {
-      "name": "Chile"
-    },
-    "competition": {
-      "name": "Chile Segunda División"
-    },
-    "league": {
-      "name": "Chile Segunda División"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
-    "id": "27018195",
-    "eventId": "27018195",
-    "country": "Morocco",
-    "tournament": "Morocco Botola 2",
-    "event": "CAYB Berrechid - Rapide Club Oued Zem",
-    "name": "CAYB Berrechid - Rapide Club Oued Zem",
-    "home_odds": 2.5,
-    "draw_odds": 2.6,
-    "away_odds": 3.1,
-    "start_time": "2025-04-27T19:00:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 2.5
-          },
-          {
-            "name": "X",
-            "price": 2.6
-          },
-          {
-            "name": "2",
-            "price": 3.1
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "Morocco"
-    },
-    "region": {
-      "name": "Morocco"
-    },
-    "competition": {
-      "name": "Morocco Botola 2"
-    },
-    "league": {
-      "name": "Morocco Botola 2"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
-    "id": "26927528",
-    "eventId": "58796773",
-    "country": "Brazil",
-    "tournament": "Campeonato Brasileiro, Women",
-    "event": "3B Sport AM - Real Brasilia FC DF",
-    "name": "3B Sport AM - Real Brasilia FC DF",
-    "home_odds": 3.4,
-    "draw_odds": 3.9,
-    "away_odds": 1.81,
-    "start_time": "2025-04-27T19:00:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 3.4
-          },
-          {
-            "name": "X",
-            "price": 3.9
-          },
-          {
-            "name": "2",
-            "price": 1.81
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "Brazil"
-    },
-    "region": {
-      "name": "Brazil"
-    },
-    "competition": {
-      "name": "Campeonato Brasileiro, Women"
-    },
-    "league": {
-      "name": "Campeonato Brasileiro, Women"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
-    "id": "26932818",
-    "eventId": "57310891",
-    "country": "Colombia",
-    "tournament": "Colombia Categoría Primera A",
-    "event": "Santa Fe - Boyacá Chicó",
-    "name": "Santa Fe - Boyacá Chicó",
-    "home_odds": 1.31,
-    "draw_odds": 4.8,
-    "away_odds": 11,
-    "start_time": "2025-04-27T19:00:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 1.31
-          },
-          {
-            "name": "X",
-            "price": 4.8
-          },
-          {
-            "name": "2",
-            "price": 11
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "Colombia"
-    },
-    "region": {
-      "name": "Colombia"
-    },
-    "competition": {
-      "name": "Colombia Categoría Primera A"
-    },
-    "league": {
-      "name": "Colombia Categoría Primera A"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
-    "id": "26574526",
-    "eventId": "58314781",
-    "country": "Brazil",
-    "tournament": "Brasileiro Serie B",
-    "event": "Athletic Club Sjdr MG - Volta Redonda FC RJ",
-    "name": "Athletic Club Sjdr MG - Volta Redonda FC RJ",
-    "home_odds": 1.86,
-    "draw_odds": 3.35,
-    "away_odds": 3.95,
-    "start_time": "2025-04-27T19:00:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 1.86
-          },
-          {
-            "name": "X",
-            "price": 3.35
-          },
-          {
-            "name": "2",
-            "price": 3.95
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "Brazil"
-    },
-    "region": {
-      "name": "Brazil"
-    },
-    "competition": {
-      "name": "Brasileiro Serie B"
-    },
-    "league": {
-      "name": "Brasileiro Serie B"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
-    "id": "26812588",
-    "eventId": "57251295",
-    "country": "Argentina",
-    "tournament": "Primera Nacional",
-    "event": "Gimnasia y Esgrima Mendoza - Nueva Chicago",
-    "name": "Gimnasia y Esgrima Mendoza - Nueva Chicago",
-    "home_odds": 1.51,
-    "draw_odds": 3.5,
-    "away_odds": 6.5,
-    "start_time": "2025-04-27T19:00:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 1.51
-          },
-          {
-            "name": "X",
-            "price": 3.5
-          },
-          {
-            "name": "2",
-            "price": 6.5
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "Argentina"
-    },
-    "region": {
-      "name": "Argentina"
-    },
-    "competition": {
-      "name": "Primera Nacional"
-    },
-    "league": {
-      "name": "Primera Nacional"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
-    "id": "26812580",
-    "eventId": "57250679",
-    "country": "Argentina",
-    "tournament": "Primera Nacional",
-    "event": "CA Racing de Cordoba - Ferro Carril Oeste",
-    "name": "CA Racing de Cordoba - Ferro Carril Oeste",
-    "home_odds": 2.14,
-    "draw_odds": 2.9,
-    "away_odds": 3.4,
-    "start_time": "2025-04-27T19:00:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 2.14
-          },
-          {
-            "name": "X",
-            "price": 2.9
-          },
-          {
-            "name": "2",
-            "price": 3.4
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "Argentina"
-    },
-    "region": {
-      "name": "Argentina"
-    },
-    "competition": {
-      "name": "Primera Nacional"
-    },
-    "league": {
-      "name": "Primera Nacional"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
-    "id": "26553024",
-    "eventId": "58052495",
-    "country": "Brazil",
-    "tournament": "Brasileiro Serie A",
-    "event": "CR Flamengo RJ - SC Corinthians SP",
-    "name": "CR Flamengo RJ - SC Corinthians SP",
-    "home_odds": 1.47,
-    "draw_odds": 4.2,
-    "away_odds": 7,
-    "start_time": "2025-04-27T19:00:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 1.47
-          },
-          {
-            "name": "X",
-            "price": 4.2
-          },
-          {
-            "name": "2",
-            "price": 7
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "Brazil"
-    },
-    "region": {
-      "name": "Brazil"
-    },
-    "competition": {
-      "name": "Brasileiro Serie A"
-    },
-    "league": {
-      "name": "Brasileiro Serie A"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
-    "id": "26574646",
-    "eventId": "59456023",
-    "country": "Brazil",
-    "tournament": "Brasileiro Serie A2, Women",
-    "event": "Minas Brasilia DF - CR Vasco da Gama RJ",
-    "name": "Minas Brasilia DF - CR Vasco da Gama RJ",
-    "home_odds": 2.9,
-    "draw_odds": 3.45,
-    "away_odds": 2.15,
-    "start_time": "2025-04-27T19:00:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 2.9
-          },
-          {
-            "name": "X",
-            "price": 3.45
-          },
-          {
-            "name": "2",
-            "price": 2.15
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "Brazil"
-    },
-    "region": {
-      "name": "Brazil"
-    },
-    "competition": {
-      "name": "Brasileiro Serie A2, Women"
-    },
-    "league": {
-      "name": "Brasileiro Serie A2, Women"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
-    "id": "27018203",
-    "eventId": "27018203",
-    "country": "Morocco",
-    "tournament": "Morocco Botola 2",
-    "event": "Wydad Fes - Racing de Casablanca",
-    "name": "Wydad Fes - Racing de Casablanca",
-    "home_odds": 2.02,
-    "draw_odds": 3.05,
-    "away_odds": 3.55,
-    "start_time": "2025-04-27T19:00:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 2.02
-          },
-          {
-            "name": "X",
-            "price": 3.05
-          },
-          {
-            "name": "2",
-            "price": 3.55
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "Morocco"
-    },
-    "region": {
-      "name": "Morocco"
-    },
-    "competition": {
-      "name": "Morocco Botola 2"
-    },
-    "league": {
-      "name": "Morocco Botola 2"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
-    "id": "26941993",
-    "eventId": "57866849",
-    "country": "Chile",
-    "tournament": "Chile Primera Division B",
-    "event": "Union San Felipe - Magallanes",
-    "name": "Union San Felipe - Magallanes",
-    "home_odds": 2.7,
-    "draw_odds": 3,
-    "away_odds": 2.55,
-    "start_time": "2025-04-27T19:00:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 2.7
-          },
-          {
-            "name": "X",
-            "price": 3
-          },
-          {
-            "name": "2",
-            "price": 2.55
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "Chile"
-    },
-    "region": {
-      "name": "Chile"
-    },
-    "competition": {
-      "name": "Chile Primera Division B"
-    },
-    "league": {
-      "name": "Chile Primera Division B"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
-    "id": "26918399",
-    "eventId": "57380237",
-    "country": "Chile",
-    "tournament": "Chile Primera Division",
-    "event": "Palestino - Universidad de Chile",
-    "name": "Palestino - Universidad de Chile",
-    "home_odds": 4.05,
-    "draw_odds": 3.55,
-    "away_odds": 1.87,
-    "start_time": "2025-04-27T19:00:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 4.05
-          },
-          {
-            "name": "X",
-            "price": 3.55
-          },
-          {
-            "name": "2",
-            "price": 1.87
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "Chile"
-    },
-    "region": {
-      "name": "Chile"
-    },
-    "competition": {
-      "name": "Chile Primera Division"
-    },
-    "league": {
-      "name": "Chile Primera Division"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
-    "id": "26942012",
-    "eventId": "59722614",
-    "country": "Bolivia",
-    "tournament": "Bolivia Primera Division",
-    "event": "Nacional Potosi - Club Jorge Wilstermann",
-    "name": "Nacional Potosi - Club Jorge Wilstermann",
-    "home_odds": 1.42,
-    "draw_odds": 4.5,
-    "away_odds": 7,
-    "start_time": "2025-04-27T19:00:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 1.42
-          },
-          {
-            "name": "X",
-            "price": 4.5
-          },
-          {
-            "name": "2",
-            "price": 7
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "Bolivia"
-    },
-    "region": {
-      "name": "Bolivia"
-    },
-    "competition": {
-      "name": "Bolivia Primera Division"
-    },
-    "league": {
-      "name": "Bolivia Primera Division"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
     "id": "26390020",
     "eventId": "56958129",
     "country": "Iceland",
@@ -20229,9 +19095,9 @@
     "tournament": "Copa do Brasil",
     "event": "Botafogo FR RJ - Capital CF DF",
     "name": "Botafogo FR RJ - Capital CF DF",
-    "home_odds": 1.21,
+    "home_odds": 1.19,
     "draw_odds": 5.25,
-    "away_odds": 12,
+    "away_odds": 13,
     "start_time": "2025-04-30T22:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -20252,7 +19118,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.21
+            "price": 1.19
           },
           {
             "name": "X",
@@ -20260,7 +19126,7 @@
           },
           {
             "name": "2",
-            "price": 12
+            "price": 13
           }
         ]
       }
@@ -31632,9 +30498,9 @@
     "tournament": "Championship",
     "event": "Portsmouth FC - Hull City",
     "name": "Portsmouth FC - Hull City",
-    "home_odds": 3.25,
-    "draw_odds": 3.75,
-    "away_odds": 2.06,
+    "home_odds": 3.15,
+    "draw_odds": 3.7,
+    "away_odds": 2.11,
     "start_time": "2025-05-03T11:30:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -31655,15 +30521,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 3.25
+            "price": 3.15
           },
           {
             "name": "X",
-            "price": 3.75
+            "price": 3.7
           },
           {
             "name": "2",
-            "price": 2.06
+            "price": 2.11
           }
         ]
       }
@@ -39759,9 +38625,9 @@
     "tournament": "LigaPro Primera A",
     "event": "LDU Quito - CD El Nacional",
     "name": "LDU Quito - CD El Nacional",
-    "home_odds": 1.56,
-    "draw_odds": 3.95,
-    "away_odds": 5.25,
+    "home_odds": 1.53,
+    "draw_odds": 4,
+    "away_odds": 5.5,
     "start_time": "2025-05-03T19:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -39782,15 +38648,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.56
+            "price": 1.53
           },
           {
             "name": "X",
-            "price": 3.95
+            "price": 4
           },
           {
             "name": "2",
-            "price": 5.25
+            "price": 5.5
           }
         ]
       }
@@ -41775,9 +40641,9 @@
     "tournament": "LigaPro Primera A",
     "event": "Mushuc Runa SC - CSD Macara",
     "name": "Mushuc Runa SC - CSD Macara",
-    "home_odds": 1.89,
-    "draw_odds": 3.35,
-    "away_odds": 3.95,
+    "home_odds": 1.82,
+    "draw_odds": 3.5,
+    "away_odds": 4.1,
     "start_time": "2025-05-04T00:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -41798,15 +40664,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.89
+            "price": 1.82
           },
           {
             "name": "X",
-            "price": 3.35
+            "price": 3.5
           },
           {
             "name": "2",
-            "price": 3.95
+            "price": 4.1
           }
         ]
       }
@@ -50280,9 +49146,9 @@
     "tournament": "Major League Soccer",
     "event": "Sporting Kansas City - Los Angeles Galaxy",
     "name": "Sporting Kansas City - Los Angeles Galaxy",
-    "home_odds": 2.04,
-    "draw_odds": 3.6,
-    "away_odds": 3.4,
+    "home_odds": 2.13,
+    "draw_odds": 3.4,
+    "away_odds": 3.35,
     "start_time": "2025-05-04T23:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -50303,15 +49169,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.04
+            "price": 2.13
           },
           {
             "name": "X",
-            "price": 3.6
+            "price": 3.4
           },
           {
             "name": "2",
-            "price": 3.4
+            "price": 3.35
           }
         ]
       }
