@@ -372,15 +372,19 @@ async function tryAlternativeEndpoint() {
           const homeTeam = teamParts[0] || '';
           const awayTeam = teamParts[1] || '';
           
-          // Generate a stable eventId format similar to other bookmakers
-          // Format: numeric hash of normalized team names
-          // This approach has better chances of matching with other bookmakers
-          const normalizedTeams = `${homeTeam.toLowerCase().replace(/\s+/g, '')}${awayTeam.toLowerCase().replace(/\s+/g, '')}`;
-          const eventIdNum = Math.abs(hashCode(normalizedTeams)) % 100000000;
+          // Extract numeric part if the ID is in the format sr:match:12345678
+          let numericId;
+          if (id && id.startsWith('sr:match:')) {
+            numericId = id.replace('sr:match:', '');
+          } else {
+            // Fallback to hash-based approach if ID is not in expected format
+            const normalizedTeams = `${homeTeam.toLowerCase().replace(/\s+/g, '')}${awayTeam.toLowerCase().replace(/\s+/g, '')}`;
+            numericId = Math.abs(hashCode(normalizedTeams)) % 100000000;
+          }
           
           return {
             id: `sporty-${id}`,
-            eventId: `${eventIdNum}`, // More stable eventId based on team names
+            eventId: `${numericId}`, // Use the numeric ID for consistent matching with other bookmakers
             event: name,
             teams: name, // Include the full team names
             home_team: homeTeam,
