@@ -1,13 +1,7 @@
 import { EventEmitter } from 'events';
 import { Request, Response, Application } from 'express';
 import { isAuthenticated, isAdmin } from '../../middleware/auth';
-import { createRequire } from 'module';
-
-// Create a require function
-const require = createRequire(import.meta.url);
-
-// Use require to import the CommonJS module
-const { scrapeLiveEvents, getMarketAvailabilityStats } = require('./bp_gh_live_scraper.js');
+import { scrapeLiveEvents, getMarketAvailabilityStats } from './bp_gh_live_scraper.mjs';
 
 // Event emitter for live scraper events
 export const liveScraperEvents = new EventEmitter();

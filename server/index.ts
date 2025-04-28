@@ -3,8 +3,8 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { startHeartbeatTracker } from "./scrapers/custom/live-heartbeat";
 import { storage } from "./storage";
-// Added import for bp_gh_live_scraper
-const { runLiveScraper } = require("./scrapers/custom/bp_gh_live_scraper.js");
+// Import using ES Module syntax
+import { runLiveScraper } from "./scrapers/custom/bp_gh_live_scraper.mjs";
 
 
 const app = express();
