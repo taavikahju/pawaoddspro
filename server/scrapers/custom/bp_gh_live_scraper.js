@@ -409,8 +409,8 @@ function getMarketAvailabilityStats() {
 }
 
 
-module.exports = {
+export {
   scrapeLiveEvents,
   getMarketAvailabilityStats,
-  runLiveScraper: scrapeLiveEvents
+  scrapeLiveEvents as runLiveScraper
 };
