@@ -1,6 +1,6 @@
-import axios from 'axios';
-import { promises as fs } from 'fs';
-import path from 'path';
+const axios = require('axios');
+const fs = require('fs').promises;
+const path = require('path');
 
 // Store history of market availability
 let marketHistoryData = {};
@@ -404,7 +404,7 @@ function getMarketAvailabilityStats() {
 }
 
 
-export default {
+module.exports = {
   scrapeLiveEvents,
   getMarketAvailabilityStats,
   runLiveScraper: scrapeLiveEvents

@@ -4,8 +4,7 @@ import { setupVite, serveStatic, log } from "./vite";
 import { startHeartbeatTracker } from "./scrapers/custom/live-heartbeat";
 import { storage } from "./storage";
 // Added import for bp_gh_live_scraper
-import scraper from "./scrapers/custom/bp_gh_live_scraper.js";
-const { runLiveScraper } = scraper;
+const { runLiveScraper } = require("./scrapers/custom/bp_gh_live_scraper.js");
 
 
 const app = express();
