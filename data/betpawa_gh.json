@@ -321,9 +321,9 @@
     "tournament": "Primera Division, Clausura",
     "event": "CF Monterrey - CF Pachuca",
     "name": "CF Monterrey - CF Pachuca",
-    "home_odds": 1.95,
-    "draw_odds": 3.45,
-    "away_odds": 3.45,
+    "home_odds": 1.92,
+    "draw_odds": 3.5,
+    "away_odds": 3.55,
     "start_time": "2025-04-28T01:30:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -344,15 +344,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.95
+            "price": 1.92
           },
           {
             "name": "X",
-            "price": 3.45
+            "price": 3.5
           },
           {
             "name": "2",
-            "price": 3.45
+            "price": 3.55
           }
         ]
       }
@@ -447,9 +447,9 @@
     "tournament": "Indonesia Liga 1",
     "event": "Arema - Persebaya Surabaya",
     "name": "Arema - Persebaya Surabaya",
-    "home_odds": 2.23,
-    "draw_odds": 3.5,
-    "away_odds": 3.1,
+    "home_odds": 2.25,
+    "draw_odds": 3.45,
+    "away_odds": 3,
     "start_time": "2025-04-28T08:30:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -470,15 +470,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.23
+            "price": 2.25
           },
           {
             "name": "X",
-            "price": 3.5
+            "price": 3.45
           },
           {
             "name": "2",
-            "price": 3.1
+            "price": 3
           }
         ]
       }
@@ -2400,9 +2400,9 @@
     "tournament": "Superliga",
     "event": "FK Napredak Krusevac - FK Jedinstvo UB",
     "name": "FK Napredak Krusevac - FK Jedinstvo UB",
-    "home_odds": 1.5,
-    "draw_odds": 4.45,
-    "away_odds": 4.75,
+    "home_odds": 1.48,
+    "draw_odds": 4.15,
+    "away_odds": 5.25,
     "start_time": "2025-04-28T14:30:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -2423,15 +2423,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.5
+            "price": 1.48
           },
           {
             "name": "X",
-            "price": 4.45
+            "price": 4.15
           },
           {
             "name": "2",
-            "price": 4.75
+            "price": 5.25
           }
         ]
       }
@@ -4668,9 +4668,9 @@
     "tournament": "Superliga",
     "event": "FK Zeleznicar Pancevo - FK Radnicki Nis",
     "name": "FK Zeleznicar Pancevo - FK Radnicki Nis",
-    "home_odds": 2.1,
-    "draw_odds": 3.2,
-    "away_odds": 3.25,
+    "home_odds": 2.06,
+    "draw_odds": 3.25,
+    "away_odds": 3.2,
     "start_time": "2025-04-28T16:30:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -4691,15 +4691,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.1
+            "price": 2.06
           },
           {
             "name": "X",
-            "price": 3.2
+            "price": 3.25
           },
           {
             "name": "2",
-            "price": 3.25
+            "price": 3.2
           }
         ]
       }
@@ -8763,9 +8763,9 @@
     "tournament": "Brasileiro Serie C",
     "event": "Anapolis FC GO - Floresta EC CE",
     "name": "Anapolis FC GO - Floresta EC CE",
-    "home_odds": 1.73,
-    "draw_odds": 3.25,
-    "away_odds": 4.6,
+    "home_odds": 1.77,
+    "draw_odds": 3.2,
+    "away_odds": 4.5,
     "start_time": "2025-04-28T22:30:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -8786,15 +8786,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.73
+            "price": 1.77
           },
           {
             "name": "X",
-            "price": 3.25
+            "price": 3.2
           },
           {
             "name": "2",
-            "price": 4.6
+            "price": 4.5
           }
         ]
       }
@@ -10826,6 +10826,69 @@
     },
     "league": {
       "name": "Premier League"
+    },
+    "isInPlay": false,
+    "status": "UPCOMING",
+    "scoreboard": {
+      "display": {
+        "minute": ""
+      }
+    }
+  },
+  {
+    "id": "27062366",
+    "eventId": "27062366",
+    "country": "Egypt",
+    "tournament": "Egypt Second Division A",
+    "event": "Suez Montakhab - Wadi Degla SC",
+    "name": "Suez Montakhab - Wadi Degla SC",
+    "home_odds": 6.5,
+    "draw_odds": 3.7,
+    "away_odds": 1.47,
+    "start_time": "2025-04-29T13:30:00Z",
+    "gameMinute": "",
+    "sport": "football",
+    "competitors": [
+      {
+        "name": ""
+      },
+      {
+        "name": ""
+      }
+    ],
+    "markets": [
+      {
+        "marketType": {
+          "id": "3743",
+          "name": "1X2"
+        },
+        "prices": [
+          {
+            "name": "1",
+            "price": 6.5
+          },
+          {
+            "name": "X",
+            "price": 3.7
+          },
+          {
+            "name": "2",
+            "price": 1.47
+          }
+        ]
+      }
+    ],
+    "category": {
+      "name": "Egypt"
+    },
+    "region": {
+      "name": "Egypt"
+    },
+    "competition": {
+      "name": "Egypt Second Division A"
+    },
+    "league": {
+      "name": "Egypt Second Division A"
     },
     "isInPlay": false,
     "status": "UPCOMING",
@@ -22689,7 +22752,7 @@
     "event": "Club 2 de Mayo - Club Sportivo Luqueño",
     "name": "Club 2 de Mayo - Club Sportivo Luqueño",
     "home_odds": 2.3,
-    "draw_odds": 3.15,
+    "draw_odds": 3.1,
     "away_odds": 3.25,
     "start_time": "2025-05-02T21:00:00Z",
     "gameMinute": "",
@@ -22715,7 +22778,7 @@
           },
           {
             "name": "X",
-            "price": 3.15
+            "price": 3.1
           },
           {
             "name": "2",
@@ -35666,9 +35729,9 @@
     "tournament": "Brasileiro Serie A",
     "event": "Fluminense FC RJ - SC Recife PE",
     "name": "Fluminense FC RJ - SC Recife PE",
-    "home_odds": 1.72,
-    "draw_odds": 3.6,
-    "away_odds": 4.9,
+    "home_odds": 1.7,
+    "draw_odds": 3.65,
+    "away_odds": 5,
     "start_time": "2025-05-03T21:30:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -35689,15 +35752,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.72
+            "price": 1.7
           },
           {
             "name": "X",
-            "price": 3.6
+            "price": 3.65
           },
           {
             "name": "2",
-            "price": 4.9
+            "price": 5
           }
         ]
       }
@@ -50156,9 +50219,9 @@
     "tournament": "Copa Libertadores",
     "event": "Cerro Porteno - SE Palmeiras SP",
     "name": "Cerro Porteno - SE Palmeiras SP",
-    "home_odds": 5,
-    "draw_odds": 3.5,
-    "away_odds": 1.65,
+    "home_odds": 4.6,
+    "draw_odds": 3.3,
+    "away_odds": 1.76,
     "start_time": "2025-05-08T00:30:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -50179,15 +50242,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 5
+            "price": 4.6
           },
           {
             "name": "X",
-            "price": 3.5
+            "price": 3.3
           },
           {
             "name": "2",
-            "price": 1.65
+            "price": 1.76
           }
         ]
       }
@@ -54881,8 +54944,8 @@
     "tournament": "Bundesliga",
     "event": "VfB Stuttgart - FC Augsburg",
     "name": "VfB Stuttgart - FC Augsburg",
-    "home_odds": 1.63,
-    "draw_odds": 4.3,
+    "home_odds": 1.64,
+    "draw_odds": 4.2,
     "away_odds": 4.9,
     "start_time": "2025-05-11T17:30:00Z",
     "gameMinute": "",
@@ -54904,11 +54967,11 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.63
+            "price": 1.64
           },
           {
             "name": "X",
-            "price": 4.3
+            "price": 4.2
           },
           {
             "name": "2",
