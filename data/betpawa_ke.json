@@ -31254,9 +31254,9 @@
     "tournament": "Eredivisie",
     "event": "NEC Nijmegen - Willem II Tilburg",
     "name": "NEC Nijmegen - Willem II Tilburg",
-    "home_odds": 1.65,
-    "draw_odds": 3.9,
-    "away_odds": 5,
+    "home_odds": 1.62,
+    "draw_odds": 4,
+    "away_odds": 5.25,
     "start_time": "2025-05-03T14:30:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -31277,15 +31277,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.65
+            "price": 1.62
           },
           {
             "name": "X",
-            "price": 3.9
+            "price": 4
           },
           {
             "name": "2",
-            "price": 5
+            "price": 5.25
           }
         ]
       }
@@ -34782,9 +34782,9 @@
     "tournament": "Brasileiro Serie B",
     "event": "Clube do Remo PA - Amazonas FC AM",
     "name": "Clube do Remo PA - Amazonas FC AM",
-    "home_odds": 1.85,
-    "draw_odds": 3.15,
-    "away_odds": 4.3,
+    "home_odds": 1.81,
+    "draw_odds": 3.2,
+    "away_odds": 4.5,
     "start_time": "2025-05-03T19:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -34805,15 +34805,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.85
+            "price": 1.81
           },
           {
             "name": "X",
-            "price": 3.15
+            "price": 3.2
           },
           {
             "name": "2",
-            "price": 4.3
+            "price": 4.5
           }
         ]
       }
@@ -37680,9 +37680,9 @@
     "tournament": "Major League Soccer",
     "event": "San Jose Earthquakes - Portland Timbers",
     "name": "San Jose Earthquakes - Portland Timbers",
-    "home_odds": 2.55,
+    "home_odds": 2.4,
     "draw_odds": 3.35,
-    "away_odds": 2.7,
+    "away_odds": 2.9,
     "start_time": "2025-05-04T02:30:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -37703,7 +37703,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.55
+            "price": 2.4
           },
           {
             "name": "X",
@@ -37711,7 +37711,7 @@
           },
           {
             "name": "2",
-            "price": 2.7
+            "price": 2.9
           }
         ]
       }
@@ -47005,8 +47005,8 @@
     "event": "Sporting Kansas City - Los Angeles Galaxy",
     "name": "Sporting Kansas City - Los Angeles Galaxy",
     "home_odds": 2.1,
-    "draw_odds": 3.4,
-    "away_odds": 3.45,
+    "draw_odds": 3.5,
+    "away_odds": 3.35,
     "start_time": "2025-05-04T23:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -47031,11 +47031,11 @@
           },
           {
             "name": "X",
-            "price": 3.4
+            "price": 3.5
           },
           {
             "name": "2",
-            "price": 3.45
+            "price": 3.35
           }
         ]
       }
@@ -51540,8 +51540,8 @@
     "tournament": "Premier League",
     "event": "Ipswich Town - Brentford FC",
     "name": "Ipswich Town - Brentford FC",
-    "home_odds": 4,
-    "draw_odds": 4,
+    "home_odds": 4.1,
+    "draw_odds": 3.9,
     "away_odds": 1.81,
     "start_time": "2025-05-10T14:00:00Z",
     "gameMinute": "",
@@ -51563,11 +51563,11 @@
         "prices": [
           {
             "name": "1",
-            "price": 4
+            "price": 4.1
           },
           {
             "name": "X",
-            "price": 4
+            "price": 3.9
           },
           {
             "name": "2",
@@ -51604,8 +51604,8 @@
     "event": "Wolverhampton Wanderers - Brighton & Hove Albion",
     "name": "Wolverhampton Wanderers - Brighton & Hove Albion",
     "home_odds": 2.6,
-    "draw_odds": 3.4,
-    "away_odds": 2.7,
+    "draw_odds": 3.45,
+    "away_odds": 2.65,
     "start_time": "2025-05-10T14:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -51630,11 +51630,11 @@
           },
           {
             "name": "X",
-            "price": 3.4
+            "price": 3.45
           },
           {
             "name": "2",
-            "price": 2.7
+            "price": 2.65
           }
         ]
       }
@@ -51666,9 +51666,9 @@
     "tournament": "Premier League",
     "event": "Southampton FC - Manchester City",
     "name": "Southampton FC - Manchester City",
-    "home_odds": 9.5,
+    "home_odds": 9.25,
     "draw_odds": 6.25,
-    "away_odds": 1.27,
+    "away_odds": 1.28,
     "start_time": "2025-05-10T14:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -51689,7 +51689,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 9.5
+            "price": 9.25
           },
           {
             "name": "X",
@@ -51697,7 +51697,7 @@
           },
           {
             "name": "2",
-            "price": 1.27
+            "price": 1.28
           }
         ]
       }
@@ -51856,8 +51856,8 @@
     "event": "AFC Bournemouth - Aston Villa",
     "name": "AFC Bournemouth - Aston Villa",
     "home_odds": 2.35,
-    "draw_odds": 3.7,
-    "away_odds": 2.85,
+    "draw_odds": 3.55,
+    "away_odds": 2.9,
     "start_time": "2025-05-10T16:30:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -51882,11 +51882,11 @@
           },
           {
             "name": "X",
-            "price": 3.7
+            "price": 3.55
           },
           {
             "name": "2",
-            "price": 2.85
+            "price": 2.9
           }
         ]
       }
@@ -53179,8 +53179,8 @@
     "event": "Newcastle United - Chelsea FC",
     "name": "Newcastle United - Chelsea FC",
     "home_odds": 2.3,
-    "draw_odds": 3.9,
-    "away_odds": 2.8,
+    "draw_odds": 3.7,
+    "away_odds": 2.95,
     "start_time": "2025-05-11T11:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -53205,11 +53205,11 @@
           },
           {
             "name": "X",
-            "price": 3.9
+            "price": 3.7
           },
           {
             "name": "2",
-            "price": 2.8
+            "price": 2.95
           }
         ]
       }
@@ -53998,8 +53998,8 @@
     "event": "Manchester United - West Ham United",
     "name": "Manchester United - West Ham United",
     "home_odds": 1.92,
-    "draw_odds": 3.75,
-    "away_odds": 3.8,
+    "draw_odds": 3.65,
+    "away_odds": 3.9,
     "start_time": "2025-05-11T13:15:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -54024,11 +54024,11 @@
           },
           {
             "name": "X",
-            "price": 3.75
+            "price": 3.65
           },
           {
             "name": "2",
-            "price": 3.8
+            "price": 3.9
           }
         ]
       }
@@ -54060,9 +54060,9 @@
     "tournament": "Premier League",
     "event": "Tottenham Hotspur - Crystal Palace",
     "name": "Tottenham Hotspur - Crystal Palace",
-    "home_odds": 2.14,
+    "home_odds": 2.18,
     "draw_odds": 3.7,
-    "away_odds": 3.2,
+    "away_odds": 3.1,
     "start_time": "2025-05-11T13:15:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -54083,7 +54083,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.14
+            "price": 2.18
           },
           {
             "name": "X",
@@ -54091,7 +54091,7 @@
           },
           {
             "name": "2",
-            "price": 3.2
+            "price": 3.1
           }
         ]
       }
