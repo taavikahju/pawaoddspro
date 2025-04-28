@@ -8,22 +8,39 @@ if [ ! -f dist/index.js ]; then
   exit 1
 fi
 
-# Step 2: Fix the directory structure
+# Step 2: Create the entire directory structure including public
 mkdir -p dist/server/scrapers/custom
+mkdir -p dist/server/public
 
 # Step 3: Copy the main server file to the expected location
 cp dist/index.js dist/server/index.js
 
-# Step 4: Copy the ES module scraper file to the correct location
+# Step 4: Copy the client build files to the server's public directory
+if [ -d dist/public ]; then
+  echo "Copying client build files to server/public..."
+  cp -r dist/public/* dist/server/public/
+else
+  echo "WARNING: Client build files not found in dist/public"
+  # Create an empty index.html to prevent 404 errors
+  echo "<html><body><h1>Application is running</h1></body></html>" > dist/server/public/index.html
+fi
+
+# Step 5: Copy the ES module scraper file to the correct location
 cp server/scrapers/custom/bp_gh_live_scraper.mjs dist/server/scrapers/custom/
 
-# Step 5: Copy all other necessary custom scraper files
+# Step 6: Copy all other necessary custom scraper files
 find server/scrapers/custom -name "*.cjs" -o -name "*.js" -o -name "*.mjs" -o -name "*.d.ts" | xargs -I{} cp {} dist/server/scrapers/custom/
 
-# Step 6: Create the data directory
+# Step 7: Create the data directory
 mkdir -p dist/data
 
-# Step 7: Create a proper package.json in the dist directory with ES module support
+# Step 8: Copy shared directory to dist for types
+mkdir -p dist/shared
+if [ -d shared ]; then
+  cp -r shared/* dist/shared/
+fi
+
+# Step 9: Create a proper package.json in the dist directory with ES module support
 cat > dist/package.json << 'EOF'
 {
   "type": "module",
@@ -33,7 +50,7 @@ cat > dist/package.json << 'EOF'
 }
 EOF
 
-# Step 8: Create a server-info file for Replit deployment
+# Step 10: Create a server-info file for Replit deployment
 cat > dist/server-info.json << 'EOF'
 {
   "entrypoint": "server/index.js",
@@ -41,12 +58,12 @@ cat > dist/server-info.json << 'EOF'
 }
 EOF
 
-# Step 9: Copy any .env file if it exists
+# Step 11: Copy any .env file if it exists
 if [ -f .env ]; then
   cp .env dist/.env
 fi
 
-# Step 10: Create an explicit start script that Replit will run
+# Step 12: Create an explicit start script that Replit will run
 cat > dist/start.sh << 'EOF'
 #!/bin/bash
 cd "$(dirname "$0")"

@@ -1,0 +1,224 @@
+2025-04-28T01:12:36Z info: Deployment: 7d9e0708-6ce8-4064-87f9-d934a2f9439f
+2025-04-28T01:12:36Z info: Build: 4919de46-519a-4b8a-89c0-24a3b010f3d5
+2025-04-28T01:12:36Z info: Connecting to builder
+2025-04-28T01:12:39Z info: Builder connected
+2025-04-28T01:12:40Z info: Installing packages
+2025-04-28T01:12:41Z info: Starting Build
+
+> rest-express@1.0.0 build
+> vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+
+
+vite v5.4.14 building for production...
+
+transforming...
+
+Browserslist: browsers data (caniuse-lite) is 6 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+✓ 2898 modules transformed.
+
+rendering chunks...
+
+✓ built in 10.67s
+
+
+  dist/index.js  162.2kb
+
+⚡ Done in 252ms
+
+npm notice
+npm notice New major version of npm available! 10.8.2 -> 11.3.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.3.0
+npm notice To update run: npm install -g npm@11.3.0
+npm notice
+
+2025-04-28T01:12:56Z info: Pushing pid1 binary layer...
+2025-04-28T01:12:58Z info: Pushing hosting layer...
+2025-04-28T01:12:58Z info: Pushing Repl layer...
+2025-04-28T01:12:58Z info: Retrieved cached nix layer
+2025-04-28T01:12:58Z info: Created hosting layer
+2025-04-28T01:12:58Z info: Created pid1 binary layer
+2025-04-28T01:13:29Z info: Created Repl layer
+2025-04-28T01:13:29Z info: Pushing Repl (cache) layer...
+2025-04-28T01:13:29Z info: Created Repl (cache) layer
+2025-04-28T01:13:30Z info: Pushed image manifest
+2025-04-28T01:13:30Z info: Pushed soci index manifest
+2025-04-28T01:13:34Z info: Creating Autoscale service
+Script path: /home/runner/workspace/server/scrapers/custom/betika KE_scraper.cjs
+starting up user application
+Detected scraper file betpawa_gh_scraper.cjs for bookmaker code: betpawa_gh
+Script path: /home/runner/workspace/server/scrapers/custom/betpawa_gh_scraper.cjs
+Detected scraper file bp_KE_scraper.py for bookmaker code: bp_KE
+Registered custom scraper for bookmaker: betika KE
+    at serveStatic (file:///home/runner/workspace/dist/server/index.js:4217:11)
+
+Registered custom scraper for bookmaker: betpawa_gh
+Command: node
+Registered custom scraper for bookmaker: betpawa_gh
+Detected scraper file sporty_better_scraper.cjs for bookmaker code: sporty_better
+🌟 Registering BetPawa Ghana 15-minute scraper (CommonJS version)
+          ^
+Registered custom scraper for bookmaker: betika KE
+Detected scraper file betpawa_gh_scraper.js for bookmaker code: betpawa_gh
+Registered custom scraper for bookmaker: betpawa
+Registered custom scraper for bookmaker: sporty_better
+
+Detected scraper file betika KE_scraper.cjs for bookmaker code: betika KE
+Registered custom scraper for bookmaker: example
+Command: node
+Detected scraper file sporty_better_scraper.cjs for bookmaker code: sporty_better
+          ^
+Registered custom scraper for bookmaker: betpawa_gh
+Script path: /home/runner/workspace/server/scrapers/custom/betpawa_scraper.js
+Command: python
+Command: node
+starting up user application
+Command: node
+Command: node
+Command: node
+History cleanup scheduled to run daily at midnight (cron: 0 0 * * *)
+    throw new Error(
+Node.js v20.18.1
+Detected scraper file sporty_scraper.cjs for bookmaker code: sporty
+Script path: /home/runner/workspace/server/scrapers/custom/betpawa_gh_scraper.js
+Command: node
+Detected scraper file betpawa_ke_scraper.cjs for bookmaker code: betpawa_ke
+Registered custom scraper for bookmaker: sporty_better
+Command: node
+Error: Could not find the build directory: /home/runner/workspace/dist/server/public, make sure to build the client first
+Node.js v20.18.1
+Detected scraper file betika KE_scraper.cjs for bookmaker code: betika KE
+Registered custom scraper for bookmaker: betpawa_gh
+Script path: /home/runner/workspace/server/scrapers/custom/bp_GH_scraper.py
+Script path: /home/runner/workspace/server/scrapers/custom/betpawa_scraper.js
+Detected scraper file betika KE_scraper.cjs for bookmaker code: betika KE
+Script path: /home/runner/workspace/server/scrapers/custom/sporty_axios_scraper.cjs
+Registered custom scraper for bookmaker: example
+    at file:///home/runner/workspace/dist/server/index.js:4269:5
+Registered custom scraper for bookmaker: betpawa_gh
+Script path: /home/runner/workspace/server/scrapers/custom/betpawa_gh_scraper.cjs
+Registered custom scraper for bookmaker: bp_GH
+    at serveStatic (file:///home/runner/workspace/dist/server/index.js:4217:11)
+crash loop detected
+Registered custom scraper for bookmaker: betika KE
+Detected scraper file betpawa_gh_scraper.cjs for bookmaker code: betpawa_gh
+Command: node
+Error: Could not find the build directory: /home/runner/workspace/dist/server/public, make sure to build the client first
+Script path: /home/runner/workspace/server/scrapers/custom/betpawa_gh_scraper.js
+Script path: /home/runner/workspace/server/scrapers/custom/sporty_new_scraper.cjs
+Script path: /home/runner/workspace/server/scrapers/custom/betika KE_scraper.cjs
+Detected scraper file betpawa_gh_scraper.js for bookmaker code: betpawa_gh
+Registered custom scraper for bookmaker: betpawa
+Detected scraper file betpawa_ke_scraper.cjs for bookmaker code: betpawa_ke
+Script path: /home/runner/workspace/server/scrapers/custom/sporty_axios_scraper.cjs
+Command: node
+Script path: /home/runner/workspace/server/scrapers/custom/betika KE_scraper.cjs
+Command: node
+Command: python
+file:///home/runner/workspace/dist/server/index.js:4217
+Detected scraper file betika KE_scraper.cjs for bookmaker code: betika KE
+Command: node
+Detected scraper file betpawa_ke_scraper.cjs for bookmaker code: betpawa_ke
+Command: node
+Script path: /home/runner/workspace/server/scrapers/custom/betpawa_gh_scraper.js
+
+Registered custom scraper for bookmaker: betpawa_gh
+Script path: /home/runner/workspace/server/scrapers/custom/example_scraper.js
+Registered custom scraper for bookmaker: bp_KE
+Script path: /home/runner/workspace/server/scrapers/custom/sporty_new_scraper.cjs
+crash loop detected
+Command: node
+Detected scraper file betpawa_gh_scraper.cjs for bookmaker code: betpawa_gh
+Registered custom scraper for bookmaker: betpawa_gh
+Command: node
+Script path: /home/runner/workspace/server/scrapers/custom/betpawa_scraper.js
+Registered custom scraper for bookmaker: betpawa_gh
+Node.js v20.18.1
+    at file:///home/runner/workspace/dist/server/index.js:4269:5
+Command: node
+Script path: /home/runner/workspace/server/scrapers/custom/sporty_new_scraper.cjs
+file:///home/runner/workspace/dist/server/index.js:4217
+
+Command: node
+Script path: /home/runner/workspace/server/scrapers/custom/betpawa_gh_scraper.cjs
+Detected scraper file betpawa_ke_scraper.cjs for bookmaker code: betpawa_ke
+    at file:///home/runner/workspace/dist/server/index.js:4269:5
+🌟 Registering SportyBet direct API scraper with correct endpoint
+Node.js v20.18.1
+Command: node
+Detected scraper file betpawa_gh_scraper.cjs for bookmaker code: betpawa_gh
+Registered custom scraper for bookmaker: betika KE
+command finished with error [sh -c NODE_ENV=production node dist/server/index.js]: exit status 1
+Registered custom scraper for bookmaker: betika KE
+Command: node
+Script path: /home/runner/workspace/server/scrapers/custom/betika KE_scraper.cjs
+Script path: /home/runner/workspace/server/scrapers/custom/sporty_new_scraper.cjs
+Detected scraper file betpawa_gh_scraper.js for bookmaker code: betpawa_gh
+Registered custom scraper for bookmaker: betpawa_gh
+Registered custom scraper for bookmaker: betika KE
+Detected scraper file betpawa_gh_scraper.js for bookmaker code: betpawa_gh
+Detected scraper file sporty_better_scraper.cjs for bookmaker code: sporty_better
+Registered custom scraper for bookmaker: sporty_new
+Command: node
+Registered custom scraper for bookmaker: betpawa_gh
+Script path: /home/runner/workspace/server/scrapers/custom/betpawa_gh_scraper.cjs
+    at file:///home/runner/workspace/dist/server/index.js:4269:5
+Command: node
+          ^
+forwarding local port 5000 to external port 80 (mapped as 1104)
+🌟 Registering SportyBet direct API scraper with correct endpoint
+Script path: /home/runner/workspace/server/scrapers/custom/betpawa_ke_scraper.cjs
+Node.js v20.18.1
+Script path: /home/runner/workspace/server/scrapers/custom/betpawa_gh_scraper.js
+Detected scraper file betpawa_gh_scraper.js for bookmaker code: betpawa_gh
+Detected scraper file bp_KE_scraper.py for bookmaker code: bp_KE
+          ^
+Registered custom scraper for bookmaker: betika KE
+Registered custom scraper for bookmaker: bp_GH
+Detected scraper file betpawa_scraper.js for bookmaker code: betpawa
+Detected scraper file example_scraper.js for bookmaker code: example
+🌟 Registering SportyBet direct API scraper with correct endpoint
+Detected scraper file betika KE_scraper.cjs for bookmaker code: betika KE
+Registered custom scraper for bookmaker: bp_KE
+Detected scraper file betpawa_ke_scraper.cjs for bookmaker code: betpawa_ke
+Command: node
+Detected scraper file betika KE_scraper.cjs for bookmaker code: betika KE
+Script path: /home/runner/workspace/server/scrapers/custom/betpawa_gh_scraper.js
+Script path: /home/runner/workspace/server/scrapers/custom/betpawa_ke_scraper.cjs
+Command: node
+Detected scraper file betika KE_scraper.cjs for bookmaker code: betika KE
+Script path: /home/runner/workspace/server/scrapers/custom/betpawa_gh_scraper.cjs
+Command: python
+Script path: /home/runner/workspace/server/scrapers/custom/bp_KE_scraper.py
+Registered custom scraper for bookmaker: betika KE
+Command: node
+Script path: /home/runner/workspace/server/scrapers/custom/betpawa_gh_scraper.js
+Command: node
+Command: node
+Detected scraper file example_scraper.js for bookmaker code: example
+Detected scraper file bp_GH_scraper.py for bookmaker code: bp_GH
+Setting up scrapers...
+Starting scraper runs...
+crash loop detected
+crash loop detected
+Command: node
+Command: node
+forwarding local port 5000 to external port 80 (mapped as 1104)
+Command: python
+Command: node
+Script path: /home/runner/workspace/server/scrapers/custom/example_scraper.js
+Script path: /home/runner/workspace/server/scrapers/custom/betpawa_scraper.js
+          ^
+Detected scraper file sporty_axios_scraper.cjs for bookmaker code: sporty_axios
+Command: python
+Script path: /home/runner/workspace/server/scrapers/custom/betika KE_scraper.cjs
+Registered custom scraper for bookmaker: betika KE
+Script path: /home/runner/workspace/server/scrapers/custom/bp_KE_scraper.py
+Node.js v20.18.1
+Command: node
+Registered custom scraper for bookmaker: betpawa_gh
+Detected scraper file betpawa_gh_scraper.js for bookmaker code: betpawa_gh
+Detected scraper file example_scraper.js for bookmaker code: example
+2025-04-28T01:17:19Z error: The deployment is crash looping. This can happen if the run command fails or exits immediately after starting. Check the logs for more information.
