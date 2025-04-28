@@ -412,5 +412,5 @@ function getMarketAvailabilityStats() {
 module.exports = {
   scrapeLiveEvents,
   getMarketAvailabilityStats,
-  scrapeLiveEvents as runLiveScraper
+  runLiveScraper: scrapeLiveEvents
 };
