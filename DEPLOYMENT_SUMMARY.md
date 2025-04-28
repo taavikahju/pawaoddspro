@@ -1,59 +1,54 @@
-# PawaOdds Deployment Summary
+# PawaOdds Deployment Guide
 
-## Identified Issues
+## Deploying to Replit
 
-1. **Module Format Mismatch**
-   - The application used a mix of ES Modules (`.mjs`) and CommonJS (`.cjs`) files
-   - TypeScript compilation was creating ES Module output but file placement was incorrect
+Follow these simple steps to deploy the PawaOdds application on Replit:
 
-2. **File Structure Issues**
-   - The build process placed files in the wrong directory structure
-   - The server was looking for files in `/dist/server/index.js` but they were in `/dist/index.js`
-
-3. **Missing TypeScript Declarations**
-   - No `.d.ts` files for the ES Module scrapers, causing TypeScript errors
-
-4. **Environment Configuration**
-   - Missing environment variables in the deployment environment
-
-## Implemented Solutions
-
-1. **Module Compatibility**
-   - Added proper ES Module declarations and exports
-   - Created TypeScript declaration files (`.d.ts`) for all ES Module scrapers
-   - Set `"type": "module"` in the package.json for correct module resolution
-
-2. **Fixed Build Process**
-   - Created the `deploy-fix.sh` script to restructure output files after build
-   - The script copies built files to the correct locations and fixes paths
-
-3. **Deployment Structure**
-   - Created proper `server-info.json` for Replit deployment
-   - Added explicit start script with correct working directory
-   - Ensured all necessary scraper files are included
-
-4. **Environment Configuration**
-   - Added automatic .env file copying to the deployment directory
-
-## Deployment Instructions
-
-1. Run the standard build process:
-   ```bash
-   npm run build
+1. **Build the application with our improved script:**
+   ```
+   ./build-deploy.sh
    ```
 
-2. Run the deployment fix script:
-   ```bash
-   ./deploy-fix.sh
-   ```
+   This script performs the following tasks:
+   - Builds the application using Vite and esbuild
+   - Fixes the directory structure for deployment
+   - Places client files in the proper location
+   - Copies all necessary scraper files
+   - Sets up package.json and server-info.json files
 
-3. Click the "Deploy" button in Replit
+2. **Deploy using Replit's deployment feature:**
+   - Click the "Deploy" button in Replit interface
+   - The application will be deployed to your Replit subdomain
 
-The combination of these changes ensures that:
-1. The server can properly find and execute the compiled JavaScript files
-2. The ES Module vs CommonJS module issues are resolved
-3. All scraper files are properly included and accessible
+## Troubleshooting Common Issues
 
-## Performance Impact
+### If deployment fails:
 
-These changes do not affect the performance of the application. They simply fix the deployment structure and module resolution issues.
+1. **Check file structure**
+   - Ensure the script completed successfully
+   - Verify that `dist/server/public` directory contains client files
+   - Confirm `dist/server/index.js` exists
+
+2. **Database connection issues**
+   - Verify that the PostgreSQL database is accessible
+   - Check environment variables in the Replit Secrets panel
+
+3. **Scraper issues**
+   - Confirm that all scraper files were copied to `dist/server/scrapers/custom`
+   - Look for any import path issues in scraper files
+
+## Monitoring Your Deployment
+
+- Check the deployment logs in Replit
+- Verify that the application is responding to API requests
+- Monitor the WebSocket connections for live heartbeat tracking
+
+## Technical Note
+
+The main issues that required fixing in the deployment process were:
+
+1. Client files needed to be in `/dist/server/public` but were being placed elsewhere
+2. Server file needed to be in `/dist/server/index.js` but was at `/dist/index.js`
+3. ES Module compatibility required fixing with a proper package.json configuration
+
+The `build-deploy.sh` script addresses all these issues and performs the necessary file organization for a successful deployment.
