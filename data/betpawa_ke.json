@@ -1,131 +1,5 @@
 [
   {
-    "id": "26923008",
-    "eventId": "57310899",
-    "country": "Colombia",
-    "tournament": "Colombia Categoría Primera A",
-    "event": "Atlético Bucaramanga - Millonarios",
-    "name": "Atlético Bucaramanga - Millonarios",
-    "home_odds": 1.92,
-    "draw_odds": 3.05,
-    "away_odds": 4.75,
-    "start_time": "2025-04-28T01:30:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 1.92
-          },
-          {
-            "name": "X",
-            "price": 3.05
-          },
-          {
-            "name": "2",
-            "price": 4.75
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "Colombia"
-    },
-    "region": {
-      "name": "Colombia"
-    },
-    "competition": {
-      "name": "Colombia Categoría Primera A"
-    },
-    "league": {
-      "name": "Colombia Categoría Primera A"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
-    "id": "26930469",
-    "eventId": "60038927",
-    "country": "Mexico",
-    "tournament": "Primera Division, Clausura",
-    "event": "CF Monterrey - CF Pachuca",
-    "name": "CF Monterrey - CF Pachuca",
-    "home_odds": 1.92,
-    "draw_odds": 3.5,
-    "away_odds": 3.55,
-    "start_time": "2025-04-28T01:30:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 1.92
-          },
-          {
-            "name": "X",
-            "price": 3.5
-          },
-          {
-            "name": "2",
-            "price": 3.55
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "Mexico"
-    },
-    "region": {
-      "name": "Mexico"
-    },
-    "competition": {
-      "name": "Primera Division, Clausura"
-    },
-    "league": {
-      "name": "Primera Division, Clausura"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
     "id": "26963101",
     "eventId": "60013395",
     "country": "Australia",
@@ -3093,9 +2967,9 @@
     "tournament": "UEFA Youth League",
     "event": "Trabzonspor U19 - FC Barcelona U19 (n)",
     "name": "Trabzonspor U19 - FC Barcelona U19 (n)",
-    "home_odds": 6,
-    "draw_odds": 4.7,
-    "away_odds": 1.41,
+    "home_odds": 4.7,
+    "draw_odds": 4.4,
+    "away_odds": 1.53,
     "start_time": "2025-04-28T16:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -3116,15 +2990,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 6
-          },
-          {
-            "name": "X",
             "price": 4.7
           },
           {
+            "name": "X",
+            "price": 4.4
+          },
+          {
             "name": "2",
-            "price": 1.41
+            "price": 1.53
           }
         ]
       }
@@ -6054,9 +5928,9 @@
     "tournament": "Saudi Arabia League Division 1",
     "event": "Al-Faisaly Harmah - Al Baten",
     "name": "Al-Faisaly Harmah - Al Baten",
-    "home_odds": 1.56,
-    "draw_odds": 3.65,
-    "away_odds": 5.25,
+    "home_odds": 1.47,
+    "draw_odds": 3.9,
+    "away_odds": 6,
     "start_time": "2025-04-28T17:45:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -6077,15 +5951,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.56
+            "price": 1.47
           },
           {
             "name": "X",
-            "price": 3.65
+            "price": 3.9
           },
           {
             "name": "2",
-            "price": 5.25
+            "price": 6
           }
         ]
       }
@@ -11724,9 +11598,9 @@
     "tournament": "England National League North",
     "event": "Chorley - King's Lynn Town",
     "name": "Chorley - King's Lynn Town",
-    "home_odds": 2.1,
+    "home_odds": 2,
     "draw_odds": 3.15,
-    "away_odds": 3.25,
+    "away_odds": 3.55,
     "start_time": "2025-04-29T18:45:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -11747,7 +11621,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.1
+            "price": 2
           },
           {
             "name": "X",
@@ -11755,7 +11629,7 @@
           },
           {
             "name": "2",
-            "price": 3.25
+            "price": 3.55
           }
         ]
       }
@@ -12653,6 +12527,258 @@
     },
     "league": {
       "name": "Thai League 1"
+    },
+    "isInPlay": false,
+    "status": "UPCOMING",
+    "scoreboard": {
+      "display": {
+        "minute": ""
+      }
+    }
+  },
+  {
+    "id": "26708558",
+    "eventId": "54057437",
+    "country": "Uganda",
+    "tournament": "Premier League",
+    "event": "Kitara FC - Wakiso Giants FC",
+    "name": "Kitara FC - Wakiso Giants FC",
+    "home_odds": 1.34,
+    "draw_odds": 4.4,
+    "away_odds": 7.5,
+    "start_time": "2025-04-30T13:00:00Z",
+    "gameMinute": "",
+    "sport": "football",
+    "competitors": [
+      {
+        "name": ""
+      },
+      {
+        "name": ""
+      }
+    ],
+    "markets": [
+      {
+        "marketType": {
+          "id": "3743",
+          "name": "1X2"
+        },
+        "prices": [
+          {
+            "name": "1",
+            "price": 1.34
+          },
+          {
+            "name": "X",
+            "price": 4.4
+          },
+          {
+            "name": "2",
+            "price": 7.5
+          }
+        ]
+      }
+    ],
+    "category": {
+      "name": "Uganda"
+    },
+    "region": {
+      "name": "Uganda"
+    },
+    "competition": {
+      "name": "Premier League"
+    },
+    "league": {
+      "name": "Premier League"
+    },
+    "isInPlay": false,
+    "status": "UPCOMING",
+    "scoreboard": {
+      "display": {
+        "minute": ""
+      }
+    }
+  },
+  {
+    "id": "26708555",
+    "eventId": "54057443",
+    "country": "Uganda",
+    "tournament": "Premier League",
+    "event": "Mbale Heroes FC - Maroons FC",
+    "name": "Mbale Heroes FC - Maroons FC",
+    "home_odds": 3.5,
+    "draw_odds": 3.5,
+    "away_odds": 1.89,
+    "start_time": "2025-04-30T13:00:00Z",
+    "gameMinute": "",
+    "sport": "football",
+    "competitors": [
+      {
+        "name": ""
+      },
+      {
+        "name": ""
+      }
+    ],
+    "markets": [
+      {
+        "marketType": {
+          "id": "3743",
+          "name": "1X2"
+        },
+        "prices": [
+          {
+            "name": "1",
+            "price": 3.5
+          },
+          {
+            "name": "X",
+            "price": 3.5
+          },
+          {
+            "name": "2",
+            "price": 1.89
+          }
+        ]
+      }
+    ],
+    "category": {
+      "name": "Uganda"
+    },
+    "region": {
+      "name": "Uganda"
+    },
+    "competition": {
+      "name": "Premier League"
+    },
+    "league": {
+      "name": "Premier League"
+    },
+    "isInPlay": false,
+    "status": "UPCOMING",
+    "scoreboard": {
+      "display": {
+        "minute": ""
+      }
+    }
+  },
+  {
+    "id": "26708556",
+    "eventId": "54057439",
+    "country": "Uganda",
+    "tournament": "Premier League",
+    "event": "Mbarara FC - NEC FC",
+    "name": "Mbarara FC - NEC FC",
+    "home_odds": 3.85,
+    "draw_odds": 3.1,
+    "away_odds": 1.93,
+    "start_time": "2025-04-30T13:00:00Z",
+    "gameMinute": "",
+    "sport": "football",
+    "competitors": [
+      {
+        "name": ""
+      },
+      {
+        "name": ""
+      }
+    ],
+    "markets": [
+      {
+        "marketType": {
+          "id": "3743",
+          "name": "1X2"
+        },
+        "prices": [
+          {
+            "name": "1",
+            "price": 3.85
+          },
+          {
+            "name": "X",
+            "price": 3.1
+          },
+          {
+            "name": "2",
+            "price": 1.93
+          }
+        ]
+      }
+    ],
+    "category": {
+      "name": "Uganda"
+    },
+    "region": {
+      "name": "Uganda"
+    },
+    "competition": {
+      "name": "Premier League"
+    },
+    "league": {
+      "name": "Premier League"
+    },
+    "isInPlay": false,
+    "status": "UPCOMING",
+    "scoreboard": {
+      "display": {
+        "minute": ""
+      }
+    }
+  },
+  {
+    "id": "26708561",
+    "eventId": "54057445",
+    "country": "Uganda",
+    "tournament": "Premier League",
+    "event": "Soltilo Bright Stars FC - Express FC",
+    "name": "Soltilo Bright Stars FC - Express FC",
+    "home_odds": 2.13,
+    "draw_odds": 3.45,
+    "away_odds": 2.95,
+    "start_time": "2025-04-30T13:00:00Z",
+    "gameMinute": "",
+    "sport": "football",
+    "competitors": [
+      {
+        "name": ""
+      },
+      {
+        "name": ""
+      }
+    ],
+    "markets": [
+      {
+        "marketType": {
+          "id": "3743",
+          "name": "1X2"
+        },
+        "prices": [
+          {
+            "name": "1",
+            "price": 2.13
+          },
+          {
+            "name": "X",
+            "price": 3.45
+          },
+          {
+            "name": "2",
+            "price": 2.95
+          }
+        ]
+      }
+    ],
+    "category": {
+      "name": "Uganda"
+    },
+    "region": {
+      "name": "Uganda"
+    },
+    "competition": {
+      "name": "Premier League"
+    },
+    "league": {
+      "name": "Premier League"
     },
     "isInPlay": false,
     "status": "UPCOMING",
@@ -27663,9 +27789,9 @@
     "tournament": "Bundesliga",
     "event": "FC St. Pauli - VfB Stuttgart",
     "name": "FC St. Pauli - VfB Stuttgart",
-    "home_odds": 2.8,
+    "home_odds": 2.75,
     "draw_odds": 3.5,
-    "away_odds": 2.45,
+    "away_odds": 2.5,
     "start_time": "2025-05-03T13:30:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -27686,7 +27812,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.8
+            "price": 2.75
           },
           {
             "name": "X",
@@ -27694,7 +27820,7 @@
           },
           {
             "name": "2",
-            "price": 2.45
+            "price": 2.5
           }
         ]
       }
@@ -38625,9 +38751,9 @@
     "tournament": "1. Liga",
     "event": "1. FC Slovacko Uherske Hradiste - SK Dynamo Ceske Budejovice",
     "name": "1. FC Slovacko Uherske Hradiste - SK Dynamo Ceske Budejovice",
-    "home_odds": 1.39,
+    "home_odds": 1.4,
     "draw_odds": 4.4,
-    "away_odds": 7,
+    "away_odds": 6.5,
     "start_time": "2025-05-04T11:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -38648,7 +38774,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.39
+            "price": 1.4
           },
           {
             "name": "X",
@@ -38656,7 +38782,7 @@
           },
           {
             "name": "2",
-            "price": 7
+            "price": 6.5
           }
         ]
       }
@@ -53934,9 +54060,9 @@
     "tournament": "Premier League",
     "event": "Nottingham Forest - Leicester City",
     "name": "Nottingham Forest - Leicester City",
-    "home_odds": 1.36,
+    "home_odds": 1.37,
     "draw_odds": 5.25,
-    "away_odds": 8,
+    "away_odds": 7.75,
     "start_time": "2025-05-11T13:15:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -53957,7 +54083,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.36
+            "price": 1.37
           },
           {
             "name": "X",
@@ -53965,7 +54091,7 @@
           },
           {
             "name": "2",
-            "price": 8
+            "price": 7.75
           }
         ]
       }
@@ -54249,7 +54375,7 @@
     "tournament": "Premier League",
     "event": "Liverpool FC - Arsenal FC",
     "name": "Liverpool FC - Arsenal FC",
-    "home_odds": 2.15,
+    "home_odds": 2.16,
     "draw_odds": 3.35,
     "away_odds": 3.45,
     "start_time": "2025-05-11T15:30:00Z",
@@ -54272,7 +54398,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.15
+            "price": 2.16
           },
           {
             "name": "X",
