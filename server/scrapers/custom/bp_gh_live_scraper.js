@@ -404,8 +404,8 @@ function getMarketAvailabilityStats() {
 }
 
 
-export {
+export default {
   scrapeLiveEvents,
   getMarketAvailabilityStats,
-  scrapeLiveEvents as runLiveScraper
+  runLiveScraper: scrapeLiveEvents
 };
