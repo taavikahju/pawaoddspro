@@ -1,266 +1,14 @@
 [
   {
-    "id": "26992283",
-    "eventId": "59986985",
-    "country": "Mexico",
-    "tournament": "Liga Premier Serie A",
-    "event": "Lobos Ulmx - CF Correcaminos Uat II",
-    "name": "Lobos Ulmx - CF Correcaminos Uat II",
-    "home_odds": 1.97,
-    "draw_odds": 3.2,
-    "away_odds": 3.55,
-    "start_time": "2025-04-28T01:00:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 1.97
-          },
-          {
-            "name": "X",
-            "price": 3.2
-          },
-          {
-            "name": "2",
-            "price": 3.55
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "Mexico"
-    },
-    "region": {
-      "name": "Mexico"
-    },
-    "competition": {
-      "name": "Liga Premier Serie A"
-    },
-    "league": {
-      "name": "Liga Premier Serie A"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
-    "id": "26989647",
-    "eventId": "60022131",
-    "country": "Mexico",
-    "tournament": "Liga de Expansion MX, Clausura",
-    "event": "CD Mineros de Zacatecas - Venados  FC",
-    "name": "CD Mineros de Zacatecas - Venados  FC",
-    "home_odds": 1.45,
-    "draw_odds": 4.25,
-    "away_odds": 5.5,
-    "start_time": "2025-04-28T01:00:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 1.45
-          },
-          {
-            "name": "X",
-            "price": 4.25
-          },
-          {
-            "name": "2",
-            "price": 5.5
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "Mexico"
-    },
-    "region": {
-      "name": "Mexico"
-    },
-    "competition": {
-      "name": "Liga de Expansion MX, Clausura"
-    },
-    "league": {
-      "name": "Liga de Expansion MX, Clausura"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
-    "id": "25387725",
-    "eventId": "56690543",
-    "country": "USA",
-    "tournament": "Major League Soccer",
-    "event": "Los Angeles Galaxy - Portland Timbers",
-    "name": "Los Angeles Galaxy - Portland Timbers",
-    "home_odds": 2.03,
-    "draw_odds": 3.85,
-    "away_odds": 3.25,
-    "start_time": "2025-04-28T01:00:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 2.03
-          },
-          {
-            "name": "X",
-            "price": 3.85
-          },
-          {
-            "name": "2",
-            "price": 3.25
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "USA"
-    },
-    "region": {
-      "name": "USA"
-    },
-    "competition": {
-      "name": "Major League Soccer"
-    },
-    "league": {
-      "name": "Major League Soccer"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
-    "id": "27022755",
-    "eventId": "60132591",
-    "country": "Nicaragua",
-    "tournament": "Primera Division",
-    "event": "Diriangen FC Diriamba - Rancho Santana FC",
-    "name": "Diriangen FC Diriamba - Rancho Santana FC",
-    "home_odds": 1.09,
-    "draw_odds": 8.25,
-    "away_odds": 15,
-    "start_time": "2025-04-28T01:00:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 1.09
-          },
-          {
-            "name": "X",
-            "price": 8.25
-          },
-          {
-            "name": "2",
-            "price": 15
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "Nicaragua"
-    },
-    "region": {
-      "name": "Nicaragua"
-    },
-    "competition": {
-      "name": "Primera Division"
-    },
-    "league": {
-      "name": "Primera Division"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
     "id": "26923008",
     "eventId": "57310899",
     "country": "Colombia",
     "tournament": "Colombia Categoría Primera A",
     "event": "Atlético Bucaramanga - Millonarios",
     "name": "Atlético Bucaramanga - Millonarios",
-    "home_odds": 1.92,
-    "draw_odds": 3.05,
-    "away_odds": 4.75,
+    "home_odds": 1.82,
+    "draw_odds": 3.1,
+    "away_odds": 5.25,
     "start_time": "2025-04-28T01:30:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -281,15 +29,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.92
+            "price": 1.82
           },
           {
             "name": "X",
-            "price": 3.05
+            "price": 3.1
           },
           {
             "name": "2",
-            "price": 4.75
+            "price": 5.25
           }
         ]
       }
@@ -447,9 +195,9 @@
     "tournament": "Indonesia Liga 1",
     "event": "Arema - Persebaya Surabaya",
     "name": "Arema - Persebaya Surabaya",
-    "home_odds": 2.25,
+    "home_odds": 2.35,
     "draw_odds": 3.45,
-    "away_odds": 3,
+    "away_odds": 2.9,
     "start_time": "2025-04-28T08:30:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -470,7 +218,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.25
+            "price": 2.35
           },
           {
             "name": "X",
@@ -478,7 +226,7 @@
           },
           {
             "name": "2",
-            "price": 3
+            "price": 2.9
           }
         ]
       }
@@ -10874,6 +10622,69 @@
           {
             "name": "2",
             "price": 1.47
+          }
+        ]
+      }
+    ],
+    "category": {
+      "name": "Egypt"
+    },
+    "region": {
+      "name": "Egypt"
+    },
+    "competition": {
+      "name": "Egypt Second Division A"
+    },
+    "league": {
+      "name": "Egypt Second Division A"
+    },
+    "isInPlay": false,
+    "status": "UPCOMING",
+    "scoreboard": {
+      "display": {
+        "minute": ""
+      }
+    }
+  },
+  {
+    "id": "27062367",
+    "eventId": "27062367",
+    "country": "Egypt",
+    "tournament": "Egypt Second Division A",
+    "event": "Alexandria Sporting Club - Kahraba Ismailia",
+    "name": "Alexandria Sporting Club - Kahraba Ismailia",
+    "home_odds": 4,
+    "draw_odds": 3.6,
+    "away_odds": 1.75,
+    "start_time": "2025-04-29T14:30:00Z",
+    "gameMinute": "",
+    "sport": "football",
+    "competitors": [
+      {
+        "name": ""
+      },
+      {
+        "name": ""
+      }
+    ],
+    "markets": [
+      {
+        "marketType": {
+          "id": "3743",
+          "name": "1X2"
+        },
+        "prices": [
+          {
+            "name": "1",
+            "price": 4
+          },
+          {
+            "name": "X",
+            "price": 3.6
+          },
+          {
+            "name": "2",
+            "price": 1.75
           }
         ]
       }
@@ -28736,9 +28547,9 @@
     "tournament": "League One",
     "event": "Reading FC - Barnsley FC",
     "name": "Reading FC - Barnsley FC",
-    "home_odds": 1.61,
+    "home_odds": 1.63,
     "draw_odds": 4.1,
-    "away_odds": 4.6,
+    "away_odds": 4.4,
     "start_time": "2025-05-03T14:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -28759,7 +28570,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.61
+            "price": 1.63
           },
           {
             "name": "X",
@@ -28767,7 +28578,7 @@
           },
           {
             "name": "2",
-            "price": 4.6
+            "price": 4.4
           }
         ]
       }
@@ -28862,9 +28673,9 @@
     "tournament": "League One",
     "event": "Shrewsbury Town - Crawley Town",
     "name": "Shrewsbury Town - Crawley Town",
-    "home_odds": 2.7,
-    "draw_odds": 3.5,
-    "away_odds": 2.35,
+    "home_odds": 2.75,
+    "draw_odds": 3.6,
+    "away_odds": 2.3,
     "start_time": "2025-05-03T14:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -28885,15 +28696,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.7
+            "price": 2.75
           },
           {
             "name": "X",
-            "price": 3.5
+            "price": 3.6
           },
           {
             "name": "2",
-            "price": 2.35
+            "price": 2.3
           }
         ]
       }
@@ -34848,8 +34659,8 @@
     "event": "Burgos CF - Elche CF",
     "name": "Burgos CF - Elche CF",
     "home_odds": 3.35,
-    "draw_odds": 3,
-    "away_odds": 2.35,
+    "draw_odds": 3.05,
+    "away_odds": 2.3,
     "start_time": "2025-05-03T19:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -34874,11 +34685,11 @@
           },
           {
             "name": "X",
-            "price": 3
+            "price": 3.05
           },
           {
             "name": "2",
-            "price": 2.35
+            "price": 2.3
           }
         ]
       }
@@ -40265,9 +40076,9 @@
     "tournament": "Bundesliga",
     "event": "SK Rapid - Wolfsberger AC",
     "name": "SK Rapid - Wolfsberger AC",
-    "home_odds": 2.18,
-    "draw_odds": 3.35,
-    "away_odds": 3.3,
+    "home_odds": 2.19,
+    "draw_odds": 3.4,
+    "away_odds": 3.2,
     "start_time": "2025-05-04T12:30:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -40288,15 +40099,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.18
+            "price": 2.19
           },
           {
             "name": "X",
-            "price": 3.35
+            "price": 3.4
           },
           {
             "name": "2",
-            "price": 3.3
+            "price": 3.2
           }
         ]
       }
@@ -46313,9 +46124,9 @@
     "tournament": "Liga Portugal",
     "event": "Sporting Lisbon - Gil Vicente Barcelos",
     "name": "Sporting Lisbon - Gil Vicente Barcelos",
-    "home_odds": 1.16,
-    "draw_odds": 7.25,
-    "away_odds": 16,
+    "home_odds": 1.15,
+    "draw_odds": 7.5,
+    "away_odds": 17,
     "start_time": "2025-05-04T19:30:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -46336,15 +46147,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.16
+            "price": 1.15
           },
           {
             "name": "X",
-            "price": 7.25
+            "price": 7.5
           },
           {
             "name": "2",
-            "price": 16
+            "price": 17
           }
         ]
       }
