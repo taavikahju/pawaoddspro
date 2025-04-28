@@ -1,11 +1,6 @@
-/**
- * BetPawa Ghana Live Events Scraper
- * Scrapes live events every 10 seconds to track market availability
- */
-
-const axios = require('axios');
-const fs = require('fs').promises;
-const path = require('path');
+import axios from 'axios';
+import { promises as fs } from 'fs';
+import path from 'path';
 
 // Store history of market availability
 let marketHistoryData = {};
