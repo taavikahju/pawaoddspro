@@ -7,8 +7,16 @@ const __dirname = path.resolve();
 
 module.exports = defineConfig({
   plugins: [
-    react()
-    // Remove the plugins that use top-level await
+    react(),
+    {
+      name: 'error-redirect',
+      configureServer(server) {
+        server.middlewares.use((req, res, next) => {
+          // Pass all requests to Vite's handler
+          next();
+        });
+      }
+    }
   ],
   resolve: {
     alias: {
