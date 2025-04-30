@@ -3,15 +3,55 @@ import ReactCountryFlag from 'react-country-flag';
 import { GlobeIcon } from 'lucide-react';
 
 interface CountryFlagProps {
-  countryCode: string;
-  countryName: string;
+  countryCode?: string;
+  countryName?: string;
+  country?: string;
   size?: 'sm' | 'md' | 'lg';
   className?: string;
 }
 
+// Map of country names to ISO codes
+const countryCodeMap: Record<string, string> = {
+  'England': 'GB',
+  'Spain': 'ES',
+  'Germany': 'DE',
+  'Italy': 'IT',
+  'France': 'FR',
+  'Kenya': 'KE',
+  'Ghana': 'GH',
+  'Nigeria': 'NG',
+  'Tanzania': 'TZ',
+  'Uganda': 'UG',
+  'South Africa': 'ZA',
+  'Egypt': 'EG',
+  'Morocco': 'MA',
+  'Brazil': 'BR',
+  'Argentina': 'AR',
+  'Netherlands': 'NL',
+  'Portugal': 'PT',
+  'Belgium': 'BE',
+  'Turkey': 'TR',
+  'Croatia': 'HR',
+  'Denmark': 'DK',
+  'Norway': 'NO',
+  'Sweden': 'SE',
+  'Switzerland': 'CH',
+  'Austria': 'AT',
+  'Poland': 'PL',
+  'Russia': 'RU',
+  'United States': 'US',
+  'Mexico': 'MX',
+  'Canada': 'CA',
+  'Australia': 'AU',
+  'China': 'CN',
+  'Japan': 'JP',
+  'South Korea': 'KR',
+};
+
 export default function CountryFlag({ 
   countryCode, 
   countryName, 
+  country,
   size = 'md',
   className = '' 
 }: CountryFlagProps) {
@@ -38,11 +78,21 @@ export default function CountryFlag({
   
   const { width, height, iconSize } = sizeMap[size];
 
+  // Determine the correct country code to use
+  let codeToUse = countryCode;
+  let nameToUse = countryName;
+  
+  // If country prop is provided (for tournament margins page), use it to lookup code
+  if (country) {
+    codeToUse = countryCodeMap[country] || 'XX';
+    nameToUse = country;
+  }
+
   // Show placeholder globe icon if flag is missing or doesn't load
-  if (countryCode === 'XX' || flagError) {
+  if (!codeToUse || codeToUse === 'XX' || flagError) {
     return (
       <div className={`inline-flex items-center justify-center ${className}`}>
-        <span title={countryName}>
+        <span title={nameToUse}>
           <GlobeIcon className={`${iconSize} text-gray-400`} />
         </span>
       </div>
@@ -52,13 +102,13 @@ export default function CountryFlag({
   return (
     <div className={`inline-flex ${className}`}>
       <ReactCountryFlag 
-        countryCode={countryCode} 
+        countryCode={codeToUse} 
         svg 
         style={{
           width,
           height
         }}
-        title={countryName}
+        title={nameToUse}
         onError={() => setFlagError(true)}
       />
     </div>

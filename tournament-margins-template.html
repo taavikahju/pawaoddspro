@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tournament Margins - pawaodds.pro</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .sidebar {
+      width: 250px;
+      transition: transform 0.3s ease-in-out;
+    }
+    .sidebar-collapsed {
+      transform: translateX(-90%);
+    }
+    .main-content {
+      margin-left: 250px;
+      transition: margin-left 0.3s ease-in-out;
+    }
+    .main-content-expanded {
+      margin-left: 25px;
+    }
+    .country-flag {
+      width: 24px;
+      height: 16px;
+      object-fit: cover;
+      border-radius: 2px;
+    }
+    .danger-triangle {
+      color: red;
+      font-size: 1.1em;
+    }
+    .old-data-icon {
+      color: #999;
+      font-size: 0.9em;
+    }
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+    .tooltip .tooltip-text {
+      visibility: hidden;
+      width: 200px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .tooltip:hover .tooltip-text {
+      visibility: visible;
+      opacity: 1;
+    }
+    .collapsible-section {
+      border: 1px solid #e5e7eb;
+      border-radius: 0.375rem;
+      margin-bottom: 0.5rem;
+    }
+    .collapsible-header {
+      padding: 0.75rem;
+      background-color: #f9fafb;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .collapsible-content {
+      padding: 0.5rem;
+    }
+    .margin-cell {
+      font-weight: 500;
+    }
+    .margin-low {
+      color: #10b981;
+    }
+    .margin-medium {
+      color: #f59e0b;
+    }
+    .margin-high {
+      color: #ef4444;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+  <!-- Sidebar -->
+  <div class="sidebar fixed h-full bg-white shadow-md z-10">
+    <div class="p-4 border-b flex justify-between items-center">
+      <h1 class="text-lg font-bold">pawa<span class="text-blue-500">odds</span>.pro</h1>
+      <button id="toggle-sidebar" class="px-2 py-1 rounded hover:bg-gray-100">
+        ←
+      </button>
+    </div>
+    <div class="p-4">
+      <div class="mb-4">
+        <h2 class="text-xs uppercase text-gray-500 font-semibold mb-2">Main</h2>
+        <ul>
+          <li class="mb-1"><a href="#" class="text-gray-600 hover:text-blue-500 flex items-center py-1 text-sm">Dashboard</a></li>
+          <li class="mb-1"><a href="#" class="text-gray-600 hover:text-blue-500 flex items-center py-1 text-sm">Scraper Status</a></li>
+          <li class="mb-1"><a href="#" class="text-gray-600 hover:text-blue-500 flex items-center py-1 text-sm">Live Heartbeat</a></li>
+          <li class="mb-1"><a href="#" class="text-blue-500 flex items-center py-1 text-sm font-medium">Tournament Margins</a></li>
+          <li class="mb-1"><a href="#" class="text-gray-600 hover:text-blue-500 flex items-center py-1 text-sm">Admin Panel</a></li>
+        </ul>
+      </div>
+      
+      <div class="mb-4">
+        <h2 class="text-xs uppercase text-gray-500 font-semibold mb-2">Quick Filters</h2>
+        <div class="space-y-2">
+          <button class="w-full text-left px-3 py-1 bg-gray-100 rounded text-sm flex items-center">
+            <img src="https://flagcdn.com/w20/gh.png" alt="Ghana" class="mr-2 w-5 h-3">
+            Ghana
+          </button>
+          <button class="w-full text-left px-3 py-1 bg-gray-100 rounded text-sm flex items-center">
+            <img src="https://flagcdn.com/w20/ke.png" alt="Kenya" class="mr-2 w-5 h-3">
+            Kenya
+          </button>
+          <button class="w-full text-left px-3 py-1 bg-gray-100 rounded text-sm flex items-center">
+            All Bookmakers
+          </button>
+        </div>
+      </div>
+      
+      <div class="mb-4">
+        <h2 class="text-xs uppercase text-gray-500 font-semibold mb-2">Bookmakers</h2>
+        <div class="bg-gray-50 p-2 rounded border">
+          <div class="flex items-center mb-2">
+            <input type="checkbox" id="betpawa_ke" checked class="mr-2">
+            <label for="betpawa_ke" class="text-sm">BetPawa Kenya</label>
+          </div>
+          <div class="flex items-center mb-2">
+            <input type="checkbox" id="betpawa_gh" checked class="mr-2">
+            <label for="betpawa_gh" class="text-sm">BetPawa Ghana</label>
+          </div>
+          <div class="flex items-center">
+            <input type="checkbox" id="sportybet" checked class="mr-2">
+            <label for="sportybet" class="text-sm">SportyBet</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content min-h-screen p-6">
+    <h1 class="text-2xl font-bold mb-6">Tournament Margins</h1>
+    
+    <div class="bg-white rounded-lg shadow p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-lg font-semibold">Tournament Margins by Country</h2>
+        <div class="text-sm bg-gray-100 px-3 py-1 rounded">
+          Margins: (1/home + 1/draw + 1/away) - 1
+        </div>
+      </div>
+      
+      <!-- Country section: England -->
+      <div class="collapsible-section">
+        <div class="collapsible-header">
+          <div class="flex items-center">
+            <img src="https://flagcdn.com/w20/gb.png" alt="England" class="country-flag mr-2">
+            <span class="font-medium">England</span>
+            <span class="danger-triangle tooltip ml-2">⚠️
+              <span class="tooltip-text">Warning: BetPawa KE or GH margin is 2.5% or more higher/lower than other bookmakers</span>
+            </span>
+          </div>
+          <div class="text-gray-500 text-sm">
+            ▼ 3 tournaments
+          </div>
+        </div>
+        <div class="collapsible-content">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-gray-50 text-left">
+                <th class="p-2 font-medium">Tournament</th>
+                <th class="p-2 font-medium text-center">BetPawa Kenya</th>
+                <th class="p-2 font-medium text-center">BetPawa Ghana</th>
+                <th class="p-2 font-medium text-center">SportyBet</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-t">
+                <td class="p-2 font-medium">Premier League</td>
+                <td class="p-2 text-center margin-cell margin-low">5.8%</td>
+                <td class="p-2 text-center margin-cell margin-low">6.4%</td>
+                <td class="p-2 text-center margin-cell margin-low">5.2%</td>
+              </tr>
+              <tr class="border-t">
+                <td class="p-2 font-medium">Championship</td>
+                <td class="p-2 text-center margin-cell margin-medium">7.3%</td>
+                <td class="p-2 text-center margin-cell margin-medium">7.1%</td>
+                <td class="p-2 text-center margin-cell margin-low">6.5%</td>
+              </tr>
+              <tr class="border-t">
+                <td class="p-2 font-medium">FA Cup</td>
+                <td class="p-2 text-center margin-cell margin-medium">8.5%</td>
+                <td class="p-2 text-center margin-cell margin-medium">
+                  8.9%
+                  <span class="old-data-icon tooltip ml-1">🕒
+                    <span class="tooltip-text">Last updated: Apr 30, 2025 16:42</span>
+                  </span>
+                </td>
+                <td class="p-2 text-center margin-cell margin-medium">7.8%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <!-- Country section: Germany -->
+      <div class="collapsible-section">
+        <div class="collapsible-header">
+          <div class="flex items-center">
+            <img src="https://flagcdn.com/w20/de.png" alt="Germany" class="country-flag mr-2">
+            <span class="font-medium">Germany</span>
+            <span class="danger-triangle tooltip ml-2">⚠️
+              <span class="tooltip-text">Warning: BetPawa KE or GH margin is 2.5% or more higher/lower than other bookmakers</span>
+            </span>
+          </div>
+          <div class="text-gray-500 text-sm">
+            ▼ 2 tournaments
+          </div>
+        </div>
+        <div class="collapsible-content">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-gray-50 text-left">
+                <th class="p-2 font-medium">Tournament</th>
+                <th class="p-2 font-medium text-center">BetPawa Kenya</th>
+                <th class="p-2 font-medium text-center">BetPawa Ghana</th>
+                <th class="p-2 font-medium text-center">SportyBet</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-t">
+                <td class="p-2 font-medium flex items-center">
+                  Bundesliga
+                  <span class="danger-triangle tooltip ml-2">⚠️
+                    <span class="tooltip-text">Significant margin difference of 2.5% or more between BetPawa and other bookmakers</span>
+                  </span>
+                </td>
+                <td class="p-2 text-center margin-cell margin-low">5.9%</td>
+                <td class="p-2 text-center margin-cell margin-high">9.3%</td>
+                <td class="p-2 text-center margin-cell margin-low">5.4%</td>
+              </tr>
+              <tr class="border-t">
+                <td class="p-2 font-medium">DFB Pokal</td>
+                <td class="p-2 text-center margin-cell margin-medium">7.6%</td>
+                <td class="p-2 text-center margin-cell margin-medium">7.8%</td>
+                <td class="p-2 text-center margin-cell margin-low">6.8%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <!-- Country section: Spain -->
+      <div class="collapsible-section">
+        <div class="collapsible-header">
+          <div class="flex items-center">
+            <img src="https://flagcdn.com/w20/es.png" alt="Spain" class="country-flag mr-2">
+            <span class="font-medium">Spain</span>
+          </div>
+          <div class="text-gray-500 text-sm">
+            ▼ 2 tournaments
+          </div>
+        </div>
+        <div class="collapsible-content">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-gray-50 text-left">
+                <th class="p-2 font-medium">Tournament</th>
+                <th class="p-2 font-medium text-center">BetPawa Kenya</th>
+                <th class="p-2 font-medium text-center">BetPawa Ghana</th>
+                <th class="p-2 font-medium text-center">SportyBet</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-t">
+                <td class="p-2 font-medium">La Liga</td>
+                <td class="p-2 text-center margin-cell margin-low">6.1%</td>
+                <td class="p-2 text-center margin-cell margin-low">6.8%</td>
+                <td class="p-2 text-center margin-cell margin-low">5.5%</td>
+              </tr>
+              <tr class="border-t">
+                <td class="p-2 font-medium">Copa del Rey</td>
+                <td class="p-2 text-center margin-cell margin-medium">8.3%</td>
+                <td class="p-2 text-center margin-cell">-</td>
+                <td class="p-2 text-center margin-cell margin-medium">7.9%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Simple toggle for sidebar
+    document.getElementById('toggle-sidebar').addEventListener('click', function() {
+      document.querySelector('.sidebar').classList.toggle('sidebar-collapsed');
+      document.querySelector('.main-content').classList.toggle('main-content-expanded');
+    });
+    
+    // Toggle collapsible sections
+    document.querySelectorAll('.collapsible-header').forEach(header => {
+      header.addEventListener('click', function() {
+        const content = this.nextElementSibling;
+        if (content.style.display === "none") {
+          content.style.display = "block";
+          this.querySelector('div:last-child').innerHTML = this.querySelector('div:last-child').innerHTML.replace('▶', '▼');
+        } else {
+          content.style.display = "none";
+          this.querySelector('div:last-child').innerHTML = this.querySelector('div:last-child').innerHTML.replace('▼', '▶');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

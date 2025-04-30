@@ -3,14 +3,11 @@
   "version": "1.0.0",
   "type": "commonjs",
   "scripts": {
-    "start": "node replit-deploy.cjs",
-    "dev": "node replit-deploy.cjs"
+    "start": "node replit-deploy-fixed.cjs",
+    "dev": "node replit-deploy-fixed.cjs"
   },
   "dependencies": {
-    "@types/memoizee": "^0.4.12",
-    "axios": "1.6.2",
     "express": "4.18.2",
-    "memoizee": "^0.4.17",
-    "openid-client": "^6.4.2"
+    "axios": "1.6.2"
   }
 }

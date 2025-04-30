@@ -45,7 +45,19 @@ async function main() {
         res.sendFile(path.join(frontendPath, 'index.html'));
       });
     } else {
-      console.warn('No frontend build found. Starting in API-only mode.');
+      console.log('No frontend build found. Serving tournament margins template.');
+      // Serve root directory for static files
+      app.use(express.static(path.join(__dirname, '..')));
+      
+      // Route to serve the tournament margins template
+      app.get('/tournament-margins-template', (req, res) => {
+        res.sendFile(path.join(__dirname, '../tournament-margins-template.html'));
+      });
+      
+      // Add a redirect from the root to our template for demo purposes
+      app.get('/', (req, res) => {
+        res.redirect('/tournament-margins-template');
+      });
     }
     
     // Start the server
