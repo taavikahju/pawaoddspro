@@ -1,10 +1,11 @@
 {
   "name": "rest-express",
   "version": "1.0.0",
-  "type": "commonjs",
+  "type": "module",
   "scripts": {
+    "dev": "tsx server/vite.ts",
     "start": "node dist/index.js",
-    "build": "vite build --config vite.config.cjs && esbuild server/index.ts --platform=node --packages=external --bundle --format=cjs --outdir=dist"
+    "build": "tsc && vite build"
   },
   "dependencies": {
     "@hookform/resolvers": "3.3.2",
@@ -23,13 +24,14 @@
     "express-session": "1.17.3",
     "lucide-react": "0.292.0",
     "memorystore": "1.6.7",
+    "next-themes": "0.2.1",
     "node-cron": "3.0.3",
     "passport": "0.6.0",
     "passport-local": "1.0.0",
     "postcss": "8.4.31",
-    "react": "18.3.1",  
+    "react": "18.2.0",
     "react-country-flag": "3.1.0",
-    "react-dom": "18.3.1",
+    "react-dom": "18.2.0",
     "react-hook-form": "7.48.2",
     "react-icons": "4.12.0",
     "tailwindcss": "3.3.5",

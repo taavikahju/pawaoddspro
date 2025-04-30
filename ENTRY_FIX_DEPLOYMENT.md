@@ -2,19 +2,14 @@
 
 ## Deployment Steps
 
-1. Run the entry fix deployment script:
-   ```bash
-   ./deploy-fix-entry.sh
-   ```
-
-2. Replace your package.json with the deployment version:
+1. Replace your package.json with the deployment version:
    ```bash
    cp package.json.deploy package.json
    ```
 
-3. Click the Deploy button in Replit.
+2. Click the Deploy button in Replit.
 
-4. After deployment completes, restore your development package.json:
+3. After deployment completes, restore your development package.json:
    ```bash
    cp package.json.bak package.json
    ```
