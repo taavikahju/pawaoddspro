@@ -30,16 +30,14 @@ app.get('/api/events', (req, res) => {
 
 // Serve static files (if available)
 const staticPath = path.join(__dirname, 'dist/public');
+// Check if static files exist, but always serve the default HTML fallback
 if (fs.existsSync(staticPath)) {
   console.log(`Serving static files from ${staticPath}`);
   app.use(express.static(staticPath));
-  
-  // SPA fallback for client-side routing
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(staticPath, 'index.html'));
-  });
-} else {
-  // Fallback HTML if no static files
+}
+
+// Always handle routes to ensure app works even without a build
+// Fallback HTML if no static files
   app.get('/', (req, res) => {
     res.send(`
       <!DOCTYPE html>
