@@ -447,8 +447,8 @@
     "tournament": "U20 Brasileiro Serie B",
     "event": "Vila Nova FC GO U20 - EC Vitoria BA U20",
     "name": "Vila Nova FC GO U20 - EC Vitoria BA U20",
-    "home_odds": 2.65,
-    "draw_odds": 3.25,
+    "home_odds": 2.55,
+    "draw_odds": 3.35,
     "away_odds": 2.4,
     "start_time": "2025-04-30T22:00:00Z",
     "gameMinute": "",
@@ -470,11 +470,11 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.65
+            "price": 2.55
           },
           {
             "name": "X",
-            "price": 3.25
+            "price": 3.35
           },
           {
             "name": "2",
@@ -1077,9 +1077,9 @@
     "tournament": "Ecuador Serie B",
     "event": "CA Vinotinto - Chacaritas SC",
     "name": "CA Vinotinto - Chacaritas SC",
-    "home_odds": 1.36,
-    "draw_odds": 4.2,
-    "away_odds": 7.75,
+    "home_odds": 1.38,
+    "draw_odds": 4.1,
+    "away_odds": 7.25,
     "start_time": "2025-05-01T00:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -1100,15 +1100,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.36
+            "price": 1.38
           },
           {
             "name": "X",
-            "price": 4.2
+            "price": 4.1
           },
           {
             "name": "2",
-            "price": 7.75
+            "price": 7.25
           }
         ]
       }
@@ -1581,9 +1581,9 @@
     "tournament": "Colombia Categoría Primera A",
     "event": "Llaneros FC Villavicencio - Santa Fe",
     "name": "Llaneros FC Villavicencio - Santa Fe",
-    "home_odds": 2.65,
+    "home_odds": 2.6,
     "draw_odds": 2.95,
-    "away_odds": 2.7,
+    "away_odds": 2.75,
     "start_time": "2025-05-01T01:10:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -1604,7 +1604,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.65
+            "price": 2.6
           },
           {
             "name": "X",
@@ -1612,7 +1612,7 @@
           },
           {
             "name": "2",
-            "price": 2.7
+            "price": 2.75
           }
         ]
       }
@@ -3095,8 +3095,8 @@
     "event": "IFK Norrkoping DFK - Hacken Gothenburg",
     "name": "IFK Norrkoping DFK - Hacken Gothenburg",
     "home_odds": 6.5,
-    "draw_odds": 5.5,
-    "away_odds": 1.31,
+    "draw_odds": 5.25,
+    "away_odds": 1.33,
     "start_time": "2025-05-01T11:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -3121,11 +3121,11 @@
           },
           {
             "name": "X",
-            "price": 5.5
+            "price": 5.25
           },
           {
             "name": "2",
-            "price": 1.31
+            "price": 1.33
           }
         ]
       }
@@ -5740,9 +5740,9 @@
     "tournament": "OFB Cup",
     "event": "Wolfsberger AC - TSV Hartberg (n)",
     "name": "Wolfsberger AC - TSV Hartberg (n)",
-    "home_odds": 1.78,
+    "home_odds": 1.82,
     "draw_odds": 3.55,
-    "away_odds": 4.2,
+    "away_odds": 4,
     "start_time": "2025-05-01T15:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -5763,7 +5763,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.78
+            "price": 1.82
           },
           {
             "name": "X",
@@ -5771,7 +5771,7 @@
           },
           {
             "name": "2",
-            "price": 4.2
+            "price": 4
           }
         ]
       }
@@ -7378,9 +7378,9 @@
     "tournament": "U20 Brasileiro Serie B",
     "event": "CR Brasil AL U20 - Ceara SC CE U20",
     "name": "CR Brasil AL U20 - Ceara SC CE U20",
-    "home_odds": 3.7,
+    "home_odds": 3.55,
     "draw_odds": 3.6,
-    "away_odds": 1.81,
+    "away_odds": 1.84,
     "start_time": "2025-05-01T18:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -7401,7 +7401,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 3.7
+            "price": 3.55
           },
           {
             "name": "X",
@@ -7409,7 +7409,7 @@
           },
           {
             "name": "2",
-            "price": 1.81
+            "price": 1.84
           }
         ]
       }
@@ -7693,9 +7693,9 @@
     "tournament": "Saudi Arabia Pro League",
     "event": "Al-Fateh Al-Hasa - Al-Shabab Riyadh",
     "name": "Al-Fateh Al-Hasa - Al-Shabab Riyadh",
-    "home_odds": 2.55,
-    "draw_odds": 3.85,
-    "away_odds": 2.45,
+    "home_odds": 2.65,
+    "draw_odds": 3.95,
+    "away_odds": 2.35,
     "start_time": "2025-05-01T18:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -7716,15 +7716,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.55
+            "price": 2.65
           },
           {
             "name": "X",
-            "price": 3.85
+            "price": 3.95
           },
           {
             "name": "2",
-            "price": 2.45
+            "price": 2.35
           }
         ]
       }
@@ -13301,9 +13301,9 @@
     "tournament": "2nd Division",
     "event": "Nykoebing FC - Ishoej IF",
     "name": "Nykoebing FC - Ishoej IF",
-    "home_odds": 3.6,
-    "draw_odds": 3.45,
-    "away_odds": 1.87,
+    "home_odds": 3.95,
+    "draw_odds": 3.6,
+    "away_odds": 1.75,
     "start_time": "2025-05-02T17:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -13324,15 +13324,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 3.6
+            "price": 3.95
           },
           {
             "name": "X",
-            "price": 3.45
+            "price": 3.6
           },
           {
             "name": "2",
-            "price": 1.87
+            "price": 1.75
           }
         ]
       }
@@ -16703,9 +16703,9 @@
     "tournament": "Liga Profesional",
     "event": "Independiente Rivadavia - Defensa y Justicia",
     "name": "Independiente Rivadavia - Defensa y Justicia",
-    "home_odds": 2.9,
-    "draw_odds": 3.15,
-    "away_odds": 2.35,
+    "home_odds": 2.8,
+    "draw_odds": 3.1,
+    "away_odds": 2.4,
     "start_time": "2025-05-02T18:30:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -16726,15 +16726,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.9
+            "price": 2.8
           },
           {
             "name": "X",
-            "price": 3.15
+            "price": 3.1
           },
           {
             "name": "2",
-            "price": 2.35
+            "price": 2.4
           }
         ]
       }
@@ -32583,9 +32583,9 @@
     "tournament": "Ettan, Sodra",
     "event": "FC Trollhattan - Oskarshamns AIK",
     "name": "FC Trollhattan - Oskarshamns AIK",
-    "home_odds": 1.73,
-    "draw_odds": 3.7,
-    "away_odds": 3.95,
+    "home_odds": 1.77,
+    "draw_odds": 3.65,
+    "away_odds": 3.8,
     "start_time": "2025-05-03T14:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -32606,15 +32606,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.73
+            "price": 1.77
           },
           {
             "name": "X",
-            "price": 3.7
+            "price": 3.65
           },
           {
             "name": "2",
-            "price": 3.95
+            "price": 3.8
           }
         ]
       }
@@ -37938,9 +37938,9 @@
     "tournament": "Liga I",
     "event": "FC CFR 1907 Cluj - FC Universitatea Cluj",
     "name": "FC CFR 1907 Cluj - FC Universitatea Cluj",
-    "home_odds": 1.77,
-    "draw_odds": 3.45,
-    "away_odds": 4.4,
+    "home_odds": 1.74,
+    "draw_odds": 3.5,
+    "away_odds": 4.5,
     "start_time": "2025-05-03T18:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -37961,15 +37961,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.77
+            "price": 1.74
           },
           {
             "name": "X",
-            "price": 3.45
+            "price": 3.5
           },
           {
             "name": "2",
-            "price": 4.4
+            "price": 4.5
           }
         ]
       }
@@ -45562,9 +45562,9 @@
     "tournament": "Primera Federacion",
     "event": "RC Recreativo de Huelva - UD Ibiza",
     "name": "RC Recreativo de Huelva - UD Ibiza",
-    "home_odds": 2.85,
+    "home_odds": 2.8,
     "draw_odds": 3.05,
-    "away_odds": 2.35,
+    "away_odds": 2.45,
     "start_time": "2025-05-04T10:00:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -45585,7 +45585,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 2.85
+            "price": 2.8
           },
           {
             "name": "X",
@@ -45593,7 +45593,7 @@
           },
           {
             "name": "2",
-            "price": 2.35
+            "price": 2.45
           }
         ]
       }
@@ -46507,8 +46507,8 @@
     "tournament": "Primera Federacion",
     "event": "Atletico Madrid B - CF Fuenlabrada",
     "name": "Atletico Madrid B - CF Fuenlabrada",
-    "home_odds": 1.63,
-    "draw_odds": 3.4,
+    "home_odds": 1.59,
+    "draw_odds": 3.45,
     "away_odds": 5.25,
     "start_time": "2025-05-04T10:00:00Z",
     "gameMinute": "",
@@ -46530,11 +46530,11 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.63
+            "price": 1.59
           },
           {
             "name": "X",
-            "price": 3.4
+            "price": 3.45
           },
           {
             "name": "2",
@@ -47925,6 +47925,69 @@
           {
             "name": "2",
             "price": 4.2
+          }
+        ]
+      }
+    ],
+    "category": {
+      "name": "England"
+    },
+    "region": {
+      "name": "England"
+    },
+    "competition": {
+      "name": "England FA Super League Women"
+    },
+    "league": {
+      "name": "England FA Super League Women"
+    },
+    "isInPlay": false,
+    "status": "UPCOMING",
+    "scoreboard": {
+      "display": {
+        "minute": ""
+      }
+    }
+  },
+  {
+    "id": "27119406",
+    "eventId": "27119406",
+    "country": "England",
+    "tournament": "England FA Super League Women",
+    "event": "Manchester United Women - Manchester City Women",
+    "name": "Manchester United Women - Manchester City Women",
+    "home_odds": 2,
+    "draw_odds": 3.45,
+    "away_odds": 3.25,
+    "start_time": "2025-05-04T11:00:00Z",
+    "gameMinute": "",
+    "sport": "football",
+    "competitors": [
+      {
+        "name": ""
+      },
+      {
+        "name": ""
+      }
+    ],
+    "markets": [
+      {
+        "marketType": {
+          "id": "3743",
+          "name": "1X2"
+        },
+        "prices": [
+          {
+            "name": "1",
+            "price": 2
+          },
+          {
+            "name": "X",
+            "price": 3.45
+          },
+          {
+            "name": "2",
+            "price": 3.25
           }
         ]
       }
@@ -51478,6 +51541,69 @@
     }
   },
   {
+    "id": "27119405",
+    "eventId": "27119405",
+    "country": "England",
+    "tournament": "England FA Super League Women",
+    "event": "Tottenham Hotspur Women - Chelsea Women",
+    "name": "Tottenham Hotspur Women - Chelsea Women",
+    "home_odds": 16.5,
+    "draw_odds": 7.75,
+    "away_odds": 1.1,
+    "start_time": "2025-05-04T13:15:00Z",
+    "gameMinute": "",
+    "sport": "football",
+    "competitors": [
+      {
+        "name": ""
+      },
+      {
+        "name": ""
+      }
+    ],
+    "markets": [
+      {
+        "marketType": {
+          "id": "3743",
+          "name": "1X2"
+        },
+        "prices": [
+          {
+            "name": "1",
+            "price": 16.5
+          },
+          {
+            "name": "X",
+            "price": 7.75
+          },
+          {
+            "name": "2",
+            "price": 1.1
+          }
+        ]
+      }
+    ],
+    "category": {
+      "name": "England"
+    },
+    "region": {
+      "name": "England"
+    },
+    "competition": {
+      "name": "England FA Super League Women"
+    },
+    "league": {
+      "name": "England FA Super League Women"
+    },
+    "isInPlay": false,
+    "status": "UPCOMING",
+    "scoreboard": {
+      "display": {
+        "minute": ""
+      }
+    }
+  },
+  {
     "id": "26368806",
     "eventId": "51269577",
     "country": "Germany",
@@ -54823,9 +54949,9 @@
     "tournament": "Ligue 1",
     "event": "Olympique Lyon - RC Lens",
     "name": "Olympique Lyon - RC Lens",
-    "home_odds": 1.6,
-    "draw_odds": 4.45,
-    "away_odds": 5,
+    "home_odds": 1.57,
+    "draw_odds": 4.5,
+    "away_odds": 5.25,
     "start_time": "2025-05-04T15:15:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -54846,15 +54972,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.6
+            "price": 1.57
           },
           {
             "name": "X",
-            "price": 4.45
+            "price": 4.5
           },
           {
             "name": "2",
-            "price": 5
+            "price": 5.25
           }
         ]
       }
@@ -54949,9 +55075,9 @@
     "tournament": "Primera Federacion",
     "event": "CF Intercity - Real Murcia CF",
     "name": "CF Intercity - Real Murcia CF",
-    "home_odds": 4.25,
-    "draw_odds": 3.3,
-    "away_odds": 1.77,
+    "home_odds": 4.35,
+    "draw_odds": 3.35,
+    "away_odds": 1.74,
     "start_time": "2025-05-04T15:30:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -54972,15 +55098,15 @@
         "prices": [
           {
             "name": "1",
-            "price": 4.25
+            "price": 4.35
           },
           {
             "name": "X",
-            "price": 3.3
+            "price": 3.35
           },
           {
             "name": "2",
-            "price": 1.77
+            "price": 1.74
           }
         ]
       }
@@ -65843,6 +65969,69 @@
     }
   },
   {
+    "id": "27119404",
+    "eventId": "56512319",
+    "country": "Denmark",
+    "tournament": "DBU Pokalen",
+    "event": "Silkeborg IF - Broendby IF",
+    "name": "Silkeborg IF - Broendby IF",
+    "home_odds": 2.85,
+    "draw_odds": 3.5,
+    "away_odds": 2.19,
+    "start_time": "2025-05-07T16:30:00Z",
+    "gameMinute": "",
+    "sport": "football",
+    "competitors": [
+      {
+        "name": ""
+      },
+      {
+        "name": ""
+      }
+    ],
+    "markets": [
+      {
+        "marketType": {
+          "id": "3743",
+          "name": "1X2"
+        },
+        "prices": [
+          {
+            "name": "1",
+            "price": 2.85
+          },
+          {
+            "name": "X",
+            "price": 3.5
+          },
+          {
+            "name": "2",
+            "price": 2.19
+          }
+        ]
+      }
+    ],
+    "category": {
+      "name": "Denmark"
+    },
+    "region": {
+      "name": "Denmark"
+    },
+    "competition": {
+      "name": "DBU Pokalen"
+    },
+    "league": {
+      "name": "DBU Pokalen"
+    },
+    "isInPlay": false,
+    "status": "UPCOMING",
+    "scoreboard": {
+      "display": {
+        "minute": ""
+      }
+    }
+  },
+  {
     "id": "26841167",
     "eventId": "58265387",
     "country": "International",
@@ -69125,9 +69314,9 @@
     "tournament": "LaLiga",
     "event": "RCD Mallorca - Real Valladolid",
     "name": "RCD Mallorca - Real Valladolid",
-    "home_odds": 1.44,
+    "home_odds": 1.45,
     "draw_odds": 4.3,
-    "away_odds": 8,
+    "away_odds": 7.75,
     "start_time": "2025-05-10T16:30:00Z",
     "gameMinute": "",
     "sport": "football",
@@ -69148,7 +69337,7 @@
         "prices": [
           {
             "name": "1",
-            "price": 1.44
+            "price": 1.45
           },
           {
             "name": "X",
@@ -69156,7 +69345,7 @@
           },
           {
             "name": "2",
-            "price": 8
+            "price": 7.75
           }
         ]
       }
@@ -73970,6 +74159,69 @@
     }
   },
   {
+    "id": "27088059",
+    "eventId": "59935417",
+    "country": "Russian Federation",
+    "tournament": "Russian Cup",
+    "event": "CSKA Moscow - FK Zenit Saint Petersburg",
+    "name": "CSKA Moscow - FK Zenit Saint Petersburg",
+    "home_odds": 2.35,
+    "draw_odds": 3.3,
+    "away_odds": 2.65,
+    "start_time": "2025-05-14T16:30:00Z",
+    "gameMinute": "",
+    "sport": "football",
+    "competitors": [
+      {
+        "name": ""
+      },
+      {
+        "name": ""
+      }
+    ],
+    "markets": [
+      {
+        "marketType": {
+          "id": "3743",
+          "name": "1X2"
+        },
+        "prices": [
+          {
+            "name": "1",
+            "price": 2.35
+          },
+          {
+            "name": "X",
+            "price": 3.3
+          },
+          {
+            "name": "2",
+            "price": 2.65
+          }
+        ]
+      }
+    ],
+    "category": {
+      "name": "Russian Federation"
+    },
+    "region": {
+      "name": "Russian Federation"
+    },
+    "competition": {
+      "name": "Russian Cup"
+    },
+    "league": {
+      "name": "Russian Cup"
+    },
+    "isInPlay": false,
+    "status": "UPCOMING",
+    "scoreboard": {
+      "display": {
+        "minute": ""
+      }
+    }
+  },
+  {
     "id": "27008480",
     "eventId": "60137101",
     "country": "Turkey",
@@ -75331,195 +75583,6 @@
           {
             "name": "2",
             "price": 1.43
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "International"
-    },
-    "region": {
-      "name": "International"
-    },
-    "competition": {
-      "name": "FIFA Club World Cup"
-    },
-    "league": {
-      "name": "FIFA Club World Cup"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
-    "id": "26416637",
-    "eventId": "56189493",
-    "country": "International",
-    "tournament": "FIFA Club World Cup",
-    "event": "Real Madrid - Al Hilal SFC (n)",
-    "name": "Real Madrid - Al Hilal SFC (n)",
-    "home_odds": 1.27,
-    "draw_odds": 5.75,
-    "away_odds": 9.75,
-    "start_time": "2025-06-18T19:00:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 1.27
-          },
-          {
-            "name": "X",
-            "price": 5.75
-          },
-          {
-            "name": "2",
-            "price": 9.75
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "International"
-    },
-    "region": {
-      "name": "International"
-    },
-    "competition": {
-      "name": "FIFA Club World Cup"
-    },
-    "league": {
-      "name": "FIFA Club World Cup"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
-    "id": "26416638",
-    "eventId": "56189497",
-    "country": "International",
-    "tournament": "FIFA Club World Cup",
-    "event": "CF Pachuca - FC Salzburg (n)",
-    "name": "CF Pachuca - FC Salzburg (n)",
-    "home_odds": 4.4,
-    "draw_odds": 3.7,
-    "away_odds": 1.77,
-    "start_time": "2025-06-18T22:00:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 4.4
-          },
-          {
-            "name": "X",
-            "price": 3.7
-          },
-          {
-            "name": "2",
-            "price": 1.77
-          }
-        ]
-      }
-    ],
-    "category": {
-      "name": "International"
-    },
-    "region": {
-      "name": "International"
-    },
-    "competition": {
-      "name": "FIFA Club World Cup"
-    },
-    "league": {
-      "name": "FIFA Club World Cup"
-    },
-    "isInPlay": false,
-    "status": "UPCOMING",
-    "scoreboard": {
-      "display": {
-        "minute": ""
-      }
-    }
-  },
-  {
-    "id": "26416636",
-    "eventId": "56189483",
-    "country": "International",
-    "tournament": "FIFA Club World Cup",
-    "event": "Al Ain FC - Juventus Turin (n)",
-    "name": "Al Ain FC - Juventus Turin (n)",
-    "home_odds": 11,
-    "draw_odds": 6.25,
-    "away_odds": 1.23,
-    "start_time": "2025-06-19T01:00:00Z",
-    "gameMinute": "",
-    "sport": "football",
-    "competitors": [
-      {
-        "name": ""
-      },
-      {
-        "name": ""
-      }
-    ],
-    "markets": [
-      {
-        "marketType": {
-          "id": "3743",
-          "name": "1X2"
-        },
-        "prices": [
-          {
-            "name": "1",
-            "price": 11
-          },
-          {
-            "name": "X",
-            "price": 6.25
-          },
-          {
-            "name": "2",
-            "price": 1.23
           }
         ]
       }
