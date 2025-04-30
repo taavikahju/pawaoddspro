@@ -1,0 +1,79 @@
+2025-04-30T18:05:51Z info: Deployment: 7d9e0708-6ce8-4064-87f9-d934a2f9439f
+2025-04-30T18:05:51Z info: Connecting to builder
+2025-04-30T18:05:54Z info: Builder connected
+2025-04-30T18:05:55Z info: Installing packages
+--> npm install
+
+npm warn ERESOLVE overriding peer dependency
+
+npm warn While resolving: rest-express@1.0.0
+npm warn Found: react@18.3.1
+npm warn node_modules/react
+npm warn   react@"18.2.0" from the root project
+npm warn   75 more (@floating-ui/react-dom, @radix-ui/react-accordion, ...)
+npm warn
+npm warn Could not resolve dependency:
+npm warn peer react@"^18.3.1" from react-dom@18.3.1
+npm warn node_modules/react-dom
+npm warn   react-dom@"18.2.0" from the root project
+npm warn   48 more (@floating-ui/react-dom, @radix-ui/react-accordion, ...)
+
+npm warn ERESOLVE overriding peer dependency
+
+npm warn While resolving: @tailwindcss/vite@4.1.3
+npm warn Found: vite@5.0.2
+npm warn node_modules/vite
+npm warn   vite@"5.0.2" from the root project
+npm warn   1 more (@vitejs/plugin-react)
+npm warn
+npm warn Could not resolve dependency:
+npm warn peer vite@"^5.2.0 || ^6" from @tailwindcss/vite@4.1.3
+npm warn node_modules/@tailwindcss/vite
+npm warn
+npm warn Conflicting peer dependency: vite@6.3.4
+npm warn node_modules/vite
+npm warn   peer vite@"^5.2.0 || ^6" from @tailwindcss/vite@4.1.3
+npm warn   node_modules/@tailwindcss/vite
+
+
+added 11 packages, removed 201 packages, changed 43 packages, and audited 326 packages in 46s
+
+  run `npm fund` for details
+
+
+12 vulnerabilities (4 low, 2 moderate, 6 high)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+
+npm notice
+npm notice New major version of npm available! 10.8.2 -> 11.3.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.3.0
+npm notice To update run: npm install -g npm@11.3.0
+npm notice
+
+2025-04-30T18:06:43Z info: Starting Build
+
+> rest-express@1.0.0 build
+> vite build --config vite.config.cjs && esbuild server/index.ts --platform=node --packages=external --bundle --format=cjs --outdir=dist
+
+
+The CJS build of Vite's Node API is deprecated. See https://vitejs.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.
+
+NODE_ENV=production is not supported in the .env file. Only NODE_ENV=development is supported to create a development build of your project. If you need to set process.env.NODE_ENV, you can set it in the Vite config instead.
+
+vite v5.0.2 building for production...
+
+✓ 0 modules transformed.
+
+error during build:
+RollupError: Could not resolve entry module "index.html".
+    at getRollupError (file:///home/runner/workspace/node_modules/rollup/dist/es/shared/parseAst.js:396:41)
+    at error (file:///home/runner/workspace/node_modules/rollup/dist/es/shared/parseAst.js:392:42)
+    at ModuleLoader.loadEntryModule (file:///home/runner/workspace/node_modules/rollup/dist/es/shared/node-entry.js:20086:20)
+    at async Promise.all (index 0)
