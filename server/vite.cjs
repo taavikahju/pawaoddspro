@@ -4,9 +4,6 @@ const path = require('path');
 const { createServer: createViteServer, createLogger } = require('vite');
 const { nanoid } = require('nanoid');
 
-// Use direct require instead of import
-const viteConfig = require('../vite.config.cjs');
-
 const viteLogger = createLogger();
 
 function log(message, source = "express") {

@@ -2,8 +2,8 @@ const { defineConfig } = require("vite");
 const react = require("@vitejs/plugin-react");
 const path = require("path");
 
-// Define __dirname for CommonJS compatibility
-const __dirname = path.resolve();
+// In CommonJS, __dirname is already available
+// No need to redefine it
 
 module.exports = defineConfig({
   plugins: [
