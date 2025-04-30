@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "type": "commonjs",
   "scripts": {
-    "dev": "node server/index.js",
-    "build": "vite build && node build-server.js",
+    "dev": "tsx server/index.ts",
+    "build": "vite build --config vite.config.cjs && esbuild server/index.ts --platform=node --packages=external --bundle --format=cjs --outdir=dist",
     "start": "node dist/index.js"
   },
   "dependencies": {
