@@ -9,7 +9,6 @@ import Dashboard from "@/pages/dashboard";
 import ScraperStatus from "@/pages/scraper-status";
 import LiveHeartbeat from "@/pages/live-heartbeat";
 import AdminPage from "@/pages/admin";
-import TournamentMargins from "@/pages/tournament-margins";
 import NotificationListener from "@/components/NotificationListener";
 import { BookmakerProvider } from "@/contexts/BookmakerContext";
 
@@ -19,7 +18,6 @@ function Router() {
       <Route path="/" component={Dashboard} />
       <Route path="/scraper-status" component={ScraperStatus} />
       <Route path="/live-heartbeat" component={LiveHeartbeat} />
-      <Route path="/tournament-margins" component={TournamentMargins} />
       <Route path="/admin" component={AdminPage} />
       <Route component={NotFound} />
     </Switch>
