@@ -666,7 +666,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     
     // Bookmaker combination logging removed to reduce console output
     
-    logger.critical(`Processed ${eventMap.size} events with at least 2 bookmakers`);
+    // Summary log removed to prevent frequent repeated messages
     
     // Get all events and delete any that don't meet our criteria anymore
     // This ensures events that previously had 3+ bookmakers but now have fewer are removed
