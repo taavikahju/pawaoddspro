@@ -1,177 +1,84 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
-interface WebSocketMessage {
-  type: string;
-  event?: string;
-  data: any;
-}
-
+// Keep a deprecated version of the WebSocket hook for backward compatibility
+// while we migrate the app to use direct API calls instead of WebSockets
 export function useWebSocket() {
-  const [socket, setSocket] = useState<WebSocket | null>(null);
-  const [isConnected, setIsConnected] = useState(false);
-  const [lastMessage, setLastMessage] = useState<WebSocketMessage | null>(null);
-  const [stats, setStats] = useState<any>(null);
-  const [scraperStatuses, setScraperStatuses] = useState<any[]>([]);
-  const [events, setEvents] = useState<any[]>([]);
+  const [isConnected, setIsConnected] = useState(true); // Always connected in this version
+  const [lastMessage, setLastMessage] = useState<any>(null);
   const [notifications, setNotifications] = useState<any[]>([]);
-
-  // Connect to WebSocket with reconnection logic
-  useEffect(() => {
-    let reconnectTimeout: ReturnType<typeof setTimeout>;
-    let reconnectAttempts = 0;
-    const MAX_RECONNECT_ATTEMPTS = 20;
-    const INITIAL_RECONNECT_DELAY = 1000; // 1 second
-    const MAX_RECONNECT_DELAY = 30000; // 30 seconds
-    
-    function connectWebSocket() {
-      try {
-        const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-        const wsUrl = `${protocol}//${window.location.host}/ws`;
-        
-        console.log(`Connecting to WebSocket at ${wsUrl}...`);
-        const ws = new WebSocket(wsUrl);
-        
-        ws.onopen = () => {
-          console.log('WebSocket connected successfully');
-          setIsConnected(true);
-          reconnectAttempts = 0; // Reset reconnect attempts on successful connection
-          
-          // Immediately request current data from server
-          try {
-            if (ws.readyState === WebSocket.OPEN) {
-              ws.send(JSON.stringify({ type: 'getEvents' }));
-              ws.send(JSON.stringify({ type: 'getStats' }));
-            }
-          } catch (sendError) {
-            console.error('Error sending initial requests:', sendError);
-          }
-        };
-        
-        ws.onclose = (event) => {
-          console.log(`WebSocket disconnected (code: ${event.code}, clean: ${event.wasClean})`);
-          setIsConnected(false);
-          
-          // Always attempt to reconnect except when the tab is being closed
-          if (document.visibilityState !== 'hidden') {
-            const delay = Math.min(
-              INITIAL_RECONNECT_DELAY * Math.pow(1.5, reconnectAttempts),
-              MAX_RECONNECT_DELAY
-            );
-            
-            reconnectAttempts++;
-            console.log(`Attempting to reconnect (attempt ${reconnectAttempts}) in ${delay}ms...`);
-            
-            if (reconnectAttempts <= MAX_RECONNECT_ATTEMPTS) {
-              reconnectTimeout = setTimeout(() => {
-                console.log('Reconnecting now...');
-                setSocket(null); // This will trigger a reconnect when this useEffect runs again
-              }, delay);
-            } else {
-              console.error(`Max reconnection attempts (${MAX_RECONNECT_ATTEMPTS}) reached.`);
-            }
-          }
-        };
-        
-        ws.onerror = (error) => {
-          console.error('WebSocket error:', error);
-          // Don't disconnect here - let the onclose handler handle reconnection
-        };
-        
-        return ws;
-      } catch (error) {
-        console.error('Error initializing WebSocket:', error);
-        return null;
-      }
-    }
-    
-    const ws = connectWebSocket();
-    
-    // Handle the case where WebSocket connection fails to initialize
-    if (!ws) {
-      console.error('Failed to initialize WebSocket, will retry...');
-      
-      // Try to reconnect after a delay
-      const retryDelay = 3000;
-      reconnectAttempts++;
-      reconnectTimeout = setTimeout(() => {
-        setSocket(null); // Trigger reconnect
-      }, retryDelay);
-      
-      return () => {
-        if (reconnectTimeout) {
-          clearTimeout(reconnectTimeout);
-        }
-      };
-    }
-    
-    ws.onmessage = (event) => {
-      try {
-        const message = JSON.parse(event.data);
-        setLastMessage(message);
-
-        switch (message.type) {
-          case 'stats':
-            setStats(message.data);
-            break;
-          case 'scraperStatuses':
-            setScraperStatuses(message.data);
-            break;
-          case 'events':
-            setEvents(message.data);
-            break;
-          case 'notification':
-            setNotifications(prev => [...prev, message.data]);
-            break;
-          case 'scraperEvent':
-            // Just process the last message - the ScraperActivityFeed component
-            // will handle displaying this data
-            console.log('Scraper event received:', message.event, message.data);
-            break;
-          default:
-            console.log('Unknown message type:', message.type);
-            break;
-        }
-      } catch (error) {
-        console.error('Error parsing WebSocket message:', error);
-      }
-    };
-
-    setSocket(ws);
-
-    return () => {
-      if (ws) {
-        ws.close();
-      }
-      
-      // Clean up any reconnection timeouts
-      if (reconnectTimeout) {
-        clearTimeout(reconnectTimeout);
-      }
-    };
-  }, []);
-
-  // Send a message to the WebSocket server
+  
+  // Fetch stats data using React Query
+  const { 
+    data: stats = { lastScrapeTime: 'N/A' },
+    refetch: refetchStats
+  } = useQuery<any>({ 
+    queryKey: ['/api/stats'],
+    refetchInterval: 15000, // Refresh every 15 seconds
+  });
+  
+  // Fetch scraper statuses using React Query
+  const { 
+    data: scraperStatuses = [],
+    refetch: refetchScraperStatuses 
+  } = useQuery<any[]>({ 
+    queryKey: ['/api/scrapers/status'],
+    refetchInterval: 30000, // Refresh every 30 seconds
+  });
+  
+  // Fetch events using React Query
+  const { 
+    data: events = [],
+    refetch: refetchEvents 
+  } = useQuery<any[]>({ 
+    queryKey: ['/api/events'],
+    refetchInterval: 15000, // Refresh every 15 seconds
+  });
+  
+  // Simulated send message function - for backward compatibility
   const sendMessage = useCallback((type: string, data?: any) => {
-    if (socket && socket.readyState === WebSocket.OPEN) {
-      socket.send(JSON.stringify({
-        type,
-        data: data || {}
-      }));
-    } else {
-      console.warn('WebSocket is not connected');
+    console.log(`[WebSocket Migration] Sending message ${type}`, data);
+    
+    // Mapping WebSocket message types to API calls
+    switch (type) {
+      case 'getEvents':
+        refetchEvents();
+        break;
+      case 'getStats':
+        refetchStats();
+        break;
+      case 'runScrapers':
+        // Make an API call to run the scrapers
+        fetch('/api/scrapers/run', { method: 'POST' })
+          .then(res => res.json())
+          .then(data => {
+            console.log('Scrapers triggered', data);
+            // Add a notification
+            setNotifications(prev => [...prev, {
+              type: 'info',
+              message: 'Scraper run triggered manually',
+              timestamp: new Date().toISOString()
+            }]);
+          })
+          .catch(err => {
+            console.error('Error triggering scrapers', err);
+          });
+        break;
+      default:
+        console.warn(`[WebSocket Migration] Unhandled message type: ${type}`);
     }
-  }, [socket]);
-
+  }, [refetchEvents, refetchStats]);
+  
   // Request events
   const getEvents = useCallback(() => {
-    sendMessage('getEvents');
-  }, [sendMessage]);
-
+    refetchEvents();
+  }, [refetchEvents]);
+  
   // Trigger scrapers to run
   const runScrapers = useCallback(() => {
     sendMessage('runScrapers');
   }, [sendMessage]);
-
+  
   return {
     isConnected,
     lastMessage,
