@@ -37,7 +37,7 @@ const MarginHistoryPopup: React.FC<MarginHistoryPopupProps> = ({
 }) => {
   // Query to load margin history for this event
   const { data, isLoading, error } = useQuery<any[]>({
-    queryKey: ['/api/events/margins', eventId],
+    queryKey: [`/api/events/margins/${eventId}`],
     enabled: isOpen && !!eventId,
   });
   
