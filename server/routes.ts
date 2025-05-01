@@ -99,6 +99,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
     });
   });
+  
+  // New event listener for when all processing (scraping + mapping) is complete
+  // This is when we broadcast events to the frontend with full statistics
+  scraperEvents.on(SCRAPER_EVENTS.ALL_PROCESSING_COMPLETED, (data) => {
+    console.log('📢 Broadcasting complete data update to all connected clients');
+    
+    // Broadcast a notification about the update
+    broadcast({
+      type: 'notification',
+      data: {
+        message: 'Data update complete with all bookmakers',
+        status: 'success'
+      }
+    });
+    
+    // Broadcast the statistics
+    broadcast({
+      type: 'updateStats',
+      data: data.stats
+    });
+    
+    // Broadcast trigger to refresh events (client will make a new request)
+    broadcast({
+      type: 'refreshEvents',
+      timestamp: new Date().toISOString()
+    });
+  });
 
   // Handle WebSocket connections
   wss.on('connection', (ws) => {

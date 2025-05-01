@@ -28,6 +28,8 @@ export const SCRAPER_EVENTS = {
   SCRAPER_STARTED: 'scraper:individual:started',
   SCRAPER_COMPLETED: 'scraper:individual:completed',
   SCRAPER_FAILED: 'scraper:individual:failed',
+  // Event for when all scraping and mapping is finished - ready for frontend
+  ALL_PROCESSING_COMPLETED: 'scraper:all:processing:completed',
   ALL_SCRAPERS_COMPLETED: 'scraper:all:completed'
 };
 
@@ -313,6 +315,55 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
       scraperEvents.emit(SCRAPER_EVENTS.PROCESSING_COMPLETED, {
         timestamp: new Date().toISOString(),
         message: 'Completed processing and mapping events'
+      });
+      
+      // Emit event that all processing is complete and frontend can be updated
+      // This includes statistics that will be logged and sent to frontend
+      const allEvents = await storage.getEvents();
+      const filteredEvents = allEvents.filter(event => {
+        if (!event.oddsData) return false;
+        const bookmakerCount = Object.keys(event.oddsData as Record<string, any>).length;
+        return bookmakerCount >= 2;
+      });
+      
+      // Count events by number of bookmakers
+      const eventsByBookmakerCount = {
+        '1': 0,
+        '2': 0,
+        '3': 0,
+        '4+': 0
+      };
+      
+      allEvents.forEach(event => {
+        if (!event.oddsData) return;
+        const bookmakerCount = Object.keys(event.oddsData as Record<string, any>).length;
+        if (bookmakerCount === 1) eventsByBookmakerCount['1']++;
+        else if (bookmakerCount === 2) eventsByBookmakerCount['2']++;
+        else if (bookmakerCount === 3) eventsByBookmakerCount['3']++;
+        else if (bookmakerCount >= 4) eventsByBookmakerCount['4+']++;
+      });
+      
+      // Create summary for frontend update
+      const frontendUpdateSummary = {
+        totalEvents: filteredEvents.length,
+        eventsByBookmakerCount: eventsByBookmakerCount,
+        timestamp: new Date().toISOString()
+      };
+      
+      // Log statistics for the update
+      console.log('🚀 FRONTEND UPDATE SUMMARY:');
+      console.log(`📊 Total events: ${filteredEvents.length} (filtered to have at least 2 bookmakers)`);
+      console.log('📊 Event distribution by bookmaker count:');
+      console.log(`  - Events with 1 bookmaker: ${eventsByBookmakerCount['1']}`);
+      console.log(`  - Events with 2 bookmakers: ${eventsByBookmakerCount['2']}`);
+      console.log(`  - Events with 3 bookmakers: ${eventsByBookmakerCount['3']}`);
+      console.log(`  - Events with 4+ bookmakers: ${eventsByBookmakerCount['4+']}`);
+      
+      // Emit the all processing completed event with statistics
+      scraperEvents.emit(SCRAPER_EVENTS.ALL_PROCESSING_COMPLETED, {
+        timestamp: new Date().toISOString(),
+        message: 'All scraping and processing completed, frontend can be updated',
+        stats: frontendUpdateSummary
       });
     } catch (processingError) {
       console.error('❌ Error processing events:', processingError);
