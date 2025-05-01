@@ -684,7 +684,7 @@ export class DatabaseStorage implements IStorage {
       
       // Calculate time to next update
       const now = new Date();
-      let nextScrapeTime = now.getTime() + 15 * 60 * 1000;
+      let nextScrapeTime = now.getTime() + 30 * 60 * 1000;
       
       for (const bookmaker of bookmakerList) {
         if (bookmaker.nextScrape && bookmaker.nextScrape.getTime() < nextScrapeTime) {

@@ -269,8 +269,8 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       else if (bookmakerCount === 3) eventsWith3Bookmakers++;
       else if (bookmakerCount >= 4) eventsWith4Bookmakers++;
 
-      // Only process events where at least 2 bookmakers have odds (reduced from 3 per user request)
-      if ((firstMatch || baseMatch) && bookmakerCount >= 2) {
+      // Only process events where at least 3 bookmakers have odds
+      if ((firstMatch || baseMatch) && bookmakerCount >= 3) {
         // Prioritize using betPawa Ghana data when available
         const dataSource = baseMatch || firstMatch;
         
