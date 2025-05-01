@@ -492,7 +492,7 @@ const TournamentMargins: React.FC = () => {
                                 )}
                                 title={`Based on ${marginData.eventCount} events (Updated: ${new Date(marginData.timestamp).toLocaleString()}). Click to view history.`}
                               >
-                                {(marginValue * 100).toFixed(4)}%
+                                {(marginValue * 100).toFixed(1)}%
                               </button>
                             </TableCell>
                           );
