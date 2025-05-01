@@ -36,6 +36,15 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     const allBookmakerData = await storage.getAllBookmakersData();
     const bookmakerCodes = Object.keys(allBookmakerData);
     
+    // Save a copy of the raw bookmaker data for inspection
+    try {
+      const fs = await import('fs/promises');
+      await fs.writeFile('bookmaker_data.json', JSON.stringify(allBookmakerData, null, 2));
+      logger.info(`Saved raw bookmaker data to bookmaker_data.json`);
+    } catch (writeError) {
+      logger.error(`Failed to save bookmaker data: ${writeError}`);
+    }
+    
     // Use maps to track events by their eventId (for exact matching across bookmakers)
     const eventMap = new Map<string, any>();
     const processedEvents = new Set<string>(); // Track which eventIds we've processed
@@ -542,6 +551,31 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     const eventsToUpdate = Array.from(eventMap.entries());
     const totalUpdateEvents = eventsToUpdate.length;
     let processedCount = 0;
+    
+    // Save the mapped events to a file for inspection
+    try {
+      const fs = await import('fs/promises');
+      
+      // Create a simplified version for easier analysis
+      const simplifiedEvents = eventsToUpdate.map(([key, event]) => {
+        return {
+          eventId: event.eventId,
+          teams: event.teams,
+          country: event.country,
+          tournament: event.tournament,
+          date: event.date,
+          time: event.time,
+          bookmakers: Object.keys(event.oddsData || {}),
+          oddsData: event.oddsData,
+          bestOdds: event.bestOdds
+        };
+      });
+      
+      await fs.writeFile('mapped_events.json', JSON.stringify(simplifiedEvents, null, 2));
+      logger.info(`Saved mapped events data to mapped_events.json`);
+    } catch (writeError) {
+      logger.error(`Failed to save mapped events data: ${writeError}`);
+    }
     
     // Process in smaller batches to show progress more frequently
     const updateBatchSize = 50;

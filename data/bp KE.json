@@ -165,9 +165,9 @@
     "date": "2025-05-01",
     "time": "19:00",
     "odds": {
-      "home": 8,
-      "draw": 4.8,
-      "away": 1.37
+      "home": 8.25,
+      "draw": 5,
+      "away": 1.35
     },
     "raw": {
       "eventId": "58267483",
@@ -175,9 +175,9 @@
       "tournament": "UEFA Conference League",
       "event": "Djurgardens IF - Chelsea FC",
       "market": "1X2 - FT",
-      "home_odds": "8.0",
-      "draw_odds": "4.8",
-      "away_odds": "1.37",
+      "home_odds": "8.25",
+      "draw_odds": "5.0",
+      "away_odds": "1.35",
       "start_time": "2025-05-01 19:00"
     }
   },
@@ -529,9 +529,9 @@
     "date": "2025-05-02",
     "time": "00:00",
     "odds": {
-      "home": 4.5,
+      "home": 4.7,
       "draw": 3.85,
-      "away": 1.61
+      "away": 1.59
     },
     "raw": {
       "eventId": "60164443",
@@ -539,9 +539,9 @@
       "tournament": "Primera Division",
       "event": "Unan Managua - Real Esteli FC",
       "market": "1X2 - FT",
-      "home_odds": "4.5",
+      "home_odds": "4.7",
       "draw_odds": "3.85",
-      "away_odds": "1.61",
+      "away_odds": "1.59",
       "start_time": "2025-05-02 00:00"
     }
   },
@@ -4091,9 +4091,9 @@
     "date": "2025-05-02",
     "time": "17:00",
     "odds": {
-      "home": 7,
-      "draw": 4.9,
-      "away": 1.32
+      "home": 7.5,
+      "draw": 5.25,
+      "away": 1.29
     },
     "raw": {
       "eventId": "50854501",
@@ -4101,9 +4101,9 @@
       "tournament": "Regionalliga East",
       "event": "ASV Siegendorf - SC Neusiedl am See 1919",
       "market": "1X2 - FT",
-      "home_odds": "7.0",
-      "draw_odds": "4.9",
-      "away_odds": "1.32",
+      "home_odds": "7.5",
+      "draw_odds": "5.25",
+      "away_odds": "1.29",
       "start_time": "2025-05-02 17:00"
     }
   },
@@ -7419,9 +7419,9 @@
     "date": "2025-05-02",
     "time": "23:00",
     "odds": {
-      "home": 1.94,
-      "draw": 3.35,
-      "away": 3.5
+      "home": 1.91,
+      "draw": 3.5,
+      "away": 3.45
     },
     "raw": {
       "eventId": "60262763",
@@ -7429,9 +7429,9 @@
       "tournament": "Segunda Division",
       "event": "Dynamo Puerto FC - Bolivar SC",
       "market": "1X2 - FT",
-      "home_odds": "1.94",
-      "draw_odds": "3.35",
-      "away_odds": "3.5",
+      "home_odds": "1.91",
+      "draw_odds": "3.5",
+      "away_odds": "3.45",
       "start_time": "2025-05-02 23:00"
     }
   },
@@ -9538,6 +9538,32 @@
       "home_odds": "1.91",
       "draw_odds": "4.0",
       "away_odds": "3.5",
+      "start_time": "2025-05-03 08:00"
+    }
+  },
+  {
+    "id": "56926313",
+    "eventId": "56926313",
+    "teams": "Brisbane City FC - Peninsula Power FC",
+    "league": "Queensland NPL",
+    "sport": "football",
+    "country": "Australia",
+    "date": "2025-05-03",
+    "time": "08:00",
+    "odds": {
+      "home": 3.95,
+      "draw": 4.1,
+      "away": 1.68
+    },
+    "raw": {
+      "eventId": "56926313",
+      "country": "Australia",
+      "tournament": "Queensland NPL",
+      "event": "Brisbane City FC - Peninsula Power FC",
+      "market": "1X2 - FT",
+      "home_odds": "3.95",
+      "draw_odds": "4.1",
+      "away_odds": "1.68",
       "start_time": "2025-05-03 08:00"
     }
   },
@@ -15349,9 +15375,9 @@
     "date": "2025-05-03",
     "time": "16:00",
     "odds": {
-      "home": 2.65,
-      "draw": 3.3,
-      "away": 2.45
+      "home": 2.7,
+      "draw": 3.35,
+      "away": 2.35
     },
     "raw": {
       "eventId": "58520823",
@@ -15359,9 +15385,9 @@
       "tournament": "Superliga",
       "event": "KFC Komarno - AS Trencin",
       "market": "1X2 - FT",
-      "home_odds": "2.65",
-      "draw_odds": "3.3",
-      "away_odds": "2.45",
+      "home_odds": "2.7",
+      "draw_odds": "3.35",
+      "away_odds": "2.35",
       "start_time": "2025-05-03 16:00"
     }
   },
@@ -16025,9 +16051,9 @@
     "date": "2025-05-03",
     "time": "17:30",
     "odds": {
-      "home": 2.45,
-      "draw": 3.3,
-      "away": 2.7
+      "home": 2.4,
+      "draw": 3.35,
+      "away": 2.75
     },
     "raw": {
       "eventId": "58839255",
@@ -16035,9 +16061,9 @@
       "tournament": "Premier League",
       "event": "Maccabi Petah Tikva FC - MS Ashdod",
       "market": "1X2 - FT",
-      "home_odds": "2.45",
-      "draw_odds": "3.3",
-      "away_odds": "2.7",
+      "home_odds": "2.4",
+      "draw_odds": "3.35",
+      "away_odds": "2.75",
       "start_time": "2025-05-03 17:30"
     }
   },
@@ -24345,9 +24371,9 @@
     "date": "2025-05-04",
     "time": "15:15",
     "odds": {
-      "home": 2.08,
+      "home": 2.09,
       "draw": 3.6,
-      "away": 3.4
+      "away": 3.35
     },
     "raw": {
       "eventId": "50955919",
@@ -24355,9 +24381,9 @@
       "tournament": "Ligue 1",
       "event": "AJ Auxerre - Le Havre AC",
       "market": "1X2 - FT",
-      "home_odds": "2.08",
+      "home_odds": "2.09",
       "draw_odds": "3.6",
-      "away_odds": "3.4",
+      "away_odds": "3.35",
       "start_time": "2025-05-04 15:15"
     }
   },
@@ -26698,6 +26724,32 @@
       "home_odds": "2.55",
       "draw_odds": "2.8",
       "away_odds": "2.9",
+      "start_time": "2025-05-04 19:30"
+    }
+  },
+  {
+    "id": "60263461",
+    "eventId": "60263461",
+    "teams": "Atletico El Vigia - Urena SC",
+    "league": "Segunda Division",
+    "sport": "football",
+    "country": "Venezuela",
+    "date": "2025-05-04",
+    "time": "19:30",
+    "odds": {
+      "home": 2.18,
+      "draw": 3.1,
+      "away": 3.15
+    },
+    "raw": {
+      "eventId": "60263461",
+      "country": "Venezuela",
+      "tournament": "Segunda Division",
+      "event": "Atletico El Vigia - Urena SC",
+      "market": "1X2 - FT",
+      "home_odds": "2.18",
+      "draw_odds": "3.1",
+      "away_odds": "3.15",
       "start_time": "2025-05-04 19:30"
     }
   },
