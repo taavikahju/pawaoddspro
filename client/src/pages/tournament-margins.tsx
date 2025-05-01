@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
-import { Loader2, Search, ChevronRight } from 'lucide-react';
+import { Loader2, Search, ChevronRight, X, Trophy } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { useBookmakerContext } from '@/contexts/BookmakerContext';
 import CountryFlag from '@/components/CountryFlag';
@@ -372,10 +372,15 @@ const TournamentMargins: React.FC = () => {
               <div className="overflow-x-auto">
                 <Table className="border-collapse">
                   <TableHeader>
-                    <TableRow className="bg-muted hover:bg-muted">
-                      <TableHead className="w-[250px] py-2 text-xs">Tournament</TableHead>
+                    <TableRow className="bg-gray-100 dark:bg-slate-700/50 border-b border-gray-200 dark:border-gray-700">
+                      <TableHead className="w-[250px] px-2 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+                        <div className="flex items-center">
+                          <Trophy className="w-3 h-3 mr-1" />
+                          Tournament
+                        </div>
+                      </TableHead>
                       {bookmakers.map(bookmaker => (
-                        <TableHead key={bookmaker.code} className="text-center py-2 text-xs">
+                        <TableHead key={bookmaker.code} className="px-2 py-2 text-center text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
                           {bookmaker.name.replace(' Kenya', '').replace(' Ghana', '')}
                         </TableHead>
                       ))}
@@ -399,9 +404,9 @@ const TournamentMargins: React.FC = () => {
                       .map((tournament, idx) => (
                       <TableRow 
                         key={tournament.name}
-                        className={idx % 2 === 0 ? 'bg-background' : 'bg-muted/30'}
+                        className={idx % 2 === 0 ? 'bg-background hover:bg-muted/40' : 'bg-muted/30 hover:bg-muted/50'}
                       >
-                        <TableCell className="font-medium text-xs py-1.5">
+                        <TableCell className="font-medium text-xs py-1.5 px-2 whitespace-nowrap border-r border-gray-200 dark:border-gray-700">
                           {tournament.name}
                         </TableCell>
                         
@@ -416,7 +421,7 @@ const TournamentMargins: React.FC = () => {
                           
                           if (!marginData) {
                             return (
-                              <TableCell key={bookmaker.code} className="text-center py-1.5">
+                              <TableCell key={bookmaker.code} className="text-center py-1.5 px-2 whitespace-nowrap border-r border-gray-200 dark:border-gray-700">
                                 <span className="text-xs font-medium px-1.5 py-0.5 rounded-sm bg-gray-50 text-gray-400 dark:bg-gray-800 dark:text-gray-500">
                                   -
                                 </span>
@@ -428,7 +433,7 @@ const TournamentMargins: React.FC = () => {
                           const marginColorClass = getMarginColorClass(marginValue);
                           
                           return (
-                            <TableCell key={bookmaker.code} className="text-center py-1.5">
+                            <TableCell key={bookmaker.code} className="text-center py-1.5 px-2 whitespace-nowrap border-r border-gray-200 dark:border-gray-700">
                               <span 
                                 className={cn(
                                   "text-xs font-medium px-2 py-0.5 rounded-sm",
