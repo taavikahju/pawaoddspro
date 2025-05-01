@@ -47,9 +47,16 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     
     // Second pass: Process each bookmaker's data and group by eventId
     for (const eventId of Array.from(allEventIds)) {
+      let baseMatch = null;
       let firstMatch = null;
       const bookmakerOdds: Record<string, any> = {};
       let bookmakerCount = 0; // Counter to track how many bookmakers have odds for this event
+      
+      // First check if betPawa Ghana has this event - use it as our base for country/tournament
+      const bpGhData = allBookmakerData['bp GH'];
+      if (bpGhData && Array.isArray(bpGhData)) {
+        baseMatch = bpGhData.find(e => e.eventId === eventId);
+      }
       
       // Look for this eventId in all bookmakers
       for (const bookmakerCode of bookmakerCodes) {
@@ -60,7 +67,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
         const event = bookmakerData.find(e => e.eventId === eventId);
         if (!event) continue;
         
-        // Use first match as the base event data
+        // Use first match as fallback event data if we don't have betPawa Ghana data
         if (!firstMatch) {
           firstMatch = event;
         }
@@ -103,46 +110,53 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       else if (bookmakerCount >= 4) eventsWith4Bookmakers++;
 
       // Only process events where at least 2 bookmakers have odds (reduced from 3 per user request)
-      if (firstMatch && bookmakerCount >= 2) {
+      if ((firstMatch || baseMatch) && bookmakerCount >= 2) {
+        // Prioritize using betPawa Ghana data when available
+        const dataSource = baseMatch || firstMatch;
+        
         // Extract country and tournament, checking raw data first
         let country = '';
         let tournament = '';
         
         // First check if we have raw data from scrapers
-        if (firstMatch.raw && typeof firstMatch.raw === 'object') {
-          country = firstMatch.raw.country || firstMatch.country || '';
-          tournament = firstMatch.raw.tournament || firstMatch.tournament || '';
+        if (dataSource.raw && typeof dataSource.raw === 'object') {
+          country = dataSource.raw.country || dataSource.country || '';
+          tournament = dataSource.raw.tournament || dataSource.tournament || '';
         } else {
-          country = firstMatch.country || '';
-          tournament = firstMatch.tournament || '';
+          country = dataSource.country || '';
+          tournament = dataSource.tournament || '';
         }
         
         // For backward compatibility, also set league field
         let league = `${country} ${tournament}`.trim();
         if (!league) {
-          league = firstMatch.league || 'Unknown';
+          league = dataSource.league || 'Unknown';
         }
         
-        // Detailed event information - only log in debug mode
-        // console.log(`Event ${eventId} - Country: [${country}], Tournament: [${tournament}], League: [${league}]`);
+        // Only log for specific countries/tournaments we're debugging
+        if (baseMatch && 
+           (country.toLowerCase().includes('england') || 
+            tournament.toLowerCase().includes('national league'))) {
+          console.log(`🔹 Using betPawa Ghana data for England/National League event ${eventId} - Country: [${country}], Tournament: [${tournament}]`);
+        }
         
         // Create the teams field if not already available
-        let teams = firstMatch.teams;
-        if (!teams && firstMatch.event) {
-          teams = firstMatch.event;
+        let teams = dataSource.teams;
+        if (!teams && dataSource.event) {
+          teams = dataSource.event;
         }
         
         // Create event in our map
         eventMap.set(eventId, {
-          externalId: firstMatch.id || eventId,
+          externalId: dataSource.id || eventId,
           eventId: eventId,
           teams: teams || 'Unknown',
           league: league || 'Unknown',
           country: country || null,
           tournament: tournament || null,
-          sportId: getSportId(firstMatch.sport || 'football'),
-          date: firstMatch.date || firstMatch.start_time?.split(' ')[0] || 'Unknown',
-          time: firstMatch.time || firstMatch.start_time?.split(' ')[1] || 'Unknown',
+          sportId: getSportId(dataSource.sport || 'football'),
+          date: dataSource.date || dataSource.start_time?.split(' ')[0] || 'Unknown',
+          time: dataSource.time || dataSource.start_time?.split(' ')[1] || 'Unknown',
           oddsData: bookmakerOdds,
           bestOdds: {}
         });

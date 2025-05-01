@@ -373,9 +373,9 @@
     "date": "2025-05-03",
     "time": "14:15",
     "odds": {
-      "home": 1.56,
-      "draw": 4.48,
-      "away": 5.7
+      "home": 1.58,
+      "draw": 4.61,
+      "away": 5.87
     },
     "raw": {
       "eventId": "50852757",
@@ -383,9 +383,9 @@
       "tournament": "LaLiga",
       "event": "Villarreal - Osasuna",
       "market": "1X2",
-      "home_odds": "1.56",
-      "draw_odds": "4.48",
-      "away_odds": "5.70",
+      "home_odds": "1.58",
+      "draw_odds": "4.61",
+      "away_odds": "5.87",
       "start_time": "2025-05-03 14:15"
     }
   },
@@ -3727,8 +3727,8 @@
     "date": "2025-05-04",
     "time": "14:15",
     "odds": {
-      "home": 3.6,
-      "draw": 3.3,
+      "home": 3.7,
+      "draw": 3.33,
       "away": 2.05
     },
     "raw": {
@@ -3737,8 +3737,8 @@
       "tournament": "LaLiga 2",
       "event": "Racing Club de Ferrol - Real Zaragoza",
       "market": "1X2",
-      "home_odds": "3.60",
-      "draw_odds": "3.30",
+      "home_odds": "3.70",
+      "draw_odds": "3.33",
       "away_odds": "2.05",
       "start_time": "2025-05-04 14:15"
     }
@@ -6379,9 +6379,9 @@
     "date": "2025-05-02",
     "time": "15:00",
     "odds": {
-      "home": 3.2,
+      "home": 3.1,
       "draw": 3.2,
-      "away": 2.2
+      "away": 2.25
     },
     "raw": {
       "eventId": "51158469",
@@ -6389,9 +6389,9 @@
       "tournament": "Premier League",
       "event": "FC Rukh Lviv - FC Kryvbas Kriviy Rih",
       "market": "1X2",
-      "home_odds": "3.20",
+      "home_odds": "3.10",
       "draw_odds": "3.20",
-      "away_odds": "2.20",
+      "away_odds": "2.25",
       "start_time": "2025-05-02 15:00"
     }
   },
@@ -14647,8 +14647,8 @@
     "date": "2025-05-03",
     "time": "02:15",
     "odds": {
-      "home": 13,
-      "draw": 6.8,
+      "home": 12,
+      "draw": 7.1,
       "away": 1.14
     },
     "raw": {
@@ -14657,8 +14657,8 @@
       "tournament": "Tasmania NPL",
       "event": "Launceston United Soccer Club - Kingborough Lions United FC",
       "market": "1X2",
-      "home_odds": "13.00",
-      "draw_odds": "6.80",
+      "home_odds": "12.00",
+      "draw_odds": "7.10",
       "away_odds": "1.14",
       "start_time": "2025-05-03 02:15"
     }
@@ -14674,8 +14674,8 @@
     "time": "04:30",
     "odds": {
       "home": 1.02,
-      "draw": 11.5,
-      "away": 28
+      "draw": 11,
+      "away": 30
     },
     "raw": {
       "eventId": "58064289",
@@ -14684,8 +14684,8 @@
       "event": "Devonport City SC - Clarence Zebras FC",
       "market": "1X2",
       "home_odds": "1.02",
-      "draw_odds": "11.50",
-      "away_odds": "28.00",
+      "draw_odds": "11.00",
+      "away_odds": "30.00",
       "start_time": "2025-05-03 04:30"
     }
   },
@@ -20341,9 +20341,9 @@
     "date": "2025-05-03",
     "time": "16:00",
     "odds": {
-      "home": 2.4,
-      "draw": 3,
-      "away": 2.85
+      "home": 2.35,
+      "draw": 3.1,
+      "away": 2.9
     },
     "raw": {
       "eventId": "51829989",
@@ -20351,9 +20351,9 @@
       "tournament": "Primera Federacion",
       "event": "Real Union de Irun - SD Tarazona",
       "market": "1X2",
-      "home_odds": "2.40",
-      "draw_odds": "3.00",
-      "away_odds": "2.85",
+      "home_odds": "2.35",
+      "draw_odds": "3.10",
+      "away_odds": "2.90",
       "start_time": "2025-05-03 16:00"
     }
   },
@@ -21190,6 +21190,32 @@
     }
   },
   {
+    "id": "51873265",
+    "eventId": "51873265",
+    "teams": "Millwall U21 - Hull City U21",
+    "league": "U21 Professional Development League",
+    "sport": "football",
+    "country": "England Amateur",
+    "date": "2025-05-02",
+    "time": "13:00",
+    "odds": {
+      "home": 1.37,
+      "draw": 5.4,
+      "away": 5.4
+    },
+    "raw": {
+      "eventId": "51873265",
+      "country": "England Amateur",
+      "tournament": "U21 Professional Development League",
+      "event": "Millwall U21 - Hull City U21",
+      "market": "1X2",
+      "home_odds": "1.37",
+      "draw_odds": "5.40",
+      "away_odds": "5.40",
+      "start_time": "2025-05-02 13:00"
+    }
+  },
+  {
     "id": "57540759",
     "eventId": "57540759",
     "teams": "Peterborough United U21 - Birmingham City U21",
@@ -21213,6 +21239,32 @@
       "draw_odds": "4.00",
       "away_odds": "2.10",
       "start_time": "2025-05-02 13:00"
+    }
+  },
+  {
+    "id": "51873263",
+    "eventId": "51873263",
+    "teams": "Bournemouth U21 - Wigan Athletic U21",
+    "league": "U21 Professional Development League",
+    "sport": "football",
+    "country": "England Amateur",
+    "date": "2025-05-02",
+    "time": "18:00",
+    "odds": {
+      "home": 1.33,
+      "draw": 5.25,
+      "away": 6.3
+    },
+    "raw": {
+      "eventId": "51873263",
+      "country": "England Amateur",
+      "tournament": "U21 Professional Development League",
+      "event": "Bournemouth U21 - Wigan Athletic U21",
+      "market": "1X2",
+      "home_odds": "1.33",
+      "draw_odds": "5.25",
+      "away_odds": "6.30",
+      "start_time": "2025-05-02 18:00"
     }
   },
   {
@@ -27622,8 +27674,8 @@
     "time": "13:50",
     "odds": {
       "home": 2,
-      "draw": 3.33,
-      "away": 3.3
+      "draw": 3.3,
+      "away": 3.4
     },
     "raw": {
       "eventId": "58970375",
@@ -27632,8 +27684,8 @@
       "event": "NK Opatija - Orijent 1919 Rijeka",
       "market": "1X2",
       "home_odds": "2.00",
-      "draw_odds": "3.33",
-      "away_odds": "3.30",
+      "draw_odds": "3.30",
+      "away_odds": "3.40",
       "start_time": "2025-05-02 13:50"
     }
   },
@@ -32370,32 +32422,6 @@
     }
   },
   {
-    "id": "54168067",
-    "eventId": "54168067",
-    "teams": "FC Velke Mezirici - Sokol Tasovice",
-    "league": "Divize D",
-    "sport": "football",
-    "country": "Czechia",
-    "date": "2025-05-01",
-    "time": "14:30",
-    "odds": {
-      "home": 2.5,
-      "draw": 3.3,
-      "away": 2.35
-    },
-    "raw": {
-      "eventId": "54168067",
-      "country": "Czechia",
-      "tournament": "Divize D",
-      "event": "FC Velke Mezirici - Sokol Tasovice",
-      "market": "1X2",
-      "home_odds": "2.50",
-      "draw_odds": "3.30",
-      "away_odds": "2.35",
-      "start_time": "2025-05-01 14:30"
-    }
-  },
-  {
     "id": "51123819",
     "eventId": "51123819",
     "teams": "NK Hrvatski Dragovoljac - NK Marsonia",
@@ -32613,9 +32639,9 @@
     "date": "2025-05-01",
     "time": "15:00",
     "odds": {
-      "home": 1.68,
-      "draw": 3.7,
-      "away": 4.3
+      "home": 1.64,
+      "draw": 3.8,
+      "away": 4.4
     },
     "raw": {
       "eventId": "60188265",
@@ -32623,9 +32649,9 @@
       "tournament": "Ligue 1, Reserves",
       "event": "US Khenchela U21 - MC Oran",
       "market": "1X2",
-      "home_odds": "1.68",
-      "draw_odds": "3.70",
-      "away_odds": "4.30",
+      "home_odds": "1.64",
+      "draw_odds": "3.80",
+      "away_odds": "4.40",
       "start_time": "2025-05-01 15:00"
     }
   },
