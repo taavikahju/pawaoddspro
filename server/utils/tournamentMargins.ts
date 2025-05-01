@@ -111,12 +111,16 @@ export async function calculateAndStoreTournamentMargins(storage: IStorage): Pro
         eventCount: data.count
       };
       
-      // Store in database
+      // Store in database - each calculation creates a new record with timestamp
+      // This preserves the history instead of overwriting previous records
       await db.insert(tournamentMargins).values(tournamentMarginData);
       totalGroups++;
     }
     
     console.log(`✅ Stored average margins for ${totalGroups} bookmaker-tournament combinations`);
+    
+    // Run cleanup of old data (we'll keep the last 30 days of data)
+    await cleanupOldTournamentMargins(30);
   } catch (error) {
     console.error('Error calculating tournament margins:', error);
   }
