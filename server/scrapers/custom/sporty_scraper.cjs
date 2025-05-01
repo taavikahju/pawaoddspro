@@ -6,6 +6,7 @@ const axios = require('axios');
 // Primary regions are Ghana (as per requirements) with Kenya as backup for better coverage
 const PRIMARY_REGION = 'gh'; // Ghana is primary region per requirements
 const BACKUP_REGION = 'ke'; // Kenya as backup for more comprehensive coverage
+const ADDITIONAL_REGIONS = ['ke']; // Extra regions to check for specific leagues like England National League
 
 // Debug mode flag - set to true to help debug scraping issues
 const DEBUG = true;
@@ -102,6 +103,22 @@ const buildEndpoints = () => {
       region: BACKUP_REGION,
       name: 'Kenya popular leagues',
       maxPages: 5,
+      priority: 2
+    }
+  );
+  
+  // Add a specific endpoint for searching England leagues including National League
+  endpoints.push(
+    {
+      url: `https://www.sportybet.com/api/${BACKUP_REGION}/factsCenter/football/leagues`,
+      params: {
+        option: '1',
+        query: 'England National League',
+        pageSize: '50'
+      },
+      region: BACKUP_REGION,
+      name: 'England National League Search',
+      maxPages: 2,
       priority: 2
     }
   );
