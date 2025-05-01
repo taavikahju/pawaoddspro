@@ -31,6 +31,14 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       console.log(`🔍 Identified ${sportyEvents.length} Sportybet events for special processing`);
     }
     
+    // Create team name maps for all bookmakers for secondary matching
+    const bookmakerTeamMaps = new Map<string, Map<string, any>>();
+    
+    // Initialize team maps for each bookmaker
+    for (const bookmakerCode of bookmakerCodes) {
+      bookmakerTeamMaps.set(bookmakerCode, new Map<string, any>());
+    }
+    
     // Create map of team names to Sportybet events for secondary matching
     const sportyTeamsMap = new Map();
     sportyEvents.forEach(event => {
@@ -40,6 +48,25 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       }
     });
     console.log(`🔄 Created team-based index for ${sportyTeamsMap.size} Sportybet events`);
+    
+    // Also create maps for other bookmakers
+    for (const bookmakerCode of bookmakerCodes) {
+      if (bookmakerCode === 'sporty') continue; // Already handled above
+      
+      const bookmakerData = allBookmakerData[bookmakerCode];
+      if (!bookmakerData || !Array.isArray(bookmakerData)) continue;
+      
+      const teamMap = bookmakerTeamMaps.get(bookmakerCode) || new Map();
+      
+      for (const event of bookmakerData) {
+        if (event.teams) {
+          const normalizedTeams = normalizeEventName(event.teams);
+          teamMap.set(normalizedTeams, event);
+        }
+      }
+      
+      console.log(`🔄 Created team-based index for ${teamMap.size} ${bookmakerCode} events`);
+    }
     
     // First pass: collect all eventIds from all bookmakers
     const allEventIds = new Set<string>();
