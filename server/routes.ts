@@ -701,7 +701,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json(marginHistory);
     } catch (error) {
-      console.error('Error fetching margin history:', error);
+      logger.error(`Error fetching margin history: ${error}`);
       res.status(500).json({ error: 'Failed to fetch margin history' });
     }
   });
@@ -728,7 +728,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json(history);
     } catch (error) {
-      console.error('Error fetching tournament margins history:', error);
+      logger.error(`Error fetching tournament margins history: ${error}`);
       res.status(500).json({ error: 'Failed to fetch tournament margins history' });
     }
   });
@@ -747,7 +747,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json(results);
     } catch (error) {
-      console.error('Error fetching all tournament margins:', error);
+      logger.error(`Error fetching all tournament margins: ${error}`);
       res.status(500).json({ error: 'Failed to fetch tournament margins' });
     }
   });
@@ -834,7 +834,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         averageMarginPercentage: (averageMargin * 100).toFixed(2) + '%'
       });
     } catch (error) {
-      console.error('Error fetching tournament margin details:', error);
+      logger.error(`Error fetching tournament margin details: ${error}`);
       res.status(500).json({ error: 'Failed to fetch tournament margin details' });
     }
   });
