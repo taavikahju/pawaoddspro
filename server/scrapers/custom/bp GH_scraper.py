@@ -4,8 +4,16 @@ import urllib.parse
 import time
 import sys
 
-# Use stderr for debug messages
+# Set to False to reduce logging output
+DEBUG = False
+
+# Use stderr for debug messages with conditional output
 def debug_print(message):
+    if DEBUG:
+        print(f"[DEBUG] {message}", file=sys.stderr)
+    
+# Always print critical messages regardless of debug setting
+def log_print(message):
     print(message, file=sys.stderr)
 
 all_events = []
