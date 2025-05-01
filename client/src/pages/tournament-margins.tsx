@@ -8,6 +8,7 @@ import { useBookmakerContext } from '@/contexts/BookmakerContext';
 import CountryFlag from '@/components/CountryFlag';
 import { cn } from '@/lib/utils';
 import Layout from '@/components/Layout';
+import TournamentMarginHistoryPopup from '@/components/TournamentMarginHistoryPopup';
 
 // Custom type for country data structure
 interface CountryData {
@@ -316,14 +317,7 @@ const TournamentMargins: React.FC = () => {
                       )}>
                         {country.name}
                       </span>
-                      <span className={cn(
-                        "flex items-center justify-center text-xs px-1.5 py-0.5 rounded-full min-w-[20px]",
-                        selectedCountry === country.name 
-                          ? "bg-primary text-primary-foreground" 
-                          : "bg-muted text-muted-foreground"
-                      )}>
-                        {tournamentCount}
-                      </span>
+
                     </div>
                   );
                 })}
@@ -412,10 +406,11 @@ const TournamentMargins: React.FC = () => {
                         
                         {bookmakers.map(bookmaker => {
                           // Map UI bookmaker codes to database bookmaker codes
-                          const dbBookmakerCode = 
-                            bookmaker.code === 'bp GH' ? 'betpawa_gh' :
-                            bookmaker.code === 'bp KE' ? 'betpawa_ke' :
-                            bookmaker.code;
+                          let dbBookmakerCode = bookmaker.code;
+                          
+                          // Convert from UI codes to database codes
+                          if (bookmaker.code === 'bp GH') dbBookmakerCode = 'betpawa_gh';
+                          else if (bookmaker.code === 'bp KE') dbBookmakerCode = 'betpawa_ke';
                             
                           const marginData = tournament.bookmakers[dbBookmakerCode];
                           
