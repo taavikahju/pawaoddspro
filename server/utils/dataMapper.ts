@@ -29,7 +29,8 @@ function drawProgressBar(percent: number, message: string) {
  */
 export async function processAndMapEvents(storage: IStorage): Promise<void> {
   try {
-    logger.critical('Processing scraped data...');
+    const startTime = new Date();
+    logger.critical(`[${startTime.toISOString()}] Starting event mapping process`);
     
     // Get all bookmaker data
     const allBookmakerData = await storage.getAllBookmakersData();
