@@ -437,14 +437,8 @@ const TournamentMargins: React.FC = () => {
                         </TableCell>
                         
                         {bookmakers.map(bookmaker => {
-                          // Map UI bookmaker codes to database bookmaker codes
-                          let dbBookmakerCode = bookmaker.code;
-                          
-                          // Convert from UI codes to database codes
-                          if (bookmaker.code === 'bp GH') dbBookmakerCode = 'betpawa_gh';
-                          else if (bookmaker.code === 'bp KE') dbBookmakerCode = 'betpawa_ke';
-                            
-                          const marginData = tournament.bookmakers[dbBookmakerCode];
+                          // Use the bookmaker code directly - no conversion needed
+                          const marginData = tournament.bookmakers[bookmaker.code];
                           
                           if (!marginData) {
                             return (
