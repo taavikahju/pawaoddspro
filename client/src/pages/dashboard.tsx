@@ -4,6 +4,7 @@ import CountryFlag from '@/components/CountryFlag';
 import Layout from '@/components/Layout';
 import OddsTable from '@/components/OddsTable';
 import { useBookmakerContext } from '@/contexts/BookmakerContext';
+import { useWebSocket } from '@/hooks/use-websocket';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
@@ -35,14 +36,25 @@ export default function Dashboard() {
     refetchInterval: 60000, // Refresh every minute
   });
   
-  // Fetch events (filtered by selected sports)
+  // Fetch events from API and WebSocket
   const { 
-    data: events = [],
+    data: apiEvents = [],
     isLoading: isLoadingEvents 
   } = useQuery({ 
     queryKey: ['/api/events'],
-    refetchInterval: 60000, // Refresh every minute
+    refetchInterval: 30000, // Refresh every 30 seconds
   });
+  
+  // Also use WebSocket for real-time updates
+  const { events: wsEvents } = useWebSocket();
+  
+  // Combine API and WebSocket events, preferring WebSocket data when available
+  const events = useMemo(() => {
+    if (wsEvents && wsEvents.length > 0) {
+      return wsEvents;
+    }
+    return apiEvents;
+  }, [apiEvents, wsEvents]);
 
   // Extract available countries and tournaments from the data
   useEffect(() => {
