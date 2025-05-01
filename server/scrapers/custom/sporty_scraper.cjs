@@ -408,7 +408,7 @@ const processEvents = (tournaments) => {
         try {
           // Special logging for England National League events
           if (country === 'England' || tournamentName.includes('National League') || tournamentName.includes('England')) {
-            console.error(`🏴󠁧󠁢󠁥󠁮󠁧󠁿 Found England event: ${tournamentName} - ${event.homeTeamName || ''} vs ${event.awayTeamName || ''} (Event ID: ${event.eventId || 'Unknown'})`);
+            // Removed England event log
           }
           
           if (!event.homeTeamName || !event.awayTeamName || !event.eventId) {
@@ -532,7 +532,7 @@ const processEvents = (tournaments) => {
             // Check against all known National League teams for better matching
             Object.keys(teamVariations).forEach(teamKey => {
               if (matchesTeamVariations(homeTeamLower, teamKey) || matchesTeamVariations(awayTeamLower, teamKey)) {
-                console.error(`🏴󠁧󠁢󠁥󠁮󠁧󠁿 National League match: "${event.homeTeamName} vs ${event.awayTeamName}" matches team "${teamKey}"`);
+                // Removed National League logging
               }
             });
           }
