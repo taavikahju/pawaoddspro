@@ -3,6 +3,7 @@ import { insertEventSchema, type InsertEvent, events } from '@shared/schema';
 import { db } from '../db';
 import { eq } from 'drizzle-orm';
 import { saveOddsHistory } from './oddsHistory';
+import { logger } from './logger';
 
 // Console-based progress bar implementation
 function drawProgressBar(percent: number, message: string) {
@@ -15,7 +16,7 @@ function drawProgressBar(percent: number, message: string) {
   
   const percentText = percent.toFixed(1).padStart(5);
   
-  console.log(`[${filledBar}${emptyBar}] ${percentText}% - ${message}`);
+  logger.critical(`[${filledBar}${emptyBar}] ${percentText}% - ${message}`);
 }
 
 /**
@@ -28,7 +29,7 @@ function drawProgressBar(percent: number, message: string) {
  */
 export async function processAndMapEvents(storage: IStorage): Promise<void> {
   try {
-    console.log('🔄 Processing scraped data...');
+    logger.critical('Processing scraped data...');
     
     // Get all bookmaker data
     const allBookmakerData = await storage.getAllBookmakersData();
@@ -147,9 +148,9 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
           }
           normalizedToOriginal.get(normalizedId)?.add(event.eventId);
           
-          // For debugging Sportybet specifically
+          // For debugging Sportybet specifically - switched to debug level
           if (bookmakerCode === 'sporty' && event.eventId !== normalizedId) {
-            console.log(`ℹ️ Normalized Sportybet eventId: ${event.eventId} → ${normalizedId}`);
+            logger.debug(`Normalized Sportybet eventId: ${event.eventId} → ${normalizedId}`);
           }
         }
       }
@@ -209,7 +210,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
               if (matchedEvent) {
                 event = matchedEvent;
                 if (bookmakerCode === 'sporty') {
-                  console.log(`🔄 Matched Sportybet event using normalized ID: ${originalId} → ${eventId}`);
+                  logger.debug(`Matched Sportybet event using normalized ID: ${originalId} → ${eventId}`);
                 }
               }
             });
