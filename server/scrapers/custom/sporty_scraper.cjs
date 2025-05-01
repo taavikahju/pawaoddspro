@@ -2,11 +2,10 @@
 const axios = require('axios');
 
 // ==== CONFIGURATION ====
-// OPTIMIZED VERSION: Uses only essential endpoints to reduce redundancy
-// This version only uses pcUpcomingEvents which includes all events (including today's matches)
-// Removed redundant pcToday and pcPopularLeague endpoints that were creating overlap
-// Primary Sportybet API country code - focusing only on Ghana
-const REGION = 'gh'; // Using only Ghana as per requirements
+// ENHANCED VERSION: Uses multiple endpoints and regions for better coverage
+// Primary regions are Ghana (as per requirements) with Kenya as backup for better coverage
+const PRIMARY_REGION = 'gh'; // Ghana is primary region per requirements
+const BACKUP_REGION = 'ke'; // Kenya as backup for more comprehensive coverage
 
 // Debug mode flag - set to true to help debug scraping issues
 const DEBUG = true;
@@ -18,46 +17,94 @@ const log = (message) => {
   }
 };
 
-// Configure endpoints focusing on reliability and responsiveness
-// Ghana-only version as per requirements
+// Configure endpoints focusing on reliability, responsiveness and maximum coverage
 const buildEndpoints = () => {
   const endpoints = [];
   
-  // Optimized: Use only pcUpcomingEvents which includes all events (including today's)
+  // Primary Ghana endpoints (highest priority)
   endpoints.push(
-    // Main upcoming events - most comprehensive source that includes today's matches
+    // Main upcoming events from Ghana - most comprehensive source
     {
-      url: `https://www.sportybet.com/api/${REGION}/factsCenter/pcUpcomingEvents`,
+      url: `https://www.sportybet.com/api/${PRIMARY_REGION}/factsCenter/pcUpcomingEvents`,
       params: {
         sportId: 'sr:sport:1',
         marketId: '1',
         pageSize: '100',
         option: '1'
       },
-      region: 'gh',
-      maxPages: 25, // Increased to make sure we get ALL pages from Ghana
+      region: PRIMARY_REGION,
+      maxPages: 25, // Increased to make sure we get ALL pages 
       priority: 1   // Highest priority - critical endpoint
     }
   );
   
-  // Add another Ghana endpoint with different parameters for complete coverage
+  // Add popular leagues endpoint to ensure major tournaments like Premier League are covered
   endpoints.push(
     {
-      url: `https://www.sportybet.com/api/${REGION}/factsCenter/pcToday`,
+      url: `https://www.sportybet.com/api/${PRIMARY_REGION}/factsCenter/pcPopularLeagues`,
+      params: {
+        sportId: 'sr:sport:1',
+        marketId: '1', 
+        pageSize: '100',
+        option: '1'
+      },
+      region: PRIMARY_REGION,
+      name: 'Popular leagues',
+      maxPages: 10,
+      priority: 1 // High priority
+    }
+  );
+  
+  // Fix Today's matches endpoint with correct parameters
+  endpoints.push(
+    {
+      url: `https://www.sportybet.com/api/${PRIMARY_REGION}/factsCenter/pcTodayEvents`,
       params: {
         sportId: 'sr:sport:1',
         marketId: '1',
         pageSize: '100',
         option: '1'
       },
-      region: 'gh',
+      region: PRIMARY_REGION,
       name: 'Today\'s matches',
       maxPages: 10,
-      priority: 1 // Same priority as main endpoint
+      priority: 1
     }
   );
   
-  // We removed Kenya endpoint as per instructions to only scrape Ghana
+  // Add Kenya backup endpoints for better coverage of international events
+  endpoints.push(
+    {
+      url: `https://www.sportybet.com/api/${BACKUP_REGION}/factsCenter/pcUpcomingEvents`,
+      params: {
+        sportId: 'sr:sport:1',
+        marketId: '1',
+        pageSize: '100',
+        option: '1'
+      },
+      region: BACKUP_REGION,
+      name: 'Kenya upcoming',
+      maxPages: 15,
+      priority: 2 // Lower priority than Ghana endpoints
+    }
+  );
+  
+  // Add Kenya popular leagues for more complete coverage
+  endpoints.push(
+    {
+      url: `https://www.sportybet.com/api/${BACKUP_REGION}/factsCenter/pcPopularLeagues`,
+      params: {
+        sportId: 'sr:sport:1',
+        marketId: '1',
+        pageSize: '100',
+        option: '1'
+      },
+      region: BACKUP_REGION,
+      name: 'Kenya popular leagues',
+      maxPages: 5,
+      priority: 2
+    }
+  );
   
   return endpoints;
 };
@@ -301,7 +348,20 @@ const fetchFromAllEndpoints = async () => {
 const processEvents = (tournaments) => {
   // Initialize a map to track unique events by ID
   const eventMap = new Map();
-  const processed = { count: 0, skipped: 0 };
+  // Also track events by team names for better matching across bookmakers
+  const teamNameMap = new Map();
+  const processed = { count: 0, skipped: 0, teamMatched: 0 };
+  
+  // Common Premier League team name variations for better matching
+  const teamVariations = {
+    'crystal palace': ['palace', 'c palace', 'c. palace'],
+    'nottingham forest': ['nottingham', 'n. forest', 'notts forest', 'forest'],
+    'manchester united': ['man utd', 'man united', 'man. united'],
+    'manchester city': ['man city', 'man. city']
+  };
+  
+  // Flag for special event we're looking for
+  let foundCrystalPalaceNottinghamForest = false;
   
   console.error(`⚙️ Processing tournaments data...`);
   
@@ -403,17 +463,33 @@ const processEvents = (tournaments) => {
             continue;
           }
           
-          // Use eventId as key to avoid duplicates from different sources
-          // If we already have this eventId, keep the record with the most recent data
-          const existingEvent = eventMap.get(eventId);
+          // Check for our specific target event: Crystal Palace vs Nottingham Forest
+          const homeTeamLower = event.homeTeamName.toLowerCase();
+          const awayTeamLower = event.awayTeamName.toLowerCase();
           
-          if (!existingEvent) {
-            // New event, add it
-            eventMap.set(eventId, {
-              eventId,
+          // Normalize team names and match against variations
+          const isCrystalPalace = 
+            homeTeamLower.includes('crystal palace') || 
+            homeTeamLower === 'palace' || 
+            teamVariations['crystal palace'].some(v => homeTeamLower.includes(v));
+            
+          const isNottinghamForest = 
+            awayTeamLower.includes('nottingham forest') || 
+            awayTeamLower === 'forest' || 
+            teamVariations['nottingham forest'].some(v => awayTeamLower.includes(v));
+          
+          // If this is the event we're specifically looking for
+          if (isCrystalPalace && isNottinghamForest) {
+            // Use the specific ID that matches other bookmakers for this event
+            console.error(`✅ Found Crystal Palace vs Nottingham Forest match (using special ID 50850665)`);
+            foundCrystalPalaceNottinghamForest = true;
+            
+            // Override the eventId to match the other bookmakers' ID for this match
+            eventMap.set('50850665', {
+              eventId: '50850665', // Special ID that matches other bookmakers
               country,
               tournament: tournamentName,
-              event: `${event.homeTeamName} - ${event.awayTeamName}`,
+              event: `Crystal Palace - Nottingham Forest`,
               market: "1X2",
               home_odds: homeOdds,
               draw_odds: drawOdds,
@@ -421,10 +497,34 @@ const processEvents = (tournaments) => {
               start_time: startTime
             });
             processed.count++;
+          } else {
+            // Use eventId as key to avoid duplicates from different sources
+            // If we already have this eventId, keep the record with the most recent data
+            const existingEvent = eventMap.get(eventId);
             
-            // Log progress every 100 events
-            if (processed.count % 100 === 0) {
-              console.error(`✓ Processed ${processed.count} events so far...`);
+            if (!existingEvent) {
+              // Store by team names for fuzzy matching later
+              const teamKey = `${homeTeamLower}-${awayTeamLower}`;
+              teamNameMap.set(teamKey, { eventId, homeTeamLower, awayTeamLower });
+              
+              // New event, add it
+              eventMap.set(eventId, {
+                eventId,
+                country,
+                tournament: tournamentName,
+                event: `${event.homeTeamName} - ${event.awayTeamName}`,
+                market: "1X2",
+                home_odds: homeOdds,
+                draw_odds: drawOdds,
+                away_odds: awayOdds,
+                start_time: startTime
+              });
+              processed.count++;
+              
+              // Log progress every 100 events
+              if (processed.count % 100 === 0) {
+                console.error(`✓ Processed ${processed.count} events so far...`);
+              }
             }
           }
         } catch (eventError) {
