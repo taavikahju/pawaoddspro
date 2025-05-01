@@ -6,7 +6,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "next-themes";
 import NotFound from "@/pages/not-found";
 import Dashboard from "@/pages/dashboard";
-import ScraperStatus from "@/pages/scraper-status";
 import AdminPage from "@/pages/admin";
 import TournamentMargins from "@/pages/tournament-margins";
 import NotificationListener from "@/components/NotificationListener";
@@ -16,7 +15,6 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Dashboard} />
-      <Route path="/scraper-status" component={ScraperStatus} />
       <Route path="/tournament-margins" component={TournamentMargins} />
       <Route path="/admin" component={AdminPage} />
       <Route component={NotFound} />
