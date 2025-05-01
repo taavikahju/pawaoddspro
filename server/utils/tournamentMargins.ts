@@ -17,7 +17,8 @@ function calculateMargin(homeOdds: number, drawOdds: number, awayOdds: number): 
  */
 export async function calculateAndStoreTournamentMargins(storage: IStorage): Promise<void> {
   try {
-    console.log('📊 Calculating tournament average margins by bookmaker...');
+    const startTime = new Date();
+    console.log(`[${startTime.toISOString()}] Calculating tournament average margins by bookmaker...`);
     
     // Get all events - use parallel fetching for speed
     const [allEvents, bookmakers] = await Promise.all([
@@ -129,7 +130,8 @@ export async function calculateAndStoreTournamentMargins(storage: IStorage): Pro
       await db.insert(tournamentMargins).values(batchInsertValues);
     }
     
-    console.log(`✅ Stored average margins for ${totalGroups} bookmaker-tournament combinations`);
+    const endTime = new Date();
+    console.log(`[${endTime.toISOString()}] Stored average margins for ${totalGroups} bookmaker-tournament combinations`);
     
     // Run cleanup of old data (we'll keep the last 30 days of data)
     await cleanupOldTournamentMargins(30);
@@ -177,6 +179,9 @@ export async function getTournamentMarginHistory(
  */
 export async function cleanupOldTournamentMargins(days: number = 30): Promise<number> {
   try {
+    const cleanupStartTime = new Date();
+    console.log(`[${cleanupStartTime.toISOString()}] Starting cleanup of tournament margin records older than ${days} days`);
+    
     // Calculate the cutoff date
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - days);
@@ -187,7 +192,8 @@ export async function cleanupOldTournamentMargins(days: number = 30): Promise<nu
     );
     
     const deletedCount = rowCount || 0;
-    console.log(`Deleted ${deletedCount} tournament margin records older than ${days} days`);
+    const cleanupEndTime = new Date();
+    console.log(`[${cleanupEndTime.toISOString()}] Deleted ${deletedCount} tournament margin records older than ${days} days`);
     
     return deletedCount;
   } catch (error) {

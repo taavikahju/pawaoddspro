@@ -78,6 +78,9 @@ export async function getBookmakerOddsHistory(bookmakerCode: string): Promise<an
  */
 export async function cleanupOldOddsHistory(days: number = 7): Promise<number> {
   try {
+    const cleanupStartTime = new Date();
+    console.log(`[${cleanupStartTime.toISOString()}] Starting cleanup of odds history records older than ${days} days`);
+    
     // Calculate the cutoff date (days ago from now)
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - days);
@@ -92,7 +95,9 @@ export async function cleanupOldOddsHistory(days: number = 7): Promise<number> {
     // Handle different return values from delete operation
     const deletedCount = typeof deleteResult === 'object' && 'count' in deleteResult ? 
       deleteResult.count : 0;
-    console.log(`Deleted ${deletedCount} odds history records older than ${days} days (before ${cutoffTimestamp})`);
+      
+    const cleanupEndTime = new Date();
+    console.log(`[${cleanupEndTime.toISOString()}] Deleted ${deletedCount} odds history records older than ${days} days (before ${cutoffTimestamp})`);
     
     return deletedCount;
   } catch (error) {
