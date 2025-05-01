@@ -118,8 +118,68 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
     
     console.log(`📊 Processing ${activeBookmakers.length} active bookmakers`);
     
-    // Run scrapers in parallel with all results collected first before mapping
-    const scraperPromises = activeBookmakers.map(async (bookmaker) => {
+    // Extract betPawa Ghana to run first to establish base tournaments
+    const betPawaGhanaBookmaker = activeBookmakers.find(bm => bm.code === 'bp GH');
+    const otherBookmakers = activeBookmakers.filter(bm => bm.code !== 'bp GH');
+    
+    // If betPawa Ghana is available, run it first sequentially before running other scrapers in parallel
+    let betPawaGhanaResult = null;
+    if (betPawaGhanaBookmaker) {
+      console.log('🌟 Running betPawa Ghana first to establish base tournament data...');
+      
+      try {
+        // Emit bookmaker scraper started event
+        scraperEvents.emit(SCRAPER_EVENTS.BOOKMAKER_STARTED, {
+          timestamp: new Date().toISOString(),
+          bookmaker: {
+            code: betPawaGhanaBookmaker.code,
+            name: betPawaGhanaBookmaker.name
+          },
+          message: `Running scraper for ${betPawaGhanaBookmaker.name}`
+        });
+        
+        let data: any = null;
+        
+        // Check if custom scraper exists
+        const hasCustom = customScrapers.hasCustomScraper(betPawaGhanaBookmaker.code);
+        
+        // Try to use custom scraper
+        if (hasCustom) {
+          try {
+            console.log(`🔍 Scraping ${betPawaGhanaBookmaker.name}...`);
+            data = await customScrapers.runCustomScraper(betPawaGhanaBookmaker.code);
+            console.log(`✅ ${betPawaGhanaBookmaker.name}: ${data?.length || 0} events collected`);
+          } catch (customError) {
+            console.error(`❌ Error in ${betPawaGhanaBookmaker.name} scraper:`, customError);
+            data = null;
+          }
+        }
+        
+        if (data) {
+          await storage.saveBookmakerData(betPawaGhanaBookmaker.code, data);
+          const eventCount = Array.isArray(data) ? data.length : 0;
+          
+          // Emit bookmaker scraper completed event
+          scraperEvents.emit(SCRAPER_EVENTS.BOOKMAKER_COMPLETED, {
+            timestamp: new Date().toISOString(),
+            bookmaker: {
+              code: betPawaGhanaBookmaker.code,
+              name: betPawaGhanaBookmaker.name
+            },
+            message: `Completed scraping for ${betPawaGhanaBookmaker.name}`,
+            eventCount
+          });
+          
+          betPawaGhanaResult = { bookmaker: betPawaGhanaBookmaker.code, data };
+        }
+      } catch (error) {
+        console.error(`❌ ${betPawaGhanaBookmaker.name} scraper failed:`, error);
+        betPawaGhanaResult = { bookmaker: betPawaGhanaBookmaker.code, error, data: null };
+      }
+    }
+    
+    // Run remaining scrapers in parallel with all results collected first before mapping
+    const scraperPromises = otherBookmakers.map(async (bookmaker) => {
       try {
         // Emit bookmaker scraper started event
         scraperEvents.emit(SCRAPER_EVENTS.BOOKMAKER_STARTED, {

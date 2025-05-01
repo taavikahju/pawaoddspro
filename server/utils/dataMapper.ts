@@ -209,12 +209,8 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
           league = dataSource.league || 'Unknown';
         }
         
-        // Only log for specific countries/tournaments we're debugging
-        if (baseMatch && 
-           (country.toLowerCase().includes('england') || 
-            tournament.toLowerCase().includes('national league'))) {
-          console.log(`🔹 Using betPawa Ghana data for England/National League event ${eventId} - Country: [${country}], Tournament: [${tournament}]`);
-        }
+        // Removed National League logging based on user request
+        // We're using betPawa Ghana as the base bookmaker for country/tournament mapping
         
         // Create the teams field if not already available
         let teams = dataSource.teams;
