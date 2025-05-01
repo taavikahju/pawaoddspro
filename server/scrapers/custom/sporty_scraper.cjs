@@ -125,7 +125,7 @@ const getHeaders = (region = 'gh') => ({
 });
 
 // Efficient fetch implementation with cancelable requests
-const fetchWithTimeout = async (url, options, timeout = 7000) => {
+const fetchWithTimeout = async (url, options, timeout = 15000) => {
   try {
     const source = axios.CancelToken.source();
     const id = setTimeout(() => {
@@ -175,7 +175,7 @@ const processEndpoint = async (endpoint, endpointIndex) => {
         firstPageRes = await fetchWithTimeout(
           firstPageUrl, 
           { headers }, 
-          7000 + (retries * 2000)
+          15000 + (retries * 3000)
         );
         break; // Success, exit retry loop
       } catch (err) {
@@ -214,7 +214,7 @@ const processEndpoint = async (endpoint, endpointIndex) => {
         console.error(`📥 Fetching ${displayName}, page ${pageNum}...`);
         
         try {
-          const response = await fetchWithTimeout(url, { headers }, 7000);
+          const response = await fetchWithTimeout(url, { headers }, 15000);
           const data = response.data?.data;
           
           if (data && data.tournaments && data.tournaments.length > 0) {
@@ -595,9 +595,9 @@ const processEvents = (tournaments) => {
 
 const run = async () => {
   try {
-    // Set a reasonable timeout for the entire operation (57 seconds)
+    // Set a reasonable timeout for the entire operation (120 seconds)
     const timeoutPromise = new Promise((_, reject) => {
-      setTimeout(() => reject(new Error("Global timeout after 57 seconds")), 57000);
+      setTimeout(() => reject(new Error("Global timeout after 120 seconds")), 120000);
     });
 
     const tournamentPromise = fetchFromAllEndpoints();
