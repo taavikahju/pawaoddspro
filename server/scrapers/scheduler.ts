@@ -107,11 +107,12 @@ export function setupScrapers(storage: IStorage): void {
  */
 export async function runAllScrapers(storage: IStorage): Promise<void> {
   try {
-    logger.critical('Starting scraper runs');
+    const startTime = new Date();
+    logger.critical(`[${startTime.toISOString()}] Starting scraper runs`);
     
     // Emit scraper started event
     scraperEvents.emit(SCRAPER_EVENTS.STARTED, {
-      timestamp: new Date().toISOString(),
+      timestamp: startTime.toISOString(),
       message: 'Starting scraper runs'
     });
     
@@ -157,11 +158,17 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
         // Try to use custom scraper
         if (hasCustom) {
           try {
-            // More concise logging
+            // Use custom scraper with clear timestamp-based logging
+            const scraperStartTime = new Date();
+            logger.critical(`[${scraperStartTime.toISOString()}] Starting ${bookmaker.name} scraper`);
+            
             data = await customScrapers.runCustomScraper(bookmaker.code);
-            logger.bookmakerComplete(bookmaker.name, data?.length || 0);
+            
+            const scraperEndTime = new Date();
+            logger.critical(`[${scraperEndTime.toISOString()}] ${bookmaker.name} scraper finished - ${data?.length || 0} events extracted`);
           } catch (customError) {
-            logger.error(`Error in ${bookmaker.name} scraper:`, customError);
+            const errorTime = new Date();
+            logger.critical(`[${errorTime.toISOString()}] Error in ${bookmaker.name} scraper: ${customError.message || String(customError)}`);
             data = null;
           }
         }
@@ -294,14 +301,9 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
         timestamp: new Date().toISOString()
       };
       
-      // Log statistics for the update
-      console.log('🚀 FRONTEND UPDATE SUMMARY:');
-      console.log(`📊 Total events: ${filteredEvents.length} (filtered to have at least 2 bookmakers)`);
-      console.log('📊 Event distribution by bookmaker count:');
-      console.log(`  - Events with 1 bookmaker: ${eventsByBookmakerCount['1']}`);
-      console.log(`  - Events with 2 bookmakers: ${eventsByBookmakerCount['2']}`);
-      console.log(`  - Events with 3 bookmakers: ${eventsByBookmakerCount['3']}`);
-      console.log(`  - Events with 4+ bookmakers: ${eventsByBookmakerCount['4+']}`);
+      // Log statistics for the update with timestamp
+      const updateTime = new Date();
+      logger.critical(`[${updateTime.toISOString()}] Sending ${filteredEvents.length} events to frontend - Distribution: 1 bookie: ${eventsByBookmakerCount['1']}, 2 bookies: ${eventsByBookmakerCount['2']}, 3+ bookies: ${eventsByBookmakerCount['3'] + eventsByBookmakerCount['4+']}`);
       
       // Emit the all processing completed event with statistics
       scraperEvents.emit(SCRAPER_EVENTS.ALL_PROCESSING_COMPLETED, {
@@ -324,11 +326,12 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
     
     // Update stats
     const stats = await storage.getStats();
-    console.log(`📊 Scraping complete: ${stats.totalEvents} total events`);
+    const endTime = new Date();
+    logger.critical(`[${endTime.toISOString()}] Scraping complete - ${stats.totalEvents} total events mapped from ${successfulScrapers} bookmakers`);
     
     // Emit scraper completed event
     scraperEvents.emit(SCRAPER_EVENTS.COMPLETED, {
-      timestamp: new Date().toISOString(),
+      timestamp: endTime.toISOString(),
       message: 'All scrapers completed successfully',
       stats
     });

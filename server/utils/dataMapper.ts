@@ -162,6 +162,10 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     let eventsWith4Bookmakers = 0;
     let bookmakerEventsMapped = 0;
     
+    // Count events per bookmaker
+    const bookmakerEventCounts: Record<string, number> = {};
+    bookmakerCodes.forEach(code => bookmakerEventCounts[code] = 0);
+    
     // Second pass: Process each bookmaker's data and group by eventId
     for (const eventId of Array.from(allEventIds)) {
       let baseMatch = null;
@@ -246,6 +250,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
         // If this bookmaker has odds for this event, increment the counter
         if (hasOdds) {
           bookmakerCount++;
+          bookmakerEventCounts[bookmakerCode] = (bookmakerEventCounts[bookmakerCode] || 0) + 1;
         }
       }
       
@@ -688,13 +693,22 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       }
     }
     
-    // Log summary of cleanup
-    logger.critical(`========== EVENTS CLEANUP SUMMARY ==========`);
-    logger.critical(`Starting events count: ${allEvents.length}`);
-    logger.critical(`Events meeting criteria (2+ bookmakers): ${currentEventIds.size}`);
-    logger.critical(`Events removed: ${deletedCount}`);
-    logger.critical(`Final events count: ${allEvents.length - deletedCount}`);
-    logger.critical(`===========================================`);
+    // Log summary of cleanup with timestamp
+    const endTime = new Date();
+    
+    // Create bookmaker counts summary
+    let bookmakerSummary = "";
+    for (const [code, count] of Object.entries(bookmakerEventCounts)) {
+      bookmakerSummary += `${code}: ${count} events, `;
+    }
+    
+    // Remove trailing comma and space
+    if (bookmakerSummary.endsWith(", ")) {
+      bookmakerSummary = bookmakerSummary.slice(0, -2);
+    }
+    
+    logger.critical(`[${endTime.toISOString()}] Event mapping finished - ${currentEventIds.size} events mapped, ${deletedCount} events removed, final count: ${allEvents.length - deletedCount}`);
+    logger.critical(`[${endTime.toISOString()}] Events per bookmaker: ${bookmakerSummary}`);
     
   } catch (error) {
     logger.critical('Error processing and mapping events:', error);
