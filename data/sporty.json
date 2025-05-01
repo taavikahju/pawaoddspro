@@ -1231,8 +1231,8 @@
     "date": "2025-05-04",
     "time": "10:30",
     "odds": {
-      "home": 4.33,
-      "draw": 3.67,
+      "home": 4.36,
+      "draw": 3.66,
       "away": 1.86
     },
     "raw": {
@@ -1241,8 +1241,8 @@
       "tournament": "Serie A",
       "event": "Empoli - Lazio",
       "market": "1X2",
-      "home_odds": "4.33",
-      "draw_odds": "3.67",
+      "home_odds": "4.36",
+      "draw_odds": "3.66",
       "away_odds": "1.86",
       "start_time": "2025-05-04 10:30"
     }
@@ -3909,9 +3909,9 @@
     "date": "2025-05-01",
     "time": "13:00",
     "odds": {
-      "home": 1.91,
-      "draw": 3.25,
-      "away": 4.4
+      "home": 1.95,
+      "draw": 3.2,
+      "away": 4.25
     },
     "raw": {
       "eventId": "51468293",
@@ -3919,9 +3919,9 @@
       "tournament": "Serie B",
       "event": "Modena FC - Reggiana 1919",
       "market": "1X2",
-      "home_odds": "1.91",
-      "draw_odds": "3.25",
-      "away_odds": "4.40",
+      "home_odds": "1.95",
+      "draw_odds": "3.20",
+      "away_odds": "4.25",
       "start_time": "2025-05-01 13:00"
     }
   },
@@ -4117,9 +4117,9 @@
     "date": "2025-05-02",
     "time": "18:00",
     "odds": {
-      "home": 2.85,
-      "draw": 3.4,
-      "away": 2.4
+      "home": 2.8,
+      "draw": 3.5,
+      "away": 2.35
     },
     "raw": {
       "eventId": "50956905",
@@ -4127,9 +4127,9 @@
       "tournament": "Ligue 2",
       "event": "Amiens - Pau FC",
       "market": "1X2",
-      "home_odds": "2.85",
-      "draw_odds": "3.40",
-      "away_odds": "2.40",
+      "home_odds": "2.80",
+      "draw_odds": "3.50",
+      "away_odds": "2.35",
       "start_time": "2025-05-02 18:00"
     }
   },
@@ -7615,6 +7615,32 @@
       "draw_odds": "3.10",
       "away_odds": "2.95",
       "start_time": "2025-05-04 15:30"
+    }
+  },
+  {
+    "id": "60172749",
+    "eventId": "60172749",
+    "teams": "AC Trento - Atalanta BC U23",
+    "league": "Serie C,  Promotion Playoffs",
+    "sport": "football",
+    "country": "Italy",
+    "date": "2025-05-04",
+    "time": "18:00",
+    "odds": {
+      "home": 2.45,
+      "draw": 3.3,
+      "away": 2.65
+    },
+    "raw": {
+      "eventId": "60172749",
+      "country": "Italy",
+      "tournament": "Serie C,  Promotion Playoffs",
+      "event": "AC Trento - Atalanta BC U23",
+      "market": "1X2",
+      "home_odds": "2.45",
+      "draw_odds": "3.30",
+      "away_odds": "2.65",
+      "start_time": "2025-05-04 18:00"
     }
   },
   {
@@ -15054,6 +15080,32 @@
     }
   },
   {
+    "id": "51446351",
+    "eventId": "51446351",
+    "teams": "Sutton United - Woking FC",
+    "league": "National League",
+    "sport": "football",
+    "country": "England",
+    "date": "2025-05-05",
+    "time": "14:00",
+    "odds": {
+      "home": 2.15,
+      "draw": 3.33,
+      "away": 3.1
+    },
+    "raw": {
+      "eventId": "51446351",
+      "country": "England",
+      "tournament": "National League",
+      "event": "Sutton United - Woking FC",
+      "market": "1X2",
+      "home_odds": "2.15",
+      "draw_odds": "3.33",
+      "away_odds": "3.10",
+      "start_time": "2025-05-05 14:00"
+    }
+  },
+  {
     "id": "51446349",
     "eventId": "51446349",
     "teams": "Wealdstone FC - FC Halifax Town",
@@ -17884,32 +17936,6 @@
       "home_odds": "1.68",
       "draw_odds": "3.33",
       "away_odds": "4.25",
-      "start_time": "2025-05-04 10:00"
-    }
-  },
-  {
-    "id": "51868489",
-    "eventId": "51868489",
-    "teams": "Juventud Torremolinos CF - Club Deportiva Minera",
-    "league": "Segunda Federacion",
-    "sport": "football",
-    "country": "Spain",
-    "date": "2025-05-04",
-    "time": "10:00",
-    "odds": {
-      "home": 1.25,
-      "draw": 4.25,
-      "away": 11
-    },
-    "raw": {
-      "eventId": "51868489",
-      "country": "Spain",
-      "tournament": "Segunda Federacion",
-      "event": "Juventud Torremolinos CF - Club Deportiva Minera",
-      "market": "1X2",
-      "home_odds": "1.25",
-      "draw_odds": "4.25",
-      "away_odds": "11.00",
       "start_time": "2025-05-04 10:00"
     }
   },
@@ -24440,6 +24466,32 @@
     }
   },
   {
+    "id": "57443859",
+    "eventId": "57443859",
+    "teams": "Onsala BK - Varbergs GIF FK",
+    "league": "Division 2, Vastra Gotaland",
+    "sport": "football",
+    "country": "Sweden",
+    "date": "2025-05-04",
+    "time": "11:00",
+    "odds": {
+      "home": 1.55,
+      "draw": 4.4,
+      "away": 4.4
+    },
+    "raw": {
+      "eventId": "57443859",
+      "country": "Sweden",
+      "tournament": "Division 2, Vastra Gotaland",
+      "event": "Onsala BK - Varbergs GIF FK",
+      "market": "1X2",
+      "home_odds": "1.55",
+      "draw_odds": "4.40",
+      "away_odds": "4.40",
+      "start_time": "2025-05-04 11:00"
+    }
+  },
+  {
     "id": "59947853",
     "eventId": "59947853",
     "teams": "CS 2 de Mayo - Sportivo Luqueno",
@@ -27101,9 +27153,9 @@
     "date": "2025-05-01",
     "time": "21:00",
     "odds": {
-      "home": 2.8,
-      "draw": 2.75,
-      "away": 2.8
+      "home": 2.75,
+      "draw": 2.85,
+      "away": 2.75
     },
     "raw": {
       "eventId": "60240957",
@@ -27111,9 +27163,9 @@
       "tournament": "Liga Nacional, Clausura",
       "event": "Deportivo Mixco - CSD Municipal",
       "market": "1X2",
-      "home_odds": "2.80",
-      "draw_odds": "2.75",
-      "away_odds": "2.80",
+      "home_odds": "2.75",
+      "draw_odds": "2.85",
+      "away_odds": "2.75",
       "start_time": "2025-05-01 21:00"
     }
   },
@@ -29169,32 +29221,6 @@
       "draw_odds": "3.60",
       "away_odds": "3.50",
       "start_time": "2025-05-01 14:00"
-    }
-  },
-  {
-    "id": "51071383",
-    "eventId": "51071383",
-    "teams": "LASK - SK Treibach",
-    "league": "Regionalliga Centre",
-    "sport": "football",
-    "country": "Austria Amateur",
-    "date": "2025-05-02",
-    "time": "16:00",
-    "odds": {
-      "home": 1.91,
-      "draw": 3.8,
-      "away": 3.2
-    },
-    "raw": {
-      "eventId": "51071383",
-      "country": "Austria Amateur",
-      "tournament": "Regionalliga Centre",
-      "event": "LASK - SK Treibach",
-      "market": "1X2",
-      "home_odds": "1.91",
-      "draw_odds": "3.80",
-      "away_odds": "3.20",
-      "start_time": "2025-05-02 16:00"
     }
   },
   {
@@ -32899,7 +32925,7 @@
     "date": "2025-05-02",
     "time": "16:00",
     "odds": {
-      "home": 2.25,
+      "home": 2.3,
       "draw": 3.5,
       "away": 2.45
     },
@@ -32909,7 +32935,7 @@
       "tournament": "Ykkonen",
       "event": "Tampere United - JJK Jyvaskyla",
       "market": "1X2",
-      "home_odds": "2.25",
+      "home_odds": "2.30",
       "draw_odds": "3.50",
       "away_odds": "2.45",
       "start_time": "2025-05-02 16:00"

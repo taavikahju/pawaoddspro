@@ -644,7 +644,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get tournament margin history for a specific tournament
   app.get('/api/tournaments/margins/history', async (req, res) => {
     try {
-      const { tournament, bookmaker } = req.query;
+      const { tournament, bookmaker, country } = req.query;
       
       if (!tournament) {
         return res.status(400).json({ error: 'Tournament name is required' });
@@ -654,9 +654,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { getTournamentMarginHistory } = await import('./utils/tournamentMargins');
       
       // Get the tournament margin history
+      // Include country filter if provided to ensure we only get margins for specific country's tournament
       const history = await getTournamentMarginHistory(
         tournament as string, 
-        bookmaker as string | undefined
+        bookmaker as string | undefined,
+        country as string | undefined
       );
       
       res.json(history);
@@ -688,7 +690,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get tournament margin calculation details
   app.get('/api/tournaments/margins/details', async (req, res) => {
     try {
-      const { tournament, bookmaker } = req.query;
+      const { tournament, bookmaker, country } = req.query;
       
       if (!tournament || !bookmaker) {
         return res.status(400).json({ error: 'Tournament name and bookmaker code are required' });
@@ -696,8 +698,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Get all events for this tournament
       const events = await storage.getEvents();
+      
+      // Filter events by tournament name AND country if provided
       const tournamentEvents = events.filter(event => 
         (event.tournament === tournament || event.league === tournament) && 
+        // If country is specified, only include events from that country
+        (country ? event.country === country : true) &&
         event.oddsData && 
         event.oddsData[bookmaker as string]
       );
@@ -749,8 +755,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const totalMargin = eventsWithMargin.reduce((sum, event) => sum + (event.margin || 0), 0);
       const averageMargin = totalMargin / eventsWithMargin.length;
       
+      // Get the country from the first event (they should all be same country)
+      const eventCountry = tournamentEvents.length > 0 ? tournamentEvents[0].country : null;
+      
       res.json({
         tournament: tournament,
+        country: country || eventCountry, // Use provided country or detect from event
         bookmaker: bookmaker,
         events: eventsWithMargin,
         count: eventsWithMargin.length,

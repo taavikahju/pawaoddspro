@@ -66,14 +66,16 @@ export async function calculateAndStoreTournamentMargins(storage: IStorage): Pro
         // Calculate margin for this bookmaker's odds
         const margin = calculateMargin(homeOdds, drawOdds, awayOdds);
         
-        // Create group key for this bookmaker and tournament
-        const groupKey = `${bookmakerCode}:${tournamentName}`;
+        // Include country in group key to separate leagues with same name in different countries
+        // For example: "Premier League" exists in multiple countries
+        const countryName = event.country || 'Unknown';
+        const groupKey = `${bookmakerCode}:${countryName}:${tournamentName}`;
         
         // Create group if it doesn't exist
         if (!tournamentGroups.has(groupKey)) {
           tournamentGroups.set(groupKey, {
             bookmakerCode,
-            countryName: event.country,
+            countryName: countryName,
             tournamentName,
             margins: [],
             totalMargin: 0,
@@ -124,30 +126,33 @@ export async function calculateAndStoreTournamentMargins(storage: IStorage): Pro
  * Get tournament margin history for a specific bookmaker
  * @param tournamentName The name of the tournament
  * @param bookmakerCode The bookmaker code
+ * @param countryName Optional country name to filter by
  * @returns Array of tournament margin records
  */
 export async function getTournamentMarginHistory(
   tournamentName: string,
-  bookmakerCode?: string
+  bookmakerCode?: string,
+  countryName?: string
 ): Promise<any[]> {
+  // Build the SQL condition based on provided parameters
+  let condition = sql`${tournamentMargins.tournament} = ${tournamentName}`;
+  
+  // Add bookmaker filter if provided
   if (bookmakerCode) {
-    // If bookmaker is specified, filter by both tournament and bookmaker
-    return db
-      .select()
-      .from(tournamentMargins)
-      .where(
-        sql`${tournamentMargins.tournament} = ${tournamentName} AND 
-            ${tournamentMargins.bookmakerCode} = ${bookmakerCode}`
-      )
-      .orderBy(tournamentMargins.timestamp);
-  } else {
-    // Just filter by tournament name
-    return db
-      .select()
-      .from(tournamentMargins)
-      .where(sql`${tournamentMargins.tournament} = ${tournamentName}`)
-      .orderBy(tournamentMargins.timestamp);
+    condition = sql`${condition} AND ${tournamentMargins.bookmakerCode} = ${bookmakerCode}`;
   }
+  
+  // Add country filter if provided
+  if (countryName) {
+    condition = sql`${condition} AND ${tournamentMargins.countryName} = ${countryName}`;
+  }
+  
+  // Execute the query with the combined condition
+  return db
+    .select()
+    .from(tournamentMargins)
+    .where(condition)
+    .orderBy(tournamentMargins.timestamp);
 }
 
 /**
