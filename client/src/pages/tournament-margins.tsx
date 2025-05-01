@@ -230,11 +230,11 @@ const TournamentMargins: React.FC = () => {
     // Convert decimal to percentage (e.g., 0.0364 → 3.64%)
     const percentage = margin * 100;
     
-    if (percentage < 5.0) return 'text-green-600';
-    if (percentage < 7.5) return 'text-lime-600';
-    if (percentage < 10.0) return 'text-amber-600';
-    if (percentage < 12.5) return 'text-orange-600';
-    return 'text-red-600';
+    if (percentage < 5.0) return 'text-green-600 dark:text-green-500';
+    if (percentage < 7.5) return 'text-lime-600 dark:text-lime-500';
+    if (percentage < 10.0) return 'text-amber-600 dark:text-amber-500';
+    if (percentage < 12.5) return 'text-orange-600 dark:text-orange-500';
+    return 'text-red-600 dark:text-red-500';
   };
   
   // Function to check if a tournament has significant margin differences for betPawa
