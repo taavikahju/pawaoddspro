@@ -196,17 +196,6 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
                 Dashboard
               </a>
             </Link>
-            <Link href="/scraper-status">
-              <a className={cn(
-                "flex items-center px-2 py-1 rounded-md text-sm",
-                location === "/scraper-status" 
-                  ? "bg-blue-50 dark:bg-blue-900/30 text-primary dark:text-blue-400 font-medium" 
-                  : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700"
-              )}>
-                <Database className="h-3.5 w-3.5 mr-1.5" />
-                Scraper Status
-              </a>
-            </Link>
             <Link href="/tournament-margins">
               <a className={cn(
                 "flex items-center px-2 py-1 rounded-md text-sm",
@@ -216,6 +205,17 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
               )}>
                 <TrendingUp className="h-3.5 w-3.5 mr-1.5" />
                 Tournament Margins
+              </a>
+            </Link>
+            <Link href="/scraper-status">
+              <a className={cn(
+                "flex items-center px-2 py-1 rounded-md text-sm",
+                location === "/scraper-status" 
+                  ? "bg-blue-50 dark:bg-blue-900/30 text-primary dark:text-blue-400 font-medium" 
+                  : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700"
+              )}>
+                <Database className="h-3.5 w-3.5 mr-1.5" />
+                Scraper Status
               </a>
             </Link>
             <Link href="/admin">
