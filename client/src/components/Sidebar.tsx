@@ -23,8 +23,7 @@ import {
   Settings,
   SunIcon,
   MoonIcon,
-  Filter,
-  Activity
+  Filter
 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { cn } from '@/lib/utils';
@@ -68,14 +67,17 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
   
   // Function to detect if a specific filter is active based on selected bookmakers
   React.useEffect(() => {
-    // Fixed: Updated bookmaker codes to match the exact values in the database
     const ghanaBookmakers = bookmakers
-      .filter(b => b.code === 'betpawa_gh' || b.code === 'sporty')
+      .filter(b => b.code === 'bp GH' || b.code === 'sporty')
       .map(b => b.code);
       
     const kenyaBookmakers = bookmakers
-      .filter(b => b.code === 'betpawa_ke' || b.code === 'betika KE')
+      .filter(b => b.code === 'bp KE' || b.code === 'betika KE')
       .map(b => b.code);
+    
+    console.log('Effect - Selected bookmakers:', selectedBookmakers);
+    console.log('Effect - Ghana bookmakers:', ghanaBookmakers);
+    console.log('Effect - Kenya bookmakers:', kenyaBookmakers);
     
     // Check if Ghana filter is active
     const isGhanaActive = ghanaBookmakers.every(code => selectedBookmakers.includes(code)) && 
@@ -87,6 +89,8 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
       
     // Check if all bookmakers are selected
     const isAllActive = bookmakers.every(b => selectedBookmakers.includes(b.code));
+    
+    console.log('Ghana active:', isGhanaActive, 'Kenya active:', isKenyaActive, 'All active:', isAllActive);
     
     if (isGhanaActive) {
       setActiveFilter('ghana');
@@ -203,17 +207,6 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
                 Scraper Status
               </a>
             </Link>
-            <Link href="/live-heartbeat">
-              <a className={cn(
-                "flex items-center px-2 py-1 rounded-md text-sm",
-                location === "/live-heartbeat" 
-                  ? "bg-blue-50 dark:bg-blue-900/30 text-primary dark:text-blue-400 font-medium" 
-                  : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700"
-              )}>
-                <Activity className="h-3.5 w-3.5 mr-1.5" />
-                Live Heartbeat
-              </a>
-            </Link>
             <Link href="/admin">
               <a className={cn(
                 "flex items-center px-2 py-1 rounded-md text-sm",
@@ -243,20 +236,17 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
                   : "bg-white dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700"
               )}
               onClick={() => {
-                // Since we can access the bookmakers array directly, 
-                // we can determine the exact state we want to have
-                const allCodes = bookmakers.map(b => b.code);
-                // Fixed: Include both BetPawa Ghana and SportyBet for Ghana filter
-                const ghanaCodes = ["betpawa_gh", "sporty"];
+                // Find bookmaker IDs for Ghana
+                const ghanaBookmakers = bookmakers
+                  .filter(b => b.code === 'bp GH' || b.code === 'sporty')
+                  .map(b => b.code);
                 
-                // For each bookmaker, determine whether it should be selected or not
-                // If it's already in the correct state, don't toggle it
-                allCodes.forEach(code => {
-                  const shouldBeSelected = ghanaCodes.includes(code);
-                  const isSelected = selectedBookmakers.includes(code);
-                  
-                  if (shouldBeSelected !== isSelected) {
-                    toggleBookmaker(code);
+                // Deselect all bookmakers
+                bookmakers.forEach(b => {
+                  if (selectedBookmakers.includes(b.code) && !ghanaBookmakers.includes(b.code)) {
+                    toggleBookmaker(b.code);
+                  } else if (!selectedBookmakers.includes(b.code) && ghanaBookmakers.includes(b.code)) {
+                    toggleBookmaker(b.code);
                   }
                 });
                 
@@ -278,20 +268,17 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
                   : "bg-white dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700"
               )}
               onClick={() => {
-                // Since we can access the bookmakers array directly, 
-                // we can determine the exact state we want to have
-                const allCodes = bookmakers.map(b => b.code);
-                // Fixed: Include both BetPawa Kenya and Betika KE for Kenya filter
-                const kenyaCodes = ["betpawa_ke", "betika KE"];
+                // Find bookmaker IDs for Kenya
+                const kenyaBookmakers = bookmakers
+                  .filter(b => b.code === 'bp KE' || b.code === 'betika KE')
+                  .map(b => b.code);
                 
-                // For each bookmaker, determine whether it should be selected or not
-                // If it's already in the correct state, don't toggle it
-                allCodes.forEach(code => {
-                  const shouldBeSelected = kenyaCodes.includes(code);
-                  const isSelected = selectedBookmakers.includes(code);
-                  
-                  if (shouldBeSelected !== isSelected) {
-                    toggleBookmaker(code);
+                // Deselect all bookmakers
+                bookmakers.forEach(b => {
+                  if (selectedBookmakers.includes(b.code) && !kenyaBookmakers.includes(b.code)) {
+                    toggleBookmaker(b.code);
+                  } else if (!selectedBookmakers.includes(b.code) && kenyaBookmakers.includes(b.code)) {
+                    toggleBookmaker(b.code);
                   }
                 });
                 
@@ -313,17 +300,10 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
                   : "bg-white dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700"
               )}
               onClick={() => {
-                // Since we can access the bookmakers array directly, 
-                // we can determine the exact state we want to have
-                const allCodes = bookmakers.map(b => b.code);
-                
-                // For each bookmaker, make sure it is selected
-                // Only toggle if not already selected
-                allCodes.forEach(code => {
-                  const isSelected = selectedBookmakers.includes(code);
-                  
-                  if (!isSelected) {
-                    toggleBookmaker(code);
+                // Select all bookmakers that aren't already selected
+                bookmakers.forEach(b => {
+                  if (!selectedBookmakers.includes(b.code)) {
+                    toggleBookmaker(b.code);
                   }
                 });
                 

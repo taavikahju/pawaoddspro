@@ -6,11 +6,45 @@ import util from 'util';
 
 const execPromise = util.promisify(exec);
 
-// Skip timezone conversion to avoid the CPU overhead
-// We'll simply use the times as provided by the source
+// Function to convert Estonian time to UTC
+// Estonia is UTC+2 (standard time) or UTC+3 (daylight saving time)
 function convertEstonianToUTC(dateStr: string, timeStr: string): { date: string, time: string } {
-  // Just return the original values without conversion
-  return { date: dateStr, time: timeStr };
+  if (!dateStr || !timeStr) {
+    return { date: dateStr, time: timeStr };
+  }
+  
+  try {
+    // Parse the date and time
+    const [year, month, day] = dateStr.split('-').map(Number);
+    const [hour, minute] = timeStr.split(':').map(Number);
+    
+    // Create Date object in Estonian time
+    const estonianDate = new Date(year, month - 1, day, hour, minute);
+    
+    // Check if Estonia is in daylight saving time
+    // DST in Estonia generally runs from the last Sunday in March to the last Sunday in October
+    const isDST = (function() {
+      const jan = new Date(year, 0, 1);
+      const jul = new Date(year, 6, 1);
+      const standardTimezoneOffset = Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
+      return estonianDate.getTimezoneOffset() < standardTimezoneOffset;
+    })();
+    
+    // Estonia is either UTC+2 (standard) or UTC+3 (DST)
+    const hoursToSubtract = isDST ? 3 : 2;
+    
+    // Subtract hours to get UTC time
+    estonianDate.setHours(estonianDate.getHours() - hoursToSubtract);
+    
+    // Format the UTC date and time
+    const utcDate = `${estonianDate.getFullYear()}-${String(estonianDate.getMonth() + 1).padStart(2, '0')}-${String(estonianDate.getDate()).padStart(2, '0')}`;
+    const utcTime = `${String(estonianDate.getHours()).padStart(2, '0')}:${String(estonianDate.getMinutes()).padStart(2, '0')}`;
+    
+    return { date: utcDate, time: utcTime };
+  } catch (error) {
+    console.error('Error converting time:', error);
+    return { date: dateStr, time: timeStr };
+  }
 }
 
 // Define the configuration type
@@ -79,13 +113,10 @@ export async function runCustomScraper(bookmakerCode: string): Promise<any[]> {
             const originalDate = item.start_time ? item.start_time.split(' ')[0] : '';
             const originalTime = item.start_time ? item.start_time.split(' ')[1] : '';
             
-            // Use original time values without conversion to reduce CPU overhead
+            // Convert Estonian time to UTC
             const { date: utcDate, time: utcTime } = convertEstonianToUTC(originalDate, originalTime);
             
-            // Using informational log only during debugging
-            if (process.env.DEBUG === 'true') {
-              console.log(`Using original time for ${item.event}: ${originalDate} ${originalTime}`);
-            }
+            console.log(`Converting time for ${item.event}: Estonian ${originalDate} ${originalTime} -> UTC ${utcDate} ${utcTime}`);
             
             // Map from the user's custom format to our expected format
             return {
@@ -219,157 +250,6 @@ export function loadAllCustomScrapers(): void {
 
 // Immediately load all custom scrapers when this module is imported
 loadAllCustomScrapers();
-
-// Use our direct API approach for SportyBet
-const sportyDirectApiPath = path.join(process.cwd(), 'server', 'scrapers', 'custom', 'sporty_direct_api.cjs');
-if (fs.existsSync(sportyDirectApiPath)) {
-  console.log('🌟 Registering SportyBet direct API scraper with correct endpoint');
-  SCRIPT_CONFIG['sporty'] = {
-    scriptPath: sportyDirectApiPath,
-    command: 'node',
-    outputFormat: 'json'
-  };
-  
-  // Log when the scraper is running
-  const originalRunCustomScraper = runCustomScraper;
-  // @ts-ignore - we're monkey patching this function to add additional logging
-  runCustomScraper = async function(bookmakerCode: string): Promise<any[]> {
-    if (bookmakerCode === 'sporty') {
-      console.log('🔄 Running SportyBet scraper wrapper...');
-      
-      try {
-        // Run the original function to get the data - now using our wrapper
-        const events = await originalRunCustomScraper(bookmakerCode);
-        
-        // Log detailed information about what we got
-        console.log(`📊 SportyBet scraper wrapper returned ${events.length} events`);
-        if (events.length > 0) {
-          console.log(`📊 First event sample from SportyBet: ${JSON.stringify(events[0])}`);
-        }
-        
-        return events;
-      } catch (error) {
-        console.error('Error running SportyBet wrapper:', error);
-        return []; // Return empty array on error
-      }
-    }
-    return originalRunCustomScraper(bookmakerCode);
-  };
-}
-
-// Force register the updated BetPawa scrapers with our new CommonJS versions
-const betpawaGhScraperPath = path.join(process.cwd(), 'server', 'scrapers', 'custom', 'betpawa_gh_scraper.cjs');
-if (fs.existsSync(betpawaGhScraperPath)) {
-  console.log('🌟 Registering BetPawa Ghana 15-minute scraper (CommonJS version)');
-  SCRIPT_CONFIG['betpawa_gh'] = {
-    scriptPath: betpawaGhScraperPath,
-    command: 'node',
-    outputFormat: 'json'
-  };
-}
-
-const betpawaKeScraperPath = path.join(process.cwd(), 'server', 'scrapers', 'custom', 'betpawa_ke_scraper.cjs');
-if (fs.existsSync(betpawaKeScraperPath)) {
-  console.log('🌟 Registering BetPawa Kenya 15-minute scraper (CommonJS version)');
-  SCRIPT_CONFIG['betpawa_ke'] = {
-    scriptPath: betpawaKeScraperPath,
-    command: 'node',
-    outputFormat: 'json'
-  };
-}
-
-// Add enhanced logging and error handling for BetPawa scrapers
-const originalRunCustomScraper = runCustomScraper;
-// @ts-ignore - we're monkey patching this function to add additional logging
-runCustomScraper = async function(bookmakerCode: string): Promise<any[]> {
-  if (bookmakerCode === 'betpawa_gh' || bookmakerCode === 'betpawa_ke') {
-    console.log(`🔄 Running ${bookmakerCode} scraper with enhanced logging...`);
-    
-    try {
-      // Run the direct function instead of going through the original runCustomScraper
-      let events = [];
-      const config = SCRIPT_CONFIG[bookmakerCode];
-      
-      if (!config) {
-        throw new Error(`No configuration found for bookmaker: ${bookmakerCode}`);
-      }
-      
-      console.log(`📡 Running scraper directly: ${config.command} ${config.scriptPath}`);
-      
-      // Execute the script directly
-      const { stdout, stderr } = await execPromise(`${config.command} "${config.scriptPath}"`);
-      
-      if (stderr) {
-        // Only log a portion of stderr to avoid flooding the logs - this is normal to have logs in stderr
-        console.log(`📊 ${bookmakerCode} scraper stderr output (debug info only):`, 
-          stderr.substring(0, 200) + (stderr.length > 200 ? '...' : ''));
-      }
-      
-      try {
-        // Trim to handle any extra newlines and remove any potential whitespace
-        const cleanOutput = stdout.trim();
-        
-        if (cleanOutput) {
-          events = JSON.parse(cleanOutput);
-          
-          if (!Array.isArray(events)) {
-            console.error(`⚠️ ${bookmakerCode} scraper output is not an array:`, typeof events);
-            events = [];
-          } else if (events.length > 0) {
-            // Log a sample event to verify the data format
-            const sample = events[0];
-            console.log(`📊 Sample event from ${bookmakerCode}: ${sample.id || sample.eventId} - ${sample.name || sample.event || 'Unknown'}`);
-          }
-        } else {
-          console.error(`⚠️ ${bookmakerCode} scraper returned empty output`);
-          events = [];
-        }
-      } catch (parseError) {
-        console.error(`⚠️ Error parsing ${bookmakerCode} scraper output:`, parseError);
-        // Only show the start of the output to avoid flooding the logs
-        console.error(`⚠️ Output preview: ${stdout.substring(0, 100)}... [truncated]`);
-        events = [];
-      }
-      
-      // Log detailed information about what we got
-      console.log(`📊 ${bookmakerCode} scraper returned ${events?.length || 0} events`);
-      
-      // Add more detailed stats about events
-      if (events && events.length > 0) {
-        console.log(`📊 First event sample from ${bookmakerCode}: ${JSON.stringify(events[0])}`);
-        
-        // Log stats about data distribution
-        const countriesCount = new Set(events.filter(e => e.country).map(e => e.country)).size;
-        const tournamentsCount = new Set(events.filter(e => e.tournament || e.league).map(e => e.tournament || e.league)).size;
-        
-        console.log(`📊 ${bookmakerCode} DATA STATS: ${events.length} events from ${countriesCount} countries across ${tournamentsCount} tournaments`);
-        
-        // Check for events without odds
-        const eventsWithoutOdds = events.filter(e => !e.odds || !e.odds.home || !e.odds.draw || !e.odds.away).length;
-        if (eventsWithoutOdds > 0) {
-          console.warn(`⚠️ ${bookmakerCode} has ${eventsWithoutOdds} events without complete odds`);
-        }
-      } else {
-        console.error(`⚠️ ${bookmakerCode} scraper returned no events or undefined`);
-        if (events === undefined) {
-          console.error(`⚠️ ${bookmakerCode} returned undefined instead of an array`);
-        }
-        if (events === null) {
-          console.error(`⚠️ ${bookmakerCode} returned null instead of an array`);
-        }
-        if (Array.isArray(events) && events.length === 0) {
-          console.error(`⚠️ ${bookmakerCode} returned an empty array`);
-        }
-      }
-      
-      return events || [];
-    } catch (error) {
-      console.error(`Error running ${bookmakerCode}:`, error);
-      return []; // Return empty array on error
-    }
-  }
-  return originalRunCustomScraper(bookmakerCode);
-};
 
 // Export a function that checks if a custom scraper exists for a bookmaker
 export function hasCustomScraper(bookmakerCode: string): boolean {

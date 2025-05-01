@@ -1,11 +1,6 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
-import { startHeartbeatTracker } from "./scrapers/custom/live-heartbeat";
-import { storage } from "./storage";
-// Import using ES Module syntax
-import { runLiveScraper } from "./scrapers/custom/bp_gh_live_scraper.mjs";
-
 
 const app = express();
 app.use(express.json());
@@ -72,40 +67,9 @@ app.use((req, res, next) => {
   const port = 5000;
   server.listen({
     port,
-    host: "0.0.0.0", // Updated to listen on all interfaces
+    host: "0.0.0.0",
     reusePort: true,
   }, () => {
     log(`serving on port ${port}`);
-
-    // Start the heartbeat tracker with default URL
-    const defaultHeartbeatUrl = 'https://www.betpawa.com.gh/api/sportsbook/v2/events/lists/by-queries?q=%7B%22queries%22%3A%5B%7B%22query%22%3A%7B%22eventType%22%3A%22LIVE%22%2C%22categories%22%3A%5B%222%22%5D%2C%22zones%22%3A%7B%7D%7D%2C%22view%22%3A%7B%22marketTypes%22%3A%5B%223743%22%5D%7D%2C%22skip%22%3A0%2C%22sort%22%3A%7B%22competitionPriority%22%3A%22DESC%22%7D%2C%22take%22%3A20%7D%5D%7D';
-    startHeartbeatTracker(defaultHeartbeatUrl, storage);
-    log('Live heartbeat tracker started automatically');
-
-    // Start SportyBet scraper automatically
-    try {
-      setTimeout(async () => {
-        // Import here to avoid circular dependencies
-        const { runCustomScraper } = await import('./scrapers/custom/integration');
-
-        log('🚀 Running SportyBet scraper on server start...');
-        try {
-          const events = await runCustomScraper('sporty');
-          log(`✅ SportyBet scraper collected ${events.length} events`);
-
-          // Save the data to storage
-          await storage.saveBookmakerData('sporty', events);
-          log('✅ SportyBet data saved to storage');
-        } catch (error) {
-          console.error('Error running SportyBet scraper:', error);
-        }
-      }, 10000); // Wait 10 seconds after server start
-    } catch (error) {
-      console.error('Failed to initialize SportyBet scraper:', error);
-    }
-
-    // Added to run the live scraper. Adjust the scheduling as needed.
-    setInterval(runLiveScraper, 60000); // Run every minute
-    log('Live scraper started.');
   });
 })();

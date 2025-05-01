@@ -3,7 +3,6 @@ import {
   bookmakers,
   sports,
   events,
-  heartbeatStats,
   type User, 
   type InsertUser, 
   type Bookmaker, 
@@ -13,9 +12,7 @@ import {
   type Event,
   type InsertEvent,
   type StatsData,
-  type ScraperStatus,
-  type HeartbeatStats,
-  type InsertHeartbeatStats
+  type ScraperStatus
 } from "@shared/schema";
 import * as fs from 'fs';
 import * as path from 'path';
@@ -67,14 +64,6 @@ export interface IStorage {
   // Stats methods
   getStats(): Promise<StatsData>;
   getScraperStatuses(): Promise<ScraperStatus[]>;
-  
-  // Heartbeat statistics methods
-  saveHeartbeatStats(stats: InsertHeartbeatStats): Promise<HeartbeatStats>;
-  getHeartbeatStats(eventId: string): Promise<HeartbeatStats[]>;
-  getHeartbeatStatsByDay(day: string): Promise<HeartbeatStats[]>;
-  getHeartbeatStatsByWeek(week: string): Promise<HeartbeatStats[]>;
-  getHeartbeatStatsByMonth(month: string): Promise<HeartbeatStats[]>;
-  deleteOldHeartbeatStats(olderThanDays: number): Promise<number>; // Returns number of deleted records
 }
 
 export class MemStorage implements IStorage {
@@ -420,66 +409,6 @@ export class MemStorage implements IStorage {
       fileSize: bookmaker.fileSize ?? '0 KB'
     }));
   }
-  
-  // Heartbeat statistics methods - In-memory implementation
-  private heartbeatStatsData: HeartbeatStats[] = [];
-  
-  async saveHeartbeatStats(stats: InsertHeartbeatStats): Promise<HeartbeatStats> {
-    // Generate date strings for aggregation
-    const date = new Date(stats.timestamp * 1000);
-    const day = date.toISOString().split('T')[0]; // YYYY-MM-DD
-    const week = `${date.getFullYear()}-W${Math.ceil((date.getDate() + new Date(date.getFullYear(), date.getMonth(), 1).getDay()) / 7)}`;
-    const month = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-    
-    const newStats: HeartbeatStats = {
-      id: this.heartbeatStatsData.length + 1,
-      ...stats,
-      day,
-      week,
-      month,
-      createdAt: new Date()
-    };
-    
-    this.heartbeatStatsData.push(newStats);
-    return newStats;
-  }
-  
-  async getHeartbeatStats(eventId: string): Promise<HeartbeatStats[]> {
-    return this.heartbeatStatsData
-      .filter(stat => stat.eventId === eventId)
-      .sort((a, b) => a.timestamp - b.timestamp);
-  }
-  
-  async getHeartbeatStatsByDay(day: string): Promise<HeartbeatStats[]> {
-    return this.heartbeatStatsData
-      .filter(stat => stat.day === day)
-      .sort((a, b) => a.timestamp - b.timestamp);
-  }
-  
-  async getHeartbeatStatsByWeek(week: string): Promise<HeartbeatStats[]> {
-    return this.heartbeatStatsData
-      .filter(stat => stat.week === week)
-      .sort((a, b) => a.timestamp - b.timestamp);
-  }
-  
-  async getHeartbeatStatsByMonth(month: string): Promise<HeartbeatStats[]> {
-    return this.heartbeatStatsData
-      .filter(stat => stat.month === month)
-      .sort((a, b) => a.timestamp - b.timestamp);
-  }
-  
-  async deleteOldHeartbeatStats(olderThanDays: number): Promise<number> {
-    const cutoffDate = new Date();
-    cutoffDate.setDate(cutoffDate.getDate() - olderThanDays);
-    const cutoffTimestamp = Math.floor(cutoffDate.getTime() / 1000);
-    
-    const originalLength = this.heartbeatStatsData.length;
-    this.heartbeatStatsData = this.heartbeatStatsData.filter(
-      stat => stat.timestamp >= cutoffTimestamp
-    );
-    
-    return originalLength - this.heartbeatStatsData.length;
-  }
 }
 
 export class DatabaseStorage implements IStorage {
@@ -819,75 +748,6 @@ export class DatabaseStorage implements IStorage {
       eventCount: bookmaker.eventsScraped ?? 0,
       fileSize: bookmaker.fileSize ?? '0 KB'
     }));
-  }
-  
-  // Heartbeat statistics methods
-  async saveHeartbeatStats(stats: InsertHeartbeatStats): Promise<HeartbeatStats> {
-    try {
-      // Format date strings for aggregation
-      const date = new Date(stats.timestamp * 1000);
-      const day = date.toISOString().split('T')[0]; // YYYY-MM-DD
-      const week = `${date.getFullYear()}-W${Math.ceil((date.getDate() + new Date(date.getFullYear(), date.getMonth(), 1).getDay()) / 7)}`;
-      const month = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-      
-      // Add aggregation fields
-      const statsWithDates = {
-        ...stats,
-        day,
-        week,
-        month
-      };
-      
-      const [insertedStat] = await db.insert(heartbeatStats)
-        .values(statsWithDates)
-        .returning();
-      
-      return insertedStat;
-    } catch (error) {
-      console.error('Error saving heartbeat stats:', error);
-      throw error;
-    }
-  }
-  
-  async getHeartbeatStats(eventId: string): Promise<HeartbeatStats[]> {
-    return await db.select()
-      .from(heartbeatStats)
-      .where(eq(heartbeatStats.eventId, eventId))
-      .orderBy(heartbeatStats.timestamp);
-  }
-  
-  async getHeartbeatStatsByDay(day: string): Promise<HeartbeatStats[]> {
-    return await db.select()
-      .from(heartbeatStats)
-      .where(eq(heartbeatStats.day, day))
-      .orderBy(heartbeatStats.timestamp);
-  }
-  
-  async getHeartbeatStatsByWeek(week: string): Promise<HeartbeatStats[]> {
-    return await db.select()
-      .from(heartbeatStats)
-      .where(eq(heartbeatStats.week, week))
-      .orderBy(heartbeatStats.timestamp);
-  }
-  
-  async getHeartbeatStatsByMonth(month: string): Promise<HeartbeatStats[]> {
-    return await db.select()
-      .from(heartbeatStats)
-      .where(eq(heartbeatStats.month, month))
-      .orderBy(heartbeatStats.timestamp);
-  }
-  
-  async deleteOldHeartbeatStats(olderThanDays: number): Promise<number> {
-    // Calculate the timestamp for X days ago
-    const cutoffDate = new Date();
-    cutoffDate.setDate(cutoffDate.getDate() - olderThanDays);
-    const cutoffTimestamp = Math.floor(cutoffDate.getTime() / 1000);
-    
-    const result = await db.delete(heartbeatStats)
-      .where(sql`${heartbeatStats.timestamp} < ${cutoffTimestamp}`)
-      .returning({ deletedId: heartbeatStats.id });
-    
-    return result.length;
   }
 }
 

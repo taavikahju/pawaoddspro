@@ -1,92 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Layout from '@/components/Layout';
 import ScraperStatusCard from '@/components/ScraperStatusCard';
 import ScraperActivityFeed from '@/components/ScraperActivityFeed';
-import LiveScraperPanel from '@/components/LiveScraperPanel';
-import { Database, Server, Clock, AlertCircle, Activity, Key } from 'lucide-react';
+import { Database, Server, Clock, AlertCircle, Activity } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useWebSocket } from '@/hooks/use-websocket';
 import { useToast } from '@/hooks/use-toast';
-import { setAdminKey, getAdminKey } from '@/lib/queryClient';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
 
-interface ScraperStatus {
-  name: string;
-  status: string;
-  lastRun: string;
-  nextRun: string;
-  eventCount: number;
-  fileSize: number | string;
-}
-
-export default function ScraperStatusPage() {
+export default function ScraperStatus() {
   const { toast } = useToast();
   const { isConnected, runScrapers } = useWebSocket();
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [adminKey, setAdminKeyState] = useState('');
-  const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
   
   // Fetch scraper statuses
   const { 
-    data: scraperStatuses = [] as ScraperStatus[],
+    data: scraperStatuses = [],
     isLoading 
-  } = useQuery<ScraperStatus[]>({ 
+  } = useQuery({ 
     queryKey: ['/api/scrapers/status'],
     refetchInterval: 30000, // Refresh every 30 seconds
   });
   
-  // Check admin status and set default admin key if not present
-  useEffect(() => {
-    const currentAdminKey = getAdminKey();
-    setIsAdmin(!!currentAdminKey);
-    
-    // Auto-set the default admin key if not present
-    if (!currentAdminKey) {
-      setAdminKey('default-admin-key');
-      setIsAdmin(true);
-    }
-  }, []);
-  
-  // Function to set the admin key
-  const setAdminKeyHandler = () => {
-    if (adminKey && adminKey.trim()) {
-      setAdminKey(adminKey.trim());
-      setIsAdminModalOpen(false);
-      setIsAdmin(true);
-      toast({
-        title: "Admin key set",
-        description: "You now have admin access to control the live scraper.",
-      });
-    } else {
-      toast({
-        title: "Invalid admin key",
-        description: "Please enter a valid admin key.",
-        variant: "destructive"
-      });
-    }
-  };
-  
-  // Function to set the admin key in localStorage
-  const setAdminKey = (key: string) => {
-    try {
-      localStorage.setItem('adminKey', key);
-      // Also update in the queryClient utility
-      setAdminKey(key);
-      setAdminKeyState(key);
-    } catch (error) {
-      console.error('Failed to set admin key:', error);
-      toast({
-        title: "Failed to set admin key",
-        description: "There was an error setting the admin key. Please try again.",
-        variant: "destructive"
-      });
-    }
-  };
-  
   // Count the number of active scrapers
-  const activeScrapers = scraperStatuses.filter((scraper) => 
+  const activeScrapers = scraperStatuses.filter((scraper: any) => 
     scraper.status === 'Running'
   ).length;
   
@@ -181,7 +117,7 @@ export default function ScraperStatusPage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {scraperStatuses.map((scraper, index: number) => (
+              {scraperStatuses.map((scraper: any, index: number) => (
                 <ScraperStatusCard
                   key={index}
                   name={scraper.name}
@@ -207,16 +143,11 @@ export default function ScraperStatusPage() {
         </div>
       </div>
       
-      {/* Live Scraper Panel Removed as per client request */}
-      
       {/* Footer Note */}
       <div className="text-center text-xs text-gray-500 dark:text-gray-400 mb-4">
-        <p>Standard data is collected from bookmaker APIs every 15 minutes automatically.</p>
-        <p className="mt-1">Live scraper runs every 10 seconds to track market availability during events.</p>
+        <p>Data is collected from bookmaker APIs every 15 minutes automatically.</p>
         <p className="mt-1">Admin users can trigger manual scraping from the Admin Panel.</p>
       </div>
-
-      {/* Admin key elements removed as per client request */}
     </Layout>
   );
 }

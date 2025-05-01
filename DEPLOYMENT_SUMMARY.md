@@ -1,54 +1,105 @@
-# PawaOdds Deployment Guide
+# Deployment Options Summary
 
-## Deploying to Replit
+This document outlines the different deployment options available for the pawaodds.pro application.
 
-Follow these simple steps to deploy the PawaOdds application on Replit:
+## Option 1: Direct Server Deployment (Recommended)
 
-1. **Build the application with our improved script:**
-   ```
-   ./build-deploy.sh
-   ```
+Best suited for a single production server setup, providing a good balance of simplicity and flexibility.
 
-   This script performs the following tasks:
-   - Builds the application using Vite and esbuild
-   - Fixes the directory structure for deployment
-   - Places client files in the proper location
-   - Copies all necessary scraper files
-   - Sets up package.json and server-info.json files
+### Key Files:
+- `DEPLOYMENT.md` - Comprehensive deployment guide
+- `scripts/setup-server.sh` - Server preparation script
+- `scripts/harden-server.sh` - Security hardening script
+- `scripts/backup-db.sh` - Database backup script
+- `scripts/deploy.sh` - GitHub-based deployment script
+- `.github/workflows/deploy.yml` - GitHub Actions workflow
+- `ecosystem.config.js` - PM2 process management configuration
+- `nginx.conf` - Nginx web server configuration
 
-2. **Deploy using Replit's deployment feature:**
-   - Click the "Deploy" button in Replit interface
-   - The application will be deployed to your Replit subdomain
+### Workflow:
+1. Set up a GitHub repository for the code
+2. Provision a Hetzner Cloud server
+3. Run the server setup script
+4. Configure GitHub Actions for continuous deployment
+5. Securely access the admin interface
 
-## Troubleshooting Common Issues
+### Pros:
+- Simple to set up and maintain
+- Uses minimal resources
+- Direct server access for troubleshooting
+- Automated deployment through GitHub Actions
 
-### If deployment fails:
+### Cons:
+- Limited scalability
+- Manual scaling if needed
+- Some maintenance overhead
 
-1. **Check file structure**
-   - Ensure the script completed successfully
-   - Verify that `dist/server/public` directory contains client files
-   - Confirm `dist/server/index.js` exists
+## Option 2: Docker Deployment
 
-2. **Database connection issues**
-   - Verify that the PostgreSQL database is accessible
-   - Check environment variables in the Replit Secrets panel
+Suitable for containerized environments, enabling easier scaling and consistent environments.
 
-3. **Scraper issues**
-   - Confirm that all scraper files were copied to `dist/server/scrapers/custom`
-   - Look for any import path issues in scraper files
+### Key Files:
+- `Dockerfile` - Application container definition
+- `docker-compose.yml` - Multi-container setup
+- `.dockerignore` - Container optimization
 
-## Monitoring Your Deployment
+### Workflow:
+1. Set up a Hetzner Cloud server
+2. Install Docker and Docker Compose
+3. Clone the repository
+4. Configure environment variables
+5. Run with `docker-compose up -d`
 
-- Check the deployment logs in Replit
-- Verify that the application is responding to API requests
-- Monitor the WebSocket connections for live heartbeat tracking
+### Pros:
+- Consistent environments
+- Easier horizontal scaling
+- Isolated services
+- Simplified dependency management
 
-## Technical Note
+### Cons:
+- Additional complexity
+- Higher resource usage
+- Docker knowledge required
 
-The main issues that required fixing in the deployment process were:
+## Option 3: Simple File Transfer
 
-1. Client files needed to be in `/dist/server/public` but were being placed elsewhere
-2. Server file needed to be in `/dist/server/index.js` but was at `/dist/index.js`
-3. ES Module compatibility required fixing with a proper package.json configuration
+For users without GitHub, a direct file transfer method is available.
 
-The `build-deploy.sh` script addresses all these issues and performs the necessary file organization for a successful deployment.
+### Workflow:
+1. Set up a Hetzner Cloud server
+2. Run server preparation script manually
+3. Transfer code via SFTP or SCP
+4. Initialize database and start application
+
+### Pros:
+- No GitHub dependency
+- Direct control over deployment
+- Simplest approach for non-developers
+
+### Cons:
+- Manual update process
+- No version history
+- Risk of inconsistent deployment
+
+## Database Management
+
+All deployment options include:
+- PostgreSQL database setup
+- Automatic schema updates via Drizzle ORM
+- Daily database backups
+- Script for restoring from backups if needed
+
+## Security Considerations
+
+All deployment methods incorporate:
+- SSH hardening
+- Firewall configuration
+- Fail2ban for brute force protection
+- HTTPS with Let's Encrypt
+- Admin section protected by secure key
+
+## Recommended Approach
+
+For most users, Option 1 (Direct Server Deployment) provides the best balance of simplicity and functionality. The provided scripts automate most of the setup process, while GitHub Actions handle continuous deployment.
+
+If you anticipate needing to scale horizontally in the future, consider Option 2 (Docker Deployment) for its containerization benefits.

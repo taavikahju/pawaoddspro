@@ -137,140 +137,96 @@ const fetchWithTimeout = async (url, options, timeout = 7000) => {
 
 // Process a single API endpoint with retry logic for reliability
 const processEndpoint = async (endpoint, endpointIndex) => {
-  // Create an individual timeout for this endpoint
-  const ENDPOINT_TIMEOUT = 15000; // 15 seconds max per endpoint
-  
-  // To store tournaments as we collect them (for partial results)
-  let collectedTournaments = [];
-  
-  // Wrap everything in a Promise.race to handle timeouts gracefully
   try {
-    // Create the timeout promise
-    const timeoutPromise = new Promise(resolve => {
-      setTimeout(() => {
-        console.error(`⏱️ Endpoint timeout reached for endpoint ${endpointIndex + 1} - returning partial data (${collectedTournaments.length} tournaments)`);
-        resolve(collectedTournaments); // Return whatever we've collected so far
-      }, ENDPOINT_TIMEOUT);
-    });
+    const displayName = endpoint.name ? 
+      `${endpoint.name} (${endpointIndex + 1})` : 
+      `source ${endpointIndex + 1}`;
     
-    // Create the actual processing promise
-    const processingPromise = new Promise(async (resolve, reject) => {
+    // Construct query string for endpoint
+    const queryString = Object.entries(endpoint.params)
+      .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+      .join('&');
+    
+    // Fetch first page to get metadata and first batch of results
+    const firstPageUrl = `${endpoint.url}?${queryString}&pageNum=1&_t=${Date.now()}`;
+    console.error(`📥 Fetching ${displayName}, page 1...`);
+    
+    // Use region-specific headers
+    const headers = getHeaders(endpoint.region);
+    
+    // Try up to 2 times with increasing timeouts
+    let firstPageRes;
+    let retries = 0;
+    
+    while (retries < 2) {
       try {
-        // Create a display name for logs
-        const displayName = endpoint.name ? 
-          `${endpoint.name} (${endpointIndex + 1})` : 
-          `source ${endpointIndex + 1}`;
-          
-        // Construct query string for endpoint
-        const queryString = Object.entries(endpoint.params)
-          .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-          .join('&');
-          
-        // Fetch first page to get metadata and first batch of results
-        const firstPageUrl = `${endpoint.url}?${queryString}&pageNum=1&_t=${Date.now()}`;
-        console.error(`📥 Fetching ${displayName}, page 1...`);
-        
-        // Use region-specific headers
-        const headers = getHeaders(endpoint.region);
-        
-        // Try up to 2 times with increasing timeouts
-        let firstPageRes;
-        let retries = 0;
-        
-        while (retries < 2) {
-          try {
-            firstPageRes = await fetchWithTimeout(
-              firstPageUrl, 
-              { headers }, 
-              7000 + (retries * 2000)
-            );
-            break; // Success, exit retry loop
-          } catch (err) {
-            retries++;
-            if (retries >= 2) throw err; // Max retries reached, rethrow
-            console.error(`⚠️ Retry ${retries} for ${displayName}, page 1...`);
-            await new Promise(r => setTimeout(r, 500)); // Wait before retry
-          }
-        }
-        
-        const firstPageData = firstPageRes.data?.data;
-        
-        if (!firstPageData || !firstPageData.tournaments || !Array.isArray(firstPageData.tournaments)) {
-          console.error(`❌ No data from ${displayName}`);
-          resolve([]);
-          return;
-        }
-        
-        // Calculate total pages with endpoint-specific limits
-        const totalEvents = firstPageData.totalNum || 0;
-        const pageSize = parseInt(endpoint.params.pageSize || '50');
-        let totalPages = Math.ceil(totalEvents / pageSize);
-        
-        // Hard limit on pages to prevent timeout - use the endpoint-specific maxPages
-        totalPages = Math.min(totalPages, endpoint.maxPages || 3);
-        
-        console.error(`📊 ${displayName}: Found ${totalEvents} events across ${totalPages} pages (using ${Math.min(totalPages, endpoint.maxPages)} pages)`);
-        
-        // Store first page results
-        let endpointTournaments = firstPageData.tournaments || [];
-        
-        // Update our partial results with the first page data
-        collectedTournaments = [...endpointTournaments];
-        
-        // Only fetch additional pages if needed
-        if (totalPages > 1) {
-          // Fetch remaining pages sequentially
-          for (let pageNum = 2; pageNum <= totalPages; pageNum++) {
-            const url = `${endpoint.url}?${queryString}&pageNum=${pageNum}&_t=${Date.now()}`;
-            console.error(`📥 Fetching ${displayName}, page ${pageNum}...`);
-            
-            try {
-              const response = await fetchWithTimeout(url, { headers }, 7000);
-              const data = response.data?.data;
-              
-              if (data && data.tournaments && data.tournaments.length > 0) {
-                console.error(`✅ ${displayName}, page ${pageNum}: ${data.tournaments.length} tournaments`);
-                endpointTournaments = endpointTournaments.concat(data.tournaments);
-                
-                // Update our partial results with new page data
-                collectedTournaments = [...endpointTournaments];
-              } else {
-                console.error(`⚠️ ${displayName}, page ${pageNum}: No tournaments`);
-              }
-            } catch (pageError) {
-              console.error(`❌ Failed to fetch ${displayName}, page ${pageNum}: ${pageError.message}`);
-            }
-            
-            // Small delay between requests to avoid rate limiting
-            await new Promise(resolve => setTimeout(resolve, 150));
-          }
-        }
-        
-        console.error(`📊 ${displayName}: Collected ${endpointTournaments.length} tournaments`);
-        resolve(endpointTournaments);
-      } catch (error) {
-        console.error(`❌ Error processing endpoint ${endpointIndex + 1}: ${error.message}`);
-        // If we have some partial data, return it instead of rejecting
-        if (collectedTournaments.length > 0) {
-          console.error(`Using ${collectedTournaments.length} tournaments collected before error`);
-          resolve(collectedTournaments);
-        } else {
-          resolve([]);
-        }
+        firstPageRes = await fetchWithTimeout(
+          firstPageUrl, 
+          { headers }, 
+          7000 + (retries * 2000)
+        );
+        break; // Success, exit retry loop
+      } catch (err) {
+        retries++;
+        if (retries >= 2) throw err; // Max retries reached, rethrow
+        console.error(`⚠️ Retry ${retries} for ${displayName}, page 1...`);
+        await new Promise(r => setTimeout(r, 500)); // Wait before retry
       }
-    });
+    }
     
-    // Race between processing and timeout - return whichever completes first
-    return await Promise.race([processingPromise, timeoutPromise]);
+    const firstPageData = firstPageRes.data?.data;
+    
+    if (!firstPageData || !firstPageData.tournaments || !Array.isArray(firstPageData.tournaments)) {
+      console.error(`❌ No data from ${displayName}`);
+      return [];
+    }
+    
+    // Calculate total pages with endpoint-specific limits
+    const totalEvents = firstPageData.totalNum || 0;
+    const pageSize = parseInt(endpoint.params.pageSize || '50');
+    let totalPages = Math.ceil(totalEvents / pageSize);
+    
+    // Hard limit on pages to prevent timeout - use the endpoint-specific maxPages
+    totalPages = Math.min(totalPages, endpoint.maxPages || 3);
+    
+    console.error(`📊 ${displayName}: Found ${totalEvents} events across ${totalPages} pages (using ${Math.min(totalPages, endpoint.maxPages)} pages)`);
+    
+    // Store first page results
+    let endpointTournaments = firstPageData.tournaments || [];
+    
+    // Only fetch additional pages if needed
+    if (totalPages > 1) {
+      // Fetch remaining pages sequentially
+      for (let pageNum = 2; pageNum <= totalPages; pageNum++) {
+        const url = `${endpoint.url}?${queryString}&pageNum=${pageNum}&_t=${Date.now()}`;
+        console.error(`📥 Fetching ${displayName}, page ${pageNum}...`);
+        
+        try {
+          const response = await fetchWithTimeout(url, { headers }, 7000);
+          const data = response.data?.data;
+          
+          if (data && data.tournaments && data.tournaments.length > 0) {
+            console.error(`✅ ${displayName}, page ${pageNum}: ${data.tournaments.length} tournaments`);
+            endpointTournaments = endpointTournaments.concat(data.tournaments);
+          } else {
+            console.error(`⚠️ ${displayName}, page ${pageNum}: No tournaments`);
+          }
+        } catch (pageError) {
+          console.error(`❌ Failed to fetch ${displayName}, page ${pageNum}: ${pageError.message}`);
+        }
+        
+        // Small delay between requests to avoid rate limiting
+        await new Promise(resolve => setTimeout(resolve, 150));
+      }
+    }
+    
+    console.error(`📊 ${displayName}: Collected ${endpointTournaments.length} tournaments`);
+    return endpointTournaments;
   } catch (error) {
-    console.error(`Fatal error in endpoint ${endpointIndex + 1}: ${error.message}`);
-    return collectedTournaments.length > 0 ? collectedTournaments : []; // Return whatever we've collected or empty array
+    console.error(`❌ Error processing endpoint ${endpointIndex + 1}: ${error.message}`);
+    return [];
   }
 };
-
-// Shared variables to store partial results
-let highPriorityResults = [];
-let fetchedSources = [];
 
 // Prioritized data collection with resilience
 const fetchFromAllEndpoints = async () => {
@@ -281,10 +237,6 @@ const fetchFromAllEndpoints = async () => {
   
   // To store all tournaments
   let allTournaments = [];
-  
-  // Reset partial results storage for this run
-  highPriorityResults = [];
-  fetchedSources = [];
   
   // Sort endpoints by priority to ensure critical ones are processed first
   const sortedEndpoints = [...ALL_ENDPOINTS].sort((a, b) => {
@@ -309,15 +261,8 @@ const fetchFromAllEndpoints = async () => {
     try {
       // Process each high priority endpoint with robust error handling
       const tournaments = await processEndpoint(endpoint, i);
-      
-      // Store high priority results separately to use if timeouts occur
-      highPriorityResults = highPriorityResults.concat(tournaments);
-      
       allTournaments = allTournaments.concat(tournaments);
       tournamentCount += tournaments.length;
-      
-      // Also save to fetchedSources for potentially more data
-      fetchedSources = fetchedSources.concat(tournaments);
       
       console.error(`📊 Critical endpoint ${displayName} collected ${tournaments.length} tournaments (total: ${tournamentCount})`);
       
@@ -363,9 +308,6 @@ const fetchFromAllEndpoints = async () => {
           const tournaments = await processEndpoint(endpoint, endpointIdx);
           allTournaments = allTournaments.concat(tournaments);
           tournamentCount += tournaments.length;
-          
-          // Also save to fetchedSources for potentially more data during timeouts
-          fetchedSources = fetchedSources.concat(tournaments);
           
           console.error(`📊 Endpoint ${displayName} collected ${tournaments.length} tournaments (total: ${tournamentCount})`);
           
@@ -536,52 +478,22 @@ const processEvents = (tournaments) => {
 
 const run = async () => {
   try {
-    // Set multiple timeouts for different phases of operation
-    // Main timeout: 45 seconds to allow time for processing
-    const MAIN_TIMEOUT = 45000;
-    let fetchedTournaments = [];
-    
-    // Create a timeout promise that resolves with the best available partial data
-    const timeoutPromise = new Promise(resolve => {
-      setTimeout(() => {
-        console.error(`⏱️ Global timeout after ${MAIN_TIMEOUT/1000} seconds - using best available data`);
-        
-        // Determine which data to use based on what we've collected
-        if (highPriorityResults.length > 20) {
-          console.error(`✓ Using partial data from ${highPriorityResults.length} high-priority sources`);
-          resolve(highPriorityResults);
-        } else if (fetchedSources.length > 0) {
-          console.error(`✓ Using partial data from ${fetchedSources.length} sources`);
-          resolve(fetchedSources);
-        } else {
-          console.error(`❌ No partial data available`);
-          resolve([]);
-        }
-      }, MAIN_TIMEOUT);
+    // Set a reasonable timeout for the entire operation (57 seconds)
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error("Global timeout after 57 seconds")), 57000);
     });
 
-    // Start fetching data
     const tournamentPromise = fetchFromAllEndpoints();
     
     // Race between fetching data and timeout
-    fetchedTournaments = await Promise.race([tournamentPromise, timeoutPromise]);
-    
-    // If tournamentPromise finished but gave us an empty array, check our backup data
-    if (fetchedTournaments.length === 0) {
-      console.error('No tournaments collected from primary method, checking backups');
-      
-      if (highPriorityResults.length > 0) {
-        console.error(`✓ Using backup data from ${highPriorityResults.length} high-priority sources`);
-        fetchedTournaments = highPriorityResults;
-      } else if (fetchedSources.length > 0) {
-        console.error(`✓ Using backup data from ${fetchedSources.length} sources`);
-        fetchedTournaments = fetchedSources;
-      }
-    }
+    const tournaments = await Promise.race([tournamentPromise, timeoutPromise])
+      .catch(error => {
+        console.error(`Operation error: ${error.message}`);
+        return [];
+      });
 
     // Process tournaments into events with enhanced parsing
-    // If we hit the global timeout, prioritize processing what we have
-    const events = processEvents(fetchedTournaments);
+    const events = processEvents(tournaments);
     
     if (events.length === 0) {
       console.error('No valid events found');
@@ -589,10 +501,7 @@ const run = async () => {
       return;
     }
     
-    // Check if we have partial data vs complete data 
-    const isPartialData = fetchedTournaments === highPriorityResults || fetchedTournaments === fetchedSources;
-    
-    console.error(`✅ Successfully extracted ${events.length} valid events${isPartialData ? ' (partial data due to timeout)' : ''}`);
+    console.error(`✅ Successfully extracted ${events.length} valid events`);
     
     // Output to stdout for the integration system
     console.log(JSON.stringify(events));
