@@ -142,9 +142,8 @@ const processTournaments = (tournaments) => {
             startTime = date.toISOString().slice(0, 16).replace('T', ' ');
           }
           
-          // Normalize the event ID by removing non-numeric characters
+          // Normalize the event ID by removing non-numeric characters (removing "sr:match:" prefix)
           const normalizedId = event.eventId.replace(/\D/g, '');
-          console.error(`Normalized Sportybet eventId: ${event.eventId} → ${normalizedId}`);
           
           // Add the processed event to our collection
           processedEvents.push({
