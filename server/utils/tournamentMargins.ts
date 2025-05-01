@@ -96,8 +96,8 @@ export async function calculateAndStoreTournamentMargins(storage: IStorage): Pro
     const groups = Array.from(tournamentGroups.values());
     
     for (const data of groups) {
-      // Only process groups with sufficient events (at least 3)
-      if (data.count < 3) continue;
+      // Only process groups with sufficient events (at least 2)
+      if (data.count < 2) continue;
       
       // Calculate average margin
       const averageMargin = data.totalMargin / data.count;
