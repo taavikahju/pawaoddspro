@@ -1,268 +1,272 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import React, { useState, useMemo } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Loader2, Search } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
-import { 
-  LineChart, 
-  Line, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  Legend, 
-  ResponsiveContainer 
-} from 'recharts';
-import { Loader2 } from 'lucide-react';
 import { useBookmakerContext } from '@/contexts/BookmakerContext';
+import CountryFlag from '@/components/CountryFlag';
+import { cn } from '@/lib/utils';
+
+// Custom type for country data structure
+interface CountryData {
+  name: string;
+  tournaments: TournamentData[];
+}
+
+interface TournamentData {
+  name: string;
+  bookmakers: Record<string, BookmakerMarginData>;
+}
+
+interface BookmakerMarginData {
+  margin: number;
+  eventCount: number;
+  timestamp: string;
+}
 
 const TournamentMargins: React.FC = () => {
   const { bookmakers } = useBookmakerContext();
-  const [selectedTournament, setSelectedTournament] = useState<string>('');
-  const [tournamentInput, setTournamentInput] = useState<string>('');
-  const [selectedBookmaker, setSelectedBookmaker] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
   
-  // Query to load tournament margin data
-  const { data, isLoading, error, refetch } = useQuery<any[]>({
-    queryKey: [`/api/tournaments/margins?tournament=${encodeURIComponent(selectedTournament)}${selectedBookmaker ? `&bookmaker=${encodeURIComponent(selectedBookmaker)}` : ''}`],
-    enabled: !!selectedTournament,
-  });
-  
-  // Process the data for the chart
-  const [chartData, setChartData] = useState<any[]>([]);
-  
-  useEffect(() => {
-    if (!data || !data.length) {
-      setChartData([]);
-      return;
-    }
-    
-    try {
-      // Group by timestamp first
-      const timestampMap = new Map<string, Record<string, any>>();
-      
-      for (const record of data) {
-        const timestamp = record.timestamp;
-        
-        if (!timestampMap.has(timestamp)) {
-          timestampMap.set(timestamp, {
-            timestamp,
-            date: new Date(timestamp).toLocaleString(),
-          });
-        }
-        
-        const dataPoint = timestampMap.get(timestamp)!;
-        dataPoint[record.bookmakerCode] = record.margin;
-      }
-      
-      // Convert map to array and sort by timestamp
-      const processedData = Array.from(timestampMap.values())
-        .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
-      
-      setChartData(processedData);
-    } catch (error) {
-      console.error('Error processing tournament margin data:', error);
-      setChartData([]);
-    }
-  }, [data]);
-  
-  // Colors for each bookmaker
-  const getBookmakerColor = (bookmakerCode: string) => {
-    const colorMap: Record<string, string> = {
-      'bp GH': '#3B82F6', // blue
-      'bp KE': '#10B981', // green
-      'sporty': '#F59E0B', // amber
-      'betika KE': '#EF4444', // red
+  // Function to determine country code from country name
+  const getCountryCode = (countryName: string): string => {
+    const countryCodeMap: Record<string, string> = {
+      'England': 'GB',
+      'Spain': 'ES',
+      'Germany': 'DE',
+      'Italy': 'IT',
+      'France': 'FR',
+      'Netherlands': 'NL',
+      'Portugal': 'PT',
+      'Brazil': 'BR',
+      'Argentina': 'AR',
+      'Belgium': 'BE',
+      'Scotland': 'GB-SCT',
+      'Wales': 'GB-WLS',
+      'Austria': 'AT',
+      'Denmark': 'DK',
+      'Sweden': 'SE',
+      'Norway': 'NO',
+      'Switzerland': 'CH',
+      'Greece': 'GR',
+      'Turkey': 'TR',
+      'Russia': 'RU',
+      'Ukraine': 'UA',
+      'Poland': 'PL',
+      'Czech Republic': 'CZ',
+      'Romania': 'RO',
+      'Hungary': 'HU',
+      'Croatia': 'HR',
+      'Serbia': 'RS',
+      'Slovenia': 'SI',
+      'Slovakia': 'SK',
+      'Finland': 'FI',
+      'USA': 'US',
+      'Canada': 'CA',
+      'Mexico': 'MX',
+      'Japan': 'JP',
+      'South Korea': 'KR',
+      'Australia': 'AU',
+      'New Zealand': 'NZ',
+      'South Africa': 'ZA',
+      'Egypt': 'EG',
+      'Morocco': 'MA',
+      'Nigeria': 'NG',
+      'Ghana': 'GH',
+      'Kenya': 'KE',
+      'Uganda': 'UG',
+      'Tanzania': 'TZ',
+      // Add more country mappings as needed
     };
     
-    return colorMap[bookmakerCode] || '#6B7280'; // gray as fallback
+    return countryCodeMap[countryName] || 'XX';
   };
   
-  // Get available tournaments
-  const [tournaments, setTournaments] = useState<string[]>([]);
+  // Query to load tournament margin data
+  const { data: countriesData, isLoading, error } = useQuery<CountryData[]>({
+    queryKey: ['/api/tournaments/margins/by-country'],
+  });
   
-  useEffect(() => {
-    // Mock tournament list until we have a real endpoint
-    setTournaments([
-      'Premier League',
-      'La Liga',
-      'Serie A',
-      'Bundesliga',
-      'Ligue 1',
-      'Champions League',
-      'Europa League',
-      'World Cup',
-      'UEFA Euro',
-      'Copa America'
-    ]);
-  }, []);
+  // Filter countries based on search term
+  const filteredCountries = useMemo(() => {
+    if (!countriesData) return [];
+    
+    if (!searchTerm) return countriesData;
+    
+    return countriesData.filter(country => 
+      country.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      country.tournaments.some(tournament => 
+        tournament.name.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    );
+  }, [countriesData, searchTerm]);
   
-  // Filter tournaments based on input
-  const filteredTournaments = tournaments.filter(tournament => 
-    tournament.toLowerCase().includes(tournamentInput.toLowerCase())
-  );
+  // Get the selected country data
+  const selectedCountryData = useMemo(() => {
+    if (!selectedCountry || !countriesData) return null;
+    
+    return countriesData.find(country => country.name === selectedCountry) || null;
+  }, [selectedCountry, countriesData]);
   
-  // Handle form submission
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    refetch();
+  // Function to determine color class for margin value
+  const getMarginColorClass = (margin: number): string => {
+    if (margin < 1.0) return 'text-green-600 dark:text-green-400';
+    if (margin < 5.0) return 'text-blue-600 dark:text-blue-400';
+    if (margin < 8.0) return 'text-yellow-600 dark:text-yellow-400';
+    if (margin < 12.0) return 'text-orange-600 dark:text-orange-400';
+    return 'text-red-600 dark:text-red-400';
   };
   
   return (
     <div className="container py-6">
       <h1 className="text-2xl font-bold mb-6">Tournament Margins</h1>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        {/* Left sidebar with countries list */}
         <Card className="md:col-span-1">
           <CardHeader>
-            <CardTitle>Filter Options</CardTitle>
-            <CardDescription>
-              Select a tournament and bookmaker to view margin history
-            </CardDescription>
+            <CardTitle className="flex items-center justify-between">
+              <span>Countries</span>
+              <span className="text-sm text-muted-foreground">
+                {filteredCountries?.length || 0}
+              </span>
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="tournament">Tournament</Label>
-                <Input
-                  id="tournament"
-                  value={tournamentInput}
-                  onChange={(e) => setTournamentInput(e.target.value)}
-                  placeholder="Search tournaments..."
-                  className="mb-2"
-                />
-                <Select value={selectedTournament} onValueChange={setSelectedTournament}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a tournament" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {filteredTournaments.map(tournament => (
-                      <SelectItem key={tournament} value={tournament}>
-                        {tournament}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+            <div className="relative mb-4">
+              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search countries or tournaments..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-8"
+              />
+            </div>
+            
+            {isLoading ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
               </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="bookmaker">Bookmaker (Optional)</Label>
-                <Select value={selectedBookmaker} onValueChange={setSelectedBookmaker}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="All bookmakers" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="">All bookmakers</SelectItem>
-                    {bookmakers.map(bookmaker => (
-                      <SelectItem key={bookmaker.code} value={bookmaker.code}>
-                        {bookmaker.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+            ) : error ? (
+              <div className="text-center py-8 text-red-500">
+                Failed to load countries data
               </div>
-              
-              <Button type="submit" className="w-full">
-                View Margins
-              </Button>
-            </form>
+            ) : filteredCountries.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">
+                No countries found matching your search
+              </div>
+            ) : (
+              <div className="space-y-1 max-h-[70vh] overflow-y-auto pr-2">
+                {filteredCountries.map(country => (
+                  <div 
+                    key={country.name}
+                    className={cn(
+                      "flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer hover:bg-accent",
+                      selectedCountry === country.name && "bg-accent"
+                    )}
+                    onClick={() => setSelectedCountry(country.name)}
+                  >
+                    <CountryFlag 
+                      countryCode={getCountryCode(country.name)} 
+                      countryName={country.name}
+                      size="md"
+                    />
+                    <span className="flex-1 truncate">{country.name}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {country.tournaments.length}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
           </CardContent>
         </Card>
         
-        <Card className="md:col-span-2">
+        {/* Right content area with tournament margins table */}
+        <Card className="md:col-span-3">
           <CardHeader>
             <CardTitle>
-              {selectedTournament ? `Margin History: ${selectedTournament}` : 'Tournament Margin History'}
+              {selectedCountryData 
+                ? `${selectedCountryData.name} Tournaments (${selectedCountryData.tournaments.length})` 
+                : 'Tournament Margins'}
             </CardTitle>
-            <CardDescription>
-              {selectedBookmaker 
-                ? `Showing data for ${selectedBookmaker}` 
-                : 'Comparing margins across all bookmakers'}
-            </CardDescription>
           </CardHeader>
-          <CardContent className="min-h-[400px]">
-            {!selectedTournament && (
-              <div className="h-[400px] flex items-center justify-center">
-                <p className="text-muted-foreground">
-                  Select a tournament to view margin history data
-                </p>
-              </div>
-            )}
-            
-            {selectedTournament && isLoading && (
-              <div className="h-[400px] flex items-center justify-center">
+          <CardContent>
+            {isLoading ? (
+              <div className="flex items-center justify-center py-8">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
               </div>
-            )}
-            
-            {selectedTournament && error && (
-              <div className="h-[400px] flex items-center justify-center">
-                <p className="text-red-500">
-                  Failed to load tournament margin data
-                </p>
+            ) : error ? (
+              <div className="text-center py-8 text-red-500">
+                Failed to load tournament margins data
               </div>
-            )}
-            
-            {selectedTournament && !isLoading && !error && (!chartData || chartData.length === 0) && (
-              <div className="h-[400px] flex items-center justify-center">
-                <p className="text-muted-foreground">
-                  No margin history data available for {selectedTournament}
-                </p>
+            ) : !selectedCountryData ? (
+              <div className="text-center py-8 text-muted-foreground">
+                Select a country from the list to view tournaments and margins
               </div>
-            )}
-            
-            {selectedTournament && !isLoading && !error && chartData && chartData.length > 0 && (
-              <div className="h-[400px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart
-                    data={chartData}
-                    margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis 
-                      dataKey="date" 
-                      tick={{ fontSize: 12 }}
-                      angle={-45}
-                      textAnchor="end"
-                      height={60}
-                    />
-                    <YAxis
-                      label={{ 
-                        value: 'Margin %', 
-                        angle: -90, 
-                        position: 'insideLeft',
-                        style: { textAnchor: 'middle' }
-                      }}
-                      domain={['dataMin - 0.01', 'dataMax + 0.01']}
-                      tickFormatter={(value) => `${(value * 100).toFixed(1)}%`}
-                    />
-                    <Tooltip 
-                      formatter={(value: number) => [`${(value * 100).toFixed(2)}%`, 'Margin']}
-                      labelFormatter={(label) => `Date: ${label}`}
-                    />
-                    <Legend />
-                    
-                    {bookmakers
-                      .filter(bookmaker => !selectedBookmaker || bookmaker.code === selectedBookmaker)
-                      .map(bookmaker => 
-                        chartData.some(dp => dp[bookmaker.code] !== undefined) && (
-                          <Line
-                            key={bookmaker.code}
-                            type="monotone"
-                            dataKey={bookmaker.code}
-                            name={bookmaker.name}
-                            stroke={getBookmakerColor(bookmaker.code)}
-                            activeDot={{ r: 8 }}
-                            isAnimationActive={true}
-                            animationDuration={500}
-                            strokeWidth={2}
-                          />
-                        )
-                    )}
-                  </LineChart>
-                </ResponsiveContainer>
+            ) : selectedCountryData.tournaments.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">
+                No tournaments available for {selectedCountryData.name}
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="bg-muted hover:bg-muted">
+                      <TableHead className="w-[300px]">Tournament</TableHead>
+                      {bookmakers.map(bookmaker => (
+                        <TableHead key={bookmaker.code} className="text-center">
+                          {bookmaker.name}
+                        </TableHead>
+                      ))}
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {selectedCountryData.tournaments.map((tournament, idx) => (
+                      <TableRow 
+                        key={tournament.name}
+                        className={idx % 2 === 0 ? 'bg-background' : 'bg-muted/30'}
+                      >
+                        <TableCell className="font-medium">
+                          {tournament.name}
+                        </TableCell>
+                        
+                        {bookmakers.map(bookmaker => {
+                          const marginData = tournament.bookmakers[bookmaker.code];
+                          
+                          if (!marginData) {
+                            return (
+                              <TableCell key={bookmaker.code} className="text-center">
+                                <span className="text-sm font-medium px-1 py-0.5 rounded bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300">
+                                  -
+                                </span>
+                              </TableCell>
+                            );
+                          }
+                          
+                          const marginValue = marginData.margin;
+                          const marginColorClass = getMarginColorClass(marginValue);
+                          
+                          return (
+                            <TableCell key={bookmaker.code} className="text-center">
+                              <span 
+                                className={cn(
+                                  "text-sm font-medium px-2 py-1 rounded bg-gray-50 dark:bg-gray-800",
+                                  marginColorClass
+                                )}
+                                title={`Based on ${marginData.eventCount} events (Updated: ${new Date(marginData.timestamp).toLocaleString()})`}
+                              >
+                                {marginValue.toFixed(2)}%
+                              </span>
+                            </TableCell>
+                          );
+                        })}
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
               </div>
             )}
           </CardContent>

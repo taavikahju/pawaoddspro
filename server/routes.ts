@@ -646,6 +646,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Add an endpoint to get all tournament margins grouped by country
   app.get('/api/tournaments/margins/by-country', async (req, res) => {
     try {
+      // Import the db and sql
+      const { db } = await import('./db');
+      const { sql } = await import('drizzle-orm');
+      const { tournamentMargins } = await import('@shared/schema');
+      
       // Get latest tournament margins from the database
       const results = await db.execute(sql`
         WITH latest_records AS (
