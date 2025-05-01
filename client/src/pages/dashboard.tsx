@@ -36,25 +36,14 @@ export default function Dashboard() {
     refetchInterval: 60000, // Refresh every minute
   });
   
-  // Fetch events from API and WebSocket
+  // Fetch events from API only - removed WebSocket dependency
   const { 
-    data: apiEvents = [],
+    data: events = [],
     isLoading: isLoadingEvents 
   } = useQuery({ 
     queryKey: ['/api/events'],
-    refetchInterval: 30000, // Refresh every 30 seconds
+    refetchInterval: 15000, // Refresh every 15 seconds to match scraper interval
   });
-  
-  // Also use WebSocket for real-time updates
-  const { events: wsEvents } = useWebSocket();
-  
-  // Combine API and WebSocket events, preferring WebSocket data when available
-  const events = useMemo(() => {
-    if (wsEvents && wsEvents.length > 0) {
-      return wsEvents;
-    }
-    return apiEvents;
-  }, [apiEvents, wsEvents]);
 
   // Extract available countries and tournaments from the data
   useEffect(() => {

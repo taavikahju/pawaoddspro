@@ -284,79 +284,48 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
           league = dataSource.league || 'Unknown';
         }
         
-        // Extract date from the data source
-        let eventDate = '';
-        let eventTime = '';
+        // Removed National League logging based on user request
+        // We're using betPawa Ghana as the base bookmaker for country/tournament mapping
         
-        // Handle date and time in different formats
-        if (dataSource.date) {
-          eventDate = dataSource.date;
-        } else if (dataSource.raw && dataSource.raw.startDate) {
-          eventDate = dataSource.raw.startDate;
-        } else if (dataSource.startDate) {
-          eventDate = dataSource.startDate;
-        } else {
-          // In case no date is available, use a default one week ahead
-          const today = new Date();
-          today.setDate(today.getDate() + 7);
-          eventDate = today.toISOString().split('T')[0];
+        // Create the teams field if not already available
+        let teams = dataSource.teams;
+        if (!teams && dataSource.event) {
+          teams = dataSource.event;
         }
         
-        // Extract time
-        if (dataSource.time) {
-          eventTime = dataSource.time;
-        } else if (dataSource.startTime) {
-          eventTime = dataSource.startTime;
-        } else if (dataSource.raw && dataSource.raw.startTime) {
-          eventTime = dataSource.raw.startTime;
-        } else {
-          // Default time if not available
-          eventTime = '12:00';
-        }
-        
-        // Create or update the event in our map
-        if (!eventMap.has(eventId)) {
-          const teamsText = dataSource.teams || (dataSource.home && dataSource.away ? `${dataSource.home} vs ${dataSource.away}` : 'Unknown');
-          
-          // Create new event entry
-          eventMap.set(eventId, {
-            eventId: eventId,
-            externalId: dataSource.externalId || eventId, // Use eventId as fallback
-            teams: teamsText,
-            league,
-            country,
-            tournament,
-            sportId: getSportId(dataSource.sport || 'football'),
-            date: eventDate,
-            time: eventTime,
-            oddsData: bookmakerOdds,
-            bestOdds: { home: 0, draw: 0, away: 0 }
-          });
-          
-          // Mark this eventId as processed
-          processedEvents.add(eventId);
-        } else {
-          // Update existing event with additional bookmaker odds
-          const eventData = eventMap.get(eventId);
-          Object.assign(eventData.oddsData, bookmakerOdds);
-        }
+        // Create event in our map
+        eventMap.set(eventId, {
+          externalId: dataSource.id || eventId,
+          eventId: eventId,
+          teams: teams || 'Unknown',
+          league: league || 'Unknown',
+          country: country || null,
+          tournament: tournament || null,
+          sportId: getSportId(dataSource.sport || 'football'),
+          date: dataSource.date || dataSource.start_time?.split(' ')[0] || 'Unknown',
+          time: dataSource.time || dataSource.start_time?.split(' ')[1] || 'Unknown',
+          oddsData: bookmakerOdds,
+          bestOdds: {}
+        });
       }
     }
     
-    // Process the collected events to calculate best odds
-    for (const [eventId, eventData] of eventMap.entries()) {
-      // Calculate best odds across all bookmakers
-      const bestOdds = { home: 0, draw: 0, away: 0 };
+    // Calculate best odds for each event
+    for (const [eventKey, eventData] of Array.from(eventMap.entries())) {
+      const bestOdds: any = {};
+      const allOdds = eventData.oddsData;
       
+      // Check each possible market (home, draw, away)
       ['home', 'draw', 'away'].forEach(market => {
         let best = 0;
         
-        for (const bookmakerCode of Object.keys(eventData.oddsData)) {
-          const odds = eventData.oddsData[bookmakerCode];
-          if (odds && odds[market] && odds[market] > best) {
-            best = odds[market];
+        // Compare odds across all bookmakers
+        Object.keys(allOdds).forEach(bookmakerCode => {
+          const bookieOdds = allOdds[bookmakerCode];
+          if (bookieOdds && bookieOdds[market] && bookieOdds[market] > best) {
+            best = bookieOdds[market];
           }
-        }
+        });
         
         if (best > 0) {
           bestOdds[market] = best;
@@ -367,7 +336,8 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     }
     
     // Additional debug for tracking bookmakers in the second pass
-    console.log('📊 Events count by bookmaker (initial mapping):');
+    // Log each bookmaker's total events before secondary matching
+    console.log(`📊 Bookmaker events before secondary matching:`);
     for (const [code, count] of Object.entries(eventsByBookmaker)) {
       console.log(`  - ${code}: ${count} events`);
     }
@@ -667,7 +637,6 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
           console.error(`Error processing event ${eventKey}:`, error);
         }
       }
-    }
     
     // Reset counter for final event counts
     for (const bookmakerCode of bookmakerCodes) {
@@ -791,7 +760,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     throw error;
   }
 
-  // Calculate and store tournament margins
+  // Calculate and store tournament margins (moved outside the main try/catch block)
   try {
     const { calculateAndStoreTournamentMargins } = await import('./tournamentMargins');
     await calculateAndStoreTournamentMargins(storage);
