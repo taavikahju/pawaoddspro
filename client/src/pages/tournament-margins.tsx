@@ -32,6 +32,12 @@ const TournamentMargins: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [historyPopupOpen, setHistoryPopupOpen] = useState(false);
+  const [selectedHistoryData, setSelectedHistoryData] = useState<{
+    tournamentName: string;
+    bookmakerCode: string;
+    bookmakerName: string;
+  } | null>(null);
   
   // Function to determine country code from country name
   const getCountryCode = (countryName: string): string => {
@@ -384,16 +390,22 @@ const TournamentMargins: React.FC = () => {
                     {selectedCountryData.tournaments
                       // Sort tournaments by the sum of all margins (ascending)
                       .sort((a, b) => {
-                        // Calculate total margin for each tournament
-                        const getTotalMargin = (t: TournamentData) => {
-                          let total = 0;
+                        // Calculate average margin for each tournament across all bookmakers
+                        const getAverageMargin = (t: TournamentData) => {
+                          let totalMargin = 0;
+                          let count = 0;
+                          
                           Object.values(t.bookmakers).forEach(bm => {
-                            total += bm.margin || 0;
+                            if (bm.margin) {
+                              totalMargin += bm.margin;
+                              count++;
+                            }
                           });
-                          return total;
+                          
+                          return count > 0 ? totalMargin / count : 999; // Put tournaments with no margins last
                         };
                         
-                        return getTotalMargin(a) - getTotalMargin(b);
+                        return getAverageMargin(a) - getAverageMargin(b);
                       })
                       .map((tournament, idx) => (
                       <TableRow 
@@ -429,15 +441,23 @@ const TournamentMargins: React.FC = () => {
                           
                           return (
                             <TableCell key={bookmaker.code} className="text-center py-1.5 px-2 whitespace-nowrap border-r border-gray-200 dark:border-gray-700">
-                              <span 
+                              <button
+                                onClick={() => {
+                                  setSelectedHistoryData({
+                                    tournamentName: tournament.name,
+                                    bookmakerCode: bookmaker.code,
+                                    bookmakerName: bookmaker.name
+                                  });
+                                  setHistoryPopupOpen(true);
+                                }}
                                 className={cn(
-                                  "text-xs font-medium px-2 py-0.5 rounded-sm",
+                                  "text-xs font-medium px-2 py-0.5 rounded-sm cursor-pointer hover:opacity-80 transition-opacity",
                                   marginColorClass
                                 )}
-                                title={`Based on ${marginData.eventCount} events (Updated: ${new Date(marginData.timestamp).toLocaleString()})`}
+                                title={`Based on ${marginData.eventCount} events (Updated: ${new Date(marginData.timestamp).toLocaleString()}). Click to view history.`}
                               >
                                 {(marginValue * 100).toFixed(2)}%
-                              </span>
+                              </button>
                             </TableCell>
                           );
                         })}
@@ -450,6 +470,17 @@ const TournamentMargins: React.FC = () => {
           </CardContent>
         </Card>
       </div>
+      
+      {/* Margin history popup */}
+      {selectedHistoryData && (
+        <TournamentMarginHistoryPopup
+          open={historyPopupOpen}
+          onOpenChange={setHistoryPopupOpen}
+          tournamentName={selectedHistoryData.tournamentName}
+          bookmakerCode={selectedHistoryData.bookmakerCode}
+          bookmakerName={selectedHistoryData.bookmakerName}
+        />
+      )}
     </Layout>
   );
 };
