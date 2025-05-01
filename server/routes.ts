@@ -15,6 +15,7 @@ import { simpleAdminAuth } from "./middleware/simpleAdminAuth";
 import session from "express-session";
 import { db } from './db';
 import { sql } from 'drizzle-orm';
+import { logger } from './utils/logger';
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Setup authentication
@@ -103,7 +104,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // New event listener for when all processing (scraping + mapping) is complete
   // This is when we broadcast events to the frontend with full statistics
   scraperEvents.on(SCRAPER_EVENTS.ALL_PROCESSING_COMPLETED, (data) => {
-    console.log('📢 Broadcasting complete data update to all connected clients');
+    logger.info('Broadcasting complete data update to all connected clients');
     
     // Broadcast a notification about the update
     broadcast({
@@ -567,11 +568,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
 
       // Log bookmaker count distribution
-      console.log(`📊 Event distribution by bookmaker count:`);
-      console.log(`  - Events with 1 bookmaker: ${eventsByBookmakerCount['1']}`);
-      console.log(`  - Events with 2 bookmakers: ${eventsByBookmakerCount['2']}`);
-      console.log(`  - Events with 3 bookmakers: ${eventsByBookmakerCount['3']}`);
-      console.log(`  - Events with 4+ bookmakers: ${eventsByBookmakerCount['4+']}`);
+      logger.critical(`Event distribution by bookmaker count:`);
+      logger.critical(`  - Events with 1 bookmaker: ${eventsByBookmakerCount['1']}`);
+      logger.critical(`  - Events with 2 bookmakers: ${eventsByBookmakerCount['2']}`);
+      logger.critical(`  - Events with 3 bookmakers: ${eventsByBookmakerCount['3']}`);
+      logger.critical(`  - Events with 4+ bookmakers: ${eventsByBookmakerCount['4+']}`);
       
       // Track Sportybet specific details for debugging
       const sportyEvents = filteredEvents.filter(event => {
@@ -579,8 +580,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return oddsData && oddsData['sporty'];
       });
       
-      console.log(`📊 Sportybet diagnostic (found in ${sportyEvents.length} events):`);
-      console.log(`  - Total Sportybet events: ${sportyEvents.length}`);
+      logger.critical(`Sportybet diagnostic (found in ${sportyEvents.length} events):`);
+      logger.critical(`  - Total Sportybet events: ${sportyEvents.length}`);
       
       // Count Sportybet events by bookmaker count
       const sportyByBookmakerCount = {
@@ -595,22 +596,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
         else if (count >= 4) sportyByBookmakerCount['4']++;
       });
       
-      console.log(`  - Sportybet events with 2 bookmakers: ${sportyByBookmakerCount['2']}`);
-      console.log(`  - Sportybet events with 3 bookmakers: ${sportyByBookmakerCount['3']}`);
-      console.log(`  - Sportybet events with 4+ bookmakers: ${sportyByBookmakerCount['4']}`);
+      logger.critical(`  - Sportybet events with 2 bookmakers: ${sportyByBookmakerCount['2']}`);
+      logger.critical(`  - Sportybet events with 3 bookmakers: ${sportyByBookmakerCount['3']}`);
+      logger.critical(`  - Sportybet events with 4+ bookmakers: ${sportyByBookmakerCount['4']}`);
       
       // Log Sportybet event sample
       if (sportyEvents.length > 0) {
         const sampleSize = Math.min(3, sportyEvents.length);
-        console.log(`  - Sample of ${sampleSize} Sportybet events:`);
+        logger.critical(`  - Sample of ${sampleSize} Sportybet events:`);
         
         for (let i = 0; i < sampleSize; i++) {
           const event = sportyEvents[i];
-          console.log(`    - Event ${event.id}: "${event.teams}" (eventId: ${event.eventId}) has ${Object.keys(event.oddsData as Record<string, any>).length} bookmakers`);
+          logger.critical(`    - Event ${event.id}: "${event.teams}" (eventId: ${event.eventId}) has ${Object.keys(event.oddsData as Record<string, any>).length} bookmakers`);
         }
       }
       
-      console.log(`Filtered ${events.length} events down to ${filteredEvents.length} with at least ${minBookmakers} bookmakers`);
+      logger.critical(`Filtered ${events.length} events down to ${filteredEvents.length} with at least ${minBookmakers} bookmakers`);
       
       res.json(filteredEvents);
     } catch (error) {
