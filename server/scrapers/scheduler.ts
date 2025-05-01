@@ -34,8 +34,8 @@ export const SCRAPER_EVENTS = {
   ALL_SCRAPERS_COMPLETED: 'scraper:all:completed'
 };
 
-// Schedule to run every 15 minutes
-const SCRAPE_SCHEDULE = '*/15 * * * *';
+// Schedule to run every 30 minutes (increased from 15 minutes)
+const SCRAPE_SCHEDULE = '*/30 * * * *';
 
 // Schedule to run history cleanup once a day at midnight
 const CLEANUP_SCHEDULE = '0 0 * * *';
@@ -43,6 +43,9 @@ const CLEANUP_SCHEDULE = '0 0 * * *';
 // Keep track of running jobs
 let scheduledJob: cron.ScheduledTask | null = null;
 let cleanupJob: cron.ScheduledTask | null = null;
+
+// Add a locking mechanism to prevent overlapping scraper runs
+let isScraperRunning = false;
 
 /**
  * Setup all scrapers and schedule them to run
@@ -62,16 +65,34 @@ export function setupScrapers(storage: IStorage): void {
   
   scheduledJob = cron.schedule(SCRAPE_SCHEDULE, async () => {
     try {
+      // Skip this run if a previous scrape is still running
+      if (isScraperRunning) {
+        logger.critical(`⚠️ [${new Date().toISOString()}] Skipping scheduled scraper run - previous run still in progress`);
+        return;
+      }
+      
       // More concise logging
       logger.scraperStart(new Date().toLocaleTimeString());
-      await runAllScrapers(storage);
+      
+      // Set the lock
+      isScraperRunning = true;
+      
+      try {
+        // Run the scrapers
+        await runAllScrapers(storage);
+      } finally {
+        // Always release the lock when done, even if there was an error
+        isScraperRunning = false;
+      }
       // No need for completion message as the scraper itself will log its summary
     } catch (error) {
       logger.error('Scheduled scraping failed:', error);
+      // Make sure lock is released in case of error
+      isScraperRunning = false;
     }
   });
   
-  logger.info('Scrapers will run every 15 minutes');
+  logger.info('Scrapers will run every 30 minutes');
   
   // Schedule daily cleanup job to remove old history data
   if (cleanupJob) {
@@ -123,14 +144,14 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
     logger.info(`Processing ${activeBookmakers.length} active bookmakers`);
     
     // Sort the bookmakers to process them in a specific order
-    // 1. First process betPawa Ghana (bp GH) as the base for countries/tournaments
-    // 2. Then process Sportybet to ensure consistent event IDs
+    // 1. First process Sportybet to ensure it completes (as the slowest scraper)
+    // 2. Then process betPawa Ghana as the base for countries/tournaments
     // 3. Then process all other bookmakers
     const sortedBookmakers = [...activeBookmakers].sort((a, b) => {
-      if (a.code === 'bp GH') return -1; // betPawa Ghana should be first
-      if (b.code === 'bp GH') return 1;
-      if (a.code === 'sporty') return -1; // Sportybet should be second
+      if (a.code === 'sporty') return -1; // Sportybet should be first (changed from second)
       if (b.code === 'sporty') return 1;
+      if (a.code === 'bp GH') return -1; // betPawa Ghana should be second (changed from first)
+      if (b.code === 'bp GH') return 1;
       return 0; // Keep the original order for other bookmakers
     });
     
