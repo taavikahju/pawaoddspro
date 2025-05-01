@@ -7,16 +7,19 @@ import { useBookmakerContext } from '@/contexts/BookmakerContext';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
+import { Input } from '@/components/ui/input';
 import { 
   Trophy,
   X,
   GlobeIcon,
-  Clock
+  Clock,
+  Search
 } from 'lucide-react';
 
 export default function Dashboard() {
   const [countryFilter, setCountryFilter] = useState('all');
   const [tournamentFilter, setTournamentFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
   const { selectedSports, minMarginFilter, maxMarginFilter, selectedBookmakers } = useBookmakerContext();
   
   // Available countries and tournaments (will be populated from data)
@@ -99,7 +102,7 @@ export default function Dashboard() {
     return (1/home + 1/draw + 1/away);
   };
   
-  // Filter events by selected sports, country, tournament, and margin
+  // Filter events by selected sports, country, tournament, search query, and margin
   const filteredEvents = useMemo(() => {
     if (!Array.isArray(events)) return [];
     
@@ -129,6 +132,22 @@ export default function Dashboard() {
       // Filter by tournament only if country is selected
       if (countryFilter !== 'all' && tournamentFilter !== 'all') {
         if (event.tournament !== tournamentFilter) return false;
+      }
+      
+      // Filter by search query if provided
+      if (searchQuery.trim() !== '') {
+        const query = searchQuery.toLowerCase().trim();
+        const eventName = event.teams.toLowerCase();
+        const tournamentName = (event.tournament || '').toLowerCase();
+        const countryName = (event.country || '').toLowerCase();
+        
+        // Check if any of the event details match the search query
+        const matchesSearch = 
+          eventName.includes(query) || 
+          tournamentName.includes(query) || 
+          countryName.includes(query);
+        
+        if (!matchesSearch) return false;
       }
       
       // Filter by margin based on selected bookmakers
@@ -176,7 +195,7 @@ export default function Dashboard() {
       // If dates are the same, sort by time
       return a.time.localeCompare(b.time);
     });
-  }, [events, selectedSports, selectedBookmakers, countryFilter, tournamentFilter, minMarginFilter, maxMarginFilter]);
+  }, [events, selectedSports, selectedBookmakers, countryFilter, tournamentFilter, searchQuery, minMarginFilter, maxMarginFilter]);
   
   // Get sport name by ID
   const getSportName = (sportId: number): string => {
@@ -197,6 +216,23 @@ export default function Dashboard() {
       .toLowerCase()
       .replace(/[^a-z0-9\s]/g, '')
       .trim();
+    
+    // Special cases for amateur leagues and country variants
+    if (normalizedName.includes('amateur') || normalizedName.endsWith(' am')) {
+      // For amateur leagues, use the base country flag
+      if (normalizedName.includes('austria')) return 'AT';
+      if (normalizedName.includes('czech') || normalizedName.includes('czechia')) return 'CZ';
+      if (normalizedName.includes('england')) return 'GB-ENG';
+      if (normalizedName.includes('germany')) return 'DE';
+      if (normalizedName.includes('spain')) return 'ES';
+      if (normalizedName.includes('sweden')) return 'SE';
+    }
+    
+    // Additional special cases
+    if (normalizedName.includes('turkiye')) return 'TR';
+    if (normalizedName.includes('south korea') || normalizedName.includes('republic of korea')) return 'KR';
+    if (normalizedName.includes('czechia')) return 'CZ';
+    if (normalizedName.includes('faroe')) return 'FO';
     
     // Map to standard ISO country codes
     const countryCodeMap: Record<string, string> = {
@@ -562,6 +598,25 @@ export default function Dashboard() {
               </SelectContent>
             </Select>
             
+            {/* Smart Search Box */}
+            <div className="relative">
+              <Input
+                placeholder="Search teams..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="h-8 w-[200px] pl-8 text-xs"
+              />
+              <Search className="absolute left-2.5 top-2 h-3.5 w-3.5 text-gray-500" />
+              {searchQuery && (
+                <button 
+                  className="absolute right-2.5 top-2"
+                  onClick={() => setSearchQuery('')}
+                >
+                  <X className="h-3.5 w-3.5 text-gray-500 hover:text-gray-700" />
+                </button>
+              )}
+            </div>
+            
             {/* Clear Filters Button */}
             <Button 
               variant="outline" 
@@ -569,6 +624,7 @@ export default function Dashboard() {
               onClick={() => {
                 setCountryFilter('all');
                 setTournamentFilter('all');
+                setSearchQuery('');
               }}
               size="sm"
             >
