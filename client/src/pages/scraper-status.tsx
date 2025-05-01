@@ -74,9 +74,9 @@ export default function ScraperStatus() {
           </div>
           
           <div className="flex items-center">
-            <div className={`h-2.5 w-2.5 rounded-full mr-2 ${isConnected ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></div>
+            <div className={`h-2.5 w-2.5 rounded-full mr-2 bg-green-500 animate-pulse`}></div>
             <span className="text-sm text-gray-500 dark:text-gray-400 mr-4">
-              {isConnected ? "Connected" : "Disconnected"}
+              API Connected
             </span>
           </div>
         </div>
@@ -108,11 +108,9 @@ export default function ScraperStatus() {
         </div>
         
         <div className="flex items-center mt-2">
-          <div className={`h-2.5 w-2.5 rounded-full mr-2 ${isConnected ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></div>
+          <div className={`h-2.5 w-2.5 rounded-full mr-2 bg-green-500 animate-pulse`}></div>
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            {isConnected 
-              ? "WebSocket connected. Real-time updates active." 
-              : "WebSocket disconnected. Reconnecting..."}
+            Auto-refresh enabled. Data updates every 30 seconds.
           </p>
         </div>
       </div>
