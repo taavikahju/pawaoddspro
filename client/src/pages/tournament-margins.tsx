@@ -201,16 +201,16 @@ const TournamentMargins: React.FC = () => {
     return countriesData.find(country => country.name === selectedCountry) || null;
   }, [selectedCountry, countriesData]);
   
-  // Function to determine color class for margin value
+  // Function to determine color class for margin value - matching dashboard colors
   const getMarginColorClass = (margin: number): string => {
     // Convert decimal to percentage (e.g., 0.0364 → 3.64%)
     const percentage = margin * 100;
     
-    if (percentage < 1.0) return 'text-green-600 dark:text-green-400';
-    if (percentage < 5.0) return 'text-blue-600 dark:text-blue-400';
-    if (percentage < 8.0) return 'text-yellow-600 dark:text-yellow-400';
-    if (percentage < 12.0) return 'text-orange-600 dark:text-orange-400';
-    return 'text-red-600 dark:text-red-400';
+    if (percentage < 5.0) return 'text-green-600 dark:text-green-500 bg-green-100 dark:bg-green-900/20';
+    if (percentage < 7.5) return 'text-lime-600 dark:text-lime-500 bg-lime-100 dark:bg-lime-900/20';
+    if (percentage < 10.0) return 'text-amber-600 dark:text-amber-500 bg-amber-100 dark:bg-amber-900/20';
+    if (percentage < 12.5) return 'text-orange-600 dark:text-orange-500 bg-orange-100 dark:bg-orange-900/20';
+    return 'text-red-600 dark:text-red-500 bg-red-100 dark:bg-red-900/20';
   };
   
   const toggleSidebar = () => {
@@ -245,14 +245,30 @@ const TournamentMargins: React.FC = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="pt-0">
-            <div className="relative mb-3">
-              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search countries..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-8"
-              />
+            <div className="relative mb-4">
+              <div className="relative">
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search countries and tournaments..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-9 py-5 h-9 bg-muted/40 border-muted focus-visible:bg-background focus-visible:ring-1 focus-visible:ring-primary/50 transition-colors"
+                />
+                {searchTerm && (
+                  <button
+                    onClick={() => setSearchTerm('')}
+                    className="absolute right-2.5 top-2.5 text-muted-foreground hover:text-foreground"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
+              {searchTerm && (
+                <div className="mt-1.5 text-xs text-muted-foreground flex justify-between px-1">
+                  <span>Searching: "{searchTerm}"</span>
+                  <span>{filteredCountries.length} results</span>
+                </div>
+              )}
             </div>
             
             {isLoading ? (
@@ -268,27 +284,49 @@ const TournamentMargins: React.FC = () => {
                 No countries found
               </div>
             ) : (
-              <div className="space-y-0.5 overflow-y-auto pr-1" style={{ maxHeight: 'calc(100vh - 250px)' }}>
-                {filteredCountries.map(country => (
-                  <div 
-                    key={country.name}
-                    className={cn(
-                      "flex items-center gap-2 px-2 py-1.5 rounded-md cursor-pointer hover:bg-accent text-sm",
-                      selectedCountry === country.name && "bg-accent/80 font-medium"
-                    )}
-                    onClick={() => setSelectedCountry(country.name)}
-                  >
-                    <CountryFlag 
-                      countryCode={getCountryCode(country.name)} 
-                      countryName={country.name}
-                      size="sm"
-                    />
-                    <span className="flex-1 truncate">{country.name}</span>
-                    <span className="text-xs text-muted-foreground">
-                      {country.tournaments.length}
-                    </span>
-                  </div>
-                ))}
+              <div className="space-y-1 overflow-y-auto pr-1" style={{ maxHeight: 'calc(100vh - 250px)' }}>
+                {filteredCountries.map(country => {
+                  // Get total tournament count
+                  const tournamentCount = country.tournaments.length;
+                  // Get the country code for flag display
+                  const countryCode = getCountryCode(country.name);
+                  
+                  return (
+                    <div 
+                      key={country.name}
+                      className={cn(
+                        "flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer transition-all duration-200 text-sm",
+                        selectedCountry === country.name 
+                          ? "bg-primary/10 dark:bg-primary/20 border-l-4 border-primary shadow-sm" 
+                          : "hover:bg-accent border-l-4 border-transparent"
+                      )}
+                      onClick={() => setSelectedCountry(country.name)}
+                    >
+                      <div className="relative">
+                        <CountryFlag 
+                          countryCode={countryCode} 
+                          countryName={country.name}
+                          size="sm"
+                          className="shadow-sm rounded-sm"
+                        />
+                      </div>
+                      <span className={cn(
+                        "flex-1 truncate", 
+                        selectedCountry === country.name && "font-medium"
+                      )}>
+                        {country.name}
+                      </span>
+                      <span className={cn(
+                        "flex items-center justify-center text-xs px-1.5 py-0.5 rounded-full min-w-[20px]",
+                        selectedCountry === country.name 
+                          ? "bg-primary text-primary-foreground" 
+                          : "bg-muted text-muted-foreground"
+                      )}>
+                        {tournamentCount}
+                      </span>
+                    </div>
+                  );
+                })}
               </div>
             )}
           </CardContent>
