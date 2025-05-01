@@ -9,6 +9,7 @@ import { processAndMapEvents } from '../utils/dataMapper';
 import { EventEmitter } from 'events';
 import { db } from '../db';
 import { sql } from 'drizzle-orm';
+import { logger } from '../utils/logger';
 
 // Create event emitter for scraper events
 export const scraperEvents = new EventEmitter();
@@ -47,12 +48,12 @@ let cleanupJob: cron.ScheduledTask | null = null;
  * Setup all scrapers and schedule them to run
  */
 export function setupScrapers(storage: IStorage): void {
-  console.log('⚙️ Setting up scraper services...');
+  logger.critical('Setting up scraper services');
   
   // Run scrapers immediately on startup
   runAllScrapers(storage)
-    .then(() => console.log('✅ Initial scraping completed'))
-    .catch(err => console.error('❌ Error during initial scraping:', err));
+    .then(() => logger.critical('Initial scraping completed'))
+    .catch(err => logger.error('Error during initial scraping:', err));
   
   // Schedule regular scraper runs
   if (scheduledJob) {
@@ -62,15 +63,15 @@ export function setupScrapers(storage: IStorage): void {
   scheduledJob = cron.schedule(SCRAPE_SCHEDULE, async () => {
     try {
       // More concise logging
-      console.log(`🔄 Scheduled scrape starting [${new Date().toLocaleTimeString()}]`);
+      logger.scraperStart(new Date().toLocaleTimeString());
       await runAllScrapers(storage);
       // No need for completion message as the scraper itself will log its summary
     } catch (error) {
-      console.error('❌ Scheduled scraping failed:', error);
+      logger.error('Scheduled scraping failed:', error);
     }
   });
   
-  console.log(`📆 Scrapers will run every 15 minutes`);
+  logger.info('Scrapers will run every 15 minutes');
   
   // Schedule daily cleanup job to remove old history data
   if (cleanupJob) {
@@ -79,26 +80,26 @@ export function setupScrapers(storage: IStorage): void {
   
   cleanupJob = cron.schedule(CLEANUP_SCHEDULE, async () => {
     try {
-      console.log(`🧹 Running history cleanup [${new Date().toLocaleTimeString()}]`);
+      logger.info(`Running history cleanup [${new Date().toLocaleTimeString()}]`);
       
       // Clean up odds history
       const { cleanupOldOddsHistory } = await import('../utils/oddsHistory');
       const deletedOddsCount = await cleanupOldOddsHistory(30); // Delete data older than 30 days (1 month)
-      console.log(`✅ Odds history cleanup: removed ${deletedOddsCount} records`);
+      logger.info(`Odds history cleanup: removed ${deletedOddsCount} records`);
       
       // Clean up tournament margins
       const { cleanupOldTournamentMargins } = await import('../utils/tournamentMargins');
       const deletedMarginsCount = await cleanupOldTournamentMargins(30); // Delete data older than 30 days (1 month)
-      console.log(`✅ Tournament margins cleanup: removed ${deletedMarginsCount} records`);
+      logger.info(`Tournament margins cleanup: removed ${deletedMarginsCount} records`);
       
       // Log total
-      console.log(`✅ Total cleanup: removed ${deletedOddsCount + deletedMarginsCount} records`);
+      logger.critical(`Total cleanup: removed ${deletedOddsCount + deletedMarginsCount} records`);
     } catch (error) {
-      console.error('❌ History cleanup failed:', error);
+      logger.error('History cleanup failed:', error);
     }
   });
   
-  console.log(`📆 History cleanup will run daily at midnight`);
+  logger.info('History cleanup will run daily at midnight');
 }
 
 /**
@@ -106,7 +107,7 @@ export function setupScrapers(storage: IStorage): void {
  */
 export async function runAllScrapers(storage: IStorage): Promise<void> {
   try {
-    console.log('🚀 Starting scraper runs...');
+    logger.critical('Starting scraper runs');
     
     // Emit scraper started event
     scraperEvents.emit(SCRAPER_EVENTS.STARTED, {
@@ -118,7 +119,7 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
     const bookmakers = await storage.getBookmakers();
     const activeBookmakers = bookmakers.filter(bookmaker => bookmaker.active);
     
-    console.log(`📊 Processing ${activeBookmakers.length} active bookmakers`);
+    logger.info(`Processing ${activeBookmakers.length} active bookmakers`);
     
     // Sort the bookmakers to process them in a specific order
     // 1. First process betPawa Ghana (bp GH) as the base for countries/tournaments
@@ -132,7 +133,7 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
       return 0; // Keep the original order for other bookmakers
     });
     
-    console.log(`📊 Scraping in optimized order: ${sortedBookmakers.map(b => b.code).join(', ')}`);
+    logger.info(`Scraping in optimized order: ${sortedBookmakers.map(b => b.code).join(', ')}`);
     
     // Run all scrapers in parallel for faster completion time
     // We'll still update frontend only once everything is done
@@ -158,16 +159,16 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
           try {
             // More concise logging
             data = await customScrapers.runCustomScraper(bookmaker.code);
-            console.log(`✅ ${bookmaker.name}: ${data?.length || 0} events collected`);
+            logger.bookmakerComplete(bookmaker.name, data?.length || 0);
           } catch (customError) {
-            console.error(`❌ Error in ${bookmaker.name} scraper:`, customError);
+            logger.error(`Error in ${bookmaker.name} scraper:`, customError);
             data = null;
           }
         }
         
         // Only use custom scrapers, no fallbacks to mock scrapers
         if (!data) {
-          console.warn(`⚠️ No scraper for ${bookmaker.code}`);
+          logger.info(`No scraper for ${bookmaker.code}`);
           
           // Emit bookmaker scraper failed event
           scraperEvents.emit(SCRAPER_EVENTS.BOOKMAKER_FAILED, {
@@ -227,11 +228,11 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
     
     // Total events scraped - simplified logging
     const totalScrapedEvents = results.reduce((total, r) => total + (r?.data?.length || 0), 0);
-    console.log(`📊 Total events scraped: ${totalScrapedEvents}`);
+    logger.critical(`Total events scraped: ${totalScrapedEvents}`);
     
-    console.log(`✅ ${successfulScrapers}/${activeBookmakers.length} scrapers completed successfully`);
+    logger.critical(`${successfulScrapers}/${activeBookmakers.length} scrapers completed successfully`);
     
-    console.log(`🔄 Processing and mapping events...`);
+    logger.critical(`Processing and mapping events...`);
     // Emit processing started event
     scraperEvents.emit(SCRAPER_EVENTS.PROCESSING_STARTED, {
       timestamp: new Date().toISOString(),

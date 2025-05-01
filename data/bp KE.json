@@ -9,9 +9,9 @@
     "date": "2025-05-01",
     "time": "17:30",
     "odds": {
-      "home": 3.4,
-      "draw": 3.5,
-      "away": 2.08
+      "home": 3.5,
+      "draw": 3.55,
+      "away": 2.03
     },
     "raw": {
       "eventId": "56512313",
@@ -19,9 +19,9 @@
       "tournament": "DBU Pokalen",
       "event": "Viborg FF - FC Copenhagen",
       "market": "1X2 - FT",
-      "home_odds": "3.4",
-      "draw_odds": "3.5",
-      "away_odds": "2.08",
+      "home_odds": "3.5",
+      "draw_odds": "3.55",
+      "away_odds": "2.03",
       "start_time": "2025-05-01 17:30"
     }
   },
@@ -113,9 +113,9 @@
     "date": "2025-05-01",
     "time": "18:00",
     "odds": {
-      "home": 6.5,
-      "draw": 3.85,
-      "away": 1.45
+      "home": 6.25,
+      "draw": 3.8,
+      "away": 1.48
     },
     "raw": {
       "eventId": "59879212",
@@ -123,9 +123,9 @@
       "tournament": "U20 Africa Cup of Nations",
       "event": "Kenya U20 - Morocco U20 (n)",
       "market": "1X2 - FT",
-      "home_odds": "6.5",
-      "draw_odds": "3.85",
-      "away_odds": "1.45",
+      "home_odds": "6.25",
+      "draw_odds": "3.8",
+      "away_odds": "1.48",
       "start_time": "2025-05-01 18:00"
     }
   },
@@ -191,9 +191,9 @@
     "date": "2025-05-01",
     "time": "18:00",
     "odds": {
-      "home": 2.5,
-      "draw": 3.75,
-      "away": 2.5
+      "home": 2.55,
+      "draw": 3.85,
+      "away": 2.45
     },
     "raw": {
       "eventId": "52034819",
@@ -201,9 +201,9 @@
       "tournament": "Saudi Arabia Pro League",
       "event": "Al-Fateh Al-Hasa - Al-Shabab Riyadh",
       "market": "1X2 - FT",
-      "home_odds": "2.5",
-      "draw_odds": "3.75",
-      "away_odds": "2.5",
+      "home_odds": "2.55",
+      "draw_odds": "3.85",
+      "away_odds": "2.45",
       "start_time": "2025-05-01 18:00"
     }
   },
@@ -2193,9 +2193,9 @@
     "date": "2025-05-02",
     "time": "12:30",
     "odds": {
-      "home": 3.95,
+      "home": 4.1,
       "draw": 3.05,
-      "away": 1.97
+      "away": 1.93
     },
     "raw": {
       "eventId": "52112247",
@@ -2203,9 +2203,9 @@
       "tournament": "Premier League",
       "event": "FC Levy Bereg Kyiv - Karpaty Lviv",
       "market": "1X2 - FT",
-      "home_odds": "3.95",
+      "home_odds": "4.1",
       "draw_odds": "3.05",
-      "away_odds": "1.97",
+      "away_odds": "1.93",
       "start_time": "2025-05-02 12:30"
     }
   },
@@ -3870,6 +3870,32 @@
       "home_odds": "2.11",
       "draw_odds": "3.35",
       "away_odds": "3.05",
+      "start_time": "2025-05-02 16:00"
+    }
+  },
+  {
+    "id": "58378597",
+    "eventId": "58378597",
+    "teams": "FC Kiffen - Tampereen Ilves 2",
+    "league": "Kakkonen, Group B",
+    "sport": "football",
+    "country": "Finland",
+    "date": "2025-05-02",
+    "time": "16:00",
+    "odds": {
+      "home": 2.9,
+      "draw": 4.7,
+      "away": 1.84
+    },
+    "raw": {
+      "eventId": "58378597",
+      "country": "Finland",
+      "tournament": "Kakkonen, Group B",
+      "event": "FC Kiffen - Tampereen Ilves 2",
+      "market": "1X2 - FT",
+      "home_odds": "2.9",
+      "draw_odds": "4.7",
+      "away_odds": "1.84",
       "start_time": "2025-05-02 16:00"
     }
   },
@@ -9256,6 +9282,32 @@
     }
   },
   {
+    "id": "59792366",
+    "eventId": "59792366",
+    "teams": "Queensland Lions FC - Olympic FC Brisbane",
+    "league": "Queensland NPL",
+    "sport": "football",
+    "country": "Australia",
+    "date": "2025-05-03",
+    "time": "07:15",
+    "odds": {
+      "home": 1.47,
+      "draw": 4.3,
+      "away": 5.5
+    },
+    "raw": {
+      "eventId": "59792366",
+      "country": "Australia",
+      "tournament": "Queensland NPL",
+      "event": "Queensland Lions FC - Olympic FC Brisbane",
+      "market": "1X2 - FT",
+      "home_odds": "1.47",
+      "draw_odds": "4.3",
+      "away_odds": "5.5",
+      "start_time": "2025-05-03 07:15"
+    }
+  },
+  {
     "id": "56926623",
     "eventId": "56926623",
     "teams": "Magic United Tfa - Ipswich FC",
@@ -12879,9 +12931,9 @@
     "date": "2025-05-03",
     "time": "14:00",
     "odds": {
-      "home": 1.42,
-      "draw": 3.75,
-      "away": 7.5
+      "home": 1.41,
+      "draw": 3.7,
+      "away": 8
     },
     "raw": {
       "eventId": "51241155",
@@ -12889,9 +12941,9 @@
       "tournament": "Football National League",
       "event": "FK Sochi - PFK Arsenal Tula",
       "market": "1X2 - FT",
-      "home_odds": "1.42",
-      "draw_odds": "3.75",
-      "away_odds": "7.5",
+      "home_odds": "1.41",
+      "draw_odds": "3.7",
+      "away_odds": "8.0",
       "start_time": "2025-05-03 14:00"
     }
   },
@@ -18391,8 +18443,8 @@
     "date": "2025-05-04",
     "time": "01:00",
     "odds": {
-      "home": 1.85,
-      "draw": 3.1,
+      "home": 1.87,
+      "draw": 3.05,
       "away": 4.15
     },
     "raw": {
@@ -18401,8 +18453,8 @@
       "tournament": "Liga Panamena de Futbol, Apertura",
       "event": "AF Sporting San Miguelito - Alianza FC Panama",
       "market": "1X2 - FT",
-      "home_odds": "1.85",
-      "draw_odds": "3.1",
+      "home_odds": "1.87",
+      "draw_odds": "3.05",
       "away_odds": "4.15",
       "start_time": "2025-05-04 01:00"
     }
@@ -20445,9 +20497,9 @@
     "date": "2025-05-04",
     "time": "10:00",
     "odds": {
-      "home": 1.7,
-      "draw": 3.5,
-      "away": 4.35
+      "home": 1.79,
+      "draw": 3.45,
+      "away": 3.95
     },
     "raw": {
       "eventId": "51867145",
@@ -20455,9 +20507,9 @@
       "tournament": "Segunda Federacion",
       "event": "Torrent CF - UE Sant Andreu",
       "market": "1X2 - FT",
-      "home_odds": "1.7",
-      "draw_odds": "3.5",
-      "away_odds": "4.35",
+      "home_odds": "1.79",
+      "draw_odds": "3.45",
+      "away_odds": "3.95",
       "start_time": "2025-05-04 10:00"
     }
   },
@@ -22083,9 +22135,9 @@
     "date": "2025-05-04",
     "time": "13:00",
     "odds": {
-      "home": 3.65,
-      "draw": 3.25,
-      "away": 2
+      "home": 3.55,
+      "draw": 3.2,
+      "away": 2.04
     },
     "raw": {
       "eventId": "51468319",
@@ -22093,9 +22145,9 @@
       "tournament": "Serie B",
       "event": "Reggiana 1919 - Spezia Calcio",
       "market": "1X2 - FT",
-      "home_odds": "3.65",
-      "draw_odds": "3.25",
-      "away_odds": "2.0",
+      "home_odds": "3.55",
+      "draw_odds": "3.2",
+      "away_odds": "2.04",
       "start_time": "2025-05-04 13:00"
     }
   },
@@ -24995,7 +25047,7 @@
     "date": "2025-05-04",
     "time": "17:00",
     "odds": {
-      "home": 1.22,
+      "home": 1.21,
       "draw": 5.5,
       "away": 12
     },
@@ -25005,7 +25057,7 @@
       "tournament": "Premier League",
       "event": "AL Ahly SC (EGY) - Haras El Hodood",
       "market": "1X2 - FT",
-      "home_odds": "1.22",
+      "home_odds": "1.21",
       "draw_odds": "5.5",
       "away_odds": "12.0",
       "start_time": "2025-05-04 17:00"
