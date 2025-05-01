@@ -112,7 +112,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       }
     }
     
-    console.log(`📊 Found ${allEventIds.size} unique events to process`);
+    console.log(`📊 Processing ${allEventIds.size} events...`);
     
     // Stats counters to track filtering results
     let eventsWith1Bookmaker = 0;
@@ -262,7 +262,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     
     // Third pass: Secondary matching for all bookmakers' events not yet mapped
     // This allows events with different eventIds but same team names to be matched
-    console.log(`🔍 Starting secondary matching for all bookmakers...`);
+    console.log(`🔍 Running secondary matching...`);
     
     const bookmakersMapped = {
       'sporty': 0,
@@ -278,14 +278,20 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
 
     // Flag to limit log output for performance
     let logsShown = 0;
-    const MAX_LOGS = 10; // Only show a limited number of logs
+    const MAX_LOGS = 0; // Disable logs completely for performance
     
-    console.log(`🔄 Processing ${eventEntries.length} events in ${totalBatches} batches for secondary matching`);
+    // Reduced log verbosity
+    console.log(`🔄 Processing ${totalBatches} batches...`);
     
     for (let batchIndex = 0; batchIndex < totalBatches; batchIndex++) {
       const batchStart = batchIndex * batchSize;
       const batchEnd = Math.min((batchIndex + 1) * batchSize, eventEntries.length);
       const batch = eventEntries.slice(batchStart, batchEnd);
+      
+      // Only log every few batches to reduce output
+      if (batchIndex % 2 === 0) {
+        console.log(`🔄 Processed batch ${batchIndex+1}/${totalBatches} (${Math.round((batchIndex+1)/totalBatches*100)}%)`);
+      }
       
       // Process each event in current batch
       for (const [eventId, eventData] of batch) {

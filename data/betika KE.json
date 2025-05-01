@@ -88,7 +88,7 @@
     "time": "19:00",
     "odds": {
       "home": 1.87,
-      "draw": 3.5,
+      "draw": 3.55,
       "away": 3.85
     },
     "raw": {
@@ -98,7 +98,7 @@
       "event": "Al-Akhdoud Club - Al-Wehda FC",
       "market": "1X2",
       "home_odds": "1.87",
-      "draw_odds": "3.50",
+      "draw_odds": "3.55",
       "away_odds": "3.85",
       "start_time": "2025-05-01 19:00"
     }
@@ -165,9 +165,9 @@
     "date": "2025-05-01",
     "time": "19:00",
     "odds": {
-      "home": 2.5,
+      "home": 2.6,
       "draw": 2.65,
-      "away": 3.2
+      "away": 3.1
     },
     "raw": {
       "eventId": "59821794",
@@ -175,9 +175,9 @@
       "tournament": "Pro League",
       "event": "Esteghlal Khuzestan FC - Kheybar Khorramabad FC",
       "market": "1X2",
-      "home_odds": "2.50",
+      "home_odds": "2.60",
       "draw_odds": "2.65",
-      "away_odds": "3.20",
+      "away_odds": "3.10",
       "start_time": "2025-05-01 19:00"
     }
   },
@@ -11995,9 +11995,9 @@
     "date": "2025-05-03",
     "time": "18:15",
     "odds": {
-      "home": 1.32,
-      "draw": 4.8,
-      "away": 8
+      "home": 1.33,
+      "draw": 4.9,
+      "away": 8.2
     },
     "raw": {
       "eventId": "58818245",
@@ -12005,9 +12005,9 @@
       "tournament": "Superliga",
       "event": "FC Farul Constanta - FC Gloria Buzau",
       "market": "1X2",
-      "home_odds": "1.32",
-      "draw_odds": "4.80",
-      "away_odds": "8.00",
+      "home_odds": "1.33",
+      "draw_odds": "4.90",
+      "away_odds": "8.20",
       "start_time": "2025-05-03 18:15"
     }
   },
@@ -18954,6 +18954,32 @@
     }
   },
   {
+    "id": "57442103",
+    "eventId": "57442103",
+    "teams": "Osteraaker United - Skiljebo",
+    "league": "Division 2, Norra Svealand",
+    "sport": "football",
+    "country": "Sweden",
+    "date": "2025-05-04",
+    "time": "17:00",
+    "odds": {
+      "home": 3.15,
+      "draw": 4,
+      "away": 1.88
+    },
+    "raw": {
+      "eventId": "57442103",
+      "country": "Sweden",
+      "tournament": "Division 2, Norra Svealand",
+      "event": "Osteraaker United - Skiljebo",
+      "market": "1X2",
+      "home_odds": "3.15",
+      "draw_odds": "4.00",
+      "away_odds": "1.88",
+      "start_time": "2025-05-04 17:00"
+    }
+  },
+  {
     "id": "51241153",
     "eventId": "51241153",
     "teams": "Rotor Volgograd - FC Yenisey Krasnoyarsk",
@@ -22681,9 +22707,9 @@
     "date": "2025-05-05",
     "time": "17:00",
     "odds": {
-      "home": 2.15,
-      "draw": 3.3,
-      "away": 3.1
+      "home": 2.14,
+      "draw": 3.4,
+      "away": 3.05
     },
     "raw": {
       "eventId": "51446351",
@@ -22691,9 +22717,9 @@
       "tournament": "National League",
       "event": "Sutton - Woking",
       "market": "1X2",
-      "home_odds": "2.15",
-      "draw_odds": "3.30",
-      "away_odds": "3.10",
+      "home_odds": "2.14",
+      "draw_odds": "3.40",
+      "away_odds": "3.05",
       "start_time": "2025-05-05 17:00"
     }
   },
