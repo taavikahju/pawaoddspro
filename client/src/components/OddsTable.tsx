@@ -394,7 +394,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                               isOpen: true
                             })}
                           >
-                            {event.oddsData[bookmaker.code].home.toFixed(2)}
+                            {(event.oddsData[bookmaker.code]?.home || 0).toFixed(2)}
                           </button>
                         ) : '-'}
                       </span>
@@ -421,7 +421,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                               isOpen: true
                             })}
                           >
-                            {event.oddsData[bookmaker.code].draw.toFixed(2)}
+                            {(event.oddsData[bookmaker.code]?.draw || 0).toFixed(2)}
                           </button>
                         ) : '-'}
                       </span>
@@ -448,7 +448,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                               isOpen: true
                             })}
                           >
-                            {event.oddsData[bookmaker.code].away.toFixed(2)}
+                            {(event.oddsData[bookmaker.code]?.away || 0).toFixed(2)}
                           </button>
                         ) : '-'}
                       </span>
