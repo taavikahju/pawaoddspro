@@ -155,6 +155,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
             const bookmakerCount = Object.keys(event.oddsData).length;
             return bookmakerCount >= 3;
           });
+
+          // Track counts for different bookmaker counts for WebSocket too
+          const eventsByBookmakerCount = {
+            '1': 0,
+            '2': 0,
+            '3': 0,
+            '4+': 0
+          };
+
+          // Count events by bookmaker count for WebSocket
+          events.forEach(event => {
+            if (!event.oddsData) return;
+            const count = Object.keys(event.oddsData).length;
+            
+            if (count === 1) eventsByBookmakerCount['1']++;
+            else if (count === 2) eventsByBookmakerCount['2']++;
+            else if (count === 3) eventsByBookmakerCount['3']++;
+            else if (count >= 4) eventsByBookmakerCount['4+']++;
+          });
+
+          // Log bookmaker count distribution for WebSocket
+          console.log(`WebSocket Events distribution:`);
+          console.log(`  - Events with 1 bookmaker: ${eventsByBookmakerCount['1']}`);
+          console.log(`  - Events with 2 bookmakers: ${eventsByBookmakerCount['2']}`);
+          console.log(`  - Events with 3 bookmakers: ${eventsByBookmakerCount['3']}`);
+          console.log(`  - Events with 4+ bookmakers: ${eventsByBookmakerCount['4+']}`);
           
           console.log(`WebSocket getEvents: Filtered ${events.length} events down to ${filteredEvents.length} with at least 3 bookmakers`);
           
@@ -323,6 +349,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return bookmakerCount >= 3;
       });
       
+      // Track counts for broadcast events
+      const eventsByBookmakerCount = {
+        '1': 0,
+        '2': 0,
+        '3': 0,
+        '4+': 0
+      };
+
+      // Count events by bookmaker count for broadcast
+      events.forEach(event => {
+        if (!event.oddsData) return;
+        const count = Object.keys(event.oddsData).length;
+        
+        if (count === 1) eventsByBookmakerCount['1']++;
+        else if (count === 2) eventsByBookmakerCount['2']++;
+        else if (count === 3) eventsByBookmakerCount['3']++;
+        else if (count >= 4) eventsByBookmakerCount['4+']++;
+      });
+
+      // Log bookmaker count distribution for broadcast
+      console.log(`📊 Broadcast Event distribution:`);
+      console.log(`  - Events with 1 bookmaker: ${eventsByBookmakerCount['1']}`);
+      console.log(`  - Events with 2 bookmakers: ${eventsByBookmakerCount['2']}`);
+      console.log(`  - Events with 3 bookmakers: ${eventsByBookmakerCount['3']}`);
+      console.log(`  - Events with 4+ bookmakers: ${eventsByBookmakerCount['4+']}`);
+      
       console.log(`Broadcast: Filtered ${events.length} events down to ${filteredEvents.length} with at least 3 bookmakers`);
       
       broadcast({
@@ -445,6 +497,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return bookmakerCount >= minBookmakers;
       });
 
+      // Track counts for different bookmaker counts to create a distribution
+      const eventsByBookmakerCount = {
+        '1': 0,
+        '2': 0,
+        '3': 0,
+        '4+': 0
+      };
+
+      // Count events by bookmaker count
+      events.forEach(event => {
+        if (!event.oddsData) return;
+        const count = Object.keys(event.oddsData).length;
+        
+        if (count === 1) eventsByBookmakerCount['1']++;
+        else if (count === 2) eventsByBookmakerCount['2']++;
+        else if (count === 3) eventsByBookmakerCount['3']++;
+        else if (count >= 4) eventsByBookmakerCount['4+']++;
+      });
+
+      // Log bookmaker count distribution
+      console.log(`📊 Event distribution by bookmaker count:`);
+      console.log(`  - Events with 1 bookmaker: ${eventsByBookmakerCount['1']}`);
+      console.log(`  - Events with 2 bookmakers: ${eventsByBookmakerCount['2']}`);
+      console.log(`  - Events with 3 bookmakers: ${eventsByBookmakerCount['3']}`);
+      console.log(`  - Events with 4+ bookmakers: ${eventsByBookmakerCount['4+']}`);
+      
       console.log(`Filtered ${events.length} events down to ${filteredEvents.length} with at least ${minBookmakers} bookmakers`);
       
       res.json(filteredEvents);
