@@ -397,7 +397,11 @@ const TournamentMargins: React.FC = () => {
                       </TableHead>
                       {bookmakers.map(bookmaker => (
                         <TableHead key={bookmaker.code} className="px-2 py-2 text-center text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
-                          {bookmaker.name.replace(' Kenya', '').replace(' Ghana', '')}
+                          {bookmaker.code === 'bp GH' 
+                            ? 'betPawa GH'
+                            : bookmaker.code === 'bp KE'
+                              ? 'betPawa KE'
+                              : bookmaker.name.replace(' Kenya', '').replace(' Ghana', '')}
                         </TableHead>
                       ))}
                     </TableRow>

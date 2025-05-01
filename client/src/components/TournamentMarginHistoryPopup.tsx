@@ -2,30 +2,31 @@ import React from 'react';
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogFooter,
   DialogClose
 } from "@/components/ui/dialog";
+import { Button } from '@/components/ui/button';
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   LineChart,
   Line,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
   Legend,
   ResponsiveContainer
 } from 'recharts';
-import { ChevronLeft, Loader2 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import { format } from 'date-fns';
 
 interface MarginHistoryItem {
   id: number;
   bookmakerCode: string;
   countryName: string;
-  tournamentName: string;
+  tournament: string;
   averageMargin: string;
   eventCount: number;
   timestamp: string;
@@ -54,22 +55,38 @@ export default function TournamentMarginHistoryPopup({
   // Fetch margin history data
   const { data, isLoading, error } = useQuery<MarginHistoryItem[]>({
     queryKey: ['/api/tournaments/margins', tournamentName, dbBookmakerCode],
-    queryFn: () => 
-      fetch(`/api/tournaments/margins?tournament=${encodeURIComponent(tournamentName)}&bookmaker=${encodeURIComponent(dbBookmakerCode)}`)
-        .then(res => res.json()),
+    queryFn: async () => {
+      const response = await axios.get(`/api/tournaments/margins?tournament=${encodeURIComponent(tournamentName)}&bookmaker=${encodeURIComponent(dbBookmakerCode)}`);
+      return response.data;
+    },
     enabled: open,
+    staleTime: 60000 // Cache for 1 minute
   });
 
   // Process data for the chart
   const chartData = React.useMemo(() => {
     if (!data) return [];
     
-    return data.map(item => ({
-      date: format(new Date(item.timestamp), 'dd MMM HH:mm'),
-      margin: (parseFloat(item.averageMargin) * 100).toFixed(2),
-      eventCount: item.eventCount,
-      timestamp: item.timestamp
-    }));
+    return data.map(item => {
+      const date = new Date(item.timestamp);
+      
+      // Format date for display (DD MMM HH:MM)
+      const formattedDate = date.toLocaleString('en-US', {
+        day: '2-digit',
+        month: 'short',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+        timeZone: 'UTC'
+      });
+      
+      return {
+        timestamp: formattedDate,
+        margin: parseFloat(item.averageMargin) * 100, // Convert to percentage
+        eventCount: item.eventCount,
+        date: date // Keep original date for sorting
+      };
+    }).sort((a, b) => a.date.getTime() - b.date.getTime());
   }, [data]);
 
   // Get color based on margin value
@@ -84,84 +101,93 @@ export default function TournamentMarginHistoryPopup({
   // Get chart color based on average margin
   const chartColor = React.useMemo(() => {
     if (!chartData.length) return '#16a34a';
-    const avgMargin = chartData.reduce((sum, item) => sum + parseFloat(item.margin), 0) / chartData.length;
+    const avgMargin = chartData.reduce((sum, item) => sum + item.margin, 0) / chartData.length;
     return getMarginColor(avgMargin);
   }, [chartData]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[750px] max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 text-xl">
-            <DialogClose className="absolute left-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
-              <ChevronLeft className="h-4 w-4" />
-              <span className="sr-only">Back</span>
-            </DialogClose>
-            {tournamentName} - {bookmakerName}
+      <DialogContent className="sm:max-w-[650px] max-h-[80vh] overflow-y-auto">
+        <DialogHeader className="pb-2">
+          <DialogTitle className="text-sm font-medium">
+            Margin History: {tournamentName} - {bookmakerName}
           </DialogTitle>
-          <DialogDescription>
-            Average margin history for this tournament and bookmaker over time
-          </DialogDescription>
         </DialogHeader>
         
-        {isLoading ? (
-          <div className="flex items-center justify-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          </div>
-        ) : error ? (
-          <div className="py-8 text-center text-red-500">
-            Failed to load margin history
-          </div>
-        ) : chartData.length === 0 ? (
-          <div className="py-8 text-center text-muted-foreground">
-            No margin history data available
-          </div>
-        ) : (
-          <div className="py-2">
-            <div className="text-sm text-muted-foreground mb-4">
-              Displaying {chartData.length} data points from {format(new Date(chartData[0].timestamp), 'dd MMM yyyy')} to {format(new Date(chartData[chartData.length - 1].timestamp), 'dd MMM yyyy')}
+        <div className="w-full min-h-[350px]">
+          {isLoading ? (
+            <div className="flex items-center justify-center h-[350px]">
+              <Skeleton className="h-[300px] w-full" />
             </div>
-            
+          ) : error ? (
+            <div className="text-red-500 p-2 text-center text-sm">
+              Failed to load margin history data
+            </div>
+          ) : chartData.length === 0 ? (
+            <div className="text-gray-500 p-2 text-center text-sm">
+              No margin history available for this tournament
+            </div>
+          ) : (
             <ResponsiveContainer width="100%" height={350}>
-              <LineChart
-                data={chartData}
-                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+              <LineChart 
+                data={chartData} 
+                margin={{ top: 5, right: 20, left: 15, bottom: 20 }}
               >
-                <CartesianGrid strokeDasharray="3 3" stroke="#ccc" opacity={0.3} />
                 <XAxis 
-                  dataKey="date" 
-                  tick={{ fontSize: 12 }} 
-                  tickMargin={10}
-                  padding={{ left: 20, right: 20 }}
+                  dataKey="timestamp" 
+                  tick={{ fontSize: 11 }}
+                  angle={-45}
+                  textAnchor="end"
+                  height={85} // Increase height to give more room for the date/time
                 />
                 <YAxis 
-                  tickFormatter={(value) => `${value}%`}
+                  label={{ 
+                    value: 'Margin %', 
+                    angle: -90, 
+                    position: 'insideLeft' 
+                  }}
                   domain={['dataMin - 0.5', 'dataMax + 0.5']}
-                  padding={{ top: 20, bottom: 20 }}
+                  width={40}
+                  tick={{ fontSize: 10 }}
+                  tickFormatter={(value) => `${value.toFixed(1)}%`}
                 />
                 <Tooltip 
-                  formatter={(value) => [`${value}%`, 'Margin']}
-                  labelFormatter={(date) => `Date: ${date}`}
-                  contentStyle={{ borderRadius: '4px', border: '1px solid #e2e8f0' }}
+                  formatter={(value: any) => [`${Number(value).toFixed(2)}%`, 'Margin']}
+                  labelFormatter={(label) => `Date/Time: ${label}`}
                 />
-                <Legend />
-                <Line 
-                  type="monotone" 
-                  dataKey="margin" 
-                  name="Margin (%)" 
+                <Legend 
+                  iconSize={8}
+                  wrapperStyle={{ fontSize: '10px', marginTop: '15px' }}
+                  verticalAlign="bottom"
+                />
+                <Line
+                  type="monotone"
+                  dataKey="margin"
+                  name="Tournament Margin"
                   stroke={chartColor}
                   strokeWidth={2}
-                  activeDot={{ r: 6 }}
                   dot={{ r: 3 }}
+                  activeDot={{ r: 5 }}
+                  connectNulls
                 />
               </LineChart>
             </ResponsiveContainer>
-            
-            <div className="text-xs text-right text-muted-foreground mt-2">
-              Note: Events used for calculation may vary between data points
-            </div>
-          </div>
-        )}
+          )}
+        </div>
+        
+        <div className="text-xs text-gray-500 pt-3 pb-1 text-center">
+          {chartData.length > 0 && (
+            <span>
+              Based on an average of {Math.round(chartData.reduce((sum, item) => sum + item.eventCount, 0) / chartData.length)} events per data point
+            </span>
+          )}
+        </div>
+        
+        <DialogFooter className="pt-1">
+          <DialogClose asChild>
+            <Button variant="outline" size="sm" className="h-7 text-xs px-3">Close</Button>
+          </DialogClose>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
