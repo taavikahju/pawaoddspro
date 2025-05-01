@@ -374,7 +374,16 @@ const processEvents = (tournaments) => {
     'crystal palace': ['palace', 'c palace', 'c. palace'],
     'nottingham forest': ['nottingham', 'n. forest', 'notts forest', 'forest'],
     'manchester united': ['man utd', 'man united', 'man. united'],
-    'manchester city': ['man city', 'man. city']
+    'manchester city': ['man city', 'man. city'],
+    // England National League teams with common variations
+    'sutton united': ['sutton utd', 'sutton'],
+    'woking': ['woking fc'],
+    'maidenhead united': ['maidenhead', 'maidenhead utd'],
+    'boston united': ['boston utd', 'boston'],
+    'gateshead': ['gateshead fc'],
+    'southend': ['southend united', 'southend utd'],
+    'hartlepool united': ['hartlepool', 'hartlepool utd'],
+    'forest green rovers': ['forest green', 'f.g. rovers', 'fg rovers', 'forest green r']
   };
   
   // Flag for special event we're looking for
@@ -397,6 +406,11 @@ const processEvents = (tournaments) => {
       // Process all events in this tournament
       for (const event of tournament.events) {
         try {
+          // Special logging for England National League events
+          if (country === 'England' || tournamentName.includes('National League') || tournamentName.includes('England')) {
+            console.error(`🏴󠁧󠁢󠁥󠁮󠁧󠁿 Found England event: ${tournamentName} - ${event.homeTeamName || ''} vs ${event.awayTeamName || ''} (Event ID: ${event.eventId || 'Unknown'})`);
+          }
+          
           if (!event.homeTeamName || !event.awayTeamName || !event.eventId) {
             processed.skipped++;
             continue;
@@ -499,16 +513,28 @@ const processEvents = (tournaments) => {
           const homeTeamLower = event.homeTeamName.toLowerCase();
           const awayTeamLower = event.awayTeamName.toLowerCase();
           
+          // Helper function to check if a team name matches any of the variations
+          const matchesTeamVariations = (name, teamKey) => {
+            if (!teamVariations[teamKey]) return false;
+            return name.includes(teamKey) || 
+                   name === teamKey.split(' ')[0] || // Simple case like "forest" for "nottingham forest"
+                   teamVariations[teamKey].some(v => name.includes(v));
+          };
+          
+          // Check for National League teams to improve odds matching
+          if (tournamentName.includes('National League') || country === 'England') {
+            // Check against all known National League teams for better matching
+            Object.keys(teamVariations).forEach(teamKey => {
+              if (matchesTeamVariations(homeTeamLower, teamKey) || matchesTeamVariations(awayTeamLower, teamKey)) {
+                console.error(`🏴󠁧󠁢󠁥󠁮󠁧󠁿 National League match: "${event.homeTeamName} vs ${event.awayTeamName}" matches team "${teamKey}"`);
+              }
+            });
+          }
+          
           // Normalize team names and match against variations - with debug logs
-          const isCrystalPalace = 
-            homeTeamLower.includes('crystal palace') || 
-            homeTeamLower === 'palace' || 
-            teamVariations['crystal palace'].some(v => homeTeamLower.includes(v));
+          const isCrystalPalace = matchesTeamVariations(homeTeamLower, 'crystal palace');
             
-          const isNottinghamForest = 
-            awayTeamLower.includes('nottingham forest') || 
-            awayTeamLower === 'forest' || 
-            teamVariations['nottingham forest'].some(v => awayTeamLower.includes(v));
+          const isNottinghamForest = matchesTeamVariations(awayTeamLower, 'nottingham forest');
           
           // Debug any potential matches
           if (homeTeamLower.includes('crystal') || homeTeamLower.includes('palace') ||
