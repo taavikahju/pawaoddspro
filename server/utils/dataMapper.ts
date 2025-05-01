@@ -270,12 +270,35 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       }
     }
     
+    // Count events by bookmaker
+    const eventsByBookmaker = {};
+    for (const bookmakerCode of bookmakerCodes) {
+      eventsByBookmaker[bookmakerCode] = 0;
+    }
+    
+    // Count how many events each bookmaker has odds for
+    for (const [eventId, eventData] of eventMap.entries()) {
+      const oddsData = eventData.oddsData || {};
+      for (const bookmakerCode of Object.keys(oddsData)) {
+        if (eventsByBookmaker[bookmakerCode] !== undefined) {
+          eventsByBookmaker[bookmakerCode]++;
+        }
+      }
+    }
+    
     // Log distribution of events by bookmaker count with emojis for better readability
     console.log(`📊 Event distribution by bookmaker count:`);
     console.log(`  - Events with 1 bookmaker: ${eventsWith1Bookmaker}`);
     console.log(`  - Events with 2 bookmakers: ${eventsWith2Bookmakers}`);
     console.log(`  - Events with 3 bookmakers: ${eventsWith3Bookmakers}`);
     console.log(`  - Events with 4+ bookmakers: ${eventsWith4Bookmakers}`);
+    
+    // Log events count by bookmaker
+    console.log(`📊 Events count by bookmaker (after mapping):`);
+    for (const [code, count] of Object.entries(eventsByBookmaker)) {
+      console.log(`  - ${code}: ${count} events`);
+    }
+    
     console.log(`✅ Processed ${eventMap.size} events with at least 3 bookmakers`);
     
     // Get all events and delete any that don't meet our criteria anymore
