@@ -117,7 +117,7 @@ export async function calculateAndStoreTournamentMargins(storage: IStorage): Pro
         bookmakerCode: data.bookmakerCode,
         countryName: data.countryName || 'Unknown',
         tournament: data.tournamentName,
-        averageMargin: averageMargin.toFixed(2),
+        averageMargin: averageMargin.toFixed(6), // Store with 6 decimal places for more precision
         eventCount: data.count
       });
       

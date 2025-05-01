@@ -158,7 +158,7 @@ export default function TournamentMarginHistoryPopup({
                   tickFormatter={(value) => `${value.toFixed(1)}%`}
                 />
                 <Tooltip 
-                  formatter={(value: any) => [`${Number(value).toFixed(2)}%`, 'Margin']}
+                  formatter={(value: any) => [`${Number(value).toFixed(4)}%`, 'Margin']}
                   labelFormatter={(label) => `Date/Time: ${label}`}
                 />
                 <Legend 
