@@ -116,7 +116,8 @@ export async function runCustomScraper(bookmakerCode: string): Promise<any[]> {
             // Convert Estonian time to UTC
             const { date: utcDate, time: utcTime } = convertEstonianToUTC(originalDate, originalTime);
             
-            console.log(`Converting time for ${item.event}: Estonian ${originalDate} ${originalTime} -> UTC ${utcDate} ${utcTime}`);
+            // Only log time conversions when debugging - these create too much noise
+            // console.log(`Converting time for ${item.event}: Estonian ${originalDate} ${originalTime} -> UTC ${utcDate} ${utcTime}`);
             
             // Map from the user's custom format to our expected format
             return {

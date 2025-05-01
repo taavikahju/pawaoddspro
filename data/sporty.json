@@ -10253,9 +10253,9 @@
     "date": "2025-05-05",
     "time": "13:00",
     "odds": {
-      "home": 1.49,
+      "home": 1.48,
       "draw": 3.9,
-      "away": 7
+      "away": 7.2
     },
     "raw": {
       "eventId": "58803479",
@@ -10263,9 +10263,9 @@
       "tournament": "Super League",
       "event": "Panseraikos FC - Volos NPS",
       "market": "1X2",
-      "home_odds": "1.49",
+      "home_odds": "1.48",
       "draw_odds": "3.90",
-      "away_odds": "7.00",
+      "away_odds": "7.20",
       "start_time": "2025-05-05 15:00"
     }
   },
@@ -13841,9 +13841,9 @@
     "date": "2025-05-03",
     "time": "03:30",
     "odds": {
-      "home": 2.85,
-      "draw": 4.1,
-      "away": 1.99
+      "home": 2.25,
+      "draw": 3.9,
+      "away": 2.45
     },
     "raw": {
       "eventId": "57033183",
@@ -13851,9 +13851,9 @@
       "tournament": "South Australia NPL",
       "event": "Campbelltown City SC - Adelaide United FC",
       "market": "1X2",
-      "home_odds": "2.85",
-      "draw_odds": "4.10",
-      "away_odds": "1.99",
+      "home_odds": "2.25",
+      "draw_odds": "3.90",
+      "away_odds": "2.45",
       "start_time": "2025-05-03 05:30"
     }
   },
@@ -13868,8 +13868,8 @@
     "time": "03:30",
     "odds": {
       "home": 4.1,
-      "draw": 4.5,
-      "away": 1.58
+      "draw": 3.9,
+      "away": 1.68
     },
     "raw": {
       "eventId": "57033181",
@@ -13878,8 +13878,8 @@
       "event": "Modbury Jets SC - North Eastern Metrostars SC",
       "market": "1X2",
       "home_odds": "4.10",
-      "draw_odds": "4.50",
-      "away_odds": "1.58",
+      "draw_odds": "3.90",
+      "away_odds": "1.68",
       "start_time": "2025-05-03 05:30"
     }
   },
@@ -13893,9 +13893,9 @@
     "date": "2025-05-03",
     "time": "03:30",
     "odds": {
-      "home": 3.6,
-      "draw": 4.3,
-      "away": 1.69
+      "home": 4.1,
+      "draw": 4,
+      "away": 1.65
     },
     "raw": {
       "eventId": "57033177",
@@ -13903,9 +13903,9 @@
       "tournament": "South Australia NPL",
       "event": "Para Hills Knights SC - Adelaide City FC",
       "market": "1X2",
-      "home_odds": "3.60",
-      "draw_odds": "4.30",
-      "away_odds": "1.69",
+      "home_odds": "4.10",
+      "draw_odds": "4.00",
+      "away_odds": "1.65",
       "start_time": "2025-05-03 05:30"
     }
   },
@@ -13919,9 +13919,9 @@
     "date": "2025-05-03",
     "time": "03:30",
     "odds": {
-      "home": 1.67,
-      "draw": 4.4,
-      "away": 3.7
+      "home": 1.62,
+      "draw": 4.1,
+      "away": 4.2
     },
     "raw": {
       "eventId": "57033179",
@@ -13929,9 +13929,9 @@
       "tournament": "South Australia NPL",
       "event": "Playford City - West Torrens Birkalla",
       "market": "1X2",
-      "home_odds": "1.67",
-      "draw_odds": "4.40",
-      "away_odds": "3.70",
+      "home_odds": "1.62",
+      "draw_odds": "4.10",
+      "away_odds": "4.20",
       "start_time": "2025-05-03 05:30"
     }
   },
@@ -15115,9 +15115,9 @@
     "date": "2025-05-03",
     "time": "04:00",
     "odds": {
-      "home": 1.18,
-      "draw": 6.8,
-      "away": 9.4
+      "home": 1.16,
+      "draw": 6.9,
+      "away": 10.5
     },
     "raw": {
       "eventId": "60217725",
@@ -15125,9 +15125,9 @@
       "tournament": "Queensland Premier League 2",
       "event": "Robina City - Mitchelton FC",
       "market": "1X2",
-      "home_odds": "1.18",
-      "draw_odds": "6.80",
-      "away_odds": "9.40",
+      "home_odds": "1.16",
+      "draw_odds": "6.90",
+      "away_odds": "10.50",
       "start_time": "2025-05-03 06:00"
     }
   },
@@ -15141,9 +15141,9 @@
     "date": "2025-05-03",
     "time": "06:00",
     "odds": {
-      "home": 2.2,
+      "home": 2.25,
       "draw": 3.6,
-      "away": 2.75
+      "away": 2.65
     },
     "raw": {
       "eventId": "60265399",
@@ -15151,9 +15151,9 @@
       "tournament": "Queensland Premier League 2",
       "event": "Maroochydore Swans FC - Samford Rangers",
       "market": "1X2",
-      "home_odds": "2.20",
+      "home_odds": "2.25",
       "draw_odds": "3.60",
-      "away_odds": "2.75",
+      "away_odds": "2.65",
       "start_time": "2025-05-03 08:00"
     }
   },
@@ -15181,6 +15181,32 @@
       "draw_odds": "4.60",
       "away_odds": "4.30",
       "start_time": "2025-05-03 08:00"
+    }
+  },
+  {
+    "id": "60258997",
+    "eventId": "60258997",
+    "teams": "North Star FC - Taringa Rovers SFC",
+    "league": "Queensland Premier League 2",
+    "sport": "football",
+    "country": "Australia",
+    "date": "2025-05-04",
+    "time": "03:15",
+    "odds": {
+      "home": 1.42,
+      "draw": 5.1,
+      "away": 5.1
+    },
+    "raw": {
+      "eventId": "60258997",
+      "country": "Australia",
+      "tournament": "Queensland Premier League 2",
+      "event": "North Star FC - Taringa Rovers SFC",
+      "market": "1X2",
+      "home_odds": "1.42",
+      "draw_odds": "5.10",
+      "away_odds": "5.10",
+      "start_time": "2025-05-04 05:15"
     }
   },
   {
@@ -15259,6 +15285,32 @@
       "draw_odds": "4.40",
       "away_odds": "5.10",
       "start_time": "2025-05-02 10:30"
+    }
+  },
+  {
+    "id": "56592907",
+    "eventId": "56592907",
+    "teams": "Manningham United Blues - Northcote City",
+    "league": "Victoria Premier League 1",
+    "sport": "football",
+    "country": "Australia",
+    "date": "2025-05-03",
+    "time": "03:15",
+    "odds": {
+      "home": 2.4,
+      "draw": 4,
+      "away": 2.35
+    },
+    "raw": {
+      "eventId": "56592907",
+      "country": "Australia",
+      "tournament": "Victoria Premier League 1",
+      "event": "Manningham United Blues - Northcote City",
+      "market": "1X2",
+      "home_odds": "2.40",
+      "draw_odds": "4.00",
+      "away_odds": "2.35",
+      "start_time": "2025-05-03 05:15"
     }
   },
   {
@@ -17247,9 +17299,9 @@
     "date": "2025-05-01",
     "time": "17:00",
     "odds": {
-      "home": 2.15,
+      "home": 2.2,
       "draw": 3.1,
-      "away": 3.5
+      "away": 3.4
     },
     "raw": {
       "eventId": "60132419",
@@ -17257,9 +17309,9 @@
       "tournament": "Botola Pro D1",
       "event": "Rs Berkane - Difaa Hassani d'el-Jadida",
       "market": "1X2",
-      "home_odds": "2.15",
+      "home_odds": "2.20",
       "draw_odds": "3.10",
-      "away_odds": "3.50",
+      "away_odds": "3.40",
       "start_time": "2025-05-01 19:00"
     }
   },
@@ -17663,9 +17715,9 @@
     "date": "2025-05-01",
     "time": "14:00",
     "odds": {
-      "home": 5.9,
-      "draw": 4.3,
-      "away": 1.43
+      "home": 6.2,
+      "draw": 4.4,
+      "away": 1.41
     },
     "raw": {
       "eventId": "58061647",
@@ -17673,9 +17725,9 @@
       "tournament": "Esiliiga",
       "event": "Nomme Kalju FC U21 - Tartu JK Welco",
       "market": "1X2",
-      "home_odds": "5.90",
-      "draw_odds": "4.30",
-      "away_odds": "1.43",
+      "home_odds": "6.20",
+      "draw_odds": "4.40",
+      "away_odds": "1.41",
       "start_time": "2025-05-01 16:00"
     }
   },
@@ -19470,32 +19522,6 @@
       "home_odds": "2.30",
       "draw_odds": "3.00",
       "away_odds": "3.10",
-      "start_time": "2025-05-04 20:00"
-    }
-  },
-  {
-    "id": "57250697",
-    "eventId": "57250697",
-    "teams": "Gimnasia Y Tiro de Salta - CA All Boys",
-    "league": "Primera Nacional",
-    "sport": "football",
-    "country": "Argentina",
-    "date": "2025-05-04",
-    "time": "18:00",
-    "odds": {
-      "home": 2.05,
-      "draw": 2.85,
-      "away": 4
-    },
-    "raw": {
-      "eventId": "57250697",
-      "country": "Argentina",
-      "tournament": "Primera Nacional",
-      "event": "Gimnasia Y Tiro de Salta - CA All Boys",
-      "market": "1X2",
-      "home_odds": "2.05",
-      "draw_odds": "2.85",
-      "away_odds": "4.00",
       "start_time": "2025-05-04 20:00"
     }
   },
@@ -21762,6 +21788,136 @@
     }
   },
   {
+    "id": "53062349",
+    "eventId": "53062349",
+    "teams": "Espeleno Atletico - CD San Roque",
+    "league": "Tercera Federacion, Group 10",
+    "sport": "football",
+    "country": "Spain Amateur",
+    "date": "2025-05-01",
+    "time": "14:00",
+    "odds": {
+      "home": 3,
+      "draw": 3.3,
+      "away": 2.15
+    },
+    "raw": {
+      "eventId": "53062349",
+      "country": "Spain Amateur",
+      "tournament": "Tercera Federacion, Group 10",
+      "event": "Espeleno Atletico - CD San Roque",
+      "market": "1X2",
+      "home_odds": "3.00",
+      "draw_odds": "3.30",
+      "away_odds": "2.15",
+      "start_time": "2025-05-01 16:00"
+    }
+  },
+  {
+    "id": "53062341",
+    "eventId": "53062341",
+    "teams": "Sevilla FC C - CD Ciudad de Lucena",
+    "league": "Tercera Federacion, Group 10",
+    "sport": "football",
+    "country": "Spain Amateur",
+    "date": "2025-05-01",
+    "time": "14:00",
+    "odds": {
+      "home": 4.1,
+      "draw": 2.85,
+      "away": 1.99
+    },
+    "raw": {
+      "eventId": "53062341",
+      "country": "Spain Amateur",
+      "tournament": "Tercera Federacion, Group 10",
+      "event": "Sevilla FC C - CD Ciudad de Lucena",
+      "market": "1X2",
+      "home_odds": "4.10",
+      "draw_odds": "2.85",
+      "away_odds": "1.99",
+      "start_time": "2025-05-01 16:00"
+    }
+  },
+  {
+    "id": "53062355",
+    "eventId": "53062355",
+    "teams": "UD Tomares - La Palma CF",
+    "league": "Tercera Federacion, Group 10",
+    "sport": "football",
+    "country": "Spain Amateur",
+    "date": "2025-05-01",
+    "time": "14:00",
+    "odds": {
+      "home": 1.6,
+      "draw": 3.6,
+      "away": 5.1
+    },
+    "raw": {
+      "eventId": "53062355",
+      "country": "Spain Amateur",
+      "tournament": "Tercera Federacion, Group 10",
+      "event": "UD Tomares - La Palma CF",
+      "market": "1X2",
+      "home_odds": "1.60",
+      "draw_odds": "3.60",
+      "away_odds": "5.10",
+      "start_time": "2025-05-01 16:00"
+    }
+  },
+  {
+    "id": "53063029",
+    "eventId": "53063029",
+    "teams": "UD Caravaca - CA Pulpileno",
+    "league": "Tercera Federacion, Group 13",
+    "sport": "football",
+    "country": "Spain Amateur",
+    "date": "2025-05-01",
+    "time": "07:30",
+    "odds": {
+      "home": 2.95,
+      "draw": 3,
+      "away": 2.35
+    },
+    "raw": {
+      "eventId": "53063029",
+      "country": "Spain Amateur",
+      "tournament": "Tercera Federacion, Group 13",
+      "event": "UD Caravaca - CA Pulpileno",
+      "market": "1X2",
+      "home_odds": "2.95",
+      "draw_odds": "3.00",
+      "away_odds": "2.35",
+      "start_time": "2025-05-01 09:30"
+    }
+  },
+  {
+    "id": "53459871",
+    "eventId": "53459871",
+    "teams": "Burgos CF Promesas - Ciudad Rodrigo CF",
+    "league": "Tercera Federacion, Group 8",
+    "sport": "football",
+    "country": "Spain Amateur",
+    "date": "2025-05-01",
+    "time": "08:00",
+    "odds": {
+      "home": 1.56,
+      "draw": 3.75,
+      "away": 5.2
+    },
+    "raw": {
+      "eventId": "53459871",
+      "country": "Spain Amateur",
+      "tournament": "Tercera Federacion, Group 8",
+      "event": "Burgos CF Promesas - Ciudad Rodrigo CF",
+      "market": "1X2",
+      "home_odds": "1.56",
+      "draw_odds": "3.75",
+      "away_odds": "5.20",
+      "start_time": "2025-05-01 10:00"
+    }
+  },
+  {
     "id": "53459867",
     "eventId": "53459867",
     "teams": "CD Laguna de Duero - CD Mirandes B",
@@ -21993,6 +22149,58 @@
       "draw_odds": "4.70",
       "away_odds": "6.60",
       "start_time": "2025-05-01 10:00"
+    }
+  },
+  {
+    "id": "53059843",
+    "eventId": "53059843",
+    "teams": "CD El Ejido 2012 - Udc Torredonjimeno",
+    "league": "Tercera Federacion, Group 9",
+    "sport": "football",
+    "country": "Spain Amateur",
+    "date": "2025-05-01",
+    "time": "13:30",
+    "odds": {
+      "home": 2.65,
+      "draw": 3.5,
+      "away": 2.3
+    },
+    "raw": {
+      "eventId": "53059843",
+      "country": "Spain Amateur",
+      "tournament": "Tercera Federacion, Group 9",
+      "event": "CD El Ejido 2012 - Udc Torredonjimeno",
+      "market": "1X2",
+      "home_odds": "2.65",
+      "draw_odds": "3.50",
+      "away_odds": "2.30",
+      "start_time": "2025-05-01 15:30"
+    }
+  },
+  {
+    "id": "53298069",
+    "eventId": "53298069",
+    "teams": "Real Jaen CF - FC Malaga City",
+    "league": "Tercera Federacion, Group 9",
+    "sport": "football",
+    "country": "Spain Amateur",
+    "date": "2025-05-01",
+    "time": "14:00",
+    "odds": {
+      "home": 1.11,
+      "draw": 7.9,
+      "away": 14
+    },
+    "raw": {
+      "eventId": "53298069",
+      "country": "Spain Amateur",
+      "tournament": "Tercera Federacion, Group 9",
+      "event": "Real Jaen CF - FC Malaga City",
+      "market": "1X2",
+      "home_odds": "1.11",
+      "draw_odds": "7.90",
+      "away_odds": "14.00",
+      "start_time": "2025-05-01 16:00"
     }
   },
   {
@@ -23669,9 +23877,9 @@
     "date": "2025-05-01",
     "time": "14:00",
     "odds": {
-      "home": 3.4,
+      "home": 3.6,
       "draw": 4,
-      "away": 1.8
+      "away": 1.75
     },
     "raw": {
       "eventId": "54640411",
@@ -23679,9 +23887,9 @@
       "tournament": "III Liga, Group 1",
       "event": "Bron Radom - Unia Skierniewice",
       "market": "1X2",
-      "home_odds": "3.40",
+      "home_odds": "3.60",
       "draw_odds": "4.00",
-      "away_odds": "1.80",
+      "away_odds": "1.75",
       "start_time": "2025-05-01 16:00"
     }
   },
@@ -26806,6 +27014,58 @@
     }
   },
   {
+    "id": "56958375",
+    "eventId": "56958375",
+    "teams": "UMF Selfoss - UMF Grindavik",
+    "league": "1. deild",
+    "sport": "football",
+    "country": "Iceland",
+    "date": "2025-05-02",
+    "time": "16:00",
+    "odds": {
+      "home": 2.35,
+      "draw": 4.1,
+      "away": 2.35
+    },
+    "raw": {
+      "eventId": "56958375",
+      "country": "Iceland",
+      "tournament": "1. deild",
+      "event": "UMF Selfoss - UMF Grindavik",
+      "market": "1X2",
+      "home_odds": "2.35",
+      "draw_odds": "4.10",
+      "away_odds": "2.35",
+      "start_time": "2025-05-02 18:00"
+    }
+  },
+  {
+    "id": "56958371",
+    "eventId": "56958371",
+    "teams": "Fjolnir - Keflavik IF",
+    "league": "1. deild",
+    "sport": "football",
+    "country": "Iceland",
+    "date": "2025-05-02",
+    "time": "16:30",
+    "odds": {
+      "home": 5.25,
+      "draw": 4.4,
+      "away": 1.49
+    },
+    "raw": {
+      "eventId": "56958371",
+      "country": "Iceland",
+      "tournament": "1. deild",
+      "event": "Fjolnir - Keflavik IF",
+      "market": "1X2",
+      "home_odds": "5.25",
+      "draw_odds": "4.40",
+      "away_odds": "1.49",
+      "start_time": "2025-05-02 18:30"
+    }
+  },
+  {
     "id": "56958377",
     "eventId": "56958377",
     "teams": "UMF Njardvik - Fylkir Reykjavik",
@@ -27361,9 +27621,9 @@
     "date": "2025-05-01",
     "time": "04:30",
     "odds": {
-      "home": 1.97,
+      "home": 1.94,
       "draw": 3,
-      "away": 3.8
+      "away": 3.9
     },
     "raw": {
       "eventId": "58108725",
@@ -27371,9 +27631,9 @@
       "tournament": "Premier League",
       "event": "Ethiopian Coffee SC - Dire Dawa Kenema",
       "market": "1X2",
-      "home_odds": "1.97",
+      "home_odds": "1.94",
       "draw_odds": "3.00",
-      "away_odds": "3.80",
+      "away_odds": "3.90",
       "start_time": "2025-05-01 06:30"
     }
   },
@@ -29276,32 +29536,6 @@
     }
   },
   {
-    "id": "57639723",
-    "eventId": "57639723",
-    "teams": "Utah Royals FC - North Carolina Courage",
-    "league": "National Womens Soccer League",
-    "sport": "football",
-    "country": "USA",
-    "date": "2025-05-04",
-    "time": "00:00",
-    "odds": {
-      "home": 2.65,
-      "draw": 3.1,
-      "away": 2.5
-    },
-    "raw": {
-      "eventId": "57639723",
-      "country": "USA",
-      "tournament": "National Womens Soccer League",
-      "event": "Utah Royals FC - North Carolina Courage",
-      "market": "1X2",
-      "home_odds": "2.65",
-      "draw_odds": "3.10",
-      "away_odds": "2.50",
-      "start_time": "2025-05-04 02:00"
-    }
-  },
-  {
     "id": "57639725",
     "eventId": "57639725",
     "teams": "Gotham FC - Chicago Red Stars",
@@ -29403,6 +29637,110 @@
       "draw_odds": "3.60",
       "away_odds": "3.20",
       "start_time": "2025-05-04 07:00"
+    }
+  },
+  {
+    "id": "60264181",
+    "eventId": "60264181",
+    "teams": "Illawarra Stingrays - Macarthur Rams",
+    "league": "NSW NPL, Women",
+    "sport": "football",
+    "country": "Australia",
+    "date": "2025-05-04",
+    "time": "05:00",
+    "odds": {
+      "home": 1.62,
+      "draw": 3.9,
+      "away": 4.25
+    },
+    "raw": {
+      "eventId": "60264181",
+      "country": "Australia",
+      "tournament": "NSW NPL, Women",
+      "event": "Illawarra Stingrays - Macarthur Rams",
+      "market": "1X2",
+      "home_odds": "1.62",
+      "draw_odds": "3.90",
+      "away_odds": "4.25",
+      "start_time": "2025-05-04 07:00"
+    }
+  },
+  {
+    "id": "60264183",
+    "eventId": "60264183",
+    "teams": "MT Druitt Town Rangers - Northern Tigers",
+    "league": "NSW NPL, Women",
+    "sport": "football",
+    "country": "Australia",
+    "date": "2025-05-04",
+    "time": "05:00",
+    "odds": {
+      "home": 3.3,
+      "draw": 3.6,
+      "away": 1.88
+    },
+    "raw": {
+      "eventId": "60264183",
+      "country": "Australia",
+      "tournament": "NSW NPL, Women",
+      "event": "MT Druitt Town Rangers - Northern Tigers",
+      "market": "1X2",
+      "home_odds": "3.30",
+      "draw_odds": "3.60",
+      "away_odds": "1.88",
+      "start_time": "2025-05-04 07:00"
+    }
+  },
+  {
+    "id": "60258993",
+    "eventId": "60258993",
+    "teams": "Gladesville Ravens - Unsw FC",
+    "league": "NSW NPL, Women",
+    "sport": "football",
+    "country": "Australia",
+    "date": "2025-05-04",
+    "time": "05:10",
+    "odds": {
+      "home": 3.2,
+      "draw": 3.4,
+      "away": 1.98
+    },
+    "raw": {
+      "eventId": "60258993",
+      "country": "Australia",
+      "tournament": "NSW NPL, Women",
+      "event": "Gladesville Ravens - Unsw FC",
+      "market": "1X2",
+      "home_odds": "3.20",
+      "draw_odds": "3.40",
+      "away_odds": "1.98",
+      "start_time": "2025-05-04 07:10"
+    }
+  },
+  {
+    "id": "56927017",
+    "eventId": "56927017",
+    "teams": "Sunshine Coast Wanderers FC - Mitchelton FC",
+    "league": "Queensland NPL, Women",
+    "sport": "football",
+    "country": "Australia",
+    "date": "2025-05-02",
+    "time": "07:30",
+    "odds": {
+      "home": 1.48,
+      "draw": 4.9,
+      "away": 4.6
+    },
+    "raw": {
+      "eventId": "56927017",
+      "country": "Australia",
+      "tournament": "Queensland NPL, Women",
+      "event": "Sunshine Coast Wanderers FC - Mitchelton FC",
+      "market": "1X2",
+      "home_odds": "1.48",
+      "draw_odds": "4.90",
+      "away_odds": "4.60",
+      "start_time": "2025-05-02 09:30"
     }
   },
   {
