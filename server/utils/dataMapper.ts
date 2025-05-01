@@ -72,14 +72,22 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
         if (event.odds) {
           bookmakerOdds[bookmakerCode] = event.odds;
           hasOdds = true;
-        } else if (event.home_odds && event.draw_odds && event.away_odds) {
-          // Format for scrapers that provide odds directly
-          bookmakerOdds[bookmakerCode] = {
-            home: parseFloat(event.home_odds),
-            draw: parseFloat(event.draw_odds),
-            away: parseFloat(event.away_odds)
-          };
-          hasOdds = true;
+        } else if (event.home_odds !== undefined || event.draw_odds !== undefined || event.away_odds !== undefined) {
+          // Format for scrapers that provide odds directly - more permissive check
+          // Convert to numeric and provide default of 0
+          const homeOdds = event.home_odds ? parseFloat(event.home_odds) : 0;
+          const drawOdds = event.draw_odds ? parseFloat(event.draw_odds) : 0;
+          const awayOdds = event.away_odds ? parseFloat(event.away_odds) : 0;
+          
+          // Only consider valid if we have at least one non-zero odds
+          if (homeOdds > 0 || drawOdds > 0 || awayOdds > 0) {
+            bookmakerOdds[bookmakerCode] = {
+              home: homeOdds,
+              draw: drawOdds,
+              away: awayOdds
+            };
+            hasOdds = true;
+          }
         }
         
         // If this bookmaker has odds for this event, increment the counter

@@ -182,6 +182,32 @@
     }
   },
   {
+    "id": "53459877",
+    "eventId": "53459877",
+    "teams": "CD Villaralbo - CA Bembibre",
+    "league": "Tercera Federacion, Group 8",
+    "sport": "football",
+    "country": "Spain",
+    "date": "2025-05-01",
+    "time": "10:00",
+    "odds": {
+      "home": 2.13,
+      "draw": 3.2,
+      "away": 3.1
+    },
+    "raw": {
+      "eventId": "53459877",
+      "country": "Spain",
+      "tournament": "Tercera Federacion, Group 8",
+      "event": "CD Villaralbo - CA Bembibre",
+      "market": "1X2 - FT",
+      "home_odds": "2.13",
+      "draw_odds": "3.2",
+      "away_odds": "3.1",
+      "start_time": "2025-05-01 10:00"
+    }
+  },
+  {
     "id": "58023719",
     "eventId": "58023719",
     "teams": "SK Super Nova - Riga FC",
@@ -685,9 +711,9 @@
     "date": "2025-05-01",
     "time": "11:00",
     "odds": {
-      "home": 6.5,
-      "draw": 4.7,
-      "away": 1.36
+      "home": 6.25,
+      "draw": 4.6,
+      "away": 1.38
     },
     "raw": {
       "eventId": "59284705",
@@ -695,9 +721,9 @@
       "tournament": "Svenska Cup Women",
       "event": "IFK Norrkoping DFK - Hacken Gothenburg",
       "market": "1X2 - FT",
-      "home_odds": "6.5",
-      "draw_odds": "4.7",
-      "away_odds": "1.36",
+      "home_odds": "6.25",
+      "draw_odds": "4.6",
+      "away_odds": "1.38",
       "start_time": "2025-05-01 11:00"
     }
   },
@@ -3155,7 +3181,7 @@
     "date": "2025-05-01",
     "time": "23:00",
     "odds": {
-      "home": 11,
+      "home": 12,
       "draw": 5.25,
       "away": 1.21
     },
@@ -3165,7 +3191,7 @@
       "tournament": "Copa do Brasil",
       "event": "Botafogo FC PB - CR Flamengo RJ",
       "market": "1X2 - FT",
-      "home_odds": "11.0",
+      "home_odds": "12.0",
       "draw_odds": "5.25",
       "away_odds": "1.21",
       "start_time": "2025-05-01 23:00"
@@ -3234,8 +3260,8 @@
     "time": "00:00",
     "odds": {
       "home": 1.57,
-      "draw": 3.5,
-      "away": 5.5
+      "draw": 3.6,
+      "away": 5.25
     },
     "raw": {
       "eventId": "58379571",
@@ -3244,8 +3270,8 @@
       "event": "Guayaquil City FC - 22 de Julio FC",
       "market": "1X2 - FT",
       "home_odds": "1.57",
-      "draw_odds": "3.5",
-      "away_odds": "5.5",
+      "draw_odds": "3.6",
+      "away_odds": "5.25",
       "start_time": "2025-05-02 00:00"
     }
   },
@@ -11085,9 +11111,9 @@
     "date": "2025-05-03",
     "time": "11:00",
     "odds": {
-      "home": 2.4,
+      "home": 2.5,
       "draw": 3.35,
-      "away": 2.6
+      "away": 2.5
     },
     "raw": {
       "eventId": "57131995",
@@ -11095,9 +11121,9 @@
       "tournament": "Ettan, Sodra",
       "event": "Skovde AIK - Jonkopings Sodra IF",
       "market": "1X2 - FT",
-      "home_odds": "2.4",
+      "home_odds": "2.5",
       "draw_odds": "3.35",
-      "away_odds": "2.6",
+      "away_odds": "2.5",
       "start_time": "2025-05-03 11:00"
     }
   },
@@ -13347,9 +13373,9 @@
     "date": "2025-05-03",
     "time": "14:00",
     "odds": {
-      "home": 3.1,
+      "home": 3.35,
       "draw": 3.45,
-      "away": 2.12
+      "away": 2.02
     },
     "raw": {
       "eventId": "51116911",
@@ -13357,9 +13383,9 @@
       "tournament": "Scotland League One",
       "event": "Annan Athletic - Cove Rangers",
       "market": "1X2 - FT",
-      "home_odds": "3.1",
+      "home_odds": "3.35",
       "draw_odds": "3.45",
-      "away_odds": "2.12",
+      "away_odds": "2.02",
       "start_time": "2025-05-03 14:00"
     }
   },
@@ -16844,32 +16870,6 @@
       "home_odds": "2.55",
       "draw_odds": "3.55",
       "away_odds": "2.6",
-      "start_time": "2025-05-03 18:30"
-    }
-  },
-  {
-    "id": "56527291",
-    "eventId": "56527291",
-    "teams": "Longford Town FC - Wexford FC",
-    "league": "First Division",
-    "sport": "football",
-    "country": "Ireland",
-    "date": "2025-05-03",
-    "time": "18:30",
-    "odds": {
-      "home": 3.45,
-      "draw": 3.35,
-      "away": 1.95
-    },
-    "raw": {
-      "eventId": "56527291",
-      "country": "Ireland",
-      "tournament": "First Division",
-      "event": "Longford Town FC - Wexford FC",
-      "market": "1X2 - FT",
-      "home_odds": "3.45",
-      "draw_odds": "3.35",
-      "away_odds": "1.95",
       "start_time": "2025-05-03 18:30"
     }
   },
@@ -21970,6 +21970,32 @@
     }
   },
   {
+    "id": "51857249",
+    "eventId": "51857249",
+    "teams": "Manisa Futbol Kulubu - Bandirmaspor",
+    "league": "1. Lig",
+    "sport": "football",
+    "country": "Turkey",
+    "date": "2025-05-04",
+    "time": "13:00",
+    "odds": {
+      "home": 2.95,
+      "draw": 3.35,
+      "away": 2.14
+    },
+    "raw": {
+      "eventId": "51857249",
+      "country": "Turkey",
+      "tournament": "1. Lig",
+      "event": "Manisa Futbol Kulubu - Bandirmaspor",
+      "market": "1X2 - FT",
+      "home_odds": "2.95",
+      "draw_odds": "3.35",
+      "away_odds": "2.14",
+      "start_time": "2025-05-04 13:00"
+    }
+  },
+  {
     "id": "51857245",
     "eventId": "51857245",
     "teams": "Esenler Erokspor - Istanbulspor AS",
@@ -23045,9 +23071,9 @@
     "date": "2025-05-04",
     "time": "14:00",
     "odds": {
-      "home": 1.16,
-      "draw": 6.25,
-      "away": 12.5
+      "home": 1.14,
+      "draw": 6.5,
+      "away": 13.5
     },
     "raw": {
       "eventId": "57639291",
@@ -23055,9 +23081,9 @@
       "tournament": "Estonia Meistriliiga",
       "event": "Paide Linnameeskond - FC Kuressaare",
       "market": "1X2 - FT",
-      "home_odds": "1.16",
-      "draw_odds": "6.25",
-      "away_odds": "12.5",
+      "home_odds": "1.14",
+      "draw_odds": "6.5",
+      "away_odds": "13.5",
       "start_time": "2025-05-04 14:00"
     }
   },
@@ -26520,6 +26546,32 @@
     }
   },
   {
+    "id": "56690575",
+    "eventId": "56690575",
+    "teams": "Sporting Kansas City - Los Angeles Galaxy",
+    "league": "Major League Soccer",
+    "sport": "football",
+    "country": "USA",
+    "date": "2025-05-04",
+    "time": "23:00",
+    "odds": {
+      "home": 1.99,
+      "draw": 3.65,
+      "away": 3.5
+    },
+    "raw": {
+      "eventId": "56690575",
+      "country": "USA",
+      "tournament": "Major League Soccer",
+      "event": "Sporting Kansas City - Los Angeles Galaxy",
+      "market": "1X2 - FT",
+      "home_odds": "1.99",
+      "draw_odds": "3.65",
+      "away_odds": "3.5",
+      "start_time": "2025-05-04 23:00"
+    }
+  },
+  {
     "id": "60132693",
     "eventId": "60132693",
     "teams": "Deportivo Binacional FC - Los Chankas CYC",
@@ -27452,6 +27504,32 @@
       "home_odds": "2.3",
       "draw_odds": "3.55",
       "away_odds": "2.9",
+      "start_time": "2025-05-05 17:00"
+    }
+  },
+  {
+    "id": "57034221",
+    "eventId": "57034221",
+    "teams": "Assyriska FF - Vasalunds IF",
+    "league": "Ettan, Norra",
+    "sport": "football",
+    "country": "Sweden",
+    "date": "2025-05-05",
+    "time": "17:00",
+    "odds": {
+      "home": 2.8,
+      "draw": 3.4,
+      "away": 2.22
+    },
+    "raw": {
+      "eventId": "57034221",
+      "country": "Sweden",
+      "tournament": "Ettan, Norra",
+      "event": "Assyriska FF - Vasalunds IF",
+      "market": "1X2 - FT",
+      "home_odds": "2.8",
+      "draw_odds": "3.4",
+      "away_odds": "2.22",
       "start_time": "2025-05-05 17:00"
     }
   },

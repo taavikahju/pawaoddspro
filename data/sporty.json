@@ -8563,8 +8563,8 @@
     "date": "2025-05-01",
     "time": "23:00",
     "odds": {
-      "home": 12.5,
-      "draw": 5.8,
+      "home": 13,
+      "draw": 5.75,
       "away": 1.25
     },
     "raw": {
@@ -8573,8 +8573,8 @@
       "tournament": "Copa do Brasil",
       "event": "Botafogo FC PB - CR Flamengo RJ",
       "market": "1X2",
-      "home_odds": "12.50",
-      "draw_odds": "5.80",
+      "home_odds": "13.00",
+      "draw_odds": "5.75",
       "away_odds": "1.25",
       "start_time": "2025-05-01 23:00"
     }
@@ -21147,9 +21147,9 @@
     "date": "2025-05-03",
     "time": "11:00",
     "odds": {
-      "home": 2.45,
+      "home": 2.5,
       "draw": 3.4,
-      "away": 2.6
+      "away": 2.5
     },
     "raw": {
       "eventId": "57131995",
@@ -21157,9 +21157,9 @@
       "tournament": "Ettan, Sodra",
       "event": "Skovde AIK - Jonkopings Sodra IF",
       "market": "1X2",
-      "home_odds": "2.45",
+      "home_odds": "2.50",
       "draw_odds": "3.40",
-      "away_odds": "2.60",
+      "away_odds": "2.50",
       "start_time": "2025-05-03 11:00"
     }
   },
@@ -22187,9 +22187,9 @@
     "date": "2025-05-01",
     "time": "10:00",
     "odds": {
-      "home": 1.59,
+      "home": 1.61,
       "draw": 3.6,
-      "away": 5.2
+      "away": 4.9
     },
     "raw": {
       "eventId": "53062345",
@@ -22197,9 +22197,9 @@
       "tournament": "Tercera Federacion, Group 10",
       "event": "CD Pozoblanco - Conil CF",
       "market": "1X2",
-      "home_odds": "1.59",
+      "home_odds": "1.61",
       "draw_odds": "3.60",
-      "away_odds": "5.20",
+      "away_odds": "4.90",
       "start_time": "2025-05-01 10:00"
     }
   },
@@ -22434,6 +22434,32 @@
       "home_odds": "9.60",
       "draw_odds": "4.90",
       "away_odds": "1.26",
+      "start_time": "2025-05-01 10:00"
+    }
+  },
+  {
+    "id": "53459877",
+    "eventId": "53459877",
+    "teams": "CD Villaralbo - Atletico Bembibre",
+    "league": "Tercera Federacion, Group 8",
+    "sport": "football",
+    "country": "Spain Amateur",
+    "date": "2025-05-01",
+    "time": "10:00",
+    "odds": {
+      "home": 2.15,
+      "draw": 3.2,
+      "away": 3.1
+    },
+    "raw": {
+      "eventId": "53459877",
+      "country": "Spain Amateur",
+      "tournament": "Tercera Federacion, Group 8",
+      "event": "CD Villaralbo - Atletico Bembibre",
+      "market": "1X2",
+      "home_odds": "2.15",
+      "draw_odds": "3.20",
+      "away_odds": "3.10",
       "start_time": "2025-05-01 10:00"
     }
   },
@@ -27257,9 +27283,9 @@
     "date": "2025-05-01",
     "time": "12:00",
     "odds": {
-      "home": 2.35,
+      "home": 2.4,
       "draw": 4.2,
-      "away": 2.3
+      "away": 2.25
     },
     "raw": {
       "eventId": "57356229",
@@ -27267,9 +27293,9 @@
       "tournament": "3rd Division Group 5",
       "event": "Torvastad - Brodd",
       "market": "1X2",
-      "home_odds": "2.35",
+      "home_odds": "2.40",
       "draw_odds": "4.20",
-      "away_odds": "2.30",
+      "away_odds": "2.25",
       "start_time": "2025-05-01 12:00"
     }
   },
