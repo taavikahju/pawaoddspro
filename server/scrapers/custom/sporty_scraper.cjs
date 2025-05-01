@@ -511,17 +511,23 @@ const processEvents = (tournaments) => {
             continue;
           }
           
-          // Keep the original eventId format (sr:match:12345) as this is the industry standard
-          // The data mapper will handle normalizing this format when needed
-          const eventId = event.eventId;
+          // Normalize eventId by removing the 'sr:match:' prefix to match other bookmakers
+          let eventId = event.eventId;
           if (!eventId) {
             processed.skipped++;
             continue;
           }
           
+          // Extract just the numeric part of the ID (e.g., "sr:match:12345" -> "12345")
+          if (typeof eventId === 'string' && eventId.includes('sr:match:')) {
+            const originalId = eventId;
+            eventId = eventId.replace(/\D/g, '');
+            console.error(`Normalized Sportybet eventId: ${originalId} → ${eventId}`);
+          }
+          
           // Log to debug Sportybet event ID format
-          if (DEBUG && Math.random() < 0.01) { // Only log ~1% of events to reduce noise
-            console.error(`🔍 Sportybet eventId sample: ${eventId}`);
+          if (DEBUG) { // Increase logging to see more samples
+            console.error(`🔍 Sportybet eventId (normalized): ${eventId}`);
           }
           
           // Check for our specific target event: Crystal Palace vs Nottingham Forest
