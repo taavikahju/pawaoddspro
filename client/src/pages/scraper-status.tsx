@@ -1,47 +1,61 @@
 import React from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import Layout from '@/components/Layout';
 import ScraperStatusCard from '@/components/ScraperStatusCard';
 import ScraperActivityFeed from '@/components/ScraperActivityFeed';
 import { Database, Server, Clock, AlertCircle, Activity } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+// Keep import for backward compatibility
 import { useWebSocket } from '@/hooks/use-websocket';
 import { useToast } from '@/hooks/use-toast';
 
 export default function ScraperStatus() {
   const { toast } = useToast();
-  const { isConnected, runScrapers } = useWebSocket();
+  // Keep useWebSocket for compatibility but add direct API functionality
+  const { isConnected } = useWebSocket();
   
   // Fetch scraper statuses
   const { 
     data: scraperStatuses = [],
     isLoading 
-  } = useQuery({ 
+  } = useQuery<any[]>({ 
     queryKey: ['/api/scrapers/status'],
     refetchInterval: 30000, // Refresh every 30 seconds
   });
   
+  // Create mutation to run scrapers
+  const runScrapersMutation = useMutation({
+    mutationFn: async () => {
+      const response = await fetch('/api/scrapers/run', {
+        method: 'POST',
+      });
+      if (!response.ok) {
+        throw new Error('Failed to trigger scrapers');
+      }
+      return response.json();
+    },
+    onSuccess: () => {
+      toast({
+        title: "Scrapers triggered",
+        description: "Scrapers are now running. This may take a few minutes.",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error triggering scrapers",
+        description: error.message,
+        variant: "destructive"
+      });
+    }
+  });
+  
   // Count the number of active scrapers
-  const activeScrapers = scraperStatuses.filter((scraper: any) => 
-    scraper.status === 'Running'
-  ).length;
+  const activeScrapers = Array.isArray(scraperStatuses) ? 
+    scraperStatuses.filter((scraper: any) => scraper.status === 'Running').length : 0;
   
   // Handle manual trigger of scrapers
   const handleRunScrapers = () => {
-    if (!isConnected) {
-      toast({
-        title: "WebSocket not connected",
-        description: "Cannot trigger scrapers. Please try again later.",
-        variant: "destructive"
-      });
-      return;
-    }
-    
-    runScrapers();
-    toast({
-      title: "Scrapers triggered",
-      description: "Scrapers are now running. This may take a few minutes.",
-    });
+    runScrapersMutation.mutate();
   };
   
   return (

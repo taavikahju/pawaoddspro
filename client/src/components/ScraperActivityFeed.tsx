@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
+// Keep the import for backward compatibility
 import { useWebSocket } from '@/hooks/use-websocket';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {
@@ -33,9 +35,64 @@ interface ActivityItem {
 }
 
 export default function ScraperActivityFeed() {
+  // We'll keep the WebSocket interface for compatibility but add direct API queries
   const { lastMessage } = useWebSocket();
   const [activities, setActivities] = useState<ActivityItem[]>([]);
-
+  
+  // Fetch scraper statuses from API directly
+  const { data: scraperStatuses = [] } = useQuery({
+    queryKey: ['/api/scrapers/status'],
+    refetchInterval: 30000, // Refresh every 30 seconds
+  });
+  
+  // Generate activity items from the scraper status API
+  useEffect(() => {
+    if (scraperStatuses && Array.isArray(scraperStatuses) && scraperStatuses.length > 0) {
+      const newActivities = scraperStatuses.map((scraper: {
+        name: string;
+        code?: string;
+        lastRun?: string;
+        eventCount?: number;
+        status?: string;
+      }) => {
+        // Create an activity based on the scraper status
+        const status = scraper.lastRun ? 'success' : 'info';
+        const event = scraper.lastRun ? 'scraper:COMPLETED' : 'scraper:WAITING';
+        const timestamp = scraper.lastRun || new Date().toISOString();
+        
+        return {
+          id: `${scraper.name}-${timestamp}`,
+          timestamp,
+          event,
+          message: scraper.lastRun 
+            ? `${scraper.name} last ran at ${new Date(scraper.lastRun).toLocaleTimeString()}`
+            : `${scraper.name} waiting to run`,
+          status: status as 'info' | 'success' | 'warning' | 'error',
+          data: {
+            bookmaker: {
+              code: scraper.code || 'unknown',
+              name: scraper.name
+            },
+            eventCount: scraper.eventCount || 0
+          }
+        };
+      });
+      
+      // Only update if we have actual new data
+      if (newActivities.length > 0) {
+        setActivities(prev => {
+          // Combine new activities with existing ones and remove duplicates
+          const combined = [...newActivities, ...prev];
+          const unique = combined.filter((item, index, self) => 
+            index === self.findIndex(t => t.id === item.id)
+          );
+          return unique.slice(0, 50); // Keep only last 50 activities
+        });
+      }
+    }
+  }, [scraperStatuses]);
+  
+  // Also keep the legacy WebSocket support
   useEffect(() => {
     if (lastMessage && lastMessage.type === 'scraperEvent' && lastMessage.event) {
       const { event, data } = lastMessage;

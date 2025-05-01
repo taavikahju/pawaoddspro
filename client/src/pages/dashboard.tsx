@@ -4,6 +4,7 @@ import CountryFlag from '@/components/CountryFlag';
 import Layout from '@/components/Layout';
 import OddsTable from '@/components/OddsTable';
 import { useBookmakerContext } from '@/contexts/BookmakerContext';
+// We'll keep the import but use React Query directly in most places
 import { useWebSocket } from '@/hooks/use-websocket';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
