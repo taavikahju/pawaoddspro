@@ -93,17 +93,12 @@ export const logger = {
     }
   },
   
-  // Final stats
+  // Final stats with timestamp
   finalStats: (totalEvents: number, bookmakerCounts: Record<string, number>) => {
     if (verbosityLevel >= 1) {
-      console.log(`UPDATE COMPLETE - ${totalEvents} total events`);
-      
-      if (verbosityLevel >= 2) {
-        console.log(`Event distribution by bookmaker count:`);
-        Object.entries(bookmakerCounts).forEach(([count, num]) => {
-          console.log(`  - Events with ${count} bookmaker${count === '1' ? '' : 's'}: ${num}`);
-        });
-      }
+      const timestamp = new Date().toISOString();
+      console.log(`[${timestamp}] UPDATE COMPLETE - ${totalEvents} total events`);
+      // Removed verbose bookmaker count distribution logs
     }
   }
 };

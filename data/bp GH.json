@@ -5651,9 +5651,9 @@
     "date": "2025-05-02",
     "time": "18:00",
     "odds": {
-      "home": 2.1,
-      "draw": 3.55,
-      "away": 3.1
+      "home": 2.07,
+      "draw": 3.5,
+      "away": 3.2
     },
     "raw": {
       "eventId": "50869705",
@@ -5661,9 +5661,9 @@
       "tournament": "Eerste Divisie",
       "event": "FC Den Bosch - Helmond Sport",
       "market": "1X2 - FT",
-      "home_odds": "2.1",
-      "draw_odds": "3.55",
-      "away_odds": "3.1",
+      "home_odds": "2.07",
+      "draw_odds": "3.5",
+      "away_odds": "3.2",
       "start_time": "2025-05-02 18:00"
     }
   },
@@ -7211,9 +7211,9 @@
     "date": "2025-05-02",
     "time": "19:00",
     "odds": {
-      "home": 1.43,
+      "home": 1.44,
       "draw": 5.25,
-      "away": 7.25
+      "away": 7
     },
     "raw": {
       "eventId": "50850671",
@@ -7221,9 +7221,9 @@
       "tournament": "Premier League",
       "event": "Manchester City - Wolverhampton Wanderers",
       "market": "1X2 - FT",
-      "home_odds": "1.43",
+      "home_odds": "1.44",
       "draw_odds": "5.25",
-      "away_odds": "7.25",
+      "away_odds": "7.0",
       "start_time": "2025-05-02 19:00"
     }
   },
@@ -7433,6 +7433,32 @@
       "draw_odds": "2.85",
       "away_odds": "2.55",
       "start_time": "2025-05-02 22:00"
+    }
+  },
+  {
+    "id": "60262763",
+    "eventId": "60262763",
+    "teams": "Dynamo Puerto FC - Bolivar SC",
+    "league": "Segunda Division",
+    "sport": "football",
+    "country": "Venezuela",
+    "date": "2025-05-02",
+    "time": "23:00",
+    "odds": {
+      "home": 1.94,
+      "draw": 3.35,
+      "away": 3.5
+    },
+    "raw": {
+      "eventId": "60262763",
+      "country": "Venezuela",
+      "tournament": "Segunda Division",
+      "event": "Dynamo Puerto FC - Bolivar SC",
+      "market": "1X2 - FT",
+      "home_odds": "1.94",
+      "draw_odds": "3.35",
+      "away_odds": "3.5",
+      "start_time": "2025-05-02 23:00"
     }
   },
   {
@@ -15583,9 +15609,9 @@
     "date": "2025-05-03",
     "time": "16:30",
     "odds": {
-      "home": 1.37,
+      "home": 1.36,
       "draw": 6.25,
-      "away": 7.5
+      "away": 7.75
     },
     "raw": {
       "eventId": "51269571",
@@ -15593,9 +15619,9 @@
       "tournament": "Bundesliga",
       "event": "Borussia Dortmund - VfL Wolfsburg",
       "market": "1X2 - FT",
-      "home_odds": "1.37",
+      "home_odds": "1.36",
       "draw_odds": "6.25",
-      "away_odds": "7.5",
+      "away_odds": "7.75",
       "start_time": "2025-05-03 16:30"
     }
   },
@@ -17442,6 +17468,32 @@
       "home_odds": "1.68",
       "draw_odds": "3.35",
       "away_odds": "4.75",
+      "start_time": "2025-05-03 21:00"
+    }
+  },
+  {
+    "id": "60262833",
+    "eventId": "60262833",
+    "teams": "CS Maritimo de la Guaira - Angostura FC",
+    "league": "Segunda Division",
+    "sport": "football",
+    "country": "Venezuela",
+    "date": "2025-05-03",
+    "time": "21:00",
+    "odds": {
+      "home": 2.2,
+      "draw": 3,
+      "away": 3.2
+    },
+    "raw": {
+      "eventId": "60262833",
+      "country": "Venezuela",
+      "tournament": "Segunda Division",
+      "event": "CS Maritimo de la Guaira - Angostura FC",
+      "market": "1X2 - FT",
+      "home_odds": "2.2",
+      "draw_odds": "3.0",
+      "away_odds": "3.2",
       "start_time": "2025-05-03 21:00"
     }
   },
@@ -26737,9 +26789,9 @@
     "date": "2025-05-04",
     "time": "20:30",
     "odds": {
-      "home": 2.17,
-      "draw": 3.05,
-      "away": 3.25
+      "home": 2.15,
+      "draw": 3.1,
+      "away": 3.15
     },
     "raw": {
       "eventId": "59751740",
@@ -26747,9 +26799,9 @@
       "tournament": "Primera Division",
       "event": "Alianza Atletico - Asociacion Deportiva Tarma",
       "market": "1X2 - FT",
-      "home_odds": "2.17",
-      "draw_odds": "3.05",
-      "away_odds": "3.25",
+      "home_odds": "2.15",
+      "draw_odds": "3.1",
+      "away_odds": "3.15",
       "start_time": "2025-05-04 20:30"
     }
   },

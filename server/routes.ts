@@ -567,51 +567,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         else if (count >= 4) eventsByBookmakerCount['4+']++;
       });
 
-      // Log bookmaker count distribution
-      logger.critical(`Event distribution by bookmaker count:`);
-      logger.critical(`  - Events with 1 bookmaker: ${eventsByBookmakerCount['1']}`);
-      logger.critical(`  - Events with 2 bookmakers: ${eventsByBookmakerCount['2']}`);
-      logger.critical(`  - Events with 3 bookmakers: ${eventsByBookmakerCount['3']}`);
-      logger.critical(`  - Events with 4+ bookmakers: ${eventsByBookmakerCount['4+']}`);
-      
-      // Track Sportybet specific details for debugging
-      const sportyEvents = filteredEvents.filter(event => {
-        const oddsData = event.oddsData as Record<string, any>;
-        return oddsData && oddsData['sporty'];
-      });
-      
-      logger.critical(`Sportybet diagnostic (found in ${sportyEvents.length} events):`);
-      logger.critical(`  - Total Sportybet events: ${sportyEvents.length}`);
-      
-      // Count Sportybet events by bookmaker count
-      const sportyByBookmakerCount = {
-        '2': 0, '3': 0, '4': 0
-      };
-      
-      sportyEvents.forEach(event => {
-        if (!event.oddsData) return;
-        const count = Object.keys(event.oddsData as Record<string, any>).length;
-        if (count === 2) sportyByBookmakerCount['2']++;
-        else if (count === 3) sportyByBookmakerCount['3']++;
-        else if (count >= 4) sportyByBookmakerCount['4']++;
-      });
-      
-      logger.critical(`  - Sportybet events with 2 bookmakers: ${sportyByBookmakerCount['2']}`);
-      logger.critical(`  - Sportybet events with 3 bookmakers: ${sportyByBookmakerCount['3']}`);
-      logger.critical(`  - Sportybet events with 4+ bookmakers: ${sportyByBookmakerCount['4']}`);
-      
-      // Log Sportybet event sample
-      if (sportyEvents.length > 0) {
-        const sampleSize = Math.min(3, sportyEvents.length);
-        logger.critical(`  - Sample of ${sampleSize} Sportybet events:`);
-        
-        for (let i = 0; i < sampleSize; i++) {
-          const event = sportyEvents[i];
-          logger.critical(`    - Event ${event.id}: "${event.teams}" (eventId: ${event.eventId}) has ${Object.keys(event.oddsData as Record<string, any>).length} bookmakers`);
-        }
-      }
-      
-      logger.critical(`Filtered ${events.length} events down to ${filteredEvents.length} with at least ${minBookmakers} bookmakers`);
+      // Replace verbose diagnostic logs with a single timestamp-based log
+      const timestamp = new Date().toISOString();
+      logger.critical(`[${timestamp}] Processed ${filteredEvents.length} events with at least ${minBookmakers} bookmakers`);
       
       res.json(filteredEvents);
     } catch (error) {
