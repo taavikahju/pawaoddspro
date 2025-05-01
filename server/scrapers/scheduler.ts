@@ -232,10 +232,8 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
       try {
         const { calculateAndStoreTournamentMargins } = await import('../utils/tournamentMargins');
         
-        // Clear existing tournament margins before calculating new ones
-        await db.execute(sql`DELETE FROM tournament_margins`);
-        
         // Calculate and store new tournament margins
+        // Note: We no longer delete existing margins to maintain historical data
         await calculateAndStoreTournamentMargins(storage);
         console.log('✅ Tournament margins calculated and stored');
       } catch (marginError) {
