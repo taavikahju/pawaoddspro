@@ -419,14 +419,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         else if (count >= 4) eventsByBookmakerCount['4+']++;
       });
 
-      // Log bookmaker count distribution for broadcast
-      logger.debug(`Broadcast Event distribution:`);
-      logger.debug(`  - Events with 1 bookmaker: ${eventsByBookmakerCount['1']}`);
-      logger.debug(`  - Events with 2 bookmakers: ${eventsByBookmakerCount['2']}`);
-      logger.debug(`  - Events with 3 bookmakers: ${eventsByBookmakerCount['3']}`);
-      logger.debug(`  - Events with 4+ bookmakers: ${eventsByBookmakerCount['4+']}`);
-      
-      logger.debug(`Broadcast: Filtered ${events.length} events down to ${filteredEvents.length} with at least 2 bookmakers`);
+      // Simplified broadcast message
+      const timestamp = new Date().toISOString();
+      logger.debug(`[${timestamp}] Broadcast: ${filteredEvents.length} events ready for broadcast`);
       
       broadcast({
         type: 'events',
@@ -548,24 +543,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return bookmakerCount >= minBookmakers;
       });
 
-      // Track counts for different bookmaker counts to create a distribution
-      const eventsByBookmakerCount = {
-        '1': 0,
-        '2': 0,
-        '3': 0,
-        '4+': 0
-      };
-
-      // Count events by bookmaker count
-      events.forEach(event => {
-        if (!event.oddsData) return;
-        const count = Object.keys(event.oddsData).length;
-        
-        if (count === 1) eventsByBookmakerCount['1']++;
-        else if (count === 2) eventsByBookmakerCount['2']++;
-        else if (count === 3) eventsByBookmakerCount['3']++;
-        else if (count >= 4) eventsByBookmakerCount['4+']++;
-      });
+      // Removed event distribution code
 
       // Replace verbose diagnostic logs with a single timestamp-based log
       const timestamp = new Date().toISOString();

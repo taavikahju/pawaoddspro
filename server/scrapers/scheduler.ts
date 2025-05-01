@@ -277,33 +277,15 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
         return bookmakerCount >= 2;
       });
       
-      // Count events by number of bookmakers
-      const eventsByBookmakerCount = {
-        '1': 0,
-        '2': 0,
-        '3': 0,
-        '4+': 0
-      };
-      
-      allEvents.forEach(event => {
-        if (!event.oddsData) return;
-        const bookmakerCount = Object.keys(event.oddsData as Record<string, any>).length;
-        if (bookmakerCount === 1) eventsByBookmakerCount['1']++;
-        else if (bookmakerCount === 2) eventsByBookmakerCount['2']++;
-        else if (bookmakerCount === 3) eventsByBookmakerCount['3']++;
-        else if (bookmakerCount >= 4) eventsByBookmakerCount['4+']++;
-      });
-      
-      // Create summary for frontend update
+      // Create simplified summary for frontend update
       const frontendUpdateSummary = {
         totalEvents: filteredEvents.length,
-        eventsByBookmakerCount: eventsByBookmakerCount,
         timestamp: new Date().toISOString()
       };
       
-      // Log statistics for the update with timestamp
+      // Log simplified statistics for the update with timestamp
       const updateTime = new Date();
-      logger.critical(`[${updateTime.toISOString()}] Sending ${filteredEvents.length} events to frontend - Distribution: 1 bookie: ${eventsByBookmakerCount['1']}, 2 bookies: ${eventsByBookmakerCount['2']}, 3+ bookies: ${eventsByBookmakerCount['3'] + eventsByBookmakerCount['4+']}`);
+      logger.critical(`[${updateTime.toISOString()}] Sending ${filteredEvents.length} events to frontend`);
       
       // Emit the all processing completed event with statistics
       scraperEvents.emit(SCRAPER_EVENTS.ALL_PROCESSING_COMPLETED, {
