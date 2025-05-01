@@ -7029,9 +7029,9 @@
     "date": "2025-05-04",
     "time": "00:00",
     "odds": {
-      "home": 2.2,
-      "draw": 3.2,
-      "away": 3
+      "home": 2.3,
+      "draw": 3.1,
+      "away": 2.9
     },
     "raw": {
       "eventId": "60269841",
@@ -7039,9 +7039,9 @@
       "tournament": "Primera Division",
       "event": "Academia Anzoategui FC - Ucv FC",
       "market": "1X2",
-      "home_odds": "2.20",
-      "draw_odds": "3.20",
-      "away_odds": "3.00",
+      "home_odds": "2.30",
+      "draw_odds": "3.10",
+      "away_odds": "2.90",
       "start_time": "2025-05-04 00:00"
     }
   },
@@ -7315,9 +7315,9 @@
     "date": "2025-05-01",
     "time": "11:30",
     "odds": {
-      "home": 2.44,
-      "draw": 3.61,
-      "away": 2.83
+      "home": 2.37,
+      "draw": 3.63,
+      "away": 2.91
     },
     "raw": {
       "eventId": "59017039",
@@ -7325,9 +7325,9 @@
       "tournament": "Pro League",
       "event": "Royal Antwerp FC - RSC Anderlecht",
       "market": "1X2",
-      "home_odds": "2.44",
-      "draw_odds": "3.61",
-      "away_odds": "2.83",
+      "home_odds": "2.37",
+      "draw_odds": "3.63",
+      "away_odds": "2.91",
       "start_time": "2025-05-01 11:30"
     }
   },
@@ -20055,9 +20055,9 @@
     "date": "2025-05-03",
     "time": "14:00",
     "odds": {
-      "home": 1.67,
+      "home": 1.7,
       "draw": 3.4,
-      "away": 4.75
+      "away": 4.6
     },
     "raw": {
       "eventId": "51830355",
@@ -20065,9 +20065,9 @@
       "tournament": "Primera Federacion",
       "event": "AD Ceuta - Merida UD",
       "market": "1X2",
-      "home_odds": "1.67",
+      "home_odds": "1.70",
       "draw_odds": "3.40",
-      "away_odds": "4.75",
+      "away_odds": "4.60",
       "start_time": "2025-05-03 14:00"
     }
   },
@@ -29900,6 +29900,32 @@
     }
   },
   {
+    "id": "50748175",
+    "eventId": "50748175",
+    "teams": "CSKA Sofia II - SFC Etar Veliko Tarnovo",
+    "league": "Vtora Liga",
+    "sport": "football",
+    "country": "Bulgaria",
+    "date": "2025-05-03",
+    "time": "15:00",
+    "odds": {
+      "home": 1.93,
+      "draw": 3.1,
+      "away": 3.8
+    },
+    "raw": {
+      "eventId": "50748175",
+      "country": "Bulgaria",
+      "tournament": "Vtora Liga",
+      "event": "CSKA Sofia II - SFC Etar Veliko Tarnovo",
+      "market": "1X2",
+      "home_odds": "1.93",
+      "draw_odds": "3.10",
+      "away_odds": "3.80",
+      "start_time": "2025-05-03 15:00"
+    }
+  },
+  {
     "id": "50748177",
     "eventId": "50748177",
     "teams": "FC Fratria Varna - Marek Dupnica",
@@ -30637,9 +30663,9 @@
     "date": "2025-05-01",
     "time": "11:00",
     "odds": {
-      "home": 5.6,
-      "draw": 4.25,
-      "away": 1.46
+      "home": 5.1,
+      "draw": 4,
+      "away": 1.53
     },
     "raw": {
       "eventId": "59284705",
@@ -30647,9 +30673,9 @@
       "tournament": "Svenska Cup Women",
       "event": "IFK Norrkoping DFK - Hacken Gothenburg W",
       "market": "1X2",
-      "home_odds": "5.60",
-      "draw_odds": "4.25",
-      "away_odds": "1.46",
+      "home_odds": "5.10",
+      "draw_odds": "4.00",
+      "away_odds": "1.53",
       "start_time": "2025-05-01 11:00"
     }
   },
@@ -32067,9 +32093,9 @@
     "date": "2025-05-01",
     "time": "11:00",
     "odds": {
-      "home": 1.38,
-      "draw": 4.4,
-      "away": 5.6
+      "home": 1.4,
+      "draw": 4.25,
+      "away": 5.5
     },
     "raw": {
       "eventId": "56743563",
@@ -32077,9 +32103,9 @@
       "tournament": "Elitettan, Women",
       "event": "Umea IK - Team Tg FF",
       "market": "1X2",
-      "home_odds": "1.38",
-      "draw_odds": "4.40",
-      "away_odds": "5.60",
+      "home_odds": "1.40",
+      "draw_odds": "4.25",
+      "away_odds": "5.50",
       "start_time": "2025-05-01 11:00"
     }
   },

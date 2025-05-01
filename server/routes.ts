@@ -13,6 +13,8 @@ import { setupAuth } from "./auth";
 import { isAuthenticated, isAdmin } from "./middleware/auth";
 import { simpleAdminAuth } from "./middleware/simpleAdminAuth";
 import session from "express-session";
+import { db } from './db';
+import { sql } from 'drizzle-orm';
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Setup authentication
