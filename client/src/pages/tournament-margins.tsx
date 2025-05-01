@@ -309,24 +309,24 @@ const TournamentMargins: React.FC = () => {
           <CardContent className="pt-0">
             <div className="relative mb-4">
               <div className="relative">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-black dark:text-white" />
                 <Input
                   placeholder="Search countries and tournaments..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-9 py-5 h-9 bg-muted/40 border-muted focus-visible:bg-background focus-visible:ring-1 focus-visible:ring-primary/50 transition-colors"
+                  className="pl-9 py-5 h-9 bg-muted/40 border-muted focus-visible:bg-background focus-visible:ring-1 focus-visible:ring-primary/50 transition-colors text-black dark:text-white"
                 />
                 {searchTerm && (
                   <button
                     onClick={() => setSearchTerm('')}
-                    className="absolute right-2.5 top-2.5 text-muted-foreground hover:text-foreground"
+                    className="absolute right-2.5 top-2.5 text-black dark:text-white hover:opacity-80"
                   >
                     <X className="h-4 w-4" />
                   </button>
                 )}
               </div>
               {searchTerm && (
-                <div className="mt-1.5 text-xs text-muted-foreground flex justify-between px-1">
+                <div className="mt-1.5 text-xs text-black dark:text-white flex justify-between px-1">
                   <span>Searching: "{searchTerm}"</span>
                   <span>{filteredCountries.length} results</span>
                 </div>
@@ -425,11 +425,11 @@ const TournamentMargins: React.FC = () => {
                 Failed to load tournament margins data
               </div>
             ) : !selectedCountryData ? (
-              <div className="text-center py-8 text-muted-foreground">
+              <div className="text-center py-8 text-black dark:text-white">
                 Select a country from the list to view tournaments and margins
               </div>
             ) : selectedCountryData.tournaments.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground">
+              <div className="text-center py-8 text-black dark:text-white">
                 No tournaments available for {selectedCountryData.name}
               </div>
             ) : (
