@@ -218,7 +218,23 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       // Try to match by team names
       if (eventData.teams) {
         const normalizedTeams = normalizeEventName(eventData.teams);
-        const sportyEvent = sportyTeamsMap.get(normalizedTeams);
+        
+        // Try to find a match with the normalized team name
+        let sportyEvent = sportyTeamsMap.get(normalizedTeams);
+        
+        // If no match, try to reverse team names (e.g., "Team A vs Team B" -> "Team B vs Team A")
+        if (!sportyEvent && eventData.teams.includes(' vs ')) {
+          const teams = eventData.teams.split(' vs ');
+          if (teams.length === 2) {
+            const reversedTeams = `${teams[1]} vs ${teams[0]}`;
+            const normalizedReversedTeams = normalizeEventName(reversedTeams);
+            sportyEvent = sportyTeamsMap.get(normalizedReversedTeams);
+            
+            if (sportyEvent) {
+              console.log(`✅ Matched Sportybet event using reversed team names: ${eventData.teams} ↔️ ${reversedTeams}`);
+            }
+          }
+        }
         
         if (sportyEvent) {
           // We found a matching Sportybet event by team name
@@ -446,9 +462,13 @@ function normalizeEventName(eventName: string): string {
     // Remove common separators (vs, v, -, @)
     .replace(/\s+vs\.?\s+|\s+v\.?\s+|\s+-\s+|\s+@\s+/g, '')
     // Remove 'fc' (football club)
-    .replace(/\s+fc\b|\bfc\s+/g, '')
-    // Remove periods and common abbreviations
-    .replace(/\.|utd|united|city/g, '')
+    .replace(/\s+fc\b|\bfc\s+|\s+football\s+club|\bfootball\s+club/g, '')
+    // Remove common suffixes
+    .replace(/\s+(united|utd|city|town|county|albion|rovers|wanderers|athletic|hotspur|wednesday|forest)\b/g, '')
+    // Remove common location prefixes
+    .replace(/\b(west|east|north|south)\s+/g, '')
+    // Remove periods and special characters
+    .replace(/\./g, '')
     // Remove all whitespace
     .replace(/\s+/g, '')
     // Remove any remaining punctuation
