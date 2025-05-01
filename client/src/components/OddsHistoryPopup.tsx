@@ -173,7 +173,7 @@ export default function OddsHistoryPopup({
                     strokeWidth={2}
                     dot={false} // Remove dots for better performance
                     activeDot={{ r: 4 }} // Smaller dots
-                    connectNulls
+                    connectNulls={false} // Do not connect across null/undefined values
                   />
                 ))}
               </LineChart>

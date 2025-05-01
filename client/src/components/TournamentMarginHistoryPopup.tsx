@@ -174,7 +174,7 @@ export default function TournamentMarginHistoryPopup({
                   strokeWidth={2}
                   dot={{ r: 3 }}
                   activeDot={{ r: 5 }}
-                  connectNulls
+                  connectNulls={false} // Do not connect across null/undefined values
                 />
               </LineChart>
             </ResponsiveContainer>
