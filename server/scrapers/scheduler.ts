@@ -164,6 +164,17 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
             
             data = await customScrapers.runCustomScraper(bookmaker.code);
             
+            // Save the Sportybet data to a separate file for inspection
+            if (bookmaker.code === 'sporty') {
+              try {
+                const fs = await import('fs/promises');
+                await fs.writeFile('sportybet_output.json', JSON.stringify(data, null, 2));
+                logger.info(`Saved Sportybet data to sportybet_output.json`);
+              } catch (writeError) {
+                logger.error(`Failed to save Sportybet data: ${writeError}`);
+              }
+            }
+            
             const scraperEndTime = new Date();
             logger.critical(`[${scraperEndTime.toISOString()}] ${bookmaker.name} scraper finished - ${data?.length || 0} events extracted`);
           } catch (customError) {
