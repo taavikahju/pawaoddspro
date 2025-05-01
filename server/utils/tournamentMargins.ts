@@ -7,7 +7,8 @@ import { eq, sql } from "drizzle-orm";
  * Calculate margin based on odds
  */
 function calculateMargin(homeOdds: number, drawOdds: number, awayOdds: number): number {
-  return ((1 / homeOdds) + (1 / drawOdds) + (1 / awayOdds) - 1) * 100;
+  // Return as a decimal (0.0364) instead of percentage (3.64%)
+  return (1 / homeOdds) + (1 / drawOdds) + (1 / awayOdds) - 1;
 }
 
 /**

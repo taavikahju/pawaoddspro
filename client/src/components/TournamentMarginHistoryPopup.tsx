@@ -82,7 +82,7 @@ export default function TournamentMarginHistoryPopup({
       
       return {
         timestamp: formattedDate,
-        margin: parseFloat(item.averageMargin) * 100, // Convert to percentage
+        margin: parseFloat(item.averageMargin) * 100, // Convert decimal to percentage (e.g., 0.0364 → 3.64%)
         eventCount: item.eventCount,
         date: date // Keep original date for sorting
       };
