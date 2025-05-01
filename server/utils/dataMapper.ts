@@ -97,15 +97,40 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       bookmakerTeamMaps.set(bookmakerCode, teamMap);
     }
     
+    // Function to normalize eventId format - extracts numeric part from "sr:match:12345" format
+    const normalizeEventId = (eventId: string): string => {
+      // If it's in sr:match:12345 format, extract just the numeric part
+      if (typeof eventId === 'string' && eventId.includes('sr:match:')) {
+        return eventId.replace(/\D/g, '');
+      }
+      return eventId;
+    };
+
     // First pass: collect all eventIds from all bookmakers
     const allEventIds = new Set<string>();
+    // Track original to normalized ID mapping to handle lookups later
+    const normalizedToOriginal = new Map<string, Set<string>>();
+    
     for (const bookmakerCode of bookmakerCodes) {
       const bookmakerData = allBookmakerData[bookmakerCode];
       if (!bookmakerData || !Array.isArray(bookmakerData)) continue;
       
       for (const event of bookmakerData) {
         if (event.eventId) {
-          allEventIds.add(event.eventId);
+          // Store both original and normalized versions
+          const normalizedId = normalizeEventId(event.eventId);
+          allEventIds.add(normalizedId);
+          
+          // Track which original IDs map to this normalized ID
+          if (!normalizedToOriginal.has(normalizedId)) {
+            normalizedToOriginal.set(normalizedId, new Set());
+          }
+          normalizedToOriginal.get(normalizedId)?.add(event.eventId);
+          
+          // For debugging Sportybet specifically
+          if (bookmakerCode === 'sporty' && event.eventId !== normalizedId) {
+            console.log(`ℹ️ Normalized Sportybet eventId: ${event.eventId} → ${normalizedId}`);
+          }
         }
       }
     }
@@ -138,7 +163,34 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
         if (!bookmakerData || !Array.isArray(bookmakerData)) continue;
         
         // Find event with this ID in current bookmaker
-        const event = bookmakerData.find(e => e.eventId === eventId);
+        // For each bookmaker, check both direct match and normalized matches
+        let event = null;
+        
+        // First try direct match
+        event = bookmakerData.find(e => e.eventId === eventId);
+        
+        // If not found, check if we need to normalize the event ID (especially for Sportybet)
+        if (!event) {
+          // Get all matching original IDs for this normalized ID
+          const possibleOriginalIds = normalizedToOriginal.get(eventId);
+          
+          if (possibleOriginalIds && possibleOriginalIds.size > 0) {
+            // Try each original format that maps to this normalized ID
+            // Convert Set to Array for iteration to avoid TypeScript error
+            Array.from(possibleOriginalIds).forEach(originalId => {
+              if (event) return; // Skip if we already found a match
+              
+              const matchedEvent = bookmakerData.find(e => e.eventId === originalId);
+              if (matchedEvent) {
+                event = matchedEvent;
+                if (bookmakerCode === 'sporty') {
+                  console.log(`🔄 Matched Sportybet event using normalized ID: ${originalId} → ${eventId}`);
+                }
+              }
+            });
+          }
+        }
+        
         if (!event) continue;
         
         // Use first match as fallback event data if we don't have betPawa Ghana data
@@ -262,7 +314,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     // This allows events with different eventIds but same team names to be matched
     console.log(`🔍 Running secondary matching...`);
     
-    const bookmakersMapped = {
+    const bookmakersMapped: Record<string, number> = {
       'sporty': 0,
       'bp GH': 0,
       'bp KE': 0,
@@ -517,13 +569,14 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     }
     
     // Count events by bookmaker
-    const eventsByBookmaker = {};
+    const eventsByBookmaker: Record<string, number> = {};
     for (const bookmakerCode of bookmakerCodes) {
       eventsByBookmaker[bookmakerCode] = 0;
     }
     
     // Count how many events each bookmaker has odds for
-    for (const [eventId, eventData] of eventMap.entries()) {
+    // Convert to Array to avoid TypeScript iterator issues
+    for (const [eventId, eventData] of Array.from(eventMap.entries())) {
       const oddsData = eventData.oddsData || {};
       for (const bookmakerCode of Object.keys(oddsData)) {
         if (eventsByBookmaker[bookmakerCode] !== undefined) {

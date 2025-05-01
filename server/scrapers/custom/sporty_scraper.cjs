@@ -502,11 +502,17 @@ const processEvents = (tournaments) => {
             continue;
           }
           
-          // Clean the eventId to extract just the numeric part
-          const eventId = event.eventId.replace(/\D/g, '');
+          // Keep the original eventId format (sr:match:12345) as this is the industry standard
+          // The data mapper will handle normalizing this format when needed
+          const eventId = event.eventId;
           if (!eventId) {
             processed.skipped++;
             continue;
+          }
+          
+          // Log to debug Sportybet event ID format
+          if (DEBUG && Math.random() < 0.01) { // Only log ~1% of events to reduce noise
+            console.error(`🔍 Sportybet eventId sample: ${eventId}`);
           }
           
           // Check for our specific target event: Crystal Palace vs Nottingham Forest
