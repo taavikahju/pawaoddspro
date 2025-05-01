@@ -500,6 +500,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ error: 'Failed to fetch odds history' });
     }
   });
+  
+  // Get tournament margin history
+  app.get('/api/tournaments/margins', async (req, res) => {
+    try {
+      const { tournament, bookmaker } = req.query;
+      
+      if (!tournament) {
+        return res.status(400).json({ error: 'Tournament name is required' });
+      }
+      
+      // Import the utility functions
+      const { getTournamentMarginHistory } = await import('./utils/tournamentMargins');
+      
+      // Get the tournament margin history
+      const history = await getTournamentMarginHistory(
+        tournament as string, 
+        bookmaker as string | undefined
+      );
+      
+      res.json(history);
+    } catch (error) {
+      console.error('Error fetching tournament margins:', error);
+      res.status(500).json({ error: 'Failed to fetch tournament margins' });
+    }
+  });
 
   app.get('/api/stats', async (req, res) => {
     try {

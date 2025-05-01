@@ -169,9 +169,10 @@ export const insertOddsHistorySchema = createInsertSchema(oddsHistory).pick({
 export type InsertOddsHistory = z.infer<typeof insertOddsHistorySchema>;
 export type OddsHistory = typeof oddsHistory.$inferSelect;
 
-// Tournament margin history table to track average margins by tournament
+// Tournament margin history table to track average margins by tournament for each bookmaker
 export const tournamentMargins = pgTable("tournament_margins", {
   id: serial("id").primaryKey(),
+  bookmakerCode: text("bookmaker_code").notNull(), // Which bookmaker's odds were used
   countryName: text("country_name"), // Country name for grouping
   tournamentName: text("tournament_name").notNull(), // Tournament name
   averageMargin: text("average_margin").notNull(), // Average margin for all events in this tournament
@@ -180,6 +181,7 @@ export const tournamentMargins = pgTable("tournament_margins", {
 });
 
 export const insertTournamentMarginSchema = createInsertSchema(tournamentMargins).pick({
+  bookmakerCode: true,
   countryName: true,
   tournamentName: true,
   averageMargin: true,

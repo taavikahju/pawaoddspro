@@ -1,6 +1,14 @@
 import { db } from "../db";
 import { tournamentMargins, type InsertTournamentMargin } from "@shared/schema";
 import { IStorage } from "../storage";
+import { eq, sql } from "drizzle-orm";
+
+/**
+ * Calculate margin based on odds
+ */
+function calculateMargin(homeOdds: number, drawOdds: number, awayOdds: number): number {
+  return ((1 / homeOdds) + (1 / drawOdds) + (1 / awayOdds) - 1) * 100;
+}
 
 /**
  * Calculate average margins for each tournament and store in the database
@@ -8,20 +16,31 @@ import { IStorage } from "../storage";
  */
 export async function calculateAndStoreTournamentMargins(storage: IStorage): Promise<void> {
   try {
-    console.log('📊 Calculating tournament average margins...');
+    console.log('📊 Calculating tournament average margins by bookmaker...');
     
     // Get all events
     const allEvents = await storage.getEvents();
     
-    // Group events by tournament
+    // Get all bookmakers
+    const bookmakers = await storage.getBookmakers();
+    const activeBookmakerCodes = bookmakers
+      .filter(b => b.active)
+      .map(b => b.code);
+    
+    // Group events by bookmaker and tournament
+    // Key format: "bookmakerCode:tournamentName"
     const tournamentGroups = new Map<string, { 
+      bookmakerCode: string;
       countryName: string | null | undefined;
+      tournamentName: string;
       margins: number[];
       totalMargin: number;
       count: number;
     }>();
     
-    // Process each event to extract its margin
+    let totalGroups = 0;
+    
+    // Process each event to extract margins for each bookmaker
     for (const event of allEvents) {
       // Skip events without odds data
       if (!event.oddsData) continue;
@@ -29,36 +48,47 @@ export async function calculateAndStoreTournamentMargins(storage: IStorage): Pro
       const tournamentName = event.tournament || event.league;
       if (!tournamentName) continue;
       
-      // Calculate event margin based on best odds
-      const homeOdds = parseFloat(event.bestOdds?.home?.toString() || '0');
-      const drawOdds = parseFloat(event.bestOdds?.draw?.toString() || '0');
-      const awayOdds = parseFloat(event.bestOdds?.away?.toString() || '0');
-      
-      // Skip events without complete best odds
-      if (!homeOdds || !drawOdds || !awayOdds) continue;
-      
-      // Calculate event margin
-      const eventMargin = ((1 / homeOdds) + (1 / drawOdds) + (1 / awayOdds) - 1) * 100;
-      
-      // Add to tournament group
-      if (!tournamentGroups.has(tournamentName)) {
-        tournamentGroups.set(tournamentName, {
-          countryName: event.country,
-          margins: [],
-          totalMargin: 0,
-          count: 0
-        });
+      // Process each bookmaker's odds
+      for (const bookmakerCode of activeBookmakerCodes) {
+        const bookmakerOdds = event.oddsData[bookmakerCode];
+        if (!bookmakerOdds) continue;
+        
+        const homeOdds = parseFloat(bookmakerOdds.home?.toString() || '0');
+        const drawOdds = parseFloat(bookmakerOdds.draw?.toString() || '0');
+        const awayOdds = parseFloat(bookmakerOdds.away?.toString() || '0');
+        
+        // Skip if any odds are missing
+        if (!homeOdds || !drawOdds || !awayOdds) continue;
+        
+        // Calculate margin for this bookmaker's odds
+        const margin = calculateMargin(homeOdds, drawOdds, awayOdds);
+        
+        // Create group key for this bookmaker and tournament
+        const groupKey = `${bookmakerCode}:${tournamentName}`;
+        
+        // Create group if it doesn't exist
+        if (!tournamentGroups.has(groupKey)) {
+          tournamentGroups.set(groupKey, {
+            bookmakerCode,
+            countryName: event.country,
+            tournamentName,
+            margins: [],
+            totalMargin: 0,
+            count: 0
+          });
+        }
+        
+        // Add margin to group
+        const groupData = tournamentGroups.get(groupKey)!;
+        groupData.margins.push(margin);
+        groupData.totalMargin += margin;
+        groupData.count++;
       }
-      
-      const tournamentData = tournamentGroups.get(tournamentName)!;
-      tournamentData.margins.push(eventMargin);
-      tournamentData.totalMargin += eventMargin;
-      tournamentData.count++;
     }
     
-    // Calculate and store average margin for each tournament
-    for (const [tournamentName, data] of tournamentGroups.entries()) {
-      // Only process tournaments with sufficient events
+    // Calculate and store average margin for each bookmaker and tournament
+    for (const data of tournamentGroups.values()) {
+      // Only process groups with sufficient events (at least 3)
       if (data.count < 3) continue;
       
       // Calculate average margin
@@ -66,32 +96,45 @@ export async function calculateAndStoreTournamentMargins(storage: IStorage): Pro
       
       // Create tournament margin record
       const tournamentMarginData: InsertTournamentMargin = {
+        bookmakerCode: data.bookmakerCode,
         countryName: data.countryName,
-        tournamentName,
+        tournamentName: data.tournamentName,
         averageMargin: averageMargin.toFixed(2),
         eventCount: data.count
       };
       
       // Store in database
       await db.insert(tournamentMargins).values(tournamentMarginData);
+      totalGroups++;
     }
     
-    console.log(`✅ Stored average margins for ${tournamentGroups.size} tournaments`);
+    console.log(`✅ Stored average margins for ${totalGroups} bookmaker-tournament combinations`);
   } catch (error) {
     console.error('Error calculating tournament margins:', error);
   }
 }
 
 /**
- * Get tournament margin history
+ * Get tournament margin history for a specific bookmaker
  * @param tournamentName The name of the tournament
+ * @param bookmakerCode The bookmaker code
  * @returns Array of tournament margin records
  */
-export async function getTournamentMarginHistory(tournamentName: string): Promise<any[]> {
-  return db.select()
+export async function getTournamentMarginHistory(
+  tournamentName: string,
+  bookmakerCode?: string
+): Promise<any[]> {
+  let query = db
+    .select()
     .from(tournamentMargins)
-    .where(tournamentMargins.tournamentName === tournamentName)
-    .orderBy(tournamentMargins.timestamp);
+    .where(eq(tournamentMargins.tournamentName, tournamentName));
+  
+  // Filter by bookmaker if specified
+  if (bookmakerCode) {
+    query = query.where(eq(tournamentMargins.bookmakerCode, bookmakerCode));
+  }
+  
+  return query.orderBy(tournamentMargins.timestamp);
 }
 
 /**
@@ -106,9 +149,9 @@ export async function cleanupOldTournamentMargins(days: number = 30): Promise<nu
     
     // Delete records older than the cutoff date
     const result = await db.delete(tournamentMargins)
-      .where(tournamentMargins.timestamp < cutoffDate.toISOString());
+      .where(sql`${tournamentMargins.timestamp} < ${cutoffDate.toISOString()}`);
     
-    const deletedCount = result.count || 0;
+    const deletedCount = Number(result.count) || 0;
     console.log(`Deleted ${deletedCount} tournament margin records older than ${days} days`);
     
     return deletedCount;
