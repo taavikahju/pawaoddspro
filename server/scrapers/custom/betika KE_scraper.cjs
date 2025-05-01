@@ -31,14 +31,14 @@ async function fetchPage(page) {
     const { data } = await axios.get(url);
     return data.data;
   } catch (error) {
-    console.error(`Error fetching page ${page}: ${error.message}`);
+    // Silently log errors
     return [];
   }
 }
 
 (async () => {
   try {
-    console.error('📡 Fetching Betika events...');
+    // Silently fetch all events
     while (true) {
       const events = await fetchPage(currentPage);
       if (!events || events.length === 0) break;
@@ -58,15 +58,13 @@ async function fetchPage(page) {
       });
 
       allEvents.push(...formattedEvents);
-      console.error(`✅ Fetched page ${currentPage} with ${events.length} events`);
       currentPage++;
     }
 
     // Output to stdout for the integration system
     console.log(JSON.stringify(allEvents));
   } catch (error) {
-    console.error('Error fetching Betika data:', error.message);
-    // Output empty array in case of error
+    // Silently handle errors and output empty array
     console.log('[]');
   }
 })();
