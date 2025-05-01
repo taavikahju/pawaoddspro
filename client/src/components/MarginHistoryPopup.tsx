@@ -1,24 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription
+  DialogFooter,
+  DialogClose
 } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Skeleton } from "@/components/ui/skeleton";
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import {
   LineChart,
   Line,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
   Legend,
   ResponsiveContainer
 } from 'recharts';
-import { useQuery } from '@tanstack/react-query';
-import { formatDistanceToNow } from 'date-fns';
-import { Loader2 } from 'lucide-react';
 
 interface MarginHistoryPopupProps {
   isOpen: boolean;
@@ -28,153 +29,155 @@ interface MarginHistoryPopupProps {
   bookmakers: string[];
 }
 
-const MarginHistoryPopup: React.FC<MarginHistoryPopupProps> = ({
+type MarginHistoryEntry = {
+  eventId: string;
+  bookmakerCode: string;
+  margin: number;
+  timestamp: string;
+};
+
+export default function MarginHistoryPopup({
   isOpen,
   onClose,
   eventId,
   eventName,
   bookmakers
-}) => {
-  // Query to load margin history for this event
-  const { data, isLoading, error } = useQuery<any[]>({
+}: MarginHistoryPopupProps) {
+  // Fetch margin history for this event
+  const { data, isLoading, error } = useQuery({
     queryKey: [`/api/events/margins/${eventId}`],
+    queryFn: async () => {
+      const response = await axios.get(`/api/events/margins/${eventId}`);
+      return response.data as MarginHistoryEntry[];
+    },
     enabled: isOpen && !!eventId,
+    staleTime: 60000 // Cache for 1 minute
   });
   
-  // Colors for each bookmaker
-  const getBookmakerColor = (bookmakerCode: string) => {
-    const colorMap: Record<string, string> = {
-      'bp GH': '#3B82F6', // blue
-      'bp KE': '#10B981', // green
-      'sporty': '#F59E0B', // amber
-      'betika KE': '#EF4444', // red
-    };
+  // Pre-process data for chart
+  const chartData = React.useMemo(() => {
+    if (!data) return [];
     
-    return colorMap[bookmakerCode] || '#6B7280'; // gray as fallback
-  };
-  
-  // Process the data for the chart
-  const [chartData, setChartData] = useState<any[]>([]);
-  
-  useEffect(() => {
-    if (!data || !isOpen) return;
-    
-    try {
-      // Get a set of all timestamps across all bookmakers
-      const allTimestamps = new Set<string>();
-      for (const record of data) {
-        allTimestamps.add(record.timestamp);
-      }
+    // Group by timestamp (converts to DD MMM HH:MM)
+    const dataByTimestamp = data.reduce((acc: Record<string, any>, entry) => {
+      const date = new Date(entry.timestamp);
       
-      // Create chart data points for each timestamp
-      const processedData = Array.from(allTimestamps).map(timestamp => {
-        const dataPoint: Record<string, any> = {
-          timestamp
-        };
-        
-        // Get a readable time format for display
-        const date = new Date(timestamp);
-        dataPoint.time = formatDistanceToNow(date, { addSuffix: true });
-        
-        // Add margin data for each bookmaker
-        for (const record of data) {
-          if (record.timestamp === timestamp) {
-            dataPoint[record.bookmakerCode] = record.margin;
-          }
-        }
-        
-        return dataPoint;
+      // Format the date in UTC timezone - simplified format for popups (DD MMM HH:MM)
+      const timeKey = date.toLocaleString('en-US', {
+        day: '2-digit',
+        month: 'short',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+        timeZone: 'UTC'
       });
       
-      // Sort by timestamp (newest first)
-      processedData.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+      if (!acc[timeKey]) {
+        acc[timeKey] = { 
+          timestamp: timeKey, 
+          date: date
+        };
+      }
       
-      setChartData(processedData.reverse()); // Reverse to show oldest -> newest for the chart
-    } catch (error) {
-      console.error('Error processing margin history data:', error);
-    }
-  }, [data, isOpen]);
+      // Add margin for each bookmaker (parse to float and convert to percentage)
+      const marginValue = parseFloat(entry.margin.toString()) * 100; // Convert to percentage
+      acc[timeKey][entry.bookmakerCode] = marginValue;
+      
+      return acc;
+    }, {});
+    
+    // Convert to array and sort by date
+    return Object.values(dataByTimestamp).sort((a: any, b: any) => 
+      a.date.getTime() - b.date.getTime()
+    );
+  }, [data]);
+  
+  // Generate colors for each bookmaker
+  const bookmakerColors: Record<string, string> = {
+    'bp GH': '#FFA500', // Orange
+    'bp KE': '#4CAF50', // Green
+    'sporty': '#2196F3', // Blue
+    'betika KE': '#E91E63', // Pink
+  };
   
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-[800px]">
-        <DialogHeader>
-          <DialogTitle>Margin History for {eventName}</DialogTitle>
-          <DialogDescription>
-            This chart shows how the margin for this event has changed over time for each bookmaker.
-          </DialogDescription>
+      <DialogContent className="sm:max-w-[650px] max-h-[80vh] overflow-y-auto">
+        <DialogHeader className="pb-2">
+          <DialogTitle className="text-sm font-medium">
+            Margin History: {eventName}
+          </DialogTitle>
         </DialogHeader>
         
-        <div className="py-4">
-          {isLoading && (
-            <div className="h-60 flex items-center justify-center">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <div className="w-full min-h-[350px]">
+          {isLoading ? (
+            <div className="flex items-center justify-center h-[350px]">
+              <Skeleton className="h-[300px] w-full" />
             </div>
-          )}
-          
-          {error && (
-            <div className="h-60 flex items-center justify-center">
-              <p className="text-red-500">Failed to load margin history</p>
+          ) : error ? (
+            <div className="text-red-500 p-2 text-center text-sm">
+              Failed to load margin history data
             </div>
-          )}
-          
-          {!isLoading && !error && (!chartData || chartData.length === 0) && (
-            <div className="h-60 flex items-center justify-center">
-              <p className="text-gray-500">No margin history data available for this event</p>
+          ) : chartData.length === 0 ? (
+            <div className="text-gray-500 p-2 text-center text-sm">
+              No margin history available for this event
             </div>
-          )}
-          
-          {!isLoading && !error && chartData && chartData.length > 0 && (
-            <div className="h-60">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart
-                  data={chartData}
-                  margin={{ top: 5, right: 30, left: 10, bottom: 5 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis 
-                    dataKey="time" 
-                    tick={{ fontSize: 12 }}
-                    interval="preserveStartEnd"
-                  />
-                  <YAxis
-                    label={{ 
-                      value: 'Margin %', 
-                      angle: -90, 
-                      position: 'insideLeft',
-                      style: { textAnchor: 'middle' }
-                    }}
-                    domain={['dataMin - 0.01', 'dataMax + 0.01']}
-                  />
-                  <Tooltip 
-                    formatter={(value: number) => [`${(value * 100).toFixed(2)}%`, 'Margin']}
-                    labelFormatter={(label) => `Time: ${label}`}
-                  />
-                  <Legend />
-                  
-                  {bookmakers.map(bookmakerCode => 
-                    chartData.some(dp => dp[bookmakerCode] !== undefined) && (
-                      <Line
-                        key={bookmakerCode}
-                        type="monotone"
-                        dataKey={bookmakerCode}
-                        name={bookmakerCode}
-                        stroke={getBookmakerColor(bookmakerCode)}
-                        activeDot={{ r: 8 }}
-                        isAnimationActive={true}
-                        animationDuration={500}
-                        strokeWidth={2}
-                      />
-                    )
-                  )}
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
+          ) : (
+            <ResponsiveContainer width="100%" height={350}>
+              <LineChart data={chartData} margin={{ top: 5, right: 20, left: 15, bottom: 20 }}>
+                <XAxis 
+                  dataKey="timestamp" 
+                  tick={{ fontSize: 11 }}
+                  angle={-45}
+                  textAnchor="end"
+                  height={85} // Increase height to give more room for the date/time
+                />
+                <YAxis 
+                  label={{ 
+                    value: 'Margin %', 
+                    angle: -90, 
+                    position: 'insideLeft' 
+                  }}
+                  domain={['dataMin - 0.5', 'dataMax + 0.5']}
+                  width={40}
+                  tick={{ fontSize: 10 }}
+                  tickFormatter={(value) => `${value.toFixed(1)}%`}
+                />
+                <Tooltip 
+                  formatter={(value: any, name: string) => [`${Number(value).toFixed(2)}%`, name]}
+                  labelFormatter={(label) => `Date/Time: ${label}`}
+                />
+                <Legend 
+                  iconSize={8}
+                  wrapperStyle={{ fontSize: '10px', marginTop: '15px' }}
+                  verticalAlign="bottom"
+                />
+                {bookmakers.map((bookmakerCode) => (
+                  chartData.some(dp => dp[bookmakerCode] !== undefined) && (
+                    <Line
+                      key={bookmakerCode}
+                      type="monotone"
+                      dataKey={bookmakerCode}
+                      name={bookmakerCode}
+                      stroke={bookmakerColors[bookmakerCode] || '#888888'}
+                      strokeWidth={2}
+                      dot={false} // Remove dots for better performance
+                      activeDot={{ r: 4 }} // Smaller dots
+                      connectNulls
+                    />
+                  )
+                ))}
+              </LineChart>
+            </ResponsiveContainer>
           )}
         </div>
+        
+        <DialogFooter className="pt-1">
+          <DialogClose asChild>
+            <Button variant="outline" size="sm" className="h-7 text-xs px-3">Close</Button>
+          </DialogClose>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
-};
-
-export default MarginHistoryPopup;
+}
