@@ -122,7 +122,7 @@ export class MemStorage implements IStorage {
         bestOddsCount: 0,
         bestOddsChange: 0,
         lastScrapeTime: this.formatTime(new Date()),
-        timeToNextUpdate: 15
+        timeToNextUpdate: 30
       };
     } catch (error) {
       console.error('Error initializing data:', error);
@@ -731,7 +731,7 @@ export class DatabaseStorage implements IStorage {
         bestOddsCount: 0,
         bestOddsChange: 0,
         lastScrapeTime: this.formatTime(new Date()),
-        timeToNextUpdate: 15
+        timeToNextUpdate: 30
       };
     }
   }
