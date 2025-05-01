@@ -6,10 +6,15 @@ import { saveOddsHistory } from './oddsHistory';
 
 /**
  * Maps events from different bookmakers by matching exact eventIds
+ * 
+ * This is the core function that takes raw scraper data and:
+ * 1. Identifies matching events across different bookmakers
+ * 2. Updates existing events or creates new ones
+ * 3. Calculates best odds and margins for each event
  */
 export async function processAndMapEvents(storage: IStorage): Promise<void> {
   try {
-    console.log('Processing and mapping events...');
+    console.log('🔄 Processing scraped data...');
     
     // Get all bookmaker data
     const allBookmakerData = await storage.getAllBookmakersData();
@@ -32,7 +37,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       }
     }
     
-    console.log(`Found ${allEventIds.size} unique eventIds across all bookmakers`);
+    console.log(`📊 Found ${allEventIds.size} unique events to process`);
     
     // Stats counters to track filtering results
     let eventsWith1Bookmaker = 0;
@@ -110,7 +115,8 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
           league = firstMatch.league || 'Unknown';
         }
         
-        console.log(`Event ${eventId} - Country: [${country}], Tournament: [${tournament}], League: [${league}]`);
+        // Detailed event information - only log in debug mode
+        // console.log(`Event ${eventId} - Country: [${country}], Tournament: [${tournament}], League: [${league}]`);
         
         // Create the teams field if not already available
         let teams = firstMatch.teams;
@@ -207,7 +213,8 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
             date: eventData.date,
             time: eventData.time
           });
-          console.log(`Updated event ${existingEvent.id} with eventId ${eventData.eventId}`);
+          // Skip individual event update logs to reduce console noise
+          // console.log(`Updated event ${existingEvent.id} with eventId ${eventData.eventId}`);
         } else {
           // Create new event
           const insertData: InsertEvent = {
@@ -229,7 +236,8 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
           
           // Insert new event
           const createdEvent = await storage.createEvent(validatedData);
-          console.log(`Created new event with eventId ${eventData.eventId}`);
+          // Skip individual event creation logs to reduce console noise
+          // console.log(`Created new event with eventId ${eventData.eventId}`);
           
           // Save initial historical odds data for each bookmaker for new events too
           const newOdds = eventData.oddsData;
@@ -254,13 +262,13 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       }
     }
     
-    // Log distribution of events by bookmaker count
-    console.log(`Event distribution by bookmaker count:`);
-    console.log(`- Events with 1 bookmaker: ${eventsWith1Bookmaker}`);
-    console.log(`- Events with 2 bookmakers: ${eventsWith2Bookmakers}`);
-    console.log(`- Events with 3 bookmakers: ${eventsWith3Bookmakers}`);
-    console.log(`- Events with 4 bookmakers: ${eventsWith4Bookmakers}`);
-    console.log(`Processed and mapped ${eventMap.size} events with at least 3 bookmakers`);
+    // Log distribution of events by bookmaker count with emojis for better readability
+    console.log(`📊 Event distribution by bookmaker count:`);
+    console.log(`  - Events with 1 bookmaker: ${eventsWith1Bookmaker}`);
+    console.log(`  - Events with 2 bookmakers: ${eventsWith2Bookmakers}`);
+    console.log(`  - Events with 3 bookmakers: ${eventsWith3Bookmakers}`);
+    console.log(`  - Events with 4+ bookmakers: ${eventsWith4Bookmakers}`);
+    console.log(`✅ Processed ${eventMap.size} events with at least 3 bookmakers`);
     
     // Get all events and delete any that don't meet our criteria anymore
     // This ensures events that previously had 3+ bookmakers but now have fewer are removed
@@ -269,14 +277,15 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     
     let deletedCount = 0;
     
-    console.log(`Checking ${allEvents.length} existing events against ${currentEventIds.size} mapped events that meet criteria (3+ bookmakers)`);
+    console.log(`🧹 Cleaning up events that no longer meet criteria...`);
     
     // Remove events that don't meet criteria anymore
     for (const event of allEvents) {
       // If this event is not in our current map and has an eventId, it should be removed
       if (event.eventId && !currentEventIds.has(event.eventId)) {
         try {
-          console.log(`Event ${event.id} (${event.eventId}: ${event.teams}) no longer meets criteria - removing from database`);
+          // Skip logs for individual event removal to reduce console noise
+          // console.log(`Event ${event.id} (${event.eventId}: ${event.teams}) no longer meets criteria - removing from database`);
           // Delete the event from the database
           await db.delete(events).where(eq(events.id, event.id));
           deletedCount++;
