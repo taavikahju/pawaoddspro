@@ -655,19 +655,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const results = await db.execute(sql`
         WITH latest_records AS (
           SELECT 
-            DISTINCT ON (country_name, tournament_name, bookmaker_code) 
+            DISTINCT ON (country_name, tournament, bookmaker_code) 
             id,
             country_name, 
-            tournament_name, 
+            tournament, 
             bookmaker_code,
             average_margin,
             event_count,
             timestamp
           FROM tournament_margins
-          ORDER BY country_name, tournament_name, bookmaker_code, timestamp DESC
+          ORDER BY country_name, tournament, bookmaker_code, timestamp DESC
         )
         SELECT * FROM latest_records
-        ORDER BY country_name, tournament_name
+        ORDER BY country_name, tournament
       `);
       
       // Group the results by country
@@ -684,7 +684,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
         
         const country = countriesMap.get(countryName);
-        const tournamentName = record.tournament_name;
+        const tournamentName = record.tournament;
         
         if (!country.tournaments[tournamentName]) {
           country.tournaments[tournamentName] = {

@@ -2,11 +2,12 @@ import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
-import { Loader2, Search } from 'lucide-react';
+import { Loader2, Search, ChevronRight } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { useBookmakerContext } from '@/contexts/BookmakerContext';
 import CountryFlag from '@/components/CountryFlag';
 import { cn } from '@/lib/utils';
+import Layout from '@/components/Layout';
 
 // Custom type for country data structure
 interface CountryData {
@@ -29,6 +30,7 @@ const TournamentMargins: React.FC = () => {
   const { bookmakers } = useBookmakerContext();
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   
   // Function to determine country code from country name
   const getCountryCode = (countryName: string): string => {
@@ -119,26 +121,42 @@ const TournamentMargins: React.FC = () => {
     return 'text-red-600 dark:text-red-400';
   };
   
+  const toggleSidebar = () => {
+    setSidebarCollapsed(!sidebarCollapsed);
+  };
+  
   return (
-    <div className="container py-6">
-      <h1 className="text-2xl font-bold mb-6">Tournament Margins</h1>
-      
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+    <Layout title="Tournament Margins" subtitle="Average bookmaker margins by tournament">
+      <div className="flex flex-col md:flex-row h-full gap-4">
+        {/* Collapsible sidebar toggle for mobile */}
+        <div className="md:hidden flex justify-between items-center mb-4">
+          <h2 className="font-medium text-sm">Countries</h2>
+          <button 
+            onClick={toggleSidebar} 
+            className="p-1 rounded-md hover:bg-muted"
+          >
+            <ChevronRight className={`h-5 w-5 transition-transform ${sidebarCollapsed ? '' : 'rotate-90'}`} />
+          </button>
+        </div>
+        
         {/* Left sidebar with countries list */}
-        <Card className="md:col-span-1">
-          <CardHeader>
-            <CardTitle className="flex items-center justify-between">
+        <Card 
+          className={`md:w-64 flex-shrink-0 ${sidebarCollapsed ? 'hidden' : 'block'} md:block`}
+          style={{ height: 'calc(100vh - 180px)' }}
+        >
+          <CardHeader className="py-3">
+            <CardTitle className="flex items-center justify-between text-base">
               <span>Countries</span>
-              <span className="text-sm text-muted-foreground">
+              <span className="text-xs text-muted-foreground">
                 {filteredCountries?.length || 0}
               </span>
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="relative mb-4">
+          <CardContent className="pt-0">
+            <div className="relative mb-3">
               <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search countries or tournaments..."
+                placeholder="Search countries..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-8"
@@ -147,31 +165,31 @@ const TournamentMargins: React.FC = () => {
             
             {isLoading ? (
               <div className="flex items-center justify-center py-8">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                <Loader2 className="h-6 w-6 animate-spin text-primary" />
               </div>
             ) : error ? (
-              <div className="text-center py-8 text-red-500">
-                Failed to load countries data
+              <div className="text-center py-6 text-red-500 text-sm">
+                Failed to load countries
               </div>
             ) : filteredCountries.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground">
-                No countries found matching your search
+              <div className="text-center py-6 text-muted-foreground text-sm">
+                No countries found
               </div>
             ) : (
-              <div className="space-y-1 max-h-[70vh] overflow-y-auto pr-2">
+              <div className="space-y-0.5 overflow-y-auto pr-1" style={{ maxHeight: 'calc(100vh - 250px)' }}>
                 {filteredCountries.map(country => (
                   <div 
                     key={country.name}
                     className={cn(
-                      "flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer hover:bg-accent",
-                      selectedCountry === country.name && "bg-accent"
+                      "flex items-center gap-2 px-2 py-1.5 rounded-md cursor-pointer hover:bg-accent text-sm",
+                      selectedCountry === country.name && "bg-accent/80 font-medium"
                     )}
                     onClick={() => setSelectedCountry(country.name)}
                   >
                     <CountryFlag 
                       countryCode={getCountryCode(country.name)} 
                       countryName={country.name}
-                      size="md"
+                      size="sm"
                     />
                     <span className="flex-1 truncate">{country.name}</span>
                     <span className="text-xs text-muted-foreground">
@@ -185,9 +203,19 @@ const TournamentMargins: React.FC = () => {
         </Card>
         
         {/* Right content area with tournament margins table */}
-        <Card className="md:col-span-3">
-          <CardHeader>
-            <CardTitle>
+        <Card className="flex-1">
+          <CardHeader className="py-4">
+            <CardTitle className="text-lg flex items-center">
+              {selectedCountryData && (
+                <>
+                  <CountryFlag 
+                    countryCode={getCountryCode(selectedCountryData.name)} 
+                    countryName={selectedCountryData.name}
+                    size="md"
+                    className="mr-2"
+                  />
+                </>
+              )}
               {selectedCountryData 
                 ? `${selectedCountryData.name} Tournaments (${selectedCountryData.tournaments.length})` 
                 : 'Tournament Margins'}
@@ -272,7 +300,7 @@ const TournamentMargins: React.FC = () => {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </Layout>
   );
 };
 
