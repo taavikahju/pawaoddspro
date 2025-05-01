@@ -642,6 +642,79 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ error: 'Failed to fetch tournament margins' });
     }
   });
+  
+  // Add an endpoint to get all tournament margins grouped by country
+  app.get('/api/tournaments/margins/by-country', async (req, res) => {
+    try {
+      // Get latest tournament margins from the database
+      const results = await db.execute(sql`
+        WITH latest_records AS (
+          SELECT 
+            DISTINCT ON (country_name, tournament_name, bookmaker_code) 
+            id,
+            country_name, 
+            tournament_name, 
+            bookmaker_code,
+            average_margin,
+            event_count,
+            timestamp
+          FROM tournament_margins
+          ORDER BY country_name, tournament_name, bookmaker_code, timestamp DESC
+        )
+        SELECT * FROM latest_records
+        ORDER BY country_name, tournament_name
+      `);
+      
+      // Group the results by country
+      const countriesMap = new Map();
+      
+      for (const record of results.rows) {
+        const countryName = record.country_name || 'Unknown';
+        
+        if (!countriesMap.has(countryName)) {
+          countriesMap.set(countryName, {
+            name: countryName,
+            tournaments: {}
+          });
+        }
+        
+        const country = countriesMap.get(countryName);
+        const tournamentName = record.tournament_name;
+        
+        if (!country.tournaments[tournamentName]) {
+          country.tournaments[tournamentName] = {
+            name: tournamentName,
+            bookmakers: {}
+          };
+        }
+        
+        country.tournaments[tournamentName].bookmakers[record.bookmaker_code] = {
+          margin: parseFloat(record.average_margin),
+          eventCount: record.event_count,
+          timestamp: record.timestamp
+        };
+      }
+      
+      // Convert map to array and sort alphabetically
+      const countries = Array.from(countriesMap.values()).map(country => {
+        // Convert tournaments object to array for easier rendering
+        const tournamentsArray = Object.values(country.tournaments).map((tournament: any) => ({
+          ...tournament,
+          // Keep bookmakers as an object for easy lookup by code
+        }));
+        
+        return {
+          ...country,
+          tournaments: tournamentsArray
+        };
+      }).sort((a, b) => a.name.localeCompare(b.name));
+      
+      res.json(countries);
+    } catch (error) {
+      console.error('Error fetching tournament margins by country:', error);
+      res.status(500).json({ error: 'Failed to fetch tournament margins' });
+    }
+  });
 
   app.get('/api/stats', async (req, res) => {
     try {

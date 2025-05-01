@@ -102,7 +102,7 @@ export async function calculateAndStoreTournamentMargins(storage: IStorage): Pro
       // Create tournament margin record
       const tournamentMarginData: InsertTournamentMargin = {
         bookmakerCode: data.bookmakerCode,
-        countryName: data.countryName,
+        countryName: data.countryName || 'Unknown', // Default to 'Unknown' if country is missing
         tournamentName: data.tournamentName,
         averageMargin: averageMargin.toFixed(2),
         eventCount: data.count

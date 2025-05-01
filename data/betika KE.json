@@ -23400,6 +23400,32 @@
     }
   },
   {
+    "id": "57380259",
+    "eventId": "57380259",
+    "teams": "Audax Italiano - La Serena",
+    "league": "Primera Division",
+    "sport": "football",
+    "country": "Chile",
+    "date": "2025-05-05",
+    "time": "00:30",
+    "odds": {
+      "home": 1.73,
+      "draw": 3.55,
+      "away": 4.3
+    },
+    "raw": {
+      "eventId": "57380259",
+      "country": "Chile",
+      "tournament": "Primera Division",
+      "event": "Audax Italiano - La Serena",
+      "market": "1X2",
+      "home_odds": "1.73",
+      "draw_odds": "3.55",
+      "away_odds": "4.30",
+      "start_time": "2025-05-05 00:30"
+    }
+  },
+  {
     "id": "58473123",
     "eventId": "58473123",
     "teams": "Guarani - Botafogo FC",
@@ -25974,32 +26000,6 @@
     }
   },
   {
-    "id": "59011143",
-    "eventId": "59011143",
-    "teams": "EC Bahia - Club Nacional de Football",
-    "league": "CONMEBOL Libertadores",
-    "sport": "football",
-    "country": "International Clubs",
-    "date": "2025-05-08",
-    "time": "01:00",
-    "odds": {
-      "home": 1.55,
-      "draw": 4,
-      "away": 5.8
-    },
-    "raw": {
-      "eventId": "59011143",
-      "country": "International Clubs",
-      "tournament": "CONMEBOL Libertadores",
-      "event": "EC Bahia - Club Nacional de Football",
-      "market": "1X2",
-      "home_odds": "1.55",
-      "draw_odds": "4.00",
-      "away_odds": "5.80",
-      "start_time": "2025-05-08 01:00"
-    }
-  },
-  {
     "id": "60044967",
     "eventId": "60044967",
     "teams": "CF Pachuca - America",
@@ -27270,6 +27270,32 @@
       "home_odds": "4.10",
       "draw_odds": "3.80",
       "away_odds": "1.84",
+      "start_time": "2025-05-10 22:00"
+    }
+  },
+  {
+    "id": "50955927",
+    "eventId": "50955927",
+    "teams": "Le Havre AC - Olympique Marseille",
+    "league": "Ligue 1",
+    "sport": "football",
+    "country": "France",
+    "date": "2025-05-10",
+    "time": "22:00",
+    "odds": {
+      "home": 5.4,
+      "draw": 4.4,
+      "away": 1.56
+    },
+    "raw": {
+      "eventId": "50955927",
+      "country": "France",
+      "tournament": "Ligue 1",
+      "event": "Le Havre AC - Olympique Marseille",
+      "market": "1X2",
+      "home_odds": "5.40",
+      "draw_odds": "4.40",
+      "away_odds": "1.56",
       "start_time": "2025-05-10 22:00"
     }
   },
