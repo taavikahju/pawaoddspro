@@ -43,12 +43,12 @@ let cleanupJob: cron.ScheduledTask | null = null;
  * Setup all scrapers and schedule them to run
  */
 export function setupScrapers(storage: IStorage): void {
-  console.log('Setting up scrapers...');
+  console.log('⚙️ Setting up scraper services...');
   
   // Run scrapers immediately on startup
   runAllScrapers(storage)
-    .then(() => console.log('Initial scraping completed'))
-    .catch(err => console.error('Error during initial scraping:', err));
+    .then(() => console.log('✅ Initial scraping completed'))
+    .catch(err => console.error('❌ Error during initial scraping:', err));
   
   // Schedule regular scraper runs
   if (scheduledJob) {
@@ -57,15 +57,16 @@ export function setupScrapers(storage: IStorage): void {
   
   scheduledJob = cron.schedule(SCRAPE_SCHEDULE, async () => {
     try {
-      console.log(`Running scheduled scrape at ${new Date().toLocaleTimeString()}`);
+      // More concise logging
+      console.log(`🔄 Scheduled scrape starting [${new Date().toLocaleTimeString()}]`);
       await runAllScrapers(storage);
-      console.log('Scheduled scraping completed');
+      // No need for completion message as the scraper itself will log its summary
     } catch (error) {
-      console.error('Error during scheduled scraping:', error);
+      console.error('❌ Scheduled scraping failed:', error);
     }
   });
   
-  console.log(`Scrapers scheduled to run every 15 minutes (cron: ${SCRAPE_SCHEDULE})`);
+  console.log(`📆 Scrapers will run every 15 minutes`);
   
   // Schedule daily cleanup job to remove old history data
   if (cleanupJob) {
@@ -74,16 +75,16 @@ export function setupScrapers(storage: IStorage): void {
   
   cleanupJob = cron.schedule(CLEANUP_SCHEDULE, async () => {
     try {
-      console.log(`Running scheduled history cleanup at ${new Date().toLocaleTimeString()}`);
+      console.log(`🧹 Running history cleanup [${new Date().toLocaleTimeString()}]`);
       const { cleanupOldOddsHistory } = await import('../utils/oddsHistory');
       const deletedCount = await cleanupOldOddsHistory(30); // Delete data older than 30 days (1 month)
-      console.log(`History cleanup complete: removed ${deletedCount} records`);
+      console.log(`✅ History cleanup: removed ${deletedCount} records`);
     } catch (error) {
-      console.error('Error during history cleanup:', error);
+      console.error('❌ History cleanup failed:', error);
     }
   });
   
-  console.log(`History cleanup scheduled to run daily at midnight (cron: ${CLEANUP_SCHEDULE})`);
+  console.log(`📆 History cleanup will run daily at midnight`);
 }
 
 /**
@@ -91,7 +92,7 @@ export function setupScrapers(storage: IStorage): void {
  */
 export async function runAllScrapers(storage: IStorage): Promise<void> {
   try {
-    console.log('Starting scraper runs...');
+    console.log('🚀 Starting scraper runs...');
     
     // Emit scraper started event
     scraperEvents.emit(SCRAPER_EVENTS.STARTED, {
@@ -101,78 +102,42 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
     
     // Get all bookmakers
     const bookmakers = await storage.getBookmakers();
+    const activeBookmakers = bookmakers.filter(bookmaker => bookmaker.active);
+    
+    console.log(`📊 Processing ${activeBookmakers.length} active bookmakers`);
     
     // Run scrapers in parallel
-    const scraperPromises = bookmakers
-      .filter(bookmaker => bookmaker.active)
-      .map(async (bookmaker) => {
-        try {
-          console.log(`Running scraper for ${bookmaker.name}...`);
-          
-          // Emit bookmaker scraper started event
-          scraperEvents.emit(SCRAPER_EVENTS.BOOKMAKER_STARTED, {
-            timestamp: new Date().toISOString(),
-            bookmaker: {
-              code: bookmaker.code,
-              name: bookmaker.name
-            },
-            message: `Running scraper for ${bookmaker.name}`
-          });
-          
-          let data: any = null;
-          
-          // Check if custom scraper exists
-          const hasCustom = customScrapers.hasCustomScraper(bookmaker.code);
-          
-          // Try to use custom scraper
-          if (hasCustom) {
-            try {
-              // Use the custom scraper
-              console.log(`Using custom scraper for ${bookmaker.name}...`);
-              data = await customScrapers.runCustomScraper(bookmaker.code);
-            } catch (customError) {
-              console.error(`Error in custom scraper for ${bookmaker.name}:`, customError);
-              data = null;
-            }
+    const scraperPromises = activeBookmakers.map(async (bookmaker) => {
+      try {
+        // Emit bookmaker scraper started event
+        scraperEvents.emit(SCRAPER_EVENTS.BOOKMAKER_STARTED, {
+          timestamp: new Date().toISOString(),
+          bookmaker: {
+            code: bookmaker.code,
+            name: bookmaker.name
+          },
+          message: `Running scraper for ${bookmaker.name}`
+        });
+        
+        let data: any = null;
+        
+        // Check if custom scraper exists
+        const hasCustom = customScrapers.hasCustomScraper(bookmaker.code);
+        
+        // Try to use custom scraper
+        if (hasCustom) {
+          try {
+            console.log(`🔍 Scraping ${bookmaker.name}...`);
+            data = await customScrapers.runCustomScraper(bookmaker.code);
+          } catch (customError) {
+            console.error(`❌ Error in ${bookmaker.name} scraper:`, customError);
+            data = null;
           }
-          
-          // Only use custom scrapers, no fallbacks to mock scrapers
-          if (!data) {
-            console.warn(`No custom scraper found for bookmaker ${bookmaker.code}`);
-            
-            // Emit bookmaker scraper failed event
-            scraperEvents.emit(SCRAPER_EVENTS.BOOKMAKER_FAILED, {
-              timestamp: new Date().toISOString(),
-              bookmaker: {
-                code: bookmaker.code,
-                name: bookmaker.name
-              },
-              message: `No custom scraper found for bookmaker ${bookmaker.code}`,
-              error: 'No custom scraper available'
-            });
-            
-            return null;
-          }
-          
-          if (data) {
-            await storage.saveBookmakerData(bookmaker.code, data);
-            console.log(`Saved data for ${bookmaker.name}`);
-            
-            // Emit bookmaker scraper completed event
-            scraperEvents.emit(SCRAPER_EVENTS.BOOKMAKER_COMPLETED, {
-              timestamp: new Date().toISOString(),
-              bookmaker: {
-                code: bookmaker.code,
-                name: bookmaker.name
-              },
-              message: `Completed scraping for ${bookmaker.name}`,
-              eventCount: Array.isArray(data) ? data.length : 0
-            });
-          }
-          
-          return { bookmaker: bookmaker.code, data };
-        } catch (error) {
-          console.error(`Error scraping ${bookmaker.name}:`, error);
+        }
+        
+        // Only use custom scrapers, no fallbacks to mock scrapers
+        if (!data) {
+          console.warn(`⚠️ No scraper for ${bookmaker.code}`);
           
           // Emit bookmaker scraper failed event
           scraperEvents.emit(SCRAPER_EVENTS.BOOKMAKER_FAILED, {
@@ -181,18 +146,58 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
               code: bookmaker.code,
               name: bookmaker.name
             },
-            message: `Error scraping ${bookmaker.name}`,
-            error: error instanceof Error ? error.message : String(error)
+            message: `No custom scraper found for bookmaker ${bookmaker.code}`,
+            error: 'No custom scraper available'
           });
           
-          return { bookmaker: bookmaker.code, error, data: null };
+          return null;
         }
-      });
+        
+        if (data) {
+          await storage.saveBookmakerData(bookmaker.code, data);
+          // Log event count for status clarity
+          const eventCount = Array.isArray(data) ? data.length : 0;
+          console.log(`✅ ${bookmaker.name}: ${eventCount} events collected`);
+          
+          // Emit bookmaker scraper completed event
+          scraperEvents.emit(SCRAPER_EVENTS.BOOKMAKER_COMPLETED, {
+            timestamp: new Date().toISOString(),
+            bookmaker: {
+              code: bookmaker.code,
+              name: bookmaker.name
+            },
+            message: `Completed scraping for ${bookmaker.name}`,
+            eventCount
+          });
+        }
+        
+        return { bookmaker: bookmaker.code, data };
+      } catch (error) {
+        console.error(`❌ ${bookmaker.name} scraper failed:`, error);
+        
+        // Emit bookmaker scraper failed event
+        scraperEvents.emit(SCRAPER_EVENTS.BOOKMAKER_FAILED, {
+          timestamp: new Date().toISOString(),
+          bookmaker: {
+            code: bookmaker.code,
+            name: bookmaker.name
+          },
+          message: `Error scraping ${bookmaker.name}`,
+          error: error instanceof Error ? error.message : String(error)
+        });
+        
+        return { bookmaker: bookmaker.code, error, data: null };
+      }
+    });
     
     // Wait for all scrapers to complete
     const results = await Promise.all(scraperPromises);
-    console.log('All scrapers completed');
     
+    // Count successful scrapers
+    const successfulScrapers = results.filter(r => r && r.data).length;
+    console.log(`✅ ${successfulScrapers}/${activeBookmakers.length} scrapers completed successfully`);
+    
+    console.log(`🔄 Processing and mapping events...`);
     // Emit processing started event
     scraperEvents.emit(SCRAPER_EVENTS.PROCESSING_STARTED, {
       timestamp: new Date().toISOString(),
@@ -209,7 +214,7 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
         message: 'Completed processing and mapping events'
       });
     } catch (processingError) {
-      console.error('Error processing events:', processingError);
+      console.error('❌ Error processing events:', processingError);
       
       // Emit processing failed event
       scraperEvents.emit(SCRAPER_EVENTS.PROCESSING_FAILED, {
@@ -223,6 +228,7 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
     
     // Update stats
     const stats = await storage.getStats();
+    console.log(`📊 Scraping complete: ${stats.totalEvents} total events`);
     
     // Emit scraper completed event
     scraperEvents.emit(SCRAPER_EVENTS.COMPLETED, {
@@ -232,7 +238,7 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
     });
     
   } catch (error) {
-    console.error('Error running scrapers:', error);
+    console.error('❌ Scraper run failed:', error);
     
     // Emit scraper failed event
     scraperEvents.emit(SCRAPER_EVENTS.FAILED, {
@@ -252,6 +258,12 @@ export function stopScrapers(): void {
   if (scheduledJob) {
     scheduledJob.stop();
     scheduledJob = null;
-    console.log('Scrapers stopped');
+    console.log('🛑 Scrapers stopped');
+  }
+  
+  if (cleanupJob) {
+    cleanupJob.stop();
+    cleanupJob = null;
+    console.log('🛑 Cleanup job stopped');
   }
 }
