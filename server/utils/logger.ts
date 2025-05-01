@@ -8,7 +8,7 @@
 // 1 = errors + critical info
 // 2 = errors + critical info + general info
 // 3 = all logs (including verbose debugging)
-let verbosityLevel = 1;
+let verbosityLevel = 0; // Set to errors only by default
 
 export function setVerbosityLevel(level: number) {
   verbosityLevel = Math.max(0, Math.min(3, level));

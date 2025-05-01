@@ -8,8 +8,8 @@ const PRIMARY_REGION = 'gh'; // Ghana is primary region per requirements
 const BACKUP_REGION = 'ke'; // Kenya as backup for more comprehensive coverage
 const ADDITIONAL_REGIONS = ['ke']; // Extra regions to check for specific leagues like England National League
 
-// Debug mode flag - set to true to help debug scraping issues
-const DEBUG = true;
+// Debug mode flag - set to false to suppress logs
+const DEBUG = false;
 
 // Console logging helper that respects debug mode
 const log = (message) => {
