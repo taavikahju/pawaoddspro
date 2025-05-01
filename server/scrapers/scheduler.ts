@@ -118,7 +118,7 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
     
     console.log(`📊 Processing ${activeBookmakers.length} active bookmakers`);
     
-    // Run scrapers in parallel
+    // Run scrapers in parallel with all results collected first before mapping
     const scraperPromises = activeBookmakers.map(async (bookmaker) => {
       try {
         // Emit bookmaker scraper started event
@@ -141,6 +141,7 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
           try {
             console.log(`🔍 Scraping ${bookmaker.name}...`);
             data = await customScrapers.runCustomScraper(bookmaker.code);
+            console.log(`✅ ${bookmaker.name}: ${data?.length || 0} events collected`);
           } catch (customError) {
             console.error(`❌ Error in ${bookmaker.name} scraper:`, customError);
             data = null;
@@ -167,9 +168,8 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
         
         if (data) {
           await storage.saveBookmakerData(bookmaker.code, data);
-          // Log event count for status clarity
+          // Event count already logged after scraper completes, avoid duplicate logs
           const eventCount = Array.isArray(data) ? data.length : 0;
-          console.log(`✅ ${bookmaker.name}: ${eventCount} events collected`);
           
           // Emit bookmaker scraper completed event
           scraperEvents.emit(SCRAPER_EVENTS.BOOKMAKER_COMPLETED, {

@@ -1,239 +1,5 @@
 [
   {
-    "id": "60188265",
-    "eventId": "60188265",
-    "teams": "USM Khenchela U21 - MC Oran U21",
-    "league": "Algeria U21 League 1",
-    "sport": "football",
-    "country": "Algeria",
-    "date": "2025-05-01",
-    "time": "15:00",
-    "odds": {
-      "home": 1.57,
-      "draw": 4.2,
-      "away": 4.4
-    },
-    "raw": {
-      "eventId": "60188265",
-      "country": "Algeria",
-      "tournament": "Algeria U21 League 1",
-      "event": "USM Khenchela U21 - MC Oran U21",
-      "market": "1X2 - FT",
-      "home_odds": "1.57",
-      "draw_odds": "4.2",
-      "away_odds": "4.4",
-      "start_time": "2025-05-01 15:00"
-    }
-  },
-  {
-    "id": "60188273",
-    "eventId": "60188273",
-    "teams": "CR Belouizdad U21 - MC Alger U21",
-    "league": "Algeria U21 League 1",
-    "sport": "football",
-    "country": "Algeria",
-    "date": "2025-05-01",
-    "time": "15:00",
-    "odds": {
-      "home": 2.7,
-      "draw": 3.2,
-      "away": 2.4
-    },
-    "raw": {
-      "eventId": "60188273",
-      "country": "Algeria",
-      "tournament": "Algeria U21 League 1",
-      "event": "CR Belouizdad U21 - MC Alger U21",
-      "market": "1X2 - FT",
-      "home_odds": "2.7",
-      "draw_odds": "3.2",
-      "away_odds": "2.4",
-      "start_time": "2025-05-01 15:00"
-    }
-  },
-  {
-    "id": "59879216",
-    "eventId": "59879216",
-    "teams": "Nigeria U20 - Tunisia U20 (n)",
-    "league": "U20 Africa Cup of Nations",
-    "sport": "football",
-    "country": "International",
-    "date": "2025-05-01",
-    "time": "15:00",
-    "odds": {
-      "home": 2.03,
-      "draw": 3,
-      "away": 3.6
-    },
-    "raw": {
-      "eventId": "59879216",
-      "country": "International",
-      "tournament": "U20 Africa Cup of Nations",
-      "event": "Nigeria U20 - Tunisia U20 (n)",
-      "market": "1X2 - FT",
-      "home_odds": "2.03",
-      "draw_odds": "3.0",
-      "away_odds": "3.6",
-      "start_time": "2025-05-01 15:00"
-    }
-  },
-  {
-    "id": "58108723",
-    "eventId": "58108723",
-    "teams": "Mekelle 70 Enderta FC - Saint George SC",
-    "league": "Premier League",
-    "sport": "football",
-    "country": "Ethiopia",
-    "date": "2025-05-01",
-    "time": "15:00",
-    "odds": {
-      "home": 3,
-      "draw": 2.85,
-      "away": 2.4
-    },
-    "raw": {
-      "eventId": "58108723",
-      "country": "Ethiopia",
-      "tournament": "Premier League",
-      "event": "Mekelle 70 Enderta FC - Saint George SC",
-      "market": "1X2 - FT",
-      "home_odds": "3.0",
-      "draw_odds": "2.85",
-      "away_odds": "2.4",
-      "start_time": "2025-05-01 15:00"
-    }
-  },
-  {
-    "id": "54641183",
-    "eventId": "54641183",
-    "teams": "Karkonosze Jelenia Gora - GKS Pniowek Pawlowice",
-    "league": "III Liga, Group 3",
-    "sport": "football",
-    "country": "Poland",
-    "date": "2025-05-01",
-    "time": "15:00",
-    "odds": {
-      "home": 1.65,
-      "draw": 4.4,
-      "away": 3.7
-    },
-    "raw": {
-      "eventId": "54641183",
-      "country": "Poland",
-      "tournament": "III Liga, Group 3",
-      "event": "Karkonosze Jelenia Gora - GKS Pniowek Pawlowice",
-      "market": "1X2 - FT",
-      "home_odds": "1.65",
-      "draw_odds": "4.4",
-      "away_odds": "3.7",
-      "start_time": "2025-05-01 15:00"
-    }
-  },
-  {
-    "id": "59523573",
-    "eventId": "59523573",
-    "teams": "Wolfsberger AC - TSV Hartberg (n)",
-    "league": "OFB Cup",
-    "sport": "football",
-    "country": "Austria",
-    "date": "2025-05-01",
-    "time": "15:00",
-    "odds": {
-      "home": 1.99,
-      "draw": 3.25,
-      "away": 3.7
-    },
-    "raw": {
-      "eventId": "59523573",
-      "country": "Austria",
-      "tournament": "OFB Cup",
-      "event": "Wolfsberger AC - TSV Hartberg (n)",
-      "market": "1X2 - FT",
-      "home_odds": "1.99",
-      "draw_odds": "3.25",
-      "away_odds": "3.7",
-      "start_time": "2025-05-01 15:00"
-    }
-  },
-  {
-    "id": "58970377",
-    "eventId": "58970377",
-    "teams": "NK Sesvete - NK Dubrava Zagreb",
-    "league": "Prva NL",
-    "sport": "football",
-    "country": "Croatia",
-    "date": "2025-05-01",
-    "time": "15:00",
-    "odds": {
-      "home": 2.45,
-      "draw": 2.95,
-      "away": 2.85
-    },
-    "raw": {
-      "eventId": "58970377",
-      "country": "Croatia",
-      "tournament": "Prva NL",
-      "event": "NK Sesvete - NK Dubrava Zagreb",
-      "market": "1X2 - FT",
-      "home_odds": "2.45",
-      "draw_odds": "2.95",
-      "away_odds": "2.85",
-      "start_time": "2025-05-01 15:00"
-    }
-  },
-  {
-    "id": "53459881",
-    "eventId": "53459881",
-    "teams": "CD Becerril - Atletico Astorga FC",
-    "league": "Tercera Federacion, Group 8",
-    "sport": "football",
-    "country": "Spain",
-    "date": "2025-05-01",
-    "time": "15:00",
-    "odds": {
-      "home": 5,
-      "draw": 3.4,
-      "away": 1.65
-    },
-    "raw": {
-      "eventId": "53459881",
-      "country": "Spain",
-      "tournament": "Tercera Federacion, Group 8",
-      "event": "CD Becerril - Atletico Astorga FC",
-      "market": "1X2 - FT",
-      "home_odds": "5.0",
-      "draw_odds": "3.4",
-      "away_odds": "1.65",
-      "start_time": "2025-05-01 15:00"
-    }
-  },
-  {
-    "id": "54641179",
-    "eventId": "54641179",
-    "teams": "MKS Kluczbork - BTP Stal Brzeg",
-    "league": "III Liga, Group 3",
-    "sport": "football",
-    "country": "Poland",
-    "date": "2025-05-01",
-    "time": "15:00",
-    "odds": {
-      "home": 1.38,
-      "draw": 4.9,
-      "away": 5.75
-    },
-    "raw": {
-      "eventId": "54641179",
-      "country": "Poland",
-      "tournament": "III Liga, Group 3",
-      "event": "MKS Kluczbork - BTP Stal Brzeg",
-      "market": "1X2 - FT",
-      "home_odds": "1.38",
-      "draw_odds": "4.9",
-      "away_odds": "5.75",
-      "start_time": "2025-05-01 15:00"
-    }
-  },
-  {
     "id": "51468285",
     "eventId": "51468285",
     "teams": "AS Cittadella - Brescia Calcio",
@@ -243,9 +9,9 @@
     "date": "2025-05-01",
     "time": "15:15",
     "odds": {
-      "home": 3,
-      "draw": 2.9,
-      "away": 2.5
+      "home": 3.1,
+      "draw": 2.85,
+      "away": 2.45
     },
     "raw": {
       "eventId": "51468285",
@@ -253,9 +19,9 @@
       "tournament": "Serie B",
       "event": "AS Cittadella - Brescia Calcio",
       "market": "1X2 - FT",
-      "home_odds": "3.0",
-      "draw_odds": "2.9",
-      "away_odds": "2.5",
+      "home_odds": "3.1",
+      "draw_odds": "2.85",
+      "away_odds": "2.45",
       "start_time": "2025-05-01 15:15"
     }
   },
@@ -373,9 +139,9 @@
     "date": "2025-05-01",
     "time": "15:45",
     "odds": {
-      "home": 4.45,
-      "draw": 2.75,
-      "away": 1.94
+      "home": 4.65,
+      "draw": 2.8,
+      "away": 1.88
     },
     "raw": {
       "eventId": "59821788",
@@ -383,9 +149,9 @@
       "tournament": "Pro League",
       "event": "Chador Malu Yazd - Foolad KHouzestan FC",
       "market": "1X2 - FT",
-      "home_odds": "4.45",
-      "draw_odds": "2.75",
-      "away_odds": "1.94",
+      "home_odds": "4.65",
+      "draw_odds": "2.8",
+      "away_odds": "1.88",
       "start_time": "2025-05-01 15:45"
     }
   },
@@ -2141,9 +1907,9 @@
     "date": "2025-05-02",
     "time": "09:30",
     "odds": {
-      "home": 1.26,
+      "home": 1.29,
       "draw": 5.5,
-      "away": 7.75
+      "away": 7.25
     },
     "raw": {
       "eventId": "56927017",
@@ -2151,9 +1917,9 @@
       "tournament": "Queensland NPL, Women",
       "event": "Sunshine Coast Wanderers FC - Mitchelton FC U23",
       "market": "1X2 - FT",
-      "home_odds": "1.26",
+      "home_odds": "1.29",
       "draw_odds": "5.5",
-      "away_odds": "7.75",
+      "away_odds": "7.25",
       "start_time": "2025-05-02 09:30"
     }
   },
@@ -3623,9 +3389,9 @@
     "date": "2025-05-02",
     "time": "14:35",
     "odds": {
-      "home": 1.2,
+      "home": 1.21,
       "draw": 6,
-      "away": 10
+      "away": 9
     },
     "raw": {
       "eventId": "59412033",
@@ -3633,9 +3399,9 @@
       "tournament": "Premier League",
       "event": "Kuwait SC - Al-Salmiya SC",
       "market": "1X2 - FT",
-      "home_odds": "1.2",
+      "home_odds": "1.21",
       "draw_odds": "6.0",
-      "away_odds": "10.0",
+      "away_odds": "9.0",
       "start_time": "2025-05-02 14:35"
     }
   },
@@ -6951,9 +6717,9 @@
     "date": "2025-05-02",
     "time": "18:30",
     "odds": {
-      "home": 5,
-      "draw": 4.3,
-      "away": 1.49
+      "home": 5.25,
+      "draw": 4.4,
+      "away": 1.46
     },
     "raw": {
       "eventId": "56958371",
@@ -6961,9 +6727,9 @@
       "tournament": "1. deild",
       "event": "Fjolnir - Keflavik IF",
       "market": "1X2 - FT",
-      "home_odds": "5.0",
-      "draw_odds": "4.3",
-      "away_odds": "1.49",
+      "home_odds": "5.25",
+      "draw_odds": "4.4",
+      "away_odds": "1.46",
       "start_time": "2025-05-02 18:30"
     }
   },
@@ -9005,9 +8771,9 @@
     "date": "2025-05-03",
     "time": "05:00",
     "odds": {
-      "home": 2.05,
+      "home": 2.09,
       "draw": 3.35,
-      "away": 3.3
+      "away": 3.2
     },
     "raw": {
       "eventId": "57584791",
@@ -9015,9 +8781,9 @@
       "tournament": "J.League 2",
       "event": "FC Imabari - Jubilo Iwata",
       "market": "1X2 - FT",
-      "home_odds": "2.05",
+      "home_odds": "2.09",
       "draw_odds": "3.35",
-      "away_odds": "3.3",
+      "away_odds": "3.2",
       "start_time": "2025-05-03 05:00"
     }
   },
@@ -9889,8 +9655,8 @@
     "date": "2025-05-03",
     "time": "08:00",
     "odds": {
-      "home": 2.19,
-      "draw": 4.15,
+      "home": 2.24,
+      "draw": 3.95,
       "away": 2.5
     },
     "raw": {
@@ -9899,8 +9665,8 @@
       "tournament": "Queensland Premier League 1",
       "event": "Brisbane Strikers FC - Logan Lightning",
       "market": "1X2 - FT",
-      "home_odds": "2.19",
-      "draw_odds": "4.15",
+      "home_odds": "2.24",
+      "draw_odds": "3.95",
       "away_odds": "2.5",
       "start_time": "2025-05-03 08:00"
     }
@@ -13269,9 +13035,9 @@
     "date": "2025-05-03",
     "time": "14:00",
     "odds": {
-      "home": 1.39,
-      "draw": 3.8,
-      "away": 8.25
+      "home": 1.42,
+      "draw": 3.75,
+      "away": 7.5
     },
     "raw": {
       "eventId": "51241155",
@@ -13279,9 +13045,9 @@
       "tournament": "Football National League",
       "event": "FK Sochi - PFK Arsenal Tula",
       "market": "1X2 - FT",
-      "home_odds": "1.39",
-      "draw_odds": "3.8",
-      "away_odds": "8.25",
+      "home_odds": "1.42",
+      "draw_odds": "3.75",
+      "away_odds": "7.5",
       "start_time": "2025-05-03 14:00"
     }
   },
@@ -16727,9 +16493,9 @@
     "date": "2025-05-03",
     "time": "18:00",
     "odds": {
-      "home": 2.5,
-      "draw": 2.8,
-      "away": 2.95
+      "home": 2.45,
+      "draw": 2.7,
+      "away": 3.05
     },
     "raw": {
       "eventId": "57250703",
@@ -16737,9 +16503,9 @@
       "tournament": "Primera Nacional",
       "event": "CA Guemes - CA Atlanta",
       "market": "1X2 - FT",
-      "home_odds": "2.5",
-      "draw_odds": "2.8",
-      "away_odds": "2.95",
+      "home_odds": "2.45",
+      "draw_odds": "2.7",
+      "away_odds": "3.05",
       "start_time": "2025-05-03 18:00"
     }
   },
@@ -17013,9 +16779,9 @@
     "date": "2025-05-03",
     "time": "18:30",
     "odds": {
-      "home": 1.89,
+      "home": 1.94,
       "draw": 3,
-      "away": 4.15
+      "away": 4
     },
     "raw": {
       "eventId": "57251325",
@@ -17023,9 +16789,9 @@
       "tournament": "Primera Nacional",
       "event": "CA San Telmo - Club Almirante Brown",
       "market": "1X2 - FT",
-      "home_odds": "1.89",
+      "home_odds": "1.94",
       "draw_odds": "3.0",
-      "away_odds": "4.15",
+      "away_odds": "4.0",
       "start_time": "2025-05-03 18:30"
     }
   },
@@ -19509,9 +19275,9 @@
     "date": "2025-05-04",
     "time": "07:00",
     "odds": {
-      "home": 2.65,
-      "draw": 3.75,
-      "away": 2.25
+      "home": 2.55,
+      "draw": 3.65,
+      "away": 2.35
     },
     "raw": {
       "eventId": "56926319",
@@ -19519,9 +19285,9 @@
       "tournament": "Queensland NPL",
       "event": "St George Willawong FC - Brisbane Roar FC YOUTH",
       "market": "1X2 - FT",
-      "home_odds": "2.65",
-      "draw_odds": "3.75",
-      "away_odds": "2.25",
+      "home_odds": "2.55",
+      "draw_odds": "3.65",
+      "away_odds": "2.35",
       "start_time": "2025-05-04 07:00"
     }
   },
