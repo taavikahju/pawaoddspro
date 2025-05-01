@@ -45,6 +45,16 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       if (event.teams) {
         const normalizedTeams = normalizeEventName(event.teams);
         sportyTeamsMap.set(normalizedTeams, event);
+        
+        // Also add reversed team order for better matching
+        if (event.teams.includes(' vs ')) {
+          const teams = event.teams.split(' vs ');
+          if (teams.length === 2) {
+            const reversedTeams = `${teams[1]} vs ${teams[0]}`;
+            const reversedNormalizedTeams = normalizeEventName(reversedTeams);
+            sportyTeamsMap.set(reversedNormalizedTeams, event);
+          }
+        }
       }
     });
     console.log(`🔄 Created team-based index for ${sportyTeamsMap.size} Sportybet events`);
@@ -62,9 +72,30 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
         if (event.teams) {
           const normalizedTeams = normalizeEventName(event.teams);
           teamMap.set(normalizedTeams, event);
+          
+          // Also add reversed team order for better matching
+          if (event.teams.includes(' vs ')) {
+            const teams = event.teams.split(' vs ');
+            if (teams.length === 2) {
+              const reversedTeams = `${teams[1]} vs ${teams[0]}`;
+              const reversedNormalizedTeams = normalizeEventName(reversedTeams);
+              teamMap.set(reversedNormalizedTeams, event);
+            }
+          }
+        } else if (event.home && event.away) {
+          // Create and normalize teams string if home/away are available directly
+          const teams = `${event.home} vs ${event.away}`;
+          const normalizedTeams = normalizeEventName(teams);
+          teamMap.set(normalizedTeams, event);
+          
+          // Also add reversed team order
+          const reversedTeams = `${event.away} vs ${event.home}`;
+          const reversedNormalizedTeams = normalizeEventName(reversedTeams);
+          teamMap.set(reversedNormalizedTeams, event);
         }
       }
       
+      bookmakerTeamMaps.set(bookmakerCode, teamMap);
       console.log(`🔄 Created team-based index for ${teamMap.size} ${bookmakerCode} events`);
     }
     
@@ -527,14 +558,25 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
 function normalizeEventName(eventName: string): string {
   if (!eventName) return '';
   
-  return eventName
+  let normalized = eventName
     .toLowerCase()
-    // Remove common separators (vs, v, -, @)
-    .replace(/\s+vs\.?\s+|\s+v\.?\s+|\s+-\s+|\s+@\s+/g, '')
+    // Standardize separator to 'vs' for consistent processing
+    .replace(/\s+v\.?\s+|\s+-\s+|\s+@\s+/g, ' vs ')
+    // Standardize quotes and parentheses
+    .replace(/['"''""()[\]{}]/g, '')
     // Remove 'fc' (football club)
     .replace(/\s+fc\b|\bfc\s+|\s+football\s+club|\bfootball\s+club/g, '')
-    // Remove common suffixes - expanded list
-    .replace(/\s+(united|utd|city|town|county|albion|rovers|wanderers|athletic|hotspur|wednesday|forest|fc|academy|reserve|women|ladies|boys|girls|u\d+|under\d+)\b/g, '')
+    // Specific frequent misspellings and variations
+    .replace(/juventus turin/g, 'juventus')
+    .replace(/inter milan/g, 'internazionale')
+    .replace(/rb leipzig/g, 'leipzig')
+    .replace(/psg/g, 'paris')
+    .replace(/wolves/g, 'wolverhampton')
+    .replace(/spurs/g, 'tottenham')
+    .replace(/napoli sc/g, 'napoli')
+    .replace(/ac milan/g, 'milan')
+    // Remove common suffixes - expanded list (but only after we standardize separators)
+    .replace(/\s+(united|utd|city|town|county|albion|rovers|wanderers|athletic|hotspur|wednesday|forest|fc|academy|reserve|women|ladies|boys|girls|u\d+|under\d+|fc\.?)\b/g, '')
     // Remove common location prefixes
     .replace(/\b(west|east|north|south|central|real|atletico|deportivo|inter|lokomotiv|dynamo)\s+/g, '')
     // Remove country specifiers
@@ -550,12 +592,36 @@ function normalizeEventName(eventName: string): string {
     .replace(/\bcfc\b/g, 'chelsea') // Chelsea FC
     .replace(/\bbvb\b/g, 'dortmund') // Borussia Dortmund
     .replace(/\bfcb\b/g, 'bayern') // Bayern Munich
-    // Remove periods and special characters
-    .replace(/\./g, '')
-    // Remove all whitespace
-    .replace(/\s+/g, '')
-    // Remove any remaining punctuation
-    .replace(/[^\w]/g, '')
+    // Replace ampersands with 'and'
+    .replace(/&/g, 'and');
+    
+  // Now transform both team names separately if we have a vs separator
+  if (normalized.includes(' vs ')) {
+    const parts = normalized.split(' vs ');
+    if (parts.length === 2) {
+      // Normalize each team name separately
+      const [team1, team2] = parts;
+      const normalizedTeam1 = team1
+        .replace(/\./g, '') // Remove periods
+        .replace(/\s+/g, '') // Remove all whitespace
+        .replace(/[^\w]/g, '') // Remove any remaining punctuation
+        .trim();
+      
+      const normalizedTeam2 = team2
+        .replace(/\./g, '')
+        .replace(/\s+/g, '')
+        .replace(/[^\w]/g, '')
+        .trim();
+        
+      return `${normalizedTeam1} vs ${normalizedTeam2}`;
+    }
+  }
+  
+  // If no 'vs' or format not as expected, just clean up the whole string
+  return normalized
+    .replace(/\./g, '') // Remove periods
+    .replace(/\s+/g, '') // Remove all whitespace
+    .replace(/[^\w]/g, '') // Remove any remaining punctuation
     .trim();
 }
 
