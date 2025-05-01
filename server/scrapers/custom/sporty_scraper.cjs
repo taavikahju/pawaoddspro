@@ -2,20 +2,29 @@
 const axios = require('axios');
 
 // ==== CONFIGURATION ====
-// Primary Sportybet API country code - focusing on the most reliable regions 
-// Based on testing, Ghana (gh) and Kenya (ke) are most reliable
-const REGIONS = ['gh', 'ke'];
+// Primary Sportybet API country code - focusing only on Ghana
+// Optimized to reduce API calls and improve reliability
+const REGION = 'gh'; // Using only Ghana for better performance
+
+// Debug mode flag - set to false to reduce console output
+const DEBUG = false;
+
+// Console logging helper that respects debug mode
+const log = (message) => {
+  if (DEBUG) {
+    console.error(`[DEBUG] ${message}`);
+  }
+};
 
 // Configure endpoints focusing on reliability and responsiveness
 const buildEndpoints = () => {
   const endpoints = [];
   
-  // Only use the most reliable endpoints to avoid rate limiting and timeouts
-  // Ghana API is the most stable and provides most of the data
+  // Only use Ghana API which is the most stable and provides most of the data
   endpoints.push(
     // Main upcoming events - most comprehensive source
     {
-      url: 'https://www.sportybet.com/api/gh/factsCenter/pcUpcomingEvents',
+      url: `https://www.sportybet.com/api/${REGION}/factsCenter/pcUpcomingEvents`,
       params: {
         sportId: 'sr:sport:1',
         marketId: '1',
