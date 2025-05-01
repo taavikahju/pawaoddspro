@@ -6691,9 +6691,9 @@
     "date": "2025-05-02",
     "time": "18:45",
     "odds": {
-      "home": 1.47,
+      "home": 1.46,
       "draw": 5.25,
-      "away": 7.25
+      "away": 7.5
     },
     "raw": {
       "eventId": "50955907",
@@ -6701,9 +6701,9 @@
       "tournament": "Ligue 1",
       "event": "OGC Nice - Stade Reims",
       "market": "1X2 - FT",
-      "home_odds": "1.47",
+      "home_odds": "1.46",
       "draw_odds": "5.25",
-      "away_odds": "7.25",
+      "away_odds": "7.5",
       "start_time": "2025-05-02 18:45"
     }
   },
@@ -8927,9 +8927,9 @@
     "date": "2025-05-03",
     "time": "07:00",
     "odds": {
-      "home": 7.5,
+      "home": 8.75,
       "draw": 6.75,
-      "away": 1.22
+      "away": 1.19
     },
     "raw": {
       "eventId": "57274831",
@@ -8937,9 +8937,9 @@
       "tournament": "Northern NSW NPL",
       "event": "Valentine FC - Broadmeadow Magic FC",
       "market": "1X2 - FT",
-      "home_odds": "7.5",
+      "home_odds": "8.75",
       "draw_odds": "6.75",
-      "away_odds": "1.22",
+      "away_odds": "1.19",
       "start_time": "2025-05-03 07:00"
     }
   },
@@ -18196,6 +18196,32 @@
       "home_odds": "1.6",
       "draw_odds": "3.4",
       "away_odds": "5.75",
+      "start_time": "2025-05-04 00:00"
+    }
+  },
+  {
+    "id": "60240967",
+    "eventId": "60240967",
+    "teams": "Antigua GFC - CD Guastatoya",
+    "league": "Liga Nacional. Clausura",
+    "sport": "football",
+    "country": "Guatemala",
+    "date": "2025-05-04",
+    "time": "00:00",
+    "odds": {
+      "home": 1.63,
+      "draw": 3.45,
+      "away": 5
+    },
+    "raw": {
+      "eventId": "60240967",
+      "country": "Guatemala",
+      "tournament": "Liga Nacional. Clausura",
+      "event": "Antigua GFC - CD Guastatoya",
+      "market": "1X2 - FT",
+      "home_odds": "1.63",
+      "draw_odds": "3.45",
+      "away_odds": "5.0",
       "start_time": "2025-05-04 00:00"
     }
   },

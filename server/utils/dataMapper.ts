@@ -1,7 +1,7 @@
 import { IStorage } from '../storage';
 import { insertEventSchema, type InsertEvent, events } from '@shared/schema';
 import { db } from '../db';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import { saveOddsHistory } from './oddsHistory';
 import { logger } from './logger';
 
@@ -577,24 +577,50 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       logger.error(`Failed to save mapped events data: ${writeError}`);
     }
     
-    // Process in smaller batches to show progress more frequently
-    const updateBatchSize = 50;
+    // Use significantly larger batches for database operations
+    const updateBatchSize = 100; // Increased from 50
     const updateBatches = Math.ceil(totalUpdateEvents / updateBatchSize);
     
+    // Prepare batch operations
     for (let i = 0; i < updateBatches; i++) {
       const batchStart = i * updateBatchSize;
       const batchEnd = Math.min((i + 1) * updateBatchSize, totalUpdateEvents);
       const currentBatch = eventsToUpdate.slice(batchStart, batchEnd);
       
-      // Process this batch
+      // First, look up all events in this batch in a single query
+      const eventIds = currentBatch.map(([_, eventData]) => eventData.eventId);
+      const externalIds = currentBatch.map(([_, eventData]) => eventData.externalId);
+      
+      // Get existing events in bulk
+      const existingEventsByEventId = new Map();
+      const existingEventsByExternalId = new Map();
+      
+      // Get all events by eventId in a single query
+      const eventIdResults = await db.select().from(events).where(sql`${events.eventId} IN (${eventIds})`);
+      for (const event of eventIdResults) {
+        existingEventsByEventId.set(event.eventId, event);
+      }
+      
+      // Get any remaining events by externalId
+      const externalIdResults = await db.select().from(events).where(sql`${events.externalId} IN (${externalIds})`);
+      for (const event of externalIdResults) {
+        existingEventsByExternalId.set(event.externalId, event);
+      }
+      
+      // Prepare batch operations
+      const historyOperations = [];
+      const createOperations = [];
+      const updateOperations = [];
+      
+      // Process each event in the batch
       for (const [eventKey, eventData] of currentBatch) {
         try {
-          // Check if event already exists by eventId first (this is more reliable than externalId)
-          let existingEvent = await storage.getEventByEventId(eventData.eventId);
+          // Check if event exists using the preloaded maps
+          let existingEvent = existingEventsByEventId.get(eventData.eventId);
           
-          // If not found by eventId, try by externalId as a fallback
+          // If not found by eventId, try by externalId
           if (!existingEvent) {
-            existingEvent = await storage.getEventByExternalId(eventData.externalId);
+            existingEvent = existingEventsByExternalId.get(eventData.externalId);
           }
           
           processedCount++;
@@ -608,46 +634,40 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
             );
           }
           
-          if (existingEvent) {
-            // Save historical odds data for each bookmaker
-            const newOdds = eventData.oddsData;
-            const existingOdds = existingEvent.oddsData as Record<string, any>;
+          // Collect odds history operations
+          const newOdds = eventData.oddsData;
+          for (const bookmakerCode of Object.keys(newOdds)) {
+            const bookieOdds = newOdds[bookmakerCode];
             
-            // Track odds history for each bookmaker
-            for (const bookmakerCode of Object.keys(newOdds)) {
-              const bookieOdds = newOdds[bookmakerCode];
-              
-              // Only save history if odds exist
-              if (bookieOdds && (bookieOdds.home || bookieOdds.draw || bookieOdds.away)) {
-                // Record every scrape, regardless of whether odds have changed
-                // This gives us the most detailed history possible
-                await saveOddsHistory(
-                  eventData.eventId,
-                  eventData.externalId,
-                  bookmakerCode,
-                  bookieOdds.home,
-                  bookieOdds.draw,
-                  bookieOdds.away
-                );
-              }
+            if (bookieOdds && (bookieOdds.home || bookieOdds.draw || bookieOdds.away)) {
+              historyOperations.push({
+                eventId: eventData.eventId,
+                externalId: eventData.externalId,
+                bookmakerCode,
+                homeOdds: bookieOdds.home,
+                drawOdds: bookieOdds.draw,
+                awayOdds: bookieOdds.away
+              });
             }
-            
-            // Update existing event
-            await storage.updateEvent(existingEvent.id, {
-              oddsData: eventData.oddsData,
-              bestOdds: eventData.bestOdds,
-              // Also update other fields that might have changed
-              teams: eventData.teams,
-              league: eventData.league,
-              country: eventData.country,
-              tournament: eventData.tournament,
-              date: eventData.date,
-              time: eventData.time
+          }
+          
+          if (existingEvent) {
+            // Queue update operation
+            updateOperations.push({
+              id: existingEvent.id,
+              data: {
+                oddsData: eventData.oddsData,
+                bestOdds: eventData.bestOdds,
+                teams: eventData.teams,
+                league: eventData.league,
+                country: eventData.country,
+                tournament: eventData.tournament,
+                date: eventData.date,
+                time: eventData.time
+              }
             });
-            // Skip individual event update logs to reduce console noise
-            // console.log(`Updated event ${existingEvent.id} with eventId ${eventData.eventId}`);
           } else {
-            // Create new event
+            // Queue create operation
             const insertData: InsertEvent = {
               externalId: eventData.externalId,
               eventId: eventData.eventId,
@@ -664,33 +684,51 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
             
             // Validate event data
             const validatedData = insertEventSchema.parse(insertData);
-            
-            // Insert new event
-            const createdEvent = await storage.createEvent(validatedData);
-            // Skip individual event creation logs to reduce console noise
-            // console.log(`Created new event with eventId ${eventData.eventId}`);
-            
-            // Save initial historical odds data for each bookmaker for new events too
-            const newOdds = eventData.oddsData;
-            for (const bookmakerCode of Object.keys(newOdds)) {
-              const bookieOdds = newOdds[bookmakerCode];
-              
-              // Only save history if odds exist
-              if (bookieOdds && (bookieOdds.home || bookieOdds.draw || bookieOdds.away)) {
-                await saveOddsHistory(
-                  eventData.eventId,
-                  eventData.externalId,
-                  bookmakerCode,
-                  bookieOdds.home,
-                  bookieOdds.draw,
-                  bookieOdds.away
-                );
-              }
-            }
+            createOperations.push(validatedData);
           }
         } catch (error) {
           console.error(`Error processing event ${eventKey}:`, error);
         }
+      }
+      
+      // Execute operations in parallel batches
+      try {
+        // Create new events in a single batch
+        if (createOperations.length > 0) {
+          logger.info(`Creating ${createOperations.length} new events in batch ${i+1}/${updateBatches}`);
+          await Promise.all(createOperations.map(data => storage.createEvent(data)));
+        }
+        
+        // Update existing events in parallel 
+        if (updateOperations.length > 0) {
+          logger.info(`Updating ${updateOperations.length} existing events in batch ${i+1}/${updateBatches}`);
+          await Promise.all(updateOperations.map(op => storage.updateEvent(op.id, op.data)));
+        }
+        
+        // Save odds history in batches of 50
+        const historyBatchSize = 50;
+        const historyBatches = Math.ceil(historyOperations.length / historyBatchSize);
+        
+        for (let j = 0; j < historyBatches; j++) {
+          const historyBatchStart = j * historyBatchSize;
+          const historyBatchEnd = Math.min((j + 1) * historyBatchSize, historyOperations.length);
+          const historyBatch = historyOperations.slice(historyBatchStart, historyBatchEnd);
+          
+          await Promise.all(historyBatch.map(op => 
+            saveOddsHistory(
+              op.eventId,
+              op.externalId,
+              op.bookmakerCode,
+              op.homeOdds,
+              op.drawOdds, 
+              op.awayOdds
+            )
+          ));
+        }
+        
+        logger.info(`Completed batch ${i+1}/${updateBatches} of database operations`);
+      } catch (batchError) {
+        logger.error(`Error executing batch ${i+1}/${updateBatches}:`, batchError);
       }
     }
     
