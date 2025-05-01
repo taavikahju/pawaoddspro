@@ -451,9 +451,9 @@
     "date": "2025-05-01",
     "time": "13:30",
     "odds": {
-      "home": 2.6,
+      "home": 2.42,
       "draw": 3.4,
-      "away": 2.43
+      "away": 2.6
     },
     "raw": {
       "eventId": "57605173",
@@ -461,9 +461,9 @@
       "tournament": "Chinese Super League",
       "event": "Shenzhen Peng - Tianjin",
       "market": "1X2",
-      "home_odds": "2.60",
+      "home_odds": "2.42",
       "draw_odds": "3.40",
-      "away_odds": "2.43",
+      "away_odds": "2.60",
       "start_time": "2025-05-01 13:30"
     }
   },
@@ -634,8 +634,8 @@
     "time": "14:00",
     "odds": {
       "home": 5.8,
-      "draw": 4.4,
-      "away": 1.42
+      "draw": 4.3,
+      "away": 1.44
     },
     "raw": {
       "eventId": "59284705",
@@ -644,8 +644,8 @@
       "event": "Norrkoping DFK Women - Hacken Gothenburg W",
       "market": "1X2",
       "home_odds": "5.80",
-      "draw_odds": "4.40",
-      "away_odds": "1.42",
+      "draw_odds": "4.30",
+      "away_odds": "1.44",
       "start_time": "2025-05-01 14:00"
     }
   },
@@ -789,9 +789,9 @@
     "date": "2025-05-01",
     "time": "15:00",
     "odds": {
-      "home": 1.95,
+      "home": 1.92,
       "draw": 3.75,
-      "away": 3.2
+      "away": 3.3
     },
     "raw": {
       "eventId": "52325093",
@@ -799,9 +799,9 @@
       "tournament": "Liga 1",
       "event": "Bali United - PSIS Semarang",
       "market": "1X2",
-      "home_odds": "1.95",
+      "home_odds": "1.92",
       "draw_odds": "3.75",
-      "away_odds": "3.20",
+      "away_odds": "3.30",
       "start_time": "2025-05-01 15:00"
     }
   },
@@ -910,6 +910,32 @@
     }
   },
   {
+    "id": "57356235",
+    "eventId": "57356235",
+    "teams": "SK Djerv 1919 - Stord FK",
+    "league": "3rd Division Group 5",
+    "sport": "football",
+    "country": "Norway",
+    "date": "2025-05-01",
+    "time": "15:00",
+    "odds": {
+      "home": 1.49,
+      "draw": 4.9,
+      "away": 4.4
+    },
+    "raw": {
+      "eventId": "57356235",
+      "country": "Norway",
+      "tournament": "3rd Division Group 5",
+      "event": "SK Djerv 1919 - Stord FK",
+      "market": "1X2",
+      "home_odds": "1.49",
+      "draw_odds": "4.90",
+      "away_odds": "4.40",
+      "start_time": "2025-05-01 15:00"
+    }
+  },
+  {
     "id": "60086151",
     "eventId": "60086151",
     "teams": "Bourj FC - Nabi Sheet",
@@ -919,9 +945,9 @@
     "date": "2025-05-01",
     "time": "15:30",
     "odds": {
-      "home": 1.45,
-      "draw": 4,
-      "away": 6.4
+      "home": 1.44,
+      "draw": 3.95,
+      "away": 6.6
     },
     "raw": {
       "eventId": "60086151",
@@ -929,9 +955,9 @@
       "tournament": "Premier League",
       "event": "Bourj FC - Nabi Sheet",
       "market": "1X2",
-      "home_odds": "1.45",
-      "draw_odds": "4.00",
-      "away_odds": "6.40",
+      "home_odds": "1.44",
+      "draw_odds": "3.95",
+      "away_odds": "6.60",
       "start_time": "2025-05-01 15:30"
     }
   },
@@ -1023,8 +1049,8 @@
     "date": "2025-05-01",
     "time": "16:00",
     "odds": {
-      "home": 1.71,
-      "draw": 3.5,
+      "home": 1.74,
+      "draw": 3.4,
       "away": 5
     },
     "raw": {
@@ -1033,8 +1059,8 @@
       "tournament": "Serie B",
       "event": "Pisa SC - Frosinone Calcio",
       "market": "1X2",
-      "home_odds": "1.71",
-      "draw_odds": "3.50",
+      "home_odds": "1.74",
+      "draw_odds": "3.40",
       "away_odds": "5.00",
       "start_time": "2025-05-01 16:00"
     }
@@ -1336,7 +1362,7 @@
     "time": "17:00",
     "odds": {
       "home": 1.13,
-      "draw": 6.8,
+      "draw": 6.6,
       "away": 15
     },
     "raw": {
@@ -1346,7 +1372,7 @@
       "event": "Munich Women  - Bremen Women ",
       "market": "1X2",
       "home_odds": "1.13",
-      "draw_odds": "6.80",
+      "draw_odds": "6.60",
       "away_odds": "15.00",
       "start_time": "2025-05-01 17:00"
     }
@@ -2505,9 +2531,9 @@
     "date": "2025-05-01",
     "time": "22:00",
     "odds": {
-      "home": 3.5,
-      "draw": 3,
-      "away": 2.18
+      "home": 3.4,
+      "draw": 2.95,
+      "away": 2.22
     },
     "raw": {
       "eventId": "60112563",
@@ -2515,9 +2541,9 @@
       "tournament": "Primera A, Apertura",
       "event": "Envigado - Once Caldas",
       "market": "1X2",
-      "home_odds": "3.50",
-      "draw_odds": "3.00",
-      "away_odds": "2.18",
+      "home_odds": "3.40",
+      "draw_odds": "2.95",
+      "away_odds": "2.22",
       "start_time": "2025-05-01 22:00"
     }
   },
@@ -2909,32 +2935,6 @@
       "draw_odds": "3.40",
       "away_odds": "1.55",
       "start_time": "2025-05-02 10:00"
-    }
-  },
-  {
-    "id": "52130765",
-    "eventId": "52130765",
-    "teams": "Wellington Phoenix FC - Perth Glory FC",
-    "league": "A-League",
-    "sport": "football",
-    "country": "Australia",
-    "date": "2025-05-02",
-    "time": "10:30",
-    "odds": {
-      "home": 2.16,
-      "draw": 3.8,
-      "away": 2.9
-    },
-    "raw": {
-      "eventId": "52130765",
-      "country": "Australia",
-      "tournament": "A-League",
-      "event": "Wellington Phoenix FC - Perth Glory FC",
-      "market": "1X2",
-      "home_odds": "2.16",
-      "draw_odds": "3.80",
-      "away_odds": "2.90",
-      "start_time": "2025-05-02 10:30"
     }
   },
   {
@@ -3753,9 +3753,9 @@
     "date": "2025-05-02",
     "time": "15:15",
     "odds": {
-      "home": 1.55,
+      "home": 1.58,
       "draw": 4.3,
-      "away": 4.2
+      "away": 4.1
     },
     "raw": {
       "eventId": "49405497",
@@ -3763,9 +3763,9 @@
       "tournament": "Premier League",
       "event": "Brunei DPMM FC - Tanjong Pagar United FC",
       "market": "1X2",
-      "home_odds": "1.55",
+      "home_odds": "1.58",
       "draw_odds": "4.30",
-      "away_odds": "4.20",
+      "away_odds": "4.10",
       "start_time": "2025-05-02 15:15"
     }
   },
@@ -4494,6 +4494,58 @@
       "home_odds": "2.10",
       "draw_odds": "3.30",
       "away_odds": "3.05",
+      "start_time": "2025-05-02 19:00"
+    }
+  },
+  {
+    "id": "53332891",
+    "eventId": "53332891",
+    "teams": "Zira FK - Turan Tovuz",
+    "league": "Premier League",
+    "sport": "football",
+    "country": "Azerbaijan",
+    "date": "2025-05-02",
+    "time": "19:00",
+    "odds": {
+      "home": 1.66,
+      "draw": 3.45,
+      "away": 4.8
+    },
+    "raw": {
+      "eventId": "53332891",
+      "country": "Azerbaijan",
+      "tournament": "Premier League",
+      "event": "Zira FK - Turan Tovuz",
+      "market": "1X2",
+      "home_odds": "1.66",
+      "draw_odds": "3.45",
+      "away_odds": "4.80",
+      "start_time": "2025-05-02 19:00"
+    }
+  },
+  {
+    "id": "51071383",
+    "eventId": "51071383",
+    "teams": "LASK - Treibach",
+    "league": "Regionalliga Centre",
+    "sport": "football",
+    "country": "Austria Amateur",
+    "date": "2025-05-02",
+    "time": "19:00",
+    "odds": {
+      "home": 2.26,
+      "draw": 3.75,
+      "away": 2.5
+    },
+    "raw": {
+      "eventId": "51071383",
+      "country": "Austria Amateur",
+      "tournament": "Regionalliga Centre",
+      "event": "LASK - Treibach",
+      "market": "1X2",
+      "home_odds": "2.26",
+      "draw_odds": "3.75",
+      "away_odds": "2.50",
       "start_time": "2025-05-02 19:00"
     }
   },
@@ -5521,9 +5573,9 @@
     "date": "2025-05-02",
     "time": "20:30",
     "odds": {
-      "home": 2.18,
-      "draw": 3,
-      "away": 3.15
+      "home": 2.21,
+      "draw": 2.9,
+      "away": 3.2
     },
     "raw": {
       "eventId": "52888497",
@@ -5531,9 +5583,9 @@
       "tournament": "Championship",
       "event": "Cape Town Spurs - Pretoria University FC",
       "market": "1X2",
-      "home_odds": "2.18",
-      "draw_odds": "3.00",
-      "away_odds": "3.15",
+      "home_odds": "2.21",
+      "draw_odds": "2.90",
+      "away_odds": "3.20",
       "start_time": "2025-05-02 20:30"
     }
   },
@@ -6795,9 +6847,9 @@
     "date": "2025-05-02",
     "time": "21:45",
     "odds": {
-      "home": 1.7,
+      "home": 1.67,
       "draw": 4,
-      "away": 4.3
+      "away": 4.5
     },
     "raw": {
       "eventId": "59017229",
@@ -6805,9 +6857,9 @@
       "tournament": "Pro League",
       "event": "KVC Westerlo - FCV Dender EH",
       "market": "1X2",
-      "home_odds": "1.70",
+      "home_odds": "1.67",
       "draw_odds": "4.00",
-      "away_odds": "4.30",
+      "away_odds": "4.50",
       "start_time": "2025-05-02 21:45"
     }
   },
@@ -7748,54 +7800,28 @@
     }
   },
   {
-    "id": "57584795",
-    "eventId": "57584795",
-    "teams": "Oita T - Roasso K",
-    "league": "J.League 2",
+    "id": "57436701",
+    "eventId": "57436701",
+    "teams": "Shimizu - Nagoya",
+    "league": "J.League",
     "sport": "football",
     "country": "Japan",
     "date": "2025-05-03",
     "time": "08:00",
     "odds": {
-      "home": 2.6,
-      "draw": 3.05,
-      "away": 2.7
+      "home": 2.33,
+      "draw": 3.1,
+      "away": 3.15
     },
     "raw": {
-      "eventId": "57584795",
+      "eventId": "57436701",
       "country": "Japan",
-      "tournament": "J.League 2",
-      "event": "Oita T - Roasso K",
+      "tournament": "J.League",
+      "event": "Shimizu - Nagoya",
       "market": "1X2",
-      "home_odds": "2.60",
-      "draw_odds": "3.05",
-      "away_odds": "2.70",
-      "start_time": "2025-05-03 08:00"
-    }
-  },
-  {
-    "id": "57584791",
-    "eventId": "57584791",
-    "teams": "Imabari - Jubilo Iwata",
-    "league": "J.League 2",
-    "sport": "football",
-    "country": "Japan",
-    "date": "2025-05-03",
-    "time": "08:00",
-    "odds": {
-      "home": 2.06,
-      "draw": 3.4,
-      "away": 3.3
-    },
-    "raw": {
-      "eventId": "57584791",
-      "country": "Japan",
-      "tournament": "J.League 2",
-      "event": "Imabari - Jubilo Iwata",
-      "market": "1X2",
-      "home_odds": "2.06",
-      "draw_odds": "3.40",
-      "away_odds": "3.30",
+      "home_odds": "2.33",
+      "draw_odds": "3.10",
+      "away_odds": "3.15",
       "start_time": "2025-05-03 08:00"
     }
   },
@@ -17415,6 +17441,32 @@
       "market": "1X2",
       "home_odds": "1.95",
       "draw_odds": "4.00",
+      "away_odds": "2.90",
+      "start_time": "2025-05-04 08:00"
+    }
+  },
+  {
+    "id": "52130765",
+    "eventId": "52130765",
+    "teams": "Wellington Phoenix FC - Perth Glory FC",
+    "league": "A-League",
+    "sport": "football",
+    "country": "Australia",
+    "date": "2025-05-04",
+    "time": "08:00",
+    "odds": {
+      "home": 2.14,
+      "draw": 3.75,
+      "away": 2.9
+    },
+    "raw": {
+      "eventId": "52130765",
+      "country": "Australia",
+      "tournament": "A-League",
+      "event": "Wellington Phoenix FC - Perth Glory FC",
+      "market": "1X2",
+      "home_odds": "2.14",
+      "draw_odds": "3.75",
       "away_odds": "2.90",
       "start_time": "2025-05-04 08:00"
     }
