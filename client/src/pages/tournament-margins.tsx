@@ -230,13 +230,51 @@ const TournamentMargins: React.FC = () => {
     // Convert decimal to percentage (e.g., 0.0364 → 3.64%)
     const percentage = margin * 100;
     
-    if (percentage < 5.0) return 'text-green-600 dark:text-green-500 bg-green-100 dark:bg-green-900/20';
-    if (percentage < 7.5) return 'text-lime-600 dark:text-lime-500 bg-lime-100 dark:bg-lime-900/20';
-    if (percentage < 10.0) return 'text-amber-600 dark:text-amber-500 bg-amber-100 dark:bg-amber-900/20';
-    if (percentage < 12.5) return 'text-orange-600 dark:text-orange-500 bg-orange-100 dark:bg-orange-900/20';
-    return 'text-red-600 dark:text-red-500 bg-red-100 dark:bg-red-900/20';
+    if (percentage < 5.0) return 'text-green-600 dark:text-green-500';
+    if (percentage < 7.5) return 'text-lime-600 dark:text-lime-500';
+    if (percentage < 10.0) return 'text-amber-600 dark:text-amber-500';
+    if (percentage < 12.5) return 'text-orange-600 dark:text-orange-500';
+    return 'text-red-600 dark:text-red-500';
   };
   
+  // Function to check if a tournament has significant margin differences for betPawa
+  const hasSignificantMarginDifference = (tournament: TournamentData): boolean => {
+    const betPawaGhMargin = tournament.bookmakers['bp GH']?.margin;
+    const betPawaKeMargin = tournament.bookmakers['bp KE']?.margin;
+    
+    // If no betPawa margins, return false
+    if (!betPawaGhMargin && !betPawaKeMargin) return false;
+    
+    // Get all other bookmaker margins
+    const otherMarginsMap = Object.entries(tournament.bookmakers)
+      .filter(([code]) => code !== 'bp GH' && code !== 'bp KE')
+      .map(([_, data]) => data.margin);
+    
+    // If no other margins to compare, return false
+    if (otherMarginsMap.length === 0) return false;
+    
+    // Check if any betPawa margin is at least 2.5% higher or lower than any other margin
+    const thresholdDifference = 0.025; // 2.5%
+    
+    if (betPawaGhMargin) {
+      for (const otherMargin of otherMarginsMap) {
+        if (otherMargin && Math.abs(betPawaGhMargin - otherMargin) >= thresholdDifference) {
+          return true;
+        }
+      }
+    }
+    
+    if (betPawaKeMargin) {
+      for (const otherMargin of otherMarginsMap) {
+        if (otherMargin && Math.abs(betPawaKeMargin - otherMargin) >= thresholdDifference) {
+          return true;
+        }
+      }
+    }
+    
+    return false;
+  };
+
   const toggleSidebar = () => {
     setSidebarCollapsed(!sidebarCollapsed);
   };
@@ -257,7 +295,7 @@ const TournamentMargins: React.FC = () => {
         
         {/* Left sidebar with countries list */}
         <Card 
-          className={`md:w-64 flex-shrink-0 ${sidebarCollapsed ? 'hidden' : 'block'} md:block`}
+          className={`md:w-64 flex-shrink-0 ${sidebarCollapsed ? 'hidden' : 'block'} md:block bg-transparent shadow-none border-muted`}
           style={{ height: 'calc(100vh - 180px)' }}
         >
           <CardHeader className="py-3">
@@ -314,6 +352,10 @@ const TournamentMargins: React.FC = () => {
                   const tournamentCount = country.tournaments.length;
                   // Get the country code for flag display
                   const countryCode = getCountryCode(country.name);
+                  // Check if any tournaments in this country have significant differences
+                  const hasAnySignificantDifference = country.tournaments.some(tournament => 
+                    hasSignificantMarginDifference(tournament)
+                  );
                   
                   return (
                     <div 
@@ -340,7 +382,12 @@ const TournamentMargins: React.FC = () => {
                       )}>
                         {country.name}
                       </span>
-
+                      
+                      {hasAnySignificantDifference && (
+                        <span className="text-red-500 font-bold" title="Contains tournaments with significant margin differences">
+                          ⚠️
+                        </span>
+                      )}
                     </div>
                   );
                 })}
@@ -350,7 +397,7 @@ const TournamentMargins: React.FC = () => {
         </Card>
         
         {/* Right content area with tournament margins table */}
-        <Card className="flex-1">
+        <Card className="flex-1 bg-transparent shadow-none border-muted">
           <CardHeader className="py-4">
             <CardTitle className="text-lg flex items-center">
               {selectedCountryData && (
@@ -434,7 +481,14 @@ const TournamentMargins: React.FC = () => {
                         className={idx % 2 === 0 ? 'bg-background hover:bg-muted/40' : 'bg-muted/30 hover:bg-muted/50'}
                       >
                         <TableCell className="font-medium text-xs py-1.5 px-2 whitespace-nowrap border-r border-gray-200 dark:border-gray-700">
-                          {tournament.name}
+                          <div className="flex items-center gap-1">
+                            {tournament.name}
+                            {hasSignificantMarginDifference(tournament) && (
+                              <span className="text-red-500" title="Significant margin difference detected for betPawa GH/KE">
+                                ⚠️
+                              </span>
+                            )}
+                          </div>
                         </TableCell>
                         
                         {bookmakers.map(bookmaker => {
