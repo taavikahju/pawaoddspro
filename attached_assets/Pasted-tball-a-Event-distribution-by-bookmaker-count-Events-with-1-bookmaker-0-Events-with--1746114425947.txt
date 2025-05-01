@@ -1,0 +1,48 @@
+tball","a…
+📊 Event distribution by bookmaker count:
+  - Events with 1 bookmaker: 0
+  - Events with 2 bookmakers: 20
+  - Events with 3 bookmakers: 1102
+  - Events with 4+ bookmakers: 125
+Filtered 1247 events down to 1247 with at least 2 bookmakers
+3:39:31 PM [express] GET /api/events 200 in 526ms :: [{"id":65967,"externalId":"59821788","eventId":…
+3:39:34 PM [express] GET /api/sports 304 in 208ms :: [{"id":1,"name":"Football","code":"football","a…
+3:39:34 PM [express] GET /api/bookmakers 304 in 209ms :: [{"id":14,"name":"Betika","code":"betika KE…
+3:39:41 PM [express] GET /api/tournaments/margins/by-country 304 in 367ms :: [{"name":"Albania","tou…
+3:39:58 PM [express] GET /api/bookmakers 304 in 419ms :: [{"id":14,"name":"Betika","code":"betika KE…
+3:39:58 PM [express] GET /api/sports 304 in 401ms :: [{"id":1,"name":"Football","code":"football","a…
+3:39:58 PM [express] GET /api/stats 200 in 856ms :: {"totalEvents":1257,"eventsChange":18,"bookmarke…
+📊 Event distribution by bookmaker count:
+  - Events with 1 bookmaker: 0
+  - Events with 2 bookmakers: 24
+  - Events with 3 bookmakers: 1112
+  - Events with 4+ bookmakers: 126
+Filtered 1262 events down to 1262 with at least 2 bookmakers
+3:40:03 PM [express] GET /api/events 200 in 533ms :: [{"id":65967,"externalId":"59821788","eventId":…
+3:40:04 PM [express] GET /api/sports 304 in 286ms :: [{"id":1,"name":"Football","code":"football","a…
+3:40:05 PM [express] GET /api/bookmakers 304 in 198ms :: [{"id":14,"name":"Betika","code":"betika KE…
+3:40:05 PM [express] GET /api/stats 200 in 644ms :: {"totalEvents":1262,"eventsChange":5,"bookmarker…
+3:40:12 PM [express] GET /api/tournaments/margins/by-country 304 in 330ms :: [{"name":"Albania","tou…
+3:40:29 PM [express] GET /api/bookmakers 304 in 398ms :: [{"id":14,"name":"Betika","code":"betika KE…
+3:40:29 PM [express] GET /api/sports 304 in 401ms :: [{"id":1,"name":"Football","code":"football","a…
+📊 Event distribution by bookmaker count:
+  - Events with 1 bookmaker: 0
+  - Events with 2 bookmakers: 33
+  - Events with 3 bookmakers: 1126
+  - Events with 4+ bookmakers: 116
+Filtered 1275 events down to 1275 with at least 2 bookmakers
+3:40:34 PM [express] GET /api/events 200 in 536ms :: [{"id":65967,"externalId":"59821788","eventId":…
+3:40:35 PM [express] GET /api/sports 304 in 194ms :: [{"id":1,"name":"Football","code":"football","a…
+3:40:35 PM [express] GET /api/bookmakers 304 in 194ms :: [{"id":14,"name":"Betika","code":"betika KE…
+3:40:43 PM [express] GET /api/tournaments/margins/by-country 304 in 389ms :: [{"name":"Albania","tou…
+3:40:59 PM [express] GET /api/bookmakers 304 in 414ms :: [{"id":14,"name":"Betika","code":"betika KE…
+3:40:59 PM [express] GET /api/stats 200 in 869ms :: {"totalEvents":1280,"eventsChange":18,"bookmarke…
+3:40:59 PM [express] GET /api/sports 304 in 397ms :: [{"id":1,"name":"Football","code":"football","a…
+3:41:05 PM [express] GET /api/sports 304 in 193ms :: [{"id":1,"name":"Football","code":"football","a…
+3:41:06 PM [express] GET /api/bookmakers 304 in 195ms :: [{"id":14,"name":"Betika","code":"betika KE…
+📊 Event distribution by bookmaker count:
+  - Events with 1 bookmaker: 0
+  - Events with 2 bookmakers: 36
+  - Events with 3 bookmakers: 1146
+  - Events with 4+ bookmakers: 99
+Filtered 1281 events down to 1281 with at least 2 bookmakers
