@@ -446,9 +446,24 @@ const processEvents = (tournaments) => {
           let startTime = null;
           
           if (event.estimateStartTime) {
-            startTime = new Date(event.estimateStartTime).toISOString().slice(0, 16).replace('T', ' ');
+            // Just use the string directly without parsing into Date object to avoid timezone issues
+            const dateStr = event.estimateStartTime;
+            // Check if it's an ISO string (contains T and Z)
+            if (typeof dateStr === 'string' && dateStr.includes('T')) {
+              // Convert "2025-05-05T19:45:00Z" to "2025-05-05 19:45"
+              startTime = dateStr.slice(0, 16).replace('T', ' ');
+            } else {
+              // Fallback to original logic if format is unexpected
+              startTime = new Date(event.estimateStartTime).toISOString().slice(0, 16).replace('T', ' ');
+            }
           } else if (event.startTime) {
-            startTime = new Date(event.startTime).toISOString().slice(0, 16).replace('T', ' ');
+            // Same approach for startTime
+            const dateStr = event.startTime;
+            if (typeof dateStr === 'string' && dateStr.includes('T')) {
+              startTime = dateStr.slice(0, 16).replace('T', ' ');
+            } else {
+              startTime = new Date(event.startTime).toISOString().slice(0, 16).replace('T', ' ');
+            }
           }
             
           if (!startTime) {
