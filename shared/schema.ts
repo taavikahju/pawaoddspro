@@ -174,7 +174,7 @@ export const tournamentMargins = pgTable("tournament_margins", {
   id: serial("id").primaryKey(),
   bookmakerCode: text("bookmaker_code").notNull(), // Which bookmaker's odds were used
   countryName: text("country_name"), // Country name for grouping
-  tournamentName: text("tournament_name").notNull(), // Tournament name
+  tournament: text("tournament").notNull(), // Tournament name
   averageMargin: text("average_margin").notNull(), // Average margin for all events in this tournament
   eventCount: integer("event_count").notNull(), // Number of events used to calculate average
   timestamp: timestamp("timestamp").notNull().defaultNow(), // When this record was created
@@ -183,7 +183,7 @@ export const tournamentMargins = pgTable("tournament_margins", {
 export const insertTournamentMarginSchema = createInsertSchema(tournamentMargins).pick({
   bookmakerCode: true,
   countryName: true,
-  tournamentName: true,
+  tournament: true,
   averageMargin: true,
   eventCount: true,
 });

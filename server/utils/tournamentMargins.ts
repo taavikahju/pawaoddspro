@@ -103,7 +103,7 @@ export async function calculateAndStoreTournamentMargins(storage: IStorage): Pro
       const tournamentMarginData: InsertTournamentMargin = {
         bookmakerCode: data.bookmakerCode,
         countryName: data.countryName || 'Unknown', // Default to 'Unknown' if country is missing
-        tournamentName: data.tournamentName,
+        tournament: data.tournamentName,
         averageMargin: averageMargin.toFixed(2),
         eventCount: data.count
       };
@@ -135,7 +135,7 @@ export async function getTournamentMarginHistory(
       .select()
       .from(tournamentMargins)
       .where(
-        sql`${tournamentMargins.tournamentName} = ${tournamentName} AND 
+        sql`${tournamentMargins.tournament} = ${tournamentName} AND 
             ${tournamentMargins.bookmakerCode} = ${bookmakerCode}`
       )
       .orderBy(tournamentMargins.timestamp);
@@ -144,7 +144,7 @@ export async function getTournamentMarginHistory(
     return db
       .select()
       .from(tournamentMargins)
-      .where(sql`${tournamentMargins.tournamentName} = ${tournamentName}`)
+      .where(sql`${tournamentMargins.tournament} = ${tournamentName}`)
       .orderBy(tournamentMargins.timestamp);
   }
 }
