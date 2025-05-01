@@ -225,16 +225,16 @@ const TournamentMargins: React.FC = () => {
     return countriesData.find(country => country.name === selectedCountry) || null;
   }, [selectedCountry, countriesData]);
   
-  // Function to determine color class for margin value - matching dashboard colors
+  // Function to determine color class for margin value - matching OddsTable colors exactly
   const getMarginColorClass = (margin: number): string => {
     // Convert decimal to percentage (e.g., 0.0364 → 3.64%)
     const percentage = margin * 100;
     
-    if (percentage < 5.0) return 'text-green-600 dark:text-green-500';
-    if (percentage < 7.5) return 'text-lime-600 dark:text-lime-500';
-    if (percentage < 10.0) return 'text-amber-600 dark:text-amber-500';
-    if (percentage < 12.5) return 'text-orange-600 dark:text-orange-500';
-    return 'text-red-600 dark:text-red-500';
+    if (percentage < 5.0) return 'text-green-600';
+    if (percentage < 7.5) return 'text-lime-600';
+    if (percentage < 10.0) return 'text-amber-600';
+    if (percentage < 12.5) return 'text-orange-600';
+    return 'text-red-600';
   };
   
   // Function to check if a tournament has significant margin differences for betPawa
@@ -295,7 +295,7 @@ const TournamentMargins: React.FC = () => {
         
         {/* Left sidebar with countries list */}
         <Card 
-          className={`md:w-64 flex-shrink-0 ${sidebarCollapsed ? 'hidden' : 'block'} md:block bg-transparent shadow-none border-muted`}
+          className={`md:w-72 flex-shrink-0 ${sidebarCollapsed ? 'hidden' : 'block'} md:block bg-transparent shadow-none border-muted`}
           style={{ height: 'calc(100vh - 180px)' }}
         >
           <CardHeader className="py-3">
@@ -346,7 +346,7 @@ const TournamentMargins: React.FC = () => {
                 No countries found
               </div>
             ) : (
-              <div className="space-y-1 overflow-y-auto pr-1" style={{ maxHeight: 'calc(100vh - 250px)' }}>
+              <div className="space-y-1 overflow-y-auto overflow-x-hidden pr-1" style={{ maxHeight: 'calc(100vh - 250px)' }}>
                 {filteredCountries.map(country => {
                   // Get total tournament count
                   const tournamentCount = country.tournaments.length;
@@ -498,7 +498,7 @@ const TournamentMargins: React.FC = () => {
                           if (!marginData) {
                             return (
                               <TableCell key={bookmaker.code} className="text-center py-1.5 px-2 whitespace-nowrap border-r border-gray-200 dark:border-gray-700">
-                                <span className="text-xs font-medium px-1.5 py-0.5 rounded-sm bg-gray-50 text-gray-400 dark:bg-gray-800 dark:text-gray-500">
+                                <span className="text-xs font-medium px-2 py-1 rounded bg-gray-50 text-gray-400 dark:bg-gray-800 dark:text-gray-500">
                                   -
                                 </span>
                               </TableCell>
@@ -521,7 +521,7 @@ const TournamentMargins: React.FC = () => {
                                   setHistoryPopupOpen(true);
                                 }}
                                 className={cn(
-                                  "text-xs font-medium px-2 py-0.5 rounded-sm cursor-pointer hover:opacity-80 transition-opacity",
+                                  "text-xs font-medium px-2 py-1 rounded bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 cursor-pointer transition-colors duration-150 ease-in-out",
                                   marginColorClass
                                 )}
                                 title={`Based on ${marginData.eventCount} events (Updated: ${new Date(marginData.timestamp).toLocaleString()}). Click to view history.`}
