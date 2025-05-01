@@ -53,11 +53,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       bookmakerTeamMaps.set(bookmakerCode, new Map<string, any>());
     }
     
-    // Initialize tracking for the number of events processed per bookmaker
-    const eventsByBookmaker: Record<string, number> = {};
-    bookmakerCodes.forEach(code => {
-      eventsByBookmaker[code] = 0;
-    });
+    // Removed event distribution tracking
     
     // Create map of team names to Sportybet events for secondary matching
     const sportyTeamsMap = new Map();
@@ -686,71 +682,9 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       }
     }
     
-    // Log distribution of events by bookmaker count with emojis for better readability
-    logger.critical(`Event distribution by bookmaker count:`);
-    logger.critical(`  - Events with 1 bookmaker: ${eventsWith1Bookmaker}`);
-    logger.critical(`  - Events with 2 bookmakers: ${eventsWith2Bookmakers}`);
-    logger.critical(`  - Events with 3 bookmakers: ${eventsWith3Bookmakers}`);
-    logger.critical(`  - Events with 4+ bookmakers: ${eventsWith4Bookmakers}`);
+    // Removed event distribution logs to reduce console output
     
-    // Log events count by bookmaker
-    logger.debug(`Events count by bookmaker (after mapping):`);
-    for (const [code, count] of Object.entries(eventsByBookmaker)) {
-      logger.debug(`  - ${code}: ${count} events`);
-    }
-    
-    // Log how many events have odds from each bookmaker combination
-    const bookmakerCombinations: Record<string, number> = {
-      'bp GH + bp KE': 0,
-      'bp GH + betika KE': 0,
-      'bp GH + sporty': 0,
-      'bp KE + betika KE': 0,
-      'bp KE + sporty': 0,
-      'betika KE + sporty': 0,
-      'bp GH + bp KE + betika KE': 0,
-      'bp GH + bp KE + sporty': 0,
-      'bp GH + betika KE + sporty': 0,
-      'bp KE + betika KE + sporty': 0,
-      'All 4 bookmakers': 0
-    };
-    
-    // Count events by bookmaker combination
-    for (const [eventId, eventData] of Array.from(eventMap.entries())) {
-      const bookies = new Set<string>();
-      const oddsData = eventData.oddsData || {};
-      
-      // Get all bookmakers with odds for this event
-      for (const bookmakerCode of Object.keys(oddsData)) {
-        bookies.add(bookmakerCode);
-      }
-      
-      // Specific combinations
-      const hasBpGh = bookies.has('bp GH');
-      const hasBpKe = bookies.has('bp KE');
-      const hasBetikaKe = bookies.has('betika KE');
-      const hasSporty = bookies.has('sporty');
-      
-      // Count by specific combinations
-      if (hasBpGh && hasBpKe && !hasBetikaKe && !hasSporty) bookmakerCombinations['bp GH + bp KE']++;
-      if (hasBpGh && !hasBpKe && hasBetikaKe && !hasSporty) bookmakerCombinations['bp GH + betika KE']++;
-      if (hasBpGh && !hasBpKe && !hasBetikaKe && hasSporty) bookmakerCombinations['bp GH + sporty']++;
-      if (!hasBpGh && hasBpKe && hasBetikaKe && !hasSporty) bookmakerCombinations['bp KE + betika KE']++;
-      if (!hasBpGh && hasBpKe && !hasBetikaKe && hasSporty) bookmakerCombinations['bp KE + sporty']++;
-      if (!hasBpGh && !hasBpKe && hasBetikaKe && hasSporty) bookmakerCombinations['betika KE + sporty']++;
-      
-      if (hasBpGh && hasBpKe && hasBetikaKe && !hasSporty) bookmakerCombinations['bp GH + bp KE + betika KE']++;
-      if (hasBpGh && hasBpKe && !hasBetikaKe && hasSporty) bookmakerCombinations['bp GH + bp KE + sporty']++;
-      if (hasBpGh && !hasBpKe && hasBetikaKe && hasSporty) bookmakerCombinations['bp GH + betika KE + sporty']++;
-      if (!hasBpGh && hasBpKe && hasBetikaKe && hasSporty) bookmakerCombinations['bp KE + betika KE + sporty']++;
-      
-      if (hasBpGh && hasBpKe && hasBetikaKe && hasSporty) bookmakerCombinations['All 4 bookmakers']++;
-    }
-    
-    // Log bookmaker combinations
-    logger.debug(`Events by bookmaker combination:`);
-    for (const [combo, count] of Object.entries(bookmakerCombinations)) {
-      logger.debug(`  - ${combo}: ${count} events`);
-    }
+    // Bookmaker combination logging removed to reduce console output
     
     logger.critical(`Processed ${eventMap.size} events with at least 2 bookmakers`);
     

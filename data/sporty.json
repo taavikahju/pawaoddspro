@@ -1414,8 +1414,8 @@
     "time": "18:45",
     "odds": {
       "home": 1.47,
-      "draw": 5.06,
-      "away": 7.01
+      "draw": 5.08,
+      "away": 7.08
     },
     "raw": {
       "eventId": "sr:match:50955907",
@@ -1424,8 +1424,8 @@
       "event": "Nice - Reims",
       "market": "1X2",
       "home_odds": "1.47",
-      "draw_odds": "5.06",
-      "away_odds": "7.01",
+      "draw_odds": "5.08",
+      "away_odds": "7.08",
       "start_time": "2025-05-02 18:45"
     }
   },
@@ -3233,9 +3233,9 @@
     "date": "2025-05-03",
     "time": "16:30",
     "odds": {
-      "home": 1.38,
-      "draw": 5.3,
-      "away": 7.1
+      "home": 1.4,
+      "draw": 5.25,
+      "away": 6.75
     },
     "raw": {
       "eventId": "sr:match:58856129",
@@ -3243,9 +3243,9 @@
       "tournament": "AFC Champions League Elite",
       "event": "Al Ahli Saudi FC - Kawasaki Frontale",
       "market": "1X2",
-      "home_odds": "1.38",
-      "draw_odds": "5.30",
-      "away_odds": "7.10",
+      "home_odds": "1.40",
+      "draw_odds": "5.25",
+      "away_odds": "6.75",
       "start_time": "2025-05-03 16:30"
     }
   },
@@ -16571,9 +16571,9 @@
     "date": "2025-05-02",
     "time": "00:30",
     "odds": {
-      "home": 1.16,
-      "draw": 7.1,
-      "away": 15
+      "home": 1.17,
+      "draw": 7,
+      "away": 14.5
     },
     "raw": {
       "eventId": "sr:match:59751668",
@@ -16581,9 +16581,9 @@
       "tournament": "Liga 1",
       "event": "FBC Melgar - Comerciantes Unidos",
       "market": "1X2",
-      "home_odds": "1.16",
-      "draw_odds": "7.10",
-      "away_odds": "15.00",
+      "home_odds": "1.17",
+      "draw_odds": "7.00",
+      "away_odds": "14.50",
       "start_time": "2025-05-02 00:30"
     }
   },
@@ -26321,9 +26321,9 @@
     "date": "2025-05-03",
     "time": "17:30",
     "odds": {
-      "home": 2.65,
+      "home": 2.5,
       "draw": 3.25,
-      "away": 2.5
+      "away": 2.6
     },
     "raw": {
       "eventId": "sr:match:58839255",
@@ -26331,9 +26331,9 @@
       "tournament": "Premier League",
       "event": "Maccabi Petah Tikva FC - FC Ashdod",
       "market": "1X2",
-      "home_odds": "2.65",
+      "home_odds": "2.50",
       "draw_odds": "3.25",
-      "away_odds": "2.50",
+      "away_odds": "2.60",
       "start_time": "2025-05-03 17:30"
     }
   },
@@ -28054,6 +28054,32 @@
     }
   },
   {
+    "id": "sr:match:57223073",
+    "eventId": "sr:match:57223073",
+    "teams": "C.D. Cacahuatique - CD Luis Angel Firpo Usulutan",
+    "league": "Primera Division, Clausura",
+    "sport": "football",
+    "country": "El Salvador",
+    "date": "2025-05-03",
+    "time": "21:30",
+    "odds": {
+      "home": 2.95,
+      "draw": 3.4,
+      "away": 2.15
+    },
+    "raw": {
+      "eventId": "sr:match:57223073",
+      "country": "El Salvador",
+      "tournament": "Primera Division, Clausura",
+      "event": "C.D. Cacahuatique - CD Luis Angel Firpo Usulutan",
+      "market": "1X2",
+      "home_odds": "2.95",
+      "draw_odds": "3.40",
+      "away_odds": "2.15",
+      "start_time": "2025-05-03 21:30"
+    }
+  },
+  {
     "id": "sr:match:60085511",
     "eventId": "sr:match:60085511",
     "teams": "Guarani de Fram - Club River Plate Asuncion",
@@ -29519,9 +29545,9 @@
     "date": "2025-05-02",
     "time": "16:45",
     "odds": {
-      "home": 1.2,
-      "draw": 6.2,
-      "away": 12
+      "home": 1.18,
+      "draw": 6.5,
+      "away": 13
     },
     "raw": {
       "eventId": "sr:match:60190901",
@@ -29529,9 +29555,9 @@
       "tournament": "Jordan League",
       "event": "AL Faisaly (Jor) - Moghayer AL Sarhan",
       "market": "1X2",
-      "home_odds": "1.20",
-      "draw_odds": "6.20",
-      "away_odds": "12.00",
+      "home_odds": "1.18",
+      "draw_odds": "6.50",
+      "away_odds": "13.00",
       "start_time": "2025-05-02 16:45"
     }
   },
@@ -29597,9 +29623,9 @@
     "date": "2025-05-02",
     "time": "17:00",
     "odds": {
-      "home": 2.35,
-      "draw": 3.7,
-      "away": 2.45
+      "home": 2.1,
+      "draw": 3.9,
+      "away": 2.75
     },
     "raw": {
       "eventId": "sr:match:51025009",
@@ -29607,9 +29633,9 @@
       "tournament": "Regionalliga Bavaria",
       "event": "TSV Buchbach - FC Augsburg II",
       "market": "1X2",
-      "home_odds": "2.35",
-      "draw_odds": "3.70",
-      "away_odds": "2.45",
+      "home_odds": "2.10",
+      "draw_odds": "3.90",
+      "away_odds": "2.75",
       "start_time": "2025-05-02 17:00"
     }
   },
@@ -29727,9 +29753,9 @@
     "date": "2025-05-02",
     "time": "17:00",
     "odds": {
-      "home": 3.8,
-      "draw": 3.5,
-      "away": 1.83
+      "home": 3.25,
+      "draw": 3.33,
+      "away": 2
     },
     "raw": {
       "eventId": "sr:match:51293953",
@@ -29737,9 +29763,9 @@
       "tournament": "Regionalliga Northeast",
       "event": "BFC Dynamo - Hallescher FC",
       "market": "1X2",
-      "home_odds": "3.80",
-      "draw_odds": "3.50",
-      "away_odds": "1.83",
+      "home_odds": "3.25",
+      "draw_odds": "3.33",
+      "away_odds": "2.00",
       "start_time": "2025-05-02 17:00"
     }
   },
@@ -32613,9 +32639,9 @@
     "date": "2025-05-01",
     "time": "19:00",
     "odds": {
-      "home": 1.37,
-      "draw": 4.7,
-      "away": 6.4
+      "home": 1.36,
+      "draw": 4.75,
+      "away": 6.6
     },
     "raw": {
       "eventId": "sr:match:60275611",
@@ -32623,9 +32649,9 @@
       "tournament": "Copa Division Profesional",
       "event": "Always Ready - Cdt Real Oruro",
       "market": "1X2",
-      "home_odds": "1.37",
-      "draw_odds": "4.70",
-      "away_odds": "6.40",
+      "home_odds": "1.36",
+      "draw_odds": "4.75",
+      "away_odds": "6.60",
       "start_time": "2025-05-01 19:00"
     }
   },
