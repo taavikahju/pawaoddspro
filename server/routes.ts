@@ -545,9 +545,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Removed event distribution code
 
-      // Replace verbose diagnostic logs with a single timestamp-based log
-      const timestamp = new Date().toISOString();
-      logger.critical(`[${timestamp}] Processed ${filteredEvents.length} events with at least ${minBookmakers} bookmakers`);
+      // Remove verbose diagnostic logs to reduce console output
+      // Only log during actual scraper runs, not on every client request
       
       res.json(filteredEvents);
     } catch (error) {
