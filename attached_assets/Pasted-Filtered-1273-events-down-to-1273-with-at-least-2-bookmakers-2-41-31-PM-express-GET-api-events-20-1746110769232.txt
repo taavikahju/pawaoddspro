@@ -1,0 +1,79 @@
+Filtered 1273 events down to 1273 with at least 2 bookmakers
+2:41:31 PM [express] GET /api/events 200 in 543ms :: [{"id":61092,"externalId":"51273513","eventId":…
+2:41:44 PM [express] GET /api/bookmakers 304 in 404ms :: [{"id":14,"name":"Betika","code":"betika KE…
+2:41:44 PM [express] GET /api/sports 304 in 443ms :: [{"id":1,"name":"Football","code":"football","a…
+2:41:51 PM [express] GET /api/stats 200 in 689ms :: {"totalEvents":1274,"eventsChange":2,"bookmarker…
+2:41:57 PM [express] GET /api/bookmakers 304 in 203ms :: [{"id":14,"name":"Betika","code":"betika KE…
+2:41:58 PM [express] GET /api/sports 304 in 211ms :: [{"id":1,"name":"Football","code":"football","a…
+2:41:58 PM [express] GET /api/tournaments/margins/by-country 304 in 330ms :: [{"name":"Argentina","t…
+📊 Event distribution by bookmaker count:
+  - Events with 1 bookmaker: 0
+  - Events with 2 bookmakers: 55
+  - Events with 3 bookmakers: 937
+  - Events with 4+ bookmakers: 282
+Filtered 1274 events down to 1274 with at least 2 bookmakers
+2:42:03 PM [express] GET /api/events 200 in 529ms :: [{"id":61092,"externalId":"51273513","eventId":…
+2:42:15 PM [express] GET /api/bookmakers 304 in 402ms :: [{"id":14,"name":"Betika","code":"betika KE…
+2:42:15 PM [express] GET /api/sports 304 in 405ms :: [{"id":1,"name":"Football","code":"football","a…
+2:42:28 PM [express] GET /api/bookmakers 304 in 434ms :: [{"id":14,"name":"Betika","code":"betika KE…
+2:42:28 PM [express] GET /api/sports 304 in 409ms :: [{"id":1,"name":"Football","code":"football","a…
+2:42:29 PM [express] GET /api/stats 200 in 866ms :: {"totalEvents":1280,"eventsChange":6,"bookmarker…
+2:42:29 PM [express] GET /api/tournaments/margins/by-country 304 in 335ms :: [{"name":"Argentina","t…
+📊 Event distribution by bookmaker count:
+  - Events with 1 bookmaker: 0
+  - Events with 2 bookmakers: 61
+  - Events with 3 bookmakers: 871
+  - Events with 4+ bookmakers: 349
+Filtered 1281 events down to 1281 with at least 2 bookmakers
+2:42:35 PM [express] GET /api/events 200 in 520ms :: [{"id":61092,"externalId":"51273513","eventId":…
+2:42:45 PM [express] GET /api/sports 304 in 407ms :: [{"id":1,"name":"Football","code":"football","a…
+2:42:45 PM [express] GET /api/bookmakers 304 in 427ms :: [{"id":14,"name":"Betika","code":"betika KE…
+2:42:52 PM [express] GET /api/stats 200 in 661ms :: {"totalEvents":1283,"eventsChange":3,"bookmarker…
+2:42:58 PM [express] GET /api/bookmakers 304 in 205ms :: [{"id":14,"name":"Betika","code":"betika KE…
+2:42:59 PM [express] GET /api/sports 304 in 406ms :: [{"id":1,"name":"Football","code":"football","a…
+2:42:59 PM [express] GET /api/tournaments/margins/by-country 304 in 336ms :: [{"name":"Argentina","t…
+📊 Event distribution by bookmaker count:
+  - Events with 1 bookmaker: 0
+  - Events with 2 bookmakers: 65
+  - Events with 3 bookmakers: 799
+  - Events with 4+ bookmakers: 421
+Filtered 1285 events down to 1285 with at least 2 bookmakers
+2:43:07 PM [express] GET /api/events 200 in 535ms :: [{"id":61093,"externalId":"51269601","eventId":…
+2:43:16 PM [express] GET /api/bookmakers 304 in 196ms :: [{"id":14,"name":"Betika","code":"betika KE…
+2:43:16 PM [express] GET /api/sports 304 in 419ms :: [{"id":1,"name":"Football","code":"football","a…
+2:43:29 PM [express] GET /api/bookmakers 304 in 402ms :: [{"id":14,"name":"Betika","code":"betika KE…
+2:43:29 PM [express] GET /api/sports 304 in 395ms :: [{"id":1,"name":"Football","code":"football","a…
+2:43:30 PM [express] GET /api/stats 200 in 858ms :: {"totalEvents":1288,"eventsChange":5,"bookmarker…
+2:43:30 PM [express] GET /api/tournaments/margins/by-country 304 in 327ms :: [{"name":"Argentina","t…
+📊 Event distribution by bookmaker count:
+  - Events with 1 bookmaker: 0
+  - Events with 2 bookmakers: 68
+  - Events with 3 bookmakers: 723
+  - Events with 4+ bookmakers: 497
+Filtered 1288 events down to 1288 with at least 2 bookmakers
+2:43:38 PM [express] GET /api/events 200 in 700ms :: [{"id":61093,"externalId":"51269601","eventId":…
+2:43:46 PM [express] GET /api/bookmakers 304 in 194ms :: [{"id":14,"name":"Betika","code":"betika KE…
+2:43:46 PM [express] GET /api/sports 304 in 195ms :: [{"id":1,"name":"Football","code":"football","a…
+2:43:52 PM [express] GET /api/stats 200 in 669ms :: {"totalEvents":1291,"eventsChange":3,"bookmarker…
+2:43:59 PM [express] GET /api/bookmakers 304 in 197ms :: [{"id":14,"name":"Betika","code":"betika KE…
+2:44:00 PM [express] GET /api/sports 304 in 197ms :: [{"id":1,"name":"Football","code":"football","a…
+2:44:00 PM [express] GET /api/tournaments/margins/by-country 304 in 331ms :: [{"name":"Argentina","t…
+📊 Event distribution by bookmaker count:
+  - Events with 1 bookmaker: 0
+  - Events with 2 bookmakers: 71
+  - Events with 3 bookmakers: 648
+  - Events with 4+ bookmakers: 572
+Filtered 1291 events down to 1291 with at least 2 bookmakers
+2:44:10 PM [express] GET /api/events 200 in 538ms :: [{"id":61093,"externalId":"51269601","eventId":…
+2:44:17 PM [express] GET /api/bookmakers 304 in 197ms :: [{"id":14,"name":"Betika","code":"betika KE…
+2:44:17 PM [express] GET /api/sports 304 in 202ms :: [{"id":1,"name":"Football","code":"football","a…
+2:44:30 PM [express] GET /api/bookmakers 304 in 423ms :: [{"id":14,"name":"Betika","code":"betika KE…
+2:44:30 PM [express] GET /api/sports 304 in 427ms :: [{"id":1,"name":"Football","code":"football","a…
+2:44:31 PM [express] GET /api/stats 200 in 795ms :: {"totalEvents":1054,"eventsChange":-237,"bookmar…
+2:44:31 PM [express] GET /api/tournaments/margins/by-country 304 in 334ms :: [{"name":"Argentina","t…
+📊 Event distribution by bookmaker count:
+  - Events with 1 bookmaker: 0
+  - Events with 2 bookmakers: 4
+  - Events with 3 bookmakers: 400
+  - Events with 4+ bookmakers: 639
+Filtered 1043 events down to 1043 with at least 2 bookmakers
