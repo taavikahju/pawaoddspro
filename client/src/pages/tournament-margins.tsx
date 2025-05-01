@@ -46,8 +46,8 @@ const TournamentMargins: React.FC = () => {
     
     const countryCodeMap: Record<string, string> = {
       // Europe
-      'England': 'GB',
-      'England Amateur': 'GB',
+      'England': 'GB-ENG',
+      'England Amateur': 'GB-ENG',
       'United Kingdom': 'GB',
       'Great Britain': 'GB',
       'Spain': 'ES',
@@ -74,7 +74,9 @@ const TournamentMargins: React.FC = () => {
       'Greece': 'GR',
       'Turkey': 'TR',
       'Turkiye': 'TR',
+      'Turkiye Amateur': 'TR',
       'Russia': 'RU',
+      'Russian Federation': 'RU',
       'Ukraine': 'UA',
       'Poland': 'PL',
       'Czech Republic': 'CZ',
@@ -99,6 +101,10 @@ const TournamentMargins: React.FC = () => {
       'Luxembourg': 'LU',
       'Iceland': 'IS',
       'Faroe Islands': 'FO',
+      'Armenia': 'AM',
+      'Azerbaijan': 'AZ',
+      'Georgia': 'GE',
+      'San Marino': 'SM',
       
       // Americas
       'USA': 'US',
@@ -124,6 +130,7 @@ const TournamentMargins: React.FC = () => {
       'Trinidad and Tobago': 'TT',
       'Cuba': 'CU',
       'Dominican Republic': 'DO',
+      'Nicaragua': 'NI',
       
       // Asia
       'Japan': 'JP',
@@ -149,6 +156,7 @@ const TournamentMargins: React.FC = () => {
       'Lebanon': 'LB',
       'Kazakhstan': 'KZ',
       'Uzbekistan': 'UZ',
+      'Bahrain': 'BH',
       
       // Oceania
       'Australia': 'AU',

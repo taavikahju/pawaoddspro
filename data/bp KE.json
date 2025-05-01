@@ -702,6 +702,32 @@
     }
   },
   {
+    "id": "58871825",
+    "eventId": "58871825",
+    "teams": "FSV Schoningen 2011 - SV Wilhelmshaven",
+    "league": "Oberliga Niedersachsen",
+    "sport": "football",
+    "country": "Germany",
+    "date": "2025-05-01",
+    "time": "13:00",
+    "odds": {
+      "home": 1.74,
+      "draw": 4.1,
+      "away": 3.55
+    },
+    "raw": {
+      "eventId": "58871825",
+      "country": "Germany",
+      "tournament": "Oberliga Niedersachsen",
+      "event": "FSV Schoningen 2011 - SV Wilhelmshaven",
+      "market": "1X2 - FT",
+      "home_odds": "1.74",
+      "draw_odds": "4.1",
+      "away_odds": "3.55",
+      "start_time": "2025-05-01 13:00"
+    }
+  },
+  {
     "id": "60086141",
     "eventId": "60086141",
     "teams": "Safa SC - Al Ahed FC",
@@ -1063,6 +1089,32 @@
       "draw_odds": "3.05",
       "away_odds": "1.62",
       "start_time": "2025-05-01 14:30"
+    }
+  },
+  {
+    "id": "60188265",
+    "eventId": "60188265",
+    "teams": "USM Khenchela U21 - MC Oran U21",
+    "league": "Algeria U21 League 1",
+    "sport": "football",
+    "country": "Algeria",
+    "date": "2025-05-01",
+    "time": "15:00",
+    "odds": {
+      "home": 1.77,
+      "draw": 3.4,
+      "away": 4.1
+    },
+    "raw": {
+      "eventId": "60188265",
+      "country": "Algeria",
+      "tournament": "Algeria U21 League 1",
+      "event": "USM Khenchela U21 - MC Oran U21",
+      "market": "1X2 - FT",
+      "home_odds": "1.77",
+      "draw_odds": "3.4",
+      "away_odds": "4.1",
+      "start_time": "2025-05-01 15:00"
     }
   },
   {
@@ -15583,9 +15635,9 @@
     "date": "2025-05-03",
     "time": "16:00",
     "odds": {
-      "home": 2.55,
-      "draw": 3,
-      "away": 2.7
+      "home": 2.45,
+      "draw": 3.05,
+      "away": 2.75
     },
     "raw": {
       "eventId": "51829989",
@@ -15593,9 +15645,9 @@
       "tournament": "Primera Federacion",
       "event": "Real Union de Irun - SD Tarazona",
       "market": "1X2 - FT",
-      "home_odds": "2.55",
-      "draw_odds": "3.0",
-      "away_odds": "2.7",
+      "home_odds": "2.45",
+      "draw_odds": "3.05",
+      "away_odds": "2.75",
       "start_time": "2025-05-03 16:00"
     }
   },
@@ -18859,9 +18911,9 @@
     "date": "2025-05-04",
     "time": "01:20",
     "odds": {
-      "home": 1.89,
-      "draw": 3.2,
-      "away": 4.15
+      "home": 1.82,
+      "draw": 3.3,
+      "away": 4.35
     },
     "raw": {
       "eventId": "57310917",
@@ -18869,9 +18921,9 @@
       "tournament": "Colombia Categoría Primera A",
       "event": "Junior - América de Cali",
       "market": "1X2 - FT",
-      "home_odds": "1.89",
-      "draw_odds": "3.2",
-      "away_odds": "4.15",
+      "home_odds": "1.82",
+      "draw_odds": "3.3",
+      "away_odds": "4.35",
       "start_time": "2025-05-04 01:20"
     }
   },
@@ -20107,9 +20159,9 @@
     "date": "2025-05-04",
     "time": "10:00",
     "odds": {
-      "home": 3.1,
-      "draw": 2.35,
-      "away": 2.9
+      "home": 3.15,
+      "draw": 2.23,
+      "away": 2.95
     },
     "raw": {
       "eventId": "52033053",
@@ -20117,9 +20169,9 @@
       "tournament": "Segunda Federacion",
       "event": "SD Eibar B - Arenas Club Getxo",
       "market": "1X2 - FT",
-      "home_odds": "3.1",
-      "draw_odds": "2.35",
-      "away_odds": "2.9",
+      "home_odds": "3.15",
+      "draw_odds": "2.23",
+      "away_odds": "2.95",
       "start_time": "2025-05-04 10:00"
     }
   },
@@ -20549,9 +20601,9 @@
     "date": "2025-05-04",
     "time": "10:00",
     "odds": {
-      "home": 2.4,
-      "draw": 3.1,
-      "away": 2.8
+      "home": 2.45,
+      "draw": 3.4,
+      "away": 2.55
     },
     "raw": {
       "eventId": "51866539",
@@ -20559,9 +20611,9 @@
       "tournament": "Segunda Federacion",
       "event": "CD Teruel - CD Calahorra",
       "market": "1X2 - FT",
-      "home_odds": "2.4",
-      "draw_odds": "3.1",
-      "away_odds": "2.8",
+      "home_odds": "2.45",
+      "draw_odds": "3.4",
+      "away_odds": "2.55",
       "start_time": "2025-05-04 10:00"
     }
   },
@@ -32913,32 +32965,6 @@
       "draw_odds": "5.25",
       "away_odds": "8.0",
       "start_time": "2025-06-17 01:00"
-    }
-  },
-  {
-    "id": "56189441",
-    "eventId": "56189441",
-    "teams": "Fluminense FC RJ - Borussia Dortmund (n)",
-    "league": "FIFA Club World Cup",
-    "sport": "football",
-    "country": "International",
-    "date": "2025-06-17",
-    "time": "16:00",
-    "odds": {
-      "home": 4.6,
-      "draw": 3.9,
-      "away": 1.59
-    },
-    "raw": {
-      "eventId": "56189441",
-      "country": "International",
-      "tournament": "FIFA Club World Cup",
-      "event": "Fluminense FC RJ - Borussia Dortmund (n)",
-      "market": "1X2 - FT",
-      "home_odds": "4.6",
-      "draw_odds": "3.9",
-      "away_odds": "1.59",
-      "start_time": "2025-06-17 16:00"
     }
   },
   {
