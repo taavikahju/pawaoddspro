@@ -183,10 +183,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
         // For each bookmaker, check both direct match and normalized matches
         let event = null;
         
-        // Track processed event count for this bookmaker
-        if (eventsByBookmaker[bookmakerCode] === undefined) {
-          eventsByBookmaker[bookmakerCode] = 0;
-        }
+        // Removed bookmaker tracking code
         
         // First try direct match
         event = bookmakerData.find(e => e.eventId === eventId);
@@ -363,16 +360,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       eventData.bestOdds = bestOdds;
     }
     
-    // Additional debug for tracking bookmakers in the second pass
-    logger.debug('Events count by bookmaker (initial mapping):');
-    for (const [code, count] of Object.entries(eventsByBookmaker)) {
-      logger.debug(`  - ${code}: ${count} events`);
-    }
-    
-    // Reset counts for next phase of matching
-    for (const code of bookmakerCodes) {
-      eventsByBookmaker[code] = 0;
-    }
+    // Removed additional bookmaker tracking logs
     
     // Third pass: Secondary matching for all bookmakers' events not yet mapped
     // This allows events with different eventIds but same team names to be matched
@@ -666,21 +654,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       }
     }
     
-    // Reset counter for final event counts
-    for (const bookmakerCode of bookmakerCodes) {
-      eventsByBookmaker[bookmakerCode] = 0;
-    }
-    
-    // Count how many events each bookmaker has odds for
-    // Convert to Array to avoid TypeScript iterator issues
-    for (const [eventId, eventData] of Array.from(eventMap.entries())) {
-      const oddsData = eventData.oddsData || {};
-      for (const bookmakerCode of Object.keys(oddsData)) {
-        if (eventsByBookmaker[bookmakerCode] !== undefined) {
-          eventsByBookmaker[bookmakerCode]++;
-        }
-      }
-    }
+    // Removed bookmaker count code
     
     // Removed event distribution logs to reduce console output
     
