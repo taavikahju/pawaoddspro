@@ -306,6 +306,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // API route to manually trigger tournament margin calculation
+  app.post('/api/admin/calculate-margins', simpleAdminAuth, async (req, res) => {
+    try {
+      console.log('Manually triggering tournament margin calculation...');
+      
+      // Clear existing margins
+      await db.execute(sql`DELETE FROM tournament_margins`);
+      console.log('Cleared existing tournament margins');
+      
+      // Calculate and store new tournament margins
+      const { calculateAndStoreTournamentMargins } = await import('./utils/tournamentMargins');
+      await calculateAndStoreTournamentMargins(storage);
+      console.log('Tournament margins calculated and stored successfully');
+      
+      return res.json({ success: true, message: 'Tournament margins calculated successfully' });
+    } catch (error) {
+      console.error('Error calculating tournament margins:', error);
+      return res.status(500).json({ success: false, message: 'Error calculating tournament margins' });
+    }
+  });
+  
   // Initialize and setup scrapers
   setupScrapers(storage);
   
