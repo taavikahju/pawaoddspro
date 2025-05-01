@@ -514,7 +514,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Calculate margins for each odds history entry
       const marginHistory = history.map(entry => {
+        if (!entry.homeOdds || !entry.drawOdds || !entry.awayOdds) {
+          return null; // Skip entries with missing odds
+        }
+        
         // Calculate margin using the formula (1/home) + (1/draw) + (1/away) - 1
+        // This matches the OddsTable calculation
         const margin = (1 / entry.homeOdds) + (1 / entry.drawOdds) + (1 / entry.awayOdds) - 1;
         
         return {
@@ -523,7 +528,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           margin: margin,
           timestamp: entry.timestamp
         };
-      });
+      }).filter(entry => entry !== null);
       
       // Sort by timestamp descending (newest first)
       marginHistory.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());

@@ -89,7 +89,9 @@ export async function cleanupOldOddsHistory(days: number = 7): Promise<number> {
     const deleteResult = await db.delete(oddsHistory)
       .where(sql`timestamp < ${cutoffTimestamp}`);
     
-    const deletedCount = deleteResult.count || 0;
+    // Handle different return values from delete operation
+    const deletedCount = typeof deleteResult === 'object' && 'count' in deleteResult ? 
+      deleteResult.count : 0;
     console.log(`Deleted ${deletedCount} odds history records older than ${days} days (before ${cutoffTimestamp})`);
     
     return deletedCount;

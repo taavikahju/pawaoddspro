@@ -80,9 +80,9 @@ export default function MarginHistoryPopup({
       }
       
       // Add margin for each bookmaker (parse to float)
-      // The margin is already in decimal form (e.g., 0.105 for 10.5%)
-      // We'll convert to percentage for display in the chart
-      const marginValue = parseFloat(entry.margin.toString()) * 100; // Convert to percentage 
+      // The margin is already calculated on the server as (1/home + 1/draw + 1/away - 1)
+      // Convert to percentage format for display
+      const marginValue = parseFloat(entry.margin.toString()) * 100; // Convert to percentage
       acc[timeKey][entry.bookmakerCode] = marginValue;
       
       return acc;
