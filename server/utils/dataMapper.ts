@@ -88,7 +88,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     let eventsWith2Bookmakers = 0;
     let eventsWith3Bookmakers = 0;
     let eventsWith4Bookmakers = 0;
-    let sportyEventsMapped = 0;
+    let bookmakerEventsMapped = 0;
     
     // Second pass: Process each bookmaker's data and group by eventId
     for (const eventId of Array.from(allEventIds)) {
@@ -233,77 +233,118 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       eventData.bestOdds = bestOdds;
     }
     
-    // Third pass: Secondary matching for Sportybet events not yet mapped
+    // Third pass: Secondary matching for all bookmakers' events not yet mapped
     // This allows events with different eventIds but same team names to be matched
-    console.log(`🔍 Starting secondary matching for Sportybet events...`);
+    console.log(`🔍 Starting secondary matching for all bookmakers...`);
+    
+    const bookmakersMapped = {
+      'sporty': 0,
+      'bp GH': 0,
+      'bp KE': 0,
+      'betika KE': 0
+    };
+    
+    // Process each event in our map
     for (const [eventId, eventData] of Array.from(eventMap.entries())) {
-      // Skip if this event already has Sportybet odds
-      if (eventData.oddsData && eventData.oddsData['sporty']) {
-        continue;
-      }
-      
-      // Try to match by team names
+      // Try to match by team names if we have team data
       if (eventData.teams) {
         const normalizedTeams = normalizeEventName(eventData.teams);
+        let reversedNormalizedTeams = null;
         
-        // Try to find a match with the normalized team name
-        let sportyEvent = sportyTeamsMap.get(normalizedTeams);
-        
-        // If no match, try to reverse team names (e.g., "Team A vs Team B" -> "Team B vs Team A")
-        if (!sportyEvent && eventData.teams.includes(' vs ')) {
+        // Prepare reversed teams format for matching both ways
+        if (eventData.teams.includes(' vs ')) {
           const teams = eventData.teams.split(' vs ');
           if (teams.length === 2) {
             const reversedTeams = `${teams[1]} vs ${teams[0]}`;
-            const normalizedReversedTeams = normalizeEventName(reversedTeams);
-            sportyEvent = sportyTeamsMap.get(normalizedReversedTeams);
-            
-            if (sportyEvent) {
-              console.log(`✅ Matched Sportybet event using reversed team names: ${eventData.teams} ↔️ ${reversedTeams}`);
-            }
+            reversedNormalizedTeams = normalizeEventName(reversedTeams);
           }
         }
         
-        if (sportyEvent) {
-          // We found a matching Sportybet event by team name
-          let hasOdds = false;
-          let sportyOdds = null;
+        // Try to match with each bookmaker
+        for (const bookmakerCode of bookmakerCodes) {
+          // Skip if this event already has odds for this bookmaker
+          if (eventData.oddsData && eventData.oddsData[bookmakerCode]) {
+            continue;
+          }
           
-          if (sportyEvent.odds) {
-            sportyOdds = sportyEvent.odds;
-            hasOdds = true;
-          } else if (sportyEvent.home_odds !== undefined || sportyEvent.draw_odds !== undefined || sportyEvent.away_odds !== undefined) {
-            const homeOdds = sportyEvent.home_odds ? parseFloat(sportyEvent.home_odds) : 0;
-            const drawOdds = sportyEvent.draw_odds ? parseFloat(sportyEvent.draw_odds) : 0;
-            const awayOdds = sportyEvent.away_odds ? parseFloat(sportyEvent.away_odds) : 0;
+          // Get the appropriate map based on bookmaker
+          let bookieMap = null;
+          if (bookmakerCode === 'sporty') {
+            bookieMap = sportyTeamsMap;
+          } else {
+            bookieMap = bookmakerTeamMaps.get(bookmakerCode);
+          }
+          
+          if (!bookieMap) continue;
+          
+          // Try to find a match with the normalized team name
+          let bookieEvent = bookieMap.get(normalizedTeams);
+          
+          // If no match and we have reversed teams, try that
+          if (!bookieEvent && reversedNormalizedTeams) {
+            bookieEvent = bookieMap.get(reversedNormalizedTeams);
             
-            if (homeOdds > 0 || drawOdds > 0 || awayOdds > 0) {
-              sportyOdds = {
-                home: homeOdds,
-                draw: drawOdds,
-                away: awayOdds
-              };
-              hasOdds = true;
+            if (bookieEvent) {
+              console.log(`✅ Matched ${bookmakerCode} event using reversed team names: ${eventData.teams}`);
             }
           }
           
-          if (hasOdds) {
-            // Add Sportybet odds to this event
-            eventData.oddsData['sporty'] = sportyOdds;
+          if (bookieEvent) {
+            // We found a matching event by team name
+            let hasOdds = false;
+            let bookieOdds = null;
             
-            // Recalculate best odds
-            ['home', 'draw', 'away'].forEach(market => {
-              if (sportyOdds[market] && sportyOdds[market] > (eventData.bestOdds[market] || 0)) {
-                eventData.bestOdds[market] = sportyOdds[market];
+            if (bookieEvent.odds) {
+              bookieOdds = bookieEvent.odds;
+              hasOdds = true;
+            } else if (bookieEvent.home_odds !== undefined || bookieEvent.draw_odds !== undefined || bookieEvent.away_odds !== undefined) {
+              const homeOdds = bookieEvent.home_odds ? parseFloat(bookieEvent.home_odds) : 0;
+              const drawOdds = bookieEvent.draw_odds ? parseFloat(bookieEvent.draw_odds) : 0;
+              const awayOdds = bookieEvent.away_odds ? parseFloat(bookieEvent.away_odds) : 0;
+              
+              if (homeOdds > 0 || drawOdds > 0 || awayOdds > 0) {
+                bookieOdds = {
+                  home: homeOdds,
+                  draw: drawOdds,
+                  away: awayOdds
+                };
+                hasOdds = true;
               }
-            });
+            }
             
-            sportyEventsMapped++;
-            console.log(`✅ Secondary matched Sportybet event for: ${eventData.teams}`);
+            if (hasOdds) {
+              // Add bookmaker odds to this event
+              eventData.oddsData[bookmakerCode] = bookieOdds;
+              
+              // Recalculate best odds
+              ['home', 'draw', 'away'].forEach(market => {
+                if (bookieOdds[market] && bookieOdds[market] > (eventData.bestOdds[market] || 0)) {
+                  eventData.bestOdds[market] = bookieOdds[market];
+                }
+              });
+              
+              // Track which bookmakers we've added
+              bookmakersMapped[bookmakerCode] = (bookmakersMapped[bookmakerCode] || 0) + 1;
+              
+              // Only log for Sportybet to avoid cluttering logs
+              if (bookmakerCode === 'sporty') {
+                console.log(`✅ Secondary matched ${bookmakerCode} event for: ${eventData.teams}`);
+              }
+            }
           }
         }
       }
     }
-    console.log(`🔄 Secondary matching added Sportybet odds to ${sportyEventsMapped} additional events`);
+    
+    // Log summary of secondary matching
+    console.log(`🔄 Secondary matching success:`);
+    for (const [bookmakerCode, count] of Object.entries(bookmakersMapped)) {
+      if (count > 0) {
+        console.log(`  - Added ${count} events from ${bookmakerCode}`);
+        bookmakerEventsMapped += count; // Update total count
+      }
+    }
+    console.log(`🔄 Secondary matching added odds to ${bookmakerEventsMapped} total event-bookmaker combinations`);
     
     // Store or update events in database
     for (const [eventKey, eventData] of Array.from(eventMap.entries())) {
@@ -484,16 +525,31 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
  * This function is specifically optimized to make team name matching more reliable
  */
 function normalizeEventName(eventName: string): string {
+  if (!eventName) return '';
+  
   return eventName
     .toLowerCase()
     // Remove common separators (vs, v, -, @)
     .replace(/\s+vs\.?\s+|\s+v\.?\s+|\s+-\s+|\s+@\s+/g, '')
     // Remove 'fc' (football club)
     .replace(/\s+fc\b|\bfc\s+|\s+football\s+club|\bfootball\s+club/g, '')
-    // Remove common suffixes
-    .replace(/\s+(united|utd|city|town|county|albion|rovers|wanderers|athletic|hotspur|wednesday|forest)\b/g, '')
+    // Remove common suffixes - expanded list
+    .replace(/\s+(united|utd|city|town|county|albion|rovers|wanderers|athletic|hotspur|wednesday|forest|fc|academy|reserve|women|ladies|boys|girls|u\d+|under\d+)\b/g, '')
     // Remove common location prefixes
-    .replace(/\b(west|east|north|south)\s+/g, '')
+    .replace(/\b(west|east|north|south|central|real|atletico|deportivo|inter|lokomotiv|dynamo)\s+/g, '')
+    // Remove country specifiers
+    .replace(/\s+(ghana|kenya|uganda|tanzania|nigeria|zambia)\b/g, '')
+    // Replacements for specific abbreviations
+    .replace(/\bmanu\b/g, 'manchester') // Manchester United 
+    .replace(/\bman\s+u\b/g, 'manchester') // Manchester United
+    .replace(/\bman\s+utd\b/g, 'manchester') // Manchester United
+    .replace(/\bman\s+city\b/g, 'manchester') // Manchester City
+    .replace(/\bman\s+c\b/g, 'manchester') // Manchester City
+    .replace(/\blfc\b/g, 'liverpool') // Liverpool FC
+    .replace(/\bafc\b/g, 'arsenal') // Arsenal FC
+    .replace(/\bcfc\b/g, 'chelsea') // Chelsea FC
+    .replace(/\bbvb\b/g, 'dortmund') // Borussia Dortmund
+    .replace(/\bfcb\b/g, 'bayern') // Bayern Munich
     // Remove periods and special characters
     .replace(/\./g, '')
     // Remove all whitespace
