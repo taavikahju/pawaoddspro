@@ -156,6 +156,10 @@ const TournamentMargins: React.FC = () => {
       'Kazakhstan': 'KZ',
       'Uzbekistan': 'UZ',
       'Bahrain': 'BH',
+      'Bangladesh': 'BD',
+      'Kuwait': 'KW',
+      'Bosnia & Herzegovina': 'BA',
+      'Bosnia and Herzegovina': 'BA',
       
       // Oceania
       'Australia': 'AU',

@@ -1673,9 +1673,9 @@
     "date": "2025-05-02",
     "time": "12:15",
     "odds": {
-      "home": 1.5,
-      "draw": 4.75,
-      "away": 4.45
+      "home": 1.52,
+      "draw": 4.65,
+      "away": 4.35
     },
     "raw": {
       "eventId": "49405497",
@@ -1683,9 +1683,9 @@
       "tournament": "Premier League",
       "event": "Brunei DPMM FC - Tanjong Pagar United",
       "market": "1X2 - FT",
-      "home_odds": "1.5",
-      "draw_odds": "4.75",
-      "away_odds": "4.45",
+      "home_odds": "1.52",
+      "draw_odds": "4.65",
+      "away_odds": "4.35",
       "start_time": "2025-05-02 12:15"
     }
   },
@@ -3562,6 +3562,32 @@
     }
   },
   {
+    "id": "51270245",
+    "eventId": "51270245",
+    "teams": "Schalke 04 - SC Paderborn 07",
+    "league": "2nd Bundesliga",
+    "sport": "football",
+    "country": "Germany",
+    "date": "2025-05-02",
+    "time": "16:30",
+    "odds": {
+      "home": 3.35,
+      "draw": 3.7,
+      "away": 2.03
+    },
+    "raw": {
+      "eventId": "51270245",
+      "country": "Germany",
+      "tournament": "2nd Bundesliga",
+      "event": "Schalke 04 - SC Paderborn 07",
+      "market": "1X2 - FT",
+      "home_odds": "3.35",
+      "draw_odds": "3.7",
+      "away_odds": "2.03",
+      "start_time": "2025-05-02 16:30"
+    }
+  },
+  {
     "id": "51270249",
     "eventId": "51270249",
     "teams": "1. FC Magdeburg - SC Preussen 06 Munster",
@@ -4966,6 +4992,32 @@
     }
   },
   {
+    "id": "51967103",
+    "eventId": "51967103",
+    "teams": "Grenoble Foot - ESTAC Troyes",
+    "league": "Ligue 2",
+    "sport": "football",
+    "country": "France",
+    "date": "2025-05-02",
+    "time": "18:00",
+    "odds": {
+      "home": 3,
+      "draw": 3.3,
+      "away": 2.35
+    },
+    "raw": {
+      "eventId": "51967103",
+      "country": "France",
+      "tournament": "Ligue 2",
+      "event": "Grenoble Foot - ESTAC Troyes",
+      "market": "1X2 - FT",
+      "home_odds": "3.0",
+      "draw_odds": "3.3",
+      "away_odds": "2.35",
+      "start_time": "2025-05-02 18:00"
+    }
+  },
+  {
     "id": "50956909",
     "eventId": "50956909",
     "teams": "Clermont Foot 63 - FC Annecy",
@@ -6171,9 +6223,9 @@
     "date": "2025-05-02",
     "time": "18:30",
     "odds": {
-      "home": 2.16,
+      "home": 2.11,
       "draw": 3.15,
-      "away": 3.2
+      "away": 3.3
     },
     "raw": {
       "eventId": "56743151",
@@ -6181,9 +6233,9 @@
       "tournament": "Liga Profesional",
       "event": "Racing Club Avellaneda - Newell's Old Boys",
       "market": "1X2 - FT",
-      "home_odds": "2.16",
+      "home_odds": "2.11",
       "draw_odds": "3.15",
-      "away_odds": "3.2",
+      "away_odds": "3.3",
       "start_time": "2025-05-02 18:30"
     }
   },
@@ -6457,9 +6509,9 @@
     "date": "2025-05-02",
     "time": "18:45",
     "odds": {
-      "home": 1.16,
-      "draw": 6.5,
-      "away": 14.5
+      "home": 1.15,
+      "draw": 6.75,
+      "away": 15.5
     },
     "raw": {
       "eventId": "51116545",
@@ -6467,9 +6519,9 @@
       "tournament": "Scotland Championship",
       "event": "Falkirk - Hamilton Academical",
       "market": "1X2 - FT",
-      "home_odds": "1.16",
-      "draw_odds": "6.5",
-      "away_odds": "14.5",
+      "home_odds": "1.15",
+      "draw_odds": "6.75",
+      "away_odds": "15.5",
       "start_time": "2025-05-02 18:45"
     }
   },
@@ -8346,32 +8398,6 @@
     }
   },
   {
-    "id": "57436699",
-    "eventId": "57436699",
-    "teams": "Albirex Niigata - FC Tokyo",
-    "league": "J.League",
-    "sport": "football",
-    "country": "Japan",
-    "date": "2025-05-03",
-    "time": "05:00",
-    "odds": {
-      "home": 2.13,
-      "draw": 3.35,
-      "away": 3.4
-    },
-    "raw": {
-      "eventId": "57436699",
-      "country": "Japan",
-      "tournament": "J.League",
-      "event": "Albirex Niigata - FC Tokyo",
-      "market": "1X2 - FT",
-      "home_odds": "2.13",
-      "draw_odds": "3.35",
-      "away_odds": "3.4",
-      "start_time": "2025-05-03 05:00"
-    }
-  },
-  {
     "id": "57584795",
     "eventId": "57584795",
     "teams": "Oita Trinita - Roasso Kumamoto",
@@ -8863,6 +8889,32 @@
       "draw_odds": "3.2",
       "away_odds": "3.4",
       "start_time": "2025-05-03 06:30"
+    }
+  },
+  {
+    "id": "58064293",
+    "eventId": "58064293",
+    "teams": "Glenorchy Knights FC - Launceston City FC",
+    "league": "Tasmania NPL",
+    "sport": "football",
+    "country": "Australia",
+    "date": "2025-05-03",
+    "time": "06:45",
+    "odds": {
+      "home": 1.48,
+      "draw": 4.6,
+      "away": 4.8
+    },
+    "raw": {
+      "eventId": "58064293",
+      "country": "Australia",
+      "tournament": "Tasmania NPL",
+      "event": "Glenorchy Knights FC - Launceston City FC",
+      "market": "1X2 - FT",
+      "home_odds": "1.48",
+      "draw_odds": "4.6",
+      "away_odds": "4.8",
+      "start_time": "2025-05-03 06:45"
     }
   },
   {
@@ -12402,32 +12454,6 @@
     }
   },
   {
-    "id": "51830355",
-    "eventId": "51830355",
-    "teams": "AD Ceuta - Merida AD",
-    "league": "Primera Federacion",
-    "sport": "football",
-    "country": "Spain",
-    "date": "2025-05-03",
-    "time": "14:00",
-    "odds": {
-      "home": 1.69,
-      "draw": 3.5,
-      "away": 4.45
-    },
-    "raw": {
-      "eventId": "51830355",
-      "country": "Spain",
-      "tournament": "Primera Federacion",
-      "event": "AD Ceuta - Merida AD",
-      "market": "1X2 - FT",
-      "home_odds": "1.69",
-      "draw_odds": "3.5",
-      "away_odds": "4.45",
-      "start_time": "2025-05-03 14:00"
-    }
-  },
-  {
     "id": "60259035",
     "eventId": "60259035",
     "teams": "Torquay United - Boreham Wood",
@@ -13442,6 +13468,32 @@
     }
   },
   {
+    "id": "51094153",
+    "eventId": "51094153",
+    "teams": "Lincoln City - Wrexham AFC",
+    "league": "League One",
+    "sport": "football",
+    "country": "England",
+    "date": "2025-05-03",
+    "time": "14:00",
+    "odds": {
+      "home": 2.7,
+      "draw": 3.3,
+      "away": 2.45
+    },
+    "raw": {
+      "eventId": "51094153",
+      "country": "England",
+      "tournament": "League One",
+      "event": "Lincoln City - Wrexham AFC",
+      "market": "1X2 - FT",
+      "home_odds": "2.7",
+      "draw_odds": "3.3",
+      "away_odds": "2.45",
+      "start_time": "2025-05-03 14:00"
+    }
+  },
+  {
     "id": "51094151",
     "eventId": "51094151",
     "teams": "Mansfield Town - Exeter City",
@@ -13932,32 +13984,6 @@
       "home_odds": "1.47",
       "draw_odds": "4.45",
       "away_odds": "6.75",
-      "start_time": "2025-05-03 14:00"
-    }
-  },
-  {
-    "id": "50850669",
-    "eventId": "50850669",
-    "teams": "Leicester City - Southampton FC",
-    "league": "Premier League",
-    "sport": "football",
-    "country": "England",
-    "date": "2025-05-03",
-    "time": "14:00",
-    "odds": {
-      "home": 2.25,
-      "draw": 3.65,
-      "away": 3
-    },
-    "raw": {
-      "eventId": "50850669",
-      "country": "England",
-      "tournament": "Premier League",
-      "event": "Leicester City - Southampton FC",
-      "market": "1X2 - FT",
-      "home_odds": "2.25",
-      "draw_odds": "3.65",
-      "away_odds": "3.0",
       "start_time": "2025-05-03 14:00"
     }
   },
@@ -14791,32 +14817,6 @@
       "draw_odds": "3.45",
       "away_odds": "3.2",
       "start_time": "2025-05-03 15:30"
-    }
-  },
-  {
-    "id": "52371903",
-    "eventId": "52371903",
-    "teams": "Supersport United - Chippa United",
-    "league": "South Africa Premier Soccer League",
-    "sport": "football",
-    "country": "South Africa",
-    "date": "2025-05-03",
-    "time": "15:45",
-    "odds": {
-      "home": 1.93,
-      "draw": 3.05,
-      "away": 4.25
-    },
-    "raw": {
-      "eventId": "52371903",
-      "country": "South Africa",
-      "tournament": "South Africa Premier Soccer League",
-      "event": "Supersport United - Chippa United",
-      "market": "1X2 - FT",
-      "home_odds": "1.93",
-      "draw_odds": "3.05",
-      "away_odds": "4.25",
-      "start_time": "2025-05-03 15:45"
     }
   },
   {
