@@ -284,65 +284,72 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
       // Set data processing lock
       isDataProcessingRunning = true;
 
-      // Process and map events
-      await processAndMapEvents(storage);
-      
-      // Calculate and store tournament margins
       try {
-        const { calculateAndStoreTournamentMargins } = await import('../utils/tournamentMargins');
+        // Process and map events
+        await processAndMapEvents(storage);
         
-        // Calculate and store new tournament margins
-        // Note: We no longer delete existing margins to maintain historical data
-        await calculateAndStoreTournamentMargins(storage);
-        console.log('✅ Tournament margins calculated and stored');
-      } catch (marginError) {
-        console.error('❌ Error calculating tournament margins:', marginError);
+        // Calculate and store tournament margins
+        try {
+          const { calculateAndStoreTournamentMargins } = await import('../utils/tournamentMargins');
+          
+          // Calculate and store new tournament margins
+          // Note: We no longer delete existing margins to maintain historical data
+          await calculateAndStoreTournamentMargins(storage);
+          console.log('✅ Tournament margins calculated and stored');
+        } catch (marginError) {
+          console.error('❌ Error calculating tournament margins:', marginError);
+        }
+        
+        // Emit processing completed event
+        scraperEvents.emit(SCRAPER_EVENTS.PROCESSING_COMPLETED, {
+          timestamp: new Date().toISOString(),
+          message: 'Completed processing and mapping events'
+        });
+        
+        // Emit event that all processing is complete and frontend can be updated
+        // This includes statistics that will be logged and sent to frontend
+        const allEvents = await storage.getEvents();
+        const filteredEvents = allEvents.filter(event => {
+          if (!event.oddsData) return false;
+          const bookmakerCount = Object.keys(event.oddsData as Record<string, any>).length;
+          return bookmakerCount >= 2;
+        });
+        
+        // Create simplified summary for frontend update
+        const frontendUpdateSummary = {
+          totalEvents: filteredEvents.length,
+          timestamp: new Date().toISOString()
+        };
+        
+        // Log simplified statistics for the update with timestamp
+        const updateTime = new Date();
+        logger.critical(`[${updateTime.toISOString()}] Sending ${filteredEvents.length} events to frontend`);
+        
+        // Emit the all processing completed event with statistics
+        scraperEvents.emit(SCRAPER_EVENTS.ALL_PROCESSING_COMPLETED, {
+          timestamp: new Date().toISOString(),
+          message: 'All scraping and processing completed, frontend can be updated',
+          stats: frontendUpdateSummary
+        });
+      } catch (processingError) {
+        console.error('❌ Error processing events:', processingError);
+        
+        // Emit processing failed event
+        scraperEvents.emit(SCRAPER_EVENTS.PROCESSING_FAILED, {
+          timestamp: new Date().toISOString(),
+          message: 'Error processing and mapping events',
+          error: processingError instanceof Error ? processingError.message : String(processingError)
+        });
+        
+        throw processingError;
+      } finally {
+        // Always release the data processing lock, even if there was an error
+        isDataProcessingRunning = false;
+        logger.critical(`[${new Date().toISOString()}] Data processing lock released`);
       }
-      
-      // Emit processing completed event
-      scraperEvents.emit(SCRAPER_EVENTS.PROCESSING_COMPLETED, {
-        timestamp: new Date().toISOString(),
-        message: 'Completed processing and mapping events'
-      });
-      
-      // Emit event that all processing is complete and frontend can be updated
-      // This includes statistics that will be logged and sent to frontend
-      const allEvents = await storage.getEvents();
-      const filteredEvents = allEvents.filter(event => {
-        if (!event.oddsData) return false;
-        const bookmakerCount = Object.keys(event.oddsData as Record<string, any>).length;
-        return bookmakerCount >= 2;
-      });
-      
-      // Create simplified summary for frontend update
-      const frontendUpdateSummary = {
-        totalEvents: filteredEvents.length,
-        timestamp: new Date().toISOString()
-      };
-      
-      // Log simplified statistics for the update with timestamp
-      const updateTime = new Date();
-      logger.critical(`[${updateTime.toISOString()}] Sending ${filteredEvents.length} events to frontend`);
-      
-      // Emit the all processing completed event with statistics
-      scraperEvents.emit(SCRAPER_EVENTS.ALL_PROCESSING_COMPLETED, {
-        timestamp: new Date().toISOString(),
-        message: 'All scraping and processing completed, frontend can be updated',
-        stats: frontendUpdateSummary
-      });
-      
-      // Release data processing lock
-      isDataProcessingRunning = false;
     } catch (processingError) {
-      console.error('❌ Error processing events:', processingError);
-      
-      // Emit processing failed event
-      scraperEvents.emit(SCRAPER_EVENTS.PROCESSING_FAILED, {
-        timestamp: new Date().toISOString(),
-        message: 'Error processing and mapping events',
-        error: processingError instanceof Error ? processingError.message : String(processingError)
-      });
-      
+      // This catch block is reached if an error is thrown and goes through the finally block
+      // We don't need to release the lock here as it's already done in the finally block
       throw processingError;
     }
     
