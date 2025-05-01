@@ -259,7 +259,8 @@ const processEndpoint = async (endpoint, endpointIndex) => {
 
 // Prioritized data collection with resilience
 const fetchFromAllEndpoints = async () => {
-  console.error(`📊 Starting Sportybet data collection from ${ALL_ENDPOINTS.length} endpoints...`);
+  const startTime = new Date();
+  console.error(`[${startTime.toISOString()}] Sportybet scraper starting - ${ALL_ENDPOINTS.length} endpoints configured`);
   
   // Total number of tournaments collected
   let tournamentCount = 0;
@@ -389,7 +390,7 @@ const processEvents = (tournaments) => {
   // Flag for special event we're looking for
   let foundCrystalPalaceNottinghamForest = false;
   
-  console.error(`⚙️ Processing tournaments data...`);
+  // Processing tournaments data
   
   // First pass: process all tournaments to collect events
   for (const tournament of tournaments) {
@@ -591,9 +592,9 @@ const processEvents = (tournaments) => {
               });
               processed.count++;
               
-              // Log progress every 100 events
+              // Progress tracking without logs
               if (processed.count % 100 === 0) {
-                console.error(`✓ Processed ${processed.count} events so far...`);
+                // Removed verbose progress logs
               }
             }
           }
@@ -682,7 +683,8 @@ const run = async () => {
       return;
     }
     
-    console.error(`✅ Successfully extracted ${events.length} valid events`);
+    const endTime = new Date();
+    console.error(`[${endTime.toISOString()}] Sportybet scraper finished - ${events.length} events extracted`);
     
     // Output to stdout for the integration system
     console.log(JSON.stringify(events));
