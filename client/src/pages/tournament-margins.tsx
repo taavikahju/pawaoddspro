@@ -461,7 +461,8 @@ const TournamentMargins: React.FC = () => {
                                   setSelectedHistoryData({
                                     tournamentName: tournament.name,
                                     bookmakerCode: bookmaker.code,
-                                    bookmakerName: bookmaker.name
+                                    bookmakerName: bookmaker.name,
+                                    countryName: selectedCountryData.name // Include the country name
                                   });
                                   setHistoryPopupOpen(true);
                                 }}
@@ -494,6 +495,7 @@ const TournamentMargins: React.FC = () => {
           tournamentName={selectedHistoryData.tournamentName}
           bookmakerCode={selectedHistoryData.bookmakerCode}
           bookmakerName={selectedHistoryData.bookmakerName}
+          countryName={selectedHistoryData.countryName}
         />
       )}
     </Layout>
