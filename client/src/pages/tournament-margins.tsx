@@ -37,6 +37,7 @@ const TournamentMargins: React.FC = () => {
     tournamentName: string;
     bookmakerCode: string;
     bookmakerName: string;
+    countryName: string; // Add country name to history data
   } | null>(null);
   
   // Function to determine country code from country name

@@ -38,6 +38,7 @@ interface TournamentMarginHistoryPopupProps {
   tournamentName: string;
   bookmakerCode: string;
   bookmakerName: string;
+  countryName?: string; // Make country optional
 }
 
 export default function TournamentMarginHistoryPopup({
@@ -45,14 +46,23 @@ export default function TournamentMarginHistoryPopup({
   onOpenChange,
   tournamentName,
   bookmakerCode,
-  bookmakerName
+  bookmakerName,
+  countryName
 }: TournamentMarginHistoryPopupProps) {
   // Use the original bookmaker code, no need to convert
   // Fetch margin history data
   const { data, isLoading, error } = useQuery<MarginHistoryItem[]>({
-    queryKey: ['/api/tournaments/margins/history', tournamentName, bookmakerCode],
+    queryKey: ['/api/tournaments/margins/history', tournamentName, bookmakerCode, countryName],
     queryFn: async () => {
-      const response = await axios.get(`/api/tournaments/margins/history?tournament=${encodeURIComponent(tournamentName)}&bookmaker=${encodeURIComponent(bookmakerCode)}`);
+      // Build the URL with query parameters, including country if provided
+      let url = `/api/tournaments/margins/history?tournament=${encodeURIComponent(tournamentName)}&bookmaker=${encodeURIComponent(bookmakerCode)}`;
+      
+      // Add country filter if provided
+      if (countryName) {
+        url += `&country=${encodeURIComponent(countryName)}`;
+      }
+      
+      const response = await axios.get(url);
       return response.data;
     },
     enabled: open,
@@ -106,7 +116,7 @@ export default function TournamentMarginHistoryPopup({
       <DialogContent className="sm:max-w-[650px] max-h-[80vh] overflow-y-auto">
         <DialogHeader className="pb-2">
           <DialogTitle className="text-sm font-medium">
-            Margin History: {tournamentName} - {bookmakerName}
+            Margin History: {tournamentName}{countryName ? ` (${countryName})` : ''} - {bookmakerName}
           </DialogTitle>
         </DialogHeader>
         
