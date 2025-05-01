@@ -4,6 +4,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Loader2, ChevronRight, Trophy } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { useBookmakerContext } from '@/contexts/BookmakerContext';
+import { useWebSocket } from '@/hooks/use-websocket';
 import CountryFlag from '@/components/CountryFlag';
 import { cn } from '@/lib/utils';
 import Layout from '@/components/Layout';
@@ -197,10 +198,18 @@ const TournamentMargins: React.FC = () => {
     return countryCodeMap[normalizedName] || 'XX';
   };
   
-  // Query to load tournament margin data
-  const { data: countriesData, isLoading, error } = useQuery<CountryData[]>({
+  // WebSocket data for real-time updates
+  const { stats: wsStats } = useWebSocket();
+  
+  // Query to load tournament margin data from API with more frequent updates
+  const { data: apiCountriesData, isLoading, error } = useQuery<CountryData[]>({
     queryKey: ['/api/tournaments/margins/by-country'],
+    refetchInterval: 30000, // Refresh every 30 seconds
   });
+  
+  // Get countries data, using API data since we don't have a dedicated WebSocket stream for tournament margins
+  // But the update will happen automatically after each scrape cycle finishes
+  const countriesData = apiCountriesData;
   
   // Get countries data
   const filteredCountries = useMemo(() => {
@@ -364,20 +373,30 @@ const TournamentMargins: React.FC = () => {
         {/* Right content area with tournament margins table */}
         <Card className="flex-1 bg-transparent shadow-none border-muted">
           <CardHeader className="py-4">
-            <CardTitle className="text-lg flex items-center">
-              {selectedCountryData && (
-                <>
-                  <CountryFlag 
-                    countryCode={getCountryCode(selectedCountryData.name)} 
-                    countryName={selectedCountryData.name}
-                    size="md"
-                    className="mr-2"
-                  />
-                </>
+            <CardTitle className="text-lg flex items-center justify-between">
+              <div className="flex items-center">
+                {selectedCountryData && (
+                  <>
+                    <CountryFlag 
+                      countryCode={getCountryCode(selectedCountryData.name)} 
+                      countryName={selectedCountryData.name}
+                      size="md"
+                      className="mr-2"
+                    />
+                  </>
+                )}
+                {selectedCountryData 
+                  ? `${selectedCountryData.name} Tournaments (${selectedCountryData.tournaments.length})` 
+                  : 'Tournament Margins'}
+              </div>
+              
+              {/* Display last update time from WebSocket stats */}
+              {wsStats && (
+                <div className="text-xs text-gray-500 flex items-center gap-1">
+                  <Clock className="w-3 h-3" />
+                  Last updated: {wsStats.lastScrapeTime || 'N/A'}
+                </div>
               )}
-              {selectedCountryData 
-                ? `${selectedCountryData.name} Tournaments (${selectedCountryData.tournaments.length})` 
-                : 'Tournament Margins'}
             </CardTitle>
           </CardHeader>
           <CardContent>
