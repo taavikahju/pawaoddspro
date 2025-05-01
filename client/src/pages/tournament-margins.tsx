@@ -281,7 +281,7 @@ const TournamentMargins: React.FC = () => {
   
   return (
     <Layout title="Tournament Margins" subtitle="Average bookmaker margins by tournament">
-      <div className="flex flex-col md:flex-row h-full gap-4">
+      <div className="flex flex-col md:flex-row h-full gap-4 dark:bg-[#20293A]">
         {/* Collapsible sidebar toggle for mobile */}
         <div className="md:hidden flex justify-between items-center mb-4">
           <h2 className="font-medium text-sm">Countries</h2>
@@ -295,7 +295,7 @@ const TournamentMargins: React.FC = () => {
         
         {/* Left sidebar with countries list */}
         <Card 
-          className={`md:w-72 flex-shrink-0 ${sidebarCollapsed ? 'hidden' : 'block'} md:block bg-transparent shadow-none border-muted`}
+          className={`md:w-60 flex-shrink-0 ${sidebarCollapsed ? 'hidden' : 'block'} md:block bg-transparent shadow-none border-muted`}
           style={{ height: 'calc(100vh - 180px)' }}
         >
           <CardHeader className="py-3">
