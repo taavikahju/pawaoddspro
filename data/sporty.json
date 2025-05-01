@@ -5729,9 +5729,9 @@
     "date": "2025-05-01",
     "time": "07:30",
     "odds": {
-      "home": 2.15,
+      "home": 2.1,
       "draw": 3.4,
-      "away": 3.4
+      "away": 3.5
     },
     "raw": {
       "eventId": "57605171",
@@ -5739,9 +5739,9 @@
       "tournament": "Chinese Super League",
       "event": "Dalian Young Boy FC - Yunnan Yukun",
       "market": "1X2",
-      "home_odds": "2.15",
+      "home_odds": "2.10",
       "draw_odds": "3.40",
-      "away_odds": "3.40",
+      "away_odds": "3.50",
       "start_time": "2025-05-01 07:30"
     }
   },
@@ -8641,9 +8641,9 @@
     "date": "2025-05-01",
     "time": "17:30",
     "odds": {
-      "home": 3.9,
-      "draw": 3.75,
-      "away": 1.89
+      "home": 3.8,
+      "draw": 3.7,
+      "away": 1.93
     },
     "raw": {
       "eventId": "56512313",
@@ -8651,9 +8651,9 @@
       "tournament": "DBU Pokalen",
       "event": "Viborg FF - Copenhagen",
       "market": "1X2",
-      "home_odds": "3.90",
-      "draw_odds": "3.75",
-      "away_odds": "1.89",
+      "home_odds": "3.80",
+      "draw_odds": "3.70",
+      "away_odds": "1.93",
       "start_time": "2025-05-01 17:30"
     }
   },
@@ -9993,9 +9993,9 @@
     "date": "2025-05-01",
     "time": "16:00",
     "odds": {
-      "home": 1.9,
-      "draw": 3.7,
-      "away": 4
+      "home": 1.94,
+      "draw": 3.6,
+      "away": 3.9
     },
     "raw": {
       "eventId": "52034809",
@@ -10003,9 +10003,9 @@
       "tournament": "Saudi Pro League",
       "event": "Al-Akhdoud Club - Al-Wehda FC",
       "market": "1X2",
-      "home_odds": "1.90",
-      "draw_odds": "3.70",
-      "away_odds": "4.00",
+      "home_odds": "1.94",
+      "draw_odds": "3.60",
+      "away_odds": "3.90",
       "start_time": "2025-05-01 16:00"
     }
   },
@@ -13841,9 +13841,9 @@
     "date": "2025-05-04",
     "time": "06:00",
     "odds": {
-      "home": 2,
+      "home": 1.85,
       "draw": 4,
-      "away": 2.9
+      "away": 3.33
     },
     "raw": {
       "eventId": "56926315",
@@ -13851,9 +13851,9 @@
       "tournament": "Queensland NPL",
       "event": "Gold Coast United FC - Eastern Suburbs FC",
       "market": "1X2",
-      "home_odds": "2.00",
+      "home_odds": "1.85",
       "draw_odds": "4.00",
-      "away_odds": "2.90",
+      "away_odds": "3.33",
       "start_time": "2025-05-04 06:00"
     }
   },
@@ -15444,32 +15444,6 @@
     }
   },
   {
-    "id": "111111111989300",
-    "eventId": "111111111989300",
-    "teams": "Garuda FC - Mindil Aces",
-    "league": "NorZone Premier League",
-    "sport": "football",
-    "country": "Australia",
-    "date": "2025-05-02",
-    "time": "09:00",
-    "odds": {
-      "home": 3,
-      "draw": 3.9,
-      "away": 1.96
-    },
-    "raw": {
-      "eventId": "111111111989300",
-      "country": "Australia",
-      "tournament": "NorZone Premier League",
-      "event": "Garuda FC - Mindil Aces",
-      "market": "1X2",
-      "home_odds": "3.00",
-      "draw_odds": "3.90",
-      "away_odds": "1.96",
-      "start_time": "2025-05-02 09:00"
-    }
-  },
-  {
     "id": "59745732",
     "eventId": "59745732",
     "teams": "Blacktown Spartans - Mounties Wanderers FC",
@@ -16974,32 +16948,6 @@
       "home_odds": "2.45",
       "draw_odds": "2.85",
       "away_odds": "2.70",
-      "start_time": "2025-05-04 10:00"
-    }
-  },
-  {
-    "id": "51868501",
-    "eventId": "51868501",
-    "teams": "Xerez CD - CD Linares",
-    "league": "Segunda Federacion",
-    "sport": "football",
-    "country": "Spain",
-    "date": "2025-05-04",
-    "time": "10:00",
-    "odds": {
-      "home": 1.91,
-      "draw": 3,
-      "away": 3.6
-    },
-    "raw": {
-      "eventId": "51868501",
-      "country": "Spain",
-      "tournament": "Segunda Federacion",
-      "event": "Xerez CD - CD Linares",
-      "market": "1X2",
-      "home_odds": "1.91",
-      "draw_odds": "3.00",
-      "away_odds": "3.60",
       "start_time": "2025-05-04 10:00"
     }
   },
@@ -19575,6 +19523,32 @@
       "draw_odds": "2.90",
       "away_odds": "3.50",
       "start_time": "2025-05-04 18:30"
+    }
+  },
+  {
+    "id": "57250699",
+    "eventId": "57250699",
+    "teams": "Tristan Suarez - Arsenal de Sarandi",
+    "league": "Primera Nacional",
+    "sport": "football",
+    "country": "Argentina",
+    "date": "2025-05-04",
+    "time": "18:35",
+    "odds": {
+      "home": 1.74,
+      "draw": 3.2,
+      "away": 5
+    },
+    "raw": {
+      "eventId": "57250699",
+      "country": "Argentina",
+      "tournament": "Primera Nacional",
+      "event": "Tristan Suarez - Arsenal de Sarandi",
+      "market": "1X2",
+      "home_odds": "1.74",
+      "draw_odds": "3.20",
+      "away_odds": "5.00",
+      "start_time": "2025-05-04 18:35"
     }
   },
   {
@@ -27716,58 +27690,6 @@
     }
   },
   {
-    "id": "111111112185889",
-    "eventId": "111111112185889",
-    "teams": "Nzoia Sugar FC - Muhoroni Youth FC",
-    "league": "Super League",
-    "sport": "football",
-    "country": "Kenya",
-    "date": "2025-05-01",
-    "time": "10:00",
-    "odds": {
-      "home": 1.74,
-      "draw": 3.33,
-      "away": 4.4
-    },
-    "raw": {
-      "eventId": "111111112185889",
-      "country": "Kenya",
-      "tournament": "Super League",
-      "event": "Nzoia Sugar FC - Muhoroni Youth FC",
-      "market": "1X2",
-      "home_odds": "1.74",
-      "draw_odds": "3.33",
-      "away_odds": "4.40",
-      "start_time": "2025-05-01 10:00"
-    }
-  },
-  {
-    "id": "58108725",
-    "eventId": "58108725",
-    "teams": "Ethiopian Coffee SC - Dire Dawa Kenema",
-    "league": "Premier League",
-    "sport": "football",
-    "country": "Ethiopia",
-    "date": "2025-05-01",
-    "time": "06:30",
-    "odds": {
-      "home": 1.84,
-      "draw": 3.1,
-      "away": 4.4
-    },
-    "raw": {
-      "eventId": "58108725",
-      "country": "Ethiopia",
-      "tournament": "Premier League",
-      "event": "Ethiopian Coffee SC - Dire Dawa Kenema",
-      "market": "1X2",
-      "home_odds": "1.84",
-      "draw_odds": "3.10",
-      "away_odds": "4.40",
-      "start_time": "2025-05-01 06:30"
-    }
-  },
-  {
     "id": "58108721",
     "eventId": "58108721",
     "teams": "Fasil Kenema SC - Hadiya Hossana FC",
@@ -28583,9 +28505,9 @@
     "date": "2025-05-01",
     "time": "09:00",
     "odds": {
-      "home": 1.99,
+      "home": 1.9,
       "draw": 3.1,
-      "away": 3.3
+      "away": 3.5
     },
     "raw": {
       "eventId": "52861813",
@@ -28593,9 +28515,9 @@
       "tournament": "First Division",
       "event": "Cabrayil - Baku SC",
       "market": "1X2",
-      "home_odds": "1.99",
+      "home_odds": "1.90",
       "draw_odds": "3.10",
-      "away_odds": "3.30",
+      "away_odds": "3.50",
       "start_time": "2025-05-01 09:00"
     }
   },
@@ -28675,32 +28597,6 @@
       "draw_odds": "3.50",
       "away_odds": "4.40",
       "start_time": "2025-05-02 11:30"
-    }
-  },
-  {
-    "id": "111111112195997",
-    "eventId": "111111112195997",
-    "teams": "Lee Man FC - Southern District RSA",
-    "league": "Sapling Cup",
-    "sport": "football",
-    "country": "Hong Kong, China",
-    "date": "2025-05-01",
-    "time": "09:30",
-    "odds": {
-      "home": 1.82,
-      "draw": 3.75,
-      "away": 3.5
-    },
-    "raw": {
-      "eventId": "111111112195997",
-      "country": "Hong Kong, China",
-      "tournament": "Sapling Cup",
-      "event": "Lee Man FC - Southern District RSA",
-      "market": "1X2",
-      "home_odds": "1.82",
-      "draw_odds": "3.75",
-      "away_odds": "3.50",
-      "start_time": "2025-05-01 09:30"
     }
   },
   {
@@ -28938,6 +28834,32 @@
     }
   },
   {
+    "id": "58521523",
+    "eventId": "58521523",
+    "teams": "Xorazm Fk Urganch - PFC Nasaf",
+    "league": "Superliga",
+    "sport": "football",
+    "country": "Uzbekistan",
+    "date": "2025-05-02",
+    "time": "13:15",
+    "odds": {
+      "home": 8.4,
+      "draw": 3.8,
+      "away": 1.39
+    },
+    "raw": {
+      "eventId": "58521523",
+      "country": "Uzbekistan",
+      "tournament": "Superliga",
+      "event": "Xorazm Fk Urganch - PFC Nasaf",
+      "market": "1X2",
+      "home_odds": "8.40",
+      "draw_odds": "3.80",
+      "away_odds": "1.39",
+      "start_time": "2025-05-02 13:15"
+    }
+  },
+  {
     "id": "58521525",
     "eventId": "58521525",
     "teams": "FC Bunyodkor - FK Kokand 1912",
@@ -29065,32 +28987,6 @@
       "draw_odds": "3.60",
       "away_odds": "2.40",
       "start_time": "2025-05-01 09:00"
-    }
-  },
-  {
-    "id": "111111111841745",
-    "eventId": "111111111841745",
-    "teams": "Throttur/SR U19 - Thor/THK/Volsungur U19",
-    "league": "U19 League",
-    "sport": "football",
-    "country": "Iceland",
-    "date": "2025-05-01",
-    "time": "14:00",
-    "odds": {
-      "home": 2.85,
-      "draw": 4.9,
-      "away": 1.84
-    },
-    "raw": {
-      "eventId": "111111111841745",
-      "country": "Iceland",
-      "tournament": "U19 League",
-      "event": "Throttur/SR U19 - Thor/THK/Volsungur U19",
-      "market": "1X2",
-      "home_odds": "2.85",
-      "draw_odds": "4.90",
-      "away_odds": "1.84",
-      "start_time": "2025-05-01 14:00"
     }
   },
   {
@@ -30420,58 +30316,6 @@
     }
   },
   {
-    "id": "58285171",
-    "eventId": "58285171",
-    "teams": "Tallinna FC Ararat - JK Tallinna Kalev",
-    "league": "Meistriliiga Women",
-    "sport": "football",
-    "country": "Estonia",
-    "date": "2025-05-01",
-    "time": "09:30",
-    "odds": {
-      "home": 1.4,
-      "draw": 4.3,
-      "away": 5.4
-    },
-    "raw": {
-      "eventId": "58285171",
-      "country": "Estonia",
-      "tournament": "Meistriliiga Women",
-      "event": "Tallinna FC Ararat - JK Tallinna Kalev",
-      "market": "1X2",
-      "home_odds": "1.40",
-      "draw_odds": "4.30",
-      "away_odds": "5.40",
-      "start_time": "2025-05-01 09:30"
-    }
-  },
-  {
-    "id": "58285169",
-    "eventId": "58285169",
-    "teams": "Viimsi JK - FC Elva",
-    "league": "Meistriliiga Women",
-    "sport": "football",
-    "country": "Estonia",
-    "date": "2025-05-01",
-    "time": "09:30",
-    "odds": {
-      "home": 1.3,
-      "draw": 4.8,
-      "away": 6.5
-    },
-    "raw": {
-      "eventId": "58285169",
-      "country": "Estonia",
-      "tournament": "Meistriliiga Women",
-      "event": "Viimsi JK - FC Elva",
-      "market": "1X2",
-      "home_odds": "1.30",
-      "draw_odds": "4.80",
-      "away_odds": "6.50",
-      "start_time": "2025-05-01 09:30"
-    }
-  },
-  {
     "id": "60173063",
     "eventId": "60173063",
     "teams": "Chengdu Rongcheng FC Srl - Shanghai Shenhua SRL",
@@ -30703,84 +30547,6 @@
       "draw_odds": "3.80",
       "away_odds": "4.20",
       "start_time": "2025-05-01 12:00"
-    }
-  },
-  {
-    "id": "111111112046967",
-    "eventId": "111111112046967",
-    "teams": "Maleyet Kafr El Zayiat - Delphi",
-    "league": "Egypt Second Division B",
-    "sport": "football",
-    "country": "Egypt",
-    "date": "2025-05-01",
-    "time": "13:30",
-    "odds": {
-      "home": 1.92,
-      "draw": 2.95,
-      "away": 4.2
-    },
-    "raw": {
-      "eventId": "111111112046967",
-      "country": "Egypt",
-      "tournament": "Egypt Second Division B",
-      "event": "Maleyet Kafr El Zayiat - Delphi",
-      "market": "1X2",
-      "home_odds": "1.92",
-      "draw_odds": "2.95",
-      "away_odds": "4.20",
-      "start_time": "2025-05-01 13:30"
-    }
-  },
-  {
-    "id": "111111112046966",
-    "eventId": "111111112046966",
-    "teams": "Damanhur - Al Olympi",
-    "league": "Egypt Second Division B",
-    "sport": "football",
-    "country": "Egypt",
-    "date": "2025-05-01",
-    "time": "14:30",
-    "odds": {
-      "home": 3.5,
-      "draw": 2.95,
-      "away": 2.1
-    },
-    "raw": {
-      "eventId": "111111112046966",
-      "country": "Egypt",
-      "tournament": "Egypt Second Division B",
-      "event": "Damanhur - Al Olympi",
-      "market": "1X2",
-      "home_odds": "3.50",
-      "draw_odds": "2.95",
-      "away_odds": "2.10",
-      "start_time": "2025-05-01 14:30"
-    }
-  },
-  {
-    "id": "111111112046968",
-    "eventId": "111111112046968",
-    "teams": "MS El Kazazin - MS Tala",
-    "league": "Egypt Second Division B",
-    "sport": "football",
-    "country": "Egypt",
-    "date": "2025-05-01",
-    "time": "14:30",
-    "odds": {
-      "home": 2.35,
-      "draw": 2.75,
-      "away": 3.2
-    },
-    "raw": {
-      "eventId": "111111112046968",
-      "country": "Egypt",
-      "tournament": "Egypt Second Division B",
-      "event": "MS El Kazazin - MS Tala",
-      "market": "1X2",
-      "home_odds": "2.35",
-      "draw_odds": "2.75",
-      "away_odds": "3.20",
-      "start_time": "2025-05-01 14:30"
     }
   },
   {

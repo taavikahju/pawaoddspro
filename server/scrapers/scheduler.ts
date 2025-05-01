@@ -76,9 +76,19 @@ export function setupScrapers(storage: IStorage): void {
   cleanupJob = cron.schedule(CLEANUP_SCHEDULE, async () => {
     try {
       console.log(`🧹 Running history cleanup [${new Date().toLocaleTimeString()}]`);
+      
+      // Clean up odds history
       const { cleanupOldOddsHistory } = await import('../utils/oddsHistory');
-      const deletedCount = await cleanupOldOddsHistory(30); // Delete data older than 30 days (1 month)
-      console.log(`✅ History cleanup: removed ${deletedCount} records`);
+      const deletedOddsCount = await cleanupOldOddsHistory(30); // Delete data older than 30 days (1 month)
+      console.log(`✅ Odds history cleanup: removed ${deletedOddsCount} records`);
+      
+      // Clean up tournament margins
+      const { cleanupOldTournamentMargins } = await import('../utils/tournamentMargins');
+      const deletedMarginsCount = await cleanupOldTournamentMargins(30); // Delete data older than 30 days (1 month)
+      console.log(`✅ Tournament margins cleanup: removed ${deletedMarginsCount} records`);
+      
+      // Log total
+      console.log(`✅ Total cleanup: removed ${deletedOddsCount + deletedMarginsCount} records`);
     } catch (error) {
       console.error('❌ History cleanup failed:', error);
     }

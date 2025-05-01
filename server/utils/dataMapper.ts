@@ -302,6 +302,15 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     console.log(`Events removed: ${deletedCount}`);
     console.log(`Final events count: ${allEvents.length - deletedCount}`);
     console.log(`===========================================`);
+    
+    // Calculate and store tournament margins
+    try {
+      const { calculateAndStoreTournamentMargins } = await import('./tournamentMargins');
+      await calculateAndStoreTournamentMargins(storage);
+    } catch (marginError) {
+      console.error('Error calculating tournament margins:', marginError);
+      // Don't throw this error, as it shouldn't stop the main process
+    }
   } catch (error) {
     console.error('Error processing and mapping events:', error);
     throw error;

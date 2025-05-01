@@ -50,7 +50,9 @@ export async function calculateAndStoreTournamentMargins(storage: IStorage): Pro
       
       // Process each bookmaker's odds
       for (const bookmakerCode of activeBookmakerCodes) {
-        const bookmakerOdds = event.oddsData[bookmakerCode];
+        // Type assertion to avoid TypeScript errors
+        const eventOddsData = event.oddsData as Record<string, Record<string, any>>;
+        const bookmakerOdds = eventOddsData[bookmakerCode];
         if (!bookmakerOdds) continue;
         
         const homeOdds = parseFloat(bookmakerOdds.home?.toString() || '0');
@@ -87,7 +89,10 @@ export async function calculateAndStoreTournamentMargins(storage: IStorage): Pro
     }
     
     // Calculate and store average margin for each bookmaker and tournament
-    for (const data of tournamentGroups.values()) {
+    // Use Array.from to convert iterator to array for better compatibility
+    const groups = Array.from(tournamentGroups.values());
+    
+    for (const data of groups) {
       // Only process groups with sufficient events (at least 3)
       if (data.count < 3) continue;
       
@@ -124,17 +129,24 @@ export async function getTournamentMarginHistory(
   tournamentName: string,
   bookmakerCode?: string
 ): Promise<any[]> {
-  let query = db
-    .select()
-    .from(tournamentMargins)
-    .where(eq(tournamentMargins.tournamentName, tournamentName));
-  
-  // Filter by bookmaker if specified
   if (bookmakerCode) {
-    query = query.where(eq(tournamentMargins.bookmakerCode, bookmakerCode));
+    // If bookmaker is specified, filter by both tournament and bookmaker
+    return db
+      .select()
+      .from(tournamentMargins)
+      .where(
+        sql`${tournamentMargins.tournamentName} = ${tournamentName} AND 
+            ${tournamentMargins.bookmakerCode} = ${bookmakerCode}`
+      )
+      .orderBy(tournamentMargins.timestamp);
+  } else {
+    // Just filter by tournament name
+    return db
+      .select()
+      .from(tournamentMargins)
+      .where(sql`${tournamentMargins.tournamentName} = ${tournamentName}`)
+      .orderBy(tournamentMargins.timestamp);
   }
-  
-  return query.orderBy(tournamentMargins.timestamp);
 }
 
 /**
@@ -147,11 +159,12 @@ export async function cleanupOldTournamentMargins(days: number = 30): Promise<nu
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - days);
     
-    // Delete records older than the cutoff date
-    const result = await db.delete(tournamentMargins)
-      .where(sql`${tournamentMargins.timestamp} < ${cutoffDate.toISOString()}`);
+    // Delete records older than the cutoff date using SQL template
+    const { rowCount } = await db.execute(
+      sql`DELETE FROM ${tournamentMargins} WHERE ${tournamentMargins.timestamp} < ${cutoffDate.toISOString()}`
+    );
     
-    const deletedCount = Number(result.count) || 0;
+    const deletedCount = rowCount || 0;
     console.log(`Deleted ${deletedCount} tournament margin records older than ${days} days`);
     
     return deletedCount;
