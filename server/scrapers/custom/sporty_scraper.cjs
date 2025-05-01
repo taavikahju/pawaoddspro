@@ -2,8 +2,10 @@
 const axios = require('axios');
 
 // ==== CONFIGURATION ====
+// OPTIMIZED VERSION: Uses only essential endpoints to reduce redundancy
+// This version only uses pcUpcomingEvents which includes all events (including today's matches)
+// Removed redundant pcToday and pcPopularLeague endpoints that were creating overlap
 // Primary Sportybet API country code - focusing only on Ghana
-// Optimized to reduce API calls and improve reliability
 const REGION = 'gh'; // Using only Ghana for better performance
 
 // Debug mode flag - set to false to reduce console output
@@ -20,9 +22,9 @@ const log = (message) => {
 const buildEndpoints = () => {
   const endpoints = [];
   
-  // Only use Ghana API which is the most stable and provides most of the data
+  // Optimized: Use only pcUpcomingEvents which includes all events (including today's)
   endpoints.push(
-    // Main upcoming events - most comprehensive source
+    // Main upcoming events - most comprehensive source that includes today's matches
     {
       url: `https://www.sportybet.com/api/${REGION}/factsCenter/pcUpcomingEvents`,
       params: {
@@ -32,37 +34,14 @@ const buildEndpoints = () => {
         option: '1'
       },
       region: 'gh',
-      maxPages: 15, // Increase page limit to get more events
+      maxPages: 15, // Enough pages to get all relevant events
       priority: 1   // Highest priority - critical endpoint
-    },
-    // Today's matches - has most immediate matches
-    {
-      url: 'https://www.sportybet.com/api/gh/factsCenter/pcToday',
-      params: {
-        sportId: 'sr:sport:1',
-        marketId: '1',
-        pageSize: '100',
-        option: '1'
-      },
-      region: 'gh',
-      maxPages: 5,
-      priority: 1
-    },
-    // Popular leagues - has key matches that people bet on most
-    {
-      url: 'https://www.sportybet.com/api/gh/factsCenter/pcPopularLeague',
-      params: {
-        sportId: 'sr:sport:1',
-        marketId: '1', 
-        option: '1'
-      },
-      region: 'gh',
-      maxPages: 3,
-      priority: 1
     }
+    // Removed redundant pcToday endpoint that was creating overlap
+    // Removed pcPopularLeague as those events should be included in upcoming events
   );
   
-  // Add Kenya API as backup source - often has different events
+  // Add Kenya API as backup source only - important for different region coverage
   endpoints.push(
     {
       url: 'https://www.sportybet.com/api/ke/factsCenter/pcUpcomingEvents',
@@ -78,30 +57,8 @@ const buildEndpoints = () => {
     }
   );
   
-  // Only include the most important countries to avoid too many API calls
-  const majorCountryCategories = [
-    { id: 'sr:category:1', name: 'England' },    // England (most popular)
-    { id: 'sr:category:13', name: 'Ghana' },     // Ghana (local focus)
-    { id: 'sr:category:45', name: 'Kenya' }      // Kenya (local focus)
-  ];
-  
-  // Add these key country endpoints
-  majorCountryCategories.forEach(country => {
-    endpoints.push({
-      url: 'https://www.sportybet.com/api/gh/factsCenter/pcCategory',
-      params: {
-        sportId: 'sr:sport:1',
-        categoryId: country.id,
-        marketId: '1',
-        pageSize: '100',
-        option: '1'
-      },
-      region: 'gh',
-      name: country.name,
-      maxPages: 3,
-      priority: 3
-    });
-  });
+  // Remove country-specific endpoints as they're redundant with pcUpcomingEvents
+  // The main endpoint already includes all countries and tournaments
   
   return endpoints;
 };
