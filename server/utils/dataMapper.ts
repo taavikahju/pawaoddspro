@@ -102,8 +102,8 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       else if (bookmakerCount === 3) eventsWith3Bookmakers++;
       else if (bookmakerCount >= 4) eventsWith4Bookmakers++;
 
-      // Only process events where at least 3 bookmakers have odds
-      if (firstMatch && bookmakerCount >= 3) {
+      // Only process events where at least 2 bookmakers have odds (reduced from 3 per user request)
+      if (firstMatch && bookmakerCount >= 2) {
         // Extract country and tournament, checking raw data first
         let country = '';
         let tournament = '';
@@ -299,7 +299,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       console.log(`  - ${code}: ${count} events`);
     }
     
-    console.log(`✅ Processed ${eventMap.size} events with at least 3 bookmakers`);
+    console.log(`✅ Processed ${eventMap.size} events with at least 2 bookmakers`);
     
     // Get all events and delete any that don't meet our criteria anymore
     // This ensures events that previously had 3+ bookmakers but now have fewer are removed
@@ -329,7 +329,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     // Log summary of cleanup
     console.log(`========== EVENTS CLEANUP SUMMARY ==========`);
     console.log(`Starting events count: ${allEvents.length}`);
-    console.log(`Events meeting criteria (3+ bookmakers): ${currentEventIds.size}`);
+    console.log(`Events meeting criteria (2+ bookmakers): ${currentEventIds.size}`);
     console.log(`Events removed: ${deletedCount}`);
     console.log(`Final events count: ${allEvents.length - deletedCount}`);
     console.log(`===========================================`);
