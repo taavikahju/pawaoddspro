@@ -506,105 +506,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { eventId } = req.params;
       
-      // Mock margin history data until we have real data
-      const marginHistory = [
-        {
-          eventId: eventId,
-          bookmakerCode: 'bp GH',
-          margin: 0.105,
-          timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString() // 24 hours ago
-        },
-        {
-          eventId: eventId,
-          bookmakerCode: 'bp GH',
-          margin: 0.112,
-          timestamp: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString() // 12 hours ago
-        },
-        {
-          eventId: eventId,
-          bookmakerCode: 'bp GH',
-          margin: 0.108,
-          timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString() // 6 hours ago
-        },
-        {
-          eventId: eventId,
-          bookmakerCode: 'bp GH',
-          margin: 0.107,
-          timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString() // 2 hours ago
-        },
-        {
-          eventId: eventId,
-          bookmakerCode: 'bp KE',
-          margin: 0.110,
-          timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString() // 24 hours ago
-        },
-        {
-          eventId: eventId,
-          bookmakerCode: 'bp KE',
-          margin: 0.115,
-          timestamp: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString() // 12 hours ago
-        },
-        {
-          eventId: eventId,
-          bookmakerCode: 'bp KE',
-          margin: 0.112,
-          timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString() // 6 hours ago
-        },
-        {
-          eventId: eventId,
-          bookmakerCode: 'bp KE',
-          margin: 0.109,
-          timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString() // 2 hours ago
-        },
-        {
-          eventId: eventId,
-          bookmakerCode: 'sporty',
-          margin: 0.095,
-          timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString() // 24 hours ago
-        },
-        {
-          eventId: eventId,
-          bookmakerCode: 'sporty',
-          margin: 0.102,
-          timestamp: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString() // 12 hours ago
-        },
-        {
-          eventId: eventId,
-          bookmakerCode: 'sporty',
-          margin: 0.099,
-          timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString() // 6 hours ago
-        },
-        {
-          eventId: eventId,
-          bookmakerCode: 'sporty',
-          margin: 0.101,
-          timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString() // 2 hours ago
-        },
-        {
-          eventId: eventId,
-          bookmakerCode: 'betika KE',
-          margin: 0.098,
-          timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString() // 24 hours ago
-        },
-        {
-          eventId: eventId,
-          bookmakerCode: 'betika KE',
-          margin: 0.105,
-          timestamp: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString() // 12 hours ago
-        },
-        {
-          eventId: eventId,
-          bookmakerCode: 'betika KE',
-          margin: 0.102,
-          timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString() // 6 hours ago
-        },
-        {
-          eventId: eventId,
-          bookmakerCode: 'betika KE',
-          margin: 0.097,
-          timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString() // 2 hours ago
-        }
-      ];
+      // Import the utility functions
+      const { getOddsHistory } = await import('./utils/oddsHistory');
+      
+      // Get the odds history
+      const history = await getOddsHistory(eventId);
+      
+      // Calculate margins for each odds history entry
+      const marginHistory = history.map(entry => {
+        // Calculate margin using the formula (1/home) + (1/draw) + (1/away) - 1
+        const margin = (1 / entry.homeOdds) + (1 / entry.drawOdds) + (1 / entry.awayOdds) - 1;
+        
+        return {
+          eventId: entry.eventId,
+          bookmakerCode: entry.bookmakerCode,
+          margin: margin,
+          timestamp: entry.timestamp
+        };
+      });
+      
+      // Sort by timestamp descending (newest first)
+      marginHistory.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
       
       res.json(marginHistory);
     } catch (error) {

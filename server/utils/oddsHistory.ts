@@ -54,7 +54,15 @@ export async function saveOddsHistory(
  * Get odds history for a particular event
  */
 export async function getOddsHistory(eventId: string): Promise<any[]> {
-  return db.select().from(oddsHistory).where(eq(oddsHistory.eventId, eventId));
+  const history = await db.select().from(oddsHistory).where(eq(oddsHistory.eventId, eventId));
+  
+  // Ensure odds are converted from strings to numbers for margin calculation
+  return history.map(entry => ({
+    ...entry,
+    homeOdds: entry.homeOdds ? parseFloat(entry.homeOdds) : 0,
+    drawOdds: entry.drawOdds ? parseFloat(entry.drawOdds) : 0,
+    awayOdds: entry.awayOdds ? parseFloat(entry.awayOdds) : 0,
+  }));
 }
 
 /**
