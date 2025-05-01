@@ -129,10 +129,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const filteredEvents = events.filter(event => {
         if (!event.oddsData) return false;
         const bookmakerCount = Object.keys(event.oddsData).length;
-        return bookmakerCount >= 3;
+        return bookmakerCount >= 2;
       });
       
-      console.log(`WebSocket: Filtered ${events.length} events down to ${filteredEvents.length} with at least 3 bookmakers`);
+      console.log(`WebSocket: Filtered ${events.length} events down to ${filteredEvents.length} with at least 2 bookmakers`);
       
       ws.send(JSON.stringify({
         type: 'events',
@@ -155,7 +155,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           const filteredEvents = events.filter(event => {
             if (!event.oddsData) return false;
             const bookmakerCount = Object.keys(event.oddsData).length;
-            return bookmakerCount >= 3;
+            return bookmakerCount >= 2;
           });
 
           // Track counts for different bookmaker counts for WebSocket too
@@ -184,7 +184,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           console.log(`  - Events with 3 bookmakers: ${eventsByBookmakerCount['3']}`);
           console.log(`  - Events with 4+ bookmakers: ${eventsByBookmakerCount['4+']}`);
           
-          console.log(`WebSocket getEvents: Filtered ${events.length} events down to ${filteredEvents.length} with at least 3 bookmakers`);
+          console.log(`WebSocket getEvents: Filtered ${events.length} events down to ${filteredEvents.length} with at least 2 bookmakers`);
           
           ws.send(JSON.stringify({
             type: 'events',
@@ -369,7 +369,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const filteredEvents = events.filter(event => {
         if (!event.oddsData) return false;
         const bookmakerCount = Object.keys(event.oddsData).length;
-        return bookmakerCount >= 3;
+        return bookmakerCount >= 2;
       });
       
       // Track counts for broadcast events
@@ -398,7 +398,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log(`  - Events with 3 bookmakers: ${eventsByBookmakerCount['3']}`);
       console.log(`  - Events with 4+ bookmakers: ${eventsByBookmakerCount['4+']}`);
       
-      console.log(`Broadcast: Filtered ${events.length} events down to ${filteredEvents.length} with at least 3 bookmakers`);
+      console.log(`Broadcast: Filtered ${events.length} events down to ${filteredEvents.length} with at least 2 bookmakers`);
       
       broadcast({
         type: 'events',
@@ -498,7 +498,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/events', async (req, res) => {
     try {
       const sportIdParam = req.query.sportId as string | undefined;
-      const minBookmakers = req.query.minBookmakers ? parseInt(req.query.minBookmakers as string, 10) : 3;
+      const minBookmakers = req.query.minBookmakers ? parseInt(req.query.minBookmakers as string, 10) : 2;
       let events;
 
       if (sportIdParam) {
