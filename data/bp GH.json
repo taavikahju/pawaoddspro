@@ -165,9 +165,9 @@
     "date": "2025-05-01",
     "time": "08:00",
     "odds": {
-      "home": 10,
-      "draw": 5,
-      "away": 1.24
+      "home": 9.5,
+      "draw": 4.9,
+      "away": 1.26
     },
     "raw": {
       "eventId": "53459867",
@@ -175,9 +175,9 @@
       "tournament": "Tercera Federacion, Group 8",
       "event": "CD Laguna de Duero - CD Mirandes B",
       "market": "1X2 - FT",
-      "home_odds": "10.0",
-      "draw_odds": "5.0",
-      "away_odds": "1.24",
+      "home_odds": "9.5",
+      "draw_odds": "4.9",
+      "away_odds": "1.26",
       "start_time": "2025-05-01 10:00"
     }
   },
@@ -217,9 +217,9 @@
     "date": "2025-05-01",
     "time": "08:00",
     "odds": {
-      "home": 14,
-      "draw": 6.75,
-      "away": 1.13
+      "home": 13,
+      "draw": 6.5,
+      "away": 1.14
     },
     "raw": {
       "eventId": "58023719",
@@ -227,9 +227,9 @@
       "tournament": "Virsliga",
       "event": "SK Super Nova - Riga FC",
       "market": "1X2 - FT",
-      "home_odds": "14.0",
-      "draw_odds": "6.75",
-      "away_odds": "1.13",
+      "home_odds": "13.0",
+      "draw_odds": "6.5",
+      "away_odds": "1.14",
       "start_time": "2025-05-01 10:00"
     }
   },
@@ -841,9 +841,9 @@
     "date": "2025-05-01",
     "time": "09:35",
     "odds": {
-      "home": 1.23,
-      "draw": 6,
-      "away": 9.5
+      "home": 1.22,
+      "draw": 6.25,
+      "away": 9.75
     },
     "raw": {
       "eventId": "57605179",
@@ -851,9 +851,9 @@
       "tournament": "Chinese Super League",
       "event": "Shandong Taishan FC - Qingdao Hainiu FC",
       "market": "1X2 - FT",
-      "home_odds": "1.23",
-      "draw_odds": "6.0",
-      "away_odds": "9.5",
+      "home_odds": "1.22",
+      "draw_odds": "6.25",
+      "away_odds": "9.75",
       "start_time": "2025-05-01 11:35"
     }
   },
@@ -1025,7 +1025,7 @@
     "odds": {
       "home": 2.4,
       "draw": 3.25,
-      "away": 2.8
+      "away": 2.85
     },
     "raw": {
       "eventId": "51468291",
@@ -1035,7 +1035,7 @@
       "market": "1X2 - FT",
       "home_odds": "2.4",
       "draw_odds": "3.25",
-      "away_odds": "2.8",
+      "away_odds": "2.85",
       "start_time": "2025-05-01 13:00"
     }
   },
@@ -1413,9 +1413,9 @@
     "date": "2025-05-01",
     "time": "12:00",
     "odds": {
-      "home": 1.07,
-      "draw": 10,
-      "away": 15
+      "home": 1.05,
+      "draw": 11,
+      "away": 16
     },
     "raw": {
       "eventId": "54640873",
@@ -1423,9 +1423,9 @@
       "tournament": "III Liga, Group 2",
       "event": "WDA Swiecie - Vineta Wolin",
       "market": "1X2 - FT",
-      "home_odds": "1.07",
-      "draw_odds": "10.0",
-      "away_odds": "15.0",
+      "home_odds": "1.05",
+      "draw_odds": "11.0",
+      "away_odds": "16.0",
       "start_time": "2025-05-01 14:00"
     }
   },
@@ -1933,9 +1933,9 @@
     "date": "2025-05-01",
     "time": "14:00",
     "odds": {
-      "home": 9.25,
-      "draw": 4.9,
-      "away": 1.26
+      "home": 8.5,
+      "draw": 4.85,
+      "away": 1.28
     },
     "raw": {
       "eventId": "58061647",
@@ -1943,9 +1943,9 @@
       "tournament": "Estonia Esiliiga A",
       "event": "Nõmme Kalju FC U21 - Tartu JK Welco",
       "market": "1X2 - FT",
-      "home_odds": "9.25",
-      "draw_odds": "4.9",
-      "away_odds": "1.26",
+      "home_odds": "8.5",
+      "draw_odds": "4.85",
+      "away_odds": "1.28",
       "start_time": "2025-05-01 16:00"
     }
   },
@@ -2049,6 +2049,32 @@
       "market": "1X2 - FT",
       "home_odds": "2.65",
       "draw_odds": "3.0",
+      "away_odds": "2.6",
+      "start_time": "2025-05-01 16:00"
+    }
+  },
+  {
+    "id": "60250341",
+    "eventId": "60250341",
+    "teams": "CF Correcaminos Uat II - Leones Negros Udg II",
+    "league": "Liga Premier Serie A",
+    "sport": "football",
+    "country": "Mexico",
+    "date": "2025-05-01",
+    "time": "14:00",
+    "odds": {
+      "home": 2.35,
+      "draw": 3.45,
+      "away": 2.6
+    },
+    "raw": {
+      "eventId": "60250341",
+      "country": "Mexico",
+      "tournament": "Liga Premier Serie A",
+      "event": "CF Correcaminos Uat II - Leones Negros Udg II",
+      "market": "1X2 - FT",
+      "home_odds": "2.35",
+      "draw_odds": "3.45",
       "away_odds": "2.6",
       "start_time": "2025-05-01 16:00"
     }
@@ -2427,9 +2453,9 @@
     "date": "2025-05-01",
     "time": "16:00",
     "odds": {
-      "home": 2.17,
-      "draw": 3.95,
-      "away": 2.85
+      "home": 2.25,
+      "draw": 3.85,
+      "away": 2.75
     },
     "raw": {
       "eventId": "52034819",
@@ -2437,9 +2463,9 @@
       "tournament": "Saudi Arabia Pro League",
       "event": "Al-Fateh Al-Hasa - Al-Shabab Riyadh",
       "market": "1X2 - FT",
-      "home_odds": "2.17",
-      "draw_odds": "3.95",
-      "away_odds": "2.85",
+      "home_odds": "2.25",
+      "draw_odds": "3.85",
+      "away_odds": "2.75",
       "start_time": "2025-05-01 18:00"
     }
   },
@@ -2635,9 +2661,9 @@
     "date": "2025-05-01",
     "time": "17:00",
     "odds": {
-      "home": 9,
-      "draw": 5.5,
-      "away": 1.28
+      "home": 9.5,
+      "draw": 5.75,
+      "away": 1.27
     },
     "raw": {
       "eventId": "58267483",
@@ -2645,9 +2671,9 @@
       "tournament": "UEFA Conference League",
       "event": "Djurgardens IF - Chelsea FC",
       "market": "1X2 - FT",
-      "home_odds": "9.0",
-      "draw_odds": "5.5",
-      "away_odds": "1.28",
+      "home_odds": "9.5",
+      "draw_odds": "5.75",
+      "away_odds": "1.27",
       "start_time": "2025-05-01 19:00"
     }
   },
@@ -3822,6 +3848,32 @@
     }
   },
   {
+    "id": "57033175",
+    "eventId": "57033175",
+    "teams": "Adelaide Comets FC - FK Beograd",
+    "league": "South Australia NPL",
+    "sport": "football",
+    "country": "Australia",
+    "date": "2025-05-02",
+    "time": "08:45",
+    "odds": {
+      "home": 2.24,
+      "draw": 3.65,
+      "away": 2.65
+    },
+    "raw": {
+      "eventId": "57033175",
+      "country": "Australia",
+      "tournament": "South Australia NPL",
+      "event": "Adelaide Comets FC - FK Beograd",
+      "market": "1X2 - FT",
+      "home_odds": "2.24",
+      "draw_odds": "3.65",
+      "away_odds": "2.65",
+      "start_time": "2025-05-02 10:45"
+    }
+  },
+  {
     "id": "57033515",
     "eventId": "57033515",
     "teams": "Adelaide City - Metro United",
@@ -4706,6 +4758,32 @@
     }
   },
   {
+    "id": "58220777",
+    "eventId": "58220777",
+    "teams": "FC Molodechno - Naftan Novopolotsk",
+    "league": "Vysshaya Liga",
+    "sport": "football",
+    "country": "Belarus",
+    "date": "2025-05-02",
+    "time": "13:00",
+    "odds": {
+      "home": 2.85,
+      "draw": 3.45,
+      "away": 2.25
+    },
+    "raw": {
+      "eventId": "58220777",
+      "country": "Belarus",
+      "tournament": "Vysshaya Liga",
+      "event": "FC Molodechno - Naftan Novopolotsk",
+      "market": "1X2 - FT",
+      "home_odds": "2.85",
+      "draw_odds": "3.45",
+      "away_odds": "2.25",
+      "start_time": "2025-05-02 15:00"
+    }
+  },
+  {
     "id": "54641181",
     "eventId": "54641181",
     "teams": "Slask II Wroclaw - KS Sleza Wroclaw",
@@ -4937,6 +5015,32 @@
       "draw_odds": "3.65",
       "away_odds": "3.15",
       "start_time": "2025-05-02 15:50"
+    }
+  },
+  {
+    "id": "58141971",
+    "eventId": "58141971",
+    "teams": "FA Siauliai - FC Hegelmann Kaunas",
+    "league": "A Lyga",
+    "sport": "football",
+    "country": "Lithuania",
+    "date": "2025-05-02",
+    "time": "14:00",
+    "odds": {
+      "home": 2.75,
+      "draw": 2.95,
+      "away": 2.5
+    },
+    "raw": {
+      "eventId": "58141971",
+      "country": "Lithuania",
+      "tournament": "A Lyga",
+      "event": "FA Siauliai - FC Hegelmann Kaunas",
+      "market": "1X2 - FT",
+      "home_odds": "2.75",
+      "draw_odds": "2.95",
+      "away_odds": "2.5",
+      "start_time": "2025-05-02 16:00"
     }
   },
   {
@@ -5651,9 +5755,9 @@
     "date": "2025-05-02",
     "time": "15:00",
     "odds": {
-      "home": 4.1,
-      "draw": 3.4,
-      "away": 1.85
+      "home": 3.25,
+      "draw": 3.2,
+      "away": 2.17
     },
     "raw": {
       "eventId": "58220785",
@@ -5661,9 +5765,9 @@
       "tournament": "Vysshaya Liga",
       "event": "FK Arsenal Dzerzhinsk - Bate Borisov",
       "market": "1X2 - FT",
-      "home_odds": "4.1",
-      "draw_odds": "3.4",
-      "away_odds": "1.85",
+      "home_odds": "3.25",
+      "draw_odds": "3.2",
+      "away_odds": "2.17",
       "start_time": "2025-05-02 17:00"
     }
   },
@@ -8329,9 +8433,9 @@
     "date": "2025-05-03",
     "time": "03:00",
     "odds": {
-      "home": 1.21,
-      "draw": 6.75,
-      "away": 7.75
+      "home": 1.29,
+      "draw": 5.25,
+      "away": 7.5
     },
     "raw": {
       "eventId": "56592091",
@@ -8339,9 +8443,9 @@
       "tournament": "Victoria, NPL1",
       "event": "Avondale FC - South Melbourne FC",
       "market": "1X2 - FT",
-      "home_odds": "1.21",
-      "draw_odds": "6.75",
-      "away_odds": "7.75",
+      "home_odds": "1.29",
+      "draw_odds": "5.25",
+      "away_odds": "7.5",
       "start_time": "2025-05-03 05:00"
     }
   },
@@ -9461,6 +9565,32 @@
       "draw_odds": "4.6",
       "away_odds": "8.0",
       "start_time": "2025-05-03 08:00"
+    }
+  },
+  {
+    "id": "56927021",
+    "eventId": "56927021",
+    "teams": "North Lakes United - Brisbane City FC",
+    "league": "Queensland NPL, Women",
+    "sport": "football",
+    "country": "Australia",
+    "date": "2025-05-03",
+    "time": "06:15",
+    "odds": {
+      "home": 9,
+      "draw": 5.25,
+      "away": 1.24
+    },
+    "raw": {
+      "eventId": "56927021",
+      "country": "Australia",
+      "tournament": "Queensland NPL, Women",
+      "event": "North Lakes United - Brisbane City FC",
+      "market": "1X2 - FT",
+      "home_odds": "9.0",
+      "draw_odds": "5.25",
+      "away_odds": "1.24",
+      "start_time": "2025-05-03 08:15"
     }
   },
   {
@@ -18535,6 +18665,32 @@
       "draw_odds": "4.95",
       "away_odds": "6.25",
       "start_time": "2025-05-04 07:00"
+    }
+  },
+  {
+    "id": "60258993",
+    "eventId": "60258993",
+    "teams": "Gladesville Ravens - Unsw FC",
+    "league": "NSW Premier League, Women",
+    "sport": "football",
+    "country": "Australia",
+    "date": "2025-05-04",
+    "time": "05:10",
+    "odds": {
+      "home": 3.2,
+      "draw": 3.45,
+      "away": 2
+    },
+    "raw": {
+      "eventId": "60258993",
+      "country": "Australia",
+      "tournament": "NSW Premier League, Women",
+      "event": "Gladesville Ravens - Unsw FC",
+      "market": "1X2 - FT",
+      "home_odds": "3.2",
+      "draw_odds": "3.45",
+      "away_odds": "2.0",
+      "start_time": "2025-05-04 07:10"
     }
   },
   {
