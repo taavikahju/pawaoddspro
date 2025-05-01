@@ -156,7 +156,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       }
     }
     
-    console.log(`📊 Processing ${allEventIds.size} events...`);
+    logger.critical(`Processing ${allEventIds.size} events...`);
     
     // Stats counters to track filtering results
     let eventsWith1Bookmaker = 0;
@@ -368,9 +368,9 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     }
     
     // Additional debug for tracking bookmakers in the second pass
-    console.log('📊 Events count by bookmaker (initial mapping):');
+    logger.debug('Events count by bookmaker (initial mapping):');
     for (const [code, count] of Object.entries(eventsByBookmaker)) {
-      console.log(`  - ${code}: ${count} events`);
+      logger.debug(`  - ${code}: ${count} events`);
     }
     
     // Reset counts for next phase of matching
@@ -380,7 +380,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     
     // Third pass: Secondary matching for all bookmakers' events not yet mapped
     // This allows events with different eventIds but same team names to be matched
-    console.log(`🔍 Running secondary matching...`);
+    logger.info(`Running secondary matching...`);
     
     // Track how many events were mapped in secondary matching
     const bookmakersMapped: Record<string, number> = {};
@@ -398,7 +398,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     let logsShown = 0;
     const MAX_LOGS = 0; // Disable logs completely for performance
     
-    console.log(`\n📊 Starting event mapping process - ${totalEvents} events to process`);
+    logger.critical(`Starting event mapping process - ${totalEvents} events to process`);
     
     for (let batchIndex = 0; batchIndex < totalBatches; batchIndex++) {
       const batchStart = batchIndex * batchSize;
@@ -457,7 +457,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
               bookieEvent = bookieMap.get(reversedNormalizedTeams);
               
               if (bookieEvent && logsShown < MAX_LOGS) {
-                console.log(`✅ Matched ${bookmakerCode} event using reversed team names: ${eventData.teams}`);
+                logger.debug(`Matched ${bookmakerCode} event using reversed team names: ${eventData.teams}`);
                 logsShown++;
               }
             }
@@ -520,7 +520,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
                 
                 // Limit log output for better performance
                 if (bookmakerCode === 'sporty' && logsShown < MAX_LOGS) {
-                  console.log(`✅ Secondary matched ${bookmakerCode} event for: ${eventData.teams}`);
+                  logger.debug(`Secondary matched ${bookmakerCode} event for: ${eventData.teams}`);
                   logsShown++;
                 }
               }
@@ -531,22 +531,22 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       
       // Log batch progress
       if ((batchIndex + 1) % 2 === 0 || batchIndex === totalBatches - 1) {
-        console.log(`🔄 Processed batch ${batchIndex + 1}/${totalBatches} (${Math.round((batchIndex + 1) / totalBatches * 100)}%)`);
+        logger.info(`Processed batch ${batchIndex + 1}/${totalBatches} (${Math.round((batchIndex + 1) / totalBatches * 100)}%)`);
       }
     }
     
     // Log summary of secondary matching
-    console.log(`🔄 Secondary matching success:`);
+    logger.info(`Secondary matching success:`);
     for (const [bookmakerCode, count] of Object.entries(bookmakersMapped)) {
       if (count > 0) {
-        console.log(`  - Added ${count} events from ${bookmakerCode}`);
+        logger.info(`  - Added ${count} events from ${bookmakerCode}`);
         bookmakerEventsMapped += count; // Update total count
       }
     }
-    console.log(`🔄 Secondary matching added odds to ${bookmakerEventsMapped} total event-bookmaker combinations`);
+    logger.critical(`Secondary matching added odds to ${bookmakerEventsMapped} total event-bookmaker combinations`);
     
     // Store or update events in database
-    console.log(`\n📊 Starting database updates - ${eventMap.size} events to process`);
+    logger.critical(`Starting database updates - ${eventMap.size} events to process`);
     
     // Convert to array for progress tracking
     const eventsToUpdate = Array.from(eventMap.entries());
@@ -687,16 +687,16 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     }
     
     // Log distribution of events by bookmaker count with emojis for better readability
-    console.log(`📊 Event distribution by bookmaker count:`);
-    console.log(`  - Events with 1 bookmaker: ${eventsWith1Bookmaker}`);
-    console.log(`  - Events with 2 bookmakers: ${eventsWith2Bookmakers}`);
-    console.log(`  - Events with 3 bookmakers: ${eventsWith3Bookmakers}`);
-    console.log(`  - Events with 4+ bookmakers: ${eventsWith4Bookmakers}`);
+    logger.critical(`Event distribution by bookmaker count:`);
+    logger.critical(`  - Events with 1 bookmaker: ${eventsWith1Bookmaker}`);
+    logger.critical(`  - Events with 2 bookmakers: ${eventsWith2Bookmakers}`);
+    logger.critical(`  - Events with 3 bookmakers: ${eventsWith3Bookmakers}`);
+    logger.critical(`  - Events with 4+ bookmakers: ${eventsWith4Bookmakers}`);
     
     // Log events count by bookmaker
-    console.log(`📊 Events count by bookmaker (after mapping):`);
+    logger.debug(`Events count by bookmaker (after mapping):`);
     for (const [code, count] of Object.entries(eventsByBookmaker)) {
-      console.log(`  - ${code}: ${count} events`);
+      logger.debug(`  - ${code}: ${count} events`);
     }
     
     // Log how many events have odds from each bookmaker combination
@@ -747,12 +747,12 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     }
     
     // Log bookmaker combinations
-    console.log(`📊 Events by bookmaker combination:`);
+    logger.debug(`Events by bookmaker combination:`);
     for (const [combo, count] of Object.entries(bookmakerCombinations)) {
-      console.log(`  - ${combo}: ${count} events`);
+      logger.debug(`  - ${combo}: ${count} events`);
     }
     
-    console.log(`✅ Processed ${eventMap.size} events with at least 2 bookmakers`);
+    logger.critical(`Processed ${eventMap.size} events with at least 2 bookmakers`);
     
     // Get all events and delete any that don't meet our criteria anymore
     // This ensures events that previously had 3+ bookmakers but now have fewer are removed
@@ -761,7 +761,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     
     let deletedCount = 0;
     
-    console.log(`🧹 Cleaning up events that no longer meet criteria...`);
+    logger.info(`Cleaning up events that no longer meet criteria...`);
     
     // Remove events that don't meet criteria anymore
     for (const event of allEvents) {
@@ -780,15 +780,15 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     }
     
     // Log summary of cleanup
-    console.log(`========== EVENTS CLEANUP SUMMARY ==========`);
-    console.log(`Starting events count: ${allEvents.length}`);
-    console.log(`Events meeting criteria (2+ bookmakers): ${currentEventIds.size}`);
-    console.log(`Events removed: ${deletedCount}`);
-    console.log(`Final events count: ${allEvents.length - deletedCount}`);
-    console.log(`===========================================`);
+    logger.critical(`========== EVENTS CLEANUP SUMMARY ==========`);
+    logger.critical(`Starting events count: ${allEvents.length}`);
+    logger.critical(`Events meeting criteria (2+ bookmakers): ${currentEventIds.size}`);
+    logger.critical(`Events removed: ${deletedCount}`);
+    logger.critical(`Final events count: ${allEvents.length - deletedCount}`);
+    logger.critical(`===========================================`);
     
   } catch (error) {
-    console.error('Error processing and mapping events:', error);
+    logger.critical('Error processing and mapping events:', error);
     throw error;
   }
 
@@ -797,7 +797,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     const { calculateAndStoreTournamentMargins } = await import('./tournamentMargins');
     await calculateAndStoreTournamentMargins(storage);
   } catch (marginError) {
-    console.error('Error calculating tournament margins:', marginError);
+    logger.critical('Error calculating tournament margins:', marginError);
     // Don't throw this error, as it shouldn't stop the main process
   }
 }
