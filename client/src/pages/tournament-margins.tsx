@@ -346,7 +346,7 @@ const TournamentMargins: React.FC = () => {
                 No countries found
               </div>
             ) : (
-              <div className="space-y-1 overflow-y-auto overflow-x-hidden pr-1" style={{ maxHeight: 'calc(100vh - 250px)' }}>
+              <div className="space-y-1 overflow-y-auto overflow-x-hidden pr-1 custom-scrollbar" style={{ maxHeight: 'calc(100vh - 250px)', width: '100%' }}>
                 {filteredCountries.map(country => {
                   // Get total tournament count
                   const tournamentCount = country.tournaments.length;
