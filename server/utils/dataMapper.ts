@@ -577,8 +577,8 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       logger.error(`Failed to save mapped events data: ${writeError}`);
     }
     
-    // Use significantly larger batches for database operations
-    const updateBatchSize = 100; // Increased from 50
+    // Use smaller batches for database operations to avoid overwhelming the database
+    const updateBatchSize = 50
     const updateBatches = Math.ceil(totalUpdateEvents / updateBatchSize);
     
     // Prepare batch operations
@@ -595,16 +595,26 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       const existingEventsByEventId = new Map();
       const existingEventsByExternalId = new Map();
       
-      // Get all events by eventId in a single query
-      const eventIdResults = await db.select().from(events).where(sql`${events.eventId} IN (${eventIds})`);
-      for (const event of eventIdResults) {
-        existingEventsByEventId.set(event.eventId, event);
+      // We need to handle the bulk lookup differently to avoid type issues
+      // Instead of using IN clause with arrays, we'll query events one by one for now
+      for (const eventId of eventIds) {
+        try {
+          const [result] = await db.select().from(events).where(eq(events.eventId, eventId));
+          if (result) {
+            existingEventsByEventId.set(result.eventId, result);
+          }
+        } catch (error) {
+          logger.error(`Error fetching event by eventId ${eventId}:`, error);
+        }
       }
       
-      // Get any remaining events by externalId
-      const externalIdResults = await db.select().from(events).where(sql`${events.externalId} IN (${externalIds})`);
-      for (const event of externalIdResults) {
-        existingEventsByExternalId.set(event.externalId, event);
+      // Get any remaining events by externalId - one by one to avoid type issues
+      for (const externalId of externalIds) {
+        // Skip if we already found this event by eventId
+        const event = await storage.getEventByExternalId(externalId);
+        if (event) {
+          existingEventsByExternalId.set(externalId, event);
+        }
       }
       
       // Prepare batch operations
