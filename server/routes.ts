@@ -872,6 +872,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
+  // Admin endpoint for manually calculating tournament margins
+  app.post('/api/admin/calculate/margins', simpleAdminAuth, async (req, res) => {
+    try {
+      // Import the tournament margins utility
+      const { calculateAndStoreTournamentMargins } = await import('./utils/tournamentMargins');
+      
+      // Calculate and store tournament margins
+      await calculateAndStoreTournamentMargins(storage);
+      
+      res.json({ 
+        success: true, 
+        message: 'Tournament margins calculation completed successfully' 
+      });
+    } catch (error) {
+      console.error('Error calculating tournament margins:', error);
+      res.status(500).json({ 
+        success: false, 
+        message: 'Failed to calculate tournament margins',
+        error: error instanceof Error ? error.message : String(error)
+      });
+    }
+  });
+  
   // Endpoint to check if a custom scraper exists for a bookmaker
   app.get('/api/scrapers/custom/:bookmakerCode', async (req, res) => {
     try {
