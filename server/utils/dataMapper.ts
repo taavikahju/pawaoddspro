@@ -275,95 +275,138 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       'betika KE': 0
     };
     
-    // Process each event in our map
-    for (const [eventId, eventData] of Array.from(eventMap.entries())) {
-      // Try to match by team names if we have team data
-      if (eventData.teams) {
-        const normalizedTeams = normalizeEventName(eventData.teams);
-        let reversedNormalizedTeams = null;
-        
-        // Prepare reversed teams format for matching both ways
-        if (eventData.teams.includes(' vs ')) {
-          const teams = eventData.teams.split(' vs ');
-          if (teams.length === 2) {
-            const reversedTeams = `${teams[1]} vs ${teams[0]}`;
-            reversedNormalizedTeams = normalizeEventName(reversedTeams);
+    // Process events in batches for better performance
+    const eventEntries = Array.from(eventMap.entries());
+    const batchSize = 200; // Process events in batches of 200
+    const totalBatches = Math.ceil(eventEntries.length / batchSize);
+
+    // Flag to limit log output for performance
+    let logsShown = 0;
+    const MAX_LOGS = 10; // Only show a limited number of logs
+    
+    console.log(`🔄 Processing ${eventEntries.length} events in ${totalBatches} batches for secondary matching`);
+    
+    for (let batchIndex = 0; batchIndex < totalBatches; batchIndex++) {
+      const batchStart = batchIndex * batchSize;
+      const batchEnd = Math.min((batchIndex + 1) * batchSize, eventEntries.length);
+      const batch = eventEntries.slice(batchStart, batchEnd);
+      
+      // Process each event in current batch
+      for (const [eventId, eventData] of batch) {
+        // Try to match by team names if we have team data
+        if (eventData.teams) {
+          const normalizedTeams = normalizeEventName(eventData.teams);
+          let reversedNormalizedTeams = null;
+          
+          // Prepare reversed teams format for matching both ways
+          if (eventData.teams.includes(' vs ')) {
+            const teams = eventData.teams.split(' vs ');
+            if (teams.length === 2) {
+              const reversedTeams = `${teams[1]} vs ${teams[0]}`;
+              reversedNormalizedTeams = normalizeEventName(reversedTeams);
+            }
           }
-        }
-        
-        // Try to match with each bookmaker
-        for (const bookmakerCode of bookmakerCodes) {
-          // Skip if this event already has odds for this bookmaker
-          if (eventData.oddsData && eventData.oddsData[bookmakerCode]) {
-            continue;
-          }
           
-          // Get the appropriate map based on bookmaker
-          let bookieMap = null;
-          if (bookmakerCode === 'sporty') {
-            bookieMap = sportyTeamsMap;
-          } else {
-            bookieMap = bookmakerTeamMaps.get(bookmakerCode);
-          }
-          
-          if (!bookieMap) continue;
-          
-          // Try to find a match with the normalized team name
-          let bookieEvent = bookieMap.get(normalizedTeams);
-          
-          // If no match and we have reversed teams, try that
-          if (!bookieEvent && reversedNormalizedTeams) {
-            bookieEvent = bookieMap.get(reversedNormalizedTeams);
+          // Try to match with each bookmaker
+          for (const bookmakerCode of bookmakerCodes) {
+            // Skip if this event already has odds for this bookmaker
+            if (eventData.oddsData && eventData.oddsData[bookmakerCode]) {
+              continue;
+            }
+            
+            // Get the appropriate map based on bookmaker
+            let bookieMap = null;
+            if (bookmakerCode === 'sporty') {
+              bookieMap = sportyTeamsMap;
+            } else {
+              bookieMap = bookmakerTeamMaps.get(bookmakerCode);
+            }
+            
+            if (!bookieMap) continue;
+            
+            // Try to find a match with the normalized team name
+            let bookieEvent = bookieMap.get(normalizedTeams);
+            
+            // If no match and we have reversed teams, try that
+            if (!bookieEvent && reversedNormalizedTeams) {
+              bookieEvent = bookieMap.get(reversedNormalizedTeams);
+              
+              if (bookieEvent && logsShown < MAX_LOGS) {
+                console.log(`✅ Matched ${bookmakerCode} event using reversed team names: ${eventData.teams}`);
+                logsShown++;
+              }
+            }
             
             if (bookieEvent) {
-              console.log(`✅ Matched ${bookmakerCode} event using reversed team names: ${eventData.teams}`);
-            }
-          }
-          
-          if (bookieEvent) {
-            // We found a matching event by team name
-            let hasOdds = false;
-            let bookieOdds = null;
-            
-            if (bookieEvent.odds) {
-              bookieOdds = bookieEvent.odds;
-              hasOdds = true;
-            } else if (bookieEvent.home_odds !== undefined || bookieEvent.draw_odds !== undefined || bookieEvent.away_odds !== undefined) {
-              const homeOdds = bookieEvent.home_odds ? parseFloat(bookieEvent.home_odds) : 0;
-              const drawOdds = bookieEvent.draw_odds ? parseFloat(bookieEvent.draw_odds) : 0;
-              const awayOdds = bookieEvent.away_odds ? parseFloat(bookieEvent.away_odds) : 0;
+              // We found a matching event by team name
+              let hasOdds = false;
+              let bookieOdds = null;
               
-              if (homeOdds > 0 || drawOdds > 0 || awayOdds > 0) {
-                bookieOdds = {
-                  home: homeOdds,
-                  draw: drawOdds,
-                  away: awayOdds
-                };
+              if (bookieEvent.odds) {
+                bookieOdds = bookieEvent.odds;
                 hasOdds = true;
-              }
-            }
-            
-            if (hasOdds) {
-              // Add bookmaker odds to this event
-              eventData.oddsData[bookmakerCode] = bookieOdds;
-              
-              // Recalculate best odds
-              ['home', 'draw', 'away'].forEach(market => {
-                if (bookieOdds[market] && bookieOdds[market] > (eventData.bestOdds[market] || 0)) {
-                  eventData.bestOdds[market] = bookieOdds[market];
+              } else if (bookieEvent.home_odds !== undefined || bookieEvent.draw_odds !== undefined || bookieEvent.away_odds !== undefined) {
+                const homeOdds = bookieEvent.home_odds ? parseFloat(bookieEvent.home_odds) : 0;
+                const drawOdds = bookieEvent.draw_odds ? parseFloat(bookieEvent.draw_odds) : 0;
+                const awayOdds = bookieEvent.away_odds ? parseFloat(bookieEvent.away_odds) : 0;
+                
+                if (homeOdds > 0 || drawOdds > 0 || awayOdds > 0) {
+                  bookieOdds = {
+                    home: homeOdds,
+                    draw: drawOdds,
+                    away: awayOdds
+                  };
+                  hasOdds = true;
                 }
-              });
+              } else if (bookieEvent.homeOdds !== undefined || bookieEvent.drawOdds !== undefined || bookieEvent.awayOdds !== undefined) {
+                // Additional format support for more scrapers
+                const homeOdds = bookieEvent.homeOdds ? parseFloat(bookieEvent.homeOdds) : 0;
+                const drawOdds = bookieEvent.drawOdds ? parseFloat(bookieEvent.drawOdds) : 0;
+                const awayOdds = bookieEvent.awayOdds ? parseFloat(bookieEvent.awayOdds) : 0;
+                
+                if (homeOdds > 0 || drawOdds > 0 || awayOdds > 0) {
+                  bookieOdds = {
+                    home: homeOdds,
+                    draw: drawOdds,
+                    away: awayOdds
+                  };
+                  hasOdds = true;
+                }
+              }
               
-              // Track which bookmakers we've added
-              bookmakersMapped[bookmakerCode] = (bookmakersMapped[bookmakerCode] || 0) + 1;
-              
-              // Only log for Sportybet to avoid cluttering logs
-              if (bookmakerCode === 'sporty') {
-                console.log(`✅ Secondary matched ${bookmakerCode} event for: ${eventData.teams}`);
+              if (hasOdds) {
+                // Add bookmaker odds to this event
+                eventData.oddsData[bookmakerCode] = bookieOdds;
+                
+                // Recalculate best odds
+                ['home', 'draw', 'away'].forEach(market => {
+                  if (bookieOdds[market] && bookieOdds[market] > (eventData.bestOdds[market] || 0)) {
+                    eventData.bestOdds[market] = bookieOdds[market];
+                  }
+                });
+                
+                // Track which bookmakers we've added
+                // Handle type safety by checking if property exists first
+                if (typeof bookmakersMapped[bookmakerCode] === 'number') {
+                  bookmakersMapped[bookmakerCode] += 1;
+                } else {
+                  bookmakersMapped[bookmakerCode] = 1;
+                }
+                
+                // Limit log output for better performance
+                if (bookmakerCode === 'sporty' && logsShown < MAX_LOGS) {
+                  console.log(`✅ Secondary matched ${bookmakerCode} event for: ${eventData.teams}`);
+                  logsShown++;
+                }
               }
             }
           }
         }
+      }
+      
+      // Log batch progress
+      if ((batchIndex + 1) % 2 === 0 || batchIndex === totalBatches - 1) {
+        console.log(`🔄 Processed batch ${batchIndex + 1}/${totalBatches} (${Math.round((batchIndex + 1) / totalBatches * 100)}%)`);
       }
     }
     
