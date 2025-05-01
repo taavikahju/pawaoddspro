@@ -501,6 +501,118 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
+  // Get margin history for a specific event
+  app.get('/api/events/margins/:eventId', async (req, res) => {
+    try {
+      const { eventId } = req.params;
+      
+      // Mock margin history data until we have real data
+      const marginHistory = [
+        {
+          eventId: eventId,
+          bookmakerCode: 'bp GH',
+          margin: 0.105,
+          timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString() // 24 hours ago
+        },
+        {
+          eventId: eventId,
+          bookmakerCode: 'bp GH',
+          margin: 0.112,
+          timestamp: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString() // 12 hours ago
+        },
+        {
+          eventId: eventId,
+          bookmakerCode: 'bp GH',
+          margin: 0.108,
+          timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString() // 6 hours ago
+        },
+        {
+          eventId: eventId,
+          bookmakerCode: 'bp GH',
+          margin: 0.107,
+          timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString() // 2 hours ago
+        },
+        {
+          eventId: eventId,
+          bookmakerCode: 'bp KE',
+          margin: 0.110,
+          timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString() // 24 hours ago
+        },
+        {
+          eventId: eventId,
+          bookmakerCode: 'bp KE',
+          margin: 0.115,
+          timestamp: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString() // 12 hours ago
+        },
+        {
+          eventId: eventId,
+          bookmakerCode: 'bp KE',
+          margin: 0.112,
+          timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString() // 6 hours ago
+        },
+        {
+          eventId: eventId,
+          bookmakerCode: 'bp KE',
+          margin: 0.109,
+          timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString() // 2 hours ago
+        },
+        {
+          eventId: eventId,
+          bookmakerCode: 'sporty',
+          margin: 0.095,
+          timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString() // 24 hours ago
+        },
+        {
+          eventId: eventId,
+          bookmakerCode: 'sporty',
+          margin: 0.102,
+          timestamp: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString() // 12 hours ago
+        },
+        {
+          eventId: eventId,
+          bookmakerCode: 'sporty',
+          margin: 0.099,
+          timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString() // 6 hours ago
+        },
+        {
+          eventId: eventId,
+          bookmakerCode: 'sporty',
+          margin: 0.101,
+          timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString() // 2 hours ago
+        },
+        {
+          eventId: eventId,
+          bookmakerCode: 'betika KE',
+          margin: 0.098,
+          timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString() // 24 hours ago
+        },
+        {
+          eventId: eventId,
+          bookmakerCode: 'betika KE',
+          margin: 0.105,
+          timestamp: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString() // 12 hours ago
+        },
+        {
+          eventId: eventId,
+          bookmakerCode: 'betika KE',
+          margin: 0.102,
+          timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString() // 6 hours ago
+        },
+        {
+          eventId: eventId,
+          bookmakerCode: 'betika KE',
+          margin: 0.097,
+          timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString() // 2 hours ago
+        }
+      ];
+      
+      res.json(marginHistory);
+    } catch (error) {
+      console.error('Error fetching margin history:', error);
+      res.status(500).json({ error: 'Failed to fetch margin history' });
+    }
+  });
+  
   // Get tournament margin history
   app.get('/api/tournaments/margins', async (req, res) => {
     try {

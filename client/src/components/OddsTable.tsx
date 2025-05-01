@@ -10,6 +10,7 @@ import {
 import { useBookmakerContext } from '@/contexts/BookmakerContext';
 import { cn } from '@/lib/utils';
 import { ArrowDownIcon, ArrowUpIcon, Clock, Globe, Trophy } from 'lucide-react';
+import MarginHistoryPopup from './MarginHistoryPopup';
 import OddsHistoryPopup from './OddsHistoryPopup';
 
 interface OddsTableProps {
@@ -20,6 +21,13 @@ interface OddsTableProps {
 
 export default function OddsTable({ events, isLoading, className }: OddsTableProps) {
   const { bookmakers, selectedBookmakers } = useBookmakerContext();
+  
+  // State for margin history popup
+  const [selectedEvent, setSelectedEvent] = useState<{
+    eventId: string;
+    eventName: string;
+    isOpen: boolean;
+  }>({ eventId: '', eventName: '', isOpen: false });
   
   // State for odds history popup
   const [oddsHistoryPopup, setOddsHistoryPopup] = useState<{
@@ -472,14 +480,19 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                           }
                         }
                         
-                        // Display margin as regular text
+                        // Add clickable functionality if margin is available
                         if (marginPercentage !== '-' && event.eventId) {
                           return (
-                            <span 
-                              className={`text-sm font-medium px-2 py-1 rounded ${marginColorClass}`}
+                            <button 
+                              onClick={() => setSelectedEvent({
+                                eventId: event.eventId,
+                                eventName: event.teams,
+                                isOpen: true
+                              })}
+                              className={`text-sm font-medium px-2 py-1 rounded bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 ${marginColorClass} cursor-pointer transition-colors duration-150 ease-in-out`}
                             >
                               {marginPercentage}%
-                            </span>
+                            </button>
                           );
                         }
                         
@@ -545,6 +558,15 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
           ))}
         </TableBody>
       </Table>
+      
+      {/* Render the MarginHistoryPopup */}
+      <MarginHistoryPopup
+        isOpen={selectedEvent.isOpen}
+        onClose={() => setSelectedEvent(prev => ({ ...prev, isOpen: false }))}
+        eventId={selectedEvent.eventId}
+        eventName={selectedEvent.eventName}
+        bookmakers={selectedBookmakers}
+      />
       
       {/* Render the OddsHistoryPopup */}
       <OddsHistoryPopup
