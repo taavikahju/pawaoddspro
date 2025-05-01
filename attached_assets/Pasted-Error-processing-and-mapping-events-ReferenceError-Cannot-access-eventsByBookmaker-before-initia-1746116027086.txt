@@ -1,0 +1,36 @@
+Error processing and mapping events: ReferenceError: Cannot access 'eventsByBookmaker' before initialization
+    at processAndMapEvents (/home/runner/workspace/server/utils/dataMapper.ts:316:48)
+    at async runAllScrapers (/home/runner/workspace/server/scrapers/scheduler.ts:229:7)
+❌ Error processing events: ReferenceError: Cannot access 'eventsByBookmaker' before initialization
+    at processAndMapEvents (/home/runner/workspace/server/utils/dataMapper.ts:316:48)
+    at async runAllScrapers (/home/runner/workspace/server/scrapers/scheduler.ts:229:7)
+❌ Scraper run failed: ReferenceError: Cannot access 'eventsByBookmaker' before initialization
+    at processAndMapEvents (/home/runner/workspace/server/utils/dataMapper.ts:316:48)
+    at async runAllScrapers (/home/runner/workspace/server/scrapers/scheduler.ts:229:7)
+❌ Error during initial scraping: ReferenceError: Cannot access 'eventsByBookmaker' before initialization
+    at processAndMapEvents (/home/runner/workspace/server/utils/dataMapper.ts:316:48)
+    at async runAllScrapers (/home/runner/workspace/server/scrapers/scheduler.ts:229:7)
+4:12:59 PM [express] GET /api/sports 304 in 197ms :: [{"id":1,"name":"Football","code":"football","a…
+4:12:59 PM [express] GET /api/bookmakers 200 in 197ms :: [{"id":14,"name":"Betika","code":"betika KE…
+📊 Event distribution by bookmaker count:
+  - Events with 1 bookmaker: 0
+  - Events with 2 bookmakers: 42
+  - Events with 3 bookmakers: 1198
+  - Events with 4+ bookmakers: 2
+📊 Sportybet diagnostic (found in 180 events):
+  - Total Sportybet events: 180
+  - Sportybet events with 2 bookmakers: 3
+  - Sportybet events with 3 bookmakers: 175
+  - Sportybet events with 4+ bookmakers: 2
+  - Sample of 3 Sportybet events:
+    - Event 66506: "FC STK 1914 Samorin - 1. FC Tatran Presov" (eventId: 51563949) has 3 bookmakers
+    - Event 66507: "Ethiopia Nigd Bank - Mechal SC" (eventId: 58108729) has 3 bookmakers
+    - Event 66508: "NK Jadran LP - NK Kustosija Zagreb" (eventId: 51123829) has 3 bookmakers
+Filtered 1242 events down to 1242 with at least 2 bookmakers
+4:13:14 PM [express] GET /api/events 200 in 737ms :: [{"id":61177,"externalId":"60132759","eventId":…
+4:13:15 PM [express] GET /api/bookmakers 200 in 196ms :: [{"id":14,"name":"Betika","code":"betika KE…
+4:13:15 PM [express] GET /api/sports 304 in 195ms :: [{"id":1,"name":"Football","code":"football","a…
+4:13:18 PM [express] GET /api/tournaments/margins/by-country 304 in 394ms :: [{"name":"Albania","tou…
+4:13:28 PM [express] GET /api/stats 200 in 593ms :: {"totalEvents":1079,"eventsChange":-209,"bookmar…
+4:13:29 PM [express] GET /api/sports 304 in 197ms :: [{"id":1,"name":"Football","code":"football","a…
+4:13:29 PM [express] GET /api/bookmakers 304 in 196ms :: [{"id":14,"name":"Betika","code":"betika KE…

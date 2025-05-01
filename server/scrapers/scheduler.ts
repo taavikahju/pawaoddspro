@@ -120,9 +120,23 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
     
     console.log(`📊 Processing ${activeBookmakers.length} active bookmakers`);
     
+    // Sort the bookmakers to process them in a specific order
+    // 1. First process betPawa Ghana (bp GH) as the base for countries/tournaments
+    // 2. Then process Sportybet to ensure consistent event IDs
+    // 3. Then process all other bookmakers
+    const sortedBookmakers = [...activeBookmakers].sort((a, b) => {
+      if (a.code === 'bp GH') return -1; // betPawa Ghana should be first
+      if (b.code === 'bp GH') return 1;
+      if (a.code === 'sporty') return -1; // Sportybet should be second
+      if (b.code === 'sporty') return 1;
+      return 0; // Keep the original order for other bookmakers
+    });
+    
+    console.log(`📊 Scraping in optimized order: ${sortedBookmakers.map(b => b.code).join(', ')}`);
+    
     // Run all scrapers in parallel for faster completion time
     // We'll still update frontend only once everything is done
-    const scraperPromises = activeBookmakers.map(async (bookmaker) => {
+    const scraperPromises = sortedBookmakers.map(async (bookmaker) => {
       try {
         // Emit bookmaker scraper started event
         scraperEvents.emit(SCRAPER_EVENTS.BOOKMAKER_STARTED, {
