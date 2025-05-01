@@ -34,19 +34,27 @@ const TournamentMargins: React.FC = () => {
   
   // Function to determine country code from country name
   const getCountryCode = (countryName: string): string => {
+    // Normalize country name for matching
+    const normalizedName = countryName.trim();
+    
     const countryCodeMap: Record<string, string> = {
+      // Europe
       'England': 'GB',
+      'England Amateur': 'GB',
+      'United Kingdom': 'GB',
+      'Great Britain': 'GB',
       'Spain': 'ES',
       'Germany': 'DE',
       'Italy': 'IT',
       'France': 'FR',
       'Netherlands': 'NL',
       'Portugal': 'PT',
-      'Brazil': 'BR',
-      'Argentina': 'AR',
       'Belgium': 'BE',
       'Scotland': 'GB-SCT',
+      'Northern Ireland': 'GB-NIR',
       'Wales': 'GB-WLS',
+      'Republic of Ireland': 'IE',
+      'Ireland': 'IE',
       'Austria': 'AT',
       'Denmark': 'DK',
       'Sweden': 'SE',
@@ -65,25 +73,106 @@ const TournamentMargins: React.FC = () => {
       'Slovenia': 'SI',
       'Slovakia': 'SK',
       'Finland': 'FI',
+      'Bulgaria': 'BG',
+      'Albania': 'AL',
+      'Montenegro': 'ME',
+      'Estonia': 'EE',
+      'Latvia': 'LV',
+      'Lithuania': 'LT',
+      'Belarus': 'BY',
+      'Moldova': 'MD',
+      'Cyprus': 'CY',
+      'Malta': 'MT',
+      'Luxembourg': 'LU',
+      'Iceland': 'IS',
+      'Faroe Islands': 'FO',
+      
+      // Americas
       'USA': 'US',
+      'United States': 'US',
       'Canada': 'CA',
       'Mexico': 'MX',
+      'Brazil': 'BR',
+      'Argentina': 'AR',
+      'Colombia': 'CO',
+      'Chile': 'CL',
+      'Peru': 'PE',
+      'Uruguay': 'UY',
+      'Paraguay': 'PY',
+      'Ecuador': 'EC',
+      'Bolivia': 'BO',
+      'Venezuela': 'VE',
+      'Costa Rica': 'CR',
+      'Panama': 'PA',
+      'Honduras': 'HN',
+      'El Salvador': 'SV',
+      'Guatemala': 'GT',
+      'Jamaica': 'JM',
+      'Trinidad and Tobago': 'TT',
+      'Cuba': 'CU',
+      'Dominican Republic': 'DO',
+      
+      // Asia
       'Japan': 'JP',
       'South Korea': 'KR',
+      'China': 'CN',
+      'India': 'IN',
+      'Thailand': 'TH',
+      'Vietnam': 'VN',
+      'Indonesia': 'ID',
+      'Malaysia': 'MY',
+      'Singapore': 'SG',
+      'Philippines': 'PH',
+      'Saudi Arabia': 'SA',
+      'UAE': 'AE',
+      'United Arab Emirates': 'AE',
+      'Qatar': 'QA',
+      'Iran': 'IR',
+      'Iraq': 'IQ',
+      'Israel': 'IL',
+      'Jordan': 'JO',
+      'Lebanon': 'LB',
+      'Kazakhstan': 'KZ',
+      'Uzbekistan': 'UZ',
+      
+      // Oceania
       'Australia': 'AU',
       'New Zealand': 'NZ',
+      'Fiji': 'FJ',
+      
+      // Africa
       'South Africa': 'ZA',
       'Egypt': 'EG',
       'Morocco': 'MA',
+      'Tunisia': 'TN',
+      'Algeria': 'DZ',
       'Nigeria': 'NG',
       'Ghana': 'GH',
       'Kenya': 'KE',
       'Uganda': 'UG',
       'Tanzania': 'TZ',
-      // Add more country mappings as needed
+      'Senegal': 'SN',
+      'Ivory Coast': 'CI',
+      'Cameroon': 'CM',
+      'Zambia': 'ZM',
+      'Zimbabwe': 'ZW',
+      'Ethiopia': 'ET',
+      'Guinea': 'GN',
+      'Burkina Faso': 'BF',
+      'Mali': 'ML',
+      'Botswana': 'BW',
+      'Rwanda': 'RW',
+      'Sudan': 'SD',
+      'Libya': 'LY',
+      'Mozambique': 'MZ',
+      'Angola': 'AO',
+      'Malawi': 'MW',
+      'Gambia': 'GM',
+      'Sierra Leone': 'SL',
+      'Togo': 'TG',
     };
     
-    return countryCodeMap[countryName] || 'XX';
+    return countryCodeMap[normalizedName] || 'XX';
   };
   
   // Query to load tournament margin data
@@ -114,10 +203,13 @@ const TournamentMargins: React.FC = () => {
   
   // Function to determine color class for margin value
   const getMarginColorClass = (margin: number): string => {
-    if (margin < 1.0) return 'text-green-600 dark:text-green-400';
-    if (margin < 5.0) return 'text-blue-600 dark:text-blue-400';
-    if (margin < 8.0) return 'text-yellow-600 dark:text-yellow-400';
-    if (margin < 12.0) return 'text-orange-600 dark:text-orange-400';
+    // Convert decimal to percentage (e.g., 0.0364 → 3.64%)
+    const percentage = margin * 100;
+    
+    if (percentage < 1.0) return 'text-green-600 dark:text-green-400';
+    if (percentage < 5.0) return 'text-blue-600 dark:text-blue-400';
+    if (percentage < 8.0) return 'text-yellow-600 dark:text-yellow-400';
+    if (percentage < 12.0) return 'text-orange-600 dark:text-orange-400';
     return 'text-red-600 dark:text-red-400';
   };
   
@@ -240,34 +332,54 @@ const TournamentMargins: React.FC = () => {
               </div>
             ) : (
               <div className="overflow-x-auto">
-                <Table>
+                <Table className="border-collapse">
                   <TableHeader>
                     <TableRow className="bg-muted hover:bg-muted">
-                      <TableHead className="w-[300px]">Tournament</TableHead>
+                      <TableHead className="w-[250px] py-2 text-xs">Tournament</TableHead>
                       {bookmakers.map(bookmaker => (
-                        <TableHead key={bookmaker.code} className="text-center">
-                          {bookmaker.name}
+                        <TableHead key={bookmaker.code} className="text-center py-2 text-xs">
+                          {bookmaker.name.replace(' Kenya', '').replace(' Ghana', '')}
                         </TableHead>
                       ))}
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {selectedCountryData.tournaments.map((tournament, idx) => (
+                    {selectedCountryData.tournaments
+                      // Sort tournaments by the sum of all margins (ascending)
+                      .sort((a, b) => {
+                        // Calculate total margin for each tournament
+                        const getTotalMargin = (t: TournamentData) => {
+                          let total = 0;
+                          Object.values(t.bookmakers).forEach(bm => {
+                            total += bm.margin || 0;
+                          });
+                          return total;
+                        };
+                        
+                        return getTotalMargin(a) - getTotalMargin(b);
+                      })
+                      .map((tournament, idx) => (
                       <TableRow 
                         key={tournament.name}
                         className={idx % 2 === 0 ? 'bg-background' : 'bg-muted/30'}
                       >
-                        <TableCell className="font-medium">
+                        <TableCell className="font-medium text-xs py-1.5">
                           {tournament.name}
                         </TableCell>
                         
                         {bookmakers.map(bookmaker => {
-                          const marginData = tournament.bookmakers[bookmaker.code];
+                          // Map UI bookmaker codes to database bookmaker codes
+                          const dbBookmakerCode = 
+                            bookmaker.code === 'bp GH' ? 'betpawa_gh' :
+                            bookmaker.code === 'bp KE' ? 'betpawa_ke' :
+                            bookmaker.code;
+                            
+                          const marginData = tournament.bookmakers[dbBookmakerCode];
                           
                           if (!marginData) {
                             return (
-                              <TableCell key={bookmaker.code} className="text-center">
-                                <span className="text-sm font-medium px-1 py-0.5 rounded bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300">
+                              <TableCell key={bookmaker.code} className="text-center py-1.5">
+                                <span className="text-xs font-medium px-1.5 py-0.5 rounded-sm bg-gray-50 text-gray-400 dark:bg-gray-800 dark:text-gray-500">
                                   -
                                 </span>
                               </TableCell>
@@ -278,15 +390,15 @@ const TournamentMargins: React.FC = () => {
                           const marginColorClass = getMarginColorClass(marginValue);
                           
                           return (
-                            <TableCell key={bookmaker.code} className="text-center">
+                            <TableCell key={bookmaker.code} className="text-center py-1.5">
                               <span 
                                 className={cn(
-                                  "text-sm font-medium px-2 py-1 rounded bg-gray-50 dark:bg-gray-800",
+                                  "text-xs font-medium px-2 py-0.5 rounded-sm",
                                   marginColorClass
                                 )}
                                 title={`Based on ${marginData.eventCount} events (Updated: ${new Date(marginData.timestamp).toLocaleString()})`}
                               >
-                                {marginValue.toFixed(2)}%
+                                {(marginValue * 100).toFixed(2)}%
                               </span>
                             </TableCell>
                           );
