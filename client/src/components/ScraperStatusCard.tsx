@@ -14,14 +14,14 @@ interface ScraperStatusCardProps {
 }
 
 export default function ScraperStatusCard({
-  name,
-  status,
-  lastRun,
-  nextRun,
-  eventCount,
-  fileSize,
+  name = 'Unknown Scraper',
+  status = 'Idle',
+  lastRun = 'Never',
+  nextRun = 'Unknown',
+  eventCount = 0,
+  fileSize = '0 KB',
   className
-}: ScraperStatusCardProps) {
+}: Partial<ScraperStatusCardProps>) {
   const isRunning = status === 'Running';
   const isIdle = status === 'Idle';
   const isError = status === 'Error';
