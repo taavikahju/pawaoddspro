@@ -35,8 +35,8 @@
     "date": "2025-05-01",
     "time": "17:30",
     "odds": {
-      "home": 1.73,
-      "draw": 3.75,
+      "home": 1.76,
+      "draw": 3.65,
       "away": 4.2
     },
     "raw": {
@@ -45,8 +45,8 @@
       "tournament": "Serie B",
       "event": "Sassuolo Calcio - Carrarese Calcio",
       "market": "1X2 - FT",
-      "home_odds": "1.73",
-      "draw_odds": "3.75",
+      "home_odds": "1.76",
+      "draw_odds": "3.65",
       "away_odds": "4.2",
       "start_time": "2025-05-01 17:30"
     }
@@ -269,9 +269,9 @@
     "date": "2025-05-01",
     "time": "19:00",
     "odds": {
-      "home": 1.95,
+      "home": 1.92,
       "draw": 3.45,
-      "away": 3.35
+      "away": 3.45
     },
     "raw": {
       "eventId": "60266443",
@@ -279,9 +279,9 @@
       "tournament": "Liga de Ascenso, Clausura",
       "event": "Adr Jicaral - Futbol Consultants Desamparados",
       "market": "1X2 - FT",
-      "home_odds": "1.95",
+      "home_odds": "1.92",
       "draw_odds": "3.45",
-      "away_odds": "3.35",
+      "away_odds": "3.45",
       "start_time": "2025-05-01 19:00"
     }
   },
@@ -711,9 +711,9 @@
     "date": "2025-05-02",
     "time": "00:00",
     "odds": {
-      "home": 1.2,
-      "draw": 6,
-      "away": 10
+      "home": 1.24,
+      "draw": 5.5,
+      "away": 8.75
     },
     "raw": {
       "eventId": "56720425",
@@ -721,9 +721,9 @@
       "tournament": "USL Championship",
       "event": "Louisville City FC - Lexington SC",
       "market": "1X2 - FT",
-      "home_odds": "1.2",
-      "draw_odds": "6.0",
-      "away_odds": "10.0",
+      "home_odds": "1.24",
+      "draw_odds": "5.5",
+      "away_odds": "8.75",
       "start_time": "2025-05-02 00:00"
     }
   },
@@ -2713,9 +2713,9 @@
     "date": "2025-05-02",
     "time": "14:30",
     "odds": {
-      "home": 2.8,
-      "draw": 3.05,
-      "away": 2.4
+      "home": 2.65,
+      "draw": 3,
+      "away": 2.6
     },
     "raw": {
       "eventId": "60193999",
@@ -2723,9 +2723,9 @@
       "tournament": "Iraqi League",
       "event": "Diyala FC - AL Najaf",
       "market": "1X2 - FT",
-      "home_odds": "2.8",
-      "draw_odds": "3.05",
-      "away_odds": "2.4",
+      "home_odds": "2.65",
+      "draw_odds": "3.0",
+      "away_odds": "2.6",
       "start_time": "2025-05-02 14:30"
     }
   },
@@ -3103,9 +3103,9 @@
     "date": "2025-05-02",
     "time": "15:00",
     "odds": {
-      "home": 3.6,
-      "draw": 3.6,
-      "away": 1.91
+      "home": 3.5,
+      "draw": 3.55,
+      "away": 1.95
     },
     "raw": {
       "eventId": "58220777",
@@ -3113,9 +3113,9 @@
       "tournament": "Vysshaya Liga",
       "event": "FC Molodechno - Naftan Novopolotsk",
       "market": "1X2 - FT",
-      "home_odds": "3.6",
-      "draw_odds": "3.6",
-      "away_odds": "1.91",
+      "home_odds": "3.5",
+      "draw_odds": "3.55",
+      "away_odds": "1.95",
       "start_time": "2025-05-02 15:00"
     }
   },
@@ -4728,6 +4728,58 @@
       "home_odds": "1.87",
       "draw_odds": "3.85",
       "away_odds": "3.25",
+      "start_time": "2025-05-02 17:00"
+    }
+  },
+  {
+    "id": "51470205",
+    "eventId": "51470205",
+    "teams": "TSG Hoffenheim II U23 - FC 08 Homburg-Saar",
+    "league": "Regionalliga Southwest",
+    "sport": "football",
+    "country": "Germany",
+    "date": "2025-05-02",
+    "time": "17:00",
+    "odds": {
+      "home": 1.73,
+      "draw": 3.8,
+      "away": 3.8
+    },
+    "raw": {
+      "eventId": "51470205",
+      "country": "Germany",
+      "tournament": "Regionalliga Southwest",
+      "event": "TSG Hoffenheim II U23 - FC 08 Homburg-Saar",
+      "market": "1X2 - FT",
+      "home_odds": "1.73",
+      "draw_odds": "3.8",
+      "away_odds": "3.8",
+      "start_time": "2025-05-02 17:00"
+    }
+  },
+  {
+    "id": "51293953",
+    "eventId": "51293953",
+    "teams": "BFC Dynamo - Hallescher FC",
+    "league": "Regionalliga Northeast",
+    "sport": "football",
+    "country": "Germany",
+    "date": "2025-05-02",
+    "time": "17:00",
+    "odds": {
+      "home": 3.55,
+      "draw": 3.45,
+      "away": 1.9
+    },
+    "raw": {
+      "eventId": "51293953",
+      "country": "Germany",
+      "tournament": "Regionalliga Northeast",
+      "event": "BFC Dynamo - Hallescher FC",
+      "market": "1X2 - FT",
+      "home_odds": "3.55",
+      "draw_odds": "3.45",
+      "away_odds": "1.9",
       "start_time": "2025-05-02 17:00"
     }
   },
@@ -15687,7 +15739,7 @@
     "date": "2025-05-03",
     "time": "16:30",
     "odds": {
-      "home": 1.31,
+      "home": 1.3,
       "draw": 6.25,
       "away": 8
     },
@@ -15697,7 +15749,7 @@
       "tournament": "Bundesliga",
       "event": "Borussia Dortmund - VfL Wolfsburg",
       "market": "1X2 - FT",
-      "home_odds": "1.31",
+      "home_odds": "1.3",
       "draw_odds": "6.25",
       "away_odds": "8.0",
       "start_time": "2025-05-03 16:30"
@@ -17091,9 +17143,9 @@
     "date": "2025-05-03",
     "time": "19:00",
     "odds": {
-      "home": 1.33,
-      "draw": 4.85,
-      "away": 7
+      "home": 1.29,
+      "draw": 5.25,
+      "away": 7.5
     },
     "raw": {
       "eventId": "59722624",
@@ -17101,9 +17153,9 @@
       "tournament": "Bolivia Primera Division",
       "event": "Nacional Potosi - Oriente Petrolero",
       "market": "1X2 - FT",
-      "home_odds": "1.33",
-      "draw_odds": "4.85",
-      "away_odds": "7.0",
+      "home_odds": "1.29",
+      "draw_odds": "5.25",
+      "away_odds": "7.5",
       "start_time": "2025-05-03 19:00"
     }
   },
@@ -31209,9 +31261,9 @@
     "date": "2025-05-10",
     "time": "16:30",
     "odds": {
-      "home": 1.12,
+      "home": 1.11,
       "draw": 10,
-      "away": 17
+      "away": 18
     },
     "raw": {
       "eventId": "51269591",
@@ -31219,9 +31271,9 @@
       "tournament": "Bundesliga",
       "event": "Bayern Munich - Borussia Monchengladbach",
       "market": "1X2 - FT",
-      "home_odds": "1.12",
+      "home_odds": "1.11",
       "draw_odds": "10.0",
-      "away_odds": "17.0",
+      "away_odds": "18.0",
       "start_time": "2025-05-10 16:30"
     }
   },

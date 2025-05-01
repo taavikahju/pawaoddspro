@@ -130,7 +130,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Handle WebSocket connections
   wss.on('connection', (ws) => {
-    console.log('New WebSocket client connected');
+    logger.info('New WebSocket client connected');
     
     // Send initial data
     storage.getStats().then(stats => {
@@ -139,7 +139,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         data: stats
       }));
     }).catch(error => {
-      console.error('Error sending initial stats:', error);
+      logger.error(`Error sending initial stats: ${error}`);
     });
     
     storage.getScraperStatuses().then(scraperStatuses => {
@@ -148,7 +148,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         data: scraperStatuses
       }));
     }).catch(error => {
-      console.error('Error sending initial scraper statuses:', error);
+      logger.error(`Error sending initial scraper statuses: ${error}`);
     });
     
     // Send initial events data - filtered to only include events with 3+ bookmakers
@@ -160,14 +160,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return bookmakerCount >= 2;
       });
       
-      console.log(`WebSocket: Filtered ${events.length} events down to ${filteredEvents.length} with at least 2 bookmakers`);
+      logger.debug(`WebSocket: Filtered ${events.length} events down to ${filteredEvents.length} with at least 2 bookmakers`);
       
       ws.send(JSON.stringify({
         type: 'events',
         data: filteredEvents
       }));
     }).catch(error => {
-      console.error('Error sending initial events:', error);
+      logger.error(`Error sending initial events: ${error}`);
     });
     
     // Handle messages from client
@@ -206,13 +206,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
           });
 
           // Log bookmaker count distribution for WebSocket
-          console.log(`WebSocket Events distribution:`);
-          console.log(`  - Events with 1 bookmaker: ${eventsByBookmakerCount['1']}`);
-          console.log(`  - Events with 2 bookmakers: ${eventsByBookmakerCount['2']}`);
-          console.log(`  - Events with 3 bookmakers: ${eventsByBookmakerCount['3']}`);
-          console.log(`  - Events with 4+ bookmakers: ${eventsByBookmakerCount['4+']}`);
+          logger.debug(`WebSocket Events distribution:`);
+          logger.debug(`  - Events with 1 bookmaker: ${eventsByBookmakerCount['1']}`);
+          logger.debug(`  - Events with 2 bookmakers: ${eventsByBookmakerCount['2']}`);
+          logger.debug(`  - Events with 3 bookmakers: ${eventsByBookmakerCount['3']}`);
+          logger.debug(`  - Events with 4+ bookmakers: ${eventsByBookmakerCount['4+']}`);
           
-          console.log(`WebSocket getEvents: Filtered ${events.length} events down to ${filteredEvents.length} with at least 2 bookmakers`);
+          logger.debug(`WebSocket getEvents: Filtered ${events.length} events down to ${filteredEvents.length} with at least 2 bookmakers`);
           
           ws.send(JSON.stringify({
             type: 'events',
@@ -256,13 +256,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
           }));
         }
       } catch (error) {
-        console.error('Error handling WebSocket message:', error);
+        logger.error(`Error handling WebSocket message: ${error}`);
       }
     });
     
     // Handle disconnection
     ws.on('close', () => {
-      console.log('WebSocket client disconnected');
+      logger.info('WebSocket client disconnected');
     });
   });
 
@@ -283,10 +283,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Use bookmaker code as part of the filename
       const bookmakerCode = req.body.bookmaker || req.query.bookmaker;
       
-      console.log('Filename generator received bookmaker code:', bookmakerCode);
-      console.log('Request body:', req.body);
-      console.log('Request query:', req.query);
-      console.log('Headers:', req.headers);
+      logger.debug('Filename generator received bookmaker code:', bookmakerCode);
+      logger.debug(`Request body: ${JSON.stringify(req.body)}`);
+      logger.debug(`Request query: ${JSON.stringify(req.query)}`);
+      logger.debug(`Headers: ${JSON.stringify(req.headers)}`);
       
       // Try to get bookmaker code from custom header if not in body
       const headerBookmakerCode = req.headers['x-bookmaker-code'];
@@ -294,7 +294,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         (typeof headerBookmakerCode === 'string' ? headerBookmakerCode : '');
       
       if (!finalBookmakerCode) {
-        console.error('No bookmaker code found in request');
+        logger.error('No bookmaker code found in request');
         return cb(new Error('No bookmaker code provided'), '');
       }
       
@@ -306,7 +306,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       const filename = `${finalBookmakerCode}_scraper${ext}`;
-      console.log('Generated filename:', filename);
+      logger.debug(`Generated filename: ${filename}`);
       
       cb(null, filename);
     }
@@ -317,7 +317,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     storage: storage_config,
     limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
     fileFilter: function(req, file, cb) {
-      console.log("Upload request received with body:", req.body);
+      logger.debug(`Upload request received with body: ${JSON.stringify(req.body)}`);
       
       // Accept only JavaScript, Python, and shell script files
       const allowedExts = ['.js', '.py', '.sh', '.ts'];
@@ -339,20 +339,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // API route to manually trigger tournament margin calculation
   app.post('/api/admin/calculate-margins', simpleAdminAuth, async (req, res) => {
     try {
-      console.log('Manually triggering tournament margin calculation...');
+      logger.critical('Manually triggering tournament margin calculation...');
       
       // Clear existing margins
       await db.execute(sql`DELETE FROM tournament_margins`);
-      console.log('Cleared existing tournament margins');
+      logger.critical('Cleared existing tournament margins');
       
       // Calculate and store new tournament margins
       const { calculateAndStoreTournamentMargins } = await import('./utils/tournamentMargins');
       await calculateAndStoreTournamentMargins(storage);
-      console.log('Tournament margins calculated and stored successfully');
+      logger.critical('Tournament margins calculated and stored successfully');
       
       return res.json({ success: true, message: 'Tournament margins calculated successfully' });
     } catch (error) {
-      console.error('Error calculating tournament margins:', error);
+      logger.error(`Error calculating tournament margins: ${error}`);
       return res.status(500).json({ success: false, message: 'Error calculating tournament margins' });
     }
   });
@@ -420,13 +420,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
 
       // Log bookmaker count distribution for broadcast
-      console.log(`📊 Broadcast Event distribution:`);
-      console.log(`  - Events with 1 bookmaker: ${eventsByBookmakerCount['1']}`);
-      console.log(`  - Events with 2 bookmakers: ${eventsByBookmakerCount['2']}`);
-      console.log(`  - Events with 3 bookmakers: ${eventsByBookmakerCount['3']}`);
-      console.log(`  - Events with 4+ bookmakers: ${eventsByBookmakerCount['4+']}`);
+      logger.debug(`Broadcast Event distribution:`);
+      logger.debug(`  - Events with 1 bookmaker: ${eventsByBookmakerCount['1']}`);
+      logger.debug(`  - Events with 2 bookmakers: ${eventsByBookmakerCount['2']}`);
+      logger.debug(`  - Events with 3 bookmakers: ${eventsByBookmakerCount['3']}`);
+      logger.debug(`  - Events with 4+ bookmakers: ${eventsByBookmakerCount['4+']}`);
       
-      console.log(`Broadcast: Filtered ${events.length} events down to ${filteredEvents.length} with at least 2 bookmakers`);
+      logger.debug(`Broadcast: Filtered ${events.length} events down to ${filteredEvents.length} with at least 2 bookmakers`);
       
       broadcast({
         type: 'events',
@@ -615,7 +615,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json(filteredEvents);
     } catch (error) {
-      console.error('Error fetching events:', error);
+      logger.error(`Error fetching events: ${error}`);
       res.status(500).json({ message: 'Internal server error' });
     }
   });
@@ -634,7 +634,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       res.json(event);
     } catch (error) {
-      console.error('Error fetching event:', error);
+      logger.error(`Error fetching event: ${error}`);
       res.status(500).json({ message: 'Internal server error' });
     }
   });
@@ -662,7 +662,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json(filteredHistory);
     } catch (error) {
-      console.error('Error fetching odds history:', error);
+      logger.error(`Error fetching odds history: ${error}`);
       res.status(500).json({ error: 'Failed to fetch odds history' });
     }
   });
