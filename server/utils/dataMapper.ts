@@ -310,6 +310,13 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       eventData.bestOdds = bestOdds;
     }
     
+    // Additional debug for tracking bookmakers in the second pass
+    // Log each bookmaker's total events before secondary matching
+    console.log(`📊 Bookmaker events before secondary matching:`);
+    for (const [code, count] of Object.entries(eventsByBookmaker)) {
+      console.log(`  - ${code}: ${count} events`);
+    }
+    
     // Third pass: Secondary matching for all bookmakers' events not yet mapped
     // This allows events with different eventIds but same team names to be matched
     console.log(`🔍 Running secondary matching...`);
@@ -596,6 +603,59 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     console.log(`📊 Events count by bookmaker (after mapping):`);
     for (const [code, count] of Object.entries(eventsByBookmaker)) {
       console.log(`  - ${code}: ${count} events`);
+    }
+    
+    // Log how many events have odds from each bookmaker combination
+    const bookmakerCombinations: Record<string, number> = {
+      'bp GH + bp KE': 0,
+      'bp GH + betika KE': 0,
+      'bp GH + sporty': 0,
+      'bp KE + betika KE': 0,
+      'bp KE + sporty': 0,
+      'betika KE + sporty': 0,
+      'bp GH + bp KE + betika KE': 0,
+      'bp GH + bp KE + sporty': 0,
+      'bp GH + betika KE + sporty': 0,
+      'bp KE + betika KE + sporty': 0,
+      'All 4 bookmakers': 0
+    };
+    
+    // Count events by bookmaker combination
+    for (const [eventId, eventData] of Array.from(eventMap.entries())) {
+      const bookies = new Set<string>();
+      const oddsData = eventData.oddsData || {};
+      
+      // Get all bookmakers with odds for this event
+      for (const bookmakerCode of Object.keys(oddsData)) {
+        bookies.add(bookmakerCode);
+      }
+      
+      // Specific combinations
+      const hasBpGh = bookies.has('bp GH');
+      const hasBpKe = bookies.has('bp KE');
+      const hasBetikaKe = bookies.has('betika KE');
+      const hasSporty = bookies.has('sporty');
+      
+      // Count by specific combinations
+      if (hasBpGh && hasBpKe && !hasBetikaKe && !hasSporty) bookmakerCombinations['bp GH + bp KE']++;
+      if (hasBpGh && !hasBpKe && hasBetikaKe && !hasSporty) bookmakerCombinations['bp GH + betika KE']++;
+      if (hasBpGh && !hasBpKe && !hasBetikaKe && hasSporty) bookmakerCombinations['bp GH + sporty']++;
+      if (!hasBpGh && hasBpKe && hasBetikaKe && !hasSporty) bookmakerCombinations['bp KE + betika KE']++;
+      if (!hasBpGh && hasBpKe && !hasBetikaKe && hasSporty) bookmakerCombinations['bp KE + sporty']++;
+      if (!hasBpGh && !hasBpKe && hasBetikaKe && hasSporty) bookmakerCombinations['betika KE + sporty']++;
+      
+      if (hasBpGh && hasBpKe && hasBetikaKe && !hasSporty) bookmakerCombinations['bp GH + bp KE + betika KE']++;
+      if (hasBpGh && hasBpKe && !hasBetikaKe && hasSporty) bookmakerCombinations['bp GH + bp KE + sporty']++;
+      if (hasBpGh && !hasBpKe && hasBetikaKe && hasSporty) bookmakerCombinations['bp GH + betika KE + sporty']++;
+      if (!hasBpGh && hasBpKe && hasBetikaKe && hasSporty) bookmakerCombinations['bp KE + betika KE + sporty']++;
+      
+      if (hasBpGh && hasBpKe && hasBetikaKe && hasSporty) bookmakerCombinations['All 4 bookmakers']++;
+    }
+    
+    // Log bookmaker combinations
+    console.log(`📊 Events by bookmaker combination:`);
+    for (const [combo, count] of Object.entries(bookmakerCombinations)) {
+      console.log(`  - ${combo}: ${count} events`);
     }
     
     console.log(`✅ Processed ${eventMap.size} events with at least 2 bookmakers`);

@@ -573,6 +573,43 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log(`  - Events with 3 bookmakers: ${eventsByBookmakerCount['3']}`);
       console.log(`  - Events with 4+ bookmakers: ${eventsByBookmakerCount['4+']}`);
       
+      // Track Sportybet specific details for debugging
+      const sportyEvents = filteredEvents.filter(event => {
+        const oddsData = event.oddsData as Record<string, any>;
+        return oddsData && oddsData['sporty'];
+      });
+      
+      console.log(`📊 Sportybet diagnostic (found in ${sportyEvents.length} events):`);
+      console.log(`  - Total Sportybet events: ${sportyEvents.length}`);
+      
+      // Count Sportybet events by bookmaker count
+      const sportyByBookmakerCount = {
+        '2': 0, '3': 0, '4': 0
+      };
+      
+      sportyEvents.forEach(event => {
+        if (!event.oddsData) return;
+        const count = Object.keys(event.oddsData as Record<string, any>).length;
+        if (count === 2) sportyByBookmakerCount['2']++;
+        else if (count === 3) sportyByBookmakerCount['3']++;
+        else if (count >= 4) sportyByBookmakerCount['4']++;
+      });
+      
+      console.log(`  - Sportybet events with 2 bookmakers: ${sportyByBookmakerCount['2']}`);
+      console.log(`  - Sportybet events with 3 bookmakers: ${sportyByBookmakerCount['3']}`);
+      console.log(`  - Sportybet events with 4+ bookmakers: ${sportyByBookmakerCount['4']}`);
+      
+      // Log Sportybet event sample
+      if (sportyEvents.length > 0) {
+        const sampleSize = Math.min(3, sportyEvents.length);
+        console.log(`  - Sample of ${sampleSize} Sportybet events:`);
+        
+        for (let i = 0; i < sampleSize; i++) {
+          const event = sportyEvents[i];
+          console.log(`    - Event ${event.id}: "${event.teams}" (eventId: ${event.eventId}) has ${Object.keys(event.oddsData as Record<string, any>).length} bookmakers`);
+        }
+      }
+      
       console.log(`Filtered ${events.length} events down to ${filteredEvents.length} with at least ${minBookmakers} bookmakers`);
       
       res.json(filteredEvents);
