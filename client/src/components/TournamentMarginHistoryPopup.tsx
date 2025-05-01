@@ -47,16 +47,12 @@ export default function TournamentMarginHistoryPopup({
   bookmakerCode,
   bookmakerName
 }: TournamentMarginHistoryPopupProps) {
-  // Convert UI bookmaker codes to database codes
-  let dbBookmakerCode = bookmakerCode;
-  if (bookmakerCode === 'bp GH') dbBookmakerCode = 'betpawa_gh';
-  else if (bookmakerCode === 'bp KE') dbBookmakerCode = 'betpawa_ke';
-
+  // Use the original bookmaker code, no need to convert
   // Fetch margin history data
   const { data, isLoading, error } = useQuery<MarginHistoryItem[]>({
-    queryKey: ['/api/tournaments/margins', tournamentName, dbBookmakerCode],
+    queryKey: ['/api/tournaments/margins/history', tournamentName, bookmakerCode],
     queryFn: async () => {
-      const response = await axios.get(`/api/tournaments/margins?tournament=${encodeURIComponent(tournamentName)}&bookmaker=${encodeURIComponent(dbBookmakerCode)}`);
+      const response = await axios.get(`/api/tournaments/margins/history?tournament=${encodeURIComponent(tournamentName)}&bookmaker=${encodeURIComponent(bookmakerCode)}`);
       return response.data;
     },
     enabled: open,

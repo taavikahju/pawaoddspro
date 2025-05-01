@@ -641,8 +641,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // Get tournament margin history
-  app.get('/api/tournaments/margins', async (req, res) => {
+  // Get tournament margin history for a specific tournament
+  app.get('/api/tournaments/margins/history', async (req, res) => {
     try {
       const { tournament, bookmaker } = req.query;
       
@@ -661,7 +661,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json(history);
     } catch (error) {
-      console.error('Error fetching tournament margins:', error);
+      console.error('Error fetching tournament margins history:', error);
+      res.status(500).json({ error: 'Failed to fetch tournament margins history' });
+    }
+  });
+  
+  // Get all tournament margins (latest)
+  app.get('/api/tournaments/margins', async (req, res) => {
+    try {
+      // Import the db and sql
+      const { db } = await import('./db');
+      const { tournamentMargins } = await import('@shared/schema');
+      
+      // Get the latest tournament margins
+      const results = await db.query.tournamentMargins.findMany({
+        orderBy: (margins, { desc }) => [desc(margins.timestamp)]
+      });
+      
+      res.json(results);
+    } catch (error) {
+      console.error('Error fetching all tournament margins:', error);
       res.status(500).json({ error: 'Failed to fetch tournament margins' });
     }
   });
