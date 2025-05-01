@@ -28,7 +28,6 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     const sportyEvents = [];
     if (allBookmakerData['sporty'] && Array.isArray(allBookmakerData['sporty'])) {
       sportyEvents.push(...allBookmakerData['sporty']);
-      console.log(`🔍 Identified ${sportyEvents.length} Sportybet events for special processing`);
     }
     
     // Create team name maps for all bookmakers for secondary matching
@@ -57,7 +56,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
         }
       }
     });
-    console.log(`🔄 Created team-based index for ${sportyTeamsMap.size} Sportybet events`);
+    // Reduced log output
     
     // Also create maps for other bookmakers
     for (const bookmakerCode of bookmakerCodes) {
@@ -96,7 +95,6 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       }
       
       bookmakerTeamMaps.set(bookmakerCode, teamMap);
-      console.log(`🔄 Created team-based index for ${teamMap.size} ${bookmakerCode} events`);
     }
     
     // First pass: collect all eventIds from all bookmakers

@@ -142,7 +142,7 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
         // Try to use custom scraper
         if (hasCustom) {
           try {
-            console.log(`🔍 Scraping ${bookmaker.name}...`);
+            // More concise logging
             data = await customScrapers.runCustomScraper(bookmaker.code);
             console.log(`✅ ${bookmaker.name}: ${data?.length || 0} events collected`);
           } catch (customError) {
@@ -211,17 +211,9 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
     // Count successful scrapers and log detailed event counts
     const successfulScrapers = results.filter(r => r && r.data).length;
     
-    // Log detailed event counts per bookmaker
-    console.log('📊 Scraped event counts by bookmaker:');
-    results.forEach(result => {
-      if (result && result.data) {
-        console.log(`  - ${result.bookmaker}: ${result.data.length} events`);
-      }
-    });
-    
-    // Total events scraped
+    // Total events scraped - simplified logging
     const totalScrapedEvents = results.reduce((total, r) => total + (r?.data?.length || 0), 0);
-    console.log(`📊 Total events scraped across all bookmakers: ${totalScrapedEvents}`);
+    console.log(`📊 Total events scraped: ${totalScrapedEvents}`);
     
     console.log(`✅ ${successfulScrapers}/${activeBookmakers.length} scrapers completed successfully`);
     
@@ -238,12 +230,10 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
       
       // Calculate and store tournament margins
       try {
-        console.log(`🔄 Calculating tournament margins...`);
         const { calculateAndStoreTournamentMargins } = await import('../utils/tournamentMargins');
         
         // Clear existing tournament margins before calculating new ones
         await db.execute(sql`DELETE FROM tournament_margins`);
-        console.log('✅ Deleted existing tournament margins');
         
         // Calculate and store new tournament margins
         await calculateAndStoreTournamentMargins(storage);
