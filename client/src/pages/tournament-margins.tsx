@@ -1,8 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
-import { Loader2, Search, ChevronRight, X, Trophy } from 'lucide-react';
+import { Loader2, ChevronRight, Trophy } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { useBookmakerContext } from '@/contexts/BookmakerContext';
 import CountryFlag from '@/components/CountryFlag';
@@ -29,7 +28,6 @@ interface BookmakerMarginData {
 
 const TournamentMargins: React.FC = () => {
   const { bookmakers } = useBookmakerContext();
-  const [searchTerm, setSearchTerm] = useState<string>('');
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [historyPopupOpen, setHistoryPopupOpen] = useState(false);
@@ -204,19 +202,11 @@ const TournamentMargins: React.FC = () => {
     queryKey: ['/api/tournaments/margins/by-country'],
   });
   
-  // Filter countries based on search term
+  // Get countries data
   const filteredCountries = useMemo(() => {
     if (!countriesData) return [];
-    
-    if (!searchTerm) return countriesData;
-    
-    return countriesData.filter(country => 
-      country.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      country.tournaments.some(tournament => 
-        tournament.name.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    );
-  }, [countriesData, searchTerm]);
+    return countriesData;
+  }, [countriesData]);
   
   // Get the selected country data
   const selectedCountryData = useMemo(() => {
@@ -307,31 +297,6 @@ const TournamentMargins: React.FC = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="pt-0">
-            <div className="relative mb-4">
-              <div className="relative">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-black dark:text-white" />
-                <Input
-                  placeholder="Search countries and tournaments..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-9 py-5 h-9 bg-muted/40 border-muted focus-visible:bg-background focus-visible:ring-1 focus-visible:ring-primary/50 transition-colors text-black dark:text-white"
-                />
-                {searchTerm && (
-                  <button
-                    onClick={() => setSearchTerm('')}
-                    className="absolute right-2.5 top-2.5 text-black dark:text-white hover:opacity-80"
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                )}
-              </div>
-              {searchTerm && (
-                <div className="mt-1.5 text-xs text-black dark:text-white flex justify-between px-1">
-                  <span>Searching: "{searchTerm}"</span>
-                  <span>{filteredCountries.length} results</span>
-                </div>
-              )}
-            </div>
             
             {isLoading ? (
               <div className="flex items-center justify-center py-8">
