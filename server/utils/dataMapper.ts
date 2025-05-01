@@ -24,6 +24,23 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     const eventMap = new Map<string, any>();
     const processedEvents = new Set<string>(); // Track which eventIds we've processed
     
+    // Special handling for Sportybet to track its events for secondary matching
+    const sportyEvents = [];
+    if (allBookmakerData['sporty'] && Array.isArray(allBookmakerData['sporty'])) {
+      sportyEvents.push(...allBookmakerData['sporty']);
+      console.log(`🔍 Identified ${sportyEvents.length} Sportybet events for special processing`);
+    }
+    
+    // Create map of team names to Sportybet events for secondary matching
+    const sportyTeamsMap = new Map();
+    sportyEvents.forEach(event => {
+      if (event.teams) {
+        const normalizedTeams = normalizeEventName(event.teams);
+        sportyTeamsMap.set(normalizedTeams, event);
+      }
+    });
+    console.log(`🔄 Created team-based index for ${sportyTeamsMap.size} Sportybet events`);
+    
     // First pass: collect all eventIds from all bookmakers
     const allEventIds = new Set<string>();
     for (const bookmakerCode of bookmakerCodes) {
@@ -44,6 +61,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     let eventsWith2Bookmakers = 0;
     let eventsWith3Bookmakers = 0;
     let eventsWith4Bookmakers = 0;
+    let sportyEventsMapped = 0;
     
     // Second pass: Process each bookmaker's data and group by eventId
     for (const eventId of Array.from(allEventIds)) {
@@ -187,6 +205,62 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       
       eventData.bestOdds = bestOdds;
     }
+    
+    // Third pass: Secondary matching for Sportybet events not yet mapped
+    // This allows events with different eventIds but same team names to be matched
+    console.log(`🔍 Starting secondary matching for Sportybet events...`);
+    for (const [eventId, eventData] of Array.from(eventMap.entries())) {
+      // Skip if this event already has Sportybet odds
+      if (eventData.oddsData && eventData.oddsData['sporty']) {
+        continue;
+      }
+      
+      // Try to match by team names
+      if (eventData.teams) {
+        const normalizedTeams = normalizeEventName(eventData.teams);
+        const sportyEvent = sportyTeamsMap.get(normalizedTeams);
+        
+        if (sportyEvent) {
+          // We found a matching Sportybet event by team name
+          let hasOdds = false;
+          let sportyOdds = null;
+          
+          if (sportyEvent.odds) {
+            sportyOdds = sportyEvent.odds;
+            hasOdds = true;
+          } else if (sportyEvent.home_odds !== undefined || sportyEvent.draw_odds !== undefined || sportyEvent.away_odds !== undefined) {
+            const homeOdds = sportyEvent.home_odds ? parseFloat(sportyEvent.home_odds) : 0;
+            const drawOdds = sportyEvent.draw_odds ? parseFloat(sportyEvent.draw_odds) : 0;
+            const awayOdds = sportyEvent.away_odds ? parseFloat(sportyEvent.away_odds) : 0;
+            
+            if (homeOdds > 0 || drawOdds > 0 || awayOdds > 0) {
+              sportyOdds = {
+                home: homeOdds,
+                draw: drawOdds,
+                away: awayOdds
+              };
+              hasOdds = true;
+            }
+          }
+          
+          if (hasOdds) {
+            // Add Sportybet odds to this event
+            eventData.oddsData['sporty'] = sportyOdds;
+            
+            // Recalculate best odds
+            ['home', 'draw', 'away'].forEach(market => {
+              if (sportyOdds[market] && sportyOdds[market] > (eventData.bestOdds[market] || 0)) {
+                eventData.bestOdds[market] = sportyOdds[market];
+              }
+            });
+            
+            sportyEventsMapped++;
+            console.log(`✅ Secondary matched Sportybet event for: ${eventData.teams}`);
+          }
+        }
+      }
+    }
+    console.log(`🔄 Secondary matching added Sportybet odds to ${sportyEventsMapped} additional events`);
     
     // Store or update events in database
     for (const [eventKey, eventData] of Array.from(eventMap.entries())) {
@@ -364,12 +438,21 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
 
 /**
  * Normalize event name for matching across bookmakers
+ * This function is specifically optimized to make team name matching more reliable
  */
 function normalizeEventName(eventName: string): string {
   return eventName
     .toLowerCase()
-    .replace(/\s+vs\s+|\s+v\s+|\s+-\s+/g, '')
+    // Remove common separators (vs, v, -, @)
+    .replace(/\s+vs\.?\s+|\s+v\.?\s+|\s+-\s+|\s+@\s+/g, '')
+    // Remove 'fc' (football club)
+    .replace(/\s+fc\b|\bfc\s+/g, '')
+    // Remove periods and common abbreviations
+    .replace(/\.|utd|united|city/g, '')
+    // Remove all whitespace
     .replace(/\s+/g, '')
+    // Remove any remaining punctuation
+    .replace(/[^\w]/g, '')
     .trim();
 }
 
