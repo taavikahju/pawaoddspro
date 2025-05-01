@@ -685,6 +685,85 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
+  // Get tournament margin calculation details
+  app.get('/api/tournaments/margins/details', async (req, res) => {
+    try {
+      const { tournament, bookmaker } = req.query;
+      
+      if (!tournament || !bookmaker) {
+        return res.status(400).json({ error: 'Tournament name and bookmaker code are required' });
+      }
+      
+      // Get all events for this tournament
+      const events = await storage.getEvents();
+      const tournamentEvents = events.filter(event => 
+        (event.tournament === tournament || event.league === tournament) && 
+        event.oddsData && 
+        event.oddsData[bookmaker as string]
+      );
+      
+      if (tournamentEvents.length === 0) {
+        return res.json({
+          tournament: tournament,
+          bookmaker: bookmaker,
+          events: [],
+          count: 0,
+          message: 'No events found for this tournament and bookmaker'
+        });
+      }
+      
+      // Calculate margin for each event
+      const eventsWithMargin = tournamentEvents.map(event => {
+        const odds = event.oddsData[bookmaker as string];
+        const homeOdds = parseFloat(odds.home?.toString() || '0');
+        const drawOdds = parseFloat(odds.draw?.toString() || '0');
+        const awayOdds = parseFloat(odds.away?.toString() || '0');
+        
+        // Skip if any odds are missing
+        if (!homeOdds || !drawOdds || !awayOdds) {
+          return {
+            ...event,
+            margin: null,
+            marginCalculation: 'Missing odds'
+          };
+        }
+        
+        // Calculate margin
+        const margin = (1 / homeOdds) + (1 / drawOdds) + (1 / awayOdds) - 1;
+        
+        return {
+          id: event.id,
+          home: event.home,
+          away: event.away,
+          time: event.time,
+          homeOdds,
+          drawOdds,
+          awayOdds,
+          margin,
+          marginPercentage: (margin * 100).toFixed(2) + '%',
+          marginCalculation: `(1/${homeOdds}) + (1/${drawOdds}) + (1/${awayOdds}) - 1 = ${margin.toFixed(4)}`
+        };
+      }).filter(event => event.margin !== null);
+      
+      // Calculate average margin
+      const totalMargin = eventsWithMargin.reduce((sum, event) => sum + (event.margin || 0), 0);
+      const averageMargin = totalMargin / eventsWithMargin.length;
+      
+      res.json({
+        tournament: tournament,
+        bookmaker: bookmaker,
+        events: eventsWithMargin,
+        count: eventsWithMargin.length,
+        totalMargin,
+        averageMargin,
+        averageMarginPercentage: (averageMargin * 100).toFixed(2) + '%'
+      });
+    } catch (error) {
+      console.error('Error fetching tournament margin details:', error);
+      res.status(500).json({ error: 'Failed to fetch tournament margin details' });
+    }
+  });
+  
   // Add an endpoint to get all tournament margins grouped by country
   app.get('/api/tournaments/margins/by-country', async (req, res) => {
     try {
