@@ -203,8 +203,21 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
     // Wait for all scrapers to complete
     const results = await Promise.all(scraperPromises);
     
-    // Count successful scrapers
+    // Count successful scrapers and log detailed event counts
     const successfulScrapers = results.filter(r => r && r.data).length;
+    
+    // Log detailed event counts per bookmaker
+    console.log('📊 Scraped event counts by bookmaker:');
+    results.forEach(result => {
+      if (result && result.data) {
+        console.log(`  - ${result.bookmaker}: ${result.data.length} events`);
+      }
+    });
+    
+    // Total events scraped
+    const totalScrapedEvents = results.reduce((total, r) => total + (r?.data?.length || 0), 0);
+    console.log(`📊 Total events scraped across all bookmakers: ${totalScrapedEvents}`);
+    
     console.log(`✅ ${successfulScrapers}/${activeBookmakers.length} scrapers completed successfully`);
     
     console.log(`🔄 Processing and mapping events...`);

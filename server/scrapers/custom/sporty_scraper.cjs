@@ -6,10 +6,10 @@ const axios = require('axios');
 // This version only uses pcUpcomingEvents which includes all events (including today's matches)
 // Removed redundant pcToday and pcPopularLeague endpoints that were creating overlap
 // Primary Sportybet API country code - focusing only on Ghana
-const REGION = 'gh'; // Using only Ghana for better performance
+const REGION = 'gh'; // Using only Ghana as per requirements
 
-// Debug mode flag - set to false to reduce console output
-const DEBUG = false;
+// Debug mode flag - set to true to help debug scraping issues
+const DEBUG = true;
 
 // Console logging helper that respects debug mode
 const log = (message) => {
@@ -19,6 +19,7 @@ const log = (message) => {
 };
 
 // Configure endpoints focusing on reliability and responsiveness
+// Ghana-only version as per requirements
 const buildEndpoints = () => {
   const endpoints = [];
   
@@ -34,31 +35,29 @@ const buildEndpoints = () => {
         option: '1'
       },
       region: 'gh',
-      maxPages: 15, // Enough pages to get all relevant events
+      maxPages: 25, // Increased to make sure we get ALL pages from Ghana
       priority: 1   // Highest priority - critical endpoint
     }
-    // Removed redundant pcToday endpoint that was creating overlap
-    // Removed pcPopularLeague as those events should be included in upcoming events
   );
   
-  // Add Kenya API as backup source only - important for different region coverage
+  // Add another Ghana endpoint with different parameters for complete coverage
   endpoints.push(
     {
-      url: 'https://www.sportybet.com/api/ke/factsCenter/pcUpcomingEvents',
+      url: `https://www.sportybet.com/api/${REGION}/factsCenter/pcToday`,
       params: {
         sportId: 'sr:sport:1',
         marketId: '1',
         pageSize: '100',
         option: '1'
       },
-      region: 'ke',
+      region: 'gh',
+      name: 'Today\'s matches',
       maxPages: 10,
-      priority: 2
+      priority: 1 // Same priority as main endpoint
     }
   );
   
-  // Remove country-specific endpoints as they're redundant with pcUpcomingEvents
-  // The main endpoint already includes all countries and tournaments
+  // We removed Kenya endpoint as per instructions to only scrape Ghana
   
   return endpoints;
 };
