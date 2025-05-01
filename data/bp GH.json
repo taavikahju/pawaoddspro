@@ -269,9 +269,9 @@
     "date": "2025-05-01",
     "time": "18:00",
     "odds": {
-      "home": 6.5,
-      "draw": 3.75,
-      "away": 1.46
+      "home": 6.25,
+      "draw": 3.8,
+      "away": 1.48
     },
     "raw": {
       "eventId": "59879212",
@@ -279,9 +279,9 @@
       "tournament": "U20 Africa Cup of Nations",
       "event": "Kenya U20 - Morocco U20 (n)",
       "market": "1X2 - FT",
-      "home_odds": "6.5",
-      "draw_odds": "3.75",
-      "away_odds": "1.46",
+      "home_odds": "6.25",
+      "draw_odds": "3.8",
+      "away_odds": "1.48",
       "start_time": "2025-05-01 18:00"
     }
   },
@@ -503,8 +503,8 @@
     "date": "2025-05-01",
     "time": "19:00",
     "odds": {
-      "home": 1.32,
-      "draw": 6.5,
+      "home": 1.31,
+      "draw": 6.75,
       "away": 9
     },
     "raw": {
@@ -513,8 +513,8 @@
       "tournament": "UEFA Europa League",
       "event": "Tottenham Hotspur - Bodoe/Glimt",
       "market": "1X2 - FT",
-      "home_odds": "1.32",
-      "draw_odds": "6.5",
+      "home_odds": "1.31",
+      "draw_odds": "6.75",
       "away_odds": "9.0",
       "start_time": "2025-05-01 19:00"
     }
@@ -581,9 +581,9 @@
     "date": "2025-05-01",
     "time": "19:00",
     "odds": {
-      "home": 3.45,
+      "home": 3.35,
       "draw": 2.65,
-      "away": 2.3
+      "away": 2.35
     },
     "raw": {
       "eventId": "59752710",
@@ -591,9 +591,9 @@
       "tournament": "Copa do Brasil",
       "event": "Operario Ferroviario EC PR - CR Vasco da Gama RJ",
       "market": "1X2 - FT",
-      "home_odds": "3.45",
+      "home_odds": "3.35",
       "draw_odds": "2.65",
-      "away_odds": "2.3",
+      "away_odds": "2.35",
       "start_time": "2025-05-01 19:00"
     }
   },
@@ -867,7 +867,7 @@
     "date": "2025-05-02",
     "time": "00:00",
     "odds": {
-      "home": 1.38,
+      "home": 1.37,
       "draw": 4.65,
       "away": 6.25
     },
@@ -877,7 +877,7 @@
       "tournament": "USL Championship",
       "event": "Louisville City FC - Lexington SC",
       "market": "1X2 - FT",
-      "home_odds": "1.38",
+      "home_odds": "1.37",
       "draw_odds": "4.65",
       "away_odds": "6.25",
       "start_time": "2025-05-02 00:00"
@@ -919,9 +919,9 @@
     "date": "2025-05-02",
     "time": "00:00",
     "odds": {
-      "home": 5,
-      "draw": 3.8,
-      "away": 1.56
+      "home": 4.7,
+      "draw": 3.75,
+      "away": 1.61
     },
     "raw": {
       "eventId": "60164443",
@@ -929,9 +929,9 @@
       "tournament": "Primera Division",
       "event": "Unan Managua - Real Esteli FC",
       "market": "1X2 - FT",
-      "home_odds": "5.0",
-      "draw_odds": "3.8",
-      "away_odds": "1.56",
+      "home_odds": "4.7",
+      "draw_odds": "3.75",
+      "away_odds": "1.61",
       "start_time": "2025-05-02 00:00"
     }
   },
@@ -2886,6 +2886,32 @@
     }
   },
   {
+    "id": "59821796",
+    "eventId": "59821796",
+    "teams": "Esteghlal FC - Aluminium Arak",
+    "league": "Pro League",
+    "sport": "football",
+    "country": "Iran",
+    "date": "2025-05-02",
+    "time": "14:45",
+    "odds": {
+      "home": 2.55,
+      "draw": 2.85,
+      "away": 2.85
+    },
+    "raw": {
+      "eventId": "59821796",
+      "country": "Iran",
+      "tournament": "Pro League",
+      "event": "Esteghlal FC - Aluminium Arak",
+      "market": "1X2 - FT",
+      "home_odds": "2.55",
+      "draw_odds": "2.85",
+      "away_odds": "2.85",
+      "start_time": "2025-05-02 14:45"
+    }
+  },
+  {
     "id": "51123819",
     "eventId": "51123819",
     "teams": "NK Hrvatski Dragovoljac - NK Marsonia",
@@ -3415,9 +3441,9 @@
     "date": "2025-05-02",
     "time": "15:30",
     "odds": {
-      "home": 1.07,
-      "draw": 8.75,
-      "away": 19
+      "home": 1.06,
+      "draw": 9,
+      "away": 21
     },
     "raw": {
       "eventId": "58379965",
@@ -3425,9 +3451,9 @@
       "tournament": "Kakkonen, Group A",
       "event": "Lahden Reipas - HaPK Edustus",
       "market": "1X2 - FT",
-      "home_odds": "1.07",
-      "draw_odds": "8.75",
-      "away_odds": "19.0",
+      "home_odds": "1.06",
+      "draw_odds": "9.0",
+      "away_odds": "21.0",
       "start_time": "2025-05-02 15:30"
     }
   },
@@ -12853,9 +12879,9 @@
     "date": "2025-05-03",
     "time": "14:00",
     "odds": {
-      "home": 1.83,
-      "draw": 3.95,
-      "away": 3.3
+      "home": 1.9,
+      "draw": 3.9,
+      "away": 3.15
     },
     "raw": {
       "eventId": "57034229",
@@ -12863,9 +12889,9 @@
       "tournament": "Ettan, Norra",
       "event": "IFK Haninge - FC Arlanda",
       "market": "1X2 - FT",
-      "home_odds": "1.83",
-      "draw_odds": "3.95",
-      "away_odds": "3.3",
+      "home_odds": "1.9",
+      "draw_odds": "3.9",
+      "away_odds": "3.15",
       "start_time": "2025-05-03 14:00"
     }
   },
@@ -15219,9 +15245,9 @@
     "date": "2025-05-03",
     "time": "16:00",
     "odds": {
-      "home": 2.45,
+      "home": 2.5,
       "draw": 3.3,
-      "away": 2.6
+      "away": 2.55
     },
     "raw": {
       "eventId": "58520823",
@@ -15229,9 +15255,9 @@
       "tournament": "Superliga",
       "event": "KFC Komarno - AS Trencin",
       "market": "1X2 - FT",
-      "home_odds": "2.45",
+      "home_odds": "2.5",
       "draw_odds": "3.3",
-      "away_odds": "2.6",
+      "away_odds": "2.55",
       "start_time": "2025-05-03 16:00"
     }
   },
@@ -19847,8 +19873,8 @@
     "date": "2025-05-04",
     "time": "10:00",
     "odds": {
-      "home": 1.48,
-      "draw": 3.75,
+      "home": 1.45,
+      "draw": 3.9,
       "away": 6.25
     },
     "raw": {
@@ -19857,8 +19883,8 @@
       "tournament": "Segunda Federacion",
       "event": "UD Melilla - CD Atletico Paso",
       "market": "1X2 - FT",
-      "home_odds": "1.48",
-      "draw_odds": "3.75",
+      "home_odds": "1.45",
+      "draw_odds": "3.9",
       "away_odds": "6.25",
       "start_time": "2025-05-04 10:00"
     }
@@ -22343,9 +22369,9 @@
     "date": "2025-05-04",
     "time": "13:00",
     "odds": {
-      "home": 2.8,
-      "draw": 3.6,
-      "away": 2.13
+      "home": 2.85,
+      "draw": 3.45,
+      "away": 2.18
     },
     "raw": {
       "eventId": "56523989",
@@ -22353,9 +22379,9 @@
       "tournament": "Damallsvenskan",
       "event": "IF Brommapojkarna - Piteaa IF DFF",
       "market": "1X2 - FT",
-      "home_odds": "2.8",
-      "draw_odds": "3.6",
-      "away_odds": "2.13",
+      "home_odds": "2.85",
+      "draw_odds": "3.45",
+      "away_odds": "2.18",
       "start_time": "2025-05-04 13:00"
     }
   },
@@ -22707,9 +22733,9 @@
     "date": "2025-05-04",
     "time": "14:00",
     "odds": {
-      "home": 2.8,
+      "home": 2.65,
       "draw": 3.4,
-      "away": 2.22
+      "away": 2.35
     },
     "raw": {
       "eventId": "57034231",
@@ -22717,9 +22743,9 @@
       "tournament": "Ettan, Norra",
       "event": "Karlbergs BK - IF Karlstad Fotbol",
       "market": "1X2 - FT",
-      "home_odds": "2.8",
+      "home_odds": "2.65",
       "draw_odds": "3.4",
-      "away_odds": "2.22",
+      "away_odds": "2.35",
       "start_time": "2025-05-04 14:00"
     }
   },
@@ -23591,9 +23617,9 @@
     "date": "2025-05-04",
     "time": "15:00",
     "odds": {
-      "home": 1.64,
-      "draw": 4.2,
-      "away": 4.7
+      "home": 1.66,
+      "draw": 4.1,
+      "away": 4.6
     },
     "raw": {
       "eventId": "56677287",
@@ -23601,9 +23627,9 @@
       "tournament": "Eliteserien",
       "event": "Stroemsgodset IF - Kristiansund BK",
       "market": "1X2 - FT",
-      "home_odds": "1.64",
-      "draw_odds": "4.2",
-      "away_odds": "4.7",
+      "home_odds": "1.66",
+      "draw_odds": "4.1",
+      "away_odds": "4.6",
       "start_time": "2025-05-04 15:00"
     }
   },
@@ -23617,9 +23643,9 @@
     "date": "2025-05-04",
     "time": "15:00",
     "odds": {
-      "home": 1.26,
-      "draw": 5.75,
-      "away": 10
+      "home": 1.24,
+      "draw": 6,
+      "away": 11
     },
     "raw": {
       "eventId": "56677285",
@@ -23627,9 +23653,9 @@
       "tournament": "Eliteserien",
       "event": "Molde FK - FK Haugesund",
       "market": "1X2 - FT",
-      "home_odds": "1.26",
-      "draw_odds": "5.75",
-      "away_odds": "10.0",
+      "home_odds": "1.24",
+      "draw_odds": "6.0",
+      "away_odds": "11.0",
       "start_time": "2025-05-04 15:00"
     }
   },
@@ -26217,9 +26243,9 @@
     "date": "2025-05-04",
     "time": "19:30",
     "odds": {
-      "home": 2.4,
-      "draw": 2.85,
-      "away": 3
+      "home": 2.45,
+      "draw": 2.8,
+      "away": 2.95
     },
     "raw": {
       "eventId": "58473135",
@@ -26227,9 +26253,9 @@
       "tournament": "Brasileiro Serie C",
       "event": "Floresta EC CE - Retro FC PE",
       "market": "1X2 - FT",
-      "home_odds": "2.4",
-      "draw_odds": "2.85",
-      "away_odds": "3.0",
+      "home_odds": "2.45",
+      "draw_odds": "2.8",
+      "away_odds": "2.95",
       "start_time": "2025-05-04 19:30"
     }
   },
@@ -26243,9 +26269,9 @@
     "date": "2025-05-04",
     "time": "19:30",
     "odds": {
-      "home": 2.35,
-      "draw": 2.8,
-      "away": 3.2
+      "home": 2.3,
+      "draw": 2.75,
+      "away": 3.3
     },
     "raw": {
       "eventId": "58473131",
@@ -26253,9 +26279,9 @@
       "tournament": "Brasileiro Serie C",
       "event": "Ypiranga FC RS - CS Alagoano AL",
       "market": "1X2 - FT",
-      "home_odds": "2.35",
-      "draw_odds": "2.8",
-      "away_odds": "3.2",
+      "home_odds": "2.3",
+      "draw_odds": "2.75",
+      "away_odds": "3.3",
       "start_time": "2025-05-04 19:30"
     }
   },
@@ -26607,9 +26633,9 @@
     "date": "2025-05-04",
     "time": "22:00",
     "odds": {
-      "home": 1.91,
-      "draw": 3.1,
-      "away": 3.9
+      "home": 1.85,
+      "draw": 3.15,
+      "away": 4.1
     },
     "raw": {
       "eventId": "58473119",
@@ -26617,9 +26643,9 @@
       "tournament": "Brasileiro Serie C",
       "event": "Nautico PE - Brusque FC SC",
       "market": "1X2 - FT",
-      "home_odds": "1.91",
-      "draw_odds": "3.1",
-      "away_odds": "3.9",
+      "home_odds": "1.85",
+      "draw_odds": "3.15",
+      "away_odds": "4.1",
       "start_time": "2025-05-04 22:00"
     }
   },
@@ -28557,9 +28583,9 @@
     "date": "2025-05-05",
     "time": "22:30",
     "odds": {
-      "home": 2.17,
+      "home": 2.12,
       "draw": 2.85,
-      "away": 3.5
+      "away": 3.6
     },
     "raw": {
       "eventId": "58473127",
@@ -28567,9 +28593,9 @@
       "tournament": "Brasileiro Serie C",
       "event": "Sao Bernardo FC - Londrina EC PR",
       "market": "1X2 - FT",
-      "home_odds": "2.17",
+      "home_odds": "2.12",
       "draw_odds": "2.85",
-      "away_odds": "3.5",
+      "away_odds": "3.6",
       "start_time": "2025-05-05 22:30"
     }
   },

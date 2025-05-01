@@ -38,6 +38,12 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       bookmakerTeamMaps.set(bookmakerCode, new Map<string, any>());
     }
     
+    // Initialize tracking for the number of events processed per bookmaker
+    const eventsByBookmaker: Record<string, number> = {};
+    bookmakerCodes.forEach(code => {
+      eventsByBookmaker[code] = 0;
+    });
+    
     // Create map of team names to Sportybet events for secondary matching
     const sportyTeamsMap = new Map();
     sportyEvents.forEach(event => {
@@ -165,6 +171,11 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
         // Find event with this ID in current bookmaker
         // For each bookmaker, check both direct match and normalized matches
         let event = null;
+        
+        // Track processed event count for this bookmaker
+        if (eventsByBookmaker[bookmakerCode] === undefined) {
+          eventsByBookmaker[bookmakerCode] = 0;
+        }
         
         // First try direct match
         event = bookmakerData.find(e => e.eventId === eventId);
@@ -317,16 +328,20 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       console.log(`  - ${code}: ${count} events`);
     }
     
+    // Reset counts for next phase of matching
+    for (const code of bookmakerCodes) {
+      eventsByBookmaker[code] = 0;
+    }
+    
     // Third pass: Secondary matching for all bookmakers' events not yet mapped
     // This allows events with different eventIds but same team names to be matched
     console.log(`🔍 Running secondary matching...`);
     
-    const bookmakersMapped: Record<string, number> = {
-      'sporty': 0,
-      'bp GH': 0,
-      'bp KE': 0,
-      'betika KE': 0
-    };
+    // Track how many events were mapped in secondary matching
+    const bookmakersMapped: Record<string, number> = {};
+    bookmakerCodes.forEach(code => {
+      bookmakersMapped[code] = 0;
+    });
     
     // Process events in batches for better performance
     const eventEntries = Array.from(eventMap.entries());
@@ -575,8 +590,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       }
     }
     
-    // Count events by bookmaker
-    const eventsByBookmaker: Record<string, number> = {};
+    // Reset counter for final event counts
     for (const bookmakerCode of bookmakerCodes) {
       eventsByBookmaker[bookmakerCode] = 0;
     }
