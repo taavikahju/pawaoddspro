@@ -7315,9 +7315,9 @@
     "date": "2025-05-01",
     "time": "11:30",
     "odds": {
-      "home": 2.5,
-      "draw": 3.56,
-      "away": 2.79
+      "home": 2.44,
+      "draw": 3.61,
+      "away": 2.83
     },
     "raw": {
       "eventId": "59017039",
@@ -7325,9 +7325,9 @@
       "tournament": "Pro League",
       "event": "Royal Antwerp FC - RSC Anderlecht",
       "market": "1X2",
-      "home_odds": "2.50",
-      "draw_odds": "3.56",
-      "away_odds": "2.79",
+      "home_odds": "2.44",
+      "draw_odds": "3.61",
+      "away_odds": "2.83",
       "start_time": "2025-05-01 11:30"
     }
   },
@@ -7341,9 +7341,9 @@
     "date": "2025-05-01",
     "time": "14:00",
     "odds": {
-      "home": 1.23,
-      "draw": 7.23,
-      "away": 11.3
+      "home": 1.22,
+      "draw": 7.39,
+      "away": 11.73
     },
     "raw": {
       "eventId": "59017041",
@@ -7351,9 +7351,9 @@
       "tournament": "Pro League",
       "event": "Club Brugge - Gent",
       "market": "1X2",
-      "home_odds": "1.23",
-      "draw_odds": "7.23",
-      "away_odds": "11.30",
+      "home_odds": "1.22",
+      "draw_odds": "7.39",
+      "away_odds": "11.73",
       "start_time": "2025-05-01 14:00"
     }
   },
@@ -17690,8 +17690,8 @@
     "time": "10:00",
     "odds": {
       "home": 3.1,
-      "draw": 2.2,
-      "away": 2.9
+      "draw": 2.25,
+      "away": 2.8
     },
     "raw": {
       "eventId": "52033053",
@@ -17700,8 +17700,8 @@
       "event": "SD Eibar B - Arenas Club Getxo",
       "market": "1X2",
       "home_odds": "3.10",
-      "draw_odds": "2.20",
-      "away_odds": "2.90",
+      "draw_odds": "2.25",
+      "away_odds": "2.80",
       "start_time": "2025-05-04 10:00"
     }
   },
@@ -19379,9 +19379,9 @@
     "date": "2025-05-03",
     "time": "14:00",
     "odds": {
-      "home": 1.8,
+      "home": 1.77,
       "draw": 3.5,
-      "away": 4.25
+      "away": 4.4
     },
     "raw": {
       "eventId": "60259033",
@@ -19389,9 +19389,9 @@
       "tournament": "National League North",
       "event": "Scunthorpe United - Chorley FC",
       "market": "1X2",
-      "home_odds": "1.80",
+      "home_odds": "1.77",
       "draw_odds": "3.50",
-      "away_odds": "4.25",
+      "away_odds": "4.40",
       "start_time": "2025-05-03 14:00"
     }
   },
@@ -27439,9 +27439,9 @@
     "date": "2025-05-04",
     "time": "15:25",
     "odds": {
-      "home": 1.67,
+      "home": 1.65,
       "draw": 3.75,
-      "away": 4.5
+      "away": 4.7
     },
     "raw": {
       "eventId": "58141979",
@@ -27449,9 +27449,9 @@
       "tournament": "A Lyga",
       "event": "FK Kauno Zalgiris - FK Riteriai",
       "market": "1X2",
-      "home_odds": "1.67",
+      "home_odds": "1.65",
       "draw_odds": "3.75",
-      "away_odds": "4.50",
+      "away_odds": "4.70",
       "start_time": "2025-05-04 15:25"
     }
   },
@@ -27725,9 +27725,9 @@
     "date": "2025-05-02",
     "time": "19:00",
     "odds": {
-      "home": 1.96,
+      "home": 1.91,
       "draw": 3.5,
-      "away": 3.4
+      "away": 3.6
     },
     "raw": {
       "eventId": "59722622",
@@ -27735,9 +27735,9 @@
       "tournament": "Division Profesional",
       "event": "San Antonio Bulo Bulo - Independiente Petrolero",
       "market": "1X2",
-      "home_odds": "1.96",
+      "home_odds": "1.91",
       "draw_odds": "3.50",
-      "away_odds": "3.40",
+      "away_odds": "3.60",
       "start_time": "2025-05-02 19:00"
     }
   },
@@ -28557,7 +28557,7 @@
     "date": "2025-05-02",
     "time": "13:00",
     "odds": {
-      "home": 2.4,
+      "home": 2.45,
       "draw": 3.1,
       "away": 2.75
     },
@@ -28567,7 +28567,7 @@
       "tournament": "Championship",
       "event": "Highbury FC - Venda Football Academy",
       "market": "1X2",
-      "home_odds": "2.40",
+      "home_odds": "2.45",
       "draw_odds": "3.10",
       "away_odds": "2.75",
       "start_time": "2025-05-02 13:00"
@@ -29974,6 +29974,32 @@
       "home_odds": "1.34",
       "draw_odds": "4.10",
       "away_odds": "9.20",
+      "start_time": "2025-05-03 15:00"
+    }
+  },
+  {
+    "id": "50748171",
+    "eventId": "50748171",
+    "teams": "PFC Nesebar - FC Strumska Slava Radomir",
+    "league": "Vtora Liga",
+    "sport": "football",
+    "country": "Bulgaria",
+    "date": "2025-05-03",
+    "time": "15:00",
+    "odds": {
+      "home": 2.95,
+      "draw": 3.1,
+      "away": 2.25
+    },
+    "raw": {
+      "eventId": "50748171",
+      "country": "Bulgaria",
+      "tournament": "Vtora Liga",
+      "event": "PFC Nesebar - FC Strumska Slava Radomir",
+      "market": "1X2",
+      "home_odds": "2.95",
+      "draw_odds": "3.10",
+      "away_odds": "2.25",
       "start_time": "2025-05-03 15:00"
     }
   },
@@ -32301,9 +32327,9 @@
     "date": "2025-05-01",
     "time": "15:00",
     "odds": {
-      "home": 2.25,
+      "home": 2.4,
       "draw": 3.25,
-      "away": 2.85
+      "away": 2.65
     },
     "raw": {
       "eventId": "60188273",
@@ -32311,9 +32337,9 @@
       "tournament": "Ligue 1, Reserves",
       "event": "Cr Belouizdad - MC Alger U21",
       "market": "1X2",
-      "home_odds": "2.25",
+      "home_odds": "2.40",
       "draw_odds": "3.25",
-      "away_odds": "2.85",
+      "away_odds": "2.65",
       "start_time": "2025-05-01 15:00"
     }
   },

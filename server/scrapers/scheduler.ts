@@ -7,6 +7,8 @@ import * as paddyPowerScraper from './paddypower';
 import * as customScrapers from './custom/integration';
 import { processAndMapEvents } from '../utils/dataMapper';
 import { EventEmitter } from 'events';
+import { db } from '../db';
+import { sql } from 'drizzle-orm';
 
 // Create event emitter for scraper events
 export const scraperEvents = new EventEmitter();
@@ -230,6 +232,22 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
     try {
       // Process and map events
       await processAndMapEvents(storage);
+      
+      // Calculate and store tournament margins
+      try {
+        console.log(`🔄 Calculating tournament margins...`);
+        const { calculateAndStoreTournamentMargins } = await import('../utils/tournamentMargins');
+        
+        // Clear existing tournament margins before calculating new ones
+        await db.execute(sql`DELETE FROM tournament_margins`);
+        console.log('✅ Deleted existing tournament margins');
+        
+        // Calculate and store new tournament margins
+        await calculateAndStoreTournamentMargins(storage);
+        console.log('✅ Tournament margins calculated and stored');
+      } catch (marginError) {
+        console.error('❌ Error calculating tournament margins:', marginError);
+      }
       
       // Emit processing completed event
       scraperEvents.emit(SCRAPER_EVENTS.PROCESSING_COMPLETED, {
