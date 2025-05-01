@@ -11,10 +11,18 @@ const ADDITIONAL_REGIONS = ['ke']; // Extra regions to check for specific league
 // Debug mode flag - set to false to suppress logs
 const DEBUG = false;
 
-// Console logging helper that respects debug mode
+// Console logging helper with options to control verbosity
+const VERBOSE_MODE = false; // Set to false to remove all detailed endpoint processing logs
 const log = (message) => {
   if (DEBUG) {
     console.error(`[DEBUG] ${message}`);
+  }
+};
+
+// Helper for logging with verbosity control
+const verboseLog = (message) => {
+  if (VERBOSE_MODE) {
+    console.error(message);
   }
 };
 
