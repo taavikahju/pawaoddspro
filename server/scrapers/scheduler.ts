@@ -45,7 +45,9 @@ let scheduledJob: cron.ScheduledTask | null = null;
 let cleanupJob: cron.ScheduledTask | null = null;
 
 // Add a locking mechanism to prevent overlapping scraper runs
+// This includes both scraping and database operations
 let isScraperRunning = false;
+let isDataProcessingRunning = false;
 
 /**
  * Setup all scrapers and schedule them to run
@@ -65,8 +67,8 @@ export function setupScrapers(storage: IStorage): void {
   
   scheduledJob = cron.schedule(SCRAPE_SCHEDULE, async () => {
     try {
-      // Skip this run if a previous scrape is still running
-      if (isScraperRunning) {
+      // Skip this run if either scraper or data processing from a previous run is still in progress
+      if (isScraperRunning || isDataProcessingRunning) {
         logger.critical(`⚠️ [${new Date().toISOString()}] Skipping scheduled scraper run - previous run still in progress`);
         return;
       }
@@ -279,6 +281,9 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
     });
     
     try {
+      // Set data processing lock
+      isDataProcessingRunning = true;
+
       // Process and map events
       await processAndMapEvents(storage);
       
@@ -325,6 +330,9 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
         message: 'All scraping and processing completed, frontend can be updated',
         stats: frontendUpdateSummary
       });
+      
+      // Release data processing lock
+      isDataProcessingRunning = false;
     } catch (processingError) {
       console.error('❌ Error processing events:', processingError);
       
