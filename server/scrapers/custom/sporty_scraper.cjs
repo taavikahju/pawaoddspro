@@ -22,7 +22,10 @@ const fetchAllPages = async () => {
 
   while (pageNum <= totalPages && pageNum <= MAX_PAGES) {
     const url = `${BASE_URL}?${QUERY}&pageNum=${pageNum}&_t=${Date.now()}`;
-    console.error(`📥 Fetching page ${pageNum}/${totalPages}...`);
+    // Only log on the first page and every 5th page to reduce verbosity
+    if (pageNum === 1 || pageNum % 5 === 0) {
+      console.error(`📥 Fetching page ${pageNum}/${totalPages}...`);
+    }
 
     try {
       const res = await axios.get(url, { 
@@ -56,7 +59,7 @@ const fetchAllPages = async () => {
 
       // Add tournaments to our collection
       allTournaments = allTournaments.concat(data.tournaments);
-      console.error(`✅ Page ${pageNum}: Added ${data.tournaments.length} tournaments`);
+      // Skip tournament addition logs to reduce verbosity
       
       // Move to next page
       pageNum++;
@@ -87,8 +90,8 @@ const processTournaments = (tournaments) => {
   let eventCount = 0;
   let skippedCount = 0;
 
-  // Track progress
-  console.error(`🔄 Processing ${tournaments.length} tournaments...`);
+  // Track progress (simplified log)
+  console.error(`Processing ${tournaments.length} tournaments...`);
   
   for (const tournament of tournaments) {
     try {
@@ -97,7 +100,7 @@ const processTournaments = (tournaments) => {
       const tournamentName = tournament.name || 'Unknown Tournament';
       
       if (!tournament.events || !Array.isArray(tournament.events)) {
-        console.error(`⚠️ No events found in tournament: ${tournamentName}`);
+        // Skip logging missing events to reduce verbosity
         continue;
       }
       
@@ -160,13 +163,16 @@ const processTournaments = (tournaments) => {
           
           eventCount++;
         } catch (eventError) {
-          console.error(`❌ Error processing event: ${eventError.message}`);
+          // Skip individual event error logs to reduce verbosity
           skippedCount++;
           continue;
         }
       }
     } catch (tournamentError) {
-      console.error(`❌ Error processing tournament: ${tournamentError.message}`);
+      // Only log serious tournament errors
+      if (tournamentError.message.includes('fatal') || tournamentError.message.includes('network')) {
+        console.error(`❌ Error processing tournament: ${tournamentError.message}`);
+      }
       continue;
     }
   }
