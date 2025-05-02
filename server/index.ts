@@ -50,12 +50,14 @@ app.use((req, res, next) => {
 (async () => {
   const server = await registerRoutes(app);
 
-  // Setup automatic Sportybet data fix
+  // NOTE: Automatic Sportybet fix has been disabled
+  // We now use the Python Sportybet scraper which doesn't need the fix
   
-  // Run a Sportybet fix every 15 minutes to ensure data persistence
-  const SPORTYBET_FIX_INTERVAL = 15 * 60 * 1000; // 15 minutes in milliseconds
+  // For historical reference, the following code was used for the 
+  // JavaScript Sportybet fix that ran every 15 minutes:
+  /*
+  const SPORTYBET_FIX_INTERVAL = 15 * 60 * 1000;
   
-  // Run once at startup after a short delay
   setTimeout(async () => {
     try {
       log('Running initial Sportybet data fix...', 'scheduler');
@@ -63,9 +65,8 @@ app.use((req, res, next) => {
     } catch (error) {
       console.error('Error in initial Sportybet fix:', error);
     }
-  }, 60 * 1000); // Wait 1 minute after startup
+  }, 60 * 1000);
   
-  // Then run periodically
   setInterval(async () => {
     try {
       log('Running scheduled Sportybet data fix...', 'scheduler');
@@ -74,6 +75,10 @@ app.use((req, res, next) => {
       console.error('Error in scheduled Sportybet fix:', error);
     }
   }, SPORTYBET_FIX_INTERVAL);
+  */
+  
+  // The auto-fix is no longer needed as the Python implementation
+  // is much more robust and doesn't suffer from reference issues
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
