@@ -79,11 +79,11 @@ export async function fixSportybetData(storage: IStorage): Promise<void> {
       event.oddsData && typeof event.oddsData === 'object' && 'sporty' in event.oddsData
     );
     
-    // Check for significant discrepancy between Sportybet raw data and database
+    // Check for any discrepancy between Sportybet raw data and database
     const discrepancyRatio = eventsWithSportybet.length / sportyData.length;
     
-    if (discrepancyRatio < 0.7) {
-      logger.critical(`ALERT: Significant Sportybet data loss detected! Database has ${eventsWithSportybet.length}/${sportyData.length} events (${(discrepancyRatio * 100).toFixed(1)}%). Using enhanced recovery mode.`);
+    if (discrepancyRatio < 0.99) {
+      logger.critical(`ALERT: Sportybet data loss detected! Database has ${eventsWithSportybet.length}/${sportyData.length} events (${(discrepancyRatio * 100).toFixed(1)}%). Using enhanced recovery mode.`);
     }
     
     // Create a map of events by eventId and externalId for faster lookups

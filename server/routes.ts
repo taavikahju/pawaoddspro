@@ -595,10 +595,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
       
-      // DIRECT INSERTION: If we still have a significant discrepancy, create events directly
-      // This is a last resort approach to ensure maximum Sportybet event retention
-      if (allSportyEvents.length > 0 && eventsWithSporty.length < allSportyEvents.length * 0.8) {
-        logger.critical(`Detected significant Sportybet event loss (${eventsWithSporty.length}/${allSportyEvents.length}), creating direct events...`);
+      // DIRECT INSERTION: If we detect even a small drop in Sportybet events, create events directly
+      // This ensures we maintain maximum event coverage by immediately injecting any missing events
+      if (allSportyEvents.length > 0 && eventsWithSporty.length < allSportyEvents.length * 0.99) {
+        logger.critical(`Detected Sportybet event loss (${eventsWithSporty.length}/${allSportyEvents.length}), creating direct events...`);
         
         const existingEventIdMap = new Map();
         eventsWithSporty.forEach(event => {
