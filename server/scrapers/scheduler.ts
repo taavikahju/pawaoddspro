@@ -81,16 +81,24 @@ export function setupScrapers(storage: IStorage): void {
   const logLevel = process.env.LOG_LEVEL || 'info';
   logger.critical(`Setting up scraper services (LOG_LEVEL=${logLevel}, Python Sportybet enabled)`);
   
-  // Run scrapers immediately on startup
-  runAllScrapers(storage)
-    .then(() => logger.critical('Initial scraping completed'))
-    .catch(err => logger.error('Error during initial scraping:', err));
-  
   // Schedule regular scraper runs
   if (scheduledJob) {
     scheduledJob.stop();
   }
   
+  // Run scrapers immediately on startup, but only once
+  isScraperRunning = true; // Set lock before running
+  runAllScrapers(storage)
+    .then(() => {
+      logger.critical('Initial scraping completed');
+      isScraperRunning = false; // Release lock after completion
+    })
+    .catch(err => {
+      logger.error('Error during initial scraping:', err);
+      isScraperRunning = false; // Make sure to release lock in case of error
+    });
+  
+  // Schedule regular scraper runs for every 5 minutes after startup
   scheduledJob = cron.schedule(SCRAPE_SCHEDULE, async () => {
     try {
       // Skip this run if either scraper or data processing from a previous run is still in progress
@@ -242,9 +250,10 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
             
             const scraperEndTime = new Date();
             logger.critical(`[${scraperEndTime.toISOString()}] ${bookmaker.name} scraper finished - ${data?.length || 0} events extracted`);
-          } catch (customError) {
+          } catch (error) {
             const errorTime = new Date();
-            logger.critical(`[${errorTime.toISOString()}] Error in ${bookmaker.name} scraper: ${customError.message || String(customError)}`);
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            logger.critical(`[${errorTime.toISOString()}] Error in ${bookmaker.name} scraper: ${errorMessage}`);
             data = null;
           }
         }
