@@ -21,7 +21,7 @@ interface OddsTableProps {
 }
 
 export default function OddsTable({ events, isLoading, className }: OddsTableProps) {
-  const { bookmakers, selectedBookmakers } = useBookmakerContext();
+  const { bookmakers, selectedBookmakers, isTop5LeaguesActive } = useBookmakerContext();
   
   // State for margin history popup
   const [selectedEvent, setSelectedEvent] = useState<{
@@ -221,6 +221,44 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
     return { comparison, isBetter, favorite };
   };
   
+  // Function to check if an event belongs to one of the Top 5 Leagues
+  const isEventInTop5Leagues = (event: any): boolean => {
+    if (!event.country && !event.tournament) {
+      // Try to extract from legacy league format
+      if (event.league) {
+        const leagueInfo = event.league.toLowerCase();
+        return (
+          (leagueInfo.includes('england') && leagueInfo.includes('premier league')) ||
+          (leagueInfo.includes('spain') && (leagueInfo.includes('laliga') || leagueInfo.includes('la liga'))) ||
+          (leagueInfo.includes('germany') && leagueInfo.includes('bundesliga') && !leagueInfo.includes('2')) ||
+          (leagueInfo.includes('italy') && leagueInfo.includes('serie a')) ||
+          (leagueInfo.includes('france') && leagueInfo.includes('ligue 1'))
+        );
+      }
+      return false;
+    }
+
+    // If we have structured country and tournament data
+    const country = (event.country || '').toLowerCase();
+    const tournament = (event.tournament || '').toLowerCase();
+
+    return (
+      (country === 'england' && tournament.includes('premier league')) ||
+      (country === 'spain' && (tournament.includes('laliga') || tournament.includes('la liga'))) ||
+      (country === 'germany' && tournament.includes('bundesliga') && !tournament.includes('2')) ||
+      (country === 'italy' && tournament.includes('serie a')) ||
+      (country === 'france' && tournament.includes('ligue 1'))
+    );
+  };
+
+  // Filter events for Top 5 Leagues if that filter is active
+  const filteredEvents = useMemo(() => {
+    if (isTop5LeaguesActive) {
+      return events.filter(isEventInTop5Leagues);
+    }
+    return events;
+  }, [events, isTop5LeaguesActive]);
+
   // Get country code for flag display
   const getCountryCode = (countryName: string): string => {
     // Standardize country name (remove any special characters and convert to lowercase)
@@ -508,10 +546,13 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
     );
   }
   
-  if (events.length === 0) {
+  if (events.length === 0 || filteredEvents.length === 0) {
     return (
       <div className="h-32 flex items-center justify-center bg-white dark:bg-slate-800 rounded-lg shadow-sm">
-        <p className="text-gray-500 dark:text-gray-400">No events found</p>
+        <p className="text-gray-500 dark:text-gray-400">
+          {events.length === 0 ? "No events found" : 
+           isTop5LeaguesActive ? "No Top 5 Leagues events found" : "No events found"}
+        </p>
       </div>
     );
   }
