@@ -579,8 +579,8 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
   return (
     <div className={cn("overflow-x-auto bg-white dark:bg-slate-800 rounded-b-lg shadow", className)}>
       {isTop5LeaguesActive && (
-        <div className="p-2 bg-green-50 dark:bg-green-900/20 text-sm border-b border-gray-200 dark:border-gray-700">
-          <span className="font-medium text-green-700 dark:text-green-400">
+        <div className="p-2 bg-blue-50 dark:bg-blue-900/20 text-sm border-b border-gray-200 dark:border-gray-700">
+          <span className="font-medium text-blue-700 dark:text-blue-400">
             Top 5 Leagues Filter: 
           </span>
           <span className="text-gray-700 dark:text-gray-300 ml-1">

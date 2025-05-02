@@ -229,12 +229,12 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
           </p>
           <div className="flex flex-col space-y-1 mb-2">
             <Button 
-              variant="outline" 
+              variant={activeFilter === 'top5' ? 'default' : 'outline'} 
               size="sm" 
               className={cn(
                 "py-1 px-2 h-auto text-xs font-medium justify-start",
                 activeFilter === 'top5' 
-                  ? "bg-green-600 text-white hover:bg-green-700" 
+                  ? "bg-primary text-white hover:bg-primary/90" 
                   : "bg-white dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700"
               )}
               onClick={() => {
@@ -246,10 +246,10 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
               }}
             >
               <div className="flex items-center">
-                <Trophy className={cn("h-3.5 w-3.5 mr-1.5", activeFilter === 'top5' ? "text-green-400" : "")} />
+                <Trophy className="h-3.5 w-3.5 mr-1.5" />
                 <span className="mr-1">Top 5 Leagues</span>
                 {activeFilter === 'top5' && (
-                  <span className="inline-flex items-center justify-center w-4 h-4 ml-1 bg-green-500 bg-opacity-30 text-white text-xs rounded-full">
+                  <span className="inline-flex items-center justify-center w-4 h-4 ml-1 bg-white bg-opacity-30 text-white text-xs rounded-full">
                     ✓
                   </span>
                 )}
