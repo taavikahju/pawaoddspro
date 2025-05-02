@@ -1,0 +1,309 @@
+   at div
+    at div
+    at Layout (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/components/Layout.tsx:24:34)
+    at Dashboard (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/pages/dashboard.tsx:38:45)
+    at Route (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=6fdbad00:323:16)
+    at Switch (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=6fdbad00:379:17)
+    at Router
+    at BookmakerProvider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/contexts/BookmakerContext.tsx:23:37)
+    at Provider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-VIFX6DEG.js?v=6fdbad00:48:15)
+    at TooltipProvider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=6fdbad00:59:5)
+    at V (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/next-themes.js?v=6fdbad00:44:25)
+    at J (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/next-themes.js?v=6fdbad00:42:18)
+    at QueryClientProvider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=6fdbad00:2805:3)
+    at App
+printWarning @ react_jsx-dev-runtime.js?v=6fdbad00:64
+error @ react_jsx-dev-runtime.js?v=6fdbad00:48
+validateFragmentProps @ react_jsx-dev-runtime.js?v=6fdbad00:796
+jsxWithValidation @ react_jsx-dev-runtime.js?v=6fdbad00:874
+(anonymous) @ OddsTable.tsx:573
+OddsTable @ OddsTable.tsx:572
+renderWithHooks @ chunk-WERSD76P.js?v=6fdbad00:11548
+updateFunctionComponent @ chunk-WERSD76P.js?v=6fdbad00:14582
+beginWork @ chunk-WERSD76P.js?v=6fdbad00:15924
+beginWork$1 @ chunk-WERSD76P.js?v=6fdbad00:19753
+performUnitOfWork @ chunk-WERSD76P.js?v=6fdbad00:19198
+workLoopSync @ chunk-WERSD76P.js?v=6fdbad00:19137
+renderRootSync @ chunk-WERSD76P.js?v=6fdbad00:19116
+performSyncWorkOnRoot @ chunk-WERSD76P.js?v=6fdbad00:18874
+flushSyncCallbacks @ chunk-WERSD76P.js?v=6fdbad00:9119
+(anonymous) @ chunk-WERSD76P.js?v=6fdbad00:18627
+setTimeout
+scheduleFn @ @tanstack_react-query.js?v=6fdbad00:555
+flush @ @tanstack_react-query.js?v=6fdbad00:569
+batch @ @tanstack_react-query.js?v=6fdbad00:587
+dispatch_fn @ @tanstack_react-query.js?v=6fdbad00:996
+setData @ @tanstack_react-query.js?v=6fdbad00:696
+onSuccess @ @tanstack_react-query.js?v=6fdbad00:897
+resolve @ @tanstack_react-query.js?v=6fdbad00:456
+Promise.then
+run @ @tanstack_react-query.js?v=6fdbad00:498
+start @ @tanstack_react-query.js?v=6fdbad00:536
+fetch @ @tanstack_react-query.js?v=6fdbad00:926
+executeFetch_fn @ @tanstack_react-query.js?v=6fdbad00:2211
+onSubscribe @ @tanstack_react-query.js?v=6fdbad00:1898
+subscribe @ @tanstack_react-query.js?v=6fdbad00:24
+(anonymous) @ @tanstack_react-query.js?v=6fdbad00:3022
+subscribeToStore @ chunk-WERSD76P.js?v=6fdbad00:11984
+commitHookEffectListMount @ chunk-WERSD76P.js?v=6fdbad00:16915
+commitPassiveMountOnFiber @ chunk-WERSD76P.js?v=6fdbad00:18156
+commitPassiveMountEffects_complete @ chunk-WERSD76P.js?v=6fdbad00:18129
+commitPassiveMountEffects_begin @ chunk-WERSD76P.js?v=6fdbad00:18119
+commitPassiveMountEffects @ chunk-WERSD76P.js?v=6fdbad00:18109
+flushPassiveEffectsImpl @ chunk-WERSD76P.js?v=6fdbad00:19490
+flushPassiveEffects @ chunk-WERSD76P.js?v=6fdbad00:19447
+performSyncWorkOnRoot @ chunk-WERSD76P.js?v=6fdbad00:18868
+flushSyncCallbacks @ chunk-WERSD76P.js?v=6fdbad00:9119
+commitRootImpl @ chunk-WERSD76P.js?v=6fdbad00:19432
+commitRoot @ chunk-WERSD76P.js?v=6fdbad00:19277
+finishConcurrentRender @ chunk-WERSD76P.js?v=6fdbad00:18805
+performConcurrentWorkOnRoot @ chunk-WERSD76P.js?v=6fdbad00:18718
+workLoop @ chunk-WERSD76P.js?v=6fdbad00:197
+flushWork @ chunk-WERSD76P.js?v=6fdbad00:176
+performWorkUntilDeadline @ chunk-WERSD76P.js?v=6fdbad00:384Understand this error
+use-offline-resilient-events.tsx:93 Updating cache with 1301 Sportybet events
+use-offline-resilient-events.tsx:211 Final events array has 1350 events with Sportybet odds out of 1452 total
+use-offline-resilient-events.tsx:221 Events with Sportybet AND at least one other bookmaker: 1350
+use-offline-resilient-events.tsx:136 Server events have 1301 events with Sportybet odds
+use-offline-resilient-events.tsx:147 Cached events have 1301 events with Sportybet odds
+OddsTable.tsx:62 Selected Bookmakers: (4) ['bp GH', 'bp KE', 'sporty', 'betika KE']
+OddsTable.tsx:63 betPawa GH present: true Sportybet present: true
+OddsTable.tsx:64 betPawa KE present: true Betika KE present: true
+OddsTable.tsx:65 Ghana filter active: true
+OddsTable.tsx:66 Kenya filter active: true
+OddsTable.tsx:67 Comparison available: false
+1452OddsTable.tsx:573 Warning: Invalid prop `data-replit-metadata` supplied to `React.Fragment`. React.Fragment can only have `key` and `children` props.
+    at OddsTable (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/components/OddsTable.tsx:33:37)
+    at main
+    at div
+    at div
+    at div
+    at Layout (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/components/Layout.tsx:24:34)
+    at Dashboard (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/pages/dashboard.tsx:38:45)
+    at Route (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=6fdbad00:323:16)
+    at Switch (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=6fdbad00:379:17)
+    at Router
+    at BookmakerProvider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/contexts/BookmakerContext.tsx:23:37)
+    at Provider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-VIFX6DEG.js?v=6fdbad00:48:15)
+    at TooltipProvider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=6fdbad00:59:5)
+    at V (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/next-themes.js?v=6fdbad00:44:25)
+    at J (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/next-themes.js?v=6fdbad00:42:18)
+    at QueryClientProvider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=6fdbad00:2805:3)
+    at App
+printWarning @ react_jsx-dev-runtime.js?v=6fdbad00:64
+error @ react_jsx-dev-runtime.js?v=6fdbad00:48
+validateFragmentProps @ react_jsx-dev-runtime.js?v=6fdbad00:796
+jsxWithValidation @ react_jsx-dev-runtime.js?v=6fdbad00:874
+(anonymous) @ OddsTable.tsx:573
+OddsTable @ OddsTable.tsx:572
+renderWithHooks @ chunk-WERSD76P.js?v=6fdbad00:11548
+updateFunctionComponent @ chunk-WERSD76P.js?v=6fdbad00:14582
+beginWork @ chunk-WERSD76P.js?v=6fdbad00:15924
+beginWork$1 @ chunk-WERSD76P.js?v=6fdbad00:19753
+performUnitOfWork @ chunk-WERSD76P.js?v=6fdbad00:19198
+workLoopSync @ chunk-WERSD76P.js?v=6fdbad00:19137
+renderRootSync @ chunk-WERSD76P.js?v=6fdbad00:19116
+performConcurrentWorkOnRoot @ chunk-WERSD76P.js?v=6fdbad00:18678
+workLoop @ chunk-WERSD76P.js?v=6fdbad00:197
+flushWork @ chunk-WERSD76P.js?v=6fdbad00:176
+performWorkUntilDeadline @ chunk-WERSD76P.js?v=6fdbad00:384Understand this error
+use-offline-resilient-events.tsx:211 Final events array has 1301 events with Sportybet odds out of 1452 total
+use-offline-resilient-events.tsx:221 Events with Sportybet AND at least one other bookmaker: 1301
+use-offline-resilient-events.tsx:136 Server events have 1301 events with Sportybet odds
+use-offline-resilient-events.tsx:147 Cached events have 1301 events with Sportybet odds
+OddsTable.tsx:62 Selected Bookmakers: (4) ['bp GH', 'bp KE', 'sporty', 'betika KE']
+OddsTable.tsx:63 betPawa GH present: true Sportybet present: true
+OddsTable.tsx:64 betPawa KE present: true Betika KE present: true
+OddsTable.tsx:65 Ghana filter active: true
+OddsTable.tsx:66 Kenya filter active: true
+OddsTable.tsx:67 Comparison available: false
+1452OddsTable.tsx:573 Warning: Invalid prop `data-replit-metadata` supplied to `React.Fragment`. React.Fragment can only have `key` and `children` props.
+    at OddsTable (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/components/OddsTable.tsx:33:37)
+    at main
+    at div
+    at div
+    at div
+    at Layout (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/components/Layout.tsx:24:34)
+    at Dashboard (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/pages/dashboard.tsx:38:45)
+    at Route (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=6fdbad00:323:16)
+    at Switch (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=6fdbad00:379:17)
+    at Router
+    at BookmakerProvider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/contexts/BookmakerContext.tsx:23:37)
+    at Provider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-VIFX6DEG.js?v=6fdbad00:48:15)
+    at TooltipProvider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=6fdbad00:59:5)
+    at V (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/next-themes.js?v=6fdbad00:44:25)
+    at J (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/next-themes.js?v=6fdbad00:42:18)
+    at QueryClientProvider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=6fdbad00:2805:3)
+    at App
+printWarning @ react_jsx-dev-runtime.js?v=6fdbad00:64
+error @ react_jsx-dev-runtime.js?v=6fdbad00:48
+validateFragmentProps @ react_jsx-dev-runtime.js?v=6fdbad00:796
+jsxWithValidation @ react_jsx-dev-runtime.js?v=6fdbad00:874
+(anonymous) @ OddsTable.tsx:573
+OddsTable @ OddsTable.tsx:572
+renderWithHooks @ chunk-WERSD76P.js?v=6fdbad00:11548
+updateFunctionComponent @ chunk-WERSD76P.js?v=6fdbad00:14582
+beginWork @ chunk-WERSD76P.js?v=6fdbad00:15924
+beginWork$1 @ chunk-WERSD76P.js?v=6fdbad00:19753
+performUnitOfWork @ chunk-WERSD76P.js?v=6fdbad00:19198
+workLoopSync @ chunk-WERSD76P.js?v=6fdbad00:19137
+renderRootSync @ chunk-WERSD76P.js?v=6fdbad00:19116
+performConcurrentWorkOnRoot @ chunk-WERSD76P.js?v=6fdbad00:18678
+workLoop @ chunk-WERSD76P.js?v=6fdbad00:197
+flushWork @ chunk-WERSD76P.js?v=6fdbad00:176
+performWorkUntilDeadline @ chunk-WERSD76P.js?v=6fdbad00:384Understand this error
+use-offline-resilient-events.tsx:136 Server events have 1301 events with Sportybet odds
+use-offline-resilient-events.tsx:147 Cached events have 1301 events with Sportybet odds
+OddsTable.tsx:62 Selected Bookmakers: (4) ['bp GH', 'bp KE', 'sporty', 'betika KE']
+OddsTable.tsx:63 betPawa GH present: true Sportybet present: true
+OddsTable.tsx:64 betPawa KE present: true Betika KE present: true
+OddsTable.tsx:65 Ghana filter active: true
+OddsTable.tsx:66 Kenya filter active: true
+OddsTable.tsx:67 Comparison available: false
+1452OddsTable.tsx:573 Warning: Invalid prop `data-replit-metadata` supplied to `React.Fragment`. React.Fragment can only have `key` and `children` props.
+    at OddsTable (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/components/OddsTable.tsx:33:37)
+    at main
+    at div
+    at div
+    at div
+    at Layout (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/components/Layout.tsx:24:34)
+    at Dashboard (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/pages/dashboard.tsx:38:45)
+    at Route (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=6fdbad00:323:16)
+    at Switch (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=6fdbad00:379:17)
+    at Router
+    at BookmakerProvider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/contexts/BookmakerContext.tsx:23:37)
+    at Provider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-VIFX6DEG.js?v=6fdbad00:48:15)
+    at TooltipProvider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=6fdbad00:59:5)
+    at V (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/next-themes.js?v=6fdbad00:44:25)
+    at J (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/next-themes.js?v=6fdbad00:42:18)
+    at QueryClientProvider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=6fdbad00:2805:3)
+    at App
+printWarning @ react_jsx-dev-runtime.js?v=6fdbad00:64
+error @ react_jsx-dev-runtime.js?v=6fdbad00:48
+validateFragmentProps @ react_jsx-dev-runtime.js?v=6fdbad00:796
+jsxWithValidation @ react_jsx-dev-runtime.js?v=6fdbad00:874
+(anonymous) @ OddsTable.tsx:573
+OddsTable @ OddsTable.tsx:572
+renderWithHooks @ chunk-WERSD76P.js?v=6fdbad00:11548
+updateFunctionComponent @ chunk-WERSD76P.js?v=6fdbad00:14582
+beginWork @ chunk-WERSD76P.js?v=6fdbad00:15924
+beginWork$1 @ chunk-WERSD76P.js?v=6fdbad00:19753
+performUnitOfWork @ chunk-WERSD76P.js?v=6fdbad00:19198
+workLoopSync @ chunk-WERSD76P.js?v=6fdbad00:19137
+renderRootSync @ chunk-WERSD76P.js?v=6fdbad00:19116
+performConcurrentWorkOnRoot @ chunk-WERSD76P.js?v=6fdbad00:18678
+workLoop @ chunk-WERSD76P.js?v=6fdbad00:197
+flushWork @ chunk-WERSD76P.js?v=6fdbad00:176
+performWorkUntilDeadline @ chunk-WERSD76P.js?v=6fdbad00:384Understand this error
+use-offline-resilient-events.tsx:136 Server events have 1301 events with Sportybet odds
+use-offline-resilient-events.tsx:147 Cached events have 1301 events with Sportybet odds
+OddsTable.tsx:62 Selected Bookmakers: (4) ['bp GH', 'bp KE', 'sporty', 'betika KE']
+OddsTable.tsx:63 betPawa GH present: true Sportybet present: true
+OddsTable.tsx:64 betPawa KE present: true Betika KE present: true
+OddsTable.tsx:65 Ghana filter active: true
+OddsTable.tsx:66 Kenya filter active: true
+OddsTable.tsx:67 Comparison available: false
+1452OddsTable.tsx:573 Warning: Invalid prop `data-replit-metadata` supplied to `React.Fragment`. React.Fragment can only have `key` and `children` props.
+    at OddsTable (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/components/OddsTable.tsx:33:37)
+    at main
+    at div
+    at div
+    at div
+    at Layout (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/components/Layout.tsx:24:34)
+    at Dashboard (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/pages/dashboard.tsx:38:45)
+    at Route (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=6fdbad00:323:16)
+    at Switch (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=6fdbad00:379:17)
+    at Router
+    at BookmakerProvider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/contexts/BookmakerContext.tsx:23:37)
+    at Provider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-VIFX6DEG.js?v=6fdbad00:48:15)
+    at TooltipProvider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=6fdbad00:59:5)
+    at V (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/next-themes.js?v=6fdbad00:44:25)
+    at J (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/next-themes.js?v=6fdbad00:42:18)
+    at QueryClientProvider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=6fdbad00:2805:3)
+    at App
+printWarning @ react_jsx-dev-runtime.js?v=6fdbad00:64
+error @ react_jsx-dev-runtime.js?v=6fdbad00:48
+validateFragmentProps @ react_jsx-dev-runtime.js?v=6fdbad00:796
+jsxWithValidation @ react_jsx-dev-runtime.js?v=6fdbad00:874
+(anonymous) @ OddsTable.tsx:573
+OddsTable @ OddsTable.tsx:572
+renderWithHooks @ chunk-WERSD76P.js?v=6fdbad00:11548
+updateFunctionComponent @ chunk-WERSD76P.js?v=6fdbad00:14582
+beginWork @ chunk-WERSD76P.js?v=6fdbad00:15924
+beginWork$1 @ chunk-WERSD76P.js?v=6fdbad00:19753
+performUnitOfWork @ chunk-WERSD76P.js?v=6fdbad00:19198
+workLoopSync @ chunk-WERSD76P.js?v=6fdbad00:19137
+renderRootSync @ chunk-WERSD76P.js?v=6fdbad00:19116
+performSyncWorkOnRoot @ chunk-WERSD76P.js?v=6fdbad00:18874
+flushSyncCallbacks @ chunk-WERSD76P.js?v=6fdbad00:9119
+(anonymous) @ chunk-WERSD76P.js?v=6fdbad00:18627
+setTimeout
+scheduleFn @ @tanstack_react-query.js?v=6fdbad00:555
+flush @ @tanstack_react-query.js?v=6fdbad00:569
+batch @ @tanstack_react-query.js?v=6fdbad00:587
+dispatch_fn @ @tanstack_react-query.js?v=6fdbad00:996
+setData @ @tanstack_react-query.js?v=6fdbad00:696
+onSuccess @ @tanstack_react-query.js?v=6fdbad00:897
+resolve @ @tanstack_react-query.js?v=6fdbad00:456
+Promise.then
+run @ @tanstack_react-query.js?v=6fdbad00:498
+start @ @tanstack_react-query.js?v=6fdbad00:536
+fetch @ @tanstack_react-query.js?v=6fdbad00:926
+executeFetch_fn @ @tanstack_react-query.js?v=6fdbad00:2211
+(anonymous) @ @tanstack_react-query.js?v=6fdbad00:2245
+setInterval
+updateRefetchInterval_fn @ @tanstack_react-query.js?v=6fdbad00:2243
+updateTimers_fn @ @tanstack_react-query.js?v=6fdbad00:2250
+onQueryUpdate @ @tanstack_react-query.js?v=6fdbad00:2206
+(anonymous) @ @tanstack_react-query.js?v=6fdbad00:998
+(anonymous) @ @tanstack_react-query.js?v=6fdbad00:997
+batch @ @tanstack_react-query.js?v=6fdbad00:583
+dispatch_fn @ @tanstack_react-query.js?v=6fdbad00:996
+setData @ @tanstack_react-query.js?v=6fdbad00:696
+onSuccess @ @tanstack_react-query.js?v=6fdbad00:897
+resolve @ @tanstack_react-query.js?v=6fdbad00:456
+Promise.then
+run @ @tanstack_react-query.js?v=6fdbad00:498
+start @ @tanstack_react-query.js?v=6fdbad00:536
+fetch @ @tanstack_react-query.js?v=6fdbad00:926
+executeFetch_fn @ @tanstack_react-query.js?v=6fdbad00:2211
+onSubscribe @ @tanstack_react-query.js?v=6fdbad00:1898
+subscribe @ @tanstack_react-query.js?v=6fdbad00:24
+(anonymous) @ @tanstack_react-query.js?v=6fdbad00:3022
+subscribeToStore @ chunk-WERSD76P.js?v=6fdbad00:11984
+commitHookEffectListMount @ chunk-WERSD76P.js?v=6fdbad00:16915
+commitPassiveMountOnFiber @ chunk-WERSD76P.js?v=6fdbad00:18156
+commitPassiveMountEffects_complete @ chunk-WERSD76P.js?v=6fdbad00:18129
+commitPassiveMountEffects_begin @ chunk-WERSD76P.js?v=6fdbad00:18119
+commitPassiveMountEffects @ chunk-WERSD76P.js?v=6fdbad00:18109
+flushPassiveEffectsImpl @ chunk-WERSD76P.js?v=6fdbad00:19490
+flushPassiveEffects @ chunk-WERSD76P.js?v=6fdbad00:19447
+performSyncWorkOnRoot @ chunk-WERSD76P.js?v=6fdbad00:18868
+flushSyncCallbacks @ chunk-WERSD76P.js?v=6fdbad00:9119
+commitRootImpl @ chunk-WERSD76P.js?v=6fdbad00:19432
+commitRoot @ chunk-WERSD76P.js?v=6fdbad00:19277
+finishConcurrentRender @ chunk-WERSD76P.js?v=6fdbad00:18805
+performConcurrentWorkOnRoot @ chunk-WERSD76P.js?v=6fdbad00:18718
+workLoop @ chunk-WERSD76P.js?v=6fdbad00:197
+flushWork @ chunk-WERSD76P.js?v=6fdbad00:176
+performWorkUntilDeadline @ chunk-WERSD76P.js?v=6fdbad00:384Understand this error
+use-offline-resilient-events.tsx:136 Server events have 1251 events with Sportybet odds
+use-offline-resilient-events.tsx:147 Cached events have 1301 events with Sportybet odds
+use-offline-resilient-events.tsx:151 Cache has more Sportybet events, merging...
+use-offline-resilient-events.tsx:175 Added sporty odds for event ID 223050: CA Paranaense PR - Botafogo FC SP
+use-offline-resilient-events.tsx:175 Added sporty odds for event ID 223046: Santiago Wanderers - Club Deportivo San Luis
+use-offline-resilient-events.tsx:175 Added sporty odds for event ID 223052: Deportivo Saprissa San Jose - AD Guanacasteca
+use-offline-resilient-events.tsx:175 Added sporty odds for event ID 223055: Jaiba Brava - CD Mineros de Zacatecas
+use-offline-resilient-events.tsx:175 Added sporty odds for event ID 223060: Deportivo Binacional FC - Los Chankas CYC
+use-offline-resilient-events.tsx:175 Added sporty odds for event ID 223070: Águilas Doradas - Deportivo Pereira
+use-offline-resilient-events.tsx:175 Added sporty odds for event ID 223066: Blooming Santa Cruz - Club San José
+use-offline-resilient-events.tsx:175 Added sporty odds for event ID 223067: San Diego Wave FC - Bay FC
+use-offline-resilient-events.tsx:175 Added sporty odds for event ID 223068: Ñublense - Unión La Calera
+use-offline-resilient-events.tsx:175 Added sporty odds for event ID 223069: CF Monterrey - Pumas UNAM
+use-offline-resilient-events.tsx:175 Added sporty odds for event ID 223084: Petrojet FC - Ceramica Cleopatra
+use-offline-resilient-events.tsx:175 Added sporty odds for event ID 223078: FS Jelgava - FK Rigas Futbola Skola
+use-offline-resilient-events.tsx:175 Added sporty odds for event ID 223092: Eastleigh - York City
+use-offline-resilient-events.tsx:175 Added sporty odds for event ID 223095: Maidenhead United - Boston United
+use-offline-resilient-events.tsx:175 Added sporty odds for event ID 223090: Gateshead - Southend United
+use-offline-resilient-events.tsx:175 Added sporty odds for event ID 223053: Guarani FC SP - Botafogo FC PB
+use-offline-resilient-events.tsx:175 Added sporty odds for event ID 223057: Monterey Bay FC - Miami FC
