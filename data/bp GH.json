@@ -789,9 +789,9 @@
     "date": "2025-05-02",
     "time": "17:00",
     "odds": {
-      "home": 2.6,
-      "draw": 3.5,
-      "away": 2.35
+      "home": 2.75,
+      "draw": 3.55,
+      "away": 2.19
     },
     "raw": {
       "eventId": "51025005",
@@ -799,9 +799,9 @@
       "tournament": "Regionalliga Bavaria",
       "event": "Wacker Burghausen - SpVgg Bayreuth",
       "market": "1X2 - FT",
-      "home_odds": "2.6",
-      "draw_odds": "3.5",
-      "away_odds": "2.35",
+      "home_odds": "2.75",
+      "draw_odds": "3.55",
+      "away_odds": "2.19",
       "start_time": "2025-05-02 17:00"
     }
   },
@@ -1933,9 +1933,9 @@
     "date": "2025-05-02",
     "time": "18:00",
     "odds": {
-      "home": 1.18,
+      "home": 1.17,
       "draw": 7.25,
-      "away": 10
+      "away": 11
     },
     "raw": {
       "eventId": "50869703",
@@ -1943,9 +1943,9 @@
       "tournament": "Eerste Divisie",
       "event": "Excelsior Rotterdam - Jong PSV Eindhoven YOUTH",
       "market": "1X2 - FT",
-      "home_odds": "1.18",
+      "home_odds": "1.17",
       "draw_odds": "7.25",
-      "away_odds": "10.0",
+      "away_odds": "11.0",
       "start_time": "2025-05-02 18:00"
     }
   },
@@ -1959,9 +1959,9 @@
     "date": "2025-05-02",
     "time": "18:00",
     "odds": {
-      "home": 2.95,
+      "home": 2.85,
       "draw": 2.85,
-      "away": 2.45
+      "away": 2.5
     },
     "raw": {
       "eventId": "59879226",
@@ -1969,9 +1969,9 @@
       "tournament": "U20 Africa Cup of Nations",
       "event": "Congo DR U20 - Ghana U20 (n)",
       "market": "1X2 - FT",
-      "home_odds": "2.95",
+      "home_odds": "2.85",
       "draw_odds": "2.85",
-      "away_odds": "2.45",
+      "away_odds": "2.5",
       "start_time": "2025-05-02 18:00"
     }
   },
@@ -13556,8 +13556,8 @@
     "time": "13:30",
     "odds": {
       "home": 4.65,
-      "draw": 4.8,
-      "away": 1.67
+      "draw": 4.85,
+      "away": 1.66
     },
     "raw": {
       "eventId": "51269569",
@@ -13566,8 +13566,8 @@
       "event": "RB Leipzig - Bayern Munich",
       "market": "1X2 - FT",
       "home_odds": "4.65",
-      "draw_odds": "4.8",
-      "away_odds": "1.67",
+      "draw_odds": "4.85",
+      "away_odds": "1.66",
       "start_time": "2025-05-03 13:30"
     }
   },
@@ -22906,32 +22906,6 @@
     }
   },
   {
-    "id": "56690553",
-    "eventId": "56690553",
-    "teams": "DC United - Colorado Rapids",
-    "league": "Major League Soccer",
-    "sport": "football",
-    "country": "USA",
-    "date": "2025-05-03",
-    "time": "23:30",
-    "odds": {
-      "home": 2.06,
-      "draw": 3.8,
-      "away": 3.2
-    },
-    "raw": {
-      "eventId": "56690553",
-      "country": "USA",
-      "tournament": "Major League Soccer",
-      "event": "DC United - Colorado Rapids",
-      "market": "1X2 - FT",
-      "home_odds": "2.06",
-      "draw_odds": "3.8",
-      "away_odds": "3.2",
-      "start_time": "2025-05-03 23:30"
-    }
-  },
-  {
     "id": "60129533",
     "eventId": "60129533",
     "teams": "Cerro Largo FC - Plaza Colonia",
@@ -23422,6 +23396,32 @@
       "home_odds": "1.91",
       "draw_odds": "3.0",
       "away_odds": "4.05",
+      "start_time": "2025-05-04 01:00"
+    }
+  },
+  {
+    "id": "57347211",
+    "eventId": "57347211",
+    "teams": "CD Plaza Amador Panama City - Potros del Este",
+    "league": "Liga Panamena de Futbol, Apertura",
+    "sport": "football",
+    "country": "Panama",
+    "date": "2025-05-04",
+    "time": "01:00",
+    "odds": {
+      "home": 1.58,
+      "draw": 3.6,
+      "away": 5.25
+    },
+    "raw": {
+      "eventId": "57347211",
+      "country": "Panama",
+      "tournament": "Liga Panamena de Futbol, Apertura",
+      "event": "CD Plaza Amador Panama City - Potros del Este",
+      "market": "1X2 - FT",
+      "home_odds": "1.58",
+      "draw_odds": "3.6",
+      "away_odds": "5.25",
       "start_time": "2025-05-04 01:00"
     }
   },
@@ -39789,9 +39789,9 @@
     "date": "2025-05-20",
     "time": "22:00",
     "odds": {
-      "home": 1.37,
-      "draw": 4.25,
-      "away": 7.25
+      "home": 1.39,
+      "draw": 4.15,
+      "away": 7
     },
     "raw": {
       "eventId": "59752752",
@@ -39799,9 +39799,9 @@
       "tournament": "Copa do Brasil",
       "event": "CR Vasco da Gama RJ - Operario Ferroviario EC PR",
       "market": "1X2 - FT",
-      "home_odds": "1.37",
-      "draw_odds": "4.25",
-      "away_odds": "7.25",
+      "home_odds": "1.39",
+      "draw_odds": "4.15",
+      "away_odds": "7.0",
       "start_time": "2025-05-20 22:00"
     }
   },

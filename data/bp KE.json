@@ -789,9 +789,9 @@
     "date": "2025-05-02",
     "time": "17:00",
     "odds": {
-      "home": 2.6,
-      "draw": 3.5,
-      "away": 2.35
+      "home": 2.75,
+      "draw": 3.55,
+      "away": 2.19
     },
     "raw": {
       "eventId": "51025005",
@@ -799,9 +799,9 @@
       "tournament": "Regionalliga Bavaria",
       "event": "Wacker Burghausen - SpVgg Bayreuth",
       "market": "1X2 - FT",
-      "home_odds": "2.6",
-      "draw_odds": "3.5",
-      "away_odds": "2.35",
+      "home_odds": "2.75",
+      "draw_odds": "3.55",
+      "away_odds": "2.19",
       "start_time": "2025-05-02 17:00"
     }
   },
@@ -1933,9 +1933,9 @@
     "date": "2025-05-02",
     "time": "18:00",
     "odds": {
-      "home": 1.18,
+      "home": 1.17,
       "draw": 7.25,
-      "away": 10
+      "away": 11
     },
     "raw": {
       "eventId": "50869703",
@@ -1943,9 +1943,9 @@
       "tournament": "Eerste Divisie",
       "event": "Excelsior Rotterdam - Jong PSV Eindhoven YOUTH",
       "market": "1X2 - FT",
-      "home_odds": "1.18",
+      "home_odds": "1.17",
       "draw_odds": "7.25",
-      "away_odds": "10.0",
+      "away_odds": "11.0",
       "start_time": "2025-05-02 18:00"
     }
   },
@@ -1959,9 +1959,9 @@
     "date": "2025-05-02",
     "time": "18:00",
     "odds": {
-      "home": 2.95,
+      "home": 2.85,
       "draw": 2.85,
-      "away": 2.45
+      "away": 2.5
     },
     "raw": {
       "eventId": "59879226",
@@ -1969,9 +1969,9 @@
       "tournament": "U20 Africa Cup of Nations",
       "event": "Congo DR U20 - Ghana U20 (n)",
       "market": "1X2 - FT",
-      "home_odds": "2.95",
+      "home_odds": "2.85",
       "draw_odds": "2.85",
-      "away_odds": "2.45",
+      "away_odds": "2.5",
       "start_time": "2025-05-02 18:00"
     }
   },
@@ -15002,32 +15002,6 @@
     }
   },
   {
-    "id": "51094155",
-    "eventId": "51094155",
-    "teams": "Huddersfield Town - Leyton Orient London",
-    "league": "League One",
-    "sport": "football",
-    "country": "England",
-    "date": "2025-05-03",
-    "time": "14:00",
-    "odds": {
-      "home": 3.95,
-      "draw": 3.7,
-      "away": 1.79
-    },
-    "raw": {
-      "eventId": "51094155",
-      "country": "England",
-      "tournament": "League One",
-      "event": "Huddersfield Town - Leyton Orient London",
-      "market": "1X2 - FT",
-      "home_odds": "3.95",
-      "draw_odds": "3.7",
-      "away_odds": "1.79",
-      "start_time": "2025-05-03 14:00"
-    }
-  },
-  {
     "id": "59477017",
     "eventId": "59477017",
     "teams": "KVC Westerlo - KAA Gent",
@@ -15050,6 +15024,32 @@
       "home_odds": "1.77",
       "draw_odds": "4.25",
       "away_odds": "3.3",
+      "start_time": "2025-05-03 14:00"
+    }
+  },
+  {
+    "id": "51094155",
+    "eventId": "51094155",
+    "teams": "Huddersfield Town - Leyton Orient London",
+    "league": "League One",
+    "sport": "football",
+    "country": "England",
+    "date": "2025-05-03",
+    "time": "14:00",
+    "odds": {
+      "home": 3.95,
+      "draw": 3.7,
+      "away": 1.79
+    },
+    "raw": {
+      "eventId": "51094155",
+      "country": "England",
+      "tournament": "League One",
+      "event": "Huddersfield Town - Leyton Orient London",
+      "market": "1X2 - FT",
+      "home_odds": "3.95",
+      "draw_odds": "3.7",
+      "away_odds": "1.79",
       "start_time": "2025-05-03 14:00"
     }
   },
@@ -23946,32 +23946,6 @@
     }
   },
   {
-    "id": "57273655",
-    "eventId": "57273655",
-    "teams": "Western Sydney Youth YOUTH - Blacktown City FC",
-    "league": "NSW NPL 1",
-    "sport": "football",
-    "country": "Australia",
-    "date": "2025-05-04",
-    "time": "05:00",
-    "odds": {
-      "home": 5.25,
-      "draw": 4.75,
-      "away": 1.42
-    },
-    "raw": {
-      "eventId": "57273655",
-      "country": "Australia",
-      "tournament": "NSW NPL 1",
-      "event": "Western Sydney Youth YOUTH - Blacktown City FC",
-      "market": "1X2 - FT",
-      "home_odds": "5.25",
-      "draw_odds": "4.75",
-      "away_odds": "1.42",
-      "start_time": "2025-05-04 05:00"
-    }
-  },
-  {
     "id": "58318603",
     "eventId": "58318603",
     "teams": "Gangneung City - Paju Citizen FC",
@@ -24462,6 +24436,32 @@
       "home_odds": "2.05",
       "draw_odds": "3.7",
       "away_odds": "3.05",
+      "start_time": "2025-05-04 07:30"
+    }
+  },
+  {
+    "id": "57353143",
+    "eventId": "57353143",
+    "teams": "Incheon United FC - Gimpo FC",
+    "league": "K-League 2",
+    "sport": "football",
+    "country": "Republic of Korea",
+    "date": "2025-05-04",
+    "time": "07:30",
+    "odds": {
+      "home": 1.83,
+      "draw": 3.35,
+      "away": 4
+    },
+    "raw": {
+      "eventId": "57353143",
+      "country": "Republic of Korea",
+      "tournament": "K-League 2",
+      "event": "Incheon United FC - Gimpo FC",
+      "market": "1X2 - FT",
+      "home_odds": "1.83",
+      "draw_odds": "3.35",
+      "away_odds": "4.0",
       "start_time": "2025-05-04 07:30"
     }
   },
@@ -39789,9 +39789,9 @@
     "date": "2025-05-20",
     "time": "22:00",
     "odds": {
-      "home": 1.37,
-      "draw": 4.25,
-      "away": 7.25
+      "home": 1.39,
+      "draw": 4.15,
+      "away": 7
     },
     "raw": {
       "eventId": "59752752",
@@ -39799,9 +39799,9 @@
       "tournament": "Copa do Brasil",
       "event": "CR Vasco da Gama RJ - Operario Ferroviario EC PR",
       "market": "1X2 - FT",
-      "home_odds": "1.37",
-      "draw_odds": "4.25",
-      "away_odds": "7.25",
+      "home_odds": "1.39",
+      "draw_odds": "4.15",
+      "away_odds": "7.0",
       "start_time": "2025-05-20 22:00"
     }
   },

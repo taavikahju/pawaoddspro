@@ -353,6 +353,7 @@ def main():
         # Get total pages to process
         page = 1
         more_pages = True
+        log(f"📚 Will attempt to fetch up to {MAX_PAGES} pages of data")
         
         while more_pages and page <= MAX_PAGES:
             if time.time() - start_time > max_runtime:
