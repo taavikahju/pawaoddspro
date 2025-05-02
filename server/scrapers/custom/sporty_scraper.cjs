@@ -5,9 +5,12 @@ const axios = require('axios');
 const BASE_URL = 'https://www.sportybet.com/api/gh/factsCenter/pcUpcomingEvents';
 const QUERY = 'sportId=sr%3Asport%3A1&marketId=1%2C18%2C10%2C29%2C11%2C26%2C36%2C14%2C60100&pageSize=100&option=1';
 
-// NOTE: We tried using a specific Premier League endpoint but it returned 404
-// Instead, we'll look for Premier League events in the general data
-// and do some additional processing to ensure we get all available events
+// We need to use time-based filtering to get future Premier League matches
+// These dates need to be formatted as Unix timestamps in milliseconds
+const getCurrentTimestamp = () => Date.now();
+const getTimestampForDate = (dateString) => {
+  return new Date(dateString).getTime();
+};
 
 // The Premier League tournament ID is "sr:tournament:17"
 // We'll check for it in the tournament data
@@ -94,25 +97,8 @@ const fetchAllPages = async () => {
   const MAX_ATTEMPTS = 3;
   const MAX_PAGES = 20; // Safety limit
 
-  // Define the special URL for future Premier League events (May 10-11)
-  const FUTURE_EPL_URL = 'https://www.sportybet.com/api/gh/factsCenter/pcUpcomingEvents?sportId=sr%3Asport%3A1&tournamentId=sr%3Atournament%3A17&marketId=1%2C18%2C10%2C29%2C11%2C26%2C36%2C14%2C60100&pageSize=100&option=1&pageNum=1';
-  
-  // First try to fetch future Premier League events specifically
-  console.error(`🏴󠁧󠁢󠁥󠁮󠁧󠁿 Attempting to fetch future Premier League matches using dedicated endpoint...`);
-  try {
-    const futurePLData = await fetchWithRetry(FUTURE_EPL_URL, 'future Premier League matches');
-    if (futurePLData && futurePLData.tournaments && futurePLData.tournaments.length > 0) {
-      console.error(`✅ Found ${futurePLData.tournaments[0].events?.length || 0} future Premier League events!`);
-      allTournaments = allTournaments.concat(futurePLData.tournaments);
-    } else {
-      console.error(`❌ No future Premier League data found with dedicated endpoint.`);
-    }
-  } catch (err) {
-    console.error(`❌ Error fetching future Premier League data: ${err.message}`);
-  }
-
-  // Fetch all tournaments data
-  console.error(`📊 Fetching general tournaments data...`);
+  // Fetch current tournaments data
+  console.error(`📊 Fetching current tournaments data...`);
   
   while (pageNum <= totalPages && pageNum <= MAX_PAGES) {
     const url = `${BASE_URL}?${QUERY}&pageNum=${pageNum}&_t=${Date.now()}`;
@@ -173,6 +159,50 @@ const fetchAllPages = async () => {
       // Longer pause after an error
       await new Promise(resolve => setTimeout(resolve, 2000));
     }
+  }
+
+  // Now fetch future events (May 10-11) using date filtering
+  console.error(`🔍 Fetching future Premier League matches (May 10-11) using date filtering...`);
+  
+  // Set the begin and end times for May 10-11
+  const beginTime = getTimestampForDate('2025-05-10 00:00:00');
+  const endTime = getTimestampForDate('2025-05-11 23:59:59');
+  
+  // Build the URL with date filtering
+  const futureURL = `${BASE_URL}?${QUERY}&beginTime=${beginTime}&endTime=${endTime}&pageNum=1`;
+  
+  try {
+    console.error(`📥 Fetching future events between May 10-11...`);
+    const res = await axios.get(futureURL, {
+      headers: HEADERS,
+      timeout: 30000
+    });
+    
+    const data = res.data?.data;
+    
+    if (data && data.tournaments && Array.isArray(data.tournaments)) {
+      const futureTournaments = data.tournaments;
+      const totalEvents = futureTournaments.reduce((count, t) => count + (t.events?.length || 0), 0);
+      
+      console.error(`✅ Found ${totalEvents} events for May 10-11 across ${futureTournaments.length} tournaments`);
+      
+      // Check if we have Premier League specifically
+      const premierLeague = futureTournaments.find(t => 
+        t.name === "Premier League" && 
+        t.events?.[0]?.sport?.category?.name === "England"
+      );
+      
+      if (premierLeague) {
+        console.error(`🏴󠁧󠁢󠁥󠁮󠁧󠁿 Found future Premier League with ${premierLeague.events?.length || 0} matches!`);
+      }
+      
+      // Add future tournaments to our collection
+      allTournaments = allTournaments.concat(futureTournaments);
+    } else {
+      console.error(`❌ No valid future tournaments found`);
+    }
+  } catch (err) {
+    console.error(`❌ Error fetching future events: ${err.message}`);
   }
 
   return allTournaments;
