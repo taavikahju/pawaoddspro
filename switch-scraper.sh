@@ -9,6 +9,27 @@ PY_BACKUP="${PY_SCRAPER}.disabled"
 function enable_python() {
   echo "Switching to Python Sportybet scraper..."
   
+  # Check if Python is installed
+  if ! command -v python3 &> /dev/null; then
+    echo "⚠️ Python 3 is not installed. Attempting to install it..."
+    apt-get update && apt-get install -y python3 python3-pip
+    pip3 install requests
+    
+    if ! command -v python3 &> /dev/null; then
+      echo "❌ Failed to install Python 3. Cannot proceed with Python scraper."
+      exit 1
+    else
+      echo "✅ Python 3 installed successfully."
+    fi
+  else
+    echo "✅ Python 3 is already installed."
+    # Make sure requests library is installed
+    if ! python3 -c "import requests" &> /dev/null; then
+      echo "Installing requests library..."
+      pip3 install requests
+    fi
+  fi
+  
   # Both Python original and disabled backup exist, special case
   if [ -f "$PY_SCRAPER" ] && [ -f "$PY_BACKUP" ]; then
     echo "Python scraper is already active and backup exists."
@@ -30,6 +51,9 @@ function enable_python() {
     echo "  - $PY_BACKUP"
     exit 1
   fi
+  
+  # Make Python scraper executable
+  chmod +x "$PY_SCRAPER"
   
   # Backup the Node.js scraper if not already backed up
   if [ -f "$NODE_SCRAPER" ] && [ ! -f "$NODE_BACKUP" ]; then

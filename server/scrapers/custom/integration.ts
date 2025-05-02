@@ -52,30 +52,66 @@ export async function runCustomScraper(bookmakerCode: string): Promise<any[]> {
         throw new Error('Python Sportybet scraper not found');
       }
       
-      // Run the Python scraper with a longer timeout (5 minutes)
-      console.log(`Running command: python "${pythonScraperPath}" with 5 minute timeout`);
-      const { stdout, stderr } = await execPromise(`python "${pythonScraperPath}"`, {
-        timeout: 5 * 60 * 1000, // 5 minutes in milliseconds
-        maxBuffer: 10 * 1024 * 1024 // 10MB buffer for large JSON output
-      });
-      
-      if (stderr && stderr.trim()) {
-        console.error(`Error running Python Sportybet scraper:`, stderr);
+      // First check if python3 is available, if not try python, and if that's not available, throw error
+      let pythonCommand = 'python3';
+      try {
+        await execPromise('python3 --version');
+        console.log('Using python3 command');
+      } catch (e) {
+        try {
+          await execPromise('python --version');
+          console.log('Using python command');
+          pythonCommand = 'python';
+        } catch (e) {
+          console.error('Neither python3 nor python is available on this system');
+          throw new Error('Python is not available');
+        }
       }
       
-      // Parse the output
+      // Run the Python scraper directly with python3 for better compatibility
+      // Use longer timeout (10 minutes) and larger buffer
+      console.log(`Running command: ${pythonCommand} "${pythonScraperPath}" with 10 minute timeout`);
+      
       try {
-        const rawData = JSON.parse(stdout.trim());
-        const data = Array.isArray(rawData) ? rawData : [];
-        console.log(`Python Sportybet scraper returned ${data.length} events`);
-        return data;
-      } catch (e) {
-        console.error(`Error parsing JSON output from Python Sportybet scraper:`, e);
-        console.error('Output was:', stdout.substring(0, 500) + '...');
-        return [];
+        const { stdout, stderr } = await execPromise(`${pythonCommand} "${pythonScraperPath}"`, {
+          timeout: 10 * 60 * 1000, // 10 minutes in milliseconds
+          maxBuffer: 20 * 1024 * 1024 // 20MB buffer for large JSON output
+        });
+        
+        if (stderr && stderr.trim()) {
+          console.error(`Python Sportybet scraper warnings:`, stderr);
+          // Still continue with stdout processing even if stderr has content
+        }
+        
+        // Check if we got a valid output
+        if (!stdout || !stdout.trim()) {
+          console.error('Python Sportybet scraper returned empty output');
+          throw new Error('Empty output from Python scraper');
+        }
+        
+        // Parse the output
+        try {
+          const rawData = JSON.parse(stdout.trim());
+          const data = Array.isArray(rawData) ? rawData : [];
+          console.log(`Python Sportybet scraper returned ${data.length} events`);
+          
+          if (data.length === 0) {
+            console.error('Python Sportybet scraper returned 0 events, falling back to Node.js implementation');
+            throw new Error('No events returned from Python scraper');
+          }
+          
+          return data;
+        } catch (parseError) {
+          console.error(`Error parsing JSON output from Python Sportybet scraper:`, parseError);
+          console.error('Output starts with:', stdout.substring(0, 500) + '...');
+          throw parseError; // Re-throw to trigger fallback
+        }
+      } catch (execError) {
+        console.error(`Error executing Python Sportybet scraper:`, execError);
+        throw execError; // Re-throw to trigger fallback
       }
     } catch (error) {
-      console.error(`Error running Python Sportybet scraper:`, error);
+      console.error(`Error running Python Sportybet scraper, falling back to Node.js implementation:`, error);
       console.log('Falling back to Node.js Sportybet scraper');
     }
   }

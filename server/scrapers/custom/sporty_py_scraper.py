@@ -351,7 +351,7 @@ def main():
             continue  # Skip to next endpoint on error
         attempts = 0
         MAX_ATTEMPTS = 3
-        MAX_PAGES = 20  # Safety limit
+        MAX_PAGES = 5  # Reduce to 5 pages per endpoint for faster execution
         
         # Fetch current tournaments data
         log(f"📊 Fetching current tournaments data...")
