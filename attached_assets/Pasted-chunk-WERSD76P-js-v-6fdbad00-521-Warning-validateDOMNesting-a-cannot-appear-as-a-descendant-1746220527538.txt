@@ -1,0 +1,24 @@
+chunk-WERSD76P.js?v=6fdbad00:521 Warning: validateDOMNesting(...): <a> cannot appear as a descendant of <a>.
+    at a
+    at a
+    at https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=6fdbad00:337:18
+    at div
+    at div
+    at div
+    at div
+    at Sidebar (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/components/Sidebar.tsx:45:35)
+    at div
+    at div
+    at div
+    at Layout (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/components/Layout.tsx:24:34)
+    at Dashboard (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/pages/dashboard.tsx?t=1746220461464:38:45)
+    at Route (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=6fdbad00:323:16)
+    at Switch (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=6fdbad00:379:17)
+    at Router
+    at BookmakerProvider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/contexts/BookmakerContext.tsx:23:37)
+    at Provider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-VIFX6DEG.js?v=6fdbad00:48:15)
+    at TooltipProvider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=6fdbad00:59:5)
+    at V (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/next-themes.js?v=6fdbad00:44:25)
+    at J (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/next-themes.js?v=6fdbad00:42:18)
+    at QueryClientProvider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=6fdbad00:2805:3)
+    at App

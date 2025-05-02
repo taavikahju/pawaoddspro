@@ -77,9 +77,7 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
       .filter(b => b.code === 'bp KE' || b.code === 'betika KE')
       .map(b => b.code);
     
-    console.log('Effect - Selected bookmakers:', selectedBookmakers);
-    console.log('Effect - Ghana bookmakers:', ghanaBookmakers);
-    console.log('Effect - Kenya bookmakers:', kenyaBookmakers);
+    // No logging selected bookmakers for performance
     
     // Check if Ghana filter is active
     const isGhanaActive = ghanaBookmakers.every(code => selectedBookmakers.includes(code)) && 
@@ -92,7 +90,7 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
     // Check if all bookmakers are selected
     const isAllActive = bookmakers.every(b => selectedBookmakers.includes(b.code));
     
-    console.log('Ghana active:', isGhanaActive, 'Kenya active:', isKenyaActive, 'All active:', isAllActive);
+    // No logging filter state for performance
     
     if (isGhanaActive) {
       setActiveFilter('ghana');
@@ -190,37 +188,37 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
           </p>
           <div className="space-y-1">
             <Link href="/">
-              <a className={cn(
-                "flex items-center px-2 py-1 rounded-md text-sm",
+              <div className={cn(
+                "flex items-center px-2 py-1 rounded-md text-sm cursor-pointer",
                 location === "/" 
                   ? "bg-blue-50 dark:bg-blue-900/30 text-primary dark:text-blue-400 font-medium" 
                   : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700"
               )}>
                 <LayoutDashboard className="h-3.5 w-3.5 mr-1.5" />
                 Dashboard
-              </a>
+              </div>
             </Link>
             <Link href="/tournament-margins">
-              <a className={cn(
-                "flex items-center px-2 py-1 rounded-md text-sm",
+              <div className={cn(
+                "flex items-center px-2 py-1 rounded-md text-sm cursor-pointer",
                 location === "/tournament-margins" 
                   ? "bg-blue-50 dark:bg-blue-900/30 text-primary dark:text-blue-400 font-medium" 
                   : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700"
               )}>
                 <TrendingUp className="h-3.5 w-3.5 mr-1.5" />
                 Tournament Margins
-              </a>
+              </div>
             </Link>
             <Link href="/admin">
-              <a className={cn(
-                "flex items-center px-2 py-1 rounded-md text-sm",
+              <div className={cn(
+                "flex items-center px-2 py-1 rounded-md text-sm cursor-pointer",
                 location === "/admin" 
                   ? "bg-blue-50 dark:bg-blue-900/30 text-primary dark:text-blue-400 font-medium" 
                   : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700"
               )}>
                 <Settings className="h-3.5 w-3.5 mr-1.5" />
                 Admin Panel
-              </a>
+              </div>
             </Link>
           </div>
         </div>
