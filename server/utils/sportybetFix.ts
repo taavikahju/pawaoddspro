@@ -66,14 +66,20 @@ export async function fixSportybetData(storage: IStorage): Promise<void> {
       event.oddsData && typeof event.oddsData === 'object' && 'sporty' in event.oddsData
     );
     
-    // If we already have most of the Sportybet events, no need to run the fix
-    // Temporarily disabled for testing our Premier League detection
-    if (false && eventsWithSportybet.length >= sportyData.length * 0.9) {
-      logger.critical(`Sportybet data already up to date (${eventsWithSportybet.length} / ${sportyData.length} events)`);
-      return;
-    }
+    // Create a map of events by eventId and externalId for faster lookups
+    const eventsByEventId = new Map();
+    const eventsByExternalId = new Map();
     
-    logger.critical(`Forcing Sportybet processing to test Premier League detection...`);
+    allEvents.forEach(event => {
+      if (event.eventId) {
+        eventsByEventId.set(event.eventId, event);
+      }
+      if (event.externalId) {
+        eventsByExternalId.set(event.externalId, event);
+      }
+    });
+    
+    logger.critical(`Forcing Sportybet processing to ensure all data is present...`);
     
     // Create a set of eventIds that already have Sportybet data
     const existingSportyEventIds = new Set(eventsWithSportybet.map(event => event.eventId));
@@ -103,38 +109,77 @@ export async function fixSportybetData(storage: IStorage): Promise<void> {
         if (homeOdds > 0 || drawOdds > 0 || awayOdds > 0) {
           oddsData['sporty'] = { home: homeOdds, draw: drawOdds, away: awayOdds };
         }
+      } else if (event.raw) {
+        // Try to extract from raw data if available
+        const homeOdds = event.raw.home_odds ? parseFloat(event.raw.home_odds) : 0;
+        const drawOdds = event.raw.draw_odds ? parseFloat(event.raw.draw_odds) : 0;
+        const awayOdds = event.raw.away_odds ? parseFloat(event.raw.away_odds) : 0;
+        
+        if (homeOdds > 0 || drawOdds > 0 || awayOdds > 0) {
+          oddsData['sporty'] = { home: homeOdds, draw: drawOdds, away: awayOdds };
+        }
       }
       
       if (Object.keys(oddsData).length === 0) {
         continue; // Skip events with no odds
       }
       
-      // Check if this event already exists in the database
-      let existingEvent = allEvents.find(e => e.eventId === normalizedId || e.eventId === originalId);
+      // Check if this event already exists in the database using the maps for faster lookup
+      let existingEvent = eventsByEventId.get(normalizedId) || 
+                           eventsByEventId.get(originalId) || 
+                           eventsByExternalId.get(normalizedId) || 
+                           eventsByExternalId.get(originalId);
       
       if (existingEvent) {
         // Check if this is a Premier League event
         const isPremierLeague = (existingEvent.country === 'England' && existingEvent.tournament === 'Premier League');
         
-        // For Premier League events, always update them, otherwise only update if they don't have Sportybet data
-        if (isPremierLeague || !existingSportyEventIds.has(existingEvent.eventId)) {
-          // Update existing event with Sportybet odds
-          const updatedOddsData = { ...existingEvent.oddsData, ...oddsData };
+        // Always update existing events to maintain Sportybet odds data
+        // This is key to preventing disappearing odds
+        const updatedOddsData = { 
+          ...existingEvent.oddsData, 
+          sporty: oddsData['sporty'] // Ensure Sportybet odds are updated/preserved
+        };
+        
+        // Track Premier League events
+        if (isPremierLeague) {
+          premierLeagueCount++;
+          logger.info(`Found Premier League match to update: ${existingEvent.teams} (ID: ${existingEvent.id})`);
+        }
+        
+        eventsToUpdate[existingEvent.id] = {
+          oddsData: updatedOddsData,
+          lastUpdated: new Date()
+        };
+      } else {
+        // Extra check for existing events by teams/date/time to avoid creating duplicates
+        // This helps prevent unique constraint errors on external_id
+        const teamsText = event.teams || event.event || (event.raw && event.raw.event) || 'Unknown';
+        const eventDate = extractDate(event);
+        
+        // Look for a potential match by team names and date to avoid duplicates
+        const potentialMatch = allEvents.find(e => 
+          e.teams === teamsText && 
+          e.date === eventDate
+        );
+        
+        if (potentialMatch) {
+          // Update the potential match instead of creating a new event
+          const updatedOddsData = { 
+            ...potentialMatch.oddsData, 
+            sporty: oddsData['sporty']
+          };
           
-          // Track Premier League events
-          if (isPremierLeague) {
-            premierLeagueCount++;
-            logger.info(`Found Premier League match to update: ${existingEvent.teams} (ID: ${existingEvent.id})`);
-          }
-          
-          eventsToUpdate[existingEvent.id] = {
+          eventsToUpdate[potentialMatch.id] = {
             oddsData: updatedOddsData,
             lastUpdated: new Date()
           };
+          
+          logger.info(`Found match by team name and date: ${teamsText} (${eventDate})`);
+          continue;
         }
-      } else {
-        // Create a new event
-        const teamsText = event.teams || event.event || (event.raw && event.raw.event) || 'Unknown';
+        
+        // Create a new event object
         const country = event.country || (event.raw && event.raw.country) || '';
         const tournament = event.tournament || event.league || (event.raw && event.raw.tournament) || '';
         let league = `${country} ${tournament}`.trim();
@@ -142,36 +187,8 @@ export async function fixSportybetData(storage: IStorage): Promise<void> {
           league = 'Unknown';
         }
         
-        // Extract date and time
-        let eventDate = '';
-        let eventTime = '';
-        
-        if (event.date) {
-          eventDate = event.date;
-        } else if (event.raw && event.raw.start_time && event.raw.start_time.includes(' ')) {
-          eventDate = event.raw.start_time.split(' ')[0];
-        } else if (event.start_time && event.start_time.includes(' ')) {
-          eventDate = event.start_time.split(' ')[0];
-        } else {
-          // Default date if not available
-          const today = new Date();
-          eventDate = today.toISOString().split('T')[0];
-        }
-        
-        // Extract time
-        if (event.time) {
-          eventTime = event.time;
-        } else if (event.raw && event.raw.start_time && event.raw.start_time.includes(' ')) {
-          eventTime = event.raw.start_time.split(' ')[1];
-        } else if (event.start_time && event.start_time.includes(' ')) {
-          eventTime = event.start_time.split(' ')[1];
-        } else {
-          // Default time if not available
-          eventTime = '12:00';
-        }
-        
         // Create a new event object
-        eventsToInsert.push({
+        const newEventData = {
           eventId: normalizedId,
           externalId: originalId || normalizedId,
           teams: teamsText,
@@ -180,21 +197,61 @@ export async function fixSportybetData(storage: IStorage): Promise<void> {
           tournament,
           sportId: 1, // Default to football
           date: eventDate,
-          time: eventTime,
+          time: extractTime(event),
           oddsData,
           bestOdds: oddsData['sporty'], // Best odds are the only odds we have
           lastUpdated: new Date()
-        });
+        };
+        
+        // Try to check if this event already exists by externalId before adding to insert list
+        try {
+          const existingByExternalId = await storage.getEventByExternalId(newEventData.externalId);
+          if (existingByExternalId) {
+            // If it exists, update instead of inserting
+            const updatedOddsData = {
+              ...existingByExternalId.oddsData,
+              sporty: oddsData['sporty']
+            };
+            
+            eventsToUpdate[existingByExternalId.id] = {
+              oddsData: updatedOddsData,
+              lastUpdated: new Date()
+            };
+            logger.info(`Found existing event by externalId: ${newEventData.externalId}`);
+          } else {
+            // If not found by externalId, try by eventId
+            const existingByEventId = await storage.getEventByEventId(newEventData.eventId);
+            if (existingByEventId) {
+              // If it exists, update instead of inserting
+              const updatedOddsData = {
+                ...existingByEventId.oddsData,
+                sporty: oddsData['sporty']
+              };
+              
+              eventsToUpdate[existingByEventId.id] = {
+                oddsData: updatedOddsData,
+                lastUpdated: new Date()
+              };
+              logger.info(`Found existing event by eventId: ${newEventData.eventId}`);
+            } else {
+              // Only add to insert list if truly not found in the database
+              eventsToInsert.push(newEventData);
+            }
+          }
+        } catch (e) {
+          logger.critical(`Error checking for existing event: ${e.message}`);
+          // Add to insert list with caution
+          eventsToInsert.push(newEventData);
+        }
         
         // Check if it's a Premier League event
-        // More thorough check using multiple properties and case-insensitive matching
         const isEngland = country && country.toLowerCase() === 'england';
         const isPremierLeague = tournament && tournament.toLowerCase().includes('premier league') ||
                              league && league.toLowerCase().includes('england premier league');
         
         if (isEngland && isPremierLeague) {
           premierLeagueCount++;
-          logger.info(`Found Premier League match: ${teamsText} (ID: ${normalizedId}) with odds ${JSON.stringify(oddsData.sporty)}`);
+          logger.info(`Found Premier League match: ${teamsText} (ID: ${normalizedId})`);
         }
       }
     }
@@ -202,20 +259,11 @@ export async function fixSportybetData(storage: IStorage): Promise<void> {
     logger.critical(`Prepared ${eventsToInsert.length} events to insert and ${Object.keys(eventsToUpdate).length} events to update`);
     logger.critical(`Found ${premierLeagueCount} Premier League events in Sportybet data`);
     
-    // Add detailed logging for every 200th event to help diagnose
-    let sampleCount = 0;
+    // Add detailed logging for Premier League events
     let directPremierLeagueCount = 0;
     
     // Direct check for Premier League events in raw data
     for (const event of sportyData) {
-      if (sampleCount % 200 === 0) {
-        const country = event.country || (event.raw && event.raw.country) || '';
-        const tournament = event.tournament || event.league || (event.raw && event.raw.tournament) || '';
-        const teams = event.teams || event.event || (event.raw && event.raw.event) || '';
-        
-        logger.critical(`Sample event ${sampleCount}: country="${country}", tournament="${tournament}", teams="${teams}"`);
-      }
-      
       // Check directly for Premier League events in source data
       const country = event.country || (event.raw && event.raw.country) || '';
       const tournament = event.tournament || event.league || (event.raw && event.raw.tournament) || '';
@@ -227,8 +275,6 @@ export async function fixSportybetData(storage: IStorage): Promise<void> {
           logger.critical(`England Premier League Match Found: ${teams}`);
         }
       }
-      
-      sampleCount++;
     }
     
     logger.critical(`Direct Premier League check found ${directPremierLeagueCount} England Premier League events`)
@@ -236,35 +282,135 @@ export async function fixSportybetData(storage: IStorage): Promise<void> {
     // Perform database operations
     let updateCount = 0;
     let insertCount = 0;
+    let errorCount = 0;
     
     // First update existing events
     if (Object.keys(eventsToUpdate).length > 0) {
       for (const [eventId, updateData] of Object.entries(eventsToUpdate)) {
-        await storage.updateEvent(parseInt(eventId), updateData);
-        updateCount++;
-        
-        // Log progress every 100 events
-        if (updateCount % 100 === 0) {
-          logger.critical(`Updated ${updateCount} / ${Object.keys(eventsToUpdate).length} events with Sportybet data`);
+        try {
+          await storage.updateEvent(parseInt(eventId), updateData);
+          updateCount++;
+          
+          // Log progress every 100 events
+          if (updateCount % 100 === 0) {
+            logger.critical(`Updated ${updateCount} / ${Object.keys(eventsToUpdate).length} events with Sportybet data`);
+          }
+        } catch (error) {
+          errorCount++;
+          logger.error(`Error updating event ${eventId}: ${error.message}`);
         }
       }
     }
     
-    // Then insert new events
+    // Then insert new events using a safer approach
     if (eventsToInsert.length > 0) {
       for (const eventData of eventsToInsert) {
-        await storage.createEvent(eventData);
-        insertCount++;
-        
-        // Log progress every 100 events
-        if (insertCount % 100 === 0) {
-          logger.critical(`Inserted ${insertCount} / ${eventsToInsert.length} new events with Sportybet data`);
+        try {
+          // Double-check one more time that this event doesn't exist
+          const existingByExternalId = await storage.getEventByExternalId(eventData.externalId);
+          const existingByEventId = await storage.getEventByEventId(eventData.eventId);
+          
+          if (existingByExternalId) {
+            // If it exists, update instead of inserting
+            const updatedOddsData = {
+              ...existingByExternalId.oddsData,
+              sporty: eventData.oddsData.sporty
+            };
+            
+            await storage.updateEvent(existingByExternalId.id, {
+              oddsData: updatedOddsData,
+              lastUpdated: new Date()
+            });
+            updateCount++;
+          } else if (existingByEventId) {
+            // If it exists by eventId, update instead of inserting
+            const updatedOddsData = {
+              ...existingByEventId.oddsData,
+              sporty: eventData.oddsData.sporty
+            };
+            
+            await storage.updateEvent(existingByEventId.id, {
+              oddsData: updatedOddsData,
+              lastUpdated: new Date()
+            });
+            updateCount++;
+          } else {
+            // If truly not found, insert safely
+            await storage.createEvent(eventData);
+            insertCount++;
+          }
+          
+          // Log progress every 100 events
+          if ((insertCount + updateCount) % 100 === 0) {
+            logger.critical(`Processed ${insertCount + updateCount} / ${eventsToInsert.length} new events with Sportybet data`);
+          }
+        } catch (error) {
+          errorCount++;
+          logger.error(`Error inserting event ${eventData.teams} (${eventData.externalId}): ${error.message}`);
+          
+          // Try to update instead if it's a duplicate key error
+          if (error.message.includes('duplicate key')) {
+            try {
+              // Try to find the event by team name and date as a last resort
+              const matchingEvents = allEvents.filter(e => 
+                e.teams === eventData.teams && 
+                e.date === eventData.date
+              );
+              
+              if (matchingEvents.length > 0) {
+                const matchEvent = matchingEvents[0];
+                const updatedOddsData = {
+                  ...matchEvent.oddsData,
+                  sporty: eventData.oddsData.sporty
+                };
+                
+                await storage.updateEvent(matchEvent.id, {
+                  oddsData: updatedOddsData,
+                  lastUpdated: new Date()
+                });
+                
+                logger.info(`Recovered from duplicate key error by updating event by name: ${eventData.teams}`);
+                updateCount++;
+              }
+            } catch (recoveryError) {
+              logger.error(`Failed to recover from duplicate key error: ${recoveryError.message}`);
+            }
+          }
         }
       }
     }
     
-    logger.critical(`Sportybet fix completed: ${insertCount} events inserted, ${updateCount} events updated`);
+    logger.critical(`Sportybet fix completed: ${insertCount} events inserted, ${updateCount} events updated, ${errorCount} errors handled`);
   } catch (error) {
     logger.critical(`Error in automatic Sportybet fix: ${error}`);
+  }
+}
+
+// Helper function to extract date from event
+function extractDate(event: any): string {
+  if (event.date) {
+    return event.date;
+  } else if (event.raw && event.raw.start_time && event.raw.start_time.includes(' ')) {
+    return event.raw.start_time.split(' ')[0];
+  } else if (event.start_time && event.start_time.includes(' ')) {
+    return event.start_time.split(' ')[0];
+  } else {
+    // Default date if not available
+    const today = new Date();
+    return today.toISOString().split('T')[0];
+  }
+}
+
+// Helper function to extract time from event
+function extractTime(event: any): string {
+  if (event.time) {
+    return event.time;
+  } else if (event.raw && event.raw.start_time && event.raw.start_time.includes(' ')) {
+    return event.raw.start_time.split(' ')[1];
+  } else if (event.start_time && event.start_time.includes(' ')) {
+    return event.start_time.split(' ')[1];
+  } else {
+    // Default time if not available
+    return '12:00';
   }
 }
