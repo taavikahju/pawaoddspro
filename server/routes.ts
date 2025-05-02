@@ -157,7 +157,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const filteredEvents = events.filter(event => {
         if (!event.oddsData) return false;
         const bookmakerCount = Object.keys(event.oddsData).length;
-        return bookmakerCount >= 3; // Updated to require 3+ bookmakers
+        return bookmakerCount >= 3; // Consistent with API endpoint (min 3 bookmakers)
       });
       
       logger.debug(`WebSocket: Filtered ${events.length} events down to ${filteredEvents.length} with at least 3 bookmakers`);
@@ -183,7 +183,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           const filteredEvents = events.filter(event => {
             if (!event.oddsData) return false;
             const bookmakerCount = Object.keys(event.oddsData).length;
-            return bookmakerCount >= 3; // Updated to require 3+ bookmakers
+            return bookmakerCount >= 3; // Consistent with API endpoint (min 3 bookmakers)
           });
 
           // Track counts for different bookmaker counts for WebSocket too
@@ -419,7 +419,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
         
         const bookmakerCount = Object.keys(event.oddsData).length;
-        return bookmakerCount >= 3; // Updated to require 3+ bookmakers
+        return bookmakerCount >= 3; // Consistent with API endpoint (min 3 bookmakers)
       });
       
       // Track counts for broadcast events
@@ -546,7 +546,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/events', async (req, res) => {
     try {
       const sportIdParam = req.query.sportId as string | undefined;
-      const minBookmakers = req.query.minBookmakers ? parseInt(req.query.minBookmakers as string, 10) : 2;
+      const minBookmakers = req.query.minBookmakers ? parseInt(req.query.minBookmakers as string, 10) : 3; // Updated to require 3+ bookmakers by default
       let rawEvents;
 
       if (sportIdParam) {
@@ -595,12 +595,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return bookmakerCount >= minBookmakers;
       });
       
-      // Get all events with Sportybet odds
+      // Get all events with Sportybet odds that ALSO meet the minimum bookmaker requirement
       const eventsWithSporty = events.filter(event => 
-        event.oddsData && typeof event.oddsData === 'object' && 'sporty' in event.oddsData
+        event.oddsData && 
+        typeof event.oddsData === 'object' && 
+        'sporty' in event.oddsData &&
+        Object.keys(event.oddsData).length >= minBookmakers
       );
       
-      // Combine both sets into a filtered event list, Sportybet events first
+      // Start with Sportybet events that meet the minimum bookmaker requirement
       const filteredEvents = [...eventsWithSporty];
       
       // Add events from eventsWithMinBookmakers that aren't already in filteredEvents
@@ -695,28 +698,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
             continue;
           }
           
-          // Create a direct event for the response
-          directEvents.push({
-            id: -1 * (directEvents.length + 1), // Temporary negative ID for direct events
-            eventId: eventId,
-            externalId: event.originalId || eventId,
-            teams: teams,
-            league: event.league || '',
-            country: event.country || event.raw?.country || '',
-            tournament: tournamentName,
-            sportId: 1, // Default to football
-            date: event.date || 
-              (event.start_time ? event.start_time.split(' ')[0] : null) || 
-              event.raw?.date || 
-              new Date().toISOString().split('T')[0],
-            time: event.time || 
-              (event.start_time ? event.start_time.split(' ')[1] : null) || 
-              event.raw?.time || 
-              '12:00',
-            oddsData: { sporty: odds },
-            bestOdds: odds,
-            lastUpdated: new Date()
-          });
+          // We won't create direct events with only Sportybet data anymore
+          // as they would have only one bookmaker and wouldn't meet our 3+ bookmaker requirement
+          // However, we'll keep the structure in place for potential future use with multiple bookmakers
+          
+          // Skip this event - it only has Sportybet odds (1 bookmaker)
+          continue;
           
           if (directEvents.length <= 5) {
             logger.info(`Created direct event: ${teams} (${eventId})`);
