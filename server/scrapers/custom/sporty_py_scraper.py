@@ -339,11 +339,16 @@ def main():
     
     all_tournaments = []
     
-    # Process each endpoint
+    # Process each endpoint with timeout handling
     for idx, endpoint in enumerate(API_ENDPOINTS):
-        log(f"Processing endpoint {idx+1}/6: {endpoint}")
-        page_num = 1
-        total_pages = 1
+        try:
+            log(f"Processing endpoint {idx+1}/6: {endpoint}")
+            page_num = 1
+            total_pages = 1
+        except Exception as e:
+            log(f"Error starting endpoint {endpoint} processing: {str(e)}")
+            log(traceback.format_exc())
+            continue  # Skip to next endpoint on error
         attempts = 0
         MAX_ATTEMPTS = 3
         MAX_PAGES = 20  # Safety limit

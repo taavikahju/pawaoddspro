@@ -87,9 +87,9 @@
     "date": "2025-05-02",
     "time": "19:30",
     "odds": {
-      "home": 2.47,
+      "home": 2.42,
       "draw": 3.6,
-      "away": 2.6
+      "away": 2.65
     },
     "raw": {
       "eventId": "59694219",
@@ -97,9 +97,9 @@
       "tournament": "Superliga",
       "event": "OFK Belgrade - FK Vojvodina Novi Sad",
       "market": "1X2",
-      "home_odds": "2.47",
+      "home_odds": "2.42",
       "draw_odds": "3.60",
-      "away_odds": "2.60",
+      "away_odds": "2.65",
       "start_time": "2025-05-02 19:30"
     }
   },
@@ -1439,9 +1439,9 @@
     "date": "2025-05-02",
     "time": "20:00",
     "odds": {
-      "home": 1.99,
+      "home": 2.03,
       "draw": 3.9,
-      "away": 2.95
+      "away": 2.85
     },
     "raw": {
       "eventId": "51025009",
@@ -1449,9 +1449,9 @@
       "tournament": "Regionalliga Bavaria",
       "event": "Buchbach - Augsburg II",
       "market": "1X2",
-      "home_odds": "1.99",
+      "home_odds": "2.03",
       "draw_odds": "3.90",
-      "away_odds": "2.95",
+      "away_odds": "2.85",
       "start_time": "2025-05-02 20:00"
     }
   },
@@ -3805,9 +3805,9 @@
     "date": "2025-05-02",
     "time": "21:30",
     "odds": {
-      "home": 2.35,
-      "draw": 2.95,
-      "away": 3.15
+      "home": 2.38,
+      "draw": 3,
+      "away": 3.05
     },
     "raw": {
       "eventId": "56743149",
@@ -3815,9 +3815,9 @@
       "tournament": "Primera LPF",
       "event": "Independiente Rivadavia - Defensa Y Justicia",
       "market": "1X2",
-      "home_odds": "2.35",
-      "draw_odds": "2.95",
-      "away_odds": "3.15",
+      "home_odds": "2.38",
+      "draw_odds": "3.00",
+      "away_odds": "3.05",
       "start_time": "2025-05-02 21:30"
     }
   },
@@ -3936,7 +3936,7 @@
     "time": "21:45",
     "odds": {
       "home": 1.39,
-      "draw": 5.4,
+      "draw": 5.2,
       "away": 7.6
     },
     "raw": {
@@ -3946,7 +3946,7 @@
       "event": "OGC Nice - Stade Reims",
       "market": "1X2",
       "home_odds": "1.39",
-      "draw_odds": "5.40",
+      "draw_odds": "5.20",
       "away_odds": "7.60",
       "start_time": "2025-05-02 21:45"
     }
@@ -15314,6 +15314,32 @@
     }
   },
   {
+    "id": "51923781",
+    "eventId": "51923781",
+    "teams": "Benevento Calcio U19 - SSC Napoli U19",
+    "league": "Primavera 2",
+    "sport": "football",
+    "country": "Italy",
+    "date": "2025-05-03",
+    "time": "16:00",
+    "odds": {
+      "home": 4.5,
+      "draw": 4,
+      "away": 1.57
+    },
+    "raw": {
+      "eventId": "51923781",
+      "country": "Italy",
+      "tournament": "Primavera 2",
+      "event": "Benevento Calcio U19 - SSC Napoli U19",
+      "market": "1X2",
+      "home_odds": "4.50",
+      "draw_odds": "4.00",
+      "away_odds": "1.57",
+      "start_time": "2025-05-03 16:00"
+    }
+  },
+  {
     "id": "55724235",
     "eventId": "55724235",
     "teams": "Gyor ETO Women - Pecsi MFC",
@@ -18729,9 +18755,9 @@
     "date": "2025-05-03",
     "time": "17:00",
     "odds": {
-      "home": 1.77,
+      "home": 1.82,
       "draw": 3.65,
-      "away": 3.65
+      "away": 3.45
     },
     "raw": {
       "eventId": "51469561",
@@ -18739,9 +18765,9 @@
       "tournament": "Regionalliga West",
       "event": "Gutersloh - Cologne II",
       "market": "1X2",
-      "home_odds": "1.77",
+      "home_odds": "1.82",
       "draw_odds": "3.65",
-      "away_odds": "3.65",
+      "away_odds": "3.45",
       "start_time": "2025-05-03 17:00"
     }
   },
@@ -23151,7 +23177,7 @@
     "odds": {
       "home": 2.16,
       "draw": 3.65,
-      "away": 3.4
+      "away": 3.45
     },
     "raw": {
       "eventId": "50850655",
@@ -23161,7 +23187,7 @@
       "market": "1X2",
       "home_odds": "2.16",
       "draw_odds": "3.65",
-      "away_odds": "3.40",
+      "away_odds": "3.45",
       "start_time": "2025-05-03 19:30"
     }
   },
@@ -34615,9 +34641,9 @@
     "date": "2025-05-04",
     "time": "18:00",
     "odds": {
-      "home": 3.65,
+      "home": 3.75,
       "draw": 3.65,
-      "away": 1.79
+      "away": 1.76
     },
     "raw": {
       "eventId": "51356267",
@@ -34625,9 +34651,9 @@
       "tournament": "NB II",
       "event": "Szentlorinc - Vasas FC",
       "market": "1X2",
-      "home_odds": "3.65",
+      "home_odds": "3.75",
       "draw_odds": "3.65",
-      "away_odds": "1.79",
+      "away_odds": "1.76",
       "start_time": "2025-05-04 18:00"
     }
   },

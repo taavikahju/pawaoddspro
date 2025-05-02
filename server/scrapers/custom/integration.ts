@@ -52,11 +52,14 @@ export async function runCustomScraper(bookmakerCode: string): Promise<any[]> {
         throw new Error('Python Sportybet scraper not found');
       }
       
-      // Run the Python scraper
-      console.log(`Running command: python "${pythonScraperPath}"`);
-      const { stdout, stderr } = await execPromise(`python "${pythonScraperPath}"`);
+      // Run the Python scraper with a longer timeout (5 minutes)
+      console.log(`Running command: python "${pythonScraperPath}" with 5 minute timeout`);
+      const { stdout, stderr } = await execPromise(`python "${pythonScraperPath}"`, {
+        timeout: 5 * 60 * 1000, // 5 minutes in milliseconds
+        maxBuffer: 10 * 1024 * 1024 // 10MB buffer for large JSON output
+      });
       
-      if (stderr) {
+      if (stderr && stderr.trim()) {
         console.error(`Error running Python Sportybet scraper:`, stderr);
       }
       
