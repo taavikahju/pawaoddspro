@@ -540,10 +540,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const sportyData = await storage.getBookmakerData('sporty', true);
         const sportyCount = Array.isArray(sportyData) ? sportyData.length : 0;
         logger.critical(`Raw Sportybet data check: ${sportyCount} events found in file`);
-        
-        if (sportyCount > 0 && Array.isArray(sportyData)) {
-          logger.critical(`First raw Sportybet event: ${JSON.stringify(sportyData[0])}`);
-        }
       } catch (e) {
         logger.critical(`Error checking raw Sportybet data: ${e}`);
       }

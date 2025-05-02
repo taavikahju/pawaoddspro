@@ -1881,9 +1881,9 @@
     "date": "2025-05-02",
     "time": "20:00",
     "odds": {
-      "home": 9.6,
-      "draw": 5.8,
-      "away": 1.22
+      "home": 9.8,
+      "draw": 6,
+      "away": 1.2
     },
     "raw": {
       "eventId": "50854499",
@@ -1891,9 +1891,9 @@
       "tournament": "Regionalliga Ost",
       "event": "FC Mauerwerk - FC Marchfeld Donauauen",
       "market": "1X2",
-      "home_odds": "9.60",
-      "draw_odds": "5.80",
-      "away_odds": "1.22",
+      "home_odds": "9.80",
+      "draw_odds": "6.00",
+      "away_odds": "1.20",
       "start_time": "2025-05-02 20:00"
     }
   },
@@ -2817,8 +2817,8 @@
     "date": "2025-05-02",
     "time": "21:00",
     "odds": {
-      "home": 1.16,
-      "draw": 7.8,
+      "home": 1.17,
+      "draw": 7.6,
       "away": 11
     },
     "raw": {
@@ -2827,8 +2827,8 @@
       "tournament": "Eerste Divisie",
       "event": "Excelsior Rotterdam - Jong PSV Eindhoven",
       "market": "1X2",
-      "home_odds": "1.16",
-      "draw_odds": "7.80",
+      "home_odds": "1.17",
+      "draw_odds": "7.60",
       "away_odds": "11.00",
       "start_time": "2025-05-02 21:00"
     }
@@ -3287,7 +3287,7 @@
     "odds": {
       "home": 1.42,
       "draw": 5.2,
-      "away": 7
+      "away": 7.2
     },
     "raw": {
       "eventId": "50955907",
@@ -3297,7 +3297,7 @@
       "market": "1X2",
       "home_odds": "1.42",
       "draw_odds": "5.20",
-      "away_odds": "7.00",
+      "away_odds": "7.20",
       "start_time": "2025-05-02 21:45"
     }
   },
@@ -3623,9 +3623,9 @@
     "date": "2025-05-02",
     "time": "21:45",
     "odds": {
-      "home": 5.8,
+      "home": 6,
       "draw": 4,
-      "away": 1.5
+      "away": 1.48
     },
     "raw": {
       "eventId": "56527283",
@@ -3633,9 +3633,9 @@
       "tournament": "First Division",
       "event": "Athlone Town AFC - Dundalk FC",
       "market": "1X2",
-      "home_odds": "5.80",
+      "home_odds": "6.00",
       "draw_odds": "4.00",
-      "away_odds": "1.50",
+      "away_odds": "1.48",
       "start_time": "2025-05-02 21:45"
     }
   },
@@ -12855,7 +12855,7 @@
     "odds": {
       "home": 1.36,
       "draw": 5.2,
-      "away": 9.2
+      "away": 9
     },
     "raw": {
       "eventId": "51273499",
@@ -12865,7 +12865,7 @@
       "market": "1X2",
       "home_odds": "1.36",
       "draw_odds": "5.20",
-      "away_odds": "9.20",
+      "away_odds": "9.00",
       "start_time": "2025-05-03 21:45"
     }
   },
@@ -15080,32 +15080,6 @@
     }
   },
   {
-    "id": "56926317",
-    "eventId": "56926317",
-    "teams": "Wynnum Wolves FC - Sunshine Coast Wanderers",
-    "league": "Queensland NPL",
-    "sport": "football",
-    "country": "Australia",
-    "date": "2025-05-04",
-    "time": "09:30",
-    "odds": {
-      "home": 2.02,
-      "draw": 3.6,
-      "away": 2.95
-    },
-    "raw": {
-      "eventId": "56926317",
-      "country": "Australia",
-      "tournament": "Queensland NPL",
-      "event": "Wynnum Wolves FC - Sunshine Coast Wanderers",
-      "market": "1X2",
-      "home_odds": "2.02",
-      "draw_odds": "3.60",
-      "away_odds": "2.95",
-      "start_time": "2025-05-04 09:30"
-    }
-  },
-  {
     "id": "57274835",
     "eventId": "57274835",
     "teams": "Adamstown Rosebud FC - Charlestown Azzurri FC",
@@ -15258,6 +15232,32 @@
       "home_odds": "3.10",
       "draw_odds": "3.25",
       "away_odds": "2.22",
+      "start_time": "2025-05-04 10:30"
+    }
+  },
+  {
+    "id": "56926317",
+    "eventId": "56926317",
+    "teams": "Wynnum Wolves FC - Sunshine Coast Wanderers",
+    "league": "Queensland NPL",
+    "sport": "football",
+    "country": "Australia",
+    "date": "2025-05-04",
+    "time": "10:30",
+    "odds": {
+      "home": 2.02,
+      "draw": 3.6,
+      "away": 2.95
+    },
+    "raw": {
+      "eventId": "56926317",
+      "country": "Australia",
+      "tournament": "Queensland NPL",
+      "event": "Wynnum Wolves FC - Sunshine Coast Wanderers",
+      "market": "1X2",
+      "home_odds": "2.02",
+      "draw_odds": "3.60",
+      "away_odds": "2.95",
       "start_time": "2025-05-04 10:30"
     }
   },
@@ -27205,7 +27205,7 @@
     "date": "2025-05-24",
     "time": "22:00",
     "odds": {
-      "home": 1.24,
+      "home": 1.23,
       "draw": 6.4,
       "away": 11
     },
@@ -27215,7 +27215,7 @@
       "tournament": "Coupe de France",
       "event": "Paris Saint-Germain - Stade Reims",
       "market": "1X2",
-      "home_odds": "1.24",
+      "home_odds": "1.23",
       "draw_odds": "6.40",
       "away_odds": "11.00",
       "start_time": "2025-05-24 22:00"
