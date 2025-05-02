@@ -35,7 +35,7 @@ export function useOfflineResilientEvents() {
         
         // Only update local cache if we have Sportybet data
         if (sportyEvents.length > 0) {
-          console.log(`Caching ${sportyEvents.length} events with Sportybet odds to localStorage`);
+          // No logging for cache updates
           
           // Store the entire dataset - we'll merge with local cache on disconnection
           localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
@@ -49,14 +49,14 @@ export function useOfflineResilientEvents() {
 
   // Handler for API error
   const handleError = useCallback(() => {
-    console.log('Error fetching events, falling back to local cache');
+    // Silent fallback to local cache
     // On error, try to load from local cache
     try {
       const cachedData = localStorage.getItem(LOCAL_STORAGE_KEY);
       if (cachedData) {
         const parsedData = JSON.parse(cachedData);
         if (Array.isArray(parsedData) && parsedData.length > 0) {
-          console.log(`Using ${parsedData.length} cached events from localStorage`);
+          // Silent usage of cached events
           setLocalCacheEvents(parsedData);
         }
       }
