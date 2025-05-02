@@ -999,28 +999,74 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
           // Store that we've seen this Sportybet event
           processedSportyEventIds.add(eventId);
           
-          // Check if the event already exists in the eventMap
+          // Determine if this is a Championship match for better matching
+          const isChampionshipMatch = 
+            (event.tournament && event.tournament.includes('Championship')) ||
+            (event.league && event.league.includes('Championship')) ||
+            (event.country === 'England' && event.tournament === 'Championship');
+          
+          // Get teams from the event for matching
+          let eventTeams = '';
+          if (event.teams) {
+            eventTeams = event.teams;
+          } else if (event.home && event.away) {
+            eventTeams = `${event.home} vs ${event.away}`;
+          } else if (event.raw && event.raw.home && event.raw.away) {
+            eventTeams = `${event.raw.home} vs ${event.raw.away}`;
+          }
+          
+          // Create normalized team names for better matching
+          const normalizedTeams = normalizeEventName(eventTeams);
+          
+          // Prepare for team-based matching if needed
+          let foundByTeamName = false;
+          let existingEvent = null;
+          
+          // Check if the event already exists in the eventMap by ID
           if (eventMap.has(eventId)) {
-            // Get the existing event
-            const existingEvent = eventMap.get(eventId);
+            existingEvent = eventMap.get(eventId);
+          } else if (isChampionshipMatch && eventTeams) {
+            // For Championship matches, try secondary matching by team names 
+            // when a direct ID match fails
+            logger.info(`Attempting Championship match by team name for: ${eventTeams}`);
             
-            // Extract Sportybet odds from the current event
-            let homeOdds = 0, drawOdds = 0, awayOdds = 0;
-            
-            if (event.odds) {
-              homeOdds = event.odds.home || 0;
-              drawOdds = event.odds.draw || 0;
-              awayOdds = event.odds.away || 0;
-            } else if (event.home_odds !== undefined && event.draw_odds !== undefined && event.away_odds !== undefined) {
-              homeOdds = parseFloat(event.home_odds) || 0;
-              drawOdds = parseFloat(event.draw_odds) || 0;
-              awayOdds = parseFloat(event.away_odds) || 0;
-            } else if (event.raw) {
-              homeOdds = parseFloat(event.raw.home_odds) || 0;
-              drawOdds = parseFloat(event.raw.draw_odds) || 0;
-              awayOdds = parseFloat(event.raw.away_odds) || 0;
+            // Loop through existing events to find a match by team name
+            for (const [existingId, existingEventData] of eventMap.entries()) {
+              // Skip if not a Championship match
+              if (!existingEventData.tournament || !existingEventData.tournament.includes('Championship')) {
+                continue;
+              }
+              
+              const existingNormalizedTeams = normalizeEventName(existingEventData.teams);
+              if (normalizedTeams === existingNormalizedTeams) {
+                // Found a match by team name
+                existingEvent = existingEventData;
+                foundByTeamName = true;
+                logger.critical(`✅ Found Championship match by team name: ${eventTeams} = ${existingEventData.teams}`);
+                break;
+              }
             }
+          }
             
+          // Extract Sportybet odds from the current event
+          let homeOdds = 0, drawOdds = 0, awayOdds = 0;
+          
+          if (event.odds) {
+            homeOdds = event.odds.home || 0;
+            drawOdds = event.odds.draw || 0;
+            awayOdds = event.odds.away || 0;
+          } else if (event.home_odds !== undefined && event.draw_odds !== undefined && event.away_odds !== undefined) {
+            homeOdds = parseFloat(event.home_odds) || 0;
+            drawOdds = parseFloat(event.draw_odds) || 0;
+            awayOdds = parseFloat(event.away_odds) || 0;
+          } else if (event.raw) {
+            homeOdds = parseFloat(event.raw.home_odds) || 0;
+            drawOdds = parseFloat(event.raw.draw_odds) || 0;
+            awayOdds = parseFloat(event.raw.away_odds) || 0;
+          }
+            
+          // If we found an existing event (either by ID or team name matching)
+          if (existingEvent) {
             // Only update if we have valid odds
             if (homeOdds > 0 && drawOdds > 0 && awayOdds > 0) {
               // Deep copy the existing odds data to avoid reference modification
@@ -1045,8 +1091,17 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
                 lastUpdated: new Date()
               };
               
-              // Replace the existing event in the map
-              eventMap.set(eventId, updatedEvent);
+              // If we found the event by team name matching, we should preserve its original ID
+              // but make sure to store this normalized match for future lookups
+              if (foundByTeamName) {
+                logger.critical(`Using team name match for Sportybet event: ${eventTeams}`);
+                // Store normalized team match info for future reference
+                // Important: We use the original event ID, not the Sportybet one
+                eventMap.set(existingEvent.eventId, updatedEvent);
+              } else {
+                // Replace the existing event in the map with the Sportybet event ID
+                eventMap.set(eventId, updatedEvent);
+              }
               
               logger.info(`Updated existing event with Sportybet odds: ${existingEvent.teams}`);
             }
@@ -1203,6 +1258,22 @@ function normalizeEventName(eventName: string): string {
       'man c': 'manchestercity',
       'ogc nice': 'nice',     // Specific case in the example
       'stade reims': 'reims', // Specific case in the example
+      
+      // Championship/EFL team names
+      'sheffield wed': 'sheffieldwednesday',
+      'sheffield wednesday': 'sheffieldwednesday',
+      'millwall': 'millwall fc',
+      'millwall fc': 'millwall fc',
+      'preston': 'preston north end',
+      'preston north end': 'preston north end',
+      'luton': 'luton town',
+      'luton town': 'luton town',
+      'west bromwich': 'west bromwich albion',
+      'west bromwich albion': 'west bromwich albion',
+      'qpr': 'queens park rangers',
+      'queens park rangers': 'queens park rangers',
+      'derby': 'derby county',
+      'derby county': 'derby county',
       
       // Team name aliases
       'juventus turin': 'juventus',

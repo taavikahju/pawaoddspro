@@ -1,0 +1,53 @@
+Python Sportybet scraper warnings: [2025-05-02T19:08:15.518441Z] [INFO] Starting Sportybet data collection (Python scraper)
+[2025-05-02T19:08:15.518521Z] [INFO] 📚 Will attempt to fetch up to 20 pages of data
+[2025-05-02T19:08:19.879165Z] [INFO] 📊 Found 8 tournaments on page 1
+[2025-05-02T19:08:19.879255Z] [INFO] 📊 Found 100 events on page 1 (total: 100)
+[2025-05-02T19:08:24.213009Z] [INFO] 📊 Found 18 tournaments on page 2
+[2025-05-02T19:08:24.213108Z] [INFO] 📊 Found 100 events on page 2 (total: 200)
+[2025-05-02T19:08:29.177228Z] [INFO] 📊 Found 13 tournaments on page 3
+[2025-05-02T19:08:29.177314Z] [INFO] 📊 Found 100 events on page 3 (total: 300)
+[2025-05-02T19:08:32.931014Z] [INFO] 📊 Found 12 tournaments on page 4
+[2025-05-02T19:08:32.931090Z] [INFO] 📊 Found 100 events on page 4 (total: 400)
+[2025-05-02T19:08:36.618063Z] [INFO] 📊 Found 20 tournaments on page 5
+[2025-05-02T19:08:36.618152Z] [INFO] 📊 Found 100 events on page 5 (total: 500)
+[2025-05-02T19:08:40.423202Z] [INFO] 📊 Found 15 tournaments on page 6
+[2025-05-02T19:08:40.423285Z] [INFO] 📊 Found 100 events on page 6 (total: 600)
+[2025-05-02T19:08:44.925423Z] [INFO] 📊 Found 19 tournaments on page 7
+[2025-05-02T19:08:44.925510Z] [INFO] 📊 Found 100 events on page 7 (total: 700)
+[2025-05-02T19:08:48.953286Z] [INFO] 📊 Found 19 tournaments on page 8
+[2025-05-02T19:08:48.953367Z] [INFO] 📊 Found 100 events on page 8 (total: 800)
+[2025-05-02T19:08:52.806101Z] [INFO] 📊 Found 12 tournaments on page 9
+[2025-05-02T19:08:52.806376Z] [INFO] 📊 Found 100 events on page 9 (total: 900)
+[2025-05-02T19:08:56.670361Z] [INFO] 📊 Found 22 tournaments on page 10
+[2025-05-02T19:08:56.670583Z] [INFO] 📊 Found 100 events on page 10 (total: 1000)
+[2025-05-02T19:08:59.957499Z] [INFO] 📊 Found 26 tournaments on page 11
+[2025-05-02T19:08:59.957571Z] [INFO] 📊 Found 100 events on page 11 (total: 1100)
+[2025-05-02T19:09:03.377559Z] [INFO] 📊 Found 22 tournaments on page 12
+[2025-05-02T19:09:03.377644Z] [INFO] 📊 Found 100 events on page 12 (total: 1200)
+[2025-05-02T19:09:07.506242Z] [INFO] 📊 Found 22 tournaments on page 13
+[2025-05-02T19:09:07.506316Z] [INFO] 📊 Found 100 events on page 13 (total: 1300)
+[2025-05-02T19:09:11.603132Z] [INFO] 📊 Found 24 tournaments on page 14
+[2025-05-02T19:09:11.603229Z] [INFO] 📊 Found 100 events on page 14 (total: 1400)
+[2025-05-02T19:09:14.633615Z] [INFO] 📊 Found 28 tournaments on page 15
+[2025-05-02T19:09:14.633691Z] [INFO] 📊 Found 100 events on page 15 (total: 1500)
+[2025-05-02T19:09:18.231805Z] [INFO] 📊 Found 35 tournaments on page 16
+[2025-05-02T19:09:18.232127Z] [INFO] 📊 Found 100 events on page 16 (total: 1600)
+[2025-05-02T19:09:22.048470Z] [INFO] 📊 Found 36 tournaments on page 17
+[2025-05-02T19:09:22.048550Z] [INFO] 📊 Found 98 events on page 17 (total: 1698)
+[2025-05-02T19:09:23.094489Z] [INFO] ❌ Invalid data format from page 18 - no tournaments found
+[2025-05-02T19:09:23.094590Z] [INFO] Processing tournaments after 67.6s/120s...
+[2025-05-02T19:09:23.094620Z] [INFO] Processing 351 tournaments...
+[2025-05-02T19:09:23.094649Z] [INFO] 🏴󠁧󠁢󠁥󠁮󠁧󠁿 Found England Premier League tournament: Premier League
+[2025-05-02T19:09:23.124548Z] [INFO] 🏴󠁧󠁢󠁥󠁮󠁧󠁿 PREMIER LEAGUE: 19 events with valid odds
+[2025-05-02T19:09:23.124600Z] [INFO] Dates covered: 2025-05-03, 2025-05-04, 2025-05-05, 2025-05-10, 2025-05-11
+[2025-05-02T19:09:23.124617Z] [INFO] ⚠️ Missing special EPL events: 50850810, 50850826, 50850822
+[2025-05-02T19:09:23.124653Z] [INFO] ✅ Successfully processed 1697 events (skipped 1)
+[2025-05-02T19:09:23.124679Z] [INFO] Total: collected 1697 events
+[2025-05-02T19:09:23.157567Z] [INFO] Saved 1697 events to test file data/sporty_py.json
+[2025-05-02T19:09:23.157619Z] [INFO] ✅ Collected 1697 total events from Sportybet
+[2025-05-02T19:09:23.157686Z] [INFO] Top countries: Brazil: 92, Spain: 86, Australia: 81, England: 68, Italy: 66
+[2025-05-02T19:09:23.157700Z] [INFO] Premier League events: 19
+[2025-05-02T19:09:23.179435Z] [INFO] Saved 1697 events to standard file data/sporty.json
+[2025-05-02T19:09:23.184566Z] [INFO] ✅ Sportybet scraper (Python) completed with 1697 total events
+
+Python Sportybet scraper returned 1697 events
