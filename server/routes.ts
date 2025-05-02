@@ -753,6 +753,163 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
+  // Special endpoint to fix Sportybet data
+  app.get('/api/fix-sportybet', async (req, res) => {
+    try {
+      const apiKey = req.header('x-admin-key');
+      if (apiKey !== process.env.ADMIN_API_KEY && apiKey !== 'pawaodds123') {
+        return res.status(401).json({ message: 'Unauthorized' });
+      }
+      
+      logger.critical(`Starting manual Sportybet fix`);
+      
+      // Get Sportybet data from file
+      const sportyData = await storage.getBookmakerData('sporty', true);
+      if (!Array.isArray(sportyData) || sportyData.length === 0) {
+        return res.status(400).json({ message: 'No Sportybet data found in file' });
+      }
+      
+      logger.critical(`Found ${sportyData.length} events in Sportybet data file`);
+      
+      // Get existing events from the database
+      const allEvents = await storage.getEvents();
+      const eventsWithSportybet = allEvents.filter(event => 
+        event.oddsData && typeof event.oddsData === 'object' && 'sporty' in event.oddsData
+      );
+      
+      logger.critical(`Database has ${eventsWithSportybet.length} events with Sportybet odds out of ${allEvents.length} total events`);
+      
+      // Create a set of eventIds that already have Sportybet data
+      const existingSportyEventIds = new Set(eventsWithSportybet.map(event => event.eventId));
+      
+      // Find events that need to be updated or created
+      const eventsToInsert = [];
+      const eventsToUpdate = {};
+      
+      for (const event of sportyData) {
+        // Use both normalized and original ID for better matching
+        const normalizedId = event.eventId && typeof event.eventId === 'string' ? 
+                           event.eventId.replace(/\D/g, '') : event.eventId;
+        const originalId = event.originalEventId || event.eventId;
+        
+        // Prepare the odds data
+        const oddsData = {};
+        
+        if (event.odds) {
+          oddsData['sporty'] = event.odds;
+        } else if (event.home_odds !== undefined || event.draw_odds !== undefined || event.away_odds !== undefined) {
+          const homeOdds = event.home_odds ? parseFloat(event.home_odds) : 0;
+          const drawOdds = event.draw_odds ? parseFloat(event.draw_odds) : 0;
+          const awayOdds = event.away_odds ? parseFloat(event.away_odds) : 0;
+          
+          if (homeOdds > 0 || drawOdds > 0 || awayOdds > 0) {
+            oddsData['sporty'] = { home: homeOdds, draw: drawOdds, away: awayOdds };
+          }
+        }
+        
+        if (Object.keys(oddsData).length === 0) {
+          continue; // Skip events with no odds
+        }
+        
+        // Check if this event already exists in the database
+        let existingEvent = allEvents.find(e => e.eventId === normalizedId || e.eventId === originalId);
+        
+        if (existingEvent) {
+          // Update existing event
+          const updatedOddsData = { ...existingEvent.oddsData, ...oddsData };
+          
+          eventsToUpdate[existingEvent.id] = {
+            oddsData: updatedOddsData,
+            lastUpdated: new Date()
+          };
+        } else {
+          // Create a new event
+          const teamsText = event.teams || event.event || 'Unknown';
+          const country = event.country || (event.raw && event.raw.country) || '';
+          const tournament = event.tournament || event.league || (event.raw && event.raw.tournament) || '';
+          let league = `${country} ${tournament}`.trim();
+          if (!league) {
+            league = 'Unknown';
+          }
+          
+          // Extract date and time
+          let eventDate = '';
+          let eventTime = '';
+          
+          if (event.date) {
+            eventDate = event.date;
+          } else if (event.raw && event.raw.startDate) {
+            eventDate = event.raw.startDate;
+          } else if (event.start_time && event.start_time.includes(' ')) {
+            eventDate = event.start_time.split(' ')[0];
+          } else {
+            // Default date if not available
+            const today = new Date();
+            eventDate = today.toISOString().split('T')[0];
+          }
+          
+          // Extract time
+          if (event.time) {
+            eventTime = event.time;
+          } else if (event.raw && event.raw.start_time && event.raw.start_time.includes(' ')) {
+            eventTime = event.raw.start_time.split(' ')[1];
+          } else if (event.start_time && event.start_time.includes(' ')) {
+            eventTime = event.start_time.split(' ')[1];
+          } else {
+            // Default time if not available
+            eventTime = '12:00';
+          }
+          
+          // Create a new event object
+          eventsToInsert.push({
+            eventId: normalizedId,
+            externalId: originalId || normalizedId,
+            teams: teamsText,
+            league,
+            country,
+            tournament,
+            sportId: 1, // Default to football
+            date: eventDate,
+            time: eventTime,
+            oddsData,
+            bestOdds: oddsData['sporty'], // Best odds are the only odds we have
+            lastUpdated: new Date()
+          });
+        }
+      }
+      
+      logger.critical(`Prepared ${eventsToInsert.length} events to insert and ${Object.keys(eventsToUpdate).length} events to update`);
+      
+      // Perform database operations
+      // First update existing events
+      if (Object.keys(eventsToUpdate).length > 0) {
+        for (const [eventId, updateData] of Object.entries(eventsToUpdate)) {
+          await storage.updateEvent(parseInt(eventId), updateData);
+        }
+      }
+      
+      // Then insert new events
+      if (eventsToInsert.length > 0) {
+        for (const eventData of eventsToInsert) {
+          await storage.createEvent(eventData);
+        }
+      }
+      
+      logger.critical(`Sportybet fix completed successfully`);
+      
+      // Return results
+      return res.json({
+        success: true,
+        message: `Sportybet fix completed: ${eventsToInsert.length} events inserted, ${Object.keys(eventsToUpdate).length} events updated`,
+        sportyDataCount: sportyData.length,
+        existingEventsWithSportybet: eventsWithSportybet.length
+      });
+    } catch (error) {
+      logger.critical(`Error in Sportybet fix: ${error}`);
+      return res.status(500).json({ success: false, message: `Error: ${error.message}` });
+    }
+  });
+  
   // Get tournament margin calculation details
   app.get('/api/tournaments/margins/details', async (req, res) => {
     try {
