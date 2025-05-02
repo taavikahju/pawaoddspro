@@ -868,7 +868,7 @@
     "time": "02:15",
     "odds": {
       "home": 12,
-      "draw": 7.25,
+      "draw": 7.5,
       "away": 1.13
     },
     "raw": {
@@ -878,7 +878,7 @@
       "event": "Launceston United SC - Kingborough Lions United FC",
       "market": "1X2 - FT",
       "home_odds": "12.0",
-      "draw_odds": "7.25",
+      "draw_odds": "7.5",
       "away_odds": "1.13",
       "start_time": "2025-05-03 02:15"
     }
@@ -945,9 +945,9 @@
     "date": "2025-05-03",
     "time": "03:00",
     "odds": {
-      "home": 1.41,
-      "draw": 4.85,
-      "away": 5.25
+      "home": 1.37,
+      "draw": 5,
+      "away": 5.5
     },
     "raw": {
       "eventId": "58697923",
@@ -955,9 +955,9 @@
       "tournament": "New Zealand Central League",
       "event": "Petone FC - Upper Hutt City Football",
       "market": "1X2 - FT",
-      "home_odds": "1.41",
-      "draw_odds": "4.85",
-      "away_odds": "5.25",
+      "home_odds": "1.37",
+      "draw_odds": "5.0",
+      "away_odds": "5.5",
       "start_time": "2025-05-03 03:00"
     }
   },
@@ -10903,9 +10903,9 @@
     "date": "2025-05-03",
     "time": "14:00",
     "odds": {
-      "home": 1.63,
-      "draw": 4,
-      "away": 4.5
+      "home": 1.6,
+      "draw": 4.1,
+      "away": 4.7
     },
     "raw": {
       "eventId": "51094147",
@@ -10913,9 +10913,9 @@
       "tournament": "League One",
       "event": "Reading FC - Barnsley FC",
       "market": "1X2 - FT",
-      "home_odds": "1.63",
-      "draw_odds": "4.0",
-      "away_odds": "4.5",
+      "home_odds": "1.6",
+      "draw_odds": "4.1",
+      "away_odds": "4.7",
       "start_time": "2025-05-03 14:00"
     }
   },
@@ -11388,32 +11388,6 @@
     }
   },
   {
-    "id": "59477017",
-    "eventId": "59477017",
-    "teams": "KVC Westerlo - KAA Gent",
-    "league": "Super League, Women",
-    "sport": "football",
-    "country": "Belgium",
-    "date": "2025-05-03",
-    "time": "14:00",
-    "odds": {
-      "home": 1.77,
-      "draw": 4.25,
-      "away": 3.3
-    },
-    "raw": {
-      "eventId": "59477017",
-      "country": "Belgium",
-      "tournament": "Super League, Women",
-      "event": "KVC Westerlo - KAA Gent",
-      "market": "1X2 - FT",
-      "home_odds": "1.77",
-      "draw_odds": "4.25",
-      "away_odds": "3.3",
-      "start_time": "2025-05-03 14:00"
-    }
-  },
-  {
     "id": "51094155",
     "eventId": "51094155",
     "teams": "Huddersfield Town - Leyton Orient London",
@@ -11436,6 +11410,32 @@
       "home_odds": "3.95",
       "draw_odds": "3.7",
       "away_odds": "1.79",
+      "start_time": "2025-05-03 14:00"
+    }
+  },
+  {
+    "id": "59477017",
+    "eventId": "59477017",
+    "teams": "KVC Westerlo - KAA Gent",
+    "league": "Super League, Women",
+    "sport": "football",
+    "country": "Belgium",
+    "date": "2025-05-03",
+    "time": "14:00",
+    "odds": {
+      "home": 1.77,
+      "draw": 4.25,
+      "away": 3.3
+    },
+    "raw": {
+      "eventId": "59477017",
+      "country": "Belgium",
+      "tournament": "Super League, Women",
+      "event": "KVC Westerlo - KAA Gent",
+      "market": "1X2 - FT",
+      "home_odds": "1.77",
+      "draw_odds": "4.25",
+      "away_odds": "3.3",
       "start_time": "2025-05-03 14:00"
     }
   },
@@ -12333,9 +12333,9 @@
     "date": "2025-05-03",
     "time": "14:00",
     "odds": {
-      "home": 2.08,
-      "draw": 3.5,
-      "away": 3.4
+      "home": 2.03,
+      "draw": 3.55,
+      "away": 3.5
     },
     "raw": {
       "eventId": "59886246",
@@ -12343,9 +12343,9 @@
       "tournament": "Premiership",
       "event": "Dundee FC - Motherwell FC",
       "market": "1X2 - FT",
-      "home_odds": "2.08",
-      "draw_odds": "3.5",
-      "away_odds": "3.4",
+      "home_odds": "2.03",
+      "draw_odds": "3.55",
+      "away_odds": "3.5",
       "start_time": "2025-05-03 14:00"
     }
   },
@@ -15314,32 +15314,6 @@
     }
   },
   {
-    "id": "60190903",
-    "eventId": "60190903",
-    "teams": "Al-Wehdat - Al-Ramtha",
-    "league": "Jordan Pro League",
-    "sport": "football",
-    "country": "Jordan",
-    "date": "2025-05-03",
-    "time": "16:00",
-    "odds": {
-      "home": 1.26,
-      "draw": 4.8,
-      "away": 9.75
-    },
-    "raw": {
-      "eventId": "60190903",
-      "country": "Jordan",
-      "tournament": "Jordan Pro League",
-      "event": "Al-Wehdat - Al-Ramtha",
-      "market": "1X2 - FT",
-      "home_odds": "1.26",
-      "draw_odds": "4.8",
-      "away_odds": "9.75",
-      "start_time": "2025-05-03 16:00"
-    }
-  },
-  {
     "id": "51829981",
     "eventId": "51829981",
     "teams": "CD Arenteiro - Zamora CF",
@@ -15362,6 +15336,32 @@
       "home_odds": "2.14",
       "draw_odds": "3.05",
       "away_odds": "3.25",
+      "start_time": "2025-05-03 16:00"
+    }
+  },
+  {
+    "id": "60190903",
+    "eventId": "60190903",
+    "teams": "Al-Wehdat - Al-Ramtha",
+    "league": "Jordan Pro League",
+    "sport": "football",
+    "country": "Jordan",
+    "date": "2025-05-03",
+    "time": "16:00",
+    "odds": {
+      "home": 1.26,
+      "draw": 4.8,
+      "away": 9.75
+    },
+    "raw": {
+      "eventId": "60190903",
+      "country": "Jordan",
+      "tournament": "Jordan Pro League",
+      "event": "Al-Wehdat - Al-Ramtha",
+      "market": "1X2 - FT",
+      "home_odds": "1.26",
+      "draw_odds": "4.8",
+      "away_odds": "9.75",
       "start_time": "2025-05-03 16:00"
     }
   },
@@ -15740,8 +15740,8 @@
     "time": "16:45",
     "odds": {
       "home": 5.5,
-      "draw": 4.3,
-      "away": 1.55
+      "draw": 4.4,
+      "away": 1.52
     },
     "raw": {
       "eventId": "50868517",
@@ -15750,8 +15750,8 @@
       "event": "Heracles Almelo - Feyenoord Rotterdam",
       "market": "1X2 - FT",
       "home_odds": "5.5",
-      "draw_odds": "4.3",
-      "away_odds": "1.55",
+      "draw_odds": "4.4",
+      "away_odds": "1.52",
       "start_time": "2025-05-03 16:45"
     }
   },
@@ -17769,7 +17769,7 @@
     "odds": {
       "home": 13.5,
       "draw": 9.25,
-      "away": 1.19
+      "away": 1.2
     },
     "raw": {
       "eventId": "50852751",
@@ -17779,7 +17779,7 @@
       "market": "1X2 - FT",
       "home_odds": "13.5",
       "draw_odds": "9.25",
-      "away_odds": "1.19",
+      "away_odds": "1.2",
       "start_time": "2025-05-03 19:00"
     }
   },
@@ -27439,9 +27439,9 @@
     "date": "2025-05-04",
     "time": "17:45",
     "odds": {
-      "home": 1.11,
+      "home": 1.1,
       "draw": 6.75,
-      "away": 17.5
+      "away": 19.5
     },
     "raw": {
       "eventId": "59224393",
@@ -27449,9 +27449,9 @@
       "tournament": "Bosnia-Herzegovina Premier Liga",
       "event": "FK Radnik Bijeljina - GOŠK Gabela",
       "market": "1X2 - FT",
-      "home_odds": "1.11",
+      "home_odds": "1.1",
       "draw_odds": "6.75",
-      "away_odds": "17.5",
+      "away_odds": "19.5",
       "start_time": "2025-05-04 17:45"
     }
   },
@@ -33913,9 +33913,9 @@
     "date": "2025-05-09",
     "time": "18:00",
     "odds": {
-      "home": 1.81,
-      "draw": 3.85,
-      "away": 3.7
+      "home": 1.78,
+      "draw": 3.9,
+      "away": 3.8
     },
     "raw": {
       "eventId": "50869729",
@@ -33923,9 +33923,9 @@
       "tournament": "Eerste Divisie",
       "event": "Roda JC Kerkrade - FC Eindhoven",
       "market": "1X2 - FT",
-      "home_odds": "1.81",
-      "draw_odds": "3.85",
-      "away_odds": "3.7",
+      "home_odds": "1.78",
+      "draw_odds": "3.9",
+      "away_odds": "3.8",
       "start_time": "2025-05-09 18:00"
     }
   },
@@ -34147,9 +34147,9 @@
     "date": "2025-05-09",
     "time": "18:30",
     "odds": {
-      "home": 1.74,
-      "draw": 3.65,
-      "away": 4.2
+      "home": 1.79,
+      "draw": 3.6,
+      "away": 3.95
     },
     "raw": {
       "eventId": "51157989",
@@ -34157,9 +34157,9 @@
       "tournament": "2. Liga",
       "event": "FC Admira Wacker Modling - ASK Voitsberg",
       "market": "1X2 - FT",
-      "home_odds": "1.74",
-      "draw_odds": "3.65",
-      "away_odds": "4.2",
+      "home_odds": "1.79",
+      "draw_odds": "3.6",
+      "away_odds": "3.95",
       "start_time": "2025-05-09 18:30"
     }
   },
@@ -34225,7 +34225,7 @@
     "date": "2025-05-09",
     "time": "19:00",
     "odds": {
-      "home": 2.5,
+      "home": 2.55,
       "draw": 3.3,
       "away": 2.85
     },
@@ -34235,7 +34235,7 @@
       "tournament": "LaLiga",
       "event": "UD Las Palmas - Rayo Vallecano",
       "market": "1X2 - FT",
-      "home_odds": "2.5",
+      "home_odds": "2.55",
       "draw_odds": "3.3",
       "away_odds": "2.85",
       "start_time": "2025-05-09 19:00"
@@ -34538,7 +34538,7 @@
     "time": "14:00",
     "odds": {
       "home": 2.65,
-      "draw": 3.55,
+      "draw": 3.5,
       "away": 2.6
     },
     "raw": {
@@ -34548,7 +34548,7 @@
       "event": "Wolverhampton Wanderers - Brighton & Hove Albion",
       "market": "1X2 - FT",
       "home_odds": "2.65",
-      "draw_odds": "3.55",
+      "draw_odds": "3.5",
       "away_odds": "2.6",
       "start_time": "2025-05-10 14:00"
     }
