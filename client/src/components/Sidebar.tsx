@@ -242,11 +242,18 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
                 toggleTop5LeaguesFilter();
                 
                 // Set active filter
-                setActiveFilter('top5');
+                setActiveFilter(activeFilter === 'top5' ? null : 'top5');
               }}
             >
-              <Trophy className="h-3.5 w-3.5 mr-1.5" />
-              Top 5 Leagues
+              <div className="flex items-center">
+                <Trophy className="h-3.5 w-3.5 mr-1.5" />
+                <span className="mr-1">Top 5 Leagues</span>
+                {activeFilter === 'top5' && (
+                  <span className="inline-flex items-center justify-center w-4 h-4 ml-1 bg-white bg-opacity-30 text-white text-xs rounded-full">
+                    ✓
+                  </span>
+                )}
+              </div>
             </Button>
             
             <Button 
@@ -278,8 +285,15 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
                 setActiveFilter('ghana');
               }}
             >
-              <CountryFlag countryCode="GH" countryName="Ghana" size="sm" className="mr-1.5" />
-              Ghana
+              <div className="flex items-center">
+                <CountryFlag countryCode="GH" countryName="Ghana" size="sm" className="mr-1.5" />
+                <span className="mr-1">Ghana</span>
+                {activeFilter === 'ghana' && (
+                  <span className="inline-flex items-center justify-center w-4 h-4 ml-1 bg-white bg-opacity-30 text-white text-xs rounded-full">
+                    ✓
+                  </span>
+                )}
+              </div>
             </Button>
             
             <Button 
@@ -311,8 +325,15 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
                 setActiveFilter('kenya');
               }}
             >
-              <CountryFlag countryCode="KE" countryName="Kenya" size="sm" className="mr-1.5" />
-              Kenya
+              <div className="flex items-center">
+                <CountryFlag countryCode="KE" countryName="Kenya" size="sm" className="mr-1.5" />
+                <span className="mr-1">Kenya</span>
+                {activeFilter === 'kenya' && (
+                  <span className="inline-flex items-center justify-center w-4 h-4 ml-1 bg-white bg-opacity-30 text-white text-xs rounded-full">
+                    ✓
+                  </span>
+                )}
+              </div>
             </Button>
             
             <Button 
@@ -336,8 +357,15 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
                 setActiveFilter('all');
               }}
             >
-              <Filter className="h-3.5 w-3.5 mr-1.5" />
-              All Bookmakers
+              <div className="flex items-center">
+                <Filter className="h-3.5 w-3.5 mr-1.5" />
+                <span className="mr-1">All Bookmakers</span>
+                {activeFilter === 'all' && (
+                  <span className="inline-flex items-center justify-center w-4 h-4 ml-1 bg-white bg-opacity-30 text-white text-xs rounded-full">
+                    ✓
+                  </span>
+                )}
+              </div>
             </Button>
           </div>
           
