@@ -91,7 +91,27 @@ export async function runCustomScraper(bookmakerCode: string): Promise<any[]> {
         
         // Parse the output
         try {
-          const rawData = JSON.parse(stdout.trim());
+          // Ensure we're only parsing the actual JSON output
+          // Many issues can happen if logs get mixed in with the JSON
+          // First identify the position of the first '[' which should be the start of the JSON array
+          const jsonStart = stdout.indexOf('[');
+          if (jsonStart === -1) {
+            console.error('No JSON array found in Python scraper output');
+            throw new Error('Invalid JSON output format');
+          }
+          
+          // Then find the closing ']' from the end (last occurence)
+          const jsonEnd = stdout.lastIndexOf(']');
+          if (jsonEnd === -1 || jsonEnd <= jsonStart) {
+            console.error('No valid JSON array closing found in Python scraper output');
+            throw new Error('Invalid JSON output format');
+          }
+          
+          // Extract only the JSON part
+          const jsonText = stdout.substring(jsonStart, jsonEnd + 1);
+          
+          // Parse the JSON
+          const rawData = JSON.parse(jsonText);
           const data = Array.isArray(rawData) ? rawData : [];
           console.log(`Python Sportybet scraper returned ${data.length} events`);
           

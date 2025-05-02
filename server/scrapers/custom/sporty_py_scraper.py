@@ -489,12 +489,18 @@ def main():
         log(f"Saved {len(all_events)} events to standard file {standard_output}")
         
         # 5. Print to stdout for the integration system to capture
+        # Important: Don't write any logs before printing the JSON result
+        # Make sure there's no logging output before this to avoid JSON parsing errors
         print(json.dumps(all_events))
+        sys.stdout.flush()  # Make sure output is flushed
         
+        # Only log after we've printed the JSON
         log(f"✅ Sportybet scraper (Python) completed with {len(all_events)} total events")
     else:
         log("⚠️ No events collected, file not saved")
-        print("[]")  # Empty array for the integration system
+        # Important: Make sure we only print valid JSON
+        print("[]")
+        sys.stdout.flush()
 
 if __name__ == "__main__":
     try:
@@ -503,5 +509,7 @@ if __name__ == "__main__":
         log(f"Critical error in main process: {str(e)}")
         log(traceback.format_exc())
         # Print empty array for integration system in case of failure
+        # Just print a valid JSON array and nothing else to avoid parsing issues
         print("[]")
+        sys.stdout.flush()
         sys.exit(1)
