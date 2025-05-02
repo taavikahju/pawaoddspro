@@ -196,22 +196,28 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
     logger.info(`Processing ${activeBookmakers.length} active bookmakers`);
     
     // Sort the bookmakers to process them in a specific order
-    // 1. First process Sportybet to ensure it completes (as the slowest scraper)
-    // 2. Then process betPawa Ghana as the base for countries/tournaments
+    // 1. First process betPawa Ghana as it's our base bookmaker for event mapping
+    // 2. Then process Sportybet to ensure it completes (as the slowest scraper)
     // 3. Then process all other bookmakers
     const sortedBookmakers = [...activeBookmakers].sort((a, b) => {
-      if (a.code === 'sporty') return -1; // Sportybet should be first (changed from second)
-      if (b.code === 'sporty') return 1;
-      if (a.code === 'bp GH') return -1; // betPawa Ghana should be second (changed from first)
+      if (a.code === 'bp GH') return -1; // betPawa Ghana should be first as it's our base bookmaker
       if (b.code === 'bp GH') return 1;
+      if (a.code === 'sporty') return -1; // Sportybet should be second as it's slow but important
+      if (b.code === 'sporty') return 1;
       return 0; // Keep the original order for other bookmakers
     });
     
     logger.info(`Scraping in optimized order: ${sortedBookmakers.map(b => b.code).join(', ')}`);
     
-    // Run all scrapers in parallel for faster completion time
-    // We'll still update frontend only once everything is done
-    const scraperPromises = sortedBookmakers.map(async (bookmaker) => {
+    // Run scrapers in sequence to ensure bookmakers are processed in the correct order
+    // This allows betPawa Ghana (our base bookmaker) to complete first
+    const results: Array<{
+      bookmaker: string;
+      data?: any;
+      error?: unknown;
+    }> = [];
+    
+    for (const bookmaker of sortedBookmakers) {
       try {
         // Emit bookmaker scraper started event
         scraperEvents.emit(SCRAPER_EVENTS.BOOKMAKER_STARTED, {
@@ -273,7 +279,8 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
             error: 'No custom scraper available'
           });
           
-          return null;
+          results.push({ bookmaker: bookmaker.code, error: 'No custom scraper available' });
+          continue; // Skip to next bookmaker
         }
         
         if (data) {
@@ -291,9 +298,9 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
             message: `Completed scraping for ${bookmaker.name}`,
             eventCount
           });
+          
+          results.push({ bookmaker: bookmaker.code, data });
         }
-        
-        return { bookmaker: bookmaker.code, data };
       } catch (error) {
         console.error(`❌ ${bookmaker.name} scraper failed:`, error);
         
@@ -308,12 +315,9 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
           error: error instanceof Error ? error.message : String(error)
         });
         
-        return { bookmaker: bookmaker.code, error, data: null };
+        results.push({ bookmaker: bookmaker.code, error });
       }
-    });
-    
-    // Wait for all scrapers to complete
-    const results = await Promise.all(scraperPromises);
+    }
     
     // Count successful scrapers and log detailed event counts
     const successfulScrapers = results.filter(r => r && r.data).length;
