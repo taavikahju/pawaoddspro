@@ -34,7 +34,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
 
     // Get all bookmaker data - force fresh load to avoid caching issues
     logger.critical('Loading fresh bookmaker data from disk...');
-    const rawBookmakerData = await storage.getAllBookmakersData(true);
+    const rawBookmakerData = await storage.getAllBookmakersData();
     
     // Create a deep copy to prevent accidental modifications of the source data
     // This is critical to prevent events from disappearing between requests
@@ -971,8 +971,8 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     
     // First get all Sportybet events from the raw data
     try {
-      // Force a fresh load of Sportybet data to ensure we have the most up-to-date data
-      const rawDataResponse = await storage.getBookmakerData('sporty', true);
+      // Get Sportybet data to ensure we have the most up-to-date data
+      const rawDataResponse = await storage.getBookmakerData('sporty');
       
       // Make a deep copy to avoid reference issues
       const sportyRawData = JSON.parse(JSON.stringify(rawDataResponse));
@@ -1025,15 +1025,22 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
           // Check if the event already exists in the eventMap by ID
           if (eventMap.has(eventId)) {
             existingEvent = eventMap.get(eventId);
-          } else if (isChampionshipMatch && eventTeams) {
-            // For Championship matches, try secondary matching by team names 
-            // when a direct ID match fails
-            logger.info(`Attempting Championship match by team name for: ${eventTeams}`);
+          } else if (eventTeams) {
+            // Try team name-based matching for all tournaments when direct ID match fails
+            logger.info(`Attempting team name match for: ${eventTeams}`);
             
+            // First priority - match within the same tournament if possible
             // Loop through existing events to find a match by team name
             for (const [existingId, existingEventData] of eventMap.entries()) {
-              // Skip if not a Championship match
-              if (!existingEventData.tournament || !existingEventData.tournament.includes('Championship')) {
+              // Check if tournaments match
+              const tournamentsMatch = 
+                (existingEventData.tournament && event.tournament && 
+                 existingEventData.tournament === event.tournament) || 
+                (existingEventData.tournament && event.league && 
+                 existingEventData.tournament === event.league);
+                
+              // Skip if we want to prioritize tournament matching
+              if (!tournamentsMatch && isChampionshipMatch) {
                 continue;
               }
               
@@ -1042,7 +1049,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
                 // Found a match by team name
                 existingEvent = existingEventData;
                 foundByTeamName = true;
-                logger.critical(`✅ Found Championship match by team name: ${eventTeams} = ${existingEventData.teams}`);
+                logger.critical(`✅ Found team name match: ${eventTeams} = ${existingEventData.teams}`);
                 break;
               }
             }
@@ -1274,12 +1281,78 @@ function normalizeEventName(eventName: string): string {
       'queens park rangers': 'queens park rangers',
       'derby': 'derby county',
       'derby county': 'derby county',
+      'cardiff': 'cardiff city',
+      'cardiff city': 'cardiff city',
+      'plymouth': 'plymouth argyle',
+      'plymouth argyle': 'plymouth argyle',
+      'portsmouth': 'portsmouth fc',
+      'portsmouth fc': 'portsmouth fc',
+      'swansea': 'swansea city',
+      'swansea city': 'swansea city',
+      'norwich': 'norwich city',
+      'norwich city': 'norwich city',
+      'burnley': 'burnley fc',
+      'burnley fc': 'burnley fc',
+      'stoke': 'stoke city',
+      'stoke city': 'stoke city',
+      'coventry': 'coventry city',
+      'coventry city': 'coventry city',
+      'blackburn': 'blackburn rovers',
+      'blackburn rovers': 'blackburn rovers',
+      'hull': 'hull city',
+      'hull city': 'hull city',
+      
+      // Premier League teams
+      'aston villa': 'aston villa',
+      'villa': 'aston villa',
+      'leeds': 'leeds united',
+      'leeds utd': 'leeds united',
+      'leeds united': 'leeds united',
+      'liverpool': 'liverpool',
+      'chelsea': 'chelsea fc',
+      'chelsea fc': 'chelsea fc',
+      'everton': 'everton fc',
+      'everton fc': 'everton fc',
+      'newcastle': 'newcastle united',
+      'newcastle united': 'newcastle united',
+      'brighton': 'brighton',
+      'brighton & hove': 'brighton',
+      'brighton and hove': 'brighton',
+      'brentford': 'brentford fc',
+      'brentford fc': 'brentford fc',
+      'fulham': 'fulham fc',
+      'fulham fc': 'fulham fc',
+      'forest': 'nottingham forest',
+      'nottingham': 'nottingham forest',
+      'nottingham forest': 'nottingham forest',
+      'southampton': 'southampton fc',
+      'southampton fc': 'southampton fc',
+      'west ham': 'west ham united',
+      'west ham utd': 'west ham united',
+      'west ham united': 'west ham united',
+      
+      // European/International teams
+      'real madrid': 'realmadrid',
+      'barcelona': 'barcelona',
+      'fc barcelona': 'barcelona',
+      'atletico': 'atletico madrid',
+      'atletico madrid': 'atletico madrid',
+      'bayern': 'bayern munich',
+      'bayern munich': 'bayern munich',
+      'dortmund': 'borussia dortmund',
+      'borussia dortmund': 'borussia dortmund',
+      'psg': 'paris saint-germain',
+      'paris': 'paris saint-germain',
+      'paris saint-germain': 'paris saint-germain',
+      'marseille': 'olympique marseille',
+      'olympique marseille': 'olympique marseille',
+      'lyon': 'olympique lyonnais',
+      'olympique lyonnais': 'olympique lyonnais',
       
       // Team name aliases
       'juventus turin': 'juventus',
       'inter milan': 'internazionale',
       'rb leipzig': 'leipzig',
-      'psg': 'paris',
       'wolverhampton wanderers': 'wolverhampton',
       'wolves': 'wolverhampton',
       'tottenham hotspur': 'tottenham',

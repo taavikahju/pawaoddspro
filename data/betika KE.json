@@ -1127,9 +1127,9 @@
     "date": "2025-05-03",
     "time": "05:15",
     "odds": {
-      "home": 11,
+      "home": 12,
       "draw": 7.2,
-      "away": 1.15
+      "away": 1.14
     },
     "raw": {
       "eventId": "58064287",
@@ -1137,9 +1137,9 @@
       "tournament": "Tasmania NPL",
       "event": "Launceston United SC - Kingborough Lions United FC",
       "market": "1X2",
-      "home_odds": "11.00",
+      "home_odds": "12.00",
       "draw_odds": "7.20",
-      "away_odds": "1.15",
+      "away_odds": "1.14",
       "start_time": "2025-05-03 05:15"
     }
   },
@@ -2115,9 +2115,9 @@
     "date": "2025-05-03",
     "time": "08:00",
     "odds": {
-      "home": 1.82,
-      "draw": 3.95,
-      "away": 3.35
+      "home": 1.66,
+      "draw": 4.3,
+      "away": 3.8
     },
     "raw": {
       "eventId": "59291445",
@@ -2125,9 +2125,9 @@
       "tournament": "Capital Npl 1",
       "event": "O'Connor Knights FC - Queanbeyan City FC",
       "market": "1X2",
-      "home_odds": "1.82",
-      "draw_odds": "3.95",
-      "away_odds": "3.35",
+      "home_odds": "1.66",
+      "draw_odds": "4.30",
+      "away_odds": "3.80",
       "start_time": "2025-05-03 08:00"
     }
   },
@@ -3285,9 +3285,9 @@
     "date": "2025-05-03",
     "time": "10:00",
     "odds": {
-      "home": 2.15,
+      "home": 2.1,
       "draw": 3.9,
-      "away": 2.65
+      "away": 2.75
     },
     "raw": {
       "eventId": "56926621",
@@ -3295,9 +3295,9 @@
       "tournament": "Queensland Premier League 1",
       "event": "Capalaba Bulldogs - SW Queensland",
       "market": "1X2",
-      "home_odds": "2.15",
+      "home_odds": "2.10",
       "draw_odds": "3.90",
-      "away_odds": "2.65",
+      "away_odds": "2.75",
       "start_time": "2025-05-03 10:00"
     }
   },
@@ -3675,8 +3675,8 @@
     "date": "2025-05-03",
     "time": "10:15",
     "odds": {
-      "home": 1.44,
-      "draw": 4.7,
+      "home": 1.45,
+      "draw": 4.8,
       "away": 4.9
     },
     "raw": {
@@ -3685,8 +3685,8 @@
       "tournament": "Queensland Premier League 1",
       "event": "Magic United - Ipswich FC",
       "market": "1X2",
-      "home_odds": "1.44",
-      "draw_odds": "4.70",
+      "home_odds": "1.45",
+      "draw_odds": "4.80",
       "away_odds": "4.90",
       "start_time": "2025-05-03 10:15"
     }
@@ -3701,9 +3701,9 @@
     "date": "2025-05-03",
     "time": "10:15",
     "odds": {
-      "home": 1.4,
+      "home": 1.41,
       "draw": 4.5,
-      "away": 5.8
+      "away": 6
     },
     "raw": {
       "eventId": "59792366",
@@ -3711,9 +3711,9 @@
       "tournament": "Queensland NPL",
       "event": "Queensland Lions FC - Olympic FC Brisbane",
       "market": "1X2",
-      "home_odds": "1.40",
+      "home_odds": "1.41",
       "draw_odds": "4.50",
-      "away_odds": "5.80",
+      "away_odds": "6.00",
       "start_time": "2025-05-03 10:15"
     }
   },
@@ -21632,6 +21632,32 @@
     }
   },
   {
+    "id": "58222797",
+    "eventId": "58222797",
+    "teams": "CA Bucaramanga Sa - Once Caldas Sa",
+    "league": "Liga Femenina",
+    "sport": "football",
+    "country": "Colombia",
+    "date": "2025-05-03",
+    "time": "22:00",
+    "odds": {
+      "home": 2.5,
+      "draw": 3.05,
+      "away": 2.6
+    },
+    "raw": {
+      "eventId": "58222797",
+      "country": "Colombia",
+      "tournament": "Liga Femenina",
+      "event": "CA Bucaramanga Sa - Once Caldas Sa",
+      "market": "1X2",
+      "home_odds": "2.50",
+      "draw_odds": "3.05",
+      "away_odds": "2.60",
+      "start_time": "2025-05-03 22:00"
+    }
+  },
+  {
     "id": "58474099",
     "eventId": "58474099",
     "teams": "Marica FC RJ - Nova Iguacu RJ",
@@ -34095,9 +34121,9 @@
     "date": "2025-05-05",
     "time": "01:00",
     "odds": {
-      "home": 2.37,
+      "home": 2.3,
       "draw": 2.85,
-      "away": 3.2
+      "away": 3.3
     },
     "raw": {
       "eventId": "58473123",
@@ -34105,9 +34131,9 @@
       "tournament": "Brasileiro Serie C",
       "event": "Guarani - Botafogo FC",
       "market": "1X2",
-      "home_odds": "2.37",
+      "home_odds": "2.30",
       "draw_odds": "2.85",
-      "away_odds": "3.20",
+      "away_odds": "3.30",
       "start_time": "2025-05-05 01:00"
     }
   },
@@ -39581,9 +39607,9 @@
     "date": "2025-05-10",
     "time": "16:30",
     "odds": {
-      "home": 2.05,
-      "draw": 3.6,
-      "away": 3.65
+      "home": 2.04,
+      "draw": 3.55,
+      "away": 3.7
     },
     "raw": {
       "eventId": "51269599",
@@ -39591,9 +39617,9 @@
       "tournament": "Bundesliga",
       "event": "UNION BERLIN - Heidenheim",
       "market": "1X2",
-      "home_odds": "2.05",
-      "draw_odds": "3.60",
-      "away_odds": "3.65",
+      "home_odds": "2.04",
+      "draw_odds": "3.55",
+      "away_odds": "3.70",
       "start_time": "2025-05-10 16:30"
     }
   },
