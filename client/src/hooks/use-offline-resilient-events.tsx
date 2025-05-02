@@ -73,7 +73,8 @@ export function useOfflineResilientEvents() {
     isError,
   } = useQuery<EventData[]>({ 
     queryKey: ['/api/events?includeSportybet=true'],
-    refetchInterval: 15000, // Refresh every 15 seconds
+    // Removed refetchInterval as data only updates after scraper runs (every 30 minutes)
+    // The page will now only fetch data on initial load or manual refresh
   });
   
   // Always update cache on successful response that contains Sportybet data

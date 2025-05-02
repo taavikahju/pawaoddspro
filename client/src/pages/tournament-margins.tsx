@@ -204,10 +204,10 @@ const TournamentMargins: React.FC = () => {
     return countryCodeMap[normalizedName] || 'XX';
   };
   
-  // Query to load tournament margin data from API with more frequent updates
+  // Query to load tournament margin data from API
   const { data: countriesData, isLoading, error } = useQuery<CountryData[]>({
     queryKey: ['/api/tournaments/margins/by-country'],
-    refetchInterval: 30000, // Refresh every 30 seconds
+    // Removed refetchInterval as data only updates after scraper runs (every 30 minutes)
   });
   
   // Get countries data

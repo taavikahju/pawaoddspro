@@ -35,7 +35,7 @@ export default function Dashboard() {
     isLoading: isLoadingStats 
   } = useQuery<{ lastScrapeTime: string }>({ 
     queryKey: ['/api/stats'],
-    refetchInterval: 60000, // Refresh every minute
+    // Removed refetchInterval as data only updates after scraper runs (every 30 minutes)
   });
   
   // Use the offline-resilient events hook for better reliability with Sportybet data
