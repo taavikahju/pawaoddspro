@@ -172,7 +172,116 @@ export function setupScrapers(storage: IStorage): void {
 }
 
 /**
- * Run all scrapers in sequence
+ * Function to run a single scraper
+ */
+async function runSingleScraper(
+  bookmaker: any, 
+  storage: IStorage, 
+  results: Array<{bookmaker: string; data?: any; error?: unknown;}>
+): Promise<void> {
+  try {
+    // Emit bookmaker scraper started event
+    scraperEvents.emit(SCRAPER_EVENTS.BOOKMAKER_STARTED, {
+      timestamp: new Date().toISOString(),
+      bookmaker: {
+        code: bookmaker.code,
+        name: bookmaker.name
+      },
+      message: `Running scraper for ${bookmaker.name}`
+    });
+    
+    let data: any = null;
+    
+    // Check if custom scraper exists
+    const hasCustom = customScrapers.hasCustomScraper(bookmaker.code);
+    
+    // Try to use custom scraper
+    if (hasCustom) {
+      try {
+        // Use custom scraper with clear timestamp-based logging
+        const scraperStartTime = new Date();
+        logger.critical(`[${scraperStartTime.toISOString()}] Starting ${bookmaker.name} scraper`);
+        
+        data = await customScrapers.runCustomScraper(bookmaker.code);
+        
+        // Save the Sportybet data to a separate file for inspection
+        if (bookmaker.code === 'sporty') {
+          try {
+            const fs = await import('fs/promises');
+            await fs.writeFile('sportybet_output.json', JSON.stringify(data, null, 2));
+            logger.info(`Saved Sportybet data to sportybet_output.json`);
+          } catch (writeError) {
+            logger.error(`Failed to save Sportybet data: ${writeError}`);
+          }
+        }
+        
+        const scraperEndTime = new Date();
+        logger.critical(`[${scraperEndTime.toISOString()}] ${bookmaker.name} scraper finished - ${data?.length || 0} events extracted`);
+      } catch (error) {
+        const errorTime = new Date();
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        logger.critical(`[${errorTime.toISOString()}] Error in ${bookmaker.name} scraper: ${errorMessage}`);
+        data = null;
+      }
+    }
+    
+    // Only use custom scrapers, no fallbacks to mock scrapers
+    if (!data) {
+      logger.info(`No scraper for ${bookmaker.code}`);
+      
+      // Emit bookmaker scraper failed event
+      scraperEvents.emit(SCRAPER_EVENTS.BOOKMAKER_FAILED, {
+        timestamp: new Date().toISOString(),
+        bookmaker: {
+          code: bookmaker.code,
+          name: bookmaker.name
+        },
+        message: `No custom scraper found for bookmaker ${bookmaker.code}`,
+        error: 'No custom scraper available'
+      });
+      
+      results.push({ bookmaker: bookmaker.code, error: 'No custom scraper available' });
+      return; // Exit this scraper execution
+    }
+    
+    if (data) {
+      await storage.saveBookmakerData(bookmaker.code, data);
+      // Event count already logged after scraper completes, avoid duplicate logs
+      const eventCount = Array.isArray(data) ? data.length : 0;
+      
+      // Emit bookmaker scraper completed event
+      scraperEvents.emit(SCRAPER_EVENTS.BOOKMAKER_COMPLETED, {
+        timestamp: new Date().toISOString(),
+        bookmaker: {
+          code: bookmaker.code,
+          name: bookmaker.name
+        },
+        message: `Completed scraping for ${bookmaker.name}`,
+        eventCount
+      });
+      
+      results.push({ bookmaker: bookmaker.code, data });
+    }
+  } catch (error) {
+    console.error(`❌ ${bookmaker.name} scraper failed:`, error);
+    
+    // Emit bookmaker scraper failed event
+    scraperEvents.emit(SCRAPER_EVENTS.BOOKMAKER_FAILED, {
+      timestamp: new Date().toISOString(),
+      bookmaker: {
+        code: bookmaker.code,
+        name: bookmaker.name
+      },
+      message: `Error scraping ${bookmaker.name}`,
+      error: error instanceof Error ? error.message : String(error)
+    });
+    
+    results.push({ bookmaker: bookmaker.code, error });
+  }
+}
+
+/**
+ * Run all scrapers with betPawa Ghana first, then others in parallel
  */
 export async function runAllScrapers(storage: IStorage): Promise<void> {
   try {
@@ -197,127 +306,34 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
     
     // Sort the bookmakers to process them in a specific order
     // 1. First process betPawa Ghana as it's our base bookmaker for event mapping
-    // 2. Then process Sportybet to ensure it completes (as the slowest scraper)
-    // 3. Then process all other bookmakers
+    // 2. Then process all other bookmakers in parallel
     const sortedBookmakers = [...activeBookmakers].sort((a, b) => {
       if (a.code === 'bp GH') return -1; // betPawa Ghana should be first as it's our base bookmaker
       if (b.code === 'bp GH') return 1;
-      if (a.code === 'sporty') return -1; // Sportybet should be second as it's slow but important
-      if (b.code === 'sporty') return 1;
       return 0; // Keep the original order for other bookmakers
     });
     
     logger.info(`Scraping in optimized order: ${sortedBookmakers.map(b => b.code).join(', ')}`);
     
-    // Run scrapers in sequence to ensure bookmakers are processed in the correct order
-    // This allows betPawa Ghana (our base bookmaker) to complete first
+    // Prepare to run scrapers with results tracking
     const results: Array<{
       bookmaker: string;
       data?: any;
       error?: unknown;
     }> = [];
     
-    for (const bookmaker of sortedBookmakers) {
-      try {
-        // Emit bookmaker scraper started event
-        scraperEvents.emit(SCRAPER_EVENTS.BOOKMAKER_STARTED, {
-          timestamp: new Date().toISOString(),
-          bookmaker: {
-            code: bookmaker.code,
-            name: bookmaker.name
-          },
-          message: `Running scraper for ${bookmaker.name}`
-        });
-        
-        let data: any = null;
-        
-        // Check if custom scraper exists
-        const hasCustom = customScrapers.hasCustomScraper(bookmaker.code);
-        
-        // Try to use custom scraper
-        if (hasCustom) {
-          try {
-            // Use custom scraper with clear timestamp-based logging
-            const scraperStartTime = new Date();
-            logger.critical(`[${scraperStartTime.toISOString()}] Starting ${bookmaker.name} scraper`);
-            
-            data = await customScrapers.runCustomScraper(bookmaker.code);
-            
-            // Save the Sportybet data to a separate file for inspection
-            if (bookmaker.code === 'sporty') {
-              try {
-                const fs = await import('fs/promises');
-                await fs.writeFile('sportybet_output.json', JSON.stringify(data, null, 2));
-                logger.info(`Saved Sportybet data to sportybet_output.json`);
-              } catch (writeError) {
-                logger.error(`Failed to save Sportybet data: ${writeError}`);
-              }
-            }
-            
-            const scraperEndTime = new Date();
-            logger.critical(`[${scraperEndTime.toISOString()}] ${bookmaker.name} scraper finished - ${data?.length || 0} events extracted`);
-          } catch (error) {
-            const errorTime = new Date();
-            const errorMessage = error instanceof Error ? error.message : String(error);
-            logger.critical(`[${errorTime.toISOString()}] Error in ${bookmaker.name} scraper: ${errorMessage}`);
-            data = null;
-          }
-        }
-        
-        // Only use custom scrapers, no fallbacks to mock scrapers
-        if (!data) {
-          logger.info(`No scraper for ${bookmaker.code}`);
-          
-          // Emit bookmaker scraper failed event
-          scraperEvents.emit(SCRAPER_EVENTS.BOOKMAKER_FAILED, {
-            timestamp: new Date().toISOString(),
-            bookmaker: {
-              code: bookmaker.code,
-              name: bookmaker.name
-            },
-            message: `No custom scraper found for bookmaker ${bookmaker.code}`,
-            error: 'No custom scraper available'
-          });
-          
-          results.push({ bookmaker: bookmaker.code, error: 'No custom scraper available' });
-          continue; // Skip to next bookmaker
-        }
-        
-        if (data) {
-          await storage.saveBookmakerData(bookmaker.code, data);
-          // Event count already logged after scraper completes, avoid duplicate logs
-          const eventCount = Array.isArray(data) ? data.length : 0;
-          
-          // Emit bookmaker scraper completed event
-          scraperEvents.emit(SCRAPER_EVENTS.BOOKMAKER_COMPLETED, {
-            timestamp: new Date().toISOString(),
-            bookmaker: {
-              code: bookmaker.code,
-              name: bookmaker.name
-            },
-            message: `Completed scraping for ${bookmaker.name}`,
-            eventCount
-          });
-          
-          results.push({ bookmaker: bookmaker.code, data });
-        }
-      } catch (error) {
-        console.error(`❌ ${bookmaker.name} scraper failed:`, error);
-        
-        // Emit bookmaker scraper failed event
-        scraperEvents.emit(SCRAPER_EVENTS.BOOKMAKER_FAILED, {
-          timestamp: new Date().toISOString(),
-          bookmaker: {
-            code: bookmaker.code,
-            name: bookmaker.name
-          },
-          message: `Error scraping ${bookmaker.name}`,
-          error: error instanceof Error ? error.message : String(error)
-        });
-        
-        results.push({ bookmaker: bookmaker.code, error });
-      }
+    // Split bookmakers into two groups: betPawa Ghana and the rest
+    const bpGhanaBookmaker = sortedBookmakers.find(b => b.code === 'bp GH');
+    const otherBookmakers = sortedBookmakers.filter(b => b.code !== 'bp GH');
+    
+    // Run betPawa Ghana first - our base bookmaker needs to complete first
+    if (bpGhanaBookmaker) {
+      await runSingleScraper(bpGhanaBookmaker, storage, results);
+      logger.critical(`Completed betPawa Ghana scraper - starting all other scrapers in parallel`);
     }
+    
+    // Then run all other scrapers in parallel for speed
+    await Promise.all(otherBookmakers.map(bookmaker => runSingleScraper(bookmaker, storage, results)));
     
     // Count successful scrapers and log detailed event counts
     const successfulScrapers = results.filter(r => r && r.data).length;
