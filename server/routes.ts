@@ -596,7 +596,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // DIRECT INSERTION: If we detect even a small drop in Sportybet events, create events directly
       // This ensures we maintain maximum event coverage by immediately injecting any missing events
       if (allSportyEvents.length > 0 && eventsWithSporty.length < allSportyEvents.length * 0.99) {
-        logger.critical(`Detected Sportybet event loss (${eventsWithSporty.length}/${allSportyEvents.length}), creating direct events...`);
+        // Don't log this on every API call to reduce noise
+        // We only need to log this when direct events are created
+        const directEventCount = allSportyEvents.length - eventsWithSporty.length;
         
         const existingEventIdMap = new Map();
         eventsWithSporty.forEach(event => {
@@ -662,7 +664,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
         // Add direct events to filtered events
         if (directEvents.length > 0) {
-          logger.critical(`Created ${directEvents.length} direct Sportybet events`);
+          // Only log this during scraper runs, not on every API call
+          // This is controlled by the referer header
+          const referer = req.headers.referer || '';
+          if (referer.includes('scraper') || referer.includes('admin')) {
+            logger.critical(`Created ${directEvents.length} direct Sportybet events`);
+          }
           filteredEvents.push(...directEvents);
         }
       }
