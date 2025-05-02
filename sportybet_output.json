@@ -1575,8 +1575,8 @@
     "date": "2025-05-04",
     "time": "13:00",
     "odds": {
-      "home": 12.01,
-      "draw": 6.62,
+      "home": 12.21,
+      "draw": 6.68,
       "away": 1.24
     },
     "raw": {
@@ -1586,8 +1586,8 @@
       "tournament": "Serie A",
       "event": "AC Monza - Atalanta",
       "market": "1X2",
-      "home_odds": "12.01",
-      "draw_odds": "6.62",
+      "home_odds": "12.21",
+      "draw_odds": "6.68",
       "away_odds": "1.24",
       "start_time": "2025-05-04 13:00"
     }
@@ -30222,9 +30222,9 @@
     "date": "2025-05-02",
     "time": "14:00",
     "odds": {
-      "home": 1.24,
-      "draw": 5.5,
-      "away": 8.75
+      "home": 1.22,
+      "draw": 5.7,
+      "away": 9.75
     },
     "raw": {
       "eventId": "60289771",
@@ -30233,9 +30233,9 @@
       "tournament": "Liga Prom",
       "event": "CD Plaza Amador Reserves - Potros del Este FC Reserves",
       "market": "1X2",
-      "home_odds": "1.24",
-      "draw_odds": "5.50",
-      "away_odds": "8.75",
+      "home_odds": "1.22",
+      "draw_odds": "5.70",
+      "away_odds": "9.75",
       "start_time": "2025-05-02 14:00"
     }
   },
@@ -33777,6 +33777,33 @@
     }
   },
   {
+    "id": "52643343",
+    "eventId": "52643343",
+    "teams": "Tai Po FC - Southern District Football Club",
+    "league": "Premier League",
+    "sport": "football",
+    "country": "Hong Kong, China",
+    "date": "2025-05-05",
+    "time": "07:00",
+    "odds": {
+      "home": 1.64,
+      "draw": 4.1,
+      "away": 4.2
+    },
+    "raw": {
+      "eventId": "52643343",
+      "originalEventId": "sr:match:52643343",
+      "country": "Hong Kong, China",
+      "tournament": "Premier League",
+      "event": "Tai Po FC - Southern District Football Club",
+      "market": "1X2",
+      "home_odds": "1.64",
+      "draw_odds": "4.10",
+      "away_odds": "4.20",
+      "start_time": "2025-05-05 07:00"
+    }
+  },
+  {
     "id": "51025007",
     "eventId": "51025007",
     "teams": "Hankofen-Hailing - TSV Aubstadt",
@@ -35325,9 +35352,9 @@
     "date": "2025-05-02",
     "time": "19:00",
     "odds": {
-      "home": 1.4,
-      "draw": 4,
-      "away": 7.4
+      "home": 1.46,
+      "draw": 3.8,
+      "away": 6.6
     },
     "raw": {
       "eventId": "60194043",
@@ -35336,9 +35363,9 @@
       "tournament": "Stars League",
       "event": "AL Naft - AL Hedood",
       "market": "1X2",
-      "home_odds": "1.40",
-      "draw_odds": "4.00",
-      "away_odds": "7.40",
+      "home_odds": "1.46",
+      "draw_odds": "3.80",
+      "away_odds": "6.60",
       "start_time": "2025-05-02 19:00"
     }
   },
@@ -35435,7 +35462,7 @@
     "odds": {
       "home": 1.52,
       "draw": 3.5,
-      "away": 5.3
+      "away": 5.4
     },
     "raw": {
       "eventId": "111111111968886",
@@ -35446,7 +35473,7 @@
       "market": "1X2",
       "home_odds": "1.52",
       "draw_odds": "3.50",
-      "away_odds": "5.30",
+      "away_odds": "5.40",
       "start_time": "2025-05-02 12:00"
     }
   },
@@ -35838,9 +35865,9 @@
     "date": "2025-05-02",
     "time": "12:00",
     "odds": {
-      "home": 4.1,
-      "draw": 3.75,
-      "away": 1.62
+      "home": 4.2,
+      "draw": 3.8,
+      "away": 1.59
     },
     "raw": {
       "eventId": "52521987",
@@ -35849,9 +35876,9 @@
       "tournament": "U19 Elit B",
       "event": "Isparta 32 Spor - Aytemiz Alanyaspor",
       "market": "1X2",
-      "home_odds": "4.10",
-      "draw_odds": "3.75",
-      "away_odds": "1.62",
+      "home_odds": "4.20",
+      "draw_odds": "3.80",
+      "away_odds": "1.59",
       "start_time": "2025-05-02 12:00"
     }
   },
@@ -37404,9 +37431,9 @@
     "date": "2025-05-02",
     "time": "10:45",
     "odds": {
-      "home": 2.25,
+      "home": 2.2,
       "draw": 4.1,
-      "away": 2.45
+      "away": 2.5
     },
     "raw": {
       "eventId": "57033515",
@@ -37415,9 +37442,9 @@
       "tournament": "South Australia NPL, Women",
       "event": "Adelaide City - Metro United",
       "market": "1X2",
-      "home_odds": "2.25",
+      "home_odds": "2.20",
       "draw_odds": "4.10",
-      "away_odds": "2.45",
+      "away_odds": "2.50",
       "start_time": "2025-05-02 10:45"
     }
   },
@@ -37608,33 +37635,6 @@
       "draw_odds": "5.70",
       "away_odds": "1.21",
       "start_time": "2025-05-05 15:00"
-    }
-  },
-  {
-    "id": "58071387",
-    "eventId": "58071387",
-    "teams": "Bentleigh Greens SC - FC Bulleen Lions",
-    "league": "Victoria NPL, Women",
-    "sport": "football",
-    "country": "Australia",
-    "date": "2025-05-02",
-    "time": "08:15",
-    "odds": {
-      "home": 4.25,
-      "draw": 4.25,
-      "away": 1.59
-    },
-    "raw": {
-      "eventId": "58071387",
-      "originalEventId": "sr:match:58071387",
-      "country": "Australia",
-      "tournament": "Victoria NPL, Women",
-      "event": "Bentleigh Greens SC - FC Bulleen Lions",
-      "market": "1X2",
-      "home_odds": "4.25",
-      "draw_odds": "4.25",
-      "away_odds": "1.59",
-      "start_time": "2025-05-02 08:15"
     }
   },
   {
