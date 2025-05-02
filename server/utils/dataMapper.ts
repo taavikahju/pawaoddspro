@@ -866,39 +866,111 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     
     // First get all Sportybet events from the raw data
     try {
-      const sportyRawData = await storage.getBookmakerData('sporty', true);
+      // Force a fresh load of Sportybet data to ensure we have the most up-to-date data
+      const rawDataResponse = await storage.getBookmakerData('sporty', true);
+      
+      // Make a deep copy to avoid reference issues
+      const sportyRawData = JSON.parse(JSON.stringify(rawDataResponse));
+      
       if (Array.isArray(sportyRawData)) {
         logger.critical(`Found ${sportyRawData.length} raw Sportybet events to process`);
+        
+        // Track which Sportybet events we've processed to avoid duplicates
+        const processedSportyEventIds = new Set();
+        
+        // Track event IDs we've already processed
+        const processedEventIds = new Set();
+
         // Process each Sportybet event to ensure it gets included in eventMap
+        // First update any existing events
         for (const event of sportyRawData) {
           const eventId = event.eventId || event.id || (event.raw && event.raw.originalEventId) || (event.raw && event.raw.eventId) || '';
-          if (eventId && !eventMap.has(eventId)) {
-            // Only add events that aren't already in the map
+          if (!eventId) continue;
+          
+          // Skip if already processed
+          if (processedEventIds.has(eventId)) continue;
+          processedEventIds.add(eventId);
+          
+          // Store that we've seen this Sportybet event
+          processedSportyEventIds.add(eventId);
+          
+          // Check if the event already exists in the eventMap
+          if (eventMap.has(eventId)) {
+            // Get the existing event
+            const existingEvent = eventMap.get(eventId);
+            
+            // Extract Sportybet odds from the current event
+            let homeOdds = 0, drawOdds = 0, awayOdds = 0;
+            
+            if (event.odds) {
+              homeOdds = event.odds.home || 0;
+              drawOdds = event.odds.draw || 0;
+              awayOdds = event.odds.away || 0;
+            } else if (event.home_odds !== undefined && event.draw_odds !== undefined && event.away_odds !== undefined) {
+              homeOdds = parseFloat(event.home_odds) || 0;
+              drawOdds = parseFloat(event.draw_odds) || 0;
+              awayOdds = parseFloat(event.away_odds) || 0;
+            } else if (event.raw) {
+              homeOdds = parseFloat(event.raw.home_odds) || 0;
+              drawOdds = parseFloat(event.raw.draw_odds) || 0;
+              awayOdds = parseFloat(event.raw.away_odds) || 0;
+            }
+            
+            // Only update if we have valid odds
+            if (homeOdds > 0 && drawOdds > 0 && awayOdds > 0) {
+              // Deep copy the existing odds data to avoid reference modification
+              const newOddsData = JSON.parse(JSON.stringify(existingEvent.oddsData || {}));
+              
+              // Update with Sportybet odds
+              newOddsData['sporty'] = { home: homeOdds, draw: drawOdds, away: awayOdds };
+              
+              // Create a deep copy of the best odds
+              const newBestOdds = JSON.parse(JSON.stringify(existingEvent.bestOdds || { home: 0, draw: 0, away: 0 }));
+              
+              // Update best odds if Sportybet has better odds
+              newBestOdds.home = Math.max(newBestOdds.home || 0, homeOdds);
+              newBestOdds.draw = Math.max(newBestOdds.draw || 0, drawOdds);
+              newBestOdds.away = Math.max(newBestOdds.away || 0, awayOdds);
+              
+              // Create a completely new object for the event to avoid reference issues
+              const updatedEvent = {
+                ...JSON.parse(JSON.stringify(existingEvent)),
+                oddsData: newOddsData,
+                bestOdds: newBestOdds,
+                lastUpdated: new Date()
+              };
+              
+              // Replace the existing event in the map
+              eventMap.set(eventId, updatedEvent);
+              
+              logger.info(`Updated existing event with Sportybet odds: ${existingEvent.teams}`);
+            }
+          } else {
+            // This is a new event that needs to be added
             const teams = event.teams || event.event || (event.raw && event.raw.event) || 'Unknown';
             const bookmakerOdds = {};
             
-            // Create odds data
+            // Extract Sportybet odds
+            let homeOdds = 0, drawOdds = 0, awayOdds = 0;
+            
             if (event.odds) {
-              bookmakerOdds['sporty'] = event.odds;
-            } else if (event.home_odds !== undefined || event.draw_odds !== undefined || event.away_odds !== undefined) {
-              const homeOdds = event.home_odds ? parseFloat(event.home_odds) : 0;
-              const drawOdds = event.draw_odds ? parseFloat(event.draw_odds) : 0;
-              const awayOdds = event.away_odds ? parseFloat(event.away_odds) : 0;
-              
-              if (homeOdds > 0 || drawOdds > 0 || awayOdds > 0) {
-                bookmakerOdds['sporty'] = { home: homeOdds, draw: drawOdds, away: awayOdds };
-              }
+              homeOdds = event.odds.home || 0;
+              drawOdds = event.odds.draw || 0;
+              awayOdds = event.odds.away || 0;
+            } else if (event.home_odds !== undefined && event.draw_odds !== undefined && event.away_odds !== undefined) {
+              homeOdds = parseFloat(event.home_odds) || 0;
+              drawOdds = parseFloat(event.draw_odds) || 0;
+              awayOdds = parseFloat(event.away_odds) || 0;
             } else if (event.raw) {
-              const homeOdds = event.raw.home_odds ? parseFloat(event.raw.home_odds) : 0;
-              const drawOdds = event.raw.draw_odds ? parseFloat(event.raw.draw_odds) : 0;
-              const awayOdds = event.raw.away_odds ? parseFloat(event.raw.away_odds) : 0;
-              
-              if (homeOdds > 0 || drawOdds > 0 || awayOdds > 0) {
-                bookmakerOdds['sporty'] = { home: homeOdds, draw: drawOdds, away: awayOdds };
-              }
+              homeOdds = parseFloat(event.raw.home_odds) || 0;
+              drawOdds = parseFloat(event.raw.draw_odds) || 0;
+              awayOdds = parseFloat(event.raw.away_odds) || 0;
             }
             
-            if (Object.keys(bookmakerOdds).length > 0) {
+            // Only add if we have valid odds
+            if (homeOdds > 0 && drawOdds > 0 && awayOdds > 0) {
+              bookmakerOdds['sporty'] = { home: homeOdds, draw: drawOdds, away: awayOdds };
+              
               const country = event.country || (event.raw && event.raw.country) || '';
               const tournament = event.tournament || event.league || (event.raw && event.raw.tournament) || '';
               const date = event.date || (event.raw && event.raw.date) || new Date().toISOString().split('T')[0];
@@ -924,12 +996,18 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
             }
           }
         }
+        
+        // CRITICAL: Log how many Sportybet events we processed
+        logger.critical(`Processed ${processedSportyEventIds.size}/${sportyRawData.length} Sportybet events during direct injection`);
       }
     } catch (e) {
       logger.error(`Error processing raw Sportybet events: ${e.message}`);
     }
     
-    const allEvents = await storage.getEvents();
+    // CRITICAL: Create deep copy of events to prevent reference issues
+    const allEventsRaw = await storage.getEvents();
+    const allEvents = JSON.parse(JSON.stringify(allEventsRaw));
+    
     const currentEventIds = new Set(Array.from(eventMap.keys()));
 
     let deletedCount = 0;
