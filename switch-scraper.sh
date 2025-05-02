@@ -9,9 +9,25 @@ PY_BACKUP="${PY_SCRAPER}.disabled"
 function enable_python() {
   echo "Switching to Python Sportybet scraper..."
   
-  # First check if files exist
-  if [ ! -f "$PY_BACKUP" ]; then
-    echo "Error: Python scraper backup file not found at $PY_BACKUP"
+  # Both Python original and disabled backup exist, special case
+  if [ -f "$PY_SCRAPER" ] && [ -f "$PY_BACKUP" ]; then
+    echo "Python scraper is already active and backup exists."
+    echo "Updating .env to use Python implementation..."
+  # Python scraper exists but no backup (normal case)
+  elif [ -f "$PY_SCRAPER" ]; then
+    echo "Python scraper is already active."
+    echo "Creating a backup copy at $PY_BACKUP"
+    cp "$PY_SCRAPER" "$PY_BACKUP"
+  # Only backup exists, need to restore
+  elif [ -f "$PY_BACKUP" ]; then
+    echo "Activating Python scraper from backup..."
+    cp "$PY_BACKUP" "$PY_SCRAPER"
+  # Neither exists, can't proceed
+  else
+    echo "Error: Neither Python scraper nor backup found"
+    echo "Expected locations:"
+    echo "  - $PY_SCRAPER"
+    echo "  - $PY_BACKUP"
     exit 1
   fi
   
@@ -21,12 +37,9 @@ function enable_python() {
     cp "$NODE_SCRAPER" "$NODE_BACKUP"
   fi
   
-  # Rename to make Python the active scraper
-  echo "Activating Python scraper..."
-  cp "$PY_BACKUP" "$PY_SCRAPER"
-  
   # Create a .env file to enable Python scraper in the scheduler
   echo "USE_PYTHON_SPORTYBET=true" > .env
+  echo "PYTHON_SCRAPER_ACTIVE=true" >> .env
   
   echo "✅ Successfully switched to Python Sportybet scraper"
   echo "The next scheduled run will use the Python implementation"
@@ -35,24 +48,31 @@ function enable_python() {
 function enable_nodejs() {
   echo "Switching to Node.js Sportybet scraper..."
   
-  # First check if backup exists
-  if [ ! -f "$NODE_BACKUP" ]; then
-    echo "Error: Node.js scraper backup file not found at $NODE_BACKUP"
+  # Node.js scraper already exists
+  if [ -f "$NODE_SCRAPER" ]; then
+    echo "Node.js scraper is already active."
+    
+    # Make a backup if it doesn't exist
+    if [ ! -f "$NODE_BACKUP" ]; then
+      echo "Creating a backup copy at $NODE_BACKUP"
+      cp "$NODE_SCRAPER" "$NODE_BACKUP"
+    fi
+  # Node.js backup exists but active file doesn't
+  elif [ -f "$NODE_BACKUP" ]; then
+    echo "Restoring Node.js scraper from backup..."
+    cp "$NODE_BACKUP" "$NODE_SCRAPER"
+  # Neither exists, can't proceed
+  else 
+    echo "Error: Neither Node.js scraper nor backup found"
+    echo "Expected locations:"
+    echo "  - $NODE_SCRAPER"
+    echo "  - $NODE_BACKUP"
     exit 1
-  fi
-  
-  # Restore the Node.js scraper
-  echo "Restoring Node.js scraper..."
-  cp "$NODE_BACKUP" "$NODE_SCRAPER"
-  
-  # Remove Python scraper if it exists (keeping the backup)
-  if [ -f "$PY_SCRAPER" ]; then
-    echo "Removing active Python scraper..."
-    rm "$PY_SCRAPER"
   fi
   
   # Update .env to use Node.js scraper
   echo "USE_PYTHON_SPORTYBET=false" > .env
+  echo "PYTHON_SCRAPER_ACTIVE=false" >> .env
   
   echo "✅ Successfully switched to Node.js Sportybet scraper"
   echo "The next scheduled run will use the Node.js implementation"
