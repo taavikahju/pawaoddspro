@@ -9,7 +9,6 @@
     "bookmakers": [
       "bp GH",
       "bp KE",
-      "sporty",
       "betika KE"
     ],
     "oddsData": {
@@ -21,11 +20,6 @@
       "bp KE": {
         "home": 17,
         "draw": 7.5,
-        "away": 1.09
-      },
-      "sporty": {
-        "home": 15,
-        "draw": 6.8,
         "away": 1.09
       },
       "betika KE": {
@@ -41,47 +35,6 @@
     }
   },
   {
-    "eventId": "59975175",
-    "teams": "Universidad de Concepción - CSD Rangers",
-    "country": "Chile",
-    "tournament": "Chile Primera Division B",
-    "date": "2025-05-02",
-    "time": "19:00",
-    "bookmakers": [
-      "bp GH",
-      "bp KE",
-      "sporty",
-      "betika KE"
-    ],
-    "oddsData": {
-      "bp GH": {
-        "home": 2.8,
-        "draw": 3.15,
-        "away": 2.35
-      },
-      "bp KE": {
-        "home": 2.8,
-        "draw": 3.15,
-        "away": 2.35
-      },
-      "sporty": {
-        "home": 2.85,
-        "draw": 3.2,
-        "away": 2.4
-      },
-      "betika KE": {
-        "home": 2.85,
-        "draw": 3.1,
-        "away": 2.39
-      }
-    },
-    "bestOdds": {
-      "home": 2.85,
-      "draw": 3.2,
-      "away": 2.4
-    }
-  },
-  {
     "eventId": "50852755",
     "teams": "Rayo Vallecano - Getafe CF",
     "country": "Spain",
@@ -90,7 +43,6 @@
     "time": "19:00",
     "bookmakers": [
       "bp GH",
-      "bp KE",
       "sporty",
       "betika KE"
     ],
@@ -100,67 +52,21 @@
         "draw": 3,
         "away": 3.5
       },
-      "bp KE": {
-        "home": 2.5,
-        "draw": 3.05,
-        "away": 3.6
-      },
       "sporty": {
         "home": 2.46,
-        "draw": 3.02,
-        "away": 3.54
+        "draw": 3,
+        "away": 3.56
       },
       "betika KE": {
         "home": 2.44,
-        "draw": 3,
-        "away": 3.5
+        "draw": 2.95,
+        "away": 3.55
       }
     },
     "bestOdds": {
       "home": 2.5,
-      "draw": 3.05,
-      "away": 3.6
-    }
-  },
-  {
-    "eventId": "60194043",
-    "teams": "AL Naft - AL Hedood",
-    "country": "Iraq",
-    "tournament": "Iraqi League",
-    "date": "2025-05-02",
-    "time": "19:00",
-    "bookmakers": [
-      "bp GH",
-      "bp KE",
-      "sporty",
-      "betika KE"
-    ],
-    "oddsData": {
-      "bp GH": {
-        "home": 1.52,
-        "draw": 3.6,
-        "away": 6
-      },
-      "bp KE": {
-        "home": 1.52,
-        "draw": 3.6,
-        "away": 6
-      },
-      "sporty": {
-        "home": 1.52,
-        "draw": 3.6,
-        "away": 6.1
-      },
-      "betika KE": {
-        "home": 1.53,
-        "draw": 3.65,
-        "away": 6.2
-      }
-    },
-    "bestOdds": {
-      "home": 1.53,
-      "draw": 3.65,
-      "away": 6.2
+      "draw": 3,
+      "away": 3.56
     }
   },
   {
@@ -173,24 +79,18 @@
     "bookmakers": [
       "bp GH",
       "bp KE",
-      "sporty",
       "betika KE"
     ],
     "oddsData": {
       "bp GH": {
-        "home": 2.03,
+        "home": 2.08,
         "draw": 3.4,
-        "away": 3.2
+        "away": 3.05
       },
       "bp KE": {
-        "home": 2.03,
+        "home": 2.08,
         "draw": 3.4,
-        "away": 3.2
-      },
-      "sporty": {
-        "home": 2.3,
-        "draw": 3.5,
-        "away": 2.8
+        "away": 3.05
       },
       "betika KE": {
         "home": 2.29,
@@ -199,9 +99,9 @@
       }
     },
     "bestOdds": {
-      "home": 2.3,
+      "home": 2.29,
       "draw": 3.5,
-      "away": 3.2
+      "away": 3.05
     }
   },
   {
@@ -213,36 +113,30 @@
     "time": "19:00",
     "bookmakers": [
       "bp GH",
-      "bp KE",
       "sporty",
       "betika KE"
     ],
     "oddsData": {
       "bp GH": {
-        "home": 1.39,
+        "home": 1.37,
         "draw": 5.75,
-        "away": 8
-      },
-      "bp KE": {
-        "home": 1.38,
-        "draw": 5.75,
-        "away": 8.75
+        "away": 8.25
       },
       "sporty": {
         "home": 1.37,
-        "draw": 5.67,
-        "away": 8.68
+        "draw": 5.69,
+        "away": 8.72
       },
       "betika KE": {
-        "home": 1.37,
+        "home": 1.36,
         "draw": 5.6,
-        "away": 8.4
+        "away": 8.6
       }
     },
     "bestOdds": {
-      "home": 1.39,
+      "home": 1.37,
       "draw": 5.75,
-      "away": 8.75
+      "away": 8.72
     }
   },
   {
@@ -516,8 +410,8 @@
         "away": 3.75
       },
       "sporty": {
-        "home": 1.88,
-        "draw": 3.3,
+        "home": 1.92,
+        "draw": 3.2,
         "away": 3.8
       },
       "betika KE": {
@@ -603,14 +497,14 @@
         "away": 2.5
       },
       "betika KE": {
-        "home": 2.85,
-        "draw": 2.85,
+        "home": 2.8,
+        "draw": 2.95,
         "away": 2.55
       }
     },
     "bestOdds": {
-      "home": 2.85,
-      "draw": 2.9,
+      "home": 2.8,
+      "draw": 2.95,
       "away": 2.55
     }
   },
@@ -875,9 +769,9 @@
     ],
     "oddsData": {
       "bp GH": {
-        "home": 1.73,
+        "home": 1.74,
         "draw": 3.4,
-        "away": 4.35
+        "away": 4.25
       },
       "bp KE": {
         "home": 1.74,
@@ -890,15 +784,15 @@
         "away": 4.25
       },
       "betika KE": {
-        "home": 1.74,
-        "draw": 3.35,
-        "away": 4.4
+        "home": 1.75,
+        "draw": 3.4,
+        "away": 4.2
       }
     },
     "bestOdds": {
       "home": 1.75,
       "draw": 3.4,
-      "away": 4.4
+      "away": 4.25
     }
   },
   {
@@ -15298,41 +15192,6 @@
     }
   },
   {
-    "eventId": "51923301",
-    "teams": "Calcio Padova U19 - Como 1907 U19",
-    "country": "Italy",
-    "tournament": "Campionato Primavera 2",
-    "date": "2025-05-03",
-    "time": "13:00",
-    "bookmakers": [
-      "bp GH",
-      "bp KE",
-      "sporty"
-    ],
-    "oddsData": {
-      "bp GH": {
-        "home": 7.5,
-        "draw": 5.25,
-        "away": 1.29
-      },
-      "bp KE": {
-        "home": 7.5,
-        "draw": 5.25,
-        "away": 1.29
-      },
-      "sporty": {
-        "home": 7.5,
-        "draw": 5,
-        "away": 1.3
-      }
-    },
-    "bestOdds": {
-      "home": 7.5,
-      "draw": 5.25,
-      "away": 1.3
-    }
-  },
-  {
     "eventId": "51273493",
     "teams": "Cagliari Calcio - Udinese Calcio",
     "country": "Italy",
@@ -15862,19 +15721,19 @@
     ],
     "oddsData": {
       "bp GH": {
-        "home": 2.19,
+        "home": 2.21,
         "draw": 4.05,
         "away": 3.1
       },
       "bp KE": {
-        "home": 2.11,
+        "home": 2.12,
         "draw": 3.95,
-        "away": 3.1
+        "away": 3.05
       },
       "sporty": {
-        "home": 2.17,
-        "draw": 4.07,
-        "away": 3.19
+        "home": 2.19,
+        "draw": 4.06,
+        "away": 3.16
       },
       "betika KE": {
         "home": 2.18,
@@ -15883,9 +15742,9 @@
       }
     },
     "bestOdds": {
-      "home": 2.19,
-      "draw": 4.07,
-      "away": 3.19
+      "home": 2.21,
+      "draw": 4.06,
+      "away": 3.16
     }
   },
   {
@@ -16911,47 +16770,6 @@
       "home": 9.25,
       "draw": 3.33,
       "away": 1.48
-    }
-  },
-  {
-    "eventId": "59224397",
-    "teams": "FK Velež Mostar - Zrinjski Mostar",
-    "country": "Bosnia and Herzegovina",
-    "tournament": "Bosnia-Herzegovina Premier Liga",
-    "date": "2025-05-03",
-    "time": "14:00",
-    "bookmakers": [
-      "bp GH",
-      "bp KE",
-      "sporty",
-      "betika KE"
-    ],
-    "oddsData": {
-      "bp GH": {
-        "home": 4.9,
-        "draw": 3.5,
-        "away": 1.63
-      },
-      "bp KE": {
-        "home": 4.9,
-        "draw": 3.5,
-        "away": 1.63
-      },
-      "sporty": {
-        "home": 4.9,
-        "draw": 3.6,
-        "away": 1.68
-      },
-      "betika KE": {
-        "home": 4.8,
-        "draw": 3.55,
-        "away": 1.67
-      }
-    },
-    "bestOdds": {
-      "home": 4.9,
-      "draw": 3.6,
-      "away": 1.68
     }
   },
   {
@@ -18486,19 +18304,19 @@
     ],
     "oddsData": {
       "bp GH": {
-        "home": 4.25,
+        "home": 4.35,
         "draw": 3.4,
-        "away": 1.74
+        "away": 1.72
       },
       "bp KE": {
-        "home": 4.25,
+        "home": 4.35,
         "draw": 3.4,
-        "away": 1.74
+        "away": 1.72
       },
       "sporty": {
-        "home": 4.4,
+        "home": 4.5,
         "draw": 3.5,
-        "away": 1.78
+        "away": 1.77
       },
       "betika KE": {
         "home": 4.4,
@@ -18507,7 +18325,7 @@
       }
     },
     "bestOdds": {
-      "home": 4.4,
+      "home": 4.5,
       "draw": 3.55,
       "away": 1.78
     }
@@ -19224,30 +19042,30 @@
     ],
     "oddsData": {
       "bp GH": {
-        "home": 1.54,
-        "draw": 4.55,
+        "home": 1.56,
+        "draw": 4.45,
         "away": 6.5
       },
       "bp KE": {
-        "home": 1.48,
-        "draw": 4.4,
-        "away": 6.75
+        "home": 1.5,
+        "draw": 4.35,
+        "away": 6.5
       },
       "sporty": {
-        "home": 1.53,
-        "draw": 4.52,
-        "away": 6.84
+        "home": 1.55,
+        "draw": 4.48,
+        "away": 6.68
       },
       "betika KE": {
         "home": 1.54,
         "draw": 4.4,
-        "away": 6.6
+        "away": 6.4
       }
     },
     "bestOdds": {
-      "home": 1.54,
-      "draw": 4.55,
-      "away": 6.84
+      "home": 1.56,
+      "draw": 4.48,
+      "away": 6.68
     }
   },
   {
@@ -19330,47 +19148,6 @@
       "home": 4.6,
       "draw": 4.4,
       "away": 1.56
-    }
-  },
-  {
-    "eventId": "57131989",
-    "teams": "FC Trollhattan - Oskarshamns AIK",
-    "country": "Sweden",
-    "tournament": "Ettan, Sodra",
-    "date": "2025-05-03",
-    "time": "14:00",
-    "bookmakers": [
-      "bp GH",
-      "bp KE",
-      "sporty",
-      "betika KE"
-    ],
-    "oddsData": {
-      "bp GH": {
-        "home": 1.94,
-        "draw": 3.6,
-        "away": 3.25
-      },
-      "bp KE": {
-        "home": 1.94,
-        "draw": 3.6,
-        "away": 3.25
-      },
-      "sporty": {
-        "home": 1.97,
-        "draw": 3.7,
-        "away": 3.33
-      },
-      "betika KE": {
-        "home": 1.95,
-        "draw": 3.65,
-        "away": 3.3
-      }
-    },
-    "bestOdds": {
-      "home": 1.97,
-      "draw": 3.7,
-      "away": 3.33
     }
   },
   {
@@ -22340,7 +22117,7 @@
     ],
     "oddsData": {
       "bp GH": {
-        "home": 2.4,
+        "home": 2.45,
         "draw": 4.05,
         "away": 2.75
       },
@@ -22350,20 +22127,20 @@
         "away": 2.7
       },
       "sporty": {
-        "home": 2.4,
-        "draw": 4.09,
-        "away": 2.79
+        "home": 2.41,
+        "draw": 4.08,
+        "away": 2.77
       },
       "betika KE": {
-        "home": 2.41,
-        "draw": 3.95,
+        "home": 2.42,
+        "draw": 3.9,
         "away": 2.7
       }
     },
     "bestOdds": {
-      "home": 2.41,
-      "draw": 4.09,
-      "away": 2.79
+      "home": 2.45,
+      "draw": 4.08,
+      "away": 2.77
     }
   },
   {
@@ -24827,129 +24604,6 @@
     }
   },
   {
-    "eventId": "58856129",
-    "teams": "Al Ahli Saudi FC - Kawasaki Frontale",
-    "country": "International",
-    "tournament": "AFC Champions League",
-    "date": "2025-05-03",
-    "time": "16:30",
-    "bookmakers": [
-      "bp GH",
-      "bp KE",
-      "sporty",
-      "betika KE"
-    ],
-    "oddsData": {
-      "bp GH": {
-        "home": 1.34,
-        "draw": 5.25,
-        "away": 6.75
-      },
-      "bp KE": {
-        "home": 1.34,
-        "draw": 5.25,
-        "away": 6.75
-      },
-      "sporty": {
-        "home": 1.38,
-        "draw": 5.5,
-        "away": 7.1
-      },
-      "betika KE": {
-        "home": 1.36,
-        "draw": 5.2,
-        "away": 6.8
-      }
-    },
-    "bestOdds": {
-      "home": 1.38,
-      "draw": 5.5,
-      "away": 7.1
-    }
-  },
-  {
-    "eventId": "50850655",
-    "teams": "Arsenal FC - AFC Bournemouth",
-    "country": "England",
-    "tournament": "Premier League",
-    "date": "2025-05-03",
-    "time": "16:30",
-    "bookmakers": [
-      "bp GH",
-      "bp KE",
-      "sporty",
-      "betika KE"
-    ],
-    "oddsData": {
-      "bp GH": {
-        "home": 2.18,
-        "draw": 3.7,
-        "away": 3.4
-      },
-      "bp KE": {
-        "home": 2.18,
-        "draw": 3.75,
-        "away": 3.5
-      },
-      "sporty": {
-        "home": 2.16,
-        "draw": 3.69,
-        "away": 3.48
-      },
-      "betika KE": {
-        "home": 2.18,
-        "draw": 3.6,
-        "away": 3.4
-      }
-    },
-    "bestOdds": {
-      "home": 2.18,
-      "draw": 3.75,
-      "away": 3.5
-    }
-  },
-  {
-    "eventId": "58184595",
-    "teams": "San Antonio Unido - Provincial Osorno",
-    "country": "Chile",
-    "tournament": "Chile Segunda División",
-    "date": "2025-05-03",
-    "time": "16:30",
-    "bookmakers": [
-      "bp GH",
-      "bp KE",
-      "sporty",
-      "betika KE"
-    ],
-    "oddsData": {
-      "bp GH": {
-        "home": 2.13,
-        "draw": 3.15,
-        "away": 3.2
-      },
-      "bp KE": {
-        "home": 2.13,
-        "draw": 3.15,
-        "away": 3.2
-      },
-      "sporty": {
-        "home": 2.1,
-        "draw": 3.2,
-        "away": 3.2
-      },
-      "betika KE": {
-        "home": 2.16,
-        "draw": 3.3,
-        "away": 3.05
-      }
-    },
-    "bestOdds": {
-      "home": 2.16,
-      "draw": 3.3,
-      "away": 3.2
-    }
-  },
-  {
     "eventId": "50868517",
     "teams": "Heracles Almelo - Feyenoord Rotterdam",
     "country": "Netherlands",
@@ -24999,17 +24653,11 @@
     "time": "16:45",
     "bookmakers": [
       "bp GH",
-      "bp KE",
       "sporty",
       "betika KE"
     ],
     "oddsData": {
       "bp GH": {
-        "home": 2.75,
-        "draw": 3.5,
-        "away": 2.25
-      },
-      "bp KE": {
         "home": 2.75,
         "draw": 3.5,
         "away": 2.25
@@ -25040,17 +24688,11 @@
     "time": "16:45",
     "bookmakers": [
       "bp GH",
-      "bp KE",
       "sporty",
       "betika KE"
     ],
     "oddsData": {
       "bp GH": {
-        "home": 2.6,
-        "draw": 3.1,
-        "away": 2.6
-      },
-      "bp KE": {
         "home": 2.6,
         "draw": 3.1,
         "away": 2.6
@@ -28163,27 +27805,27 @@
     "oddsData": {
       "bp GH": {
         "home": 13.5,
-        "draw": 9.5,
+        "draw": 9.25,
         "away": 1.19
       },
       "bp KE": {
-        "home": 16,
+        "home": 15,
         "draw": 9.5,
-        "away": 1.18
+        "away": 1.19
       },
       "sporty": {
-        "home": 15.17,
-        "draw": 9.26,
+        "home": 15.02,
+        "draw": 9.2,
         "away": 1.18
       },
       "betika KE": {
         "home": 14,
-        "draw": 8.6,
+        "draw": 8.8,
         "away": 1.19
       }
     },
     "bestOdds": {
-      "home": 16,
+      "home": 15.02,
       "draw": 9.5,
       "away": 1.19
     }
@@ -28450,18 +28092,18 @@
     "oddsData": {
       "bp GH": {
         "home": 6.25,
-        "draw": 5.75,
-        "away": 1.46
+        "draw": 5.5,
+        "away": 1.47
       },
       "bp KE": {
         "home": 6.25,
         "draw": 5.5,
-        "away": 1.4
+        "away": 1.41
       },
       "sporty": {
-        "home": 6.54,
-        "draw": 5.64,
-        "away": 1.45
+        "home": 6.45,
+        "draw": 5.6,
+        "away": 1.46
       },
       "betika KE": {
         "home": 6.2,
@@ -28470,9 +28112,9 @@
       }
     },
     "bestOdds": {
-      "home": 6.54,
-      "draw": 5.75,
-      "away": 1.46
+      "home": 6.45,
+      "draw": 5.6,
+      "away": 1.47
     }
   },
   {
@@ -29542,129 +29184,6 @@
     }
   },
   {
-    "eventId": "60256109",
-    "teams": "Portuguesa FC - Deportivo La Guaira",
-    "country": "Venezuela",
-    "tournament": "Primera Division",
-    "date": "2025-05-03",
-    "time": "21:30",
-    "bookmakers": [
-      "bp GH",
-      "bp KE",
-      "sporty",
-      "betika KE"
-    ],
-    "oddsData": {
-      "bp GH": {
-        "home": 3.2,
-        "draw": 3.15,
-        "away": 2.11
-      },
-      "bp KE": {
-        "home": 3.2,
-        "draw": 3.15,
-        "away": 2.11
-      },
-      "sporty": {
-        "home": 3.25,
-        "draw": 3.1,
-        "away": 2.1
-      },
-      "betika KE": {
-        "home": 3.25,
-        "draw": 3.15,
-        "away": 2.12
-      }
-    },
-    "bestOdds": {
-      "home": 3.25,
-      "draw": 3.15,
-      "away": 2.12
-    }
-  },
-  {
-    "eventId": "57381275",
-    "teams": "CD Tecnico Universitario - CD Universidad Catolica del Ecuador",
-    "country": "Ecuador",
-    "tournament": "LigaPro Primera A",
-    "date": "2025-05-03",
-    "time": "21:30",
-    "bookmakers": [
-      "bp GH",
-      "bp KE",
-      "sporty",
-      "betika KE"
-    ],
-    "oddsData": {
-      "bp GH": {
-        "home": 2.55,
-        "draw": 3.2,
-        "away": 2.65
-      },
-      "bp KE": {
-        "home": 2.55,
-        "draw": 3.2,
-        "away": 2.65
-      },
-      "sporty": {
-        "home": 2.55,
-        "draw": 3.2,
-        "away": 2.65
-      },
-      "betika KE": {
-        "home": 2.55,
-        "draw": 3.2,
-        "away": 2.65
-      }
-    },
-    "bestOdds": {
-      "home": 2.55,
-      "draw": 3.2,
-      "away": 2.65
-    }
-  },
-  {
-    "eventId": "59722626",
-    "teams": "The Strongest - Guabira",
-    "country": "Bolivia",
-    "tournament": "Bolivia Primera Division",
-    "date": "2025-05-03",
-    "time": "21:30",
-    "bookmakers": [
-      "bp GH",
-      "bp KE",
-      "sporty",
-      "betika KE"
-    ],
-    "oddsData": {
-      "bp GH": {
-        "home": 0,
-        "draw": 0,
-        "away": 0
-      },
-      "bp KE": {
-        "home": 1.11,
-        "draw": 7.25,
-        "away": 15.5
-      },
-      "sporty": {
-        "home": 1.13,
-        "draw": 7.5,
-        "away": 14
-      },
-      "betika KE": {
-        "home": 1.13,
-        "draw": 7.8,
-        "away": 15
-      }
-    },
-    "bestOdds": {
-      "home": 1.13,
-      "draw": 7.8,
-      "away": 15.5
-    }
-  },
-  {
     "eventId": "58184589",
     "teams": "Deportes Linares - Deportes Melipilla",
     "country": "Chile",
@@ -30147,13 +29666,13 @@
       "betika KE": {
         "home": 1.41,
         "draw": 4.1,
-        "away": 8
+        "away": 7.8
       }
     },
     "bestOdds": {
       "home": 1.41,
       "draw": 4.1,
-      "away": 8
+      "away": 7.8
     }
   },
   {
@@ -31179,47 +30698,6 @@
       "home": 5.8,
       "draw": 5.75,
       "away": 1.33
-    }
-  },
-  {
-    "eventId": "58052531",
-    "teams": "EC Bahia BA - Botafogo FR RJ",
-    "country": "Brazil",
-    "tournament": "Brasileiro Serie A",
-    "date": "2025-05-04",
-    "time": "00:00",
-    "bookmakers": [
-      "bp GH",
-      "bp KE",
-      "sporty",
-      "betika KE"
-    ],
-    "oddsData": {
-      "bp GH": {
-        "home": 2.22,
-        "draw": 3.3,
-        "away": 3.25
-      },
-      "bp KE": {
-        "home": 2.22,
-        "draw": 3.3,
-        "away": 3.25
-      },
-      "sporty": {
-        "home": 2.25,
-        "draw": 3.33,
-        "away": 3.3
-      },
-      "betika KE": {
-        "home": 2.21,
-        "draw": 3.25,
-        "away": 3.2
-      }
-    },
-    "bestOdds": {
-      "home": 2.25,
-      "draw": 3.33,
-      "away": 3.3
     }
   },
   {
@@ -32303,19 +31781,19 @@
     ],
     "oddsData": {
       "bp GH": {
-        "home": 5.25,
-        "draw": 4.75,
-        "away": 1.42
+        "home": 5.5,
+        "draw": 4.85,
+        "away": 1.39
       },
       "bp KE": {
-        "home": 5.25,
-        "draw": 4.75,
-        "away": 1.42
+        "home": 5.5,
+        "draw": 4.85,
+        "away": 1.39
       },
       "sporty": {
-        "home": 5.4,
-        "draw": 4.7,
-        "away": 1.43
+        "home": 5.5,
+        "draw": 4.8,
+        "away": 1.41
       },
       "betika KE": {
         "home": 5.2,
@@ -32324,9 +31802,9 @@
       }
     },
     "bestOdds": {
-      "home": 5.4,
-      "draw": 4.75,
-      "away": 1.43
+      "home": 5.5,
+      "draw": 4.85,
+      "away": 1.42
     }
   },
   {
@@ -33551,129 +33029,6 @@
       "home": 1.26,
       "draw": 4.6,
       "away": 12
-    }
-  },
-  {
-    "eventId": "51867137",
-    "teams": "SCR Pena Deportiva - Elche Ilicitano CF",
-    "country": "Spain",
-    "tournament": "Segunda Federacion",
-    "date": "2025-05-04",
-    "time": "10:00",
-    "bookmakers": [
-      "bp GH",
-      "bp KE",
-      "sporty",
-      "betika KE"
-    ],
-    "oddsData": {
-      "bp GH": {
-        "home": 2.09,
-        "draw": 3.2,
-        "away": 3.2
-      },
-      "bp KE": {
-        "home": 2.09,
-        "draw": 3.2,
-        "away": 3.2
-      },
-      "sporty": {
-        "home": 2.05,
-        "draw": 3.1,
-        "away": 3.1
-      },
-      "betika KE": {
-        "home": 2.1,
-        "draw": 3.2,
-        "away": 3.2
-      }
-    },
-    "bestOdds": {
-      "home": 2.1,
-      "draw": 3.2,
-      "away": 3.2
-    }
-  },
-  {
-    "eventId": "51866531",
-    "teams": "SD Ejea - UD Barbastro",
-    "country": "Spain",
-    "tournament": "Segunda Federacion",
-    "date": "2025-05-04",
-    "time": "10:00",
-    "bookmakers": [
-      "bp GH",
-      "bp KE",
-      "sporty",
-      "betika KE"
-    ],
-    "oddsData": {
-      "bp GH": {
-        "home": 3.95,
-        "draw": 3,
-        "away": 1.93
-      },
-      "bp KE": {
-        "home": 3.95,
-        "draw": 3,
-        "away": 1.93
-      },
-      "sporty": {
-        "home": 3.8,
-        "draw": 2.95,
-        "away": 1.89
-      },
-      "betika KE": {
-        "home": 3.95,
-        "draw": 3.05,
-        "away": 1.93
-      }
-    },
-    "bestOdds": {
-      "home": 3.95,
-      "draw": 3.05,
-      "away": 1.93
-    }
-  },
-  {
-    "eventId": "51866529",
-    "teams": "CD Izarra - CD Subiza",
-    "country": "Spain",
-    "tournament": "Segunda Federacion",
-    "date": "2025-05-04",
-    "time": "10:00",
-    "bookmakers": [
-      "bp GH",
-      "bp KE",
-      "sporty",
-      "betika KE"
-    ],
-    "oddsData": {
-      "bp GH": {
-        "home": 2.21,
-        "draw": 3.45,
-        "away": 2.75
-      },
-      "bp KE": {
-        "home": 2.21,
-        "draw": 3.45,
-        "away": 2.75
-      },
-      "sporty": {
-        "home": 2.15,
-        "draw": 3.4,
-        "away": 2.7
-      },
-      "betika KE": {
-        "home": 2.22,
-        "draw": 3.45,
-        "away": 2.75
-      }
-    },
-    "bestOdds": {
-      "home": 2.22,
-      "draw": 3.45,
-      "away": 2.75
     }
   },
   {
@@ -35276,47 +34631,6 @@
     }
   },
   {
-    "eventId": "51867143",
-    "teams": "Valencia CF Mestalla - CE Sabadell FC",
-    "country": "Spain",
-    "tournament": "Segunda Federacion",
-    "date": "2025-05-04",
-    "time": "10:00",
-    "bookmakers": [
-      "bp GH",
-      "bp KE",
-      "sporty",
-      "betika KE"
-    ],
-    "oddsData": {
-      "bp GH": {
-        "home": 2.55,
-        "draw": 2.95,
-        "away": 2.65
-      },
-      "bp KE": {
-        "home": 2.55,
-        "draw": 2.95,
-        "away": 2.65
-      },
-      "sporty": {
-        "home": 2.5,
-        "draw": 2.9,
-        "away": 2.6
-      },
-      "betika KE": {
-        "home": 2.6,
-        "draw": 2.95,
-        "away": 2.7
-      }
-    },
-    "bestOdds": {
-      "home": 2.6,
-      "draw": 2.95,
-      "away": 2.7
-    }
-  },
-  {
     "eventId": "50868521",
     "teams": "NAC Breda - PEC Zwolle",
     "country": "Netherlands",
@@ -36720,7 +36034,6 @@
     "bookmakers": [
       "bp GH",
       "bp KE",
-      "sporty",
       "betika KE"
     ],
     "oddsData": {
@@ -36734,11 +36047,6 @@
         "draw": 3.8,
         "away": 3.95
       },
-      "sporty": {
-        "home": 1.77,
-        "draw": 3.8,
-        "away": 4
-      },
       "betika KE": {
         "home": 1.77,
         "draw": 3.8,
@@ -36748,7 +36056,7 @@
     "bestOdds": {
       "home": 1.77,
       "draw": 3.8,
-      "away": 4
+      "away": 3.95
     }
   },
   {
@@ -39999,9 +39307,9 @@
     ],
     "oddsData": {
       "bp GH": {
-        "home": 3.65,
+        "home": 3.8,
         "draw": 3.3,
-        "away": 2.06
+        "away": 2.02
       },
       "bp KE": {
         "home": 3.8,
@@ -40009,20 +39317,20 @@
         "away": 2.02
       },
       "sporty": {
-        "home": 3.7,
-        "draw": 3.33,
+        "home": 3.8,
+        "draw": 3.3,
         "away": 2.05
       },
       "betika KE": {
-        "home": 3.6,
+        "home": 3.7,
         "draw": 3.25,
-        "away": 2.05
+        "away": 2.02
       }
     },
     "bestOdds": {
       "home": 3.8,
-      "draw": 3.33,
-      "away": 2.06
+      "draw": 3.3,
+      "away": 2.05
     }
   },
   {
@@ -42187,13 +41495,13 @@
         "away": 1.75
       },
       "betika KE": {
-        "home": 4.2,
+        "home": 4,
         "draw": 3.85,
-        "away": 1.72
+        "away": 1.75
       }
     },
     "bestOdds": {
-      "home": 4.2,
+      "home": 4,
       "draw": 3.85,
       "away": 1.75
     }
@@ -43402,13 +42710,13 @@
     ],
     "oddsData": {
       "bp GH": {
-        "home": 1.12,
-        "draw": 6.5,
+        "home": 1.11,
+        "draw": 6.75,
         "away": 17.5
       },
       "bp KE": {
-        "home": 1.12,
-        "draw": 6.5,
+        "home": 1.11,
+        "draw": 6.75,
         "away": 17.5
       },
       "sporty": {
@@ -43424,7 +42732,7 @@
     },
     "bestOdds": {
       "home": 1.17,
-      "draw": 6.5,
+      "draw": 6.75,
       "away": 17.5
     }
   },
@@ -48501,15 +47809,15 @@
         "away": 1.58
       },
       "betika KE": {
-        "home": 5.8,
-        "draw": 3.6,
-        "away": 1.59
+        "home": 6,
+        "draw": 3.65,
+        "away": 1.56
       }
     },
     "bestOdds": {
       "home": 6.25,
       "draw": 3.75,
-      "away": 1.59
+      "away": 1.58
     }
   },
   {
@@ -51023,7 +50331,6 @@
     "bookmakers": [
       "bp GH",
       "bp KE",
-      "sporty",
       "betika KE"
     ],
     "oddsData": {
@@ -51037,11 +50344,6 @@
         "draw": 4.1,
         "away": 5.75
       },
-      "sporty": {
-        "home": 1.49,
-        "draw": 4.25,
-        "away": 6.1
-      },
       "betika KE": {
         "home": 1.5,
         "draw": 4.2,
@@ -51050,8 +50352,8 @@
     },
     "bestOdds": {
       "home": 1.5,
-      "draw": 4.25,
-      "away": 6.1
+      "draw": 4.2,
+      "away": 6
     }
   },
   {
@@ -56952,7 +56254,7 @@
         "away": 3.2
       },
       "betika KE": {
-        "home": 2.07,
+        "home": 2.08,
         "draw": 3.9,
         "away": 3.2
       }
@@ -59412,6 +58714,490 @@
       "home": 11,
       "draw": 6.31,
       "away": 1.25
+    }
+  },
+  {
+    "eventId": "51923301",
+    "teams": "Calcio Padova U19 - Como 1907 U19",
+    "country": "Italy",
+    "tournament": "Campionato Primavera 2",
+    "date": "2025-05-03",
+    "time": "13:00",
+    "bookmakers": [
+      "bp KE",
+      "sporty"
+    ],
+    "oddsData": {
+      "bp KE": {
+        "home": 7.5,
+        "draw": 5.25,
+        "away": 1.29
+      },
+      "sporty": {
+        "home": 7.5,
+        "draw": 5,
+        "away": 1.3
+      }
+    },
+    "bestOdds": {
+      "home": 7.5,
+      "draw": 5.25,
+      "away": 1.3
+    }
+  },
+  {
+    "eventId": "59224397",
+    "teams": "FK Velež Mostar - Zrinjski Mostar",
+    "country": "Bosnia and Herzegovina",
+    "tournament": "Bosnia-Herzegovina Premier Liga",
+    "date": "2025-05-03",
+    "time": "14:00",
+    "bookmakers": [
+      "bp KE",
+      "sporty",
+      "betika KE"
+    ],
+    "oddsData": {
+      "bp KE": {
+        "home": 4.9,
+        "draw": 3.5,
+        "away": 1.63
+      },
+      "sporty": {
+        "home": 4.9,
+        "draw": 3.6,
+        "away": 1.68
+      },
+      "betika KE": {
+        "home": 4.8,
+        "draw": 3.55,
+        "away": 1.67
+      }
+    },
+    "bestOdds": {
+      "home": 4.9,
+      "draw": 3.6,
+      "away": 1.68
+    }
+  },
+  {
+    "eventId": "57131989",
+    "teams": "FC Trollhattan - Oskarshamns AIK",
+    "country": "Sweden",
+    "tournament": "Ettan, Sodra",
+    "date": "2025-05-03",
+    "time": "14:00",
+    "bookmakers": [
+      "bp KE",
+      "sporty",
+      "betika KE"
+    ],
+    "oddsData": {
+      "bp KE": {
+        "home": 1.94,
+        "draw": 3.6,
+        "away": 3.25
+      },
+      "sporty": {
+        "home": 1.97,
+        "draw": 3.7,
+        "away": 3.33
+      },
+      "betika KE": {
+        "home": 1.95,
+        "draw": 3.65,
+        "away": 3.3
+      }
+    },
+    "bestOdds": {
+      "home": 1.97,
+      "draw": 3.7,
+      "away": 3.33
+    }
+  },
+  {
+    "eventId": "58856129",
+    "teams": "Al Ahli Saudi FC - Kawasaki Frontale",
+    "country": "International",
+    "tournament": "AFC Champions League",
+    "date": "2025-05-03",
+    "time": "16:30",
+    "bookmakers": [
+      "bp KE",
+      "sporty",
+      "betika KE"
+    ],
+    "oddsData": {
+      "bp KE": {
+        "home": 1.34,
+        "draw": 5.25,
+        "away": 6.75
+      },
+      "sporty": {
+        "home": 1.38,
+        "draw": 5.5,
+        "away": 7.1
+      },
+      "betika KE": {
+        "home": 1.36,
+        "draw": 5.2,
+        "away": 6.8
+      }
+    },
+    "bestOdds": {
+      "home": 1.38,
+      "draw": 5.5,
+      "away": 7.1
+    }
+  },
+  {
+    "eventId": "50850655",
+    "teams": "Arsenal FC - AFC Bournemouth",
+    "country": "England",
+    "tournament": "Premier League",
+    "date": "2025-05-03",
+    "time": "16:30",
+    "bookmakers": [
+      "bp KE",
+      "sporty",
+      "betika KE"
+    ],
+    "oddsData": {
+      "bp KE": {
+        "home": 2.18,
+        "draw": 3.75,
+        "away": 3.5
+      },
+      "sporty": {
+        "home": 2.16,
+        "draw": 3.69,
+        "away": 3.48
+      },
+      "betika KE": {
+        "home": 2.18,
+        "draw": 3.6,
+        "away": 3.4
+      }
+    },
+    "bestOdds": {
+      "home": 2.18,
+      "draw": 3.75,
+      "away": 3.5
+    }
+  },
+  {
+    "eventId": "58184595",
+    "teams": "San Antonio Unido - Provincial Osorno",
+    "country": "Chile",
+    "tournament": "Chile Segunda División",
+    "date": "2025-05-03",
+    "time": "16:30",
+    "bookmakers": [
+      "bp KE",
+      "sporty",
+      "betika KE"
+    ],
+    "oddsData": {
+      "bp KE": {
+        "home": 2.13,
+        "draw": 3.15,
+        "away": 3.2
+      },
+      "sporty": {
+        "home": 2.1,
+        "draw": 3.2,
+        "away": 3.2
+      },
+      "betika KE": {
+        "home": 2.16,
+        "draw": 3.3,
+        "away": 3.05
+      }
+    },
+    "bestOdds": {
+      "home": 2.16,
+      "draw": 3.3,
+      "away": 3.2
+    }
+  },
+  {
+    "eventId": "60256109",
+    "teams": "Portuguesa FC - Deportivo La Guaira",
+    "country": "Venezuela",
+    "tournament": "Primera Division",
+    "date": "2025-05-03",
+    "time": "21:30",
+    "bookmakers": [
+      "bp KE",
+      "sporty",
+      "betika KE"
+    ],
+    "oddsData": {
+      "bp KE": {
+        "home": 3.2,
+        "draw": 3.15,
+        "away": 2.11
+      },
+      "sporty": {
+        "home": 3.25,
+        "draw": 3.1,
+        "away": 2.1
+      },
+      "betika KE": {
+        "home": 3.25,
+        "draw": 3.15,
+        "away": 2.12
+      }
+    },
+    "bestOdds": {
+      "home": 3.25,
+      "draw": 3.15,
+      "away": 2.12
+    }
+  },
+  {
+    "eventId": "57381275",
+    "teams": "CD Tecnico Universitario - CD Universidad Catolica del Ecuador",
+    "country": "Ecuador",
+    "tournament": "LigaPro Primera A",
+    "date": "2025-05-03",
+    "time": "21:30",
+    "bookmakers": [
+      "bp KE",
+      "sporty",
+      "betika KE"
+    ],
+    "oddsData": {
+      "bp KE": {
+        "home": 2.55,
+        "draw": 3.2,
+        "away": 2.65
+      },
+      "sporty": {
+        "home": 2.55,
+        "draw": 3.2,
+        "away": 2.65
+      },
+      "betika KE": {
+        "home": 2.55,
+        "draw": 3.2,
+        "away": 2.65
+      }
+    },
+    "bestOdds": {
+      "home": 2.55,
+      "draw": 3.2,
+      "away": 2.65
+    }
+  },
+  {
+    "eventId": "59722626",
+    "teams": "The Strongest - Guabira",
+    "country": "Bolivia",
+    "tournament": "Bolivia Primera Division",
+    "date": "2025-05-03",
+    "time": "21:30",
+    "bookmakers": [
+      "bp KE",
+      "sporty",
+      "betika KE"
+    ],
+    "oddsData": {
+      "bp KE": {
+        "home": 1.09,
+        "draw": 7.75,
+        "away": 17.5
+      },
+      "sporty": {
+        "home": 1.13,
+        "draw": 7.5,
+        "away": 14
+      },
+      "betika KE": {
+        "home": 1.13,
+        "draw": 7.8,
+        "away": 15
+      }
+    },
+    "bestOdds": {
+      "home": 1.13,
+      "draw": 7.8,
+      "away": 17.5
+    }
+  },
+  {
+    "eventId": "58052531",
+    "teams": "EC Bahia BA - Botafogo FR RJ",
+    "country": "Brazil",
+    "tournament": "Brasileiro Serie A",
+    "date": "2025-05-04",
+    "time": "00:00",
+    "bookmakers": [
+      "bp KE",
+      "sporty",
+      "betika KE"
+    ],
+    "oddsData": {
+      "bp KE": {
+        "home": 2.22,
+        "draw": 3.3,
+        "away": 3.25
+      },
+      "sporty": {
+        "home": 2.25,
+        "draw": 3.33,
+        "away": 3.3
+      },
+      "betika KE": {
+        "home": 2.21,
+        "draw": 3.25,
+        "away": 3.2
+      }
+    },
+    "bestOdds": {
+      "home": 2.25,
+      "draw": 3.33,
+      "away": 3.3
+    }
+  },
+  {
+    "eventId": "51867137",
+    "teams": "SCR Pena Deportiva - Elche Ilicitano CF",
+    "country": "Spain",
+    "tournament": "Segunda Federacion",
+    "date": "2025-05-04",
+    "time": "10:00",
+    "bookmakers": [
+      "bp KE",
+      "sporty",
+      "betika KE"
+    ],
+    "oddsData": {
+      "bp KE": {
+        "home": 2.09,
+        "draw": 3.2,
+        "away": 3.2
+      },
+      "sporty": {
+        "home": 2.05,
+        "draw": 3.1,
+        "away": 3.1
+      },
+      "betika KE": {
+        "home": 2.1,
+        "draw": 3.2,
+        "away": 3.2
+      }
+    },
+    "bestOdds": {
+      "home": 2.1,
+      "draw": 3.2,
+      "away": 3.2
+    }
+  },
+  {
+    "eventId": "51866531",
+    "teams": "SD Ejea - UD Barbastro",
+    "country": "Spain",
+    "tournament": "Segunda Federacion",
+    "date": "2025-05-04",
+    "time": "10:00",
+    "bookmakers": [
+      "bp KE",
+      "sporty",
+      "betika KE"
+    ],
+    "oddsData": {
+      "bp KE": {
+        "home": 3.95,
+        "draw": 3,
+        "away": 1.93
+      },
+      "sporty": {
+        "home": 3.8,
+        "draw": 2.95,
+        "away": 1.89
+      },
+      "betika KE": {
+        "home": 3.95,
+        "draw": 3.05,
+        "away": 1.93
+      }
+    },
+    "bestOdds": {
+      "home": 3.95,
+      "draw": 3.05,
+      "away": 1.93
+    }
+  },
+  {
+    "eventId": "51866529",
+    "teams": "CD Izarra - CD Subiza",
+    "country": "Spain",
+    "tournament": "Segunda Federacion",
+    "date": "2025-05-04",
+    "time": "10:00",
+    "bookmakers": [
+      "bp KE",
+      "sporty",
+      "betika KE"
+    ],
+    "oddsData": {
+      "bp KE": {
+        "home": 2.21,
+        "draw": 3.45,
+        "away": 2.75
+      },
+      "sporty": {
+        "home": 2.15,
+        "draw": 3.4,
+        "away": 2.7
+      },
+      "betika KE": {
+        "home": 2.22,
+        "draw": 3.45,
+        "away": 2.75
+      }
+    },
+    "bestOdds": {
+      "home": 2.22,
+      "draw": 3.45,
+      "away": 2.75
+    }
+  },
+  {
+    "eventId": "51867143",
+    "teams": "Valencia CF Mestalla - CE Sabadell FC",
+    "country": "Spain",
+    "tournament": "Segunda Federacion",
+    "date": "2025-05-04",
+    "time": "10:00",
+    "bookmakers": [
+      "bp KE",
+      "sporty",
+      "betika KE"
+    ],
+    "oddsData": {
+      "bp KE": {
+        "home": 2.55,
+        "draw": 2.95,
+        "away": 2.65
+      },
+      "sporty": {
+        "home": 2.5,
+        "draw": 2.9,
+        "away": 2.6
+      },
+      "betika KE": {
+        "home": 2.6,
+        "draw": 2.95,
+        "away": 2.7
+      }
+    },
+    "bestOdds": {
+      "home": 2.6,
+      "draw": 2.95,
+      "away": 2.7
     }
   },
   {
@@ -62821,8 +62607,8 @@
     "oddsData": {
       "sporty": {
         "home": 2.25,
-        "draw": 3.1,
-        "away": 3
+        "draw": 3.2,
+        "away": 3.1
       },
       "betika KE": {
         "home": 2.21,
@@ -62832,8 +62618,8 @@
     },
     "bestOdds": {
       "home": 2.25,
-      "draw": 3.1,
-      "away": 3
+      "draw": 3.2,
+      "away": 3.1
     }
   },
   {
@@ -62878,7 +62664,7 @@
     ],
     "oddsData": {
       "sporty": {
-        "home": 1.95,
+        "home": 1.96,
         "draw": 3.1,
         "away": 4
       },
@@ -62889,7 +62675,7 @@
       }
     },
     "bestOdds": {
-      "home": 1.95,
+      "home": 1.96,
       "draw": 3.1,
       "away": 4
     }
@@ -62907,8 +62693,8 @@
     ],
     "oddsData": {
       "sporty": {
-        "home": 2.35,
-        "draw": 3.1,
+        "home": 2.4,
+        "draw": 3.2,
         "away": 2.9
       },
       "betika KE": {
@@ -62918,8 +62704,8 @@
       }
     },
     "bestOdds": {
-      "home": 2.35,
-      "draw": 3.1,
+      "home": 2.4,
+      "draw": 3.2,
       "away": 2.9
     }
   },
@@ -62937,7 +62723,7 @@
     "oddsData": {
       "sporty": {
         "home": 2.2,
-        "draw": 3.3,
+        "draw": 3.33,
         "away": 3
       },
       "betika KE": {
@@ -62948,7 +62734,7 @@
     },
     "bestOdds": {
       "home": 2.2,
-      "draw": 3.3,
+      "draw": 3.33,
       "away": 3
     }
   },
@@ -62965,9 +62751,9 @@
     ],
     "oddsData": {
       "sporty": {
-        "home": 2.1,
+        "home": 2.15,
         "draw": 3.2,
-        "away": 3.3
+        "away": 3.33
       },
       "betika KE": {
         "home": 2.08,
@@ -62976,9 +62762,9 @@
       }
     },
     "bestOdds": {
-      "home": 2.1,
+      "home": 2.15,
       "draw": 3.2,
-      "away": 3.3
+      "away": 3.33
     }
   },
   {
@@ -62994,7 +62780,7 @@
     ],
     "oddsData": {
       "sporty": {
-        "home": 2.1,
+        "home": 2.15,
         "draw": 3.1,
         "away": 3.4
       },
@@ -63005,7 +62791,7 @@
       }
     },
     "bestOdds": {
-      "home": 2.1,
+      "home": 2.15,
       "draw": 3.1,
       "away": 3.4
     }
@@ -63023,7 +62809,7 @@
     ],
     "oddsData": {
       "sporty": {
-        "home": 2.85,
+        "home": 2.9,
         "draw": 3.2,
         "away": 2.35
       },
@@ -63034,7 +62820,7 @@
       }
     },
     "bestOdds": {
-      "home": 2.85,
+      "home": 2.9,
       "draw": 3.2,
       "away": 2.35
     }
@@ -63371,8 +63157,8 @@
     ],
     "oddsData": {
       "sporty": {
-        "home": 2.2,
-        "draw": 4,
+        "home": 2.25,
+        "draw": 3.9,
         "away": 2.55
       },
       "betika KE": {
@@ -63382,7 +63168,7 @@
       }
     },
     "bestOdds": {
-      "home": 2.2,
+      "home": 2.25,
       "draw": 4,
       "away": 2.55
     }
