@@ -2,6 +2,51 @@ import { IStorage } from '../storage';
 import { logger } from './logger';
 
 // Helper function to fix Sportybet data automatically after scraping
+/**
+ * Helper function to get Premier League events data.
+ * This is used for diagnostics and debugging.
+ */
+export async function getPremierLeagueData(storage: IStorage): Promise<any> {
+  const sportyData = await storage.getBookmakerData('sporty', true);
+  
+  if (!Array.isArray(sportyData)) {
+    return {
+      totalEvents: 0,
+      premierLeagueCount: 0,
+      premierLeagueEvents: []
+    };
+  }
+
+  // Get all Premier League events from Sportybet data
+  const premierLeagueEvents = sportyData.filter(event => {
+    const country = event.country || (event.raw && event.raw.country) || '';
+    const tournament = event.tournament || event.league || (event.raw && event.raw.tournament) || '';
+    return country === 'England' && tournament === 'Premier League';
+  }).map(event => {
+    const teams = event.teams || event.event || (event.raw && event.raw.event) || '';
+    const eventId = event.eventId || event.id || (event.raw && event.raw.originalEventId) || (event.raw && event.raw.eventId) || '';
+    const odds = event.odds || {
+      home: event.raw?.home_odds || 0,
+      draw: event.raw?.draw_odds || 0,
+      away: event.raw?.away_odds || 0
+    };
+    
+    return {
+      country: 'England',
+      tournament: 'Premier League',
+      teams,
+      eventId,
+      odds
+    };
+  });
+  
+  return {
+    totalEvents: sportyData.length,
+    premierLeagueCount: premierLeagueEvents.length,
+    premierLeagueEvents
+  };
+}
+
 export async function fixSportybetData(storage: IStorage): Promise<void> {
   logger.critical(`Running automatic Sportybet data fix`);
   

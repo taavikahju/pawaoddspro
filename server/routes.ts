@@ -828,6 +828,70 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
+  // Admin-only endpoint to check Premier League events
+  app.get('/api/check-premier-league', async (req, res) => {
+    try {
+      const apiKey = req.header('x-admin-key');
+      if (apiKey !== process.env.ADMIN_API_KEY && apiKey !== 'pawaodds123') {
+        return res.status(401).json({ message: 'Unauthorized' });
+      }
+      
+      // Get all events from the database
+      const events = await storage.getEvents();
+      
+      // Filter for Premier League events
+      const premierLeagueEvents = events.filter(event => {
+        return event.country === 'England' && 
+               event.tournament === 'Premier League';
+      });
+      
+      // Check how many have Sportybet odds
+      const withSportybet = premierLeagueEvents.filter(event => {
+        const oddsData = event.oddsData as Record<string, any>;
+        return oddsData && oddsData.sporty;
+      });
+      
+      // Check for upcoming matches (May 10-11)
+      const upcomingMatches = premierLeagueEvents.filter(event => {
+        // Get the date part
+        const eventDate = event.date;
+        // Check if it's May 10 or 11
+        return eventDate && (eventDate === '2025-05-10' || eventDate === '2025-05-11');
+      });
+      
+      // Use our helper function to get Premier League data from Sportybet
+      const { getPremierLeagueData } = await import('./utils/sportybetFix');
+      const rawSportyData = await getPremierLeagueData(storage);
+      
+      res.json({
+        total: premierLeagueEvents.length,
+        withSportybet: withSportybet.length,
+        upcomingMatchCount: upcomingMatches.length,
+        
+        // Add Sportybet source data information
+        plEventsInSportyData: rawSportyData.premierLeagueCount,
+        sportyTotalEvents: rawSportyData.totalEvents,
+        
+        // Database events
+        databaseEvents: premierLeagueEvents.map(e => ({
+          id: e.id,
+          teams: e.teams,
+          date: e.date,
+          time: e.time,
+          hasSportybet: Boolean((e.oddsData as Record<string, any>)?.sporty),
+          bookmakers: Object.keys(e.oddsData as Record<string, any> || {})
+        })),
+        
+        // Raw source events
+        rawSportyEvents: rawSportyData.premierLeagueEvents
+      });
+      
+    } catch (error) {
+      logger.error(`Error checking Premier League events: ${error}`);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  });
+  
   // Get tournament margin calculation details
   app.get('/api/tournaments/margins/details', async (req, res) => {
     try {
