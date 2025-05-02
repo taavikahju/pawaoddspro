@@ -156,7 +156,16 @@ export default function OddsHistoryPopup({
                 />
                 <Tooltip 
                   formatter={(value: any, name: string) => [`${Number(value).toFixed(2)}`, name]}
-                  labelFormatter={(label) => `Date/Time: ${label}`}
+                  labelFormatter={(label) => {
+                    // Find the data point for this label to get the original timestamp
+                    const dataPoint = chartData.find(dp => dp.timestamp === label);
+                    if (dataPoint && dataPoint.date) {
+                      // Format the full date and time
+                      return `Date/Time: ${label}\nFull Timestamp: ${dataPoint.date.toISOString()}`;
+                    }
+                    return `Date/Time: ${label}`;
+                  }}
+                  contentStyle={{ whiteSpace: 'pre-line', fontSize: '12px' }}
                 />
                 <Legend 
                   iconSize={8}
