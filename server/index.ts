@@ -22,6 +22,33 @@ app.use((req, res, next) => {
 (async () => {
   const server = await registerRoutes(app);
 
+  // Setup automatic Sportybet data fix
+  import { fixSportybetData } from './utils/sportybetFix';
+  import { storage } from './storage';
+  
+  // Run a Sportybet fix every 15 minutes to ensure data persistence
+  const SPORTYBET_FIX_INTERVAL = 15 * 60 * 1000; // 15 minutes in milliseconds
+  
+  // Run once at startup after a short delay
+  setTimeout(async () => {
+    try {
+      log('Running initial Sportybet data fix...', 'scheduler');
+      await fixSportybetData(storage);
+    } catch (error) {
+      console.error('Error in initial Sportybet fix:', error);
+    }
+  }, 60 * 1000); // Wait 1 minute after startup
+  
+  // Then run periodically
+  setInterval(async () => {
+    try {
+      log('Running scheduled Sportybet data fix...', 'scheduler');
+      await fixSportybetData(storage);
+    } catch (error) {
+      console.error('Error in scheduled Sportybet fix:', error);
+    }
+  }, SPORTYBET_FIX_INTERVAL);
+
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";
