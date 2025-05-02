@@ -50,7 +50,8 @@ export const logger = {
   // Scraper lifecycle events
   scraperStart: (time: string) => {
     if (verbosityLevel >= 1) {
-      console.log(`SCRAPER START [${time}]`);
+      const logLevel = process.env.LOG_LEVEL || 'info';
+      console.log(`SCRAPER START [${time}] (LOG_LEVEL=${logLevel})`);
     }
   },
   

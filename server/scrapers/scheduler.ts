@@ -78,7 +78,8 @@ let isDataProcessingRunning = false;
 export function setupScrapers(storage: IStorage): void {
   // Enable Python Sportybet implementation at startup
   process.env.USE_PYTHON_SPORTYBET = 'true';
-  logger.critical('Setting up scraper services');
+  const logLevel = process.env.LOG_LEVEL || 'info';
+  logger.critical(`Setting up scraper services (LOG_LEVEL=${logLevel}, Python Sportybet enabled)`);
   
   // Run scrapers immediately on startup
   runAllScrapers(storage)
@@ -145,7 +146,7 @@ export function setupScrapers(storage: IStorage): void {
       fiveDaysAgo.setDate(fiveDaysAgo.getDate() - OLD_EVENT_DAYS);
       const formattedDate = fiveDaysAgo.toISOString().split('T')[0]; // Format as YYYY-MM-DD
       
-      const { events } = await import('../shared/schema');
+      const { events } = await import('@shared/schema');
       const { eq, lt } = await import('drizzle-orm');
       const result = await db.delete(events).where(lt(events.date, formattedDate));
       
@@ -171,7 +172,8 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
     process.env.USE_PYTHON_SPORTYBET = 'true';
     
     const startTime = new Date();
-    logger.critical(`[${startTime.toISOString()}] Starting scraper runs (Python Sportybet enabled)`);
+    const logLevel = process.env.LOG_LEVEL || 'info';
+    logger.critical(`[${startTime.toISOString()}] Starting scraper runs (LOG_LEVEL=${logLevel}, Python Sportybet enabled)`);
     
     // Emit scraper started event
     scraperEvents.emit(SCRAPER_EVENTS.STARTED, {
