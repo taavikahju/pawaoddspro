@@ -616,99 +616,93 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
           }
         });
       }
-        // Skip if we already found this event by eventId
-        const event = await storage.getEventByExternalId(externalId);
-        if (event) {
-          existingEventsByExternalId.set(externalId, event);
-        }
-      }
 
       // Prepare batch operations
       const historyOperations = [];
       const createOperations = [];
       const updateOperations = [];
 
-      // Process each event in the batch
-      for (const [eventKey, eventData] of currentBatch) {
-        try {
-          // Check if event exists using the preloaded maps
-          let existingEvent = existingEventsByEventId.get(eventData.eventId);
+      try {
+        // Process each event in the batch
+        for (const [eventKey, eventData] of currentBatch) {
+          try {
+            // Check if event exists using the preloaded maps
+            let existingEvent = existingEventsByEventId.get(eventData.eventId);
 
-          // If not found by eventId, try by externalId
-          if (!existingEvent) {
-            existingEvent = existingEventsByExternalId.get(eventData.externalId);
-          }
-
-          processedCount++;
-
-          // Show progress every 50 events or at the end
-          if (processedCount % 50 === 0 || processedCount === totalUpdateEvents) {
-            const progressPercent = (processedCount / totalUpdateEvents) * 100;
-            drawProgressBar(
-              progressPercent,
-              `Database operations: ${processedCount} / ${totalUpdateEvents} events`
-            );
-          }
-
-          // Collect odds history operations
-          const newOdds = eventData.oddsData;
-          for (const bookmakerCode of Object.keys(newOdds)) {
-            const bookieOdds = newOdds[bookmakerCode];
-
-            if (bookieOdds && (bookieOdds.home || bookieOdds.draw || bookieOdds.away)) {
-              historyOperations.push({
-                eventId: eventData.eventId,
-                externalId: eventData.externalId,
-                bookmakerCode,
-                homeOdds: bookieOdds.home,
-                drawOdds: bookieOdds.draw,
-                awayOdds: bookieOdds.away
-              });
+            // If not found by eventId, try by externalId
+            if (!existingEvent && eventData.externalId) {
+              existingEvent = existingEventsByExternalId.get(eventData.externalId);
             }
-          }
 
-          if (existingEvent) {
-            // Queue update operation
-            updateOperations.push({
-              id: existingEvent.id,
-              data: {
-                oddsData: eventData.oddsData,
-                bestOdds: eventData.bestOdds,
+            processedCount++;
+
+            // Show progress every 50 events or at the end
+            if (processedCount % 50 === 0 || processedCount === totalUpdateEvents) {
+              const progressPercent = (processedCount / totalUpdateEvents) * 100;
+              drawProgressBar(
+                progressPercent,
+                `Database operations: ${processedCount} / ${totalUpdateEvents} events`
+              );
+            }
+
+            // Collect odds history operations
+            const newOdds = eventData.oddsData;
+            for (const bookmakerCode of Object.keys(newOdds)) {
+              const bookieOdds = newOdds[bookmakerCode];
+
+              if (bookieOdds && (bookieOdds.home || bookieOdds.draw || bookieOdds.away)) {
+                historyOperations.push({
+                  eventId: eventData.eventId,
+                  externalId: eventData.externalId,
+                  bookmakerCode,
+                  homeOdds: bookieOdds.home,
+                  drawOdds: bookieOdds.draw,
+                  awayOdds: bookieOdds.away
+                });
+              }
+            }
+
+            if (existingEvent) {
+              // Queue update operation
+              updateOperations.push({
+                id: existingEvent.id,
+                data: {
+                  oddsData: eventData.oddsData,
+                  bestOdds: eventData.bestOdds,
+                  teams: eventData.teams,
+                  league: eventData.league,
+                  country: eventData.country,
+                  tournament: eventData.tournament,
+                  date: eventData.date,
+                  time: eventData.time
+                }
+              });
+            } else {
+              // Queue create operation
+              const insertData: InsertEvent = {
+                externalId: eventData.externalId,
+                eventId: eventData.eventId,
                 teams: eventData.teams,
                 league: eventData.league,
                 country: eventData.country,
                 tournament: eventData.tournament,
+                sportId: eventData.sportId,
                 date: eventData.date,
-                time: eventData.time
-              }
-            });
-          } else {
-            // Queue create operation
-            const insertData: InsertEvent = {
-              externalId: eventData.externalId,
-              eventId: eventData.eventId,
-              teams: eventData.teams,
-              league: eventData.league,
-              country: eventData.country,
-              tournament: eventData.tournament,
-              sportId: eventData.sportId,
-              date: eventData.date,
-              time: eventData.time,
-              oddsData: eventData.oddsData,
-              bestOdds: eventData.bestOdds
-            };
+                time: eventData.time,
+                oddsData: eventData.oddsData,
+                bestOdds: eventData.bestOdds
+              };
 
-            // Validate event data
-            const validatedData = insertEventSchema.parse(insertData);
-            createOperations.push(validatedData);
+              // Validate event data
+              const validatedData = insertEventSchema.parse(insertData);
+              createOperations.push(validatedData);
+            }
+          } catch (error) {
+            console.error(`Error processing event ${eventKey}:`, error);
           }
-        } catch (error) {
-          console.error(`Error processing event ${eventKey}:`, error);
         }
-      }
 
-      // Execute bulk operations
-      try {
+        // Execute bulk operations
         // Bulk create new events
         if (createOperations.length > 0) {
           logger.info(`Bulk creating ${createOperations.length} new events in batch ${i+1}/${updateBatches}`);
@@ -754,14 +748,6 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
         logger.error(`Error executing batch ${i+1}/${updateBatches}:`, batchError);
       }
     }
-
-    // Removed bookmaker count code
-
-    // Removed event distribution logs to reduce console output
-
-    // Bookmaker combination logging removed to reduce console output
-
-    // Summary log removed to prevent frequent repeated messages
 
     // Get all events and delete any that don't meet our criteria anymore
     // This ensures events that previously had 3+ bookmakers but now have fewer are removed
