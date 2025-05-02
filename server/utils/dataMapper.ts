@@ -590,6 +590,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       
       // Get all eventIds and externalIds for this batch
       const eventIds = currentBatch.map(([_, eventData]) => eventData.eventId);
+      const externalIds = currentBatch.map(([_, eventData]) => eventData.externalId).filter(Boolean);
       
       // Fetch all existing events in a single query using IN clause
       const existingEvents = await db.select()
@@ -601,8 +602,20 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
         existingEvents.map(event => [event.eventId, event])
       );
       
-      // Get any remaining events by externalId - one by one to avoid type issues
-      for (const externalId of externalIds) {
+      const existingEventsByExternalId = new Map();
+      
+      // Get any remaining events by externalId if we have any
+      if (externalIds.length > 0) {
+        const externalIdEvents = await db.select()
+          .from(events)
+          .where(sql`external_id = ANY(ARRAY[${externalIds.map(id => `'${id}'`).join(',')}])`);
+          
+        externalIdEvents.forEach(event => {
+          if (event.externalId) {
+            existingEventsByExternalId.set(event.externalId, event);
+          }
+        });
+      }
         // Skip if we already found this event by eventId
         const event = await storage.getEventByExternalId(externalId);
         if (event) {
