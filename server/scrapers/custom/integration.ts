@@ -40,8 +40,8 @@ const SCRIPT_CONFIG: Record<string, ScraperConfig> = {};
  * ]
  */
 export async function runCustomScraper(bookmakerCode: string): Promise<any[]> {
-  // Special case for Sportybet to support Python implementation
-  if (bookmakerCode === 'sporty' && process.env.USE_PYTHON_SPORTYBET === 'true') {
+  // Always use Python implementation for Sportybet
+  if (bookmakerCode === 'sporty') {
     try {
       console.log('Using Python implementation of Sportybet scraper');
       // Check if Python scraper exists
@@ -116,8 +116,8 @@ export async function runCustomScraper(bookmakerCode: string): Promise<any[]> {
           console.log(`Python Sportybet scraper returned ${data.length} events`);
           
           if (data.length === 0) {
-            console.error('Python Sportybet scraper returned 0 events, falling back to Node.js implementation');
-            throw new Error('No events returned from Python scraper');
+            console.error('⚠️ Python Sportybet scraper returned 0 events - CRITICAL ERROR');
+            throw new Error('No events returned from Python Sportybet scraper');
           }
           
           return data;
@@ -131,9 +131,12 @@ export async function runCustomScraper(bookmakerCode: string): Promise<any[]> {
         throw execError; // Re-throw to trigger fallback
       }
     } catch (error) {
-      console.error(`Error running Python Sportybet scraper, falling back to Node.js implementation:`, error);
-      console.log('Falling back to Node.js Sportybet scraper');
+      console.error(`⚠️ CRITICAL ERROR: Python Sportybet scraper failed:`, error);
+      // Don't fallback to Node.js implementation, just report the error and return empty data
+      return [];
     }
+    // Always return data from Python scraper or empty array if there was an error
+    return [];
   }
   
   // Regular code path for all other scrapers (and Sportybet fallback)
