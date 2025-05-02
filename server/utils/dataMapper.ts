@@ -989,15 +989,22 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
         // Process each Sportybet event to ensure it gets included in eventMap
         // First update any existing events
         for (const event of sportyRawData) {
-          const eventId = event.eventId || event.id || (event.raw && event.raw.originalEventId) || (event.raw && event.raw.eventId) || '';
-          if (!eventId) continue;
+          // Get the original event ID
+          const originalEventId = event.eventId || event.id || (event.raw && event.raw.originalEventId) || (event.raw && event.raw.eventId) || '';
+          if (!originalEventId) continue;
           
-          // Skip if already processed
-          if (processedEventIds.has(eventId)) continue;
-          processedEventIds.add(eventId);
+          // Normalize the event ID to match how other bookmakers store it
+          const normalizedEventId = normalizeEventId(originalEventId);
+          
+          // Skip if already processed using normalized ID
+          if (processedEventIds.has(normalizedEventId)) continue;
+          processedEventIds.add(normalizedEventId);
           
           // Store that we've seen this Sportybet event
-          processedSportyEventIds.add(eventId);
+          processedSportyEventIds.add(normalizedEventId);
+          
+          // Log the ID normalization for debugging
+          logger.info(`Sportybet ID normalization: ${originalEventId} → ${normalizedEventId}`);
           
           // Determine if this is a Championship match for better matching
           const isChampionshipMatch = 
@@ -1022,9 +1029,13 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
           let foundByTeamName = false;
           let existingEvent = null;
           
-          // Check if the event already exists in the eventMap by ID
-          if (eventMap.has(eventId)) {
-            existingEvent = eventMap.get(eventId);
+          // Check if the event already exists in the eventMap by normalized ID first
+          if (eventMap.has(normalizedEventId)) {
+            existingEvent = eventMap.get(normalizedEventId);
+            logger.info(`Found existing event using normalized ID: ${normalizedEventId} for ${eventTeams}`);
+          } else if (eventMap.has(originalEventId)) {
+            // Also check with original ID as a fallback
+            existingEvent = eventMap.get(originalEventId);
           } else if (eventTeams) {
             // Try team name-based matching for all tournaments when direct ID match fails
             logger.info(`Attempting team name match for: ${eventTeams}`);
@@ -1106,8 +1117,8 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
                 // Important: We use the original event ID, not the Sportybet one
                 eventMap.set(existingEvent.eventId, updatedEvent);
               } else {
-                // Replace the existing event in the map with the Sportybet event ID
-                eventMap.set(eventId, updatedEvent);
+                // Replace the existing event in the map with the normalized Sportybet event ID
+                eventMap.set(normalizedEventId, updatedEvent);
               }
               
               logger.info(`Updated existing event with Sportybet odds: ${existingEvent.teams}`);
@@ -1143,9 +1154,9 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
               const date = event.date || (event.raw && event.raw.date) || new Date().toISOString().split('T')[0];
               const time = event.time || (event.raw && event.raw.time) || '12:00';
               
-              // Create a new entry in the eventMap for this Sportybet event
-              eventMap.set(eventId, {
-                eventId,
+              // Create a new entry in the eventMap for this Sportybet event using normalized ID
+              eventMap.set(normalizedEventId, {
+                eventId: normalizedEventId, // Use the normalized ID consistently
                 teams,
                 oddsData: bookmakerOdds,
                 bestOdds: bookmakerOdds['sporty'],
@@ -1155,7 +1166,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
                 sportId: 1, // Default to football
                 date,
                 time,
-                externalId: event.originalEventId || eventId,
+                externalId: event.originalEventId || originalEventId, // Store original ID as external ID
                 lastUpdated: new Date()
               });
               
@@ -1184,8 +1195,11 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
 
     // Remove events that don't meet criteria anymore
     for (const event of allEvents) {
+      // Get normalized ID for consistent comparison
+      const normalizedEventId = event.eventId ? normalizeEventId(event.eventId) : '';
+      
       // If this event is not in our current map and has an eventId, it would normally be removed
-      if (event.eventId && !currentEventIds.has(event.eventId)) {
+      if (normalizedEventId && !currentEventIds.has(normalizedEventId)) {
         // EXCEPTION: Don't delete if it has Sportybet odds
         const hasSportybetOdds = event.oddsData && 
                                  typeof event.oddsData === 'object' && 
@@ -1424,6 +1438,21 @@ function normalizeEventName(eventName: string): string {
     .replace(/\s+/g, '') // Remove all whitespace
     .replace(/[^\w]/g, '') // Remove any remaining punctuation
     .trim();
+}
+
+/**
+ * Normalize event ID to ensure consistent matching across bookmakers
+ * This specifically handles Sportybet's format of sr:match:58956949
+ */
+function normalizeEventId(eventId: string): string {
+  if (typeof eventId !== 'string') return '';
+  
+  // If it's in sr:match:12345 format (Sportybet), extract just the numeric part
+  if (eventId.includes('sr:match:')) {
+    return eventId.replace(/\D/g, '');
+  }
+  
+  return eventId;
 }
 
 /**
