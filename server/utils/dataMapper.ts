@@ -321,17 +321,91 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       
       // Check if this event has Sportybet odds
       let hasSportybetOdds = false;
+      let isSportybetOnly = false;
+      
       for (const bookmakerCode of bookmakerCodes) {
         if (bookmakerCode === 'sporty' && bookmakerOdds[bookmakerCode]) {
           hasSportybetOdds = true;
+          
+          // Check if this is a Sportybet-only event
+          if (bookmakerCount === 1) {
+            isSportybetOnly = true;
+          }
           break;
         }
+      }
+
+      // Function to check if an event is an upcoming Premier League match
+      const isValidPremierLeagueMatch = (dataSource: any): boolean => {
+        // Check if it's Premier League
+        const isPremierLeague = 
+          (dataSource.tournament?.toLowerCase().includes('premier league') && 
+           dataSource.country?.toLowerCase().includes('england')) ||
+          (dataSource.raw?.tournament?.toLowerCase().includes('premier league') && 
+           dataSource.raw?.country?.toLowerCase().includes('england'));
+        
+        if (!isPremierLeague) return false;
+        
+        // Extract date from data source
+        let eventDate = '';
+        if (dataSource.date) {
+          eventDate = dataSource.date;
+        } else if (dataSource.raw && dataSource.raw.startDate) {
+          eventDate = dataSource.raw.startDate;
+        } else if (dataSource.startDate) {
+          eventDate = dataSource.startDate;
+        }
+        
+        // No date validation
+        if (!eventDate) return false;
+        
+        // Convert to Date object
+        const match_date = new Date(eventDate);
+        const now = new Date();
+        
+        // Check if date is in valid range (today up to 30 days in future)
+        // This prevents matches with incorrect dates from being included
+        const diffDays = Math.floor((match_date.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+        return diffDays >= 0 && diffDays <= 30;
+      };
+
+      // Apply special validation for Sportybet-only events that are Premier League matches
+      const isValidSportybetPremierLeagueMatch = isSportybetOnly && 
+        ((firstMatch && isValidPremierLeagueMatch(firstMatch)) || 
+         (baseMatch && isValidPremierLeagueMatch(baseMatch)));
+         
+      // Log Sportybet Premier League matches for debugging
+      if (isSportybetOnly && 
+         ((firstMatch && firstMatch.tournament?.toLowerCase().includes('premier league') && firstMatch.country?.toLowerCase().includes('england')) || 
+          (baseMatch && baseMatch.tournament?.toLowerCase().includes('premier league') && baseMatch.country?.toLowerCase().includes('england')))) {
+          
+        // Get data source
+        const dataSource = baseMatch || firstMatch;
+        
+        // Extract date
+        let eventDate = '';
+        if (dataSource.date) {
+          eventDate = dataSource.date;
+        } else if (dataSource.raw && dataSource.raw.startDate) {
+          eventDate = dataSource.raw.startDate;
+        } else if (dataSource.startDate) {
+          eventDate = dataSource.startDate;
+        }
+        
+        // Extract teams
+        const teamsText = dataSource.teams || 
+          (dataSource.home && dataSource.away ? `${dataSource.home} vs ${dataSource.away}` : 'Unknown');
+          
+        // Log this Sportybet Premier League match for debugging
+        logger.info(`Sportybet-only Premier League match: ${teamsText} | Date: ${eventDate} | Valid: ${isValidSportybetPremierLeagueMatch}`);
       }
 
       // Only process events where:
       // 1. At least 2 bookmakers have odds (changed from 3), OR
       // 2. The event has Sportybet odds (to preserve all Sportybet events)
-      if ((firstMatch || baseMatch) && (bookmakerCount >= 2 || hasSportybetOdds)) {
+      //    AND passes date validation for Premier League matches
+      if ((firstMatch || baseMatch) && (bookmakerCount >= 2 || 
+          (hasSportybetOdds && (!isSportybetOnly || isValidSportybetPremierLeagueMatch)))) {
         // Prioritize using betPawa Ghana data when available
         const dataSource = baseMatch || firstMatch;
 
