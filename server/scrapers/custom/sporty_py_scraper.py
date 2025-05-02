@@ -68,28 +68,28 @@ def fetch_page(page=1):
         timestamp = int(datetime.now().timestamp() * 1000)
         url = f"{BASE_URL}?{QUERY}&pageNum={page}&_t={timestamp}"
         
-        log(f"Fetching URL: {url}")
+        log(f"Fetching URL: {url}", "debug")
         response = requests.get(url, headers=HEADERS, timeout=TIMEOUT)
         
         if response.status_code != 200:
-            log(f"Error fetching {url}: Status code {response.status_code}")
+            log(f"Error fetching {url}: Status code {response.status_code}", "error")
             return None
         
         # Check if we got valid JSON
         if not response.text:
-            log(f"Error: Empty response from {url}")
+            log(f"Error: Empty response from {url}", "error")
             return None
         
         try:
             data = response.json()
             return data
         except Exception as json_error:
-            log(f"Error parsing JSON from {url}: {str(json_error)}")
+            log(f"Error parsing JSON from {url}: {str(json_error)}", "error")
             # Print first 100 characters of response
-            log(f"Response starts with: {response.text[:100]}...")
+            log(f"Response starts with: {response.text[:100]}...", "debug")
             return None
     except Exception as e:
-        log(f"Error fetching page {page}: {str(e)}")
+        log(f"Error fetching page {page}: {str(e)}", "error")
         return None
 
 def process_event(event, endpoint_idx=0):
@@ -126,7 +126,7 @@ def process_event(event, endpoint_idx=0):
                 date_obj = datetime.fromtimestamp(timestamp)
                 start_time = date_obj.strftime('%Y-%m-%d %H:%M')  # Format to "YYYY-MM-DD HH:MM"
             except Exception as e:
-                log(f"Error parsing startTime: {str(e)}")
+                log(f"Error parsing startTime: {str(e)}", "error")
         
         # Find the 1X2 market (home/draw/away)
         home_odds = 0
@@ -179,8 +179,8 @@ def process_event(event, endpoint_idx=0):
         # Explicitly create a deep copy through serialization/deserialization
         return json.loads(json.dumps(processed_event))
     except Exception as e:
-        log(f"Error processing event: {str(e)}")
-        log(traceback.format_exc())
+        log(f"Error processing event: {str(e)}", "error")
+        log(traceback.format_exc(), "debug")
         return None
 
 def process_tournaments(tournaments):
@@ -320,11 +320,11 @@ def process_tournaments(tournaments):
                     
                     event_count += 1
                 except Exception as e:
-                    log(f"Error processing event: {str(e)}")
+                    log(f"Error processing event: {str(e)}", "error")
                     skipped_count += 1
                     continue
         except Exception as e:
-            log(f"Error processing tournament: {str(e)}")
+            log(f"Error processing tournament: {str(e)}", "error")
             continue
     
     # Log EPL specific stats
@@ -412,8 +412,8 @@ def main():
                 # Move to next page
                 page += 1
             except Exception as e:
-                log(f"❌ Error processing page {page}: {str(e)}")
-                log(traceback.format_exc())
+                log(f"❌ Error processing page {page}: {str(e)}", "error")
+                log(traceback.format_exc(), "debug")
                 # Try to continue with next page
                 page += 1
         
@@ -491,7 +491,7 @@ def main():
                 print(output_json)  # This goes to stdout
                 sys.stdout.flush()  # Force flush to ensure Node.js receives the data
             except Exception as e:
-                log(f"Error serializing to stdout: {str(e)}")
+                log(f"Error serializing to stdout: {str(e)}", "error")
                 # Return empty JSON array to stdout on error
                 print("[]")  # This goes to stdout
                 sys.stdout.flush()
@@ -506,8 +506,8 @@ def main():
         
         return 0
     except Exception as e:
-        log(f"❌ Error in main function: {str(e)}")
-        log(traceback.format_exc())
+        log(f"❌ Error in main function: {str(e)}", "critical")
+        log(traceback.format_exc(), "error")
         # Return empty array to stdout on error
         print("[]")  # This goes to stdout
         sys.stdout.flush()  # Force flush
@@ -518,8 +518,8 @@ if __name__ == "__main__":
     try:
         main()
     except Exception as e:
-        log(f"Critical error in main process: {str(e)}")
-        log(traceback.format_exc())
+        log(f"Critical error in main process: {str(e)}", "critical")
+        log(traceback.format_exc(), "error")
         # Return empty array to stdout on error
         print("[]")  # This goes to stdout
         sys.stdout.flush()  # Force flush
