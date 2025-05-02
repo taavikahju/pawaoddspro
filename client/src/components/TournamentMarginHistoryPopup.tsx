@@ -21,6 +21,7 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { format } from 'date-fns';
+import CustomTooltip from './CustomTooltip';
 
 interface MarginHistoryItem {
   id: number;
@@ -158,17 +159,7 @@ export default function TournamentMarginHistoryPopup({
                   tickFormatter={(value) => `${value.toFixed(1)}%`}
                 />
                 <Tooltip 
-                  formatter={(value: any) => [`${Number(value).toFixed(1)}%`, 'Margin']}
-                  labelFormatter={(label) => {
-                    // Find the data point for this label to get the original timestamp
-                    const dataPoint = chartData.find(dp => dp.timestamp === label);
-                    if (dataPoint && dataPoint.date) {
-                      // Format the full date and time
-                      return `Date/Time: ${label}\nFull Timestamp: ${dataPoint.date.toISOString()}`;
-                    }
-                    return `Date/Time: ${label}`;
-                  }}
-                  contentStyle={{ whiteSpace: 'pre-line', fontSize: '12px' }}
+                  content={<CustomTooltip dataPoints={chartData} />}
                 />
                 <Legend 
                   iconSize={8}

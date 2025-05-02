@@ -20,6 +20,7 @@ import {
   Legend,
   ResponsiveContainer
 } from 'recharts';
+import CustomTooltip from './CustomTooltip';
 
 interface MarginHistoryPopupProps {
   isOpen: boolean;
@@ -146,17 +147,7 @@ export default function MarginHistoryPopup({
                   tickFormatter={(value) => `${value.toFixed(1)}%`}
                 />
                 <Tooltip 
-                  formatter={(value: any, name: string) => [`${Number(value).toFixed(2)}%`, name]}
-                  labelFormatter={(label) => {
-                    // Find the data point for this label to get the original timestamp
-                    const dataPoint = chartData.find(dp => dp.timestamp === label);
-                    if (dataPoint && dataPoint.date) {
-                      // Format the full date and time
-                      return `Date/Time: ${label}\nFull Timestamp: ${dataPoint.date.toISOString()}`;
-                    }
-                    return `Date/Time: ${label}`;
-                  }}
-                  contentStyle={{ whiteSpace: 'pre-line', fontSize: '12px' }}
+                  content={<CustomTooltip dataPoints={chartData} />}
                 />
                 <Legend 
                   iconSize={8}

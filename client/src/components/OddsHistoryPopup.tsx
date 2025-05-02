@@ -14,6 +14,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 // Import only the components we need to reduce bundle size
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import CustomTooltip from './CustomTooltip';
 
 interface OddsHistoryPopupProps {
   isOpen: boolean;
@@ -154,18 +155,8 @@ export default function OddsHistoryPopup({
                   width={30}
                   tick={{ fontSize: 10 }}
                 />
-                <Tooltip 
-                  formatter={(value: any, name: string) => [`${Number(value).toFixed(2)}`, name]}
-                  labelFormatter={(label) => {
-                    // Find the data point for this label to get the original timestamp
-                    const dataPoint = chartData.find(dp => dp.timestamp === label);
-                    if (dataPoint && dataPoint.date) {
-                      // Format the full date and time
-                      return `Date/Time: ${label}\nFull Timestamp: ${dataPoint.date.toISOString()}`;
-                    }
-                    return `Date/Time: ${label}`;
-                  }}
-                  contentStyle={{ whiteSpace: 'pre-line', fontSize: '12px' }}
+                <Tooltip
+                  content={<CustomTooltip dataPoints={chartData} />}
                 />
                 <Legend 
                   iconSize={8}
