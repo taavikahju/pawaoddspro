@@ -34,7 +34,11 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
 
     // Get all bookmaker data - force fresh load to avoid caching issues
     logger.critical('Loading fresh bookmaker data from disk...');
-    const allBookmakerData = await storage.getAllBookmakersData(true);
+    const rawBookmakerData = await storage.getAllBookmakersData(true);
+    
+    // Create a deep copy to prevent accidental modifications of the source data
+    // This is critical to prevent events from disappearing between requests
+    const allBookmakerData = JSON.parse(JSON.stringify(rawBookmakerData));
     const bookmakerCodes = Object.keys(allBookmakerData);
     
     // Log detailed bookmaker data
