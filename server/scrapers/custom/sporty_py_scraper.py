@@ -10,10 +10,11 @@ import time
 import sys
 import requests
 from datetime import datetime
+import traceback
 
 # Configuration
 BASE_URL = "https://www.sportybet.com"
-OUTPUT_FILE = "data/sporty.json"
+OUTPUT_FILE = "data/sporty_py.json"  # Separate output file for testing
 TIMEOUT = 30  # seconds
 API_ENDPOINTS = [
     "/api/ng/factsCenter/markets?market=1&tournamentId=",
@@ -118,17 +119,18 @@ def process_event(event, endpoint_idx):
             "source": "sporty"
         }
         
-        # Make a deep copy by serializing and deserializing - extra precaution
+        # Explicitly create a deep copy through serialization/deserialization
         return json.loads(json.dumps(processed_event))
     except Exception as e:
         log(f"Error processing event: {str(e)}")
+        log(traceback.format_exc())
         return None
 
 def main():
     all_events = []
     event_ids = set()  # To track duplicates
     
-    log("Starting Sportybet data collection from 6 endpoints")
+    log("Starting Sportybet data collection from 6 endpoints (Python scraper)")
     
     # Process each endpoint
     for idx, endpoint in enumerate(API_ENDPOINTS):
@@ -171,19 +173,32 @@ def main():
         # Ensure data directory exists
         os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
         
-        # Save with explicit serialization to ensure deep copy
+        # First, save to our test file
         with open(OUTPUT_FILE, 'w') as f:
             json.dump(all_events, f, indent=2)
         
-        log(f"Successfully saved {len(all_events)} events to {OUTPUT_FILE}")
+        log(f"Saved {len(all_events)} events to test file {OUTPUT_FILE}")
+        
+        # Then save to the standard output file for the integration
+        # This ensures we're compatible with the existing system
+        standard_output = "data/sporty.json"
+        with open(standard_output, 'w') as f:
+            json.dump(all_events, f, indent=2)
+        
+        # Print to stdout for the integration system to capture
+        print(json.dumps(all_events))
+        
+        log(f"Sportybet scraper (Python) completed with {len(all_events)} total events")
     else:
         log("No events collected, file not saved")
-    
-    log(f"Sportybet scraper (Python) completed with {len(all_events)} total events")
+        print("[]")  # Empty array for the integration system
 
 if __name__ == "__main__":
     try:
         main()
     except Exception as e:
         log(f"Critical error in main process: {str(e)}")
+        log(traceback.format_exc())
+        # Print empty array for integration system in case of failure
+        print("[]")
         sys.exit(1)

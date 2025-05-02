@@ -40,6 +40,44 @@ const SCRIPT_CONFIG: Record<string, ScraperConfig> = {};
  * ]
  */
 export async function runCustomScraper(bookmakerCode: string): Promise<any[]> {
+  // Special case for Sportybet to support Python implementation
+  if (bookmakerCode === 'sporty' && process.env.USE_PYTHON_SPORTYBET === 'true') {
+    try {
+      console.log('Using Python implementation of Sportybet scraper');
+      // Check if Python scraper exists
+      const pythonScraperPath = path.join(process.cwd(), 'server', 'scrapers', 'custom', 'sporty_py_scraper.py');
+      
+      if (!fs.existsSync(pythonScraperPath)) {
+        console.error(`Python Sportybet scraper not found at ${pythonScraperPath}`);
+        throw new Error('Python Sportybet scraper not found');
+      }
+      
+      // Run the Python scraper
+      console.log(`Running command: python "${pythonScraperPath}"`);
+      const { stdout, stderr } = await execPromise(`python "${pythonScraperPath}"`);
+      
+      if (stderr) {
+        console.error(`Error running Python Sportybet scraper:`, stderr);
+      }
+      
+      // Parse the output
+      try {
+        const rawData = JSON.parse(stdout.trim());
+        const data = Array.isArray(rawData) ? rawData : [];
+        console.log(`Python Sportybet scraper returned ${data.length} events`);
+        return data;
+      } catch (e) {
+        console.error(`Error parsing JSON output from Python Sportybet scraper:`, e);
+        console.error('Output was:', stdout.substring(0, 500) + '...');
+        return [];
+      }
+    } catch (error) {
+      console.error(`Error running Python Sportybet scraper:`, error);
+      console.log('Falling back to Node.js Sportybet scraper');
+    }
+  }
+  
+  // Regular code path for all other scrapers (and Sportybet fallback)
   const config = SCRIPT_CONFIG[bookmakerCode];
   
   if (!config) {
