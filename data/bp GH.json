@@ -11388,32 +11388,6 @@
     }
   },
   {
-    "id": "51094155",
-    "eventId": "51094155",
-    "teams": "Huddersfield Town - Leyton Orient London",
-    "league": "League One",
-    "sport": "football",
-    "country": "England",
-    "date": "2025-05-03",
-    "time": "14:00",
-    "odds": {
-      "home": 3.95,
-      "draw": 3.7,
-      "away": 1.79
-    },
-    "raw": {
-      "eventId": "51094155",
-      "country": "England",
-      "tournament": "League One",
-      "event": "Huddersfield Town - Leyton Orient London",
-      "market": "1X2 - FT",
-      "home_odds": "3.95",
-      "draw_odds": "3.7",
-      "away_odds": "1.79",
-      "start_time": "2025-05-03 14:00"
-    }
-  },
-  {
     "id": "59477017",
     "eventId": "59477017",
     "teams": "KVC Westerlo - KAA Gent",
@@ -11436,6 +11410,32 @@
       "home_odds": "1.77",
       "draw_odds": "4.25",
       "away_odds": "3.3",
+      "start_time": "2025-05-03 14:00"
+    }
+  },
+  {
+    "id": "51094155",
+    "eventId": "51094155",
+    "teams": "Huddersfield Town - Leyton Orient London",
+    "league": "League One",
+    "sport": "football",
+    "country": "England",
+    "date": "2025-05-03",
+    "time": "14:00",
+    "odds": {
+      "home": 3.95,
+      "draw": 3.7,
+      "away": 1.79
+    },
+    "raw": {
+      "eventId": "51094155",
+      "country": "England",
+      "tournament": "League One",
+      "event": "Huddersfield Town - Leyton Orient London",
+      "market": "1X2 - FT",
+      "home_odds": "3.95",
+      "draw_odds": "3.7",
+      "away_odds": "1.79",
       "start_time": "2025-05-03 14:00"
     }
   },
@@ -12827,7 +12827,7 @@
     "date": "2025-05-03",
     "time": "14:15",
     "odds": {
-      "home": 1.57,
+      "home": 1.56,
       "draw": 4.75,
       "away": 5.75
     },
@@ -12837,7 +12837,7 @@
       "tournament": "LaLiga",
       "event": "Villarreal CF - CA Osasuna",
       "market": "1X2 - FT",
-      "home_odds": "1.57",
+      "home_odds": "1.56",
       "draw_odds": "4.75",
       "away_odds": "5.75",
       "start_time": "2025-05-03 14:15"
@@ -28219,9 +28219,9 @@
     "date": "2025-05-04",
     "time": "19:00",
     "odds": {
-      "home": 1.93,
+      "home": 1.99,
       "draw": 3.05,
-      "away": 4.25
+      "away": 4
     },
     "raw": {
       "eventId": "57310911",
@@ -28229,9 +28229,9 @@
       "tournament": "Colombia Categoría Primera A",
       "event": "Deportivo Pasto - Fortaleza FC",
       "market": "1X2 - FT",
-      "home_odds": "1.93",
+      "home_odds": "1.99",
       "draw_odds": "3.05",
-      "away_odds": "4.25",
+      "away_odds": "4.0",
       "start_time": "2025-05-04 19:00"
     }
   },
@@ -34459,9 +34459,9 @@
     "date": "2025-05-10",
     "time": "13:30",
     "odds": {
-      "home": 3.05,
+      "home": 3.1,
       "draw": 3.65,
-      "away": 2.23
+      "away": 2.21
     },
     "raw": {
       "eventId": "51269601",
@@ -34469,9 +34469,9 @@
       "tournament": "Bundesliga",
       "event": "VfL Bochum - FSV Mainz",
       "market": "1X2 - FT",
-      "home_odds": "3.05",
+      "home_odds": "3.1",
       "draw_odds": "3.65",
-      "away_odds": "2.23",
+      "away_odds": "2.21",
       "start_time": "2025-05-10 13:30"
     }
   },
@@ -34563,9 +34563,9 @@
     "date": "2025-05-10",
     "time": "14:00",
     "odds": {
-      "home": 10,
+      "home": 9.75,
       "draw": 6.5,
-      "away": 1.25
+      "away": 1.26
     },
     "raw": {
       "eventId": "50850689",
@@ -34573,9 +34573,9 @@
       "tournament": "Premier League",
       "event": "Southampton FC - Manchester City",
       "market": "1X2 - FT",
-      "home_odds": "10.0",
+      "home_odds": "9.75",
       "draw_odds": "6.5",
-      "away_odds": "1.25",
+      "away_odds": "1.26",
       "start_time": "2025-05-10 14:00"
     }
   },
