@@ -56,10 +56,12 @@ export const SCRAPER_EVENTS = {
 };
 
 // Schedule to run every 30 minutes (increased from 15 minutes)
-const SCRAPE_SCHEDULE = '*/30 * * * *';
+const SCRAPE_SCHEDULE = '*/5 * * * *';
 
 // Schedule to run history cleanup once a day at midnight
+// Also clean up events older than 5 days
 const CLEANUP_SCHEDULE = '0 0 * * *';
+const OLD_EVENT_DAYS = 5; // Number of days to keep events before removal
 
 // Keep track of running jobs
 let scheduledJob: cron.ScheduledTask | null = null;
@@ -115,7 +117,7 @@ export function setupScrapers(storage: IStorage): void {
     }
   });
   
-  logger.info('Scrapers will run every 30 minutes');
+  logger.info('Scrapers will run every 5 minutes');
   
   // Schedule daily cleanup job to remove old history data
   if (cleanupJob) {
@@ -136,8 +138,20 @@ export function setupScrapers(storage: IStorage): void {
       const deletedMarginsCount = await cleanupOldTournamentMargins(30); // Delete data older than 30 days (1 month)
       logger.info(`Tournament margins cleanup: removed ${deletedMarginsCount} records`);
       
+      // New: Clean up events older than 5 days
+      const fiveDaysAgo = new Date();
+      fiveDaysAgo.setDate(fiveDaysAgo.getDate() - OLD_EVENT_DAYS);
+      const formattedDate = fiveDaysAgo.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+      
+      const { events } = await import('../shared/schema');
+      const { eq, lt } = await import('drizzle-orm');
+      const result = await db.delete(events).where(lt(events.date, formattedDate));
+      
+      logger.info(`Deleted ${result.rowCount || 0} events older than ${OLD_EVENT_DAYS} days (before ${formattedDate})`);
+      
       // Log total
-      logger.critical(`Total cleanup: removed ${deletedOddsCount + deletedMarginsCount} records`);
+      const totalDeleted = deletedOddsCount + deletedMarginsCount + (result.rowCount || 0);
+      logger.critical(`Total cleanup: removed ${totalDeleted} records (including ${result.rowCount || 0} old events)`);
     } catch (error) {
       logger.error('History cleanup failed:', error);
     }
