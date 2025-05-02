@@ -154,9 +154,10 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
           }
           normalizedToOriginal.get(normalizedId)?.add(event.eventId);
           
-          // For debugging Sportybet specifically - using debug level again
-          if (bookmakerCode === 'sporty' && event.eventId !== normalizedId) {
-            logger.debug(`Normalized Sportybet eventId: ${event.eventId} → ${normalizedId}`);
+          // Enhanced debugging for Sportybet specifically
+          if (bookmakerCode === 'sporty') {
+            // Track all Sportybet events with their IDs and team names for debugging
+            logger.info(`Sportybet event: ${event.event} | ID: ${event.eventId} → ${normalizedId}`);
           }
         }
       }
