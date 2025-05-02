@@ -614,11 +614,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
         // We only need to log this when direct events are created
         const directEventCount = allSportyEvents.length - eventsWithSporty.length;
         
+        // Function to normalize eventId format - extracts numeric part from "sr:match:12345" format
+        const normalizeEventId = (eventId: string): string => {
+          // If it's in sr:match:12345 format, extract just the numeric part
+          if (typeof eventId === 'string' && eventId.includes('sr:match:')) {
+            return eventId.replace(/\D/g, '');
+          }
+          return eventId;
+        };
+        
+        // Track both original and normalized event IDs
         const existingEventIdMap = new Map();
         eventsWithSporty.forEach(event => {
           const eventId = event.eventId || '';
           if (eventId) {
+            // Add the original event ID
             existingEventIdMap.set(eventId, true);
+            
+            // Also add the normalized version
+            const normalizedId = normalizeEventId(eventId);
+            existingEventIdMap.set(normalizedId, true);
+            
+            // If we have an externalId, add that too
+            if (event.externalId && event.externalId !== eventId) {
+              existingEventIdMap.set(event.externalId, true);
+              existingEventIdMap.set(normalizeEventId(event.externalId), true);
+            }
           }
         });
         
@@ -628,7 +649,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
         for (const event of allSportyEvents) {
           // Skip if already included
           const eventId = event.eventId || event.id || '';
-          if (!eventId || existingEventIdMap.has(eventId)) continue;
+          const originalId = event.originalEventId || '';
+          
+          // Check if this event is already in our map (by any of its possible IDs)
+          if (!eventId || 
+              existingEventIdMap.has(eventId) || 
+              (originalId && existingEventIdMap.has(originalId)) ||
+              existingEventIdMap.has(normalizeEventId(eventId)) ||
+              (originalId && existingEventIdMap.has(normalizeEventId(originalId)))
+          ) continue;
           
           // Create basic event structure
           const teams = event.teams || event.event || '';
