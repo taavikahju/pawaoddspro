@@ -9,8 +9,8 @@ import Dashboard from "@/pages/dashboard";
 import AdminPage from "@/pages/admin";
 import TournamentMargins from "@/pages/tournament-margins";
 import NotificationListener from "@/components/NotificationListener";
+import WebSocketListener from "@/components/WebSocketListener";
 import { BookmakerProvider } from "@/contexts/BookmakerContext";
-import { useRealWebSocket } from "@/hooks/use-real-websocket";
 
 function Router() {
   return (
@@ -31,6 +31,7 @@ function App() {
           <BookmakerProvider>
             <Toaster />
             <NotificationListener />
+            <WebSocketListener />
             <Router />
           </BookmakerProvider>
         </TooltipProvider>
