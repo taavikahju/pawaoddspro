@@ -136,7 +136,7 @@ export function useOfflineResilientEvents() {
           }
         }
       } catch (error) {
-        console.error('Error processing cache data:', error);
+        // Silent error handling to prevent console flooding
       }
     }, 0);
   }, [serverEvents]);

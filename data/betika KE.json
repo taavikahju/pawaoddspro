@@ -581,9 +581,9 @@
     "date": "2025-05-03",
     "time": "03:30",
     "odds": {
-      "home": 1.83,
+      "home": 1.85,
       "draw": 3.25,
-      "away": 4.9
+      "away": 4.8
     },
     "raw": {
       "eventId": "58052523",
@@ -591,9 +591,9 @@
       "tournament": "Brasileiro Serie A",
       "event": "Sao Paulo FC - Fortaleza EC",
       "market": "1X2",
-      "home_odds": "1.83",
+      "home_odds": "1.85",
       "draw_odds": "3.25",
-      "away_odds": "4.90",
+      "away_odds": "4.80",
       "start_time": "2025-05-03 03:30"
     }
   },
@@ -4299,9 +4299,9 @@
     "date": "2025-05-03",
     "time": "11:15",
     "odds": {
-      "home": 2.25,
-      "draw": 3.45,
-      "away": 2.75
+      "home": 2.17,
+      "draw": 3.55,
+      "away": 2.8
     },
     "raw": {
       "eventId": "56008913",
@@ -4309,9 +4309,9 @@
       "tournament": "Divize B",
       "event": "Hrebec - Kopanina",
       "market": "1X2",
-      "home_odds": "2.25",
-      "draw_odds": "3.45",
-      "away_odds": "2.75",
+      "home_odds": "2.17",
+      "draw_odds": "3.55",
+      "away_odds": "2.80",
       "start_time": "2025-05-03 11:15"
     }
   },
@@ -14881,9 +14881,9 @@
     "date": "2025-05-03",
     "time": "17:00",
     "odds": {
-      "home": 8,
-      "draw": 3.3,
-      "away": 1.47
+      "home": 8.2,
+      "draw": 3.35,
+      "away": 1.45
     },
     "raw": {
       "eventId": "60120499",
@@ -14891,9 +14891,9 @@
       "tournament": "Ligue 1",
       "event": "Stade Tunisien - Monastir",
       "market": "1X2",
-      "home_odds": "8.00",
-      "draw_odds": "3.30",
-      "away_odds": "1.47",
+      "home_odds": "8.20",
+      "draw_odds": "3.35",
+      "away_odds": "1.45",
       "start_time": "2025-05-03 17:00"
     }
   },
@@ -15765,9 +15765,9 @@
     "date": "2025-05-03",
     "time": "17:30",
     "odds": {
-      "home": 7.4,
+      "home": 6.8,
       "draw": 5.2,
-      "away": 1.28
+      "away": 1.3
     },
     "raw": {
       "eventId": "54162403",
@@ -15775,9 +15775,9 @@
       "tournament": "MSFL",
       "event": "Uhersky Brod - Fotbal Trinec",
       "market": "1X2",
-      "home_odds": "7.40",
+      "home_odds": "6.80",
       "draw_odds": "5.20",
-      "away_odds": "1.28",
+      "away_odds": "1.30",
       "start_time": "2025-05-03 17:30"
     }
   },
@@ -15791,9 +15791,9 @@
     "date": "2025-05-03",
     "time": "17:30",
     "odds": {
-      "home": 3.2,
-      "draw": 3.75,
-      "away": 1.88
+      "home": 3.15,
+      "draw": 3.6,
+      "away": 1.94
     },
     "raw": {
       "eventId": "54162397",
@@ -15801,9 +15801,9 @@
       "tournament": "MSFL",
       "event": "SC Znojmo - FC Strani",
       "market": "1X2",
-      "home_odds": "3.20",
-      "draw_odds": "3.75",
-      "away_odds": "1.88",
+      "home_odds": "3.15",
+      "draw_odds": "3.60",
+      "away_odds": "1.94",
       "start_time": "2025-05-03 17:30"
     }
   },
@@ -18885,9 +18885,9 @@
     "date": "2025-05-03",
     "time": "19:00",
     "odds": {
-      "home": 2.1,
+      "home": 2.06,
       "draw": 3.6,
-      "away": 2.8
+      "away": 2.9
     },
     "raw": {
       "eventId": "57125569",
@@ -18895,9 +18895,9 @@
       "tournament": "Premier League",
       "event": "Tofta Itrottarfelag B68 - 07 Vestur Sorvagur",
       "market": "1X2",
-      "home_odds": "2.10",
+      "home_odds": "2.06",
       "draw_odds": "3.60",
-      "away_odds": "2.80",
+      "away_odds": "2.90",
       "start_time": "2025-05-03 19:00"
     }
   },
@@ -20654,8 +20654,8 @@
     "time": "21:00",
     "odds": {
       "home": 1.1,
-      "draw": 6.2,
-      "away": 24
+      "draw": 6.4,
+      "away": 25
     },
     "raw": {
       "eventId": "59716656",
@@ -20664,8 +20664,8 @@
       "event": "Santos FC SP U20 - SC Aguai SP U20",
       "market": "1X2",
       "home_odds": "1.10",
-      "draw_odds": "6.20",
-      "away_odds": "24.00",
+      "draw_odds": "6.40",
+      "away_odds": "25.00",
       "start_time": "2025-05-03 21:00"
     }
   },
@@ -20770,6 +20770,32 @@
       "home_odds": "2.04",
       "draw_odds": "3.15",
       "away_odds": "3.30",
+      "start_time": "2025-05-03 21:00"
+    }
+  },
+  {
+    "id": "59716654",
+    "eventId": "59716654",
+    "teams": "Ponte Preta SP U20 - Gremio Osasco Audax U20",
+    "league": "U20 Paulista",
+    "sport": "football",
+    "country": "Brazil",
+    "date": "2025-05-03",
+    "time": "21:00",
+    "odds": {
+      "home": 2.26,
+      "draw": 3.15,
+      "away": 2.9
+    },
+    "raw": {
+      "eventId": "59716654",
+      "country": "Brazil",
+      "tournament": "U20 Paulista",
+      "event": "Ponte Preta SP U20 - Gremio Osasco Audax U20",
+      "market": "1X2",
+      "home_odds": "2.26",
+      "draw_odds": "3.15",
+      "away_odds": "2.90",
       "start_time": "2025-05-03 21:00"
     }
   },
@@ -24969,9 +24995,9 @@
     "date": "2025-05-04",
     "time": "05:30",
     "odds": {
-      "home": 1.46,
+      "home": 1.47,
       "draw": 4.4,
-      "away": 6.4
+      "away": 6.2
     },
     "raw": {
       "eventId": "56690571",
@@ -24979,9 +25005,9 @@
       "tournament": "MLS",
       "event": "Seattle Sounders - Saint Louis City SC",
       "market": "1X2",
-      "home_odds": "1.46",
+      "home_odds": "1.47",
       "draw_odds": "4.40",
-      "away_odds": "6.40",
+      "away_odds": "6.20",
       "start_time": "2025-05-04 05:30"
     }
   },
@@ -28817,9 +28843,9 @@
     "date": "2025-05-04",
     "time": "16:00",
     "odds": {
-      "home": 1.06,
+      "home": 1.07,
       "draw": 8,
-      "away": 28
+      "away": 26
     },
     "raw": {
       "eventId": "59224401",
@@ -28827,9 +28853,9 @@
       "tournament": "Premijer Liga",
       "event": "FK Zeljeznicar Sarajevo - FK Sloboda Tuzla",
       "market": "1X2",
-      "home_odds": "1.06",
+      "home_odds": "1.07",
       "draw_odds": "8.00",
-      "away_odds": "28.00",
+      "away_odds": "26.00",
       "start_time": "2025-05-04 16:00"
     }
   },
@@ -33991,9 +34017,9 @@
     "date": "2025-05-05",
     "time": "00:00",
     "odds": {
-      "home": 2.07,
+      "home": 2.02,
       "draw": 3.05,
-      "away": 3.7
+      "away": 3.85
     },
     "raw": {
       "eventId": "59947859",
@@ -34001,9 +34027,9 @@
       "tournament": "Division de Honor, Apertura",
       "event": "Nacional Asuncion - Sportivo Ameliano",
       "market": "1X2",
-      "home_odds": "2.07",
+      "home_odds": "2.02",
       "draw_odds": "3.05",
-      "away_odds": "3.70",
+      "away_odds": "3.85",
       "start_time": "2025-05-05 00:00"
     }
   },
@@ -34043,7 +34069,7 @@
     "date": "2025-05-05",
     "time": "00:00",
     "odds": {
-      "home": 2.95,
+      "home": 3,
       "draw": 2.85,
       "away": 2.5
     },
@@ -34053,7 +34079,7 @@
       "tournament": "Primera LPF",
       "event": "CA Tigre - Boca Juniors",
       "market": "1X2",
-      "home_odds": "2.95",
+      "home_odds": "3.00",
       "draw_odds": "2.85",
       "away_odds": "2.50",
       "start_time": "2025-05-05 00:00"
@@ -40023,9 +40049,9 @@
     "date": "2025-05-10",
     "time": "17:00",
     "odds": {
-      "home": 1.93,
+      "home": 1.94,
       "draw": 3.6,
-      "away": 4.3
+      "away": 4.2
     },
     "raw": {
       "eventId": "50850677",
@@ -40033,9 +40059,9 @@
       "tournament": "Premier League",
       "event": "Fulham - Everton",
       "market": "1X2",
-      "home_odds": "1.93",
+      "home_odds": "1.94",
       "draw_odds": "3.60",
-      "away_odds": "4.30",
+      "away_odds": "4.20",
       "start_time": "2025-05-10 17:00"
     }
   },

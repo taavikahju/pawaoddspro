@@ -425,9 +425,9 @@
     "date": "2025-05-03",
     "time": "00:30",
     "odds": {
-      "home": 1.81,
+      "home": 1.83,
       "draw": 3.25,
-      "away": 5
+      "away": 4.8
     },
     "raw": {
       "eventId": "58052523",
@@ -435,9 +435,9 @@
       "tournament": "Brasileiro Serie A",
       "event": "Sao Paulo FC SP - Fortaleza EC CE",
       "market": "1X2 - FT",
-      "home_odds": "1.81",
+      "home_odds": "1.83",
       "draw_odds": "3.25",
-      "away_odds": "5.0",
+      "away_odds": "4.8",
       "start_time": "2025-05-03 00:30"
     }
   },
@@ -3103,9 +3103,9 @@
     "date": "2025-05-03",
     "time": "08:00",
     "odds": {
-      "home": 1.44,
-      "draw": 4.85,
-      "away": 4.95
+      "home": 0,
+      "draw": 0,
+      "away": 0
     },
     "raw": {
       "eventId": "56592911",
@@ -3113,9 +3113,9 @@
       "tournament": "NPL 2, Victoria",
       "event": "Caroline Springs George Cross FC - FC Melbourne Srbija",
       "market": "1X2 - FT",
-      "home_odds": "1.44",
-      "draw_odds": "4.85",
-      "away_odds": "4.95",
+      "home_odds": "0.0",
+      "draw_odds": "0.0",
+      "away_odds": "0.0",
       "start_time": "2025-05-03 08:00"
     }
   },
@@ -10409,9 +10409,9 @@
     "date": "2025-05-03",
     "time": "14:00",
     "odds": {
-      "home": 1.31,
-      "draw": 4.1,
-      "away": 11.5
+      "home": 1.3,
+      "draw": 4.25,
+      "away": 10
     },
     "raw": {
       "eventId": "60120495",
@@ -10419,9 +10419,9 @@
       "tournament": "Tunisia Ligue 1",
       "event": "Espérance Sportive de Tunis - Club Sportif Sfaxien",
       "market": "1X2 - FT",
-      "home_odds": "1.31",
-      "draw_odds": "4.1",
-      "away_odds": "11.5",
+      "home_odds": "1.3",
+      "draw_odds": "4.25",
+      "away_odds": "10.0",
       "start_time": "2025-05-03 14:00"
     }
   },
@@ -12827,9 +12827,9 @@
     "date": "2025-05-03",
     "time": "14:30",
     "odds": {
-      "home": 7.5,
-      "draw": 5.5,
-      "away": 1.28
+      "home": 7,
+      "draw": 5.25,
+      "away": 1.3
     },
     "raw": {
       "eventId": "54162403",
@@ -12837,9 +12837,9 @@
       "tournament": "MSFL",
       "event": "CSK Uhersky Brod - FK Fotbal Trinec",
       "market": "1X2 - FT",
-      "home_odds": "7.5",
-      "draw_odds": "5.5",
-      "away_odds": "1.28",
+      "home_odds": "7.0",
+      "draw_odds": "5.25",
+      "away_odds": "1.3",
       "start_time": "2025-05-03 14:30"
     }
   },
@@ -14985,9 +14985,9 @@
     "date": "2025-05-03",
     "time": "16:00",
     "odds": {
-      "home": 2.12,
-      "draw": 3.6,
-      "away": 2.85
+      "home": 2.06,
+      "draw": 3.65,
+      "away": 2.95
     },
     "raw": {
       "eventId": "57125569",
@@ -14995,9 +14995,9 @@
       "tournament": "Premier League",
       "event": "Tofta Itrottarfelag B68 - 07 Vestur Sorvagur",
       "market": "1X2 - FT",
-      "home_odds": "2.12",
-      "draw_odds": "3.6",
-      "away_odds": "2.85",
+      "home_odds": "2.06",
+      "draw_odds": "3.65",
+      "away_odds": "2.95",
       "start_time": "2025-05-03 16:00"
     }
   },
@@ -16458,6 +16458,32 @@
     }
   },
   {
+    "id": "59716654",
+    "eventId": "59716654",
+    "teams": "AA Ponte Preta SP U20 - Gremio Osasco Audax EC SP U20",
+    "league": "U20 Paulista",
+    "sport": "football",
+    "country": "Brazil",
+    "date": "2025-05-03",
+    "time": "18:00",
+    "odds": {
+      "home": 2.3,
+      "draw": 3.15,
+      "away": 2.9
+    },
+    "raw": {
+      "eventId": "59716654",
+      "country": "Brazil",
+      "tournament": "U20 Paulista",
+      "event": "AA Ponte Preta SP U20 - Gremio Osasco Audax EC SP U20",
+      "market": "1X2 - FT",
+      "home_odds": "2.3",
+      "draw_odds": "3.15",
+      "away_odds": "2.9",
+      "start_time": "2025-05-03 18:00"
+    }
+  },
+  {
     "id": "59716656",
     "eventId": "59716656",
     "teams": "Santos FC SP U20 - SC Aguai SP U20",
@@ -16467,9 +16493,9 @@
     "date": "2025-05-03",
     "time": "18:00",
     "odds": {
-      "home": 1.1,
+      "home": 1.09,
       "draw": 6.5,
-      "away": 25
+      "away": 26
     },
     "raw": {
       "eventId": "59716656",
@@ -16477,9 +16503,9 @@
       "tournament": "U20 Paulista",
       "event": "Santos FC SP U20 - SC Aguai SP U20",
       "market": "1X2 - FT",
-      "home_odds": "1.1",
+      "home_odds": "1.09",
       "draw_odds": "6.5",
-      "away_odds": "25.0",
+      "away_odds": "26.0",
       "start_time": "2025-05-03 18:00"
     }
   },
@@ -20029,7 +20055,7 @@
     "date": "2025-05-04",
     "time": "02:30",
     "odds": {
-      "home": 1.45,
+      "home": 1.46,
       "draw": 4.5,
       "away": 6.5
     },
@@ -20039,7 +20065,7 @@
       "tournament": "Major League Soccer",
       "event": "Seattle Sounders - Saint Louis City SC",
       "market": "1X2 - FT",
-      "home_odds": "1.45",
+      "home_odds": "1.46",
       "draw_odds": "4.5",
       "away_odds": "6.5",
       "start_time": "2025-05-04 02:30"
@@ -28704,6 +28730,32 @@
     }
   },
   {
+    "id": "59947859",
+    "eventId": "59947859",
+    "teams": "Club Nacional Asuncion - Club Sportivo Ameliano",
+    "league": "Paraguay Primera Division",
+    "sport": "football",
+    "country": "Paraguay",
+    "date": "2025-05-04",
+    "time": "21:00",
+    "odds": {
+      "home": 1.99,
+      "draw": 3,
+      "away": 4.1
+    },
+    "raw": {
+      "eventId": "59947859",
+      "country": "Paraguay",
+      "tournament": "Paraguay Primera Division",
+      "event": "Club Nacional Asuncion - Club Sportivo Ameliano",
+      "market": "1X2 - FT",
+      "home_odds": "1.99",
+      "draw_odds": "3.0",
+      "away_odds": "4.1",
+      "start_time": "2025-05-04 21:00"
+    }
+  },
+  {
     "id": "57445303",
     "eventId": "57445303",
     "teams": "CA Huracan Women - Boca Juniors Women",
@@ -31937,9 +31989,9 @@
     "date": "2025-05-06",
     "time": "11:00",
     "odds": {
-      "home": 5.75,
-      "draw": 4.7,
-      "away": 1.43
+      "home": 5.5,
+      "draw": 4.6,
+      "away": 1.47
     },
     "raw": {
       "eventId": "57605199",
@@ -31947,9 +31999,9 @@
       "tournament": "Chinese Super League",
       "event": "Meizhou Hakka - Shanghai Shenhua FC",
       "market": "1X2 - FT",
-      "home_odds": "5.75",
-      "draw_odds": "4.7",
-      "away_odds": "1.43",
+      "home_odds": "5.5",
+      "draw_odds": "4.6",
+      "away_odds": "1.47",
       "start_time": "2025-05-06 11:00"
     }
   },
@@ -33644,32 +33696,6 @@
     }
   },
   {
-    "id": "51628763",
-    "eventId": "51628763",
-    "teams": "US Concarneau - Le Mans FC",
-    "league": "National",
-    "sport": "football",
-    "country": "France",
-    "date": "2025-05-09",
-    "time": "17:30",
-    "odds": {
-      "home": 3.45,
-      "draw": 3.3,
-      "away": 2.04
-    },
-    "raw": {
-      "eventId": "51628763",
-      "country": "France",
-      "tournament": "National",
-      "event": "US Concarneau - Le Mans FC",
-      "market": "1X2 - FT",
-      "home_odds": "3.45",
-      "draw_odds": "3.3",
-      "away_odds": "2.04",
-      "start_time": "2025-05-09 17:30"
-    }
-  },
-  {
     "id": "51628769",
     "eventId": "51628769",
     "teams": "FC Villefranche Beaujolais - Quevilly-Rouen Metropole",
@@ -33991,9 +34017,9 @@
     "date": "2025-05-09",
     "time": "18:00",
     "odds": {
-      "home": 4.9,
+      "home": 4.7,
       "draw": 4.4,
-      "away": 1.54
+      "away": 1.56
     },
     "raw": {
       "eventId": "50869725",
@@ -34001,9 +34027,9 @@
       "tournament": "Eerste Divisie",
       "event": "Jong AZ Alkmaar YOUTH - Excelsior Rotterdam",
       "market": "1X2 - FT",
-      "home_odds": "4.9",
+      "home_odds": "4.7",
       "draw_odds": "4.4",
-      "away_odds": "1.54",
+      "away_odds": "1.56",
       "start_time": "2025-05-09 18:00"
     }
   },
@@ -34199,7 +34225,7 @@
     "date": "2025-05-09",
     "time": "19:00",
     "odds": {
-      "home": 2.55,
+      "home": 2.5,
       "draw": 3.3,
       "away": 2.85
     },
@@ -34209,7 +34235,7 @@
       "tournament": "LaLiga",
       "event": "UD Las Palmas - Rayo Vallecano",
       "market": "1X2 - FT",
-      "home_odds": "2.55",
+      "home_odds": "2.5",
       "draw_odds": "3.3",
       "away_odds": "2.85",
       "start_time": "2025-05-09 19:00"

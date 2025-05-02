@@ -66,32 +66,31 @@ export function useRealWebSocket() {
               queryClient.invalidateQueries({ queryKey: ['/api/stats'] });
             }
           } catch (error) {
-            console.error('[WebSocket] Error parsing message:', error);
+            // Silent error handling for parsing errors
           }
         });
         
         // Connection closed
         socket.addEventListener('close', () => {
-          console.log('[WebSocket] Connection closed');
+          // Silent disconnect
           setIsConnected(false);
           
           // Attempt to reconnect after a delay
           reconnectTimeoutRef.current = setTimeout(() => {
-            console.log('[WebSocket] Attempting to reconnect...');
+            // Silent reconnection
             connectWebSocket();
           }, 5000); // Try to reconnect after 5 seconds
         });
         
         // Connection error
-        socket.addEventListener('error', (error) => {
-          console.error('[WebSocket] Connection error:', error);
+        socket.addEventListener('error', () => {
+          // Silent error handling
           // Let the close event handler handle reconnection
         });
       } catch (error) {
-        console.error('[WebSocket] Setup error:', error);
+        // Silent error handling
         // Attempt to reconnect after a delay
         reconnectTimeoutRef.current = setTimeout(() => {
-          console.log('[WebSocket] Attempting to reconnect after error...');
           connectWebSocket();
         }, 5000);
       }
