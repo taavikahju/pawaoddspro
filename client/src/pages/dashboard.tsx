@@ -6,6 +6,7 @@ import OddsTable from '@/components/OddsTable';
 import { useBookmakerContext } from '@/contexts/BookmakerContext';
 // We'll keep the import but use React Query directly in most places
 import { useWebSocket } from '@/hooks/use-websocket';
+import { useOfflineResilientEvents } from '@/hooks/use-offline-resilient-events';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
@@ -37,14 +38,13 @@ export default function Dashboard() {
     refetchInterval: 60000, // Refresh every minute
   });
   
-  // Fetch events from API only - removed WebSocket dependency
+  // Use the offline-resilient events hook for better reliability with Sportybet data
   const { 
-    data: events = [],
-    isLoading: isLoadingEvents 
-  } = useQuery({ 
-    queryKey: ['/api/events'],
-    refetchInterval: 15000, // Refresh every 15 seconds to match scraper interval
-  });
+    events = [],
+    isLoading: isLoadingEvents,
+    error: eventsError,
+    isError: isEventsError,
+  } = useOfflineResilientEvents();
 
   // Extract available countries and tournaments from the data
   useEffect(() => {
