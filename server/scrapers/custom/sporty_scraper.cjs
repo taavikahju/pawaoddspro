@@ -5,8 +5,11 @@ const axios = require('axios');
 const BASE_URL = 'https://www.sportybet.com/api/gh/factsCenter/pcUpcomingEvents';
 const QUERY = 'sportId=sr%3Asport%3A1&marketId=1%2C18%2C10%2C29%2C11%2C26%2C36%2C14%2C60100&pageSize=100&option=1';
 
-// NOTE: Previous specific endpoint for EPL was removed because it was returning 404
-// The tournament ID for Premier League is "sr:tournament:17" and it's available in the regular API endpoint
+// Add specific configuration for Premier League
+const EPL_URL = 'https://www.sportybet.com/api/gh/factsCenter/pcTournament';
+const EPL_QUERY = 'tournamentId=sr%3Atournament%3A17&limit=50&sportId=sr%3Asport%3A1';
+
+// NOTE: The tournament ID for Premier League is "sr:tournament:17"
 
 const HEADERS = {
   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
