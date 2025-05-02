@@ -113,15 +113,16 @@ export async function fixSportybetData(storage: IStorage): Promise<void> {
       let existingEvent = allEvents.find(e => e.eventId === normalizedId || e.eventId === originalId);
       
       if (existingEvent) {
-        // Only update if the event doesn't already have Sportybet data
-        if (!existingSportyEventIds.has(existingEvent.eventId)) {
+        // Check if this is a Premier League event
+        const isPremierLeague = (existingEvent.country === 'England' && existingEvent.tournament === 'Premier League');
+        
+        // For Premier League events, always update them, otherwise only update if they don't have Sportybet data
+        if (isPremierLeague || !existingSportyEventIds.has(existingEvent.eventId)) {
           // Update existing event with Sportybet odds
           const updatedOddsData = { ...existingEvent.oddsData, ...oddsData };
           
-          // Check if this is a Premier League event (for existing events)
-          const country = existingEvent.country || '';
-          const tournament = existingEvent.tournament || '';
-          if (country === 'England' && tournament === 'Premier League') {
+          // Track Premier League events
+          if (isPremierLeague) {
             premierLeagueCount++;
             logger.info(`Found Premier League match to update: ${existingEvent.teams} (ID: ${existingEvent.id})`);
           }
