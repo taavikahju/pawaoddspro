@@ -5,11 +5,12 @@ const axios = require('axios');
 const BASE_URL = 'https://www.sportybet.com/api/gh/factsCenter/pcUpcomingEvents';
 const QUERY = 'sportId=sr%3Asport%3A1&marketId=1%2C18%2C10%2C29%2C11%2C26%2C36%2C14%2C60100&pageSize=100&option=1';
 
-// Add specific configuration for Premier League
-const EPL_URL = 'https://www.sportybet.com/api/gh/factsCenter/pcTournament';
-const EPL_QUERY = 'tournamentId=sr%3Atournament%3A17&limit=50&sportId=sr%3Asport%3A1';
+// NOTE: We tried using a specific Premier League endpoint but it returned 404
+// Instead, we'll look for Premier League events in the general data
+// and do some additional processing to ensure we get all available events
 
-// NOTE: The tournament ID for Premier League is "sr:tournament:17"
+// The Premier League tournament ID is "sr:tournament:17"
+// We'll check for it in the tournament data
 
 const HEADERS = {
   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
@@ -48,6 +49,38 @@ const fetchWithRetry = async (url, description, maxAttempts = 3) => {
   return null;
 };
 
+// Enhanced logging function to track Premier League events
+const logPremierLeagueInfo = (tournaments) => {
+  // Find and count all Premier League tournaments
+  let eplTournaments = 0;
+  let eplEvents = 0;
+  
+  for (const tournament of tournaments) {
+    const country = tournament.events?.[0]?.sport?.category?.name || 'Unknown';
+    const tournamentName = tournament.name || 'Unknown Tournament';
+    
+    if (country === 'England' && 
+        (tournamentName.includes('Premier League') || 
+         tournamentName.includes('Premier league'))) {
+      eplTournaments++;
+      eplEvents += tournament.events?.length || 0;
+      
+      // Log tournament details
+      console.error(`🏴󠁧󠁢󠁥󠁮󠁧󠁿 Found England Premier League tournament: ${tournamentName} with ${tournament.events?.length || 0} events`);
+      
+      // Check for tournament ID
+      if (tournament.id && tournament.id.includes('sr:tournament:17')) {
+        console.error(`✅ Confirmed tournament ID is correct: ${tournament.id}`);
+      } else {
+        console.error(`ℹ️ Tournament ID is: ${tournament.id || 'unknown'}`);
+      }
+    }
+  }
+  
+  console.error(`📊 Premier League summary: found ${eplTournaments} tournaments with ${eplEvents} total events`);
+  return eplEvents;
+};
+
 // Fetch all pages of tournament data
 const fetchAllPages = async () => {
   let allTournaments = [];
@@ -57,9 +90,8 @@ const fetchAllPages = async () => {
   const MAX_ATTEMPTS = 3;
   const MAX_PAGES = 20; // Safety limit
 
-  // Fetch all tournaments data including Premier League
-  // The Premier League tournament ID is "sr:tournament:17" and it's available in the regular endpoint
-  console.error(`📊 Fetching tournaments data (including Premier League)...`);
+  // Fetch all tournaments data
+  console.error(`📊 Fetching general tournaments data...`);
   
   while (pageNum <= totalPages && pageNum <= MAX_PAGES) {
     const url = `${BASE_URL}?${QUERY}&pageNum=${pageNum}&_t=${Date.now()}`;
@@ -330,19 +362,29 @@ const run = async () => {
     
     console.error('About to fetch tournaments data...');
     
-    // Fetch and process tournaments
-    const tournamentPromise = fetchAllPages();
+    // Fetch all tournaments
+    const tournamentsPromise = fetchAllPages();
     
     // Race between fetching data and timeout
     console.error('Waiting for tournament data with timeout...');
-    const tournaments = await Promise.race([tournamentPromise, timeoutPromise])
+    
+    const tournaments = await Promise.race([tournamentsPromise, timeoutPromise])
       .catch(error => {
-        console.error(`Operation error: ${error.message}`);
-        console.error(`Error stack: ${error.stack || 'No stack trace available'}`);
+        console.error(`Tournament fetch error: ${error.message}`);
         return [];
       });
     
-    console.error(`Fetched ${tournaments.length} tournaments, processing them now...`);
+    // Check if we got any tournaments
+    if (!tournaments || tournaments.length === 0) {
+      console.error("No tournaments found!");
+      console.log(JSON.stringify([]));
+      return;
+    }
+    
+    // Add enhanced logging for Premier League events
+    const eplEvents = logPremierLeagueInfo(tournaments);
+    
+    console.error(`Fetched ${tournaments.length} tournaments (including ${eplEvents} Premier League events), processing them now...`);
     
     // Process tournaments into our standardized format
     const events = processTournaments(tournaments);
