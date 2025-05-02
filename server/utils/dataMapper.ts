@@ -594,7 +594,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       // Fetch all existing events in a single query using IN clause
       const existingEvents = await db.select()
         .from(events)
-        .where(sql`event_id = ANY(${eventIds})`);
+        .where(sql`event_id = ANY(ARRAY[${eventIds.map(id => `'${id}'`).join(',')}])`);
       
       // Create lookup maps
       const existingEventsByEventId = new Map(
