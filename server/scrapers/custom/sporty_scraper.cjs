@@ -175,6 +175,10 @@ const processTournaments = (tournaments) => {
   let eventCount = 0;
   let skippedCount = 0;
   
+  // Special event ID to track
+  const SPECIAL_EVENT_ID = '50850679';
+  let specialEventFound = false;
+  
   // Add specific tracking for England Premier League
   const eplEvents = {
     found: 0,
@@ -262,6 +266,21 @@ const processTournaments = (tournaments) => {
           const normalizedId = event.eventId.replace(/\D/g, '');
           const originalId = event.eventId;
           
+          // Check if this is our special tracked event
+          if (normalizedId === SPECIAL_EVENT_ID || originalId.includes(SPECIAL_EVENT_ID)) {
+            specialEventFound = true;
+            console.error(`\n🔍 FOUND SPECIAL EVENT ID ${SPECIAL_EVENT_ID}:`);
+            console.error(`- Teams: ${event.homeTeamName} vs ${event.awayTeamName}`);
+            console.error(`- Original ID: ${originalId}`);
+            console.error(`- Normalized ID: ${normalizedId}`);
+            console.error(`- Country: ${country}`);
+            console.error(`- Tournament: ${tournamentName}`);
+            console.error(`- Odds: Home=${homeOdds}, Draw=${drawOdds}, Away=${awayOdds}`);
+            console.error(`- Start Time: ${startTime}`);
+            console.error(`- Is EPL: ${isEPL}`);
+            console.error(``);
+          }
+          
           // Track EPL events
           if (isEPL) {
             eplEvents.found++;
@@ -332,6 +351,11 @@ const processTournaments = (tournaments) => {
       console.error(`  - ${team.teams} (ID: ${team.normalizedId}) Odds: ${team.odds.home}/${team.odds.draw}/${team.odds.away}`);
     }
     console.error(''); // Empty line for better readability
+  }
+  
+  // Report on our special event tracking
+  if (!specialEventFound) {
+    console.error(`\n⚠️ SPECIAL EVENT ID ${SPECIAL_EVENT_ID} WAS NOT FOUND in any tournament!`);
   }
   
   console.error(`✅ Successfully processed ${eventCount} events (skipped ${skippedCount})`);
