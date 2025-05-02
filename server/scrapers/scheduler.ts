@@ -76,6 +76,8 @@ let isDataProcessingRunning = false;
  * Setup all scrapers and schedule them to run
  */
 export function setupScrapers(storage: IStorage): void {
+  // Enable Python Sportybet implementation at startup
+  process.env.USE_PYTHON_SPORTYBET = 'true';
   logger.critical('Setting up scraper services');
   
   // Run scrapers immediately on startup
@@ -165,8 +167,11 @@ export function setupScrapers(storage: IStorage): void {
  */
 export async function runAllScrapers(storage: IStorage): Promise<void> {
   try {
+    // Set environment variable to enable Python Sportybet implementation
+    process.env.USE_PYTHON_SPORTYBET = 'true';
+    
     const startTime = new Date();
-    logger.critical(`[${startTime.toISOString()}] Starting scraper runs`);
+    logger.critical(`[${startTime.toISOString()}] Starting scraper runs (Python Sportybet enabled)`);
     
     // Emit scraper started event
     scraperEvents.emit(SCRAPER_EVENTS.STARTED, {

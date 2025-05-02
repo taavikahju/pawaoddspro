@@ -711,9 +711,9 @@
     "date": "2025-05-02",
     "time": "17:00",
     "odds": {
-      "home": 1.58,
+      "home": 1.55,
       "draw": 4.25,
-      "away": 4.25
+      "away": 4.45
     },
     "raw": {
       "eventId": "51293955",
@@ -721,9 +721,9 @@
       "tournament": "Regionalliga Northeast",
       "event": "FC Hertha 03 Zehlendorf - FC Viktoria 1889 Berlin",
       "market": "1X2 - FT",
-      "home_odds": "1.58",
+      "home_odds": "1.55",
       "draw_odds": "4.25",
-      "away_odds": "4.25",
+      "away_odds": "4.45",
       "start_time": "2025-05-02 17:00"
     }
   },
@@ -815,9 +815,9 @@
     "date": "2025-05-02",
     "time": "17:00",
     "odds": {
-      "home": 2.35,
+      "home": 2.45,
       "draw": 3.55,
-      "away": 2.5
+      "away": 2.45
     },
     "raw": {
       "eventId": "51025005",
@@ -825,9 +825,9 @@
       "tournament": "Regionalliga Bavaria",
       "event": "Wacker Burghausen - SpVgg Bayreuth",
       "market": "1X2 - FT",
-      "home_odds": "2.35",
+      "home_odds": "2.45",
       "draw_odds": "3.55",
-      "away_odds": "2.5",
+      "away_odds": "2.45",
       "start_time": "2025-05-02 17:00"
     }
   },
@@ -11319,9 +11319,9 @@
     "date": "2025-05-03",
     "time": "12:00",
     "odds": {
-      "home": 6.25,
-      "draw": 4.8,
-      "away": 1.36
+      "home": 6.75,
+      "draw": 4.85,
+      "away": 1.33
     },
     "raw": {
       "eventId": "51776615",
@@ -11329,9 +11329,9 @@
       "tournament": "Netherlands Eredivisie Women",
       "event": "Heerenveen Women - FC Utrecht Women",
       "market": "1X2 - FT",
-      "home_odds": "6.25",
-      "draw_odds": "4.8",
-      "away_odds": "1.36",
+      "home_odds": "6.75",
+      "draw_odds": "4.85",
+      "away_odds": "1.33",
       "start_time": "2025-05-03 12:00"
     }
   },
@@ -15028,32 +15028,6 @@
     }
   },
   {
-    "id": "51094155",
-    "eventId": "51094155",
-    "teams": "Huddersfield Town - Leyton Orient London",
-    "league": "League One",
-    "sport": "football",
-    "country": "England",
-    "date": "2025-05-03",
-    "time": "14:00",
-    "odds": {
-      "home": 3.95,
-      "draw": 3.7,
-      "away": 1.79
-    },
-    "raw": {
-      "eventId": "51094155",
-      "country": "England",
-      "tournament": "League One",
-      "event": "Huddersfield Town - Leyton Orient London",
-      "market": "1X2 - FT",
-      "home_odds": "3.95",
-      "draw_odds": "3.7",
-      "away_odds": "1.79",
-      "start_time": "2025-05-03 14:00"
-    }
-  },
-  {
     "id": "59477017",
     "eventId": "59477017",
     "teams": "KVC Westerlo - KAA Gent",
@@ -15076,6 +15050,32 @@
       "home_odds": "1.77",
       "draw_odds": "4.25",
       "away_odds": "3.3",
+      "start_time": "2025-05-03 14:00"
+    }
+  },
+  {
+    "id": "51094155",
+    "eventId": "51094155",
+    "teams": "Huddersfield Town - Leyton Orient London",
+    "league": "League One",
+    "sport": "football",
+    "country": "England",
+    "date": "2025-05-03",
+    "time": "14:00",
+    "odds": {
+      "home": 3.95,
+      "draw": 3.7,
+      "away": 1.79
+    },
+    "raw": {
+      "eventId": "51094155",
+      "country": "England",
+      "tournament": "League One",
+      "event": "Huddersfield Town - Leyton Orient London",
+      "market": "1X2 - FT",
+      "home_odds": "3.95",
+      "draw_odds": "3.7",
+      "away_odds": "1.79",
       "start_time": "2025-05-03 14:00"
     }
   },
@@ -16467,9 +16467,9 @@
     "date": "2025-05-03",
     "time": "14:15",
     "odds": {
-      "home": 1.49,
-      "draw": 4.7,
-      "away": 6
+      "home": 1.51,
+      "draw": 4.65,
+      "away": 5.75
     },
     "raw": {
       "eventId": "50852757",
@@ -16477,9 +16477,9 @@
       "tournament": "LaLiga",
       "event": "Villarreal CF - CA Osasuna",
       "market": "1X2 - FT",
-      "home_odds": "1.49",
-      "draw_odds": "4.7",
-      "away_odds": "6.0",
+      "home_odds": "1.51",
+      "draw_odds": "4.65",
+      "away_odds": "5.75",
       "start_time": "2025-05-03 14:15"
     }
   },
@@ -18443,9 +18443,9 @@
     "date": "2025-05-03",
     "time": "16:00",
     "odds": {
-      "home": 1.64,
-      "draw": 4.1,
-      "away": 4
+      "home": 1.65,
+      "draw": 3.95,
+      "away": 4.1
     },
     "raw": {
       "eventId": "56958379",
@@ -18453,9 +18453,9 @@
       "tournament": "1. deild",
       "event": "IR Reykjavik - Volsungur",
       "market": "1X2 - FT",
-      "home_odds": "1.64",
-      "draw_odds": "4.1",
-      "away_odds": "4.0",
+      "home_odds": "1.65",
+      "draw_odds": "3.95",
+      "away_odds": "4.1",
       "start_time": "2025-05-03 16:00"
     }
   },
@@ -19276,8 +19276,8 @@
     "time": "16:30",
     "odds": {
       "home": 2.6,
-      "draw": 3.4,
-      "away": 2.7
+      "draw": 3.35,
+      "away": 2.75
     },
     "raw": {
       "eventId": "50852743",
@@ -19286,8 +19286,8 @@
       "event": "UD Las Palmas - Valencia CF",
       "market": "1X2 - FT",
       "home_odds": "2.6",
-      "draw_odds": "3.4",
-      "away_odds": "2.7",
+      "draw_odds": "3.35",
+      "away_odds": "2.75",
       "start_time": "2025-05-03 16:30"
     }
   },
@@ -40283,9 +40283,9 @@
     "date": "2025-06-16",
     "time": "22:00",
     "odds": {
-      "home": 4.1,
-      "draw": 3.7,
-      "away": 1.83
+      "home": 4.3,
+      "draw": 3.75,
+      "away": 1.78
     },
     "raw": {
       "eventId": "56189339",
@@ -40293,9 +40293,9 @@
       "tournament": "FIFA Club World Cup",
       "event": "Boca Juniors - SL Benfica (n)",
       "market": "1X2 - FT",
-      "home_odds": "4.1",
-      "draw_odds": "3.7",
-      "away_odds": "1.83",
+      "home_odds": "4.3",
+      "draw_odds": "3.75",
+      "away_odds": "1.78",
       "start_time": "2025-06-16 22:00"
     }
   },

@@ -2,7 +2,13 @@
 """
 Python implementation of the Sportybet scraper
 This scraper is designed to replace the JavaScript version to avoid reference issues
+
+To use this scraper, set the environment variable:
+USE_PYTHON_SPORTYBET=true
 """
+# Set Node.js compatibility mode for Python-Node.js integration
+import sys
+sys.stdout.reconfigure(line_buffering=True) # Ensure output is immediately flushed
 
 import json
 import os
