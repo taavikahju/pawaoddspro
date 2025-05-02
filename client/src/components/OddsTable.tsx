@@ -59,12 +59,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
   // Specifically dont show for "All Bookmakers" filter
   const isComparisonAvailable = (isGhanaFilterActive || isKenyaFilterActive) && !(selectedBookmakers.length >= 4);
   
-  console.log('Selected Bookmakers:', selectedBookmakers);
-  console.log('betPawa GH present:', hasBetPawaGH, 'Sportybet present:', hasSportybet);
-  console.log('betPawa KE present:', hasBetPawaKE, 'Betika KE present:', hasBetikaKE);
-  console.log('Ghana filter active:', isGhanaFilterActive);
-  console.log('Kenya filter active:', isKenyaFilterActive);
-  console.log('Comparison available:', isComparisonAvailable);
+  // No logging bookmaker selection details for performance
   
   // Helper function to determine if odds should be highlighted
   const getOddsHighlightType = (event: any, market: string, bookmakerCode: string): 'highest' | 'lowest' | 'none' => {
@@ -152,7 +147,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
     
     // Get the appropriate competitor code based on the active filter
     const competitorCode = isGhanaFilterActive ? 'sporty' : isKenyaFilterActive ? 'betika KE' : null;
-    console.log('Selected betPawa code:', betPawaCode, 'Selected competitor code:', competitorCode);
+    // No logging selected codes for performance
     
     if (!betPawaCode || !competitorCode) return { comparison: null, isBetter: null, favorite: null };
     
