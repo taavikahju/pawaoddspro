@@ -8,6 +8,7 @@ import json
 import os
 import time
 import sys
+import re
 import requests
 from datetime import datetime
 import traceback
@@ -16,13 +17,14 @@ import traceback
 BASE_URL = "https://www.sportybet.com"
 OUTPUT_FILE = "data/sporty_py.json"  # Separate output file for testing
 TIMEOUT = 30  # seconds
+QUERY = "sportId=sr%3Asport%3A1&marketId=1%2C18%2C10%2C29%2C11%2C26%2C36%2C14%2C60100&pageSize=100"
 API_ENDPOINTS = [
-    "/api/ng/factsCenter/markets?market=1&tournamentId=",
-    "/api/ke/factsCenter/markets?market=1&tournamentId=",
-    "/api/ug/factsCenter/markets?market=1&tournamentId=",
-    "/api/gh/factsCenter/markets?market=1&tournamentId=",
-    "/api/tz/factsCenter/markets?market=1&tournamentId=",
-    "/api/za/factsCenter/markets?market=1&tournamentId="
+    "/api/gh/factsCenter/pcUpcomingEvents",  # Ghana
+    "/api/ng/factsCenter/pcUpcomingEvents",  # Nigeria
+    "/api/ke/factsCenter/pcUpcomingEvents",  # Kenya
+    "/api/ug/factsCenter/pcUpcomingEvents",  # Uganda
+    "/api/tz/factsCenter/pcUpcomingEvents",  # Tanzania
+    "/api/za/factsCenter/pcUpcomingEvents"   # South Africa
 ]
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
@@ -41,14 +43,30 @@ def log(message):
 def fetch_page(endpoint, page=1):
     """Fetch a single page from Sportybet API"""
     try:
-        url = f"{BASE_URL}{endpoint}&page={page}"
+        # Add timestamp to avoid caching
+        timestamp = int(datetime.now().timestamp() * 1000)
+        url = f"{BASE_URL}{endpoint}?{QUERY}&pageNum={page}&_t={timestamp}"
+        
+        log(f"Fetching URL: {url}")
         response = requests.get(url, headers=HEADERS, timeout=TIMEOUT)
         
         if response.status_code != 200:
             log(f"Error fetching {url}: Status code {response.status_code}")
             return None
-            
-        return response.json()
+        
+        # Check if we got valid JSON
+        if not response.text:
+            log(f"Error: Empty response from {url}")
+            return None
+        
+        try:
+            data = response.json()
+            return data
+        except Exception as json_error:
+            log(f"Error parsing JSON from {url}: {str(json_error)}")
+            # Print first 100 characters of response
+            log(f"Response starts with: {response.text[:100]}...")
+            return None
     except Exception as e:
         log(f"Error fetching {endpoint} page {page}: {str(e)}")
         return None
@@ -56,67 +74,85 @@ def fetch_page(endpoint, page=1):
 def process_event(event, endpoint_idx):
     """Process a single event from Sportybet API response"""
     try:
+        # Basic validation
+        if not event.get('homeTeamName') or not event.get('awayTeamName') or not event.get('eventId'):
+            return None
+        
         # Extract country and tournament info from the event
-        tournament = event.get('tournament', {})
-        tournament_name = tournament.get('name', '')
-        category = tournament.get('category', {})
-        country_name = category.get('name', '')
+        # In pcUpcomingEvents API, we need to extract from a different structure
+        country = "Unknown"
+        tournament_name = "Unknown Tournament"
         
-        # Extract teams/opponents information
-        opponents = event.get('opponents', [])
-        home_team = opponents[0].get('name', '') if len(opponents) > 0 else ''
-        away_team = opponents[1].get('name', '') if len(opponents) > 1 else ''
-        team_names = f"{home_team} vs {away_team}"
+        # Try to get country and tournament info from the sport data
+        if event.get('sport') and event.get('sport', {}).get('category'):
+            country = event.get('sport', {}).get('category', {}).get('name', 'Unknown')
         
-        # Get event date and time
-        start_time = event.get('startTime', 0) / 1000  # Convert from milliseconds
-        date_obj = datetime.fromtimestamp(start_time)
-        event_date = date_obj.strftime('%Y-%m-%d')
-        event_time = date_obj.strftime('%H:%M')
+        # Get tournament name
+        if event.get('tournament') and event.get('tournament', {}).get('name'):
+            tournament_name = event.get('tournament', {}).get('name', 'Unknown Tournament')
         
-        # Extract odds information
-        markets = event.get('markets', [])
+        # Extract teams information
+        home_team = event.get('homeTeamName', '')
+        away_team = event.get('awayTeamName', '')
+        team_names = f"{home_team} - {away_team}"  # Notice the dash instead of vs to match Node.js format
+        
+        # Format the start time
+        start_time = None
+        if event.get('estimateStartTime'):
+            try:
+                # In pcUpcomingEvents API, startTime is a timestamp string
+                timestamp = int(event.get('estimateStartTime')) / 1000  # Convert to seconds
+                date_obj = datetime.fromtimestamp(timestamp)
+                start_time = date_obj.strftime('%Y-%m-%d %H:%M')  # Format to "YYYY-MM-DD HH:MM"
+            except Exception as e:
+                log(f"Error parsing startTime: {str(e)}")
+        
+        # Find the 1X2 market (home/draw/away)
         home_odds = 0
         draw_odds = 0
         away_odds = 0
         
-        for market in markets:
-            if market.get('type') == 1:  # 1X2 market
+        # In pcUpcomingEvents, markets is an array
+        if event.get('markets') and isinstance(event.get('markets'), list):
+            # Find market with id="1" (1X2 market)
+            market = next((m for m in event.get('markets', []) if m.get('id') == "1"), None)
+            
+            if market and market.get('outcomes') and isinstance(market.get('outcomes'), list):
                 outcomes = market.get('outcomes', [])
+                
+                # Extract odds from outcomes
                 for outcome in outcomes:
-                    outcome_type = outcome.get('type')
-                    if outcome_type == 1:  # Home win
+                    desc = outcome.get('desc', '').lower() if outcome.get('desc') else ''
+                    
+                    if desc == 'home':
                         home_odds = outcome.get('odds', 0)
-                    elif outcome_type == 2:  # Draw
+                    elif desc == 'draw':
                         draw_odds = outcome.get('odds', 0)
-                    elif outcome_type == 3:  # Away win
+                    elif desc == 'away':
                         away_odds = outcome.get('odds', 0)
         
         # Skip events with incomplete odds
         if home_odds == 0 or draw_odds == 0 or away_odds == 0:
             return None
-            
+        
+        # Normalize the event ID by removing non-numeric characters (removing "sr:match:" prefix)
+        # Store both the original ID and the normalized version to help with matching
+        original_id = event.get('eventId', '')
+        # Use Python regex to remove non-digits
+        normalized_id = re.sub(r'\D', '', original_id) if original_id else ''
+        
         # Create standardized event object
         processed_event = {
-            "id": str(event.get('id', '')),
-            "eventId": str(event.get('id', '')),  # Use same ID for consistency
-            "originalId": str(event.get('id', '')),
-            "teams": team_names,
-            "country": country_name,
+            "eventId": normalized_id,
+            "originalEventId": original_id,
+            "country": country,
             "tournament": tournament_name,
-            "league": f"{country_name} {tournament_name}",
-            "date": event_date,
-            "time": event_time,
-            "home_odds": str(home_odds),
-            "draw_odds": str(draw_odds),
-            "away_odds": str(away_odds),
-            "odds": {
-                "home": float(home_odds),
-                "draw": float(draw_odds),
-                "away": float(away_odds)
-            },
-            "source_index": endpoint_idx,
-            "source": "sporty"
+            "event": team_names,
+            "market": "1X2",
+            "home_odds": home_odds,
+            "draw_odds": draw_odds,
+            "away_odds": away_odds,
+            "start_time": start_time
         }
         
         # Explicitly create a deep copy through serialization/deserialization
