@@ -534,6 +534,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
         events = await storage.getEvents();
       }
 
+      // Add debugging info for Sportybet data
+      const sportyEvents = events.filter(event => 
+        event.oddsData && typeof event.oddsData === 'object' && 'sporty' in event.oddsData
+      );
+      
+      logger.critical(`BEFORE FILTERING: Found ${sportyEvents.length} events with Sportybet odds out of ${events.length} total events`);
+      
+      // If we have events with Sportybet odds, log some details about a sample event
+      if (sportyEvents.length > 0) {
+        const sampleEvent = sportyEvents[0];
+        logger.critical(`Sample Sportybet event - ID: ${sampleEvent.id}, Teams: ${sampleEvent.teams}`);
+        logger.critical(`Sample event bookmakers: ${Object.keys(sampleEvent.oddsData || {}).join(', ')}`);
+        logger.critical(`Sportybet odds: ${JSON.stringify(sampleEvent.oddsData?.sporty)}`);
+      }
+
       // Filter events to only include those with at least the minimum number of bookmakers
       const filteredEvents = events.filter(event => {
         // Count bookmakers with odds for this event
@@ -543,10 +558,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return bookmakerCount >= minBookmakers;
       });
 
-      // Removed event distribution code
-
-      // Remove verbose diagnostic logs to reduce console output
-      // Only log during actual scraper runs, not on every client request
+      // Check after filtering for Sportybet events
+      const filteredSportyEvents = filteredEvents.filter(event => 
+        event.oddsData && typeof event.oddsData === 'object' && 'sporty' in event.oddsData
+      );
+      
+      logger.critical(`AFTER FILTERING: Found ${filteredSportyEvents.length} events with Sportybet odds out of ${filteredEvents.length} filtered events`);
       
       res.json(filteredEvents);
     } catch (error) {
