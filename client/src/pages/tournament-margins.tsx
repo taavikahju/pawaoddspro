@@ -66,6 +66,7 @@ const TournamentMargins: React.FC = () => {
       'Austria': 'AT',
       'Austria Amateur': 'AT',
       'Denmark': 'DK',
+      'Denmark Amateur': 'DK',
       'Sweden': 'SE',
       'Sweden Amateur': 'SE',
       'Norway': 'NO',
@@ -104,6 +105,7 @@ const TournamentMargins: React.FC = () => {
       'Azerbaijan': 'AZ',
       'Georgia': 'GE',
       'San Marino': 'SM',
+      'Gibraltar': 'GI',
       
       // Americas
       'USA': 'US',
@@ -158,6 +160,7 @@ const TournamentMargins: React.FC = () => {
       'Bahrain': 'BH',
       'Bangladesh': 'BD',
       'Kuwait': 'KW',
+      'Hong Kong': 'HK',
       'Bosnia & Herzegovina': 'BA',
       'Bosnia and Herzegovina': 'BA',
       
