@@ -231,6 +231,27 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
           </p>
           <div className="flex flex-col space-y-1 mb-2">
             <Button 
+              variant={activeFilter === 'top5' ? 'default' : 'outline'} 
+              size="sm" 
+              className={cn(
+                "py-1 px-2 h-auto text-xs font-medium justify-start",
+                activeFilter === 'top5' 
+                  ? "bg-primary text-white hover:bg-primary/90" 
+                  : "bg-white dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700"
+              )}
+              onClick={() => {
+                // Toggle the Top 5 Leagues filter
+                toggleTop5LeaguesFilter();
+                
+                // Set active filter
+                setActiveFilter('top5');
+              }}
+            >
+              <Trophy className="h-3.5 w-3.5 mr-1.5" />
+              Top 5 Leagues
+            </Button>
+            
+            <Button 
               variant={activeFilter === 'ghana' ? 'default' : 'outline'} 
               size="sm" 
               className={cn(
@@ -319,27 +340,6 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
             >
               <Filter className="h-3.5 w-3.5 mr-1.5" />
               All Bookmakers
-            </Button>
-            
-            <Button 
-              variant={activeFilter === 'top5' ? 'default' : 'outline'} 
-              size="sm" 
-              className={cn(
-                "py-1 px-2 h-auto text-xs font-medium justify-start",
-                activeFilter === 'top5' 
-                  ? "bg-primary text-white hover:bg-primary/90" 
-                  : "bg-white dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700"
-              )}
-              onClick={() => {
-                // Toggle the Top 5 Leagues filter
-                toggleTop5LeaguesFilter();
-                
-                // Set active filter
-                setActiveFilter('top5');
-              }}
-            >
-              <Trophy className="h-3.5 w-3.5 mr-1.5" />
-              Top 5 Leagues
             </Button>
           </div>
           
