@@ -578,8 +578,8 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       logger.error(`Failed to save mapped events data: ${writeError}`);
     }
     
-    // Use smaller batches for database operations to avoid overwhelming the database
-    const updateBatchSize = 50
+    // Use larger batches for better performance
+    const updateBatchSize = 200;
     const updateBatches = Math.ceil(totalUpdateEvents / updateBatchSize);
     
     // Prepare batch operations
@@ -588,26 +588,18 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       const batchEnd = Math.min((i + 1) * updateBatchSize, totalUpdateEvents);
       const currentBatch = eventsToUpdate.slice(batchStart, batchEnd);
       
-      // First, look up all events in this batch in a single query
+      // Get all eventIds and externalIds for this batch
       const eventIds = currentBatch.map(([_, eventData]) => eventData.eventId);
-      const externalIds = currentBatch.map(([_, eventData]) => eventData.externalId);
       
-      // Get existing events in bulk
-      const existingEventsByEventId = new Map();
-      const existingEventsByExternalId = new Map();
+      // Fetch all existing events in a single query using IN clause
+      const existingEvents = await db.select()
+        .from(events)
+        .where(sql`event_id = ANY(${eventIds})`);
       
-      // We need to handle the bulk lookup differently to avoid type issues
-      // Instead of using IN clause with arrays, we'll query events one by one for now
-      for (const eventId of eventIds) {
-        try {
-          const [result] = await db.select().from(events).where(eq(events.eventId, eventId));
-          if (result) {
-            existingEventsByEventId.set(result.eventId, result);
-          }
-        } catch (error) {
-          logger.error(`Error fetching event by eventId ${eventId}:`, error);
-        }
-      }
+      // Create lookup maps
+      const existingEventsByEventId = new Map(
+        existingEvents.map(event => [event.eventId, event])
+      );
       
       // Get any remaining events by externalId - one by one to avoid type issues
       for (const externalId of externalIds) {
@@ -702,18 +694,25 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
         }
       }
       
-      // Execute operations in parallel batches
+      // Execute bulk operations
       try {
-        // Create new events in a single batch
+        // Bulk create new events
         if (createOperations.length > 0) {
-          logger.info(`Creating ${createOperations.length} new events in batch ${i+1}/${updateBatches}`);
-          await Promise.all(createOperations.map(data => storage.createEvent(data)));
+          logger.info(`Bulk creating ${createOperations.length} new events in batch ${i+1}/${updateBatches}`);
+          await db.insert(events).values(createOperations);
         }
         
-        // Update existing events in parallel 
+        // Bulk update existing events
         if (updateOperations.length > 0) {
-          logger.info(`Updating ${updateOperations.length} existing events in batch ${i+1}/${updateBatches}`);
-          await Promise.all(updateOperations.map(op => storage.updateEvent(op.id, op.data)));
+          logger.info(`Bulk updating ${updateOperations.length} existing events in batch ${i+1}/${updateBatches}`);
+          // Group updates by fields to update for more efficient bulk operations
+          const updates = updateOperations.map(op => ({
+            where: eq(events.id, op.id),
+            set: op.data
+          }));
+          await Promise.all(
+            updates.map(({ where, set }) => db.update(events).set(set).where(where))
+          );
         }
         
         // Save odds history in batches of 50
