@@ -1,0 +1,142 @@
+74OddsTable.tsx:648 Warning: Invalid prop `data-replit-metadata` supplied to `React.Fragment`. React.Fragment can only have `key` and `children` props.
+    at OddsTable (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/components/OddsTable.tsx?t=1746218820823:33:37)
+    at main
+    at div
+    at div
+    at div
+    at Layout (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/components/Layout.tsx?t=1746218659386:24:34)
+    at Dashboard (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/pages/dashboard.tsx?t=1746219041094:38:45)
+    at Route (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=6fdbad00:323:16)
+    at Switch (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=6fdbad00:379:17)
+    at Router
+    at BookmakerProvider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/contexts/BookmakerContext.tsx:23:37)
+    at Provider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-VIFX6DEG.js?v=6fdbad00:48:15)
+    at TooltipProvider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=6fdbad00:59:5)
+    at V (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/next-themes.js?v=6fdbad00:44:25)
+    at J (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/next-themes.js?v=6fdbad00:42:18)
+    at QueryClientProvider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=6fdbad00:2805:3)
+    at App
+printWarning @ react_jsx-dev-runtime.js?v=6fdbad00:64
+error @ react_jsx-dev-runtime.js?v=6fdbad00:48
+validateFragmentProps @ react_jsx-dev-runtime.js?v=6fdbad00:796
+jsxWithValidation @ react_jsx-dev-runtime.js?v=6fdbad00:874
+(anonymous) @ OddsTable.tsx:648
+OddsTable @ OddsTable.tsx:647
+renderWithHooks @ chunk-WERSD76P.js?v=6fdbad00:11548
+updateFunctionComponent @ chunk-WERSD76P.js?v=6fdbad00:14582
+beginWork @ chunk-WERSD76P.js?v=6fdbad00:15924
+beginWork$1 @ chunk-WERSD76P.js?v=6fdbad00:19753
+performUnitOfWork @ chunk-WERSD76P.js?v=6fdbad00:19198
+workLoopSync @ chunk-WERSD76P.js?v=6fdbad00:19137
+renderRootSync @ chunk-WERSD76P.js?v=6fdbad00:19116
+performConcurrentWorkOnRoot @ chunk-WERSD76P.js?v=6fdbad00:18678
+workLoop @ chunk-WERSD76P.js?v=6fdbad00:197
+flushWork @ chunk-WERSD76P.js?v=6fdbad00:176
+performWorkUntilDeadline @ chunk-WERSD76P.js?v=6fdbad00:384Understand this error
+use-offline-resilient-events.tsx:257 Final events array has 1099 events with Sportybet odds out of 1407 total
+use-offline-resilient-events.tsx:267 Events with Sportybet AND at least one other bookmaker: 1099
+use-offline-resilient-events.tsx:182 [Events Hook] Server events have 1099 events with Sportybet odds
+use-offline-resilient-events.tsx:193 [Events Hook] Cached events have 1099 events with Sportybet odds
+use-offline-resilient-events.tsx:196 [Events Hook] Merging Sportybet odds from cache with server events
+use-offline-resilient-events.tsx:226 [Events Hook] Added/updated Sportybet odds for 1099 events from cache
+use-offline-resilient-events.tsx:235 [Events Hook] After merging: 1099 events with Sportybet odds
+OddsTable.tsx:62 Selected Bookmakers: ['sporty']
+OddsTable.tsx:63 betPawa GH present: false Sportybet present: true
+OddsTable.tsx:64 betPawa KE present: false Betika KE present: false
+OddsTable.tsx:65 Ghana filter active: false
+OddsTable.tsx:66 Kenya filter active: false
+OddsTable.tsx:67 Comparison available: false
+74OddsTable.tsx:648 Warning: Invalid prop `data-replit-metadata` supplied to `React.Fragment`. React.Fragment can only have `key` and `children` props.
+    at OddsTable (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/components/OddsTable.tsx?t=1746218820823:33:37)
+    at main
+    at div
+    at div
+    at div
+    at Layout (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/components/Layout.tsx?t=1746218659386:24:34)
+    at Dashboard (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/pages/dashboard.tsx?t=1746219041094:38:45)
+    at Route (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=6fdbad00:323:16)
+    at Switch (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=6fdbad00:379:17)
+    at Router
+    at BookmakerProvider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/contexts/BookmakerContext.tsx:23:37)
+    at Provider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-VIFX6DEG.js?v=6fdbad00:48:15)
+    at TooltipProvider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=6fdbad00:59:5)
+    at V (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/next-themes.js?v=6fdbad00:44:25)
+    at J (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/next-themes.js?v=6fdbad00:42:18)
+    at QueryClientProvider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=6fdbad00:2805:3)
+    at App
+printWarning @ react_jsx-dev-runtime.js?v=6fdbad00:64
+error @ react_jsx-dev-runtime.js?v=6fdbad00:48
+validateFragmentProps @ react_jsx-dev-runtime.js?v=6fdbad00:796
+jsxWithValidation @ react_jsx-dev-runtime.js?v=6fdbad00:874
+(anonymous) @ OddsTable.tsx:648
+OddsTable @ OddsTable.tsx:647
+renderWithHooks @ chunk-WERSD76P.js?v=6fdbad00:11548
+updateFunctionComponent @ chunk-WERSD76P.js?v=6fdbad00:14582
+beginWork @ chunk-WERSD76P.js?v=6fdbad00:15924
+beginWork$1 @ chunk-WERSD76P.js?v=6fdbad00:19753
+performUnitOfWork @ chunk-WERSD76P.js?v=6fdbad00:19198
+workLoopSync @ chunk-WERSD76P.js?v=6fdbad00:19137
+renderRootSync @ chunk-WERSD76P.js?v=6fdbad00:19116
+performConcurrentWorkOnRoot @ chunk-WERSD76P.js?v=6fdbad00:18678
+workLoop @ chunk-WERSD76P.js?v=6fdbad00:197
+flushWork @ chunk-WERSD76P.js?v=6fdbad00:176
+performWorkUntilDeadline @ chunk-WERSD76P.js?v=6fdbad00:384Understand this error
+use-offline-resilient-events.tsx:257 Final events array has 1099 events with Sportybet odds out of 1407 total
+use-offline-resilient-events.tsx:267 Events with Sportybet AND at least one other bookmaker: 1099
+use-offline-resilient-events.tsx:182 [Events Hook] Server events have 1099 events with Sportybet odds
+use-offline-resilient-events.tsx:193 [Events Hook] Cached events have 1099 events with Sportybet odds
+use-offline-resilient-events.tsx:196 [Events Hook] Merging Sportybet odds from cache with server events
+use-offline-resilient-events.tsx:226 [Events Hook] Added/updated Sportybet odds for 1099 events from cache
+use-offline-resilient-events.tsx:235 [Events Hook] After merging: 1099 events with Sportybet odds
+OddsTable.tsx:62 Selected Bookmakers: ['sporty']
+OddsTable.tsx:63 betPawa GH present: false Sportybet present: true
+OddsTable.tsx:64 betPawa KE present: false Betika KE present: false
+OddsTable.tsx:65 Ghana filter active: false
+OddsTable.tsx:66 Kenya filter active: false
+OddsTable.tsx:67 Comparison available: false
+74OddsTable.tsx:648 Warning: Invalid prop `data-replit-metadata` supplied to `React.Fragment`. React.Fragment can only have `key` and `children` props.
+    at OddsTable (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/components/OddsTable.tsx?t=1746218820823:33:37)
+    at main
+    at div
+    at div
+    at div
+    at Layout (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/components/Layout.tsx?t=1746218659386:24:34)
+    at Dashboard (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/pages/dashboard.tsx?t=1746219041094:38:45)
+    at Route (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=6fdbad00:323:16)
+    at Switch (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=6fdbad00:379:17)
+    at Router
+    at BookmakerProvider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/src/contexts/BookmakerContext.tsx:23:37)
+    at Provider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-VIFX6DEG.js?v=6fdbad00:48:15)
+    at TooltipProvider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=6fdbad00:59:5)
+    at V (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/next-themes.js?v=6fdbad00:44:25)
+    at J (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/next-themes.js?v=6fdbad00:42:18)
+    at QueryClientProvider (https://4b4eae3b-24e6-4eeb-bfcd-cfa78282133e-00-11i8vyyslley1.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=6fdbad00:2805:3)
+    at App
+printWarning @ react_jsx-dev-runtime.js?v=6fdbad00:64
+error @ react_jsx-dev-runtime.js?v=6fdbad00:48
+validateFragmentProps @ react_jsx-dev-runtime.js?v=6fdbad00:796
+jsxWithValidation @ react_jsx-dev-runtime.js?v=6fdbad00:874
+(anonymous) @ OddsTable.tsx:648
+OddsTable @ OddsTable.tsx:647
+renderWithHooks @ chunk-WERSD76P.js?v=6fdbad00:11548
+updateFunctionComponent @ chunk-WERSD76P.js?v=6fdbad00:14582
+beginWork @ chunk-WERSD76P.js?v=6fdbad00:15924
+beginWork$1 @ chunk-WERSD76P.js?v=6fdbad00:19753
+performUnitOfWork @ chunk-WERSD76P.js?v=6fdbad00:19198
+workLoopSync @ chunk-WERSD76P.js?v=6fdbad00:19137
+renderRootSync @ chunk-WERSD76P.js?v=6fdbad00:19116
+performConcurrentWorkOnRoot @ chunk-WERSD76P.js?v=6fdbad00:18678
+workLoop @ chunk-WERSD76P.js?v=6fdbad00:197
+flushWork @ chunk-WERSD76P.js?v=6fdbad00:176
+performWorkUntilDeadline @ chunk-WERSD76P.js?v=6fdbad00:384Understand this error
+use-offline-resilient-events.tsx:257 Final events array has 1099 events with Sportybet odds out of 1407 total
+use-offline-resilient-events.tsx:267 Events with Sportybet AND at least one other bookmaker: 1099
+use-offline-resilient-events.tsx:182 [Events Hook] Server events have 1099 events with Sportybet odds
+use-offline-resilient-events.tsx:193 [Events Hook] Cached events have 1099 events with Sportybet odds
+use-offline-resilient-events.tsx:196 [Events Hook] Merging Sportybet odds from cache with server events
+use-offline-resilient-events.tsx:226 [Events Hook] Added/updated Sportybet odds for 1099 events from cache
+use-offline-resilient-events.tsx:235 [Events Hook] After merging: 1099 events with Sportybet odds
+OddsTable.tsx:62 Selected Bookmakers: ['sporty']
+OddsTable.tsx:63 betPawa GH present: false Sportybet present: true
+OddsTable.tsx:64 betPawa KE present: false Betika KE present: false
+OddsTable.tsx:65 Ghana filter active: false

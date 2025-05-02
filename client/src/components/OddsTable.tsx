@@ -589,7 +589,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
             Top 5 Leagues Filter: 
           </span>
           <span className="text-gray-700 dark:text-gray-300 ml-1">
-            Showing {filteredEvents.length} events from England Premier League, Spain La Liga, Germany Bundesliga, Italy Serie A, and France Ligue 1 (men's only, top divisions)
+            Showing {filteredEvents.length} events from England Premier League, Spain La Liga, Germany Bundesliga, Italy Serie A, and France Ligue 1
           </span>
         </div>
       )}
@@ -645,7 +645,8 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
         
         <TableBody>
           {filteredEvents.map((event, eventIndex) => (
-            <React.Fragment key={eventIndex}>
+            // Using a non-Fragment wrapper to avoid React.Fragment warnings with Replit metadata
+            <tbody key={eventIndex} className="contents">
               {filteredBookmakers.map((bookmaker, bookmakerIndex) => {
                 const isFirstBookmaker = bookmakerIndex === 0;
                 const isLastBookmaker = bookmakerIndex === filteredBookmakers.length - 1;
@@ -928,7 +929,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                   </TableRow>
                 );
               })}
-            </React.Fragment>
+            </tbody>
           ))}
         </TableBody>
       </Table>
