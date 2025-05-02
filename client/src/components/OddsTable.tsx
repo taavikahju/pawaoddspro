@@ -12,6 +12,7 @@ import { cn } from '@/lib/utils';
 import { ArrowDownIcon, ArrowUpIcon, Clock, Globe, Trophy } from 'lucide-react';
 import MarginHistoryPopup from './MarginHistoryPopup';
 import OddsHistoryPopup from './OddsHistoryPopup';
+import CountryFlag from './CountryFlag';
 
 interface OddsTableProps {
   events: any[];
@@ -220,6 +221,285 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
     return { comparison, isBetter, favorite };
   };
   
+  // Get country code for flag display
+  const getCountryCode = (countryName: string): string => {
+    // Standardize country name (remove any special characters and convert to lowercase)
+    const normalizedName = countryName
+      .toLowerCase()
+      .replace(/[^a-z0-9\s]/g, '')
+      .trim();
+    
+    // Special cases for amateur leagues and country variants
+    if (normalizedName.includes('amateur') || normalizedName.endsWith(' am')) {
+      // For amateur leagues, use the base country flag
+      if (normalizedName.includes('austria')) return 'AT';
+      if (normalizedName.includes('czech') || normalizedName.includes('czechia')) return 'CZ';
+      if (normalizedName.includes('england')) return 'GB-ENG';
+      if (normalizedName.includes('germany')) return 'DE';
+      if (normalizedName.includes('spain')) return 'ES';
+      if (normalizedName.includes('sweden')) return 'SE';
+    }
+    
+    // Additional special cases
+    if (normalizedName.includes('turkiye')) return 'TR';
+    if (normalizedName.includes('south korea') || normalizedName.includes('republic of korea')) return 'KR';
+    if (normalizedName.includes('czechia')) return 'CZ';
+    if (normalizedName.includes('faroe')) return 'FO';
+    
+    // Map to standard ISO country codes
+    const countryCodeMap: Record<string, string> = {
+      // African countries
+      'algeria': 'DZ',
+      'angola': 'AO',
+      'benin': 'BJ',
+      'botswana': 'BW',
+      'burkina': 'BF',
+      'burkinafaso': 'BF',
+      'burundi': 'BI',
+      'cameroon': 'CM',
+      'cape verde': 'CV',
+      'capeverde': 'CV',
+      'central african republic': 'CF',
+      'chad': 'TD',
+      'comoros': 'KM',
+      'congo': 'CG',
+      'democratic republic of congo': 'CD',
+      'djibouti': 'DJ',
+      'egypt': 'EG',
+      'equatorial guinea': 'GQ',
+      'eritrea': 'ER',
+      'ethiopia': 'ET',
+      'gabon': 'GA',
+      'gambia': 'GM',
+      'ghana': 'GH',
+      'guinea': 'GN',
+      'guinea bissau': 'GW',
+      'ivory coast': 'CI',
+      'ivorycoast': 'CI',
+      'cote divoire': 'CI',
+      'cotedivoire': 'CI',
+      'kenya': 'KE',
+      'lesotho': 'LS',
+      'liberia': 'LR',
+      'libya': 'LY',
+      'madagascar': 'MG',
+      'malawi': 'MW',
+      'mali': 'ML',
+      'mauritania': 'MR',
+      'mauritius': 'MU',
+      'morocco': 'MA',
+      'mozambique': 'MZ',
+      'namibia': 'NA',
+      'niger': 'NE',
+      'nigeria': 'NG',
+      'rwanda': 'RW',
+      'sao tome and principe': 'ST',
+      'senegal': 'SN',
+      'seychelles': 'SC',
+      'sierra leone': 'SL',
+      'somalia': 'SO',
+      'south africa': 'ZA',
+      'southafrica': 'ZA',
+      'south sudan': 'SS',
+      'sudan': 'SD',
+      'swaziland': 'SZ',
+      'tanzania': 'TZ',
+      'togo': 'TG',
+      'tunisia': 'TN',
+      'uganda': 'UG',
+      'zambia': 'ZM',
+      'zimbabwe': 'ZW',
+      
+      // European countries
+      'albania': 'AL',
+      'andorra': 'AD',
+      'armenia': 'AM',
+      'austria': 'AT',
+      'azerbaijan': 'AZ',
+      'belarus': 'BY',
+      'belgium': 'BE',
+      'bosnia': 'BA',
+      'bosnia and herzegovina': 'BA',
+      'bulgaria': 'BG',
+      'croatia': 'HR',
+      'cyprus': 'CY',
+      'czech republic': 'CZ',
+      'czechrepublic': 'CZ',
+      'denmark': 'DK',
+      'estonia': 'EE',
+      'finland': 'FI',
+      'france': 'FR',
+      'georgia': 'GE',
+      'germany': 'DE',
+      'greece': 'GR',
+      'hungary': 'HU',
+      'iceland': 'IS',
+      'ireland': 'IE',
+      'italy': 'IT',
+      'kazakhstan': 'KZ',
+      'kosovo': 'XK',
+      'latvia': 'LV',
+      'liechtenstein': 'LI',
+      'lithuania': 'LT',
+      'luxembourg': 'LU',
+      'malta': 'MT',
+      'moldova': 'MD',
+      'monaco': 'MC',
+      'montenegro': 'ME',
+      'netherlands': 'NL',
+      'north macedonia': 'MK',
+      'macedonia': 'MK',
+      'norway': 'NO',
+      'poland': 'PL',
+      'portugal': 'PT',
+      'romania': 'RO',
+      'russia': 'RU',
+      'san marino': 'SM',
+      'serbia': 'RS',
+      'slovakia': 'SK',
+      'slovenia': 'SI',
+      'spain': 'ES',
+      'sweden': 'SE',
+      'switzerland': 'CH',
+      'turkey': 'TR',
+      'ukraine': 'UA',
+      'united kingdom': 'GB',
+      'uk': 'GB',
+      'england': 'GB-ENG',
+      'scotland': 'GB-SCT',
+      'wales': 'GB-WLS',
+      'northern ireland': 'GB-NIR',
+      'vatican city': 'VA',
+      
+      // Americas
+      'argentina': 'AR',
+      'bahamas': 'BS',
+      'barbados': 'BB',
+      'belize': 'BZ',
+      'bolivia': 'BO',
+      'brazil': 'BR',
+      'canada': 'CA',
+      'chile': 'CL',
+      'colombia': 'CO',
+      'costa rica': 'CR',
+      'costarica': 'CR',
+      'cuba': 'CU',
+      'dominica': 'DM',
+      'dominican republic': 'DO',
+      'dominicanrepublic': 'DO',
+      'ecuador': 'EC',
+      'el salvador': 'SV',
+      'elsalvador': 'SV',
+      'grenada': 'GD',
+      'guatemala': 'GT',
+      'guyana': 'GY',
+      'haiti': 'HT',
+      'honduras': 'HN',
+      'jamaica': 'JM',
+      'mexico': 'MX',
+      'nicaragua': 'NI',
+      'panama': 'PA',
+      'paraguay': 'PY',
+      'peru': 'PE',
+      'saint kitts and nevis': 'KN',
+      'saint lucia': 'LC',
+      'saint vincent': 'VC',
+      'suriname': 'SR',
+      'trinidad and tobago': 'TT',
+      'united states': 'US',
+      'unitedstates': 'US',
+      'usa': 'US',
+      'uruguay': 'UY',
+      'venezuela': 'VE',
+      
+      // Asian countries
+      'afghanistan': 'AF',
+      'bahrain': 'BH',
+      'bangladesh': 'BD',
+      'bhutan': 'BT',
+      'brunei': 'BN',
+      'cambodia': 'KH',
+      'china': 'CN',
+      'india': 'IN',
+      'indonesia': 'ID',
+      'iran': 'IR',
+      'iraq': 'IQ',
+      'israel': 'IL',
+      'japan': 'JP',
+      'jordan': 'JO',
+      'kuwait': 'KW',
+      'kyrgyzstan': 'KG',
+      'laos': 'LA',
+      'lebanon': 'LB',
+      'malaysia': 'MY',
+      'maldives': 'MV',
+      'mongolia': 'MN',
+      'myanmar': 'MM',
+      'nepal': 'NP',
+      'north korea': 'KP',
+      'northkorea': 'KP',
+      'oman': 'OM',
+      'pakistan': 'PK',
+      'palestine': 'PS',
+      'philippines': 'PH',
+      'qatar': 'QA',
+      'saudi arabia': 'SA',
+      'saudiarabia': 'SA',
+      'singapore': 'SG',
+      'south korea': 'KR',
+      'southkorea': 'KR',
+      'sri lanka': 'LK',
+      'srilanka': 'LK',
+      'syria': 'SY',
+      'taiwan': 'TW',
+      'tajikistan': 'TJ',
+      'thailand': 'TH',
+      'timor leste': 'TL',
+      'timorleste': 'TL',
+      'east timor': 'TL',
+      'easttimor': 'TL',
+      'turkmenistan': 'TM',
+      'united arab emirates': 'AE',
+      'unitedarabemirates': 'AE',
+      'uae': 'AE',
+      'uzbekistan': 'UZ',
+      'vietnam': 'VN',
+      'yemen': 'YE',
+      
+      // Oceania
+      'australia': 'AU',
+      'fiji': 'FJ',
+      'kiribati': 'KI',
+      'marshall islands': 'MH',
+      'marshallislands': 'MH',
+      'micronesia': 'FM',
+      'nauru': 'NR',
+      'new zealand': 'NZ',
+      'newzealand': 'NZ',
+      'palau': 'PW',
+      'papua new guinea': 'PG',
+      'papuanewguinea': 'PG',
+      'samoa': 'WS',
+      'solomon islands': 'SB',
+      'solomonislands': 'SB',
+      'tonga': 'TO',
+      'tuvalu': 'TV',
+      'vanuatu': 'VU'
+    };
+    
+    // Try to find the country code - try multiple variations
+    const code = countryCodeMap[normalizedName] || 
+                countryCodeMap[normalizedName.replace(/\s/g, '')] || // Try without spaces
+                'XX'; // XX for unknown
+    
+    // Log country code mapping issues to help with troubleshooting
+    if (code === 'XX' && countryName && countryName !== 'Unknown') {
+      console.debug(`No country code found for: "${countryName}" (normalized: "${normalizedName}")`);
+    }
+    
+    return code;
+  };
+  
   if (isLoading) {
     return (
       <div className="h-48 flex items-center justify-center">
@@ -311,9 +591,25 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                           className="px-2 py-1 whitespace-nowrap border-r border-gray-200 dark:border-gray-700" 
                           rowSpan={filteredBookmakers.length}
                         >
-                          <span className="text-sm text-gray-600 dark:text-gray-300">
-                            {event.country || event.league?.split(' ')[0] || 'Unknown'}
-                          </span>
+                          <div className="flex items-center gap-1.5">
+                            {(() => {
+                              const countryName = event.country || event.league?.split(' ')[0] || 'Unknown';
+                              // Use the same function as in dashboard to get country code
+                              const countryCode = getCountryCode(countryName);
+                              return (
+                                <>
+                                  <CountryFlag
+                                    countryCode={countryCode}
+                                    countryName={countryName}
+                                    size="sm"
+                                  />
+                                  <span className="text-sm text-gray-600 dark:text-gray-300">
+                                    {countryName}
+                                  </span>
+                                </>
+                              );
+                            })()}
+                          </div>
                         </TableCell>
                         
                         <TableCell 
