@@ -318,27 +318,35 @@ const processTournaments = (tournaments) => {
 // Main function
 const run = async () => {
   try {
+    console.error('Starting Sportybet scraper with enhanced debugging...');
+    
     // Set a reasonable timeout for the entire operation
     const timeoutPromise = new Promise((_, reject) => {
       setTimeout(() => reject(new Error("Global timeout after 120 seconds")), 120000);
     });
     
+    console.error('About to fetch tournaments data...');
+    
     // Fetch and process tournaments
     const tournamentPromise = fetchAllPages();
     
     // Race between fetching data and timeout
+    console.error('Waiting for tournament data with timeout...');
     const tournaments = await Promise.race([tournamentPromise, timeoutPromise])
       .catch(error => {
         console.error(`Operation error: ${error.message}`);
+        console.error(`Error stack: ${error.stack || 'No stack trace available'}`);
         return [];
       });
+    
+    console.error(`Fetched ${tournaments.length} tournaments, processing them now...`);
     
     // Process tournaments into our standardized format
     const events = processTournaments(tournaments);
     
     // Check if we got any events
     if (events.length === 0) {
-      console.error('No valid events found');
+      console.error('No valid events found in any tournament');
       console.log(JSON.stringify([]));
       return;
     }
@@ -347,10 +355,16 @@ const run = async () => {
     const endTime = new Date();
     console.error(`[${endTime.toISOString()}] Sportybet scraper finished - ${events.length} events extracted`);
     
+    // Output sample event for debugging
+    if (events.length > 0) {
+      console.error('Sample event:', JSON.stringify(events[0]).substring(0, 200) + '...');
+    }
+    
     // Output the events as JSON to stdout for the integration system
     console.log(JSON.stringify(events));
   } catch (error) {
     console.error('Fatal error in scraper:', error.message);
+    console.error('Error stack:', error.stack || 'No stack trace available');
     console.log(JSON.stringify([]));
   }
 };
