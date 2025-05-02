@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: 'pawaodds',
-      script: 'dist/server/index.js',
+      script: 'dist/index.js',
       instances: 1,
       autorestart: true,
       watch: false,
@@ -10,14 +10,22 @@ module.exports = {
       env: {
         NODE_ENV: 'production',
       },
-      env_production: {
+    },
+    {
+      name: 'pawaodds-scrapers',
+      script: 'scripts/run-scrapers.ts',
+      instances: 1,
+      exec_mode: 'fork',
+      interpreter: 'tsx',
+      autorestart: true,
+      watch: false,
+      cron_restart: '*/30 * * * *', // Restart every 30 minutes
+      max_memory_restart: '500M',
+      env: {
         NODE_ENV: 'production',
       },
-      log_date_format: 'YYYY-MM-DD HH:mm:ss',
-      error_file: 'logs/error.log',
-      out_file: 'logs/out.log',
-      merge_logs: true,
-      time: true,
-    },
+      out_file: '/var/log/pawaodds/scrapers-out.log',
+      error_file: '/var/log/pawaodds/scrapers-error.log',
+    }
   ],
 };

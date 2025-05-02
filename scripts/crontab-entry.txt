@@ -1,0 +1,5 @@
+# Run scrapers every 30 minutes
+*/30 * * * * /var/www/pawaodds/current/scripts/run-scrapers.sh
+
+# Alternatively, run at specific times (e.g., every hour at minute 0 and 30)
+# 0,30 * * * * /var/www/pawaodds/current/scripts/run-scrapers.sh
