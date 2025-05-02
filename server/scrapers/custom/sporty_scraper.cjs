@@ -45,9 +45,6 @@ const fetchWithRetry = async (url, description, maxAttempts = 3) => {
   return null;
 };
 
-// NOTE: We previously had a special function to fetch England Premier League events directly
-// but that endpoint is now returning 404 errors. Premier League data is available in the regular API now.
-
 // Fetch all pages of tournament data
 const fetchAllPages = async () => {
   let allTournaments = [];
@@ -57,17 +54,9 @@ const fetchAllPages = async () => {
   const MAX_ATTEMPTS = 3;
   const MAX_PAGES = 20; // Safety limit
 
-  // First, fetch England Premier League events specifically
-  const eplTournaments = await fetchEplEvents();
-  
-  // Add EPL tournaments to our collection
-  if (eplTournaments.length > 0) {
-    allTournaments = allTournaments.concat(eplTournaments);
-    console.error(`✅ Added ${eplTournaments.length} EPL tournament(s) to collection`);
-  }
-
-  // Now fetch all other tournaments
-  console.error(`📊 Fetching general tournaments data...`);
+  // Fetch all tournaments data including Premier League
+  // The Premier League tournament ID is "sr:tournament:17" and it's available in the regular endpoint
+  console.error(`📊 Fetching tournaments data (including Premier League)...`);
   
   while (pageNum <= totalPages && pageNum <= MAX_PAGES) {
     const url = `${BASE_URL}?${QUERY}&pageNum=${pageNum}&_t=${Date.now()}`;
