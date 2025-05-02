@@ -554,14 +554,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       );
       
       logger.critical(`BEFORE FILTERING: Found ${sportyEvents.length} events with Sportybet odds out of ${events.length} total events`);
-      
-      // If we have events with Sportybet odds, log some details about a sample event
-      if (sportyEvents.length > 0) {
-        const sampleEvent = sportyEvents[0];
-        logger.critical(`Sample Sportybet event - ID: ${sampleEvent.id}, Teams: ${sampleEvent.teams}`);
-        logger.critical(`Sample event bookmakers: ${Object.keys(sampleEvent.oddsData || {}).join(', ')}`);
-        logger.critical(`Sportybet odds: ${JSON.stringify(sampleEvent.oddsData?.sporty)}`);
-      }
 
       // Special case: if includeSportybet is true, we need to include all Sportybet events
       // regardless of bookmaker count to prevent data loss between scrapes

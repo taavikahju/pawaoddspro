@@ -1,6 +1,8 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { fixSportybetData } from "./utils/sportybetFix";
+import { storage } from "./storage";
 
 // Set admin key for development
 process.env.ADMIN_KEY = 'pawaodds123';
@@ -23,8 +25,6 @@ app.use((req, res, next) => {
   const server = await registerRoutes(app);
 
   // Setup automatic Sportybet data fix
-  import { fixSportybetData } from './utils/sportybetFix';
-  import { storage } from './storage';
   
   // Run a Sportybet fix every 15 minutes to ensure data persistence
   const SPORTYBET_FIX_INTERVAL = 15 * 60 * 1000; // 15 minutes in milliseconds

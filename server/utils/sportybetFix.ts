@@ -13,15 +13,13 @@ export async function fixSportybetData(storage: IStorage): Promise<void> {
       return;
     }
     
-    logger.critical(`Found ${sportyData.length} events in Sportybet data file`);
+    logger.critical(`Raw Sportybet data check: ${sportyData.length} events found in file`);
     
     // Get existing events from the database
     const allEvents = await storage.getEvents();
     const eventsWithSportybet = allEvents.filter(event => 
       event.oddsData && typeof event.oddsData === 'object' && 'sporty' in event.oddsData
     );
-    
-    logger.critical(`Database has ${eventsWithSportybet.length} events with Sportybet odds out of ${allEvents.length} total events`);
     
     // If we already have most of the Sportybet events, no need to run the fix
     if (eventsWithSportybet.length >= sportyData.length * 0.9) {
