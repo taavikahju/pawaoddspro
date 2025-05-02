@@ -531,8 +531,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const sportIdParam = req.query.sportId as string | undefined;
       const minBookmakers = req.query.minBookmakers ? parseInt(req.query.minBookmakers as string, 10) : 2;
-      // Always include Sportybet events regardless of query parameter to ensure consistency
-      const includeSportybet = true; // Force to true to always include Sportybet events
+      // Always include Sportybet events regardless of query parameter to ensure consistency across calls
+      // This prevents data loss by ensuring even events with only Sportybet odds are shown
+      const includeSportybet = true; // Fixed to always include Sportybet events regardless of bookmaker count
       let rawEvents;
 
       if (sportIdParam) {
