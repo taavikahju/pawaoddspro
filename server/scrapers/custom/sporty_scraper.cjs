@@ -49,6 +49,10 @@ const fetchWithRetry = async (url, description, maxAttempts = 3) => {
   return null;
 };
 
+// Add special tracking for future Premier League matches (May 10-11)
+console.error(`🔍 Looking for Premier League fixtures on May 10-11, 2025`);
+console.error(`🔍 Tracking special event IDs for May 10-11 matches:  50850679, 50850810, 50850826, 50850822`);
+
 // Enhanced logging function to track Premier League events
 const logPremierLeagueInfo = (tournaments) => {
   // Find and count all Premier League tournaments
@@ -89,6 +93,23 @@ const fetchAllPages = async () => {
   let attempts = 0;
   const MAX_ATTEMPTS = 3;
   const MAX_PAGES = 20; // Safety limit
+
+  // Define the special URL for future Premier League events (May 10-11)
+  const FUTURE_EPL_URL = 'https://www.sportybet.com/api/gh/factsCenter/pcUpcomingEvents?sportId=sr%3Asport%3A1&tournamentId=sr%3Atournament%3A17&marketId=1%2C18%2C10%2C29%2C11%2C26%2C36%2C14%2C60100&pageSize=100&option=1&pageNum=1';
+  
+  // First try to fetch future Premier League events specifically
+  console.error(`🏴󠁧󠁢󠁥󠁮󠁧󠁿 Attempting to fetch future Premier League matches using dedicated endpoint...`);
+  try {
+    const futurePLData = await fetchWithRetry(FUTURE_EPL_URL, 'future Premier League matches');
+    if (futurePLData && futurePLData.tournaments && futurePLData.tournaments.length > 0) {
+      console.error(`✅ Found ${futurePLData.tournaments[0].events?.length || 0} future Premier League events!`);
+      allTournaments = allTournaments.concat(futurePLData.tournaments);
+    } else {
+      console.error(`❌ No future Premier League data found with dedicated endpoint.`);
+    }
+  } catch (err) {
+    console.error(`❌ Error fetching future Premier League data: ${err.message}`);
+  }
 
   // Fetch all tournaments data
   console.error(`📊 Fetching general tournaments data...`);
@@ -163,9 +184,9 @@ const processTournaments = (tournaments) => {
   let eventCount = 0;
   let skippedCount = 0;
   
-  // Special event ID to track
-  const SPECIAL_EVENT_ID = '50850679';
-  let specialEventFound = false;
+  // Special event IDs to track
+  const SPECIAL_EVENT_IDS = ['50850679', '50850810', '50850826', '50850822']; // Added future match IDs to track
+  let specialEventsFound = {};
   
   // Add specific tracking for England Premier League
   const eplEvents = {
@@ -254,10 +275,11 @@ const processTournaments = (tournaments) => {
           const normalizedId = event.eventId.replace(/\D/g, '');
           const originalId = event.eventId;
           
-          // Check if this is our special tracked event
-          if (normalizedId === SPECIAL_EVENT_ID || originalId.includes(SPECIAL_EVENT_ID)) {
-            specialEventFound = true;
-            console.error(`\n🔍 FOUND SPECIAL EVENT ID ${SPECIAL_EVENT_ID}:`);
+          // Check if this is one of our special tracked events
+          if (SPECIAL_EVENT_IDS.some(id => normalizedId === id || originalId.includes(id))) {
+            const matchedId = SPECIAL_EVENT_IDS.find(id => normalizedId === id || originalId.includes(id));
+            specialEventsFound[matchedId] = true;
+            console.error(`\n🔍 FOUND SPECIAL EVENT ID ${matchedId}:`);
             console.error(`- Teams: ${event.homeTeamName} vs ${event.awayTeamName}`);
             console.error(`- Original ID: ${originalId}`);
             console.error(`- Normalized ID: ${normalizedId}`);
@@ -342,8 +364,10 @@ const processTournaments = (tournaments) => {
   }
   
   // Report on our special event tracking
-  if (!specialEventFound) {
-    console.error(`\n⚠️ SPECIAL EVENT ID ${SPECIAL_EVENT_ID} WAS NOT FOUND in any tournament!`);
+  for (const specialId of SPECIAL_EVENT_IDS) {
+    if (!specialEventsFound[specialId]) {
+      console.error(`\n⚠️ SPECIAL EVENT ID ${specialId} WAS NOT FOUND in any tournament!`);
+    }
   }
   
   console.error(`✅ Successfully processed ${eventCount} events (skipped ${skippedCount})`);
