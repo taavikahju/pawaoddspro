@@ -133,8 +133,8 @@ export async function calculateAndStoreTournamentMargins(storage: IStorage): Pro
     const endTime = new Date();
     console.log(`[${endTime.toISOString()}] Stored average margins for ${totalGroups} bookmaker-tournament combinations`);
     
-    // Run cleanup of old data (we'll keep the last 30 days of data)
-    await cleanupOldTournamentMargins(30);
+    // Run cleanup of old data (we'll keep the last 5 days of data)
+    await cleanupOldTournamentMargins(5);
   } catch (error) {
     console.error('Error calculating tournament margins:', error);
   }
@@ -175,9 +175,9 @@ export async function getTournamentMarginHistory(
 
 /**
  * Clean up old tournament margin history records
- * @param days Number of days to keep (default: 30)
+ * @param days Number of days to keep (default: 5)
  */
-export async function cleanupOldTournamentMargins(days: number = 30): Promise<number> {
+export async function cleanupOldTournamentMargins(days: number = 5): Promise<number> {
   try {
     const cleanupStartTime = new Date();
     console.log(`[${cleanupStartTime.toISOString()}] Starting cleanup of tournament margin records older than ${days} days`);

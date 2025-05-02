@@ -74,9 +74,9 @@ export async function getBookmakerOddsHistory(bookmakerCode: string): Promise<an
 
 /**
  * Delete odds history older than the specified number of days
- * @param days Number of days to keep (default: 7)
+ * @param days Number of days to keep (default: 5)
  */
-export async function cleanupOldOddsHistory(days: number = 7): Promise<number> {
+export async function cleanupOldOddsHistory(days: number = 5): Promise<number> {
   try {
     const cleanupStartTime = new Date();
     console.log(`[${cleanupStartTime.toISOString()}] Starting cleanup of odds history records older than ${days} days`);

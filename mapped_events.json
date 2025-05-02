@@ -1080,19 +1080,19 @@
     ],
     "oddsData": {
       "bp GH": {
-        "home": 2.8,
+        "home": 2.9,
         "draw": 3.8,
-        "away": 2.08
+        "away": 2.03
       },
       "bp KE": {
-        "home": 2.8,
+        "home": 2.9,
         "draw": 3.8,
-        "away": 2.08
+        "away": 2.03
       },
       "sporty": {
-        "home": 2.8,
+        "home": 3,
         "draw": 3.8,
-        "away": 2.1
+        "away": 1.99
       },
       "betika KE": {
         "home": 2.8,
@@ -1101,9 +1101,9 @@
       }
     },
     "bestOdds": {
-      "home": 2.8,
+      "home": 3,
       "draw": 3.8,
-      "away": 2.1
+      "away": 2.07
     }
   },
   {
@@ -1254,9 +1254,9 @@
         "away": 2.25
       },
       "sporty": {
-        "home": 2.6,
+        "home": 2.5,
         "draw": 3.8,
-        "away": 2.3
+        "away": 2.35
       },
       "betika KE": {
         "home": 2.6,
@@ -1267,7 +1267,7 @@
     "bestOdds": {
       "home": 2.6,
       "draw": 3.8,
-      "away": 2.3
+      "away": 2.35
     }
   },
   {
@@ -1818,14 +1818,14 @@
     ],
     "oddsData": {
       "bp GH": {
-        "home": 1.28,
-        "draw": 5.5,
-        "away": 8.5
+        "home": 1.27,
+        "draw": 5.25,
+        "away": 9.25
       },
       "bp KE": {
-        "home": 1.28,
-        "draw": 5.5,
-        "away": 8.5
+        "home": 1.27,
+        "draw": 5.25,
+        "away": 9.25
       },
       "sporty": {
         "home": 1.33,
@@ -1841,7 +1841,7 @@
     "bestOdds": {
       "home": 1.33,
       "draw": 5.6,
-      "away": 8.5
+      "away": 9.25
     }
   },
   {
@@ -3991,14 +3991,14 @@
     ],
     "oddsData": {
       "bp GH": {
-        "home": 1.9,
-        "draw": 3.3,
-        "away": 3.65
+        "home": 1.85,
+        "draw": 3.25,
+        "away": 3.95
       },
       "bp KE": {
-        "home": 1.9,
-        "draw": 3.3,
-        "away": 3.65
+        "home": 1.85,
+        "draw": 3.25,
+        "away": 3.95
       },
       "sporty": {
         "home": 1.85,
@@ -12601,19 +12601,19 @@
     ],
     "oddsData": {
       "bp GH": {
-        "home": 2.06,
+        "home": 2.09,
         "draw": 2.95,
-        "away": 4.2
+        "away": 4.1
       },
       "bp KE": {
-        "home": 2.06,
+        "home": 2.09,
         "draw": 2.95,
-        "away": 4.2
+        "away": 4.1
       },
       "sporty": {
-        "home": 2.11,
-        "draw": 3.05,
-        "away": 4.39
+        "home": 2.16,
+        "draw": 3.02,
+        "away": 4.26
       },
       "betika KE": {
         "home": 2.13,
@@ -12622,9 +12622,9 @@
       }
     },
     "bestOdds": {
-      "home": 2.13,
-      "draw": 3.05,
-      "away": 4.39
+      "home": 2.16,
+      "draw": 3.02,
+      "away": 4.26
     }
   },
   {
@@ -21394,47 +21394,6 @@
     }
   },
   {
-    "eventId": "51094155",
-    "teams": "Huddersfield Town - Leyton Orient London",
-    "country": "England",
-    "tournament": "League One",
-    "date": "2025-05-03",
-    "time": "14:00",
-    "bookmakers": [
-      "bp GH",
-      "bp KE",
-      "sporty",
-      "betika KE"
-    ],
-    "oddsData": {
-      "bp GH": {
-        "home": 3.95,
-        "draw": 3.7,
-        "away": 1.79
-      },
-      "bp KE": {
-        "home": 3.95,
-        "draw": 3.7,
-        "away": 1.79
-      },
-      "sporty": {
-        "home": 4.1,
-        "draw": 3.8,
-        "away": 1.83
-      },
-      "betika KE": {
-        "home": 4,
-        "draw": 3.75,
-        "away": 1.81
-      }
-    },
-    "bestOdds": {
-      "home": 4.1,
-      "draw": 3.8,
-      "away": 1.83
-    }
-  },
-  {
     "eventId": "59477017",
     "teams": "KVC Westerlo - KAA Gent",
     "country": "Belgium",
@@ -21473,6 +21432,47 @@
       "home": 1.79,
       "draw": 4.3,
       "away": 3.35
+    }
+  },
+  {
+    "eventId": "51094155",
+    "teams": "Huddersfield Town - Leyton Orient London",
+    "country": "England",
+    "tournament": "League One",
+    "date": "2025-05-03",
+    "time": "14:00",
+    "bookmakers": [
+      "bp GH",
+      "bp KE",
+      "sporty",
+      "betika KE"
+    ],
+    "oddsData": {
+      "bp GH": {
+        "home": 3.95,
+        "draw": 3.7,
+        "away": 1.79
+      },
+      "bp KE": {
+        "home": 3.95,
+        "draw": 3.7,
+        "away": 1.79
+      },
+      "sporty": {
+        "home": 4.1,
+        "draw": 3.8,
+        "away": 1.83
+      },
+      "betika KE": {
+        "home": 4,
+        "draw": 3.75,
+        "away": 1.81
+      }
+    },
+    "bestOdds": {
+      "home": 4.1,
+      "draw": 3.8,
+      "away": 1.83
     }
   },
   {

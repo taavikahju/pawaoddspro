@@ -686,9 +686,9 @@
       "date": "2025-05-02",
       "time": "18:00",
       "odds": {
-        "home": 2.8,
+        "home": 2.9,
         "draw": 3.8,
-        "away": 2.08
+        "away": 2.03
       },
       "raw": {
         "eventId": "54641175",
@@ -696,9 +696,9 @@
         "tournament": "III Liga, Group 3",
         "event": "Odra Bytom Odrzanski - KS Stilon Gorzow Wlkp",
         "market": "1X2 - FT",
-        "home_odds": "2.8",
+        "home_odds": "2.9",
         "draw_odds": "3.8",
-        "away_odds": "2.08",
+        "away_odds": "2.03",
         "start_time": "2025-05-02 18:00"
       }
     },
@@ -1154,9 +1154,9 @@
       "date": "2025-05-02",
       "time": "18:00",
       "odds": {
-        "home": 1.28,
-        "draw": 5.5,
-        "away": 8.5
+        "home": 1.27,
+        "draw": 5.25,
+        "away": 9.25
       },
       "raw": {
         "eventId": "52034813",
@@ -1164,9 +1164,9 @@
         "tournament": "Saudi Arabia Pro League",
         "event": "Al-Qadisiyah - Al-Kholood Club",
         "market": "1X2 - FT",
-        "home_odds": "1.28",
-        "draw_odds": "5.5",
-        "away_odds": "8.5",
+        "home_odds": "1.27",
+        "draw_odds": "5.25",
+        "away_odds": "9.25",
         "start_time": "2025-05-02 18:00"
       }
     },
@@ -2532,9 +2532,9 @@
       "date": "2025-05-02",
       "time": "23:00",
       "odds": {
-        "home": 1.9,
-        "draw": 3.3,
-        "away": 3.65
+        "home": 1.85,
+        "draw": 3.25,
+        "away": 3.95
       },
       "raw": {
         "eventId": "60262763",
@@ -2542,9 +2542,9 @@
         "tournament": "Segunda Division",
         "event": "Dynamo Puerto FC - Bolivar SC",
         "market": "1X2 - FT",
-        "home_odds": "1.9",
-        "draw_odds": "3.3",
-        "away_odds": "3.65",
+        "home_odds": "1.85",
+        "draw_odds": "3.25",
+        "away_odds": "3.95",
         "start_time": "2025-05-02 23:00"
       }
     },
@@ -7992,9 +7992,9 @@
       "date": "2025-05-03",
       "time": "11:30",
       "odds": {
-        "home": 2.06,
+        "home": 2.09,
         "draw": 2.95,
-        "away": 4.2
+        "away": 4.1
       },
       "raw": {
         "eventId": "51096931",
@@ -8002,9 +8002,9 @@
         "tournament": "Championship",
         "event": "Derby County - Stoke City",
         "market": "1X2 - FT",
-        "home_odds": "2.06",
+        "home_odds": "2.09",
         "draw_odds": "2.95",
-        "away_odds": "4.2",
+        "away_odds": "4.1",
         "start_time": "2025-05-03 11:30"
       }
     },
@@ -13625,32 +13625,6 @@
       }
     },
     {
-      "id": "51094155",
-      "eventId": "51094155",
-      "teams": "Huddersfield Town - Leyton Orient London",
-      "league": "League One",
-      "sport": "football",
-      "country": "England",
-      "date": "2025-05-03",
-      "time": "14:00",
-      "odds": {
-        "home": 3.95,
-        "draw": 3.7,
-        "away": 1.79
-      },
-      "raw": {
-        "eventId": "51094155",
-        "country": "England",
-        "tournament": "League One",
-        "event": "Huddersfield Town - Leyton Orient London",
-        "market": "1X2 - FT",
-        "home_odds": "3.95",
-        "draw_odds": "3.7",
-        "away_odds": "1.79",
-        "start_time": "2025-05-03 14:00"
-      }
-    },
-    {
       "id": "59477017",
       "eventId": "59477017",
       "teams": "KVC Westerlo - KAA Gent",
@@ -13673,6 +13647,32 @@
         "home_odds": "1.77",
         "draw_odds": "4.25",
         "away_odds": "3.3",
+        "start_time": "2025-05-03 14:00"
+      }
+    },
+    {
+      "id": "51094155",
+      "eventId": "51094155",
+      "teams": "Huddersfield Town - Leyton Orient London",
+      "league": "League One",
+      "sport": "football",
+      "country": "England",
+      "date": "2025-05-03",
+      "time": "14:00",
+      "odds": {
+        "home": 3.95,
+        "draw": 3.7,
+        "away": 1.79
+      },
+      "raw": {
+        "eventId": "51094155",
+        "country": "England",
+        "tournament": "League One",
+        "event": "Huddersfield Town - Leyton Orient London",
+        "market": "1X2 - FT",
+        "home_odds": "3.95",
+        "draw_odds": "3.7",
+        "away_odds": "1.79",
         "start_time": "2025-05-03 14:00"
       }
     },
@@ -39896,9 +39896,9 @@
       "date": "2025-05-02",
       "time": "18:00",
       "odds": {
-        "home": 2.8,
+        "home": 2.9,
         "draw": 3.8,
-        "away": 2.08
+        "away": 2.03
       },
       "raw": {
         "eventId": "54641175",
@@ -39906,9 +39906,9 @@
         "tournament": "III Liga, Group 3",
         "event": "Odra Bytom Odrzanski - KS Stilon Gorzow Wlkp",
         "market": "1X2 - FT",
-        "home_odds": "2.8",
+        "home_odds": "2.9",
         "draw_odds": "3.8",
-        "away_odds": "2.08",
+        "away_odds": "2.03",
         "start_time": "2025-05-02 18:00"
       }
     },
@@ -40364,9 +40364,9 @@
       "date": "2025-05-02",
       "time": "18:00",
       "odds": {
-        "home": 1.28,
-        "draw": 5.5,
-        "away": 8.5
+        "home": 1.27,
+        "draw": 5.25,
+        "away": 9.25
       },
       "raw": {
         "eventId": "52034813",
@@ -40374,9 +40374,9 @@
         "tournament": "Saudi Arabia Pro League",
         "event": "Al-Qadisiyah - Al-Kholood Club",
         "market": "1X2 - FT",
-        "home_odds": "1.28",
-        "draw_odds": "5.5",
-        "away_odds": "8.5",
+        "home_odds": "1.27",
+        "draw_odds": "5.25",
+        "away_odds": "9.25",
         "start_time": "2025-05-02 18:00"
       }
     },
@@ -41742,9 +41742,9 @@
       "date": "2025-05-02",
       "time": "23:00",
       "odds": {
-        "home": 1.9,
-        "draw": 3.3,
-        "away": 3.65
+        "home": 1.85,
+        "draw": 3.25,
+        "away": 3.95
       },
       "raw": {
         "eventId": "60262763",
@@ -41752,9 +41752,9 @@
         "tournament": "Segunda Division",
         "event": "Dynamo Puerto FC - Bolivar SC",
         "market": "1X2 - FT",
-        "home_odds": "1.9",
-        "draw_odds": "3.3",
-        "away_odds": "3.65",
+        "home_odds": "1.85",
+        "draw_odds": "3.25",
+        "away_odds": "3.95",
         "start_time": "2025-05-02 23:00"
       }
     },
@@ -47202,9 +47202,9 @@
       "date": "2025-05-03",
       "time": "11:30",
       "odds": {
-        "home": 2.06,
+        "home": 2.09,
         "draw": 2.95,
-        "away": 4.2
+        "away": 4.1
       },
       "raw": {
         "eventId": "51096931",
@@ -47212,9 +47212,9 @@
         "tournament": "Championship",
         "event": "Derby County - Stoke City",
         "market": "1X2 - FT",
-        "home_odds": "2.06",
+        "home_odds": "2.09",
         "draw_odds": "2.95",
-        "away_odds": "4.2",
+        "away_odds": "4.1",
         "start_time": "2025-05-03 11:30"
       }
     },
@@ -79963,9 +79963,9 @@
       "tournament": "Championship",
       "event": "Derby County - Stoke",
       "market": "1X2",
-      "home_odds": "2.11",
-      "draw_odds": "3.05",
-      "away_odds": "4.39",
+      "home_odds": "2.16",
+      "draw_odds": "3.02",
+      "away_odds": "4.26",
       "start_time": "2025-05-03 11:30"
     },
     {
@@ -92947,9 +92947,9 @@
       "tournament": "III Liga, Group 3",
       "event": "Odra Bytom Odrzanski - KS Stilon Gorzow Wlkp",
       "market": "1X2",
-      "home_odds": "2.80",
+      "home_odds": "3.00",
       "draw_odds": "3.80",
-      "away_odds": "2.10",
+      "away_odds": "1.99",
       "start_time": "2025-05-02 18:00"
     },
     {
@@ -95107,9 +95107,9 @@
       "tournament": "1. deild",
       "event": "Thor Akureyri - HK Kopavogur",
       "market": "1X2",
-      "home_odds": "2.60",
+      "home_odds": "2.50",
       "draw_odds": "3.80",
-      "away_odds": "2.30",
+      "away_odds": "2.35",
       "start_time": "2025-05-02 18:00"
     },
     {
