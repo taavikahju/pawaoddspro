@@ -31,7 +31,7 @@ BASE_URL = "https://www.sportybet.com/api/gh/factsCenter/pcUpcomingEvents"
 OUTPUT_FILE = "data/sporty_py.json"  # Separate output file for testing
 TIMEOUT = 15  # Reduce timeout to 15 seconds
 QUERY = "sportId=sr%3Asport%3A1&marketId=1%2C18%2C10%2C29%2C11%2C26%2C36%2C14%2C60100&pageSize=100"
-MAX_PAGES = 5  # Maximum number of pages to fetch
+MAX_PAGES = 20  # Maximum number of pages to fetch (increased to capture more events)
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0",
@@ -351,7 +351,10 @@ def main():
         total_events = 0
         
         # Get total pages to process
-        for page in range(1, MAX_PAGES + 1):
+        page = 1
+        more_pages = True
+        
+        while more_pages and page <= MAX_PAGES:
             if time.time() - start_time > max_runtime:
                 log(f"⚠️ Reached maximum runtime limit of {max_runtime} seconds, stopping after {page-1} pages.")
                 break
@@ -362,26 +365,39 @@ def main():
                 
                 if not page_data or 'data' not in page_data or 'tournaments' not in page_data['data']:
                     log(f"❌ Invalid data format from page {page} - no tournaments found")
+                    # Try one more page before giving up
+                    if page > 1:
+                        more_pages = False
+                    page += 1
                     continue
                 
                 # Process the tournaments
                 tournaments = page_data['data'].get('tournaments', [])
                 log(f"📊 Found {len(tournaments)} tournaments on page {page}")
                 
-                # Add events count for logging
+                # Check if we have events on this page
                 page_events = sum(len(t.get('events', [])) for t in tournaments)
                 total_events += page_events
                 log(f"📊 Found {page_events} events on page {page} (total: {total_events})")
                 
-                # Store tournaments for processing
-                all_tournaments.extend(tournaments)
+                # If page has no events or tournaments, we've likely reached the end
+                if page_events == 0 or len(tournaments) == 0:
+                    log(f"📊 No more events found after page {page}, stopping pagination")
+                    more_pages = False
+                else:
+                    # Store tournaments for processing
+                    all_tournaments.extend(tournaments)
                 
                 # Short pause between requests to be polite to the server
                 time.sleep(0.5)
+                
+                # Move to next page
+                page += 1
             except Exception as e:
                 log(f"❌ Error processing page {page}: {str(e)}")
                 log(traceback.format_exc())
-                continue
+                # Try to continue with next page
+                page += 1
         
         # Process all tournaments with time monitoring
         elapsed_seconds = (time.time() - start_time)
