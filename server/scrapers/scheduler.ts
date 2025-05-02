@@ -141,12 +141,12 @@ export function setupScrapers(storage: IStorage): void {
       
       // Clean up odds history
       const { cleanupOldOddsHistory } = await import('../utils/oddsHistory');
-      const deletedOddsCount = await cleanupOldOddsHistory(30); // Delete data older than 30 days (1 month)
+      const deletedOddsCount = await cleanupOldOddsHistory(5); // Delete data older than 5 days
       logger.info(`Odds history cleanup: removed ${deletedOddsCount} records`);
       
       // Clean up tournament margins
       const { cleanupOldTournamentMargins } = await import('../utils/tournamentMargins');
-      const deletedMarginsCount = await cleanupOldTournamentMargins(30); // Delete data older than 30 days (1 month)
+      const deletedMarginsCount = await cleanupOldTournamentMargins(5); // Delete data older than 5 days
       logger.info(`Tournament margins cleanup: removed ${deletedMarginsCount} records`);
       
       // New: Clean up events older than 5 days
