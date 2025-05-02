@@ -37,8 +37,23 @@ export function useOfflineResilientEvents() {
         if (sportyEvents.length > 0) {
           // No logging for cache updates
           
-          // Store the entire dataset - we'll merge with local cache on disconnection
-          localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
+          // Only store Sportybet data to reduce the size of localStorage cache
+          const sportyEvents = data.filter((event: EventData) => 
+            event.oddsData && 
+            typeof event.oddsData === 'object' && 
+            'sporty' in event.oddsData
+          );
+          
+          // Store IDs and Sportybet odds only - much smaller data footprint
+          const minimalSportyCache = sportyEvents.map((event: EventData) => ({
+            id: event.id,
+            oddsData: {
+              sporty: event.oddsData.sporty
+            }
+          }));
+          
+          // Store the compressed dataset
+          localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(minimalSportyCache));
           setLocalCacheEvents(data);
         }
       } catch (error) {
@@ -61,7 +76,7 @@ export function useOfflineResilientEvents() {
         }
       }
     } catch (error) {
-      console.error('Error loading events from localStorage:', error);
+      // Silent error handling for performance
     }
   }, []);
   
@@ -93,8 +108,24 @@ export function useOfflineResilientEvents() {
         
         // Always maintain the cache with the most Sportybet odds
         if (sportyEventsCount > 0) {
-          // If the server response has Sportybet data, update our cache without logging
-          localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(serverEvents));
+          // If the server response has Sportybet data, update our cache with minimized data
+          // Only store Sportybet data to reduce the size of localStorage cache
+          const filteredSportyEvents = serverEvents.filter(event => 
+            event.oddsData && 
+            typeof event.oddsData === 'object' && 
+            'sporty' in event.oddsData
+          );
+          
+          // Store IDs and Sportybet odds only - much smaller data footprint
+          const minimalSportyCache = filteredSportyEvents.map(event => ({
+            id: event.id,
+            oddsData: {
+              sporty: event.oddsData.sporty
+            }
+          }));
+          
+          // Store the compressed dataset
+          localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(minimalSportyCache));
           setLocalCacheEvents(serverEvents);
         } else if (localCacheEvents.length > 0) {
           // Check cache for Sportybet data
@@ -105,8 +136,8 @@ export function useOfflineResilientEvents() {
           ).length;
           
           if (cachedSportyEventsCount > 0) {
-            // Merge data efficiently
-            const mergedEvents = JSON.parse(JSON.stringify(serverEvents));
+            // Merge data more efficiently - avoid deep cloning
+            const mergedEvents = [...serverEvents]; // Shallow copy is sufficient
             const eventMap = new Map(mergedEvents.map((event: EventData) => [event.id, event]));
             
             // Process cached events and add Sportybet odds to server events
@@ -122,7 +153,8 @@ export function useOfflineResilientEvents() {
                   if (!serverEvent.oddsData) {
                     serverEvent.oddsData = {};
                   }
-                  serverEvent.oddsData.sporty = JSON.parse(JSON.stringify(cachedEvent.oddsData.sporty));
+                  // Use direct reference instead of deep clone - much faster
+                  serverEvent.oddsData.sporty = cachedEvent.oddsData.sporty;
                   addedCount++;
                 }
               }
@@ -130,7 +162,20 @@ export function useOfflineResilientEvents() {
             
             // Only update cache if we actually added odds
             if (addedCount > 0) {
-              localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(mergedEvents));
+              // Only store Sportybet data to minimize cache size
+              const filteredForStorage = mergedEvents.map(event => {
+                if (event.oddsData && 'sporty' in event.oddsData) {
+                  return {
+                    id: event.id,
+                    oddsData: {
+                      sporty: event.oddsData.sporty
+                    }
+                  };
+                }
+                return null;
+              }).filter(Boolean);
+              
+              localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(filteredForStorage));
               setLocalCacheEvents(mergedEvents);
             }
           }
@@ -160,8 +205,7 @@ export function useOfflineResilientEvents() {
         }
       }
     } catch (error) {
-      // Only log critical errors
-      console.error('Error loading events cache:', error);
+      // Silent error handling - no logging for better performance
     }
   }, []);
 
@@ -222,8 +266,23 @@ export function useOfflineResilientEvents() {
     // First ensure we have cache
     if (Array.isArray(serverEvents) && serverEvents.length > 0) {
       try {
-        // Store these events in localStorage
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(serverEvents));
+        // Store only Sportybet data to minimize memory usage
+        const filteredSportyEvents = serverEvents.filter(event => 
+          event.oddsData && 
+          typeof event.oddsData === 'object' && 
+          'sporty' in event.oddsData
+        );
+        
+        // Store only essential data
+        const minimalSportyCache = filteredSportyEvents.map(event => ({
+          id: event.id,
+          oddsData: {
+            sporty: event.oddsData.sporty
+          }
+        }));
+        
+        // Store minimal data in localStorage
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(minimalSportyCache));
         setLocalCacheEvents(serverEvents);
         
         // Now create a modified copy without Sportybet data to simulate disconnection
