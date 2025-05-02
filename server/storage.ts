@@ -567,30 +567,40 @@ export class DatabaseStorage implements IStorage {
 
   // Event methods
   async getEvents(): Promise<Event[]> {
-    return db.select().from(events);
+    const eventsData = await db.select().from(events);
+    // CRITICAL: Create a deep copy to prevent reference modifications
+    // This ensures all consumers get their own isolated copy
+    return JSON.parse(JSON.stringify(eventsData));
   }
 
   async getEventsByIds(ids: number[]): Promise<Event[]> {
-    return db.select().from(events).where(sql`${events.id} = ANY(${ids})`);
+    const eventsData = await db.select().from(events).where(sql`${events.id} = ANY(${ids})`);
+    // CRITICAL: Create a deep copy to prevent reference modifications
+    return JSON.parse(JSON.stringify(eventsData));
   }
 
   async getEventsBySportId(sportId: number): Promise<Event[]> {
-    return db.select().from(events).where(eq(events.sportId, sportId));
+    const eventsData = await db.select().from(events).where(eq(events.sportId, sportId));
+    // CRITICAL: Create a deep copy to prevent reference modifications
+    return JSON.parse(JSON.stringify(eventsData));
   }
 
   async getEvent(id: number): Promise<Event | undefined> {
     const [event] = await db.select().from(events).where(eq(events.id, id));
-    return event;
+    // CRITICAL: Create a deep copy to prevent reference modifications (if event exists)
+    return event ? JSON.parse(JSON.stringify(event)) : undefined;
   }
 
   async getEventByExternalId(externalId: string): Promise<Event | undefined> {
     const [event] = await db.select().from(events).where(eq(events.externalId, externalId));
-    return event;
+    // CRITICAL: Create a deep copy to prevent reference modifications (if event exists)
+    return event ? JSON.parse(JSON.stringify(event)) : undefined;
   }
   
   async getEventByEventId(eventId: string): Promise<Event | undefined> {
     const [event] = await db.select().from(events).where(eq(events.eventId, eventId));
-    return event;
+    // CRITICAL: Create a deep copy to prevent reference modifications (if event exists)
+    return event ? JSON.parse(JSON.stringify(event)) : undefined;
   }
 
   async createEvent(insertEvent: InsertEvent): Promise<Event> {
@@ -598,7 +608,8 @@ export class DatabaseStorage implements IStorage {
       ...insertEvent,
       lastUpdated: new Date()
     }).returning();
-    return event;
+    // CRITICAL: Create a deep copy to prevent reference modifications
+    return JSON.parse(JSON.stringify(event));
   }
 
   async updateEvent(id: number, data: Partial<Event>): Promise<Event | undefined> {
@@ -607,7 +618,8 @@ export class DatabaseStorage implements IStorage {
       .set({ ...data, lastUpdated: new Date() })
       .where(eq(events.id, id))
       .returning();
-    return updatedEvent;
+    // CRITICAL: Create a deep copy to prevent reference modifications (if event exists)
+    return updatedEvent ? JSON.parse(JSON.stringify(updatedEvent)) : undefined;
   }
 
   // Storage methods for scraped data
