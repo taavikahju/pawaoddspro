@@ -1,7 +1,9 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
-import { fixSportybetData } from "./utils/sportybetFix";
+// Python Sportybet scraper is now the primary implementation
+// Legacy fix no longer needed for normal operation, but kept in code as a safety net
+// import { fixSportybetData } from "./utils/sportybetFix";
 import { storage } from "./storage";
 import * as fs from 'fs';
 import * as path from 'path';
