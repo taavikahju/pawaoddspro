@@ -14,7 +14,7 @@ export function useWebSocket() {
     refetch: refetchStats
   } = useQuery<any>({ 
     queryKey: ['/api/stats'],
-    refetchInterval: 15000, // Refresh every 15 seconds
+    refetchInterval: 60000, // Reduced: Refresh every 60 seconds
   });
   
   // Fetch scraper statuses using React Query
@@ -23,7 +23,7 @@ export function useWebSocket() {
     refetch: refetchScraperStatuses 
   } = useQuery<any[]>({ 
     queryKey: ['/api/scrapers/status'],
-    refetchInterval: 30000, // Refresh every 30 seconds
+    refetchInterval: 120000, // Reduced: Refresh every 120 seconds
   });
   
   // Fetch events using React Query
@@ -32,12 +32,12 @@ export function useWebSocket() {
     refetch: refetchEvents 
   } = useQuery<any[]>({ 
     queryKey: ['/api/events'],
-    refetchInterval: 15000, // Refresh every 15 seconds
+    refetchInterval: 60000, // Reduced: Refresh every 60 seconds
   });
   
   // Simulated send message function - for backward compatibility
   const sendMessage = useCallback((type: string, data?: any) => {
-    console.log(`[WebSocket Migration] Sending message ${type}`, data);
+    // No logging for performance
     
     // Mapping WebSocket message types to API calls
     switch (type) {
@@ -52,7 +52,7 @@ export function useWebSocket() {
         fetch('/api/scrapers/run', { method: 'POST' })
           .then(res => res.json())
           .then(data => {
-            console.log('Scrapers triggered', data);
+            // No logging for performance
             // Add a notification
             setNotifications(prev => [...prev, {
               type: 'info',
@@ -61,11 +61,11 @@ export function useWebSocket() {
             }]);
           })
           .catch(err => {
-            console.error('Error triggering scrapers', err);
+            // Silent error handling
           });
         break;
       default:
-        console.warn(`[WebSocket Migration] Unhandled message type: ${type}`);
+        // Silent handling of unrecognized message types
     }
   }, [refetchEvents, refetchStats]);
   

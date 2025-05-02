@@ -42,7 +42,7 @@ export function useOfflineResilientEvents() {
           setLocalCacheEvents(data);
         }
       } catch (error) {
-        console.error('Error saving events to localStorage:', error);
+        // Silent error handling for performance
       }
     }
   }, []);
