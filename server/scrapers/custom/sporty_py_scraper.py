@@ -16,6 +16,16 @@ import requests
 from datetime import datetime
 import traceback
 
+# Make sure stdout is line buffered for integration with Node.js
+# Different Python versions have different ways to handle this
+try:
+    # Python 3.7+ way
+    sys.stdout.reconfigure(line_buffering=True)
+except AttributeError:
+    # Handle older Python versions that don't have reconfigure
+    # Just use flush=True with print statements instead
+    pass
+
 # Configuration
 BASE_URL = "https://www.sportybet.com/api/gh/factsCenter/pcUpcomingEvents"
 OUTPUT_FILE = "data/sporty_py.json"  # Separate output file for testing
@@ -31,7 +41,8 @@ HEADERS = {
 def log(message):
     """Log messages with timestamp"""
     timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%fZ')
-    print(f"[{timestamp}] {message}")
+    # Write logs to stderr instead of stdout to keep stdout clean for JSON output
+    print(f"[{timestamp}] {message}", file=sys.stderr, flush=True)
 
 def fetch_page(page=1):
     """Fetch a single page from Sportybet API"""
@@ -434,30 +445,38 @@ def main():
             log(f"Saved {len(all_events)} events to standard file {standard_output}")
             
             # 5. Print to stdout for the integration system to capture
-            # Important: Make sure to use proper JSON formatting
+            # Important: We route all log messages to stderr
+            # This allows us to output clean JSON to stdout without any interleaved log messages
+            
+            # Prepare the JSON output in memory first to catch any serialization errors
             try:
-                print(json.dumps(all_events))
-                sys.stdout.flush()  # Make sure output is flushed
+                output_json = json.dumps(all_events)
+                
+                # Important: Print ONLY the JSON output to stdout for the Node.js integration to capture
+                # All logs should be written to stderr, keeping stdout clean for JSON output
+                print(output_json)  # This goes to stdout
+                sys.stdout.flush()  # Force flush to ensure Node.js receives the data
             except Exception as e:
                 log(f"Error serializing to stdout: {str(e)}")
-                print("[]")  # Output empty array on error
+                # Return empty JSON array to stdout on error
+                print("[]")  # This goes to stdout
                 sys.stdout.flush()
                 
             # Only log after we've printed the JSON
             log(f"✅ Sportybet scraper (Python) completed with {len(all_events)} total events")
         else:
             log("⚠️ No events collected, file not saved")
-            # Return empty array on error
-            print("[]")
-            sys.stdout.flush()
+            # Return empty array to stdout
+            print("[]")  # This goes to stdout
+            sys.stdout.flush()  # Force flush
         
         return 0
     except Exception as e:
         log(f"❌ Error in main function: {str(e)}")
         log(traceback.format_exc())
-        # Return empty array on error
-        print("[]")
-        sys.stdout.flush()
+        # Return empty array to stdout on error
+        print("[]")  # This goes to stdout
+        sys.stdout.flush()  # Force flush
         
         return 1
 
@@ -467,7 +486,7 @@ if __name__ == "__main__":
     except Exception as e:
         log(f"Critical error in main process: {str(e)}")
         log(traceback.format_exc())
-        # Return empty array on error
-        print("[]")
-        sys.stdout.flush()
+        # Return empty array to stdout on error
+        print("[]")  # This goes to stdout
+        sys.stdout.flush()  # Force flush
         sys.exit(1)
