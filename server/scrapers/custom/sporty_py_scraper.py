@@ -219,6 +219,11 @@ def process_tournaments(tournaments):
             country = "Unknown"
             tournament_name = tournament.get('name', 'Unknown Tournament')
             
+            # Skip Simulated Reality League explicitly
+            if "Simulated Reality League" in tournament_name:
+                log(f"Skipping 'Simulated Reality League' tournament: {tournament_name}")
+                continue
+                
             # Check if this is EPL
             if 'events' in tournament and len(tournament['events']) > 0:
                 first_event = tournament['events'][0]
