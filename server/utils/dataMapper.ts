@@ -792,18 +792,18 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
         logger.critical(`[${endTime.toISOString()}] Event mapping finished - ${currentEventIds.size} events mapped, ${deletedCount} events removed, final count: ${allEvents.length - deletedCount}`);
         logger.critical(`[${endTime.toISOString()}] Events per bookmaker: ${bookmakerSummary}`);
     }
+
+    // Calculate and store tournament margins
+    try {
+      const { calculateAndStoreTournamentMargins } = await import('./tournamentMargins');
+      await calculateAndStoreTournamentMargins(storage);
+    } catch (marginError) {
+      logger.critical('Error calculating tournament margins:', marginError);
+      // Don't throw this error, as it shouldn't stop the main process
+    }
   } catch (error) {
     logger.critical('Error processing and mapping events:', error);
     throw error;
-  }
-
-  // Calculate and store tournament margins
-  try {
-    const { calculateAndStoreTournamentMargins } = await import('./tournamentMargins');
-    await calculateAndStoreTournamentMargins(storage);
-  } catch (marginError) {
-    logger.critical('Error calculating tournament margins:', marginError);
-    // Don't throw this error, as it shouldn't stop the main process
   }
 }
 
