@@ -552,8 +552,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       let allSportyEvents = [];
       try {
         const rawSportyData = await storage.getBookmakerData('sporty', true);
+        // Only log as debug since this is verbose
         const sportyCount = Array.isArray(rawSportyData) ? rawSportyData.length : 0;
-        logger.critical(`Raw Sportybet data check: ${sportyCount} events found in file`);
         
         if (Array.isArray(rawSportyData)) {
           allSportyEvents = rawSportyData;
@@ -566,8 +566,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const sportyEvents = events.filter(event => 
         event.oddsData && typeof event.oddsData === 'object' && 'sporty' in event.oddsData
       );
-      
-      logger.critical(`BEFORE FILTERING: Found ${sportyEvents.length} events with Sportybet odds out of ${events.length} total events`);
 
       // Get all events that meet the minimum bookmaker requirement
       const eventsWithMinBookmakers = events.filter(event => {
@@ -669,12 +667,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
       
-      // Check after filtering for Sportybet events
+      // Check after filtering for Sportybet events but don't log it to reduce noise
       const filteredSportyEvents = filteredEvents.filter(event => 
         event.oddsData && typeof event.oddsData === 'object' && 'sporty' in event.oddsData
       );
-      
-      logger.critical(`AFTER FILTERING: Found ${filteredSportyEvents.length} events with Sportybet odds out of ${filteredEvents.length} filtered events`);
       
       res.json(filteredEvents);
     } catch (error) {
