@@ -1,0 +1,216 @@
+Python Sportybet scraper warnings: [2025-05-02T17:59:35.709408Z] [INFO] Starting Sportybet data collection (Python scraper)
+[2025-05-02T17:59:35.709455Z] [INFO] 📚 Will attempt to fetch up to 20 pages of data
+[2025-05-02T17:59:40.747745Z] [INFO] 📊 Found 8 tournaments on page 1
+[2025-05-02T17:59:40.747822Z] [INFO] 📊 Found 100 events on page 1 (total: 100)
+[2025-05-02T17:59:45.769575Z] [INFO] 📊 Found 18 tournaments on page 2
+[2025-05-02T17:59:45.769638Z] [INFO] 📊 Found 100 events on page 2 (total: 200)
+[2025-05-02T17:59:50.262199Z] [INFO] 📊 Found 15 tournaments on page 3
+[2025-05-02T17:59:50.262252Z] [INFO] 📊 Found 100 events on page 3 (total: 300)
+[2025-05-02T17:59:54.620122Z] [INFO] 📊 Found 9 tournaments on page 4
+[2025-05-02T17:59:54.620213Z] [INFO] 📊 Found 100 events on page 4 (total: 400)
+[2025-05-02T17:59:58.861174Z] [INFO] 📊 Found 16 tournaments on page 5
+[2025-05-02T17:59:58.861249Z] [INFO] 📊 Found 100 events on page 5 (total: 500)
+[2025-05-02T18:00:03.460820Z] [INFO] 📊 Found 17 tournaments on page 6
+[2025-05-02T18:00:03.460904Z] [INFO] 📊 Found 100 events on page 6 (total: 600)
+[2025-05-02T18:00:08.007203Z] [INFO] 📊 Found 20 tournaments on page 7
+[2025-05-02T18:00:08.007325Z] [INFO] 📊 Found 100 events on page 7 (total: 700)
+[2025-05-02T18:00:12.288082Z] [INFO] 📊 Found 19 tournaments on page 8
+[2025-05-02T18:00:12.288153Z] [INFO] 📊 Found 100 events on page 8 (total: 800)
+[2025-05-02T18:00:16.217924Z] [INFO] 📊 Found 11 tournaments on page 9
+[2025-05-02T18:00:16.218013Z] [INFO] 📊 Found 100 events on page 9 (total: 900)
+[2025-05-02T18:00:20.547582Z] [INFO] 📊 Found 19 tournaments on page 10
+[2025-05-02T18:00:20.547644Z] [INFO] 📊 Found 100 events on page 10 (total: 1000)
+[2025-05-02T18:00:25.055221Z] [INFO] 📊 Found 26 tournaments on page 11
+[2025-05-02T18:00:25.055294Z] [INFO] 📊 Found 100 events on page 11 (total: 1100)
+[2025-05-02T18:00:29.308705Z] [INFO] 📊 Found 24 tournaments on page 12
+[2025-05-02T18:00:29.308768Z] [INFO] 📊 Found 100 events on page 12 (total: 1200)
+[2025-05-02T18:00:33.224908Z] [INFO] 📊 Found 22 tournaments on page 13
+[2025-05-02T18:00:33.224978Z] [INFO] 📊 Found 100 events on page 13 (total: 1300)
+[2025-05-02T18:00:36.902773Z] [INFO] 📊 Found 21 tournaments on page 14
+[2025-05-02T18:00:36.902836Z] [INFO] 📊 Found 100 events on page 14 (total: 1400)
+[2025-05-02T18:00:40.797466Z] [INFO] 📊 Found 28 tournaments on page 15
+[2025-05-02T18:00:40.797528Z] [INFO] 📊 Found 100 events on page 15 (total: 1500)
+[2025-05-02T18:00:43.951360Z] [INFO] 📊 Found 33 tournaments on page 16
+[2025-05-02T18:00:43.951424Z] [INFO] 📊 Found 100 events on page 16 (total: 1600)
+[2025-05-02T18:00:47.125364Z] [INFO] 📊 Found 36 tournaments on page 17
+[2025-05-02T18:00:47.125427Z] [INFO] 📊 Found 100 events on page 17 (total: 1700)
+[2025-05-02T18:00:48.899408Z] [INFO] 📊 Found 12 tournaments on page 18
+[2025-05-02T18:00:48.899470Z] [INFO] 📊 Found 28 events on page 18 (total: 1728)
+[2025-05-02T18:00:49.969583Z] [INFO] ❌ Invalid data format from page 19 - no tournaments found
+[2025-05-02T18:00:49.969650Z] [INFO] Processing tournaments after 74.3s/120s...
+[2025-05-02T18:00:49.969674Z] [INFO] Processing 354 tournaments...
+[2025-05-02T18:00:49.969699Z] [INFO] 🏴󠁧󠁢󠁥󠁮󠁧󠁿 Found England Premier League tournament: Premier League
+[2025-05-02T18:00:49.970081Z] [INFO] 
+🔍 FOUND SPECIAL EVENT ID 50850679:
+[2025-05-02T18:00:49.970109Z] [INFO] - Teams: Ipswich Town vs Brentford FC
+[2025-05-02T18:00:49.970127Z] [INFO] - Original ID: sr:match:50850679
+[2025-05-02T18:00:49.970144Z] [INFO] - Normalized ID: 50850679
+[2025-05-02T18:00:49.970161Z] [INFO] - Country: England
+[2025-05-02T18:00:49.970178Z] [INFO] - Tournament: Premier League
+[2025-05-02T18:00:49.970195Z] [INFO] - Odds: Home=4.30, Draw=4.09, Away=1.74
+[2025-05-02T18:00:49.970210Z] [INFO] - Start Time: 2025-05-10 14:00
+[2025-05-02T18:00:49.970230Z] [INFO] - Is EPL: True
+[2025-05-02T18:00:49.970248Z] [INFO] 
+[2025-05-02T18:00:49.989932Z] [INFO] 
+🏴󠁧󠁢󠁥󠁮󠁧󠁿 ENGLAND PREMIER LEAGUE SUMMARY:
+[2025-05-02T18:00:49.989960Z] [INFO] - Found 20 total EPL events
+[2025-05-02T18:00:49.989978Z] [INFO] - 20 events have valid odds
+[2025-05-02T18:00:49.989998Z] [INFO] - Dates covered: 2025-05-02, 2025-05-03, 2025-05-04, 2025-05-05, 2025-05-10, 2025-05-11
+[2025-05-02T18:00:49.990020Z] [INFO] 
+  2025-05-02:
+[2025-05-02T18:00:49.990049Z] [INFO]   - Man City - Wolves (ID: 50850671) Odds: 1.39/5.59/8.28
+[2025-05-02T18:00:49.990068Z] [INFO] 
+  2025-05-03:
+[2025-05-02T18:00:49.990087Z] [INFO]   - Aston Villa - Fulham (ID: 50850657) Odds: 1.82/4.03/4.47
+[2025-05-02T18:00:49.990106Z] [INFO]   - Everton - Ipswich Town (ID: 50850667) Odds: 1.52/4.57/7.07
+[2025-05-02T18:00:49.990124Z] [INFO]   - Leicester - Southampton (ID: 50850669) Odds: 2.40/3.72/2.99
+[2025-05-02T18:00:49.990143Z] [INFO]   - Arsenal - Bournemouth (ID: 50850655) Odds: 2.16/3.69/3.48
+[2025-05-02T18:00:49.990160Z] [INFO] 
+  2025-05-04:
+[2025-05-02T18:00:49.990180Z] [INFO]   - Brentford FC - Man Utd (ID: 50850659) Odds: 1.73/4.25/4.84
+[2025-05-02T18:00:49.990197Z] [INFO]   - Brighton - Newcastle (ID: 50850661) Odds: 2.89/3.91/2.39
+[2025-05-02T18:00:49.990215Z] [INFO]   - West Ham - Tottenham (ID: 50850673) Odds: 2.15/3.87/3.38
+[2025-05-02T18:00:49.990234Z] [INFO]   - Chelsea - Liverpool (ID: 50850663) Odds: 2.21/3.86/3.24
+[2025-05-02T18:00:49.990251Z] [INFO] 
+  2025-05-05:
+[2025-05-02T18:00:49.990270Z] [INFO]   - Crystal Palace - Nottingham Forest (ID: 50850665) Odds: 2.32/3.43/3.16
+[2025-05-02T18:00:49.990287Z] [INFO] 
+  2025-05-10:
+[2025-05-02T18:00:49.990307Z] [INFO]   - Fulham - Everton (ID: 50850677) Odds: 1.89/3.54/4.20
+[2025-05-02T18:00:49.990324Z] [INFO]   - Ipswich Town - Brentford FC (ID: 50850679) Odds: 4.30/4.09/1.74
+[2025-05-02T18:00:49.990341Z] [INFO]   - Southampton - Man City (ID: 50850689) Odds: 10.24/6.41/1.26
+[2025-05-02T18:00:49.990359Z] [INFO]   - Wolves - Brighton (ID: 50850693) Odds: 2.63/3.55/2.58
+[2025-05-02T18:00:49.990377Z] [INFO]   - Bournemouth - Aston Villa (ID: 50850675) Odds: 2.52/3.61/2.66
+[2025-05-02T18:00:49.990395Z] [INFO] 
+  2025-05-11:
+[2025-05-02T18:00:49.990414Z] [INFO]   - Newcastle - Chelsea (ID: 50850685) Odds: 2.02/3.91/3.36
+[2025-05-02T18:00:49.990432Z] [INFO]   - Man Utd - West Ham (ID: 50850683) Odds: 1.89/3.77/3.92
+[2025-05-02T18:00:49.990450Z] [INFO]   - Nottingham Forest - Leicester (ID: 50850687) Odds: 1.33/5.41/9.03
+[2025-05-02T18:00:49.990467Z] [INFO]   - Tottenham - Crystal Palace (ID: 50850691) Odds: 2.40/3.67/2.76
+[2025-05-02T18:00:49.990484Z] [INFO]   - Liverpool - Arsenal (ID: 50850681) Odds: 2.13/3.46/3.43
+[2025-05-02T18:00:49.990502Z] [INFO] 
+⚠️ SPECIAL EVENT ID 50850810 WAS NOT FOUND in any tournament!
+[2025-05-02T18:00:49.990523Z] [INFO] 
+⚠️ SPECIAL EVENT ID 50850826 WAS NOT FOUND in any tournament!
+[2025-05-02T18:00:49.990544Z] [INFO] 
+⚠️ SPECIAL EVENT ID 50850822 WAS NOT FOUND in any tournament!
+[2025-05-02T18:00:49.990564Z] [INFO] ✅ Successfully processed 1727 events (skipped 1)
+[2025-05-02T18:00:49.990589Z] [INFO] Total: collected 1727 events
+[2025-05-02T18:00:50.016599Z] [INFO] Saved 1727 events to test file data/sporty_py.json
+[2025-05-02T18:00:50.016652Z] [INFO] 
+=============== EVENT SUMMARY ===============
+[2025-05-02T18:00:50.016669Z] [INFO] Total events: 1727
+[2025-05-02T18:00:50.016681Z] [INFO] Events by country:
+[2025-05-02T18:00:50.016731Z] [INFO]   - Brazil: 91 events
+[2025-05-02T18:00:50.016744Z] [INFO]   - Spain: 90 events
+[2025-05-02T18:00:50.016754Z] [INFO]   - Australia: 81 events
+[2025-05-02T18:00:50.016764Z] [INFO]   - England: 69 events
+[2025-05-02T18:00:50.016774Z] [INFO]   - Italy: 67 events
+[2025-05-02T18:00:50.016784Z] [INFO]   - USA: 60 events
+[2025-05-02T18:00:50.016794Z] [INFO]   - Sweden: 56 events
+[2025-05-02T18:00:50.016804Z] [INFO]   - Argentina: 56 events
+[2025-05-02T18:00:50.016814Z] [INFO]   - International Clubs: 53 events
+[2025-05-02T18:00:50.016824Z] [INFO]   - Japan: 47 events
+[2025-05-02T18:00:50.016834Z] [INFO]   - France: 43 events
+[2025-05-02T18:00:50.016844Z] [INFO]   - Germany: 35 events
+[2025-05-02T18:00:50.016853Z] [INFO]   - Czechia: 35 events
+[2025-05-02T18:00:50.016863Z] [INFO]   - Poland: 34 events
+[2025-05-02T18:00:50.016894Z] [INFO]   - Finland: 32 events
+[2025-05-02T18:00:50.016905Z] [INFO]   - Netherlands: 31 events
+[2025-05-02T18:00:50.016916Z] [INFO]   - Simulated Reality League: 30 events
+[2025-05-02T18:00:50.016926Z] [INFO]   - Norway: 28 events
+[2025-05-02T18:00:50.016936Z] [INFO]   - Portugal: 27 events
+[2025-05-02T18:00:50.016946Z] [INFO]   - Russia: 27 events
+[2025-05-02T18:00:50.016956Z] [INFO]   - Chile: 27 events
+[2025-05-02T18:00:50.016965Z] [INFO]   - Germany Amateur: 27 events
+[2025-05-02T18:00:50.016975Z] [INFO]   - Denmark: 25 events
+[2025-05-02T18:00:50.016985Z] [INFO]   - Ukraine: 21 events
+[2025-05-02T18:00:50.016996Z] [INFO]   - Scotland: 21 events
+[2025-05-02T18:00:50.017006Z] [INFO]   - Romania: 20 events
+[2025-05-02T18:00:50.017016Z] [INFO]   - Ireland: 19 events
+[2025-05-02T18:00:50.017032Z] [INFO]   - Iceland: 19 events
+[2025-05-02T18:00:50.017043Z] [INFO]   - Turkiye: 18 events
+[2025-05-02T18:00:50.017053Z] [INFO]   - Republic of Korea: 18 events
+[2025-05-02T18:00:50.017063Z] [INFO]   - Hungary: 18 events
+[2025-05-02T18:00:50.017074Z] [INFO]   - China: 17 events
+[2025-05-02T18:00:50.017083Z] [INFO]   - Bulgaria: 17 events
+[2025-05-02T18:00:50.017092Z] [INFO]   - Turkiye Amateur: 17 events
+[2025-05-02T18:00:50.017102Z] [INFO]   - Switzerland: 16 events
+[2025-05-02T18:00:50.017112Z] [INFO]   - Colombia: 15 events
+[2025-05-02T18:00:50.017121Z] [INFO]   - Slovakia: 15 events
+[2025-05-02T18:00:50.017132Z] [INFO]   - Belgium: 14 events
+[2025-05-02T18:00:50.017142Z] [INFO]   - Greece: 14 events
+[2025-05-02T18:00:50.017152Z] [INFO]   - England Amateur: 14 events
+[2025-05-02T18:00:50.017161Z] [INFO]   - Paraguay: 13 events
+[2025-05-02T18:00:50.017171Z] [INFO]   - New Zealand: 13 events
+[2025-05-02T18:00:50.017181Z] [INFO]   - Venezuela: 12 events
+[2025-05-02T18:00:50.017190Z] [INFO]   - Ecuador: 12 events
+[2025-05-02T18:00:50.017200Z] [INFO]   - Croatia: 11 events
+[2025-05-02T18:00:50.017209Z] [INFO]   - Egypt: 11 events
+[2025-05-02T18:00:50.017219Z] [INFO]   - Peru: 11 events
+[2025-05-02T18:00:50.017229Z] [INFO]   - Estonia: 11 events
+[2025-05-02T18:00:50.017239Z] [INFO]   - Panama: 11 events
+[2025-05-02T18:00:50.017250Z] [INFO]   - South Africa: 11 events
+[2025-05-02T18:00:50.017260Z] [INFO]   - Mexico: 10 events
+[2025-05-02T18:00:50.017270Z] [INFO]   - Austria: 10 events
+[2025-05-02T18:00:50.017281Z] [INFO]   - Israel: 10 events
+[2025-05-02T18:00:50.017291Z] [INFO]   - Lithuania: 10 events
+[2025-05-02T18:00:50.017301Z] [INFO]   - Austria Amateur: 10 events
+[2025-05-02T18:00:50.017311Z] [INFO]   - Uruguay: 9 events
+[2025-05-02T18:00:50.017321Z] [INFO]   - Cyprus: 9 events
+[2025-05-02T18:00:50.017331Z] [INFO]   - Slovenia: 9 events
+[2025-05-02T18:00:50.017341Z] [INFO]   - Serbia: 8 events
+[2025-05-02T18:00:50.017350Z] [INFO]   - El Salvador: 8 events
+[2025-05-02T18:00:50.017360Z] [INFO]   - Bolivia: 8 events
+[2025-05-02T18:00:50.017369Z] [INFO]   - Indonesia: 7 events
+[2025-05-02T18:00:50.017379Z] [INFO]   - Spain Amateur: 7 events
+[2025-05-02T18:00:50.017389Z] [INFO]   - Kazakhstan: 7 events
+[2025-05-02T18:00:50.017398Z] [INFO]   - United Arab Emirates: 6 events
+[2025-05-02T18:00:50.017408Z] [INFO]   - Morocco: 6 events
+[2025-05-02T18:00:50.017418Z] [INFO]   - Belarus: 6 events
+[2025-05-02T18:00:50.017428Z] [INFO]   - Bosnia & Herzegovina: 6 events
+[2025-05-02T18:00:50.017438Z] [INFO]   - Latvia: 5 events
+[2025-05-02T18:00:50.017451Z] [INFO]   - Costa Rica: 5 events
+[2025-05-02T18:00:50.017462Z] [INFO]   - Vietnam: 5 events
+[2025-05-02T18:00:50.017473Z] [INFO]   - Guatemala: 5 events
+[2025-05-02T18:00:50.017484Z] [INFO]   - International: 4 events
+[2025-05-02T18:00:50.017494Z] [INFO]   - Saudi Arabia: 4 events
+[2025-05-02T18:00:50.017503Z] [INFO]   - Georgia: 4 events
+[2025-05-02T18:00:50.017514Z] [INFO]   - Honduras: 4 events
+[2025-05-02T18:00:50.017525Z] [INFO]   - Canada: 4 events
+[2025-05-02T18:00:50.017536Z] [INFO]   - Oman: 4 events
+[2025-05-02T18:00:50.017548Z] [INFO]   - Iraq: 4 events
+[2025-05-02T18:00:50.017560Z] [INFO]   - Denmark Amateur: 4 events
+[2025-05-02T18:00:50.017572Z] [INFO]   - International Youth: 3 events
+[2025-05-02T18:00:50.017585Z] [INFO]   - Tunisia: 3 events
+[2025-05-02T18:00:50.017598Z] [INFO]   - Faroe Islands: 3 events
+[2025-05-02T18:00:50.017612Z] [INFO]   - Uzbekistan: 3 events
+[2025-05-02T18:00:50.017628Z] [INFO]   - Trinidad and Tobago: 3 events
+[2025-05-02T18:00:50.017644Z] [INFO]   - Cambodia: 3 events
+[2025-05-02T18:00:50.017661Z] [INFO]   - Northern Ireland: 2 events
+[2025-05-02T18:00:50.017677Z] [INFO]   - Armenia: 2 events
+[2025-05-02T18:00:50.017694Z] [INFO]   - Kosovo: 2 events
+[2025-05-02T18:00:50.017711Z] [INFO]   - Ethiopia: 2 events
+[2025-05-02T18:00:50.017727Z] [INFO]   - Jordan: 2 events
+[2025-05-02T18:00:50.017767Z] [INFO]   - Azerbaijan: 2 events
+[2025-05-02T18:00:50.017787Z] [INFO]   - Malta: 2 events
+[2025-05-02T18:00:50.017803Z] [INFO]   - San Marino: 2 events
+[2025-05-02T18:00:50.017820Z] [INFO]   - Gibraltar: 2 events
+[2025-05-02T18:00:50.017836Z] [INFO]   - Ghana: 1 events
+[2025-05-02T18:00:50.017852Z] [INFO]   - India: 1 events
+[2025-05-02T18:00:50.017887Z] [INFO]   - Singapore: 1 events
+[2025-05-02T18:00:50.017908Z] [INFO]   - Thailand: 1 events
+[2025-05-02T18:00:50.017925Z] [INFO]   - Senegal: 1 events
+[2025-05-02T18:00:50.017941Z] [INFO]   - Zimbabwe: 1 events
+[2025-05-02T18:00:50.017957Z] [INFO]   - Hong Kong, China: 1 events
+[2025-05-02T18:00:50.017972Z] [INFO]   - Luxembourg: 1 events
+[2025-05-02T18:00:50.017988Z] [INFO]   - Kuwait: 1 events
+[2025-05-02T18:00:50.018003Z] [INFO]   - Bangladesh: 1 events
+[2025-05-02T18:00:50.018018Z] [INFO]   - Andorra: 1 events
+[2025-05-02T18:00:50.018041Z] [INFO]   - Sweden Amateur: 1 events
+[2025-05-02T18:00:50.018055Z] [INFO]   - Algeria: 1 events
+[2025-05-02T18:00:50.018070Z] [INFO] Premier League events: 20
+[2025-05-02T18:00:50.040344Z] [INFO] Saved 1727 events to standard file data/sporty.json
+[2025-05-02T18:00:50.046256Z] [INFO] ✅ Sportybet scraper (Python) completed with 1727 total events
+
+Python Sportybet scraper returned 1727 events
