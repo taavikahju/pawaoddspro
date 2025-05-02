@@ -288,21 +288,11 @@ def process_tournaments(tournaments):
                     original_id = event.get('eventId', '')
                     normalized_id = re.sub(r'\D', '', original_id) if original_id else ''
                     
-                    # Check if this is one of our special tracked events
+                    # Check if this is one of our special tracked events (just track if found)
                     if any(normalized_id == id or original_id.find(id) >= 0 for id in SPECIAL_EVENT_IDS):
                         matched_id = next((id for id in SPECIAL_EVENT_IDS if normalized_id == id or original_id.find(id) >= 0), None)
                         if matched_id:
                             special_events_found[matched_id] = True
-                            log(f"\n🔍 FOUND SPECIAL EVENT ID {matched_id}:")
-                            log(f"- Teams: {event.get('homeTeamName')} vs {event.get('awayTeamName')}")
-                            log(f"- Original ID: {original_id}")
-                            log(f"- Normalized ID: {normalized_id}")
-                            log(f"- Country: {country}")
-                            log(f"- Tournament: {tournament_name}")
-                            log(f"- Odds: Home={home_odds}, Draw={draw_odds}, Away={away_odds}")
-                            log(f"- Start Time: {start_time}")
-                            log(f"- Is EPL: {is_epl}")
-                            log("")
                     
                     # Track EPL events
                     if is_epl:
@@ -341,29 +331,15 @@ def process_tournaments(tournaments):
             log(f"Error processing tournament: {str(e)}", "error")
             continue
     
-    # Log EPL specific stats
+    # Log compact EPL stats
     if epl_events['found'] > 0:
-        log("\n🏴󠁧󠁢󠁥󠁮󠁧󠁿 ENGLAND PREMIER LEAGUE SUMMARY:")
-        log(f"- Found {epl_events['found']} total EPL events")
-        log(f"- {epl_events['with_odds']} events have valid odds")
-        log(f"- Dates covered: {', '.join(sorted(epl_events['dates']))}")
-        
-        # Sort by date for easier inspection
-        epl_events['teams'].sort(key=lambda t: t['date'] if t['date'] else '')
-        
-        # Print team information grouped by date
-        current_date = ''
-        for team in epl_events['teams']:
-            date = team['date'].split(' ')[0] if team['date'] else 'Unknown date'
-            if date != current_date:
-                log(f"\n  {date}:")
-                current_date = date
-            log(f"  - {team['teams']} (ID: {team['normalizedId']}) Odds: {team['odds']['home']}/{team['odds']['draw']}/{team['odds']['away']}")
+        log(f"🏴󠁧󠁢󠁥󠁮󠁧󠁿 PREMIER LEAGUE: {epl_events['found']} events with valid odds")
+        log(f"Dates covered: {', '.join(sorted(epl_events['dates']))}")
     
-    # Report on our special event tracking
-    for special_id in SPECIAL_EVENT_IDS:
-        if special_id not in special_events_found:
-            log(f"\n⚠️ SPECIAL EVENT ID {special_id} WAS NOT FOUND in any tournament!")
+    # Report on missing special events in a single log line
+    missing_ids = [id for id in SPECIAL_EVENT_IDS if id not in special_events_found]
+    if missing_ids:
+        log(f"⚠️ Missing special EPL events: {', '.join(missing_ids)}")
     
     log(f"✅ Successfully processed {event_count} events (skipped {skipped_count})")
     return processed_events
@@ -475,14 +451,15 @@ def main():
             
             log(f"Saved {len(all_events)} events to test file {OUTPUT_FILE}")
             
-            # 3. Write a diagnostic summary
-            log("\n=============== EVENT SUMMARY ===============")
-            log(f"Total events: {len(all_events)}")
-            log(f"Events by country:")
+            # 3. Write a concise diagnostic summary
+            log(f"✅ Collected {len(all_events)} total events from Sportybet")
             
-            for country, count in sorted(country_counts.items(), key=lambda x: x[1], reverse=True):
-                log(f"  - {country}: {count} events")
+            # Show only top countries
+            top_countries = sorted(country_counts.items(), key=lambda x: x[1], reverse=True)[:5]
+            top_countries_str = ", ".join([f"{c}: {n}" for c, n in top_countries])
+            log(f"Top countries: {top_countries_str}")
             
+            # Only log Premier League events count as it's most important
             log(f"Premier League events: {premier_league_count}")
             
             # 4. Save to the standard output file for integration
