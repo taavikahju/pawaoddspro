@@ -77,29 +77,27 @@ export function useOfflineResilientEvents() {
     // The page will now only fetch data on initial load or manual refresh
   });
   
-  // Handle cache updates when server events change
+  // Handle cache updates when server events change - optimized for performance
   useEffect(() => {
-    if (serverEvents && serverEvents.length > 0) {
-      // Check if this response has Sportybet data
-      const sportyEventsCount = serverEvents.filter(event => 
-        event.oddsData && 
-        typeof event.oddsData === 'object' && 
-        'sporty' in event.oddsData
-      ).length;
-      
-      // Always maintain the cache with the most Sportybet odds
-      // EITHER from the server OR from our existing cache
-      if (sportyEventsCount > 0) {
-        // If the server response has Sportybet data, update our cache
-        console.log(`[Events Hook] Updating cache with ${sportyEventsCount} Sportybet events from server`);
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(serverEvents));
-        setLocalCacheEvents(serverEvents);
-      } else {
-        // If the server response is missing Sportybet data but we have cached data with Sportybet odds
-        // we need to merge our cache with the server data and store it
-        console.log('[Events Hook] Server response missing Sportybet data, checking cache...');
+    if (!serverEvents || serverEvents.length === 0) return;
+
+    // Process in the next event loop to avoid blocking UI
+    setTimeout(() => {
+      try {
+        // Check if this response has Sportybet data
+        const sportyEventsCount = serverEvents.filter(event => 
+          event.oddsData && 
+          typeof event.oddsData === 'object' && 
+          'sporty' in event.oddsData
+        ).length;
         
-        if (localCacheEvents.length > 0) {
+        // Always maintain the cache with the most Sportybet odds
+        if (sportyEventsCount > 0) {
+          // If the server response has Sportybet data, update our cache without logging
+          localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(serverEvents));
+          setLocalCacheEvents(serverEvents);
+        } else if (localCacheEvents.length > 0) {
+          // Check cache for Sportybet data
           const cachedSportyEventsCount = localCacheEvents.filter(event => 
             event.oddsData && 
             typeof event.oddsData === 'object' && 
@@ -107,12 +105,11 @@ export function useOfflineResilientEvents() {
           ).length;
           
           if (cachedSportyEventsCount > 0) {
-            console.log(`[Events Hook] Found ${cachedSportyEventsCount} cached events with Sportybet odds`);
-            
-            // Create a merged version of the data
+            // Merge data efficiently
             const mergedEvents = JSON.parse(JSON.stringify(serverEvents));
             const eventMap = new Map(mergedEvents.map((event: EventData) => [event.id, event]));
             
+            // Process cached events and add Sportybet odds to server events
             let addedCount = 0;
             localCacheEvents.forEach(cachedEvent => {
               if (
@@ -125,25 +122,24 @@ export function useOfflineResilientEvents() {
                   if (!serverEvent.oddsData) {
                     serverEvent.oddsData = {};
                   }
-                  // Copy Sportybet odds from cache
                   serverEvent.oddsData.sporty = JSON.parse(JSON.stringify(cachedEvent.oddsData.sporty));
                   addedCount++;
                 }
               }
             });
             
-            console.log(`[Events Hook] Added Sportybet odds to ${addedCount} events in cache`);
-            
-            // Update our cache with the merged data
+            // Only update cache if we actually added odds
             if (addedCount > 0) {
               localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(mergedEvents));
               setLocalCacheEvents(mergedEvents);
             }
           }
         }
+      } catch (error) {
+        console.error('Error processing cache data:', error);
       }
-    }
-  }, [serverEvents, localCacheEvents]);
+    }, 0);
+  }, [serverEvents]);
   
   // Handle error with useEffect
   useEffect(() => {
@@ -152,87 +148,57 @@ export function useOfflineResilientEvents() {
     }
   }, [isError, handleError]);
 
-  // Load initial cache from localStorage on component mount
+  // Load initial cache from localStorage on component mount - optimized for performance
   useEffect(() => {
     try {
       const cachedData = localStorage.getItem(LOCAL_STORAGE_KEY);
       if (cachedData) {
         const parsedData = JSON.parse(cachedData);
         if (Array.isArray(parsedData) && parsedData.length > 0) {
-          console.log(`Loaded ${parsedData.length} cached events from localStorage on init`);
+          // Set cache silently without logging
           setLocalCacheEvents(parsedData);
         }
       }
     } catch (error) {
-      console.error('Error loading initial events from localStorage:', error);
+      // Only log critical errors
+      console.error('Error loading events cache:', error);
     }
   }, []);
 
-  // Combine server events with cached local events for Sportybet data
+  // Combine server events with cached local events for Sportybet data - optimized for performance
   const mergeEvents = useCallback(() => {
     // If we have server data, use that as the base
     if (Array.isArray(serverEvents) && serverEvents.length > 0) {
-      // Count Sportybet events in server data
-      const sportyEventsCount = serverEvents.filter(event => 
-        event.oddsData && 
-        typeof event.oddsData === 'object' && 
-        'sporty' in event.oddsData
-      ).length;
-      
-      console.log(`[Events Hook] Server events have ${sportyEventsCount} events with Sportybet odds`);
-      
       // ALWAYS merge with cached data if we have it
       if (localCacheEvents.length > 0) {
-        // Count Sportybet events in cached data
-        const cachedSportyEventsCount = localCacheEvents.filter(event => 
-          event.oddsData && 
-          typeof event.oddsData === 'object' && 
-          'sporty' in event.oddsData
-        ).length;
+        // Create a shallow copy of the server events
+        const mergedEvents = [...serverEvents];
         
-        console.log(`[Events Hook] Cached events have ${cachedSportyEventsCount} events with Sportybet odds`);
-        
-        // Always merge regardless of which one has more Sportybet odds
-        console.log(`[Events Hook] Merging Sportybet odds from cache with server events`);
-        
-        // Create a deep copy of the server events to avoid mutation
-        const mergedEvents = JSON.parse(JSON.stringify(serverEvents));
-        
-        // Create a map of events by ID for quick lookup
-        const eventMap = new Map(mergedEvents.map((event: EventData) => [event.id, event]));
+        // Create a map of events by ID for quick lookup - faster than filtering arrays repeatedly
+        const eventMap = new Map();
+        mergedEvents.forEach(event => {
+          eventMap.set(event.id, event);
+        });
         
         // For each cached event that has Sportybet data, add the Sportybet data to merged events
-        let addedCount = 0;
         localCacheEvents.forEach(cachedEvent => {
           if (
             cachedEvent.oddsData && 
             typeof cachedEvent.oddsData === 'object' && 
-            'sporty' in cachedEvent.oddsData
+            'sporty' in cachedEvent.oddsData &&
+            cachedEvent.id
           ) {
             const serverEvent = eventMap.get(cachedEvent.id);
             if (serverEvent) {
-              // ALWAYS update Sportybet odds from cache, regardless of whether server has them
-              // This ensures we always have the latest cached Sportybet odds
+              // Ensure oddsData exists
               if (!serverEvent.oddsData) {
                 serverEvent.oddsData = {};
               }
-              // Copy Sportybet odds from cache
-              serverEvent.oddsData.sporty = JSON.parse(JSON.stringify(cachedEvent.oddsData.sporty));
-              addedCount++;
+              // Copy Sportybet odds from cache without deep clone (faster)
+              serverEvent.oddsData.sporty = cachedEvent.oddsData.sporty;
             }
           }
         });
-        
-        console.log(`[Events Hook] Added/updated Sportybet odds for ${addedCount} events from cache`);
-        
-        // Count again after merging
-        const finalSportyCount = mergedEvents.filter((event: EventData) => 
-          event.oddsData && 
-          typeof event.oddsData === 'object' && 
-          'sporty' in event.oddsData
-        ).length;
-        
-        console.log(`[Events Hook] After merging: ${finalSportyCount} events with Sportybet odds`);
         
         return mergedEvents;
       }
@@ -248,25 +214,19 @@ export function useOfflineResilientEvents() {
   // The final merged events array
   const events = mergeEvents();
 
-  // Debug output
+  // Debug output - only log once on initial load or when event count changes significantly
   useEffect(() => {
     if (events.length > 0) {
-      const sportyEvents = events.filter(event => 
-        event.oddsData && typeof event.oddsData === 'object' && 'sporty' in event.oddsData
-      );
-      console.log(`Final events array has ${sportyEvents.length} events with Sportybet odds out of ${events.length} total`);
-
-      // Check for a specific bookmaker combination
-      const sportyAndOtherBookies = events.filter(event => {
-        if (!event.oddsData) return false;
+      // Only log when event count changes significantly to reduce console spam
+      if (events.length % 100 === 0 || Math.random() < 0.05) {
+        const sportyEventsCount = events.filter(event => 
+          event.oddsData && typeof event.oddsData === 'object' && 'sporty' in event.oddsData
+        ).length;
         
-        const bookmakers = Object.keys(event.oddsData);
-        return bookmakers.includes('sporty') && bookmakers.length > 1;
-      });
-      
-      console.log(`Events with Sportybet AND at least one other bookmaker: ${sportyAndOtherBookies.length}`);
+        console.log(`Events: ${events.length} total, ${sportyEventsCount} with Sportybet odds`);
+      }
     }
-  }, [events]);
+  }, [events.length]);
 
   // Add test method to simulate disconnection
   const testResilience = useCallback(() => {
