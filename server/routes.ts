@@ -8,7 +8,7 @@ import path from "path";
 import fs from "fs";
 import * as customScrapers from "./scrapers/custom/integration";
 import { WebSocketServer, WebSocket } from 'ws';
-import { processAndMapEvents } from "./utils/dataMapper";
+import { processAndMapEvents, dataMapperEvents, MAPPER_EVENTS } from "./utils/dataMapper";
 import { setupAuth } from "./auth";
 import { isAuthenticated, isAdmin } from "./middleware/auth";
 import { simpleAdminAuth } from "./middleware/simpleAdminAuth";

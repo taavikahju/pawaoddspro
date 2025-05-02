@@ -4,6 +4,7 @@ import { db } from '../db';
 import { eq, sql } from 'drizzle-orm';
 import { saveOddsHistory } from './oddsHistory';
 import { logger } from './logger';
+// Remove event emitter approach
 
 // Console-based progress bar implementation
 function drawProgressBar(percent: number, message: string) {
@@ -869,6 +870,52 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
                   lastUpdated: sql`CURRENT_TIMESTAMP`
                 }
               });
+              
+              // Add special prioritization for Sportybet events - process them first in the database operations
+              // This ensures Sportybet odds appear in the frontend more quickly
+              const hasSportybetEvents = createOperations.filter(op => 
+                op.oddsData && typeof op.oddsData === 'object' && 'sporty' in op.oddsData
+              ).length > 0;
+              
+              if (hasSportybetEvents) {
+                logger.critical(`Found Sportybet events in batch ${i+1}/${updateBatches} - these will be prioritized in frontend updates`);
+              }
+              
+              // Check if there are any Sportybet events in this batch with 3+ bookmakers to prioritize them
+              const sportyEvents = createOperations.filter(event => 
+                event.oddsData && 
+                typeof event.oddsData === 'object' && 
+                'sporty' in event.oddsData &&
+                Object.keys(event.oddsData).length >= 3 
+              );
+              
+              if (sportyEvents.length > 0) {
+                // Emit an event for Sportybet events so they can be broadcast immediately
+                logger.critical(`Found ${sportyEvents.length} Sportybet events in batch ${i+1}/${updateBatches} - broadcasting early`);
+                
+                dataMapperEvents.emit(MAPPER_EVENTS.SPORTYBET_BATCH_PROCESSED, {
+                  batch: i + 1,
+                  totalBatches: updateBatches,
+                  events: sportyEvents,
+                  timestamp: new Date().toISOString()
+                });
+              }
+              
+              // Also emit an event for all events with 3+ bookmakers
+              const eventsWithMinBookmakers = createOperations.filter(event => 
+                event.oddsData && 
+                typeof event.oddsData === 'object' && 
+                Object.keys(event.oddsData).length >= 3
+              );
+              
+              if (eventsWithMinBookmakers.length > 0) {
+                dataMapperEvents.emit(MAPPER_EVENTS.BATCH_PROCESSED, {
+                  batch: i + 1, 
+                  totalBatches: updateBatches,
+                  events: eventsWithMinBookmakers,
+                  timestamp: new Date().toISOString()
+                });
+              }
           } catch (insertError) {
             logger.error(`Error with bulk insert operation: ${insertError.message}`);
             
