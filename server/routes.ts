@@ -402,6 +402,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Apply filters:
       // 1. Require 3+ bookmakers
       // 2. Exclude "Simulated Reality League" events
+      // 3. Exclude events with "Unknown" as team name
       const filteredEvents = events.filter(event => {
         if (!event.oddsData) return false;
         
@@ -409,6 +410,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         if (event.tournament && 
             typeof event.tournament === 'string' && 
             event.tournament.includes('Simulated Reality League')) {
+          return false;
+        }
+        
+        // Filter out events with "Unknown" as team name
+        if (event.teams === "Unknown") {
           return false;
         }
         
@@ -661,7 +667,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           
           // Create basic event structure
           const teams = event.teams || event.event || '';
-          if (!teams) continue;
+          if (!teams || teams === "Unknown") continue;
           
           // Get odds data
           let odds = null;
