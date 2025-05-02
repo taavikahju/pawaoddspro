@@ -16,15 +16,16 @@ import traceback
 # Configuration
 BASE_URL = "https://www.sportybet.com"
 OUTPUT_FILE = "data/sporty_py.json"  # Separate output file for testing
-TIMEOUT = 30  # seconds
+TIMEOUT = 15  # Reduce timeout to 15 seconds
 QUERY = "sportId=sr%3Asport%3A1&marketId=1%2C18%2C10%2C29%2C11%2C26%2C36%2C14%2C60100&pageSize=100"
 API_ENDPOINTS = [
-    "/api/gh/factsCenter/pcUpcomingEvents",  # Ghana
-    "/api/ng/factsCenter/pcUpcomingEvents",  # Nigeria
-    "/api/ke/factsCenter/pcUpcomingEvents",  # Kenya
-    "/api/ug/factsCenter/pcUpcomingEvents",  # Uganda
-    "/api/tz/factsCenter/pcUpcomingEvents",  # Tanzania
-    "/api/za/factsCenter/pcUpcomingEvents"   # South Africa
+    "/api/gh/factsCenter/pcUpcomingEvents",  # Ghana - Primary endpoint
+    "/api/ke/factsCenter/pcUpcomingEvents",  # Kenya - Secondary endpoint
+    # Disabling other endpoints to ensure we complete within timeout
+    # "/api/ng/factsCenter/pcUpcomingEvents",  # Nigeria
+    # "/api/ug/factsCenter/pcUpcomingEvents",  # Uganda
+    # "/api/tz/factsCenter/pcUpcomingEvents",  # Tanzania
+    # "/api/za/factsCenter/pcUpcomingEvents"   # South Africa
 ]
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
@@ -334,15 +335,27 @@ def process_tournaments(tournaments):
     return processed_events
 
 def main():
+    # Set a global timeout for the entire scraper
+    start_time = datetime.now()
     all_events = []
-    log("Starting Sportybet data collection from 6 endpoints (Python scraper)")
+    
+    log("Starting Sportybet data collection from 2 endpoints (Python scraper)")
+    
+    # Handle potential timeout with a structured approach
+    total_runtime_limit = 120  # 2 minutes max runtime
     
     all_tournaments = []
     
     # Process each endpoint with timeout handling
     for idx, endpoint in enumerate(API_ENDPOINTS):
+        # Check if we're approaching the overall time limit
+        elapsed_seconds = (datetime.now() - start_time).total_seconds()
+        if elapsed_seconds > total_runtime_limit:
+            log(f"⚠️ Approaching time limit ({elapsed_seconds:.1f}s/{total_runtime_limit}s), stopping further endpoint processing")
+            break
+            
         try:
-            log(f"Processing endpoint {idx+1}/6: {endpoint}")
+            log(f"Processing endpoint {idx+1}/{len(API_ENDPOINTS)}: {endpoint}")
             page_num = 1
             total_pages = 1
         except Exception as e:
@@ -350,8 +363,8 @@ def main():
             log(traceback.format_exc())
             continue  # Skip to next endpoint on error
         attempts = 0
-        MAX_ATTEMPTS = 3
-        MAX_PAGES = 5  # Reduce to 5 pages per endpoint for faster execution
+        MAX_ATTEMPTS = 2
+        MAX_PAGES = 3  # Further reduce to 3 pages per endpoint for faster execution
         
         # Fetch current tournaments data
         log(f"📊 Fetching current tournaments data...")
@@ -361,6 +374,12 @@ def main():
             if page_num == 1 or page_num % 5 == 0:
                 log(f"📥 Fetching page {page_num}/{total_pages}...")
             
+            # Check again if we're approaching the time limit during page fetching
+            elapsed_seconds = (datetime.now() - start_time).total_seconds()
+            if elapsed_seconds > total_runtime_limit * 0.9:  # If we're at 90% of our time limit
+                log(f"⚠️ Time limit almost reached during page fetching ({elapsed_seconds:.1f}s/{total_runtime_limit}s), stopping further pages")
+                break
+                
             try:
                 page_data = fetch_page(endpoint, page_num)
                 
@@ -408,7 +427,23 @@ def main():
                 # Longer pause after an error
                 time.sleep(2)
     
-    # Process all tournaments
+    # Process all tournaments with time monitoring
+    elapsed_seconds = (datetime.now() - start_time).total_seconds()
+    log(f"Processing tournaments after {elapsed_seconds:.1f}s/{total_runtime_limit}s...")
+    
+    # Check if we have enough time left for processing
+    if elapsed_seconds > total_runtime_limit * 0.7:  # If we've used 70% of our time already
+        log(f"⚠️ Limited time remaining, processing only a subset of collected tournaments")
+        # Take only a subset if we have too many to process
+        if len(all_tournaments) > 20:
+            log(f"Limiting from {len(all_tournaments)} to 20 tournaments for faster processing")
+            # Prioritize England tournaments first to ensure Premier League events
+            england_tournaments = [t for t in all_tournaments if 'events' in t and len(t['events']) > 0 
+                                  and 'sport' in t['events'][0] and 'category' in t['events'][0]['sport'] 
+                                  and t['events'][0]['sport']['category'].get('name', '') == 'England']
+            other_tournaments = [t for t in all_tournaments if t not in england_tournaments]
+            all_tournaments = england_tournaments + other_tournaments[:max(0, 20 - len(england_tournaments))]
+    
     all_events = process_tournaments(all_tournaments)
     log(f"Total: collected {len(all_events)} events from all endpoints")
     
