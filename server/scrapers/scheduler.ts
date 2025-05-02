@@ -6,13 +6,34 @@ import * as betfairScraper from './betfair';
 import * as paddyPowerScraper from './paddypower';
 import * as customScrapers from './custom/integration';
 import { processAndMapEvents } from '../utils/dataMapper';
-import { EventEmitter } from 'events';
 import { db } from '../db';
 import { sql } from 'drizzle-orm';
 import { logger } from '../utils/logger';
 
-// Create event emitter for scraper events
-export const scraperEvents = new EventEmitter();
+// Simple event emitter replacement
+export const scraperEvents = {
+  listeners: {} as Record<string, Function[]>,
+  
+  on(event: string, callback: Function) {
+    if (!this.listeners[event]) {
+      this.listeners[event] = [];
+    }
+    this.listeners[event].push(callback);
+    return this;
+  },
+  
+  emit(event: string, ...args: any[]) {
+    if (!this.listeners[event]) return false;
+    this.listeners[event].forEach(callback => {
+      try {
+        callback(...args);
+      } catch (err) {
+        console.error(`Error in event listener for ${event}:`, err);
+      }
+    });
+    return true;
+  }
+};
 
 // Define event types
 export const SCRAPER_EVENTS = {
