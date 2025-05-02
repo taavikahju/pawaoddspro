@@ -1,0 +1,536 @@
+Error in automatic Sportybet fix: error: duplicate key value violates unique constraint "events_external_id_key"
+Reading sporty data (size: 1016 KB, modified: 2025-05-02T11:32:00.627Z, forceFresh: true)
+Successfully loaded 1553 sporty events
+Raw Sportybet data check: 1553 events found in file
+BEFORE FILTERING: Found 1181 events with Sportybet odds out of 1316 total events
+AFTER FILTERING: Found 1181 events with Sportybet odds out of 1316 filtered events
+Reading sporty data (size: 1016 KB, modified: 2025-05-02T11:32:00.627Z, forceFresh: true)
+Successfully loaded 1553 sporty events
+Raw Sportybet data check: 1553 events found in file
+BEFORE FILTERING: Found 1181 events with Sportybet odds out of 1316 total events
+AFTER FILTERING: Found 924 events with Sportybet odds out of 1059 filtered events
+Error running sporty scraper: 🔍 Looking for Premier League fixtures on May 10-11, 2025
+🔍 Tracking special event IDs for May 10-11 matches:  50850679, 50850810, 50850826, 50850822
+Starting Sportybet scraper with enhanced debugging...
+About to fetch tournaments data...
+📊 Fetching current tournaments data...
+📥 Fetching page 1/1...
+Waiting for tournament data with timeout...
+📊 Found 1692 total events across 17 pages
+📥 Fetching page 5/17...
+📥 Fetching page 10/17...
+📥 Fetching page 15/17...
+🔍 Fetching future Premier League matches (May 10-11) using date filtering...
+📥 Fetching future events between May 10-11...
+✅ Found 59 events for May 10-11 across 8 tournaments
+🏴󠁧󠁢󠁥󠁮󠁧󠁿 Found future Premier League with 10 matches!
+🏴󠁧󠁢󠁥󠁮󠁧󠁿 Found England Premier League tournament: Premier League with 10 events
+✅ Confirmed tournament ID is correct: sr:tournament:17
+🏴󠁧󠁢󠁥󠁮󠁧󠁿 Found England Premier League tournament: Premier League with 10 events
+✅ Confirmed tournament ID is correct: sr:tournament:17
+📊 Premier League summary: found 2 tournaments with 20 total events
+Fetched 339 tournaments (including 20 Premier League events), processing them now...
+Processing 339 tournaments...
+🏴󠁧󠁢󠁥󠁮󠁧󠁿 Found England Premier League tournament: Premier League
+🏴󠁧󠁢󠁥󠁮󠁧󠁿 Found England Premier League tournament: Premier League
+
+🏴󠁧󠁢󠁥󠁮󠁧󠁿 ENGLAND PREMIER LEAGUE SUMMARY:
+- Found 20 total EPL events
+- 20 events have valid odds
+- Dates covered: 2025-05-02, 2025-05-03, 2025-05-04, 2025-05-05
+- Teams and dates:
+
+  2025-05-02:
+  - Man City - Wolves (ID: 50850671) Odds: 1.42/5.41/7.57
+  - Man City - Wolves (ID: 50850671) Odds: 1.43/5.37/7.44
+
+  2025-05-03:
+  - Aston Villa - Fulham (ID: 50850657) Odds: 1.81/4.04/4.54
+  - Aston Villa - Fulham (ID: 50850657) Odds: 1.81/4.04/4.54
+  - Everton - Ipswich Town (ID: 50850667) Odds: 1.54/4.50/6.83
+  - Leicester - Southampton (ID: 50850669) Odds: 2.37/3.74/3.03
+  - Everton - Ipswich Town (ID: 50850667) Odds: 1.54/4.50/6.83
+  - Leicester - Southampton (ID: 50850669) Odds: 2.37/3.74/3.03
+  - Arsenal - Bournemouth (ID: 50850655) Odds: 2.17/3.72/3.45
+  - Arsenal - Bournemouth (ID: 50850655) Odds: 2.17/3.72/3.45
+
+  2025-05-04:
+  - Brentford FC - Man Utd (ID: 50850659) Odds: 1.67/4.21/4.88
+  - Brighton - Newcastle (ID: 50850661) Odds: 2.88/3.80/2.33
+  - West Ham - Tottenham (ID: 50850673) Odds: 2.20/3.77/3.13
+  - Brentford FC - Man Utd (ID: 50850659) Odds: 1.67/4.21/4.88
+  - Brighton - Newcastle (ID: 50850661) Odds: 2.88/3.80/2.33
+  - West Ham - Tottenham (ID: 50850673) Odds: 2.20/3.77/3.13
+  - Chelsea - Liverpool (ID: 50850663) Odds: 2.19/3.75/3.16
+  - Chelsea - Liverpool (ID: 50850663) Odds: 2.19/3.75/3.16
+
+  2025-05-05:
+  - Crystal Palace - Nottingham Forest (ID: 50850665) Odds: 2.34/3.42/3.12
+  - Crystal Palace - Nottingham Forest (ID: 50850665) Odds: 2.34/3.42/3.12
+
+
+⚠️ SPECIAL EVENT ID 50850679 WAS NOT FOUND in any tournament!
+
+⚠️ SPECIAL EVENT ID 50850810 WAS NOT FOUND in any tournament!
+
+⚠️ SPECIAL EVENT ID 50850826 WAS NOT FOUND in any tournament!
+
+⚠️ SPECIAL EVENT ID 50850822 WAS NOT FOUND in any tournament!
+✅ Successfully processed 1567 events (skipped 1)
+[2025-05-02T12:01:09.101Z] Sportybet scraper finished - 1567 events extracted
+Sample event: {"eventId":"50850671","originalEventId":"sr:match:50850671","country":"England","tournament":"Premier League","event":"Man City - Wolves","market":"1X2","home_odds":"1.42","draw_odds":"5.41","away_odd...
+
+[2025-05-02T12:02:00.457Z] Sportybet scraper finished - 1567 events extracted
+Total events scraped: 5676
+4/4 scrapers completed successfully
+Processing and mapping events...
+[2025-05-02T12:02:00.611Z] Starting event mapping process
+Loading fresh bookmaker data from disk...
+Getting data for 4 bookmakers (forceFresh: true)
+Loading data for bookmaker: bp GH
+Reading bp GH data (size: 906 KB, modified: 2025-05-02T12:00:51.709Z, forceFresh: true)
+Successfully loaded 1467 bp GH events
+Loading data for bookmaker: bp KE
+Reading bp KE data (size: 906 KB, modified: 2025-05-02T12:00:52.489Z, forceFresh: true)
+Successfully loaded 1467 bp KE events
+Loading data for bookmaker: sporty
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Loading data for bookmaker: betika KE
+Reading betika KE data (size: 708 KB, modified: 2025-05-02T12:00:07.907Z, forceFresh: true)
+Successfully loaded 1175 betika KE events
+Loaded bookmaker data: bp GH: 1467 events, bp KE: 1467 events, sporty: 1567 events, betika KE: 1175 events
+Bookmaker bp GH: loaded 1467 events
+Bookmaker bp KE: loaded 1467 events
+Bookmaker sporty: loaded 1567 events
+First Sportybet event: {"id":"50850671","eventId":"50850671","teams":"Man City - Wolves","league":"Premier League","sport":"football","country":"England","date":"2025-05-02","time":"19:00","odds":{"home":1.42,"draw":5.41,"away":7.57},"raw":{"eventId":"50850671","originalEventId":"sr:match:50850671","country":"England","tournament":"Premier League","event":"Man City - Wolves","market":"1X2","home_odds":"1.42","draw_odds":"5.41","away_odds":"7.57","start_time":"2025-05-02 19:00"}}
+Bookmaker betika KE: loaded 1175 events
+Processing 1687 events...
+Starting event mapping process - 1545 events to process
+[████░░░░░░░░░░░░░░░░░░░░░░░░░░]  12.5% - Processed 200 / 1545 events (batch 1/8)
+[███████████░░░░░░░░░░░░░░░░░░░]  37.5% - Processed 600 / 1545 events (batch 3/8)
+[███████████████████░░░░░░░░░░░]  62.5% - Processed 1000 / 1545 events (batch 5/8)
+[██████████████████████████░░░░]  87.5% - Processed 1400 / 1545 events (batch 7/8)
+[██████████████████████████████] 100.0% - Processed 1545 / 1545 events (batch 8/8)
+Secondary matching added odds to 1 total event-bookmaker combinations
+Starting database updates - 1545 events to process
+[█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   3.2% - Database operations: 50 / 1545 events
+[██░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   6.5% - Database operations: 100 / 1545 events
+[███░░░░░░░░░░░░░░░░░░░░░░░░░░░]   9.7% - Database operations: 150 / 1545 events
+[████░░░░░░░░░░░░░░░░░░░░░░░░░░]  12.9% - Database operations: 200 / 1545 events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1254 events with Sportybet odds out of 1395 total events
+AFTER FILTERING: Found 1254 events with Sportybet odds out of 1395 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1254 events with Sportybet odds out of 1395 total events
+AFTER FILTERING: Found 1010 events with Sportybet odds out of 1151 filtered events
+[█████░░░░░░░░░░░░░░░░░░░░░░░░░]  16.2% - Database operations: 250 / 1545 events
+[██████░░░░░░░░░░░░░░░░░░░░░░░░]  19.4% - Database operations: 300 / 1545 events
+[███████░░░░░░░░░░░░░░░░░░░░░░░]  22.7% - Database operations: 350 / 1545 events
+[████████░░░░░░░░░░░░░░░░░░░░░░]  25.9% - Database operations: 400 / 1545 events
+[█████████░░░░░░░░░░░░░░░░░░░░░]  29.1% - Database operations: 450 / 1545 events
+[██████████░░░░░░░░░░░░░░░░░░░░]  32.4% - Database operations: 500 / 1545 events
+[███████████░░░░░░░░░░░░░░░░░░░]  35.6% - Database operations: 550 / 1545 events
+[████████████░░░░░░░░░░░░░░░░░░]  38.8% - Database operations: 600 / 1545 events
+[█████████████░░░░░░░░░░░░░░░░░]  42.1% - Database operations: 650 / 1545 events
+[██████████████░░░░░░░░░░░░░░░░]  45.3% - Database operations: 700 / 1545 events
+[███████████████░░░░░░░░░░░░░░░]  48.5% - Database operations: 750 / 1545 events
+[████████████████░░░░░░░░░░░░░░]  51.8% - Database operations: 800 / 1545 events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1322 events with Sportybet odds out of 1463 total events
+AFTER FILTERING: Found 1322 events with Sportybet odds out of 1463 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1365 events with Sportybet odds out of 1506 total events
+AFTER FILTERING: Found 1180 events with Sportybet odds out of 1321 filtered events
+[█████████████████░░░░░░░░░░░░░]  55.0% - Database operations: 850 / 1545 events
+[█████████████████░░░░░░░░░░░░░]  58.3% - Database operations: 900 / 1545 events
+[██████████████████░░░░░░░░░░░░]  61.5% - Database operations: 950 / 1545 events
+[███████████████████░░░░░░░░░░░]  64.7% - Database operations: 1000 / 1545 events
+[████████████████████░░░░░░░░░░]  68.0% - Database operations: 1050 / 1545 events
+[█████████████████████░░░░░░░░░]  71.2% - Database operations: 1100 / 1545 events
+[██████████████████████░░░░░░░░]  74.4% - Database operations: 1150 / 1545 events
+[███████████████████████░░░░░░░]  77.7% - Database operations: 1200 / 1545 events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1413 events with Sportybet odds out of 1577 total events
+AFTER FILTERING: Found 1413 events with Sportybet odds out of 1577 filtered events
+[████████████████████████░░░░░░]  80.9% - Database operations: 1250 / 1545 events
+[█████████████████████████░░░░░]  84.1% - Database operations: 1300 / 1545 events
+[██████████████████████████░░░░]  87.4% - Database operations: 1350 / 1545 events
+[███████████████████████████░░░]  90.6% - Database operations: 1400 / 1545 events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1413 events with Sportybet odds out of 1577 total events
+AFTER FILTERING: Found 1263 events with Sportybet odds out of 1427 filtered events
+[████████████████████████████░░]  93.9% - Database operations: 1450 / 1545 events
+[█████████████████████████████░]  97.1% - Database operations: 1500 / 1545 events
+[██████████████████████████████] 100.0% - Database operations: 1545 / 1545 events
+[2025-05-02T12:02:52.588Z] Event mapping finished - 1545 events mapped, 83 events removed, final count: 1545
+[2025-05-02T12:02:52.588Z] Events per bookmaker: bp GH: 1465 events, bp KE: 1465 events, sporty: 1508 events, betika KE: 1169 events
+[2025-05-02T12:02:52.589Z] Calculating tournament average margins by bookmaker...
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1367 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1367 events with Sportybet odds out of 1545 filtered events
+[2025-05-02T12:02:53.267Z] Stored average margins for 1033 bookmaker-tournament combinations
+[2025-05-02T12:02:53.267Z] Starting cleanup of tournament margin records older than 30 days
+[2025-05-02T12:02:53.356Z] Deleted 0 tournament margin records older than 30 days
+[2025-05-02T12:02:53.357Z] Calculating tournament average margins by bookmaker...
+[2025-05-02T12:02:54.340Z] Stored average margins for 1033 bookmaker-tournament combinations
+[2025-05-02T12:02:54.340Z] Starting cleanup of tournament margin records older than 30 days
+[2025-05-02T12:02:54.415Z] Deleted 0 tournament margin records older than 30 days
+✅ Tournament margins calculated and stored
+[2025-05-02T12:02:54.617Z] Sending 1545 events to frontend
+[2025-05-02T12:02:54.618Z] Data processing lock released
+[2025-05-02T12:02:54.852Z] Scraping complete - 1545 total events mapped from 4 bookmakers
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1367 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1367 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1367 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1367 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1367 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1367 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1367 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1367 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1367 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1367 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1367 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1367 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1367 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1367 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1367 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1367 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1367 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1367 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1367 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1367 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1367 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1367 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1367 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1367 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1367 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1367 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1367 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1367 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1367 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1367 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1367 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1367 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1367 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1367 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1367 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1367 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1367 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1367 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1367 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1367 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1367 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1367 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1317 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1317 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1317 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1317 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1317 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1317 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1317 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1317 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1267 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1267 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1267 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1267 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1267 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1267 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1265 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1265 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1217 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1217 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1217 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1217 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1192 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1192 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1168 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1168 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1168 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1168 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1168 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1168 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1168 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1168 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1166 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1166 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1118 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1118 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1118 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1118 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1118 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1118 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1118 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1118 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1118 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1118 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1103 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1103 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1072 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1072 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1069 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1069 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1069 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1069 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1069 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1069 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1069 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1069 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1069 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1069 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1069 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1069 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1022 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1022 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1022 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1022 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1022 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1022 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1022 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1022 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1022 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1022 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1022 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1022 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1022 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1022 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1022 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1022 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1022 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1022 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1022 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1022 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1021 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1021 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 1020 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 1020 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 976 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 976 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 976 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 976 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 976 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 976 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 976 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 976 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 976 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 976 events with Sportybet odds out of 1545 filtered events
+Reading sporty data (size: 1026 KB, modified: 2025-05-02T12:02:00.472Z, forceFresh: true)
+Successfully loaded 1567 sporty events
+Raw Sportybet data check: 1567 events found in file
+BEFORE FILTERING: Found 976 events with Sportybet odds out of 1545 total events
+AFTER FILTERING: Found 976 events with Sportybet odds out of 1545 filtered events
