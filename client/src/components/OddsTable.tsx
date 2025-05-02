@@ -37,7 +37,10 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
     isOpen: boolean;
   }>({ eventId: '', eventName: '', oddsType: 'home', isOpen: false });
   
-  const filteredBookmakers = bookmakers.filter(b => selectedBookmakers.includes(b.code));
+  // Sort bookmakers by ID for consistent order, then filter to selected ones
+  const filteredBookmakers = [...bookmakers]
+    .sort((a, b) => a.id - b.id)
+    .filter(b => selectedBookmakers.includes(b.code));
   
   // Always show the comparison column if betPawa is selected along with either Sportybet or Betika KE
   const hasBetPawaGH = selectedBookmakers.includes('bp GH');

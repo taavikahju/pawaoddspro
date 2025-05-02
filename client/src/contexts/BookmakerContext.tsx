@@ -49,18 +49,18 @@ export function BookmakerProvider({ children }: { children: ReactNode }) {
 
   // Fetch bookmakers
   const { 
-    data: bookmakers = [], 
+    data: bookmakers = [] as Bookmaker[], 
     isLoading: isLoadingBookmakers 
-  } = useQuery({ 
+  } = useQuery<Bookmaker[]>({ 
     queryKey: ['/api/bookmakers'],
     staleTime: 5 * 60 * 1000 // 5 minutes
   });
 
   // Fetch sports
   const { 
-    data: sports = [], 
+    data: sports = [] as Sport[], 
     isLoading: isLoadingSports 
-  } = useQuery({ 
+  } = useQuery<Sport[]>({ 
     queryKey: ['/api/sports'],
     staleTime: 5 * 60 * 1000 // 5 minutes
   });
@@ -68,17 +68,22 @@ export function BookmakerProvider({ children }: { children: ReactNode }) {
   // Initialize selected bookmakers and sports
   useEffect(() => {
     if (bookmakers.length > 0 && selectedBookmakers.length === 0) {
-      setSelectedBookmakers(bookmakers.map((b: Bookmaker) => b.code));
+      // Sort bookmakers by ID for consistent order before setting initial selection
+      const sortedBookmakers = [...(bookmakers as Bookmaker[])].sort((a, b) => a.id - b.id);
+      setSelectedBookmakers(sortedBookmakers.map(b => b.code));
     }
   }, [bookmakers, selectedBookmakers]);
 
   useEffect(() => {
     if (sports.length > 0 && selectedSports.length === 0) {
+      // Sort sports by ID for consistent order before setting initial selection
+      const sortedSports = [...(sports as Sport[])].sort((a, b) => a.id - b.id);
+      
       // Default to Football and Basketball (first two sports)
-      if (sports.length >= 2) {
-        setSelectedSports([sports[0].code, sports[1].code]);
-      } else if (sports.length === 1) {
-        setSelectedSports([sports[0].code]);
+      if (sortedSports.length >= 2) {
+        setSelectedSports([sortedSports[0].code, sortedSports[1].code]);
+      } else if (sortedSports.length === 1) {
+        setSelectedSports([sortedSports[0].code]);
       }
     }
   }, [sports, selectedSports]);
@@ -144,9 +149,9 @@ export function BookmakerProvider({ children }: { children: ReactNode }) {
     await refreshMutation();
   };
 
-  const value = {
-    bookmakers,
-    sports,
+  const value: BookmakerContextType = {
+    bookmakers: bookmakers as Bookmaker[],
+    sports: sports as Sport[],
     selectedBookmakers,
     selectedSports,
     autoRefresh,
