@@ -844,18 +844,31 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     }
 
     // Get all events and delete any that don't meet our criteria anymore
-    // This ensures events that previously had 3+ bookmakers but now have fewer are removed
+    // This ensures events that previously had 2+ bookmakers but now have fewer are removed
+    // EXCEPTION: We keep all events with Sportybet odds to prevent decreasing Sportybet event counts
     const allEvents = await storage.getEvents();
     const currentEventIds = new Set(Array.from(eventMap.keys()));
 
     let deletedCount = 0;
+    let retainedSportybetCount = 0;
 
-    logger.info(`Cleaning up events that no longer meet criteria...`);
+    logger.info(`Cleaning up events that no longer meet criteria (preserving Sportybet events)...`);
 
     // Remove events that don't meet criteria anymore
     for (const event of allEvents) {
-      // If this event is not in our current map and has an eventId, it should be removed
+      // If this event is not in our current map and has an eventId, it would normally be removed
       if (event.eventId && !currentEventIds.has(event.eventId)) {
+        // EXCEPTION: Don't delete if it has Sportybet odds
+        const hasSportybetOdds = event.oddsData && 
+                                 typeof event.oddsData === 'object' && 
+                                 'sporty' in event.oddsData;
+        
+        if (hasSportybetOdds) {
+          // Retain this event since it has Sportybet odds
+          retainedSportybetCount++;
+          continue;
+        }
+        
         try {
           // Skip logs for individual event removal to reduce console noise
           // console.log(`Event ${event.id} (${event.eventId}: ${event.teams}) no longer meets criteria - removing from database`);
@@ -882,7 +895,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       bookmakerSummary = bookmakerSummary.slice(0, -2);
     }
 
-    logger.critical(`[${endTime.toISOString()}] Event mapping finished - ${currentEventIds.size} events mapped, ${deletedCount} events removed, final count: ${allEvents.length - deletedCount}`);
+    logger.critical(`[${endTime.toISOString()}] Event mapping finished - ${currentEventIds.size} events mapped, ${deletedCount} events removed, ${retainedSportybetCount} Sportybet events retained, final count: ${allEvents.length - deletedCount}`);
     logger.critical(`[${endTime.toISOString()}] Events per bookmaker: ${bookmakerSummary}`);
 
     // Calculate and store tournament margins
