@@ -10,6 +10,7 @@ import AdminPage from "@/pages/admin";
 import TournamentMargins from "@/pages/tournament-margins";
 import NotificationListener from "@/components/NotificationListener";
 import { BookmakerProvider } from "@/contexts/BookmakerContext";
+import { useRealWebSocket } from "@/hooks/use-real-websocket";
 
 function Router() {
   return (
