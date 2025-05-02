@@ -154,18 +154,34 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
           }
           normalizedToOriginal.get(normalizedId)?.add(event.eventId);
 
-          // Enhanced debugging for Sportybet specifically
+          // Enhanced debugging and tracking for Sportybet specifically
           if (bookmakerCode === 'sporty') {
             // Track all Sportybet events with their IDs and team names for debugging
             const originalId = event.originalEventId || event.eventId;
             logger.info(`Sportybet event: ${event.event} | ID: ${originalId} → ${normalizedId}`);
             
-            // If there's an original ID format, store it for better matching
+            // Store both the original event ID and the normalized ID for better matching
+            if (!normalizedToOriginal.has(normalizedId)) {
+              normalizedToOriginal.set(normalizedId, new Set());
+            }
+            
+            // Add both IDs to help with matching
             if (event.originalEventId) {
-              if (!normalizedToOriginal.has(normalizedId)) {
-                normalizedToOriginal.set(normalizedId, new Set());
-              }
               normalizedToOriginal.get(normalizedId)?.add(event.originalEventId);
+            }
+            
+            // Also store team name to eventId mapping for Sportybet
+            // This helps with matching when IDs are completely different
+            if (event.event) {
+              const normalizedTeams = normalizeEventName(event.event);
+              if (!teamNameToEventIds.has(normalizedTeams)) {
+                teamNameToEventIds.set(normalizedTeams, []);
+              }
+              teamNameToEventIds.get(normalizedTeams)?.push({ 
+                eventId: event.eventId, 
+                originalEventId: event.originalEventId,
+                bookmakerCode 
+              });
             }
           }
         }
@@ -712,10 +728,59 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
         }
 
         // Execute bulk operations
-        // Bulk create new events
+        // Bulk create new events with conflict handling on external_id
         if (createOperations.length > 0) {
           logger.info(`Bulk creating ${createOperations.length} new events in batch ${i+1}/${updateBatches}`);
-          await db.insert(events).values(createOperations);
+          try {
+            // Use onConflictDoUpdate to handle duplicate external_id values
+            await db.insert(events).values(createOperations)
+              .onConflictDoUpdate({
+                target: events.externalId,
+                set: {
+                  eventId: sql`excluded.event_id`,
+                  teams: sql`excluded.teams`,
+                  league: sql`excluded.league`,
+                  country: sql`excluded.country`,
+                  tournament: sql`excluded.tournament`,
+                  sportId: sql`excluded.sport_id`,
+                  date: sql`excluded.date`,
+                  time: sql`excluded.time`,
+                  oddsData: sql`excluded.odds_data`,
+                  bestOdds: sql`excluded.best_odds`,
+                  lastUpdated: sql`CURRENT_TIMESTAMP`
+                }
+              });
+          } catch (insertError) {
+            logger.error(`Error with bulk insert operation: ${insertError.message}`);
+            
+            // Fall back to individual inserts if the bulk operation fails
+            let successCount = 0;
+            for (const event of createOperations) {
+              try {
+                await db.insert(events).values(event)
+                  .onConflictDoUpdate({
+                    target: events.externalId,
+                    set: {
+                      eventId: event.eventId,
+                      teams: event.teams,
+                      league: event.league,
+                      country: event.country || null,
+                      tournament: event.tournament || null,
+                      sportId: event.sportId,
+                      date: event.date,
+                      time: event.time,
+                      oddsData: event.oddsData,
+                      bestOdds: event.bestOdds,
+                      lastUpdated: new Date()
+                    }
+                  });
+                successCount++;
+              } catch (err) {
+                logger.info(`Error inserting event ${event.externalId}: ${err.message}`);
+              }
+            }
+            logger.info(`Inserted ${successCount}/${createOperations.length} events individually after bulk failure`);
+          }
         }
 
         // Bulk update existing events
