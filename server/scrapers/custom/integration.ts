@@ -70,12 +70,21 @@ export async function runCustomScraper(bookmakerCode: string): Promise<any[]> {
       
       // Run the Python scraper directly with python3 for better compatibility
       // Use longer timeout (10 minutes) and larger buffer
-      console.log(`Running command: ${pythonCommand} "${pythonScraperPath}" with 10 minute timeout`);
+      // Get LOG_LEVEL from environment to pass through to Python script
+      const logLevel = process.env.LOG_LEVEL || 'info';
+      console.log(`Running command: ${pythonCommand} "${pythonScraperPath}" with 10 minute timeout (LOG_LEVEL=${logLevel})`);
       
       try {
+        // Set environment variables for the Python process
+        const env = {
+          ...process.env,
+          LOG_LEVEL: logLevel
+        };
+        
         const { stdout, stderr } = await execPromise(`${pythonCommand} "${pythonScraperPath}"`, {
           timeout: 10 * 60 * 1000, // 10 minutes in milliseconds
-          maxBuffer: 20 * 1024 * 1024 // 20MB buffer for large JSON output
+          maxBuffer: 20 * 1024 * 1024, // 20MB buffer for large JSON output
+          env: env // Pass environment variables including LOG_LEVEL
         });
         
         if (stderr && stderr.trim()) {
@@ -154,8 +163,19 @@ export async function runCustomScraper(bookmakerCode: string): Promise<any[]> {
     }
     
     // Run the script as a separate process - quote the path to handle spaces
-    console.log(`Running command: ${config.command} "${config.scriptPath}"`);
-    const { stdout, stderr } = await execPromise(`${config.command} "${config.scriptPath}"`);
+    // Get LOG_LEVEL from environment to pass through to other scrapers
+    const logLevel = process.env.LOG_LEVEL || 'info';
+    console.log(`Running command: ${config.command} "${config.scriptPath}" (LOG_LEVEL=${logLevel})`);
+    
+    // Set environment variables for the scraper process
+    const env = {
+      ...process.env,
+      LOG_LEVEL: logLevel
+    };
+    
+    const { stdout, stderr } = await execPromise(`${config.command} "${config.scriptPath}"`, {
+      env: env // Pass environment variables including LOG_LEVEL
+    });
     
     if (stderr) {
       console.error(`Error running ${bookmakerCode} scraper:`, stderr);

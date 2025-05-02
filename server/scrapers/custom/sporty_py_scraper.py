@@ -44,22 +44,31 @@ def log(message, level="info"):
     Levels:
     - critical: Always log
     - error: Always log errors
-    - warning: Log warnings only in verbose mode
-    - info: Only log in verbose mode
-    - debug: Only log in debug mode
+    - warning: Log warnings only when LOG_LEVEL is warning or lower
+    - info: Only log when LOG_LEVEL is info or lower
+    - debug: Only log when LOG_LEVEL is debug
     """
-    # Check if we should log this message based on environment variables
-    VERBOSE_MODE = os.environ.get('SPORTY_VERBOSE_LOGGING', '').lower() == 'true'
-    DEBUG_MODE = os.environ.get('SPORTY_DEBUG_LOGGING', '').lower() == 'true'
+    # Get log level from environment variable, default to info
+    env_log_level = os.environ.get("LOG_LEVEL", "info").lower()
     
-    # Only log critical messages and errors by default
-    if level == "critical" or level == "error" or \
-       (level == "warning" and VERBOSE_MODE) or \
-       (level == "info" and VERBOSE_MODE) or \
-       (level == "debug" and DEBUG_MODE):
+    # Define log level priorities (lower number = higher priority)
+    log_levels = {
+        "critical": 0,
+        "error": 1,
+        "warning": 2,
+        "info": 3,
+        "debug": 4
+    }
+    
+    # Default to info if level is not recognized
+    current_level_priority = log_levels.get(level.lower(), 3)
+    env_level_priority = log_levels.get(env_log_level, 3)
+    
+    # Only log if the message level is higher priority (lower number) than or equal to the env setting
+    if current_level_priority <= env_level_priority:
         timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%fZ')
         # Write logs to stderr instead of stdout to keep stdout clean for JSON output
-        print(f"[{timestamp}] {message}", file=sys.stderr, flush=True)
+        print(f"[{timestamp}] [{level.upper()}] {message}", file=sys.stderr, flush=True)
 
 def fetch_page(page=1):
     """Fetch a single page from Sportybet API"""
