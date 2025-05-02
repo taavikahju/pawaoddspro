@@ -485,7 +485,7 @@ export default function Dashboard() {
     
     // Log country code mapping issues to help with troubleshooting
     if (code === 'XX' && countryName) {
-      console.debug(`No country code found for: "${countryName}" (normalized: "${normalizedName}")`);
+      // Silently handle missing country codes
     }
     
     return code;

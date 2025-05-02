@@ -551,7 +551,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
     
     // Log country code mapping issues to help with troubleshooting
     if (code === 'XX' && countryName && countryName !== 'Unknown') {
-      console.debug(`No country code found for: "${countryName}" (normalized: "${normalizedName}")`);
+      // Silently handle missing country codes
     }
     
     return code;
