@@ -73,6 +73,14 @@ export async function fixSportybetData(storage: IStorage): Promise<void> {
           // Update existing event with Sportybet odds
           const updatedOddsData = { ...existingEvent.oddsData, ...oddsData };
           
+          // Check if this is a Premier League event (for existing events)
+          const country = existingEvent.country || '';
+          const tournament = existingEvent.tournament || '';
+          if (country === 'England' && tournament === 'Premier League') {
+            premierLeagueCount++;
+            logger.info(`Found Premier League match to update: ${existingEvent.teams} (ID: ${existingEvent.id})`);
+          }
+          
           eventsToUpdate[existingEvent.id] = {
             oddsData: updatedOddsData,
             lastUpdated: new Date()
@@ -147,6 +155,37 @@ export async function fixSportybetData(storage: IStorage): Promise<void> {
     
     logger.critical(`Prepared ${eventsToInsert.length} events to insert and ${Object.keys(eventsToUpdate).length} events to update`);
     logger.critical(`Found ${premierLeagueCount} Premier League events in Sportybet data`);
+    
+    // Add detailed logging for every 200th event to help diagnose
+    let sampleCount = 0;
+    let directPremierLeagueCount = 0;
+    
+    // Direct check for Premier League events in raw data
+    for (const event of sportyData) {
+      if (sampleCount % 200 === 0) {
+        const country = event.country || (event.raw && event.raw.country) || '';
+        const tournament = event.tournament || event.league || (event.raw && event.raw.tournament) || '';
+        const teams = event.teams || event.event || (event.raw && event.raw.event) || '';
+        
+        logger.critical(`Sample event ${sampleCount}: country="${country}", tournament="${tournament}", teams="${teams}"`);
+      }
+      
+      // Check directly for Premier League events in source data
+      const country = event.country || (event.raw && event.raw.country) || '';
+      const tournament = event.tournament || event.league || (event.raw && event.raw.tournament) || '';
+      
+      if (country === 'England' && tournament === 'Premier League') {
+        directPremierLeagueCount++;
+        if (directPremierLeagueCount <= 10) {
+          const teams = event.teams || event.event || (event.raw && event.raw.event) || '';
+          logger.critical(`England Premier League Match Found: ${teams}`);
+        }
+      }
+      
+      sampleCount++;
+    }
+    
+    logger.critical(`Direct Premier League check found ${directPremierLeagueCount} England Premier League events`)
     
     // Perform database operations
     let updateCount = 0;
