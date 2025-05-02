@@ -223,14 +223,30 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
   
   // Function to check if an event belongs to one of the Top 5 Leagues
   const isEventInTop5Leagues = (event: any): boolean => {
+    // Specifically looking for:
+    // 1. England Premier League
+    // 2. France Ligue 1
+    // 3. Germany Bundesliga (men's only, not Bundesliga 2)
+    // 4. Italy Serie A (men's only, not women's)
+    // 5. Spain La Liga (top division only, not La Liga 2)
+    
     if (!event.country && !event.tournament) {
       // Try to extract from legacy league format
       if (event.league) {
         const leagueInfo = event.league.toLowerCase();
+        
+        // Exclude women's leagues and lower divisions
+        if (leagueInfo.includes('women') || 
+            leagueInfo.includes('2') || 
+            leagueInfo.includes('b') || 
+            leagueInfo.includes('segunda')) {
+          return false;
+        }
+        
         return (
           (leagueInfo.includes('england') && leagueInfo.includes('premier league')) ||
           (leagueInfo.includes('spain') && (leagueInfo.includes('laliga') || leagueInfo.includes('la liga'))) ||
-          (leagueInfo.includes('germany') && leagueInfo.includes('bundesliga') && !leagueInfo.includes('2')) ||
+          (leagueInfo.includes('germany') && leagueInfo.includes('bundesliga')) ||
           (leagueInfo.includes('italy') && leagueInfo.includes('serie a')) ||
           (leagueInfo.includes('france') && leagueInfo.includes('ligue 1'))
         );
@@ -241,11 +257,19 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
     // If we have structured country and tournament data
     const country = (event.country || '').toLowerCase();
     const tournament = (event.tournament || '').toLowerCase();
-
+    
+    // Exclude women's leagues and lower divisions
+    if (tournament.includes('women') || 
+        tournament.includes('2') || 
+        tournament.includes('b') || 
+        tournament.includes('segunda')) {
+      return false;
+    }
+    
     return (
       (country === 'england' && tournament.includes('premier league')) ||
       (country === 'spain' && (tournament.includes('laliga') || tournament.includes('la liga'))) ||
-      (country === 'germany' && tournament.includes('bundesliga') && !tournament.includes('2')) ||
+      (country === 'germany' && tournament.includes('bundesliga')) ||
       (country === 'italy' && tournament.includes('serie a')) ||
       (country === 'france' && tournament.includes('ligue 1'))
     );
@@ -565,7 +589,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
             Top 5 Leagues Filter: 
           </span>
           <span className="text-gray-700 dark:text-gray-300 ml-1">
-            Showing {filteredEvents.length} events from Premier League, La Liga, Bundesliga, Serie A, and Ligue 1
+            Showing {filteredEvents.length} events from England Premier League, Spain La Liga, Germany Bundesliga, Italy Serie A, and France Ligue 1 (men's only, top divisions)
           </span>
         </div>
       )}
