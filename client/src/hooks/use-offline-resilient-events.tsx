@@ -170,10 +170,63 @@ export function useOfflineResilientEvents() {
     }
   }, [events]);
 
+  // Add test method to simulate disconnection
+  const testResilience = useCallback(() => {
+    console.log("Testing resilience by simulating server disconnection...");
+    
+    // First ensure we have cache
+    if (Array.isArray(serverEvents) && serverEvents.length > 0) {
+      try {
+        const sportyEvents = serverEvents.filter(event => 
+          event.oddsData && typeof event.oddsData === 'object' && 'sporty' in event.oddsData
+        );
+        
+        console.log(`Found ${sportyEvents.length} events with Sportybet odds before test`);
+        
+        // Store these events in localStorage
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(serverEvents));
+        setLocalCacheEvents(serverEvents);
+        
+        // Now create a modified copy without Sportybet data to simulate disconnection
+        // In a real scenario, the server would disconnect and React Query would return
+        // cached data without Sportybet
+        const eventsWithoutSporty = serverEvents.map(event => {
+          const newEvent = {...event};
+          if (newEvent.oddsData && 'sporty' in newEvent.oddsData) {
+            newEvent.oddsData = {...newEvent.oddsData};
+            delete newEvent.oddsData.sporty;
+          }
+          return newEvent;
+        });
+        
+        // Force our hook to use this modified data temporarily
+        handleError();
+        
+        // Update server events directly (this simulates the React Query cache without Sportybet)
+        // @ts-ignore - we're deliberately overriding this for testing
+        serverEvents.splice(0, serverEvents.length, ...eventsWithoutSporty);
+        
+        setTimeout(() => {
+          const mergedEvents = mergeEvents();
+          const sportyEventsAfter = mergedEvents.filter(event => 
+            event.oddsData && typeof event.oddsData === 'object' && 'sporty' in event.oddsData
+          );
+          console.log(`After disconnection simulation: ${sportyEventsAfter.length} events with Sportybet odds`);
+          console.log("Test complete - check if Sportybet odds were successfully restored from localStorage");
+        }, 100);
+      } catch (error) {
+        console.error("Error during resilience test:", error);
+      }
+    } else {
+      console.error("Cannot test resilience - no events loaded yet");
+    }
+  }, [serverEvents, handleError]);
+
   return {
     events,
     isLoading,
     error,
-    isError
+    isError,
+    testResilience
   };
 }

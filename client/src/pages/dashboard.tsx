@@ -44,6 +44,7 @@ export default function Dashboard() {
     isLoading: isLoadingEvents,
     error: eventsError,
     isError: isEventsError,
+    testResilience
   } = useOfflineResilientEvents();
 
   // Extract available countries and tournaments from the data
@@ -506,6 +507,22 @@ export default function Dashboard() {
       {/* Minimal Control Panel */}
       <div className="bg-white dark:bg-slate-800 p-2 shadow border-b border-gray-200 dark:border-gray-700">
         <div className="flex flex-wrap items-center justify-between gap-2">
+          {/* Test Resilience Button */}
+          <Button
+            variant="outline"
+            size="sm"
+            className="bg-blue-100 hover:bg-blue-200 dark:bg-blue-900 dark:hover:bg-blue-800 border-blue-300 dark:border-blue-700"
+            onClick={() => {
+              if (typeof testResilience === 'function') {
+                testResilience();
+              } else {
+                console.error('Test resilience function not available');
+              }
+            }}
+          >
+            Test Sportybet Resilience
+          </Button>
+          
           {/* Filters */}
           <div className="flex flex-wrap items-center gap-2">
             {/* Country Filter */}
