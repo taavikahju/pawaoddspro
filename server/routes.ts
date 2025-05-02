@@ -566,7 +566,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const sportyCount = Array.isArray(rawSportyData) ? rawSportyData.length : 0;
         
         if (Array.isArray(rawSportyData)) {
-          allSportyEvents = rawSportyData;
+          // Filter out Simulated Reality League events from raw data
+          allSportyEvents = rawSportyData.filter(event => {
+            const tournament = event.tournament || '';
+            return !tournament.includes('Simulated Reality League');
+          });
         }
       } catch (e) {
         logger.critical(`Error checking raw Sportybet data: ${e}`);
@@ -650,6 +654,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
           
           if (!odds) continue;
           
+          // Skip Simulated Reality League events
+          const tournamentName = event.tournament || event.raw?.tournament || '';
+          if (tournamentName.includes('Simulated Reality League')) {
+            continue;
+          }
+          
           // Create a direct event for the response
           directEvents.push({
             id: -1 * (directEvents.length + 1), // Temporary negative ID for direct events
@@ -658,7 +668,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             teams: teams,
             league: event.league || '',
             country: event.country || event.raw?.country || '',
-            tournament: event.tournament || event.raw?.tournament || '',
+            tournament: tournamentName,
             sportId: 1, // Default to football
             date: event.date || 
               (event.start_time ? event.start_time.split(' ')[0] : null) || 
