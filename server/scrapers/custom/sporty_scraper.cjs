@@ -4,11 +4,84 @@ const axios = require('axios');
 // Configuration
 const BASE_URL = 'https://www.sportybet.com/api/gh/factsCenter/pcUpcomingEvents';
 const QUERY = 'sportId=sr%3Asport%3A1&marketId=1%2C18%2C10%2C29%2C11%2C26%2C36%2C14%2C60100&pageSize=100&option=1';
+
+// Add specific endpoint for England Premier League
+// categoryIds are the IDs for specific tournaments/categories in Sportybet
+const EPL_URL = 'https://www.sportybet.com/api/gh/factsCenter/pcUpcoming';
+const EPL_QUERY = 'sportId=sr%3Asport%3A1&categoryIds=sr%3Acategory%3A1&tournamentIds=sr%3Atournament%3A17&marketId=1%2C18%2C10%2C29%2C11%2C26%2C36%2C14%2C60100&pageSize=100';
+
 const HEADERS = {
   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
   'Accept': 'application/json',
   'Accept-Language': 'en-US,en;q=0.9',
   'Referer': 'https://www.sportybet.com/'
+};
+
+// Helper function to fetch data from a URL with retry logic
+const fetchWithRetry = async (url, description, maxAttempts = 3) => {
+  let attempts = 0;
+  
+  while (attempts < maxAttempts) {
+    try {
+      console.error(`📥 Fetching ${description}...`);
+      const res = await axios.get(url, { 
+        headers: HEADERS,
+        timeout: 30000 // 30 second timeout
+      });
+      
+      return res.data?.data;
+    } catch (err) {
+      attempts++;
+      console.error(`❌ Error fetching ${description} (attempt ${attempts}/${maxAttempts}): ${err.message}`);
+      
+      if (attempts >= maxAttempts) {
+        console.error(`⚠️ Max retry attempts reached for ${description}`);
+        return null;
+      }
+      
+      // Longer pause after an error
+      await new Promise(resolve => setTimeout(resolve, 2000));
+    }
+  }
+  
+  return null;
+};
+
+// Fetch England Premier League events specifically
+const fetchEplEvents = async () => {
+  console.error(`🏴󠁧󠁢󠁥󠁮󠁧󠁿 Fetching England Premier League events specifically...`);
+  const eplEvents = [];
+  
+  try {
+    // Fetch the EPL-specific endpoint
+    const eplUrl = `${EPL_URL}?${EPL_QUERY}&_t=${Date.now()}`;
+    const data = await fetchWithRetry(eplUrl, "England Premier League events");
+    
+    if (!data) {
+      console.error(`⚠️ Could not fetch England Premier League events`);
+      return [];
+    }
+    
+    // Process the EPL-specific data
+    if (data.tournaments && Array.isArray(data.tournaments)) {
+      console.error(`✅ Found ${data.tournaments.length} EPL tournament(s)`);
+      
+      for (const tournament of data.tournaments) {
+        if (tournament.events && Array.isArray(tournament.events)) {
+          console.error(`✅ Found ${tournament.events.length} total EPL events for tournament: ${tournament.name}`);
+          
+          // Tag these events as EPL specifically
+          tournament.isEPL = true;
+          eplEvents.push(tournament);
+        }
+      }
+    }
+    
+    return eplEvents;
+  } catch (error) {
+    console.error(`❌ Error fetching EPL events: ${error.message}`);
+    return [];
+  }
 };
 
 // Fetch all pages of tournament data
@@ -20,6 +93,18 @@ const fetchAllPages = async () => {
   const MAX_ATTEMPTS = 3;
   const MAX_PAGES = 20; // Safety limit
 
+  // First, fetch England Premier League events specifically
+  const eplTournaments = await fetchEplEvents();
+  
+  // Add EPL tournaments to our collection
+  if (eplTournaments.length > 0) {
+    allTournaments = allTournaments.concat(eplTournaments);
+    console.error(`✅ Added ${eplTournaments.length} EPL tournament(s) to collection`);
+  }
+
+  // Now fetch all other tournaments
+  console.error(`📊 Fetching general tournaments data...`);
+  
   while (pageNum <= totalPages && pageNum <= MAX_PAGES) {
     const url = `${BASE_URL}?${QUERY}&pageNum=${pageNum}&_t=${Date.now()}`;
     // Only log on the first page and every 5th page to reduce verbosity
