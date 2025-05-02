@@ -661,7 +661,11 @@ export class DatabaseStorage implements IStorage {
       
       // Read file stats to log details about the data
       const stats = await stat(filePath);
-      console.error(`Reading ${bookmakerCode} data (size: ${Math.round(stats.size / 1024)} KB, modified: ${stats.mtime.toISOString()}, forceFresh: ${forceFresh})`);
+      
+      // Only log for non-Sportybet bookmakers (reduces noise)
+      if (bookmakerCode !== 'sporty') {
+        console.error(`Reading ${bookmakerCode} data (size: ${Math.round(stats.size / 1024)} KB, modified: ${stats.mtime.toISOString()}, forceFresh: ${forceFresh})`);
+      }
       
       const data = await readFile(filePath, 'utf8');
       const parsedData = JSON.parse(data);
@@ -670,8 +674,8 @@ export class DatabaseStorage implements IStorage {
       // This prevents the disappearing events issue by isolating each data access
       const safeCopy = JSON.parse(JSON.stringify(parsedData));
       
-      // Log data length for debugging
-      if (Array.isArray(safeCopy)) {
+      // Log data length for debugging, but skip sportybet to reduce log noise
+      if (Array.isArray(safeCopy) && bookmakerCode !== 'sporty') {
         console.error(`Successfully loaded ${safeCopy.length} ${bookmakerCode} events`);
       }
       
