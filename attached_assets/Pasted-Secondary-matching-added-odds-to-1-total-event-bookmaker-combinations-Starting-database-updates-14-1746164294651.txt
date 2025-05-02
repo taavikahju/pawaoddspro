@@ -1,0 +1,99 @@
+Secondary matching added odds to 1 total event-bookmaker combinations
+Starting database updates - 1425 events to process
+Error processing and mapping events: error: op ANY/ALL (array) requires array on right side
+    at file:///home/runner/workspace/node_modules/@neondatabase/serverless/index.mjs:1345:74
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async NeonPreparedQuery.execute (/home/runner/workspace/node_modules/src/neon-serverless/session.ts:102:18)
+    at async processAndMapEvents (/home/runner/workspace/server/utils/dataMapper.ts:595:30)
+    at async runAllScrapers (/home/runner/workspace/server/scrapers/scheduler.ts:289:9) {
+  length: 121,
+  severity: 'ERROR',
+  code: '42809',
+  detail: undefined,
+  hint: undefined,
+  position: '183',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_oper.c',
+  line: '814',
+  routine: 'make_scalar_array_op'
+}
+❌ Error processing events: error: op ANY/ALL (array) requires array on right side
+    at file:///home/runner/workspace/node_modules/@neondatabase/serverless/index.mjs:1345:74
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async NeonPreparedQuery.execute (/home/runner/workspace/node_modules/src/neon-serverless/session.ts:102:18)
+    at async processAndMapEvents (/home/runner/workspace/server/utils/dataMapper.ts:595:30)
+    at async runAllScrapers (/home/runner/workspace/server/scrapers/scheduler.ts:289:9) {
+  length: 121,
+  severity: 'ERROR',
+  code: '42809',
+  detail: undefined,
+  hint: undefined,
+  position: '183',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_oper.c',
+  line: '814',
+  routine: 'make_scalar_array_op'
+}
+[2025-05-02T05:37:56.360Z] Data processing lock released
+❌ Scraper run failed: error: op ANY/ALL (array) requires array on right side
+    at file:///home/runner/workspace/node_modules/@neondatabase/serverless/index.mjs:1345:74
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async NeonPreparedQuery.execute (/home/runner/workspace/node_modules/src/neon-serverless/session.ts:102:18)
+    at async processAndMapEvents (/home/runner/workspace/server/utils/dataMapper.ts:595:30)
+    at async runAllScrapers (/home/runner/workspace/server/scrapers/scheduler.ts:289:9) {
+  length: 121,
+  severity: 'ERROR',
+  code: '42809',
+  detail: undefined,
+  hint: undefined,
+  position: '183',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_oper.c',
+  line: '814',
+  routine: 'make_scalar_array_op'
+}
+❌ ERROR: Error during initial scraping: error: op ANY/ALL (array) requires array on right side
+    at file:///home/runner/workspace/node_modules/@neondatabase/serverless/index.mjs:1345:74
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async NeonPreparedQuery.execute (/home/runner/workspace/node_modules/src/neon-serverless/session.ts:102:18)
+    at async processAndMapEvents (/home/runner/workspace/server/utils/dataMapper.ts:595:30)
+    at async runAllScrapers (/home/runner/workspace/server/scrapers/scheduler.ts:289:9) {
+  length: 121,
+  severity: 'ERROR',
+  code: '42809',
+  detail: undefined,
+  hint: undefined,
+  position: '183',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_oper.c',
+  line: '814',
+  routine: 'make_scalar_array_op'
+}
