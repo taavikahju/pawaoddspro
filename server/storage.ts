@@ -654,12 +654,16 @@ export class DatabaseStorage implements IStorage {
       const data = await readFile(filePath, 'utf8');
       const parsedData = JSON.parse(data);
       
+      // CRITICAL: Create a deep copy before returning to ensure the data is never modified
+      // This prevents the disappearing events issue by isolating each data access
+      const safeCopy = JSON.parse(JSON.stringify(parsedData));
+      
       // Log data length for debugging
-      if (Array.isArray(parsedData)) {
-        console.error(`Successfully loaded ${parsedData.length} ${bookmakerCode} events`);
+      if (Array.isArray(safeCopy)) {
+        console.error(`Successfully loaded ${safeCopy.length} ${bookmakerCode} events`);
       }
       
-      return parsedData;
+      return safeCopy;
     } catch (error) {
       console.error(`Error reading ${bookmakerCode} data:`, error);
       return [];
@@ -675,6 +679,7 @@ export class DatabaseStorage implements IStorage {
     
     for (const bookmaker of bookmakerList) {
       console.error(`Loading data for bookmaker: ${bookmaker.code}`);
+      // Data is already deep-copied in getBookmakerData
       result[bookmaker.code] = await this.getBookmakerData(bookmaker.code, forceFresh);
     }
     
@@ -686,7 +691,11 @@ export class DatabaseStorage implements IStorage {
     
     console.error(`Loaded bookmaker data: ${dataStats}`);
     
-    return result;
+    // CRITICAL: Create an additional deep copy here to ensure complete data isolation
+    // Each call to getAllBookmakersData gets a completely fresh copy
+    const safeCopy = JSON.parse(JSON.stringify(result));
+    
+    return safeCopy;
   }
 
   // Stats methods

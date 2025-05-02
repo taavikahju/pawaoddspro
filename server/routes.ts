@@ -238,7 +238,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
               });
             });
             
-            storage.getEvents().then(events => {
+            storage.getEvents().then(rawEvents => {
+              // Deep copy the events data to prevent modification by reference
+              const events = JSON.parse(JSON.stringify(rawEvents));
               broadcast({
                 type: 'events',
                 data: events
@@ -392,7 +394,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     });
     
-    storage.getEvents().then(events => {
+    storage.getEvents().then(rawEvents => {
+      // CRITICAL: Create a deep copy before any manipulation to prevent mutations
+      // This will completely isolate the data from potential reference mutations
+      const events = JSON.parse(JSON.stringify(rawEvents));
+      
       // Apply the same filter to ensure consistency
       const filteredEvents = events.filter(event => {
         if (!event.oddsData) return false;
@@ -423,9 +429,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const timestamp = new Date().toISOString();
       logger.debug(`[${timestamp}] Broadcast: ${filteredEvents.length} events ready for broadcast`);
       
+      // Create another deep copy of the filtered data before sending
+      const safeCopy = JSON.parse(JSON.stringify(filteredEvents));
+      
       broadcast({
         type: 'events',
-        data: filteredEvents
+        data: safeCopy
       });
     });
   });
@@ -524,17 +533,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const minBookmakers = req.query.minBookmakers ? parseInt(req.query.minBookmakers as string, 10) : 2;
       // Always include Sportybet events regardless of query parameter to ensure consistency
       const includeSportybet = true; // Force to true to always include Sportybet events
-      let events;
+      let rawEvents;
 
       if (sportIdParam) {
         const sportId = parseInt(sportIdParam, 10);
         if (isNaN(sportId)) {
           return res.status(400).json({ message: 'Invalid sport ID' });
         }
-        events = await storage.getEventsBySportId(sportId);
+        rawEvents = await storage.getEventsBySportId(sportId);
       } else {
-        events = await storage.getEvents();
+        rawEvents = await storage.getEvents();
       }
+      
+      // CRITICAL: Create a deep copy of all events to prevent reference modifications
+      // This is essential to fix the disappearing events issue
+      const events = JSON.parse(JSON.stringify(rawEvents));
 
       // Try to check if Sportybet data exists directly in the file
       try {
