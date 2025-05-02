@@ -217,26 +217,16 @@ export function useOfflineResilientEvents() {
   // No debug logging to improve performance
   // const events = mergeEvents();
 
-  // Add test method to simulate disconnection
+  // Add test method to simulate disconnection - with minimal logging
   const testResilience = useCallback(() => {
-    console.log("Testing resilience by simulating server disconnection...");
-    
     // First ensure we have cache
     if (Array.isArray(serverEvents) && serverEvents.length > 0) {
       try {
-        const sportyEvents = serverEvents.filter(event => 
-          event.oddsData && typeof event.oddsData === 'object' && 'sporty' in event.oddsData
-        );
-        
-        console.log(`Found ${sportyEvents.length} events with Sportybet odds before test`);
-        
         // Store these events in localStorage
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(serverEvents));
         setLocalCacheEvents(serverEvents);
         
         // Now create a modified copy without Sportybet data to simulate disconnection
-        // In a real scenario, the server would disconnect and React Query would return
-        // cached data without Sportybet
         const eventsWithoutSporty = serverEvents.map(event => {
           const newEvent = {...event};
           if (newEvent.oddsData && 'sporty' in newEvent.oddsData) {
@@ -252,20 +242,9 @@ export function useOfflineResilientEvents() {
         // Update server events directly (this simulates the React Query cache without Sportybet)
         // @ts-ignore - we're deliberately overriding this for testing
         serverEvents.splice(0, serverEvents.length, ...eventsWithoutSporty);
-        
-        setTimeout(() => {
-          const mergedEvents = mergeEvents();
-          const sportyEventsAfter = mergedEvents.filter(event => 
-            event.oddsData && typeof event.oddsData === 'object' && 'sporty' in event.oddsData
-          );
-          console.log(`After disconnection simulation: ${sportyEventsAfter.length} events with Sportybet odds`);
-          console.log("Test complete - check if Sportybet odds were successfully restored from localStorage");
-        }, 100);
       } catch (error) {
-        console.error("Error during resilience test:", error);
+        // Silent error handling
       }
-    } else {
-      console.error("Cannot test resilience - no events loaded yet");
     }
   }, [serverEvents, handleError]);
 

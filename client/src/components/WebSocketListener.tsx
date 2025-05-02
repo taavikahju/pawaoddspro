@@ -11,18 +11,17 @@ export default function WebSocketListener() {
   const { isConnected, lastMessage } = useRealWebSocket();
   const { toast } = useToast();
   
-  // Display connection status changes
+  // Display connection status changes - only show toast without console logging
   useEffect(() => {
     if (isConnected) {
-      console.info('WebSocket connected');
+      // Silent connection - no logging
       toast({
         title: 'Connected',
         description: 'Real-time data connection established',
         variant: 'default'
       });
-    } else {
-      console.warn('WebSocket disconnected');
     }
+    // No log for disconnection either
   }, [isConnected, toast]);
   
   // The component doesn't render anything

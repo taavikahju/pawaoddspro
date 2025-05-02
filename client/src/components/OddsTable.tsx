@@ -673,7 +673,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                               // Use the same function as in dashboard to get country code
                               const countryCode = getCountryCode(countryName);
                               return (
-                                <>
+                                <div className="flex items-center gap-1.5">
                                   <CountryFlag
                                     countryCode={countryCode}
                                     countryName={countryName}
@@ -682,7 +682,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                                   <span className="text-sm text-gray-600 dark:text-gray-300">
                                     {countryName}
                                   </span>
-                                </>
+                                </div>
                               );
                             })()}
                           </div>
