@@ -6,6 +6,7 @@ export function useRealWebSocket() {
   const [lastMessage, setLastMessage] = useState<any>(null);
   const socketRef = useRef<WebSocket | null>(null);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const lastScrapeCompleteTime = useRef<number>(0);
 
   useEffect(() => {
     // Function to connect to the WebSocket server
@@ -42,16 +43,37 @@ export function useRealWebSocket() {
             const message = JSON.parse(event.data);
             setLastMessage(message);
             
-            // Handle different message types
-            if (message.type === 'refreshEvents') {
-              console.log('[WebSocket] Received refreshEvents message, invalidating events query');
-              // Invalidate the events query to trigger a refetch
-              queryClient.invalidateQueries({ queryKey: ['/api/events'] });
-              queryClient.invalidateQueries({ queryKey: ['/api/events?includeSportybet=true'] });
+            // Only handle complete scrape notifications
+            if (message.type === 'scrapeCompleted') {
+              console.log('[WebSocket] Received scrapeCompleted message - all scrapers finished');
+              
+              // Rate limit updates to avoid multiple refreshes in short period
+              const now = Date.now();
+              const timeSinceLastScrape = now - lastScrapeCompleteTime.current;
+              
+              // Only update if at least 30 seconds have passed since last update
+              // This prevents duplicate refreshes
+              if (timeSinceLastScrape > 30000) {
+                console.log('[WebSocket] Refreshing data after completed scrape');
+                lastScrapeCompleteTime.current = now;
+                
+                // Invalidate event queries to trigger a refresh with complete data
+                queryClient.invalidateQueries({ queryKey: ['/api/events'] });
+                queryClient.invalidateQueries({ queryKey: ['/api/events?includeSportybet=true'] });
+                queryClient.invalidateQueries({ queryKey: ['/api/stats'] });
+              } else {
+                console.log(`[WebSocket] Ignoring duplicate scrape completion (${timeSinceLastScrape}ms since last update)`);
+              }
             }
             
+            // Ignore refreshEvents messages
+            if (message.type === 'refreshEvents') {
+              console.log('[WebSocket] Ignoring refreshEvents message - waiting for complete scrape');
+            }
+            
+            // Still track stats updates
             if (message.type === 'updateStats') {
-              console.log('[WebSocket] Received updateStats message, invalidating stats query');
+              console.log('[WebSocket] Received updateStats message, updating stats');
               queryClient.invalidateQueries({ queryKey: ['/api/stats'] });
             }
           } catch (error) {

@@ -121,10 +121,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       data: data.stats
     });
     
-    // Broadcast trigger to refresh events (client will make a new request)
+    // Broadcast scrape completed message to signal data is ready for consumption
     broadcast({
-      type: 'refreshEvents',
-      timestamp: new Date().toISOString()
+      type: 'scrapeCompleted',
+      timestamp: new Date().toISOString(),
+      message: 'All scraping and data processing complete'
     });
   });
 
