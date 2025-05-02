@@ -8,38 +8,24 @@ USE_PYTHON_SPORTYBET=true
 """
 # Set Node.js compatibility mode for Python-Node.js integration
 import sys
-sys.stdout.reconfigure(line_buffering=True) # Ensure output is immediately flushed
-
 import json
 import os
 import time
-import sys
 import re
 import requests
 from datetime import datetime
 import traceback
 
 # Configuration
-BASE_URL = "https://www.sportybet.com"
+BASE_URL = "https://www.sportybet.com/api/gh/factsCenter/pcUpcomingEvents"
 OUTPUT_FILE = "data/sporty_py.json"  # Separate output file for testing
 TIMEOUT = 15  # Reduce timeout to 15 seconds
 QUERY = "sportId=sr%3Asport%3A1&marketId=1%2C18%2C10%2C29%2C11%2C26%2C36%2C14%2C60100&pageSize=100"
-API_ENDPOINTS = [
-    "/api/gh/factsCenter/pcUpcomingEvents",  # Ghana - Primary endpoint
-    "/api/ke/factsCenter/pcUpcomingEvents",  # Kenya - Secondary endpoint
-    # Disabling other endpoints to ensure we complete within timeout
-    # "/api/ng/factsCenter/pcUpcomingEvents",  # Nigeria
-    # "/api/ug/factsCenter/pcUpcomingEvents",  # Uganda
-    # "/api/tz/factsCenter/pcUpcomingEvents",  # Tanzania
-    # "/api/za/factsCenter/pcUpcomingEvents"   # South Africa
-]
+MAX_PAGES = 5  # Maximum number of pages to fetch
+
 HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-    "Accept": "application/json, text/plain, */*",
-    "Accept-Language": "en-US,en;q=0.9",
-    "Referer": "https://www.sportybet.com/",
-    "Origin": "https://www.sportybet.com",
-    "Connection": "keep-alive"
+    "User-Agent": "Mozilla/5.0",
+    "Accept": "application/json"
 }
 
 def log(message):
@@ -47,12 +33,12 @@ def log(message):
     timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%fZ')
     print(f"[{timestamp}] {message}")
 
-def fetch_page(endpoint, page=1):
+def fetch_page(page=1):
     """Fetch a single page from Sportybet API"""
     try:
         # Add timestamp to avoid caching
         timestamp = int(datetime.now().timestamp() * 1000)
-        url = f"{BASE_URL}{endpoint}?{QUERY}&pageNum={page}&_t={timestamp}"
+        url = f"{BASE_URL}?{QUERY}&pageNum={page}&_t={timestamp}"
         
         log(f"Fetching URL: {url}")
         response = requests.get(url, headers=HEADERS, timeout=TIMEOUT)
@@ -75,10 +61,10 @@ def fetch_page(endpoint, page=1):
             log(f"Response starts with: {response.text[:100]}...")
             return None
     except Exception as e:
-        log(f"Error fetching {endpoint} page {page}: {str(e)}")
+        log(f"Error fetching page {page}: {str(e)}")
         return None
 
-def process_event(event, endpoint_idx):
+def process_event(event, endpoint_idx=0):
     """Process a single event from Sportybet API response"""
     try:
         # Basic validation
@@ -341,172 +327,139 @@ def process_tournaments(tournaments):
     return processed_events
 
 def main():
-    # Set a global timeout for the entire scraper
-    start_time = datetime.now()
-    all_events = []
-    
-    log("Starting Sportybet data collection from 2 endpoints (Python scraper)")
-    
-    # Handle potential timeout with a structured approach
-    total_runtime_limit = 120  # 2 minutes max runtime
-    
-    all_tournaments = []
-    
-    # Process each endpoint with timeout handling
-    for idx, endpoint in enumerate(API_ENDPOINTS):
-        # Check if we're approaching the overall time limit
-        elapsed_seconds = (datetime.now() - start_time).total_seconds()
-        if elapsed_seconds > total_runtime_limit:
-            log(f"⚠️ Approaching time limit ({elapsed_seconds:.1f}s/{total_runtime_limit}s), stopping further endpoint processing")
-            break
-            
-        try:
-            log(f"Processing endpoint {idx+1}/{len(API_ENDPOINTS)}: {endpoint}")
-            page_num = 1
-            total_pages = 1
-        except Exception as e:
-            log(f"Error starting endpoint {endpoint} processing: {str(e)}")
-            log(traceback.format_exc())
-            continue  # Skip to next endpoint on error
-        attempts = 0
-        MAX_ATTEMPTS = 2
-        MAX_PAGES = 3  # Further reduce to 3 pages per endpoint for faster execution
+    """Main entry point for the scraper"""
+    try:
+        # Global runtime limit to avoid hanging
+        start_time = time.time()
+        max_runtime = 120  # seconds
         
-        # Fetch current tournaments data
-        log(f"📊 Fetching current tournaments data...")
+        # Log the startup
+        log("Starting Sportybet data collection (Python scraper)")
         
-        while page_num <= total_pages and page_num <= MAX_PAGES:
-            # Only log on the first page and every 5th page to reduce verbosity
-            if page_num == 1 or page_num % 5 == 0:
-                log(f"📥 Fetching page {page_num}/{total_pages}...")
-            
-            # Check again if we're approaching the time limit during page fetching
-            elapsed_seconds = (datetime.now() - start_time).total_seconds()
-            if elapsed_seconds > total_runtime_limit * 0.9:  # If we're at 90% of our time limit
-                log(f"⚠️ Time limit almost reached during page fetching ({elapsed_seconds:.1f}s/{total_runtime_limit}s), stopping further pages")
+        all_tournaments = []
+        total_events = 0
+        
+        # Get total pages to process
+        for page in range(1, MAX_PAGES + 1):
+            if time.time() - start_time > max_runtime:
+                log(f"⚠️ Reached maximum runtime limit of {max_runtime} seconds, stopping after {page-1} pages.")
                 break
-                
+            
             try:
-                page_data = fetch_page(endpoint, page_num)
+                # Get data for this page
+                page_data = fetch_page(page)
                 
-                if not page_data or 'data' not in page_data or not page_data['data'].get('tournaments'):
-                    log(f"❌ No valid tournaments found on page {page_num}")
-                    
-                    # Only retry a few times, then move on
-                    if attempts >= MAX_ATTEMPTS:
-                        log(f"⚠️ Max retry attempts reached for page {page_num}, moving on...")
-                        page_num += 1
-                        attempts = 0
-                    else:
-                        attempts += 1
+                if not page_data or 'data' not in page_data or 'tournaments' not in page_data['data']:
+                    log(f"❌ Invalid data format from page {page} - no tournaments found")
                     continue
                 
-                # Reset attempts counter after success
-                attempts = 0
-                
-                # On first page, calculate total pages
-                if page_num == 1:
-                    total_num = page_data['data'].get('totalNum', 0)
-                    total_pages = max(1, (total_num + 99) // 100)  # Ceiling division by 100
-                    log(f"📊 Found {total_num} total events across {total_pages} pages")
-                
-                # Add tournaments to our collection
+                # Process the tournaments
                 tournaments = page_data['data'].get('tournaments', [])
-                all_tournaments.extend(tournaments)
+                log(f"📊 Found {len(tournaments)} tournaments on page {page}")
                 
-                # Move to next page
-                page_num += 1
+                # Add events count for logging
+                page_events = sum(len(t.get('events', [])) for t in tournaments)
+                total_events += page_events
+                log(f"📊 Found {page_events} events on page {page} (total: {total_events})")
+                
+                # Store tournaments for processing
+                all_tournaments.extend(tournaments)
                 
                 # Short pause between requests to be polite to the server
                 time.sleep(0.5)
             except Exception as e:
-                log(f"❌ Error on page {page_num}: {str(e)}")
-                
-                # Retry a few times, then move on
-                if attempts >= MAX_ATTEMPTS:
-                    log(f"⚠️ Max retry attempts reached for page {page_num}, moving on...")
-                    page_num += 1
-                    attempts = 0
-                else:
-                    attempts += 1
-                
-                # Longer pause after an error
-                time.sleep(2)
-    
-    # Process all tournaments with time monitoring
-    elapsed_seconds = (datetime.now() - start_time).total_seconds()
-    log(f"Processing tournaments after {elapsed_seconds:.1f}s/{total_runtime_limit}s...")
-    
-    # Check if we have enough time left for processing
-    if elapsed_seconds > total_runtime_limit * 0.7:  # If we've used 70% of our time already
-        log(f"⚠️ Limited time remaining, processing only a subset of collected tournaments")
-        # Take only a subset if we have too many to process
-        if len(all_tournaments) > 20:
-            log(f"Limiting from {len(all_tournaments)} to 20 tournaments for faster processing")
-            # Prioritize England tournaments first to ensure Premier League events
-            england_tournaments = [t for t in all_tournaments if 'events' in t and len(t['events']) > 0 
-                                  and 'sport' in t['events'][0] and 'category' in t['events'][0]['sport'] 
-                                  and t['events'][0]['sport']['category'].get('name', '') == 'England']
-            other_tournaments = [t for t in all_tournaments if t not in england_tournaments]
-            all_tournaments = england_tournaments + other_tournaments[:max(0, 20 - len(england_tournaments))]
-    
-    all_events = process_tournaments(all_tournaments)
-    log(f"Total: collected {len(all_events)} events from all endpoints")
-    
-    # Save all events to file
-    if all_events:
-        # 1. Ensure data directory exists for both files
-        os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
-        os.makedirs("data", exist_ok=True)  # Ensure data dir exists for standard output
+                log(f"❌ Error processing page {page}: {str(e)}")
+                log(traceback.format_exc())
+                continue
         
-        # Count by country for reporting
-        country_counts = {}
-        premier_league_count = 0
+        # Process all tournaments with time monitoring
+        elapsed_seconds = (time.time() - start_time)
+        log(f"Processing tournaments after {elapsed_seconds:.1f}s/{max_runtime}s...")
         
-        for event in all_events:
-            country = event.get('country', 'Unknown')
-            country_counts[country] = country_counts.get(country, 0) + 1
+        # Check if we have enough time left for processing
+        if elapsed_seconds > max_runtime * 0.7:  # If we've used 70% of our time already
+            log(f"⚠️ Limited time remaining, processing only a subset of collected tournaments")
+            # Take only a subset if we have too many to process
+            if len(all_tournaments) > 20:
+                log(f"Limiting from {len(all_tournaments)} to 20 tournaments for faster processing")
+                # Prioritize England tournaments first to ensure Premier League events
+                england_tournaments = [t for t in all_tournaments if 'events' in t and len(t['events']) > 0 
+                                      and 'sport' in t['events'][0] and 'category' in t['events'][0]['sport'] 
+                                      and t['events'][0]['sport']['category'].get('name', '') == 'England']
+                other_tournaments = [t for t in all_tournaments if t not in england_tournaments]
+                all_tournaments = england_tournaments + other_tournaments[:max(0, 20 - len(england_tournaments))]
+        
+        all_events = process_tournaments(all_tournaments)
+        log(f"Total: collected {len(all_events)} events")
+        
+        # Save all events to file
+        if all_events:
+            # 1. Ensure data directory exists for both files
+            os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
+            os.makedirs("data", exist_ok=True)  # Ensure data dir exists for standard output
             
-            # Count Premier League events
-            if country == 'England' and event.get('tournament', '').find('Premier League') >= 0:
-                premier_league_count += 1
+            # Count by country for reporting
+            country_counts = {}
+            premier_league_count = 0
+            
+            for event in all_events:
+                country = event.get('country', 'Unknown')
+                country_counts[country] = country_counts.get(country, 0) + 1
+                
+                # Count Premier League events
+                if country == 'England' and event.get('tournament', '').find('Premier League') >= 0:
+                    premier_league_count += 1
+            
+            # 2. Save to our test file - clear and detailed output for diagnostics
+            with open(OUTPUT_FILE, 'w') as f:
+                json.dump(all_events, f, indent=2)
+            
+            log(f"Saved {len(all_events)} events to test file {OUTPUT_FILE}")
+            
+            # 3. Write a diagnostic summary
+            log("\n=============== EVENT SUMMARY ===============")
+            log(f"Total events: {len(all_events)}")
+            log(f"Events by country:")
+            
+            for country, count in sorted(country_counts.items(), key=lambda x: x[1], reverse=True):
+                log(f"  - {country}: {count} events")
+            
+            log(f"Premier League events: {premier_league_count}")
+            
+            # 4. Save to the standard output file for integration
+            standard_output = "data/sporty.json"
+            with open(standard_output, 'w') as f:
+                json.dump(all_events, f, indent=2)
+            
+            log(f"Saved {len(all_events)} events to standard file {standard_output}")
+            
+            # 5. Print to stdout for the integration system to capture
+            # Important: Make sure to use proper JSON formatting
+            try:
+                print(json.dumps(all_events))
+                sys.stdout.flush()  # Make sure output is flushed
+            except Exception as e:
+                log(f"Error serializing to stdout: {str(e)}")
+                print("[]")  # Output empty array on error
+                sys.stdout.flush()
+                
+            # Only log after we've printed the JSON
+            log(f"✅ Sportybet scraper (Python) completed with {len(all_events)} total events")
+        else:
+            log("⚠️ No events collected, file not saved")
+            # Return empty array on error
+            print("[]")
+            sys.stdout.flush()
         
-        # 2. Save to our test file - clear and detailed output for diagnostics
-        with open(OUTPUT_FILE, 'w') as f:
-            json.dump(all_events, f, indent=2)
-        
-        log(f"Saved {len(all_events)} events to test file {OUTPUT_FILE}")
-        
-        # 3. Write a diagnostic summary
-        log("\n=============== EVENT SUMMARY ===============")
-        log(f"Total events: {len(all_events)}")
-        log(f"Events by country:")
-        
-        for country, count in sorted(country_counts.items(), key=lambda x: x[1], reverse=True):
-            log(f"  - {country}: {count} events")
-        
-        log(f"Premier League events: {premier_league_count}")
-        
-        # 4. Save to the standard output file for integration
-        standard_output = "data/sporty.json"
-        with open(standard_output, 'w') as f:
-            json.dump(all_events, f, indent=2)
-        
-        log(f"Saved {len(all_events)} events to standard file {standard_output}")
-        
-        # 5. Print to stdout for the integration system to capture
-        # Important: Don't write any logs before printing the JSON result
-        # Make sure there's no logging output before this to avoid JSON parsing errors
-        print(json.dumps(all_events))
-        sys.stdout.flush()  # Make sure output is flushed
-        
-        # Only log after we've printed the JSON
-        log(f"✅ Sportybet scraper (Python) completed with {len(all_events)} total events")
-    else:
-        log("⚠️ No events collected, file not saved")
-        # Important: Make sure we only print valid JSON
+        return 0
+    except Exception as e:
+        log(f"❌ Error in main function: {str(e)}")
+        log(traceback.format_exc())
+        # Return empty array on error
         print("[]")
         sys.stdout.flush()
+        
+        return 1
 
 if __name__ == "__main__":
     try:
@@ -514,8 +467,7 @@ if __name__ == "__main__":
     except Exception as e:
         log(f"Critical error in main process: {str(e)}")
         log(traceback.format_exc())
-        # Print empty array for integration system in case of failure
-        # Just print a valid JSON array and nothing else to avoid parsing issues
+        # Return empty array on error
         print("[]")
         sys.stdout.flush()
         sys.exit(1)
