@@ -861,6 +861,74 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     // Get all events and delete any that don't meet our criteria anymore
     // This ensures events that previously had 2+ bookmakers but now have fewer are removed
     // EXCEPTION: We keep all events with Sportybet odds to prevent decreasing Sportybet event counts
+    // Also, we directly inject Sportybet events into the eventMap as a special case
+    // This ensures maximum retention of Sportybet events during mapping
+    
+    // First get all Sportybet events from the raw data
+    try {
+      const sportyRawData = await storage.getBookmakerData('sporty', true);
+      if (Array.isArray(sportyRawData)) {
+        logger.critical(`Found ${sportyRawData.length} raw Sportybet events to process`);
+        // Process each Sportybet event to ensure it gets included in eventMap
+        for (const event of sportyRawData) {
+          const eventId = event.eventId || event.id || (event.raw && event.raw.originalEventId) || (event.raw && event.raw.eventId) || '';
+          if (eventId && !eventMap.has(eventId)) {
+            // Only add events that aren't already in the map
+            const teams = event.teams || event.event || (event.raw && event.raw.event) || 'Unknown';
+            const bookmakerOdds = {};
+            
+            // Create odds data
+            if (event.odds) {
+              bookmakerOdds['sporty'] = event.odds;
+            } else if (event.home_odds !== undefined || event.draw_odds !== undefined || event.away_odds !== undefined) {
+              const homeOdds = event.home_odds ? parseFloat(event.home_odds) : 0;
+              const drawOdds = event.draw_odds ? parseFloat(event.draw_odds) : 0;
+              const awayOdds = event.away_odds ? parseFloat(event.away_odds) : 0;
+              
+              if (homeOdds > 0 || drawOdds > 0 || awayOdds > 0) {
+                bookmakerOdds['sporty'] = { home: homeOdds, draw: drawOdds, away: awayOdds };
+              }
+            } else if (event.raw) {
+              const homeOdds = event.raw.home_odds ? parseFloat(event.raw.home_odds) : 0;
+              const drawOdds = event.raw.draw_odds ? parseFloat(event.raw.draw_odds) : 0;
+              const awayOdds = event.raw.away_odds ? parseFloat(event.raw.away_odds) : 0;
+              
+              if (homeOdds > 0 || drawOdds > 0 || awayOdds > 0) {
+                bookmakerOdds['sporty'] = { home: homeOdds, draw: drawOdds, away: awayOdds };
+              }
+            }
+            
+            if (Object.keys(bookmakerOdds).length > 0) {
+              const country = event.country || (event.raw && event.raw.country) || '';
+              const tournament = event.tournament || event.league || (event.raw && event.raw.tournament) || '';
+              const date = event.date || (event.raw && event.raw.date) || new Date().toISOString().split('T')[0];
+              const time = event.time || (event.raw && event.raw.time) || '12:00';
+              
+              // Create a new entry in the eventMap for this Sportybet event
+              eventMap.set(eventId, {
+                eventId,
+                teams,
+                oddsData: bookmakerOdds,
+                bestOdds: bookmakerOdds['sporty'],
+                league: `${country} ${tournament}`.trim() || 'Unknown',
+                country,
+                tournament,
+                sportId: 1, // Default to football
+                date,
+                time,
+                externalId: event.originalEventId || eventId,
+                lastUpdated: new Date()
+              });
+              
+              logger.info(`Added Sportybet event directly to eventMap: ${teams}`);
+            }
+          }
+        }
+      }
+    } catch (e) {
+      logger.error(`Error processing raw Sportybet events: ${e.message}`);
+    }
+    
     const allEvents = await storage.getEvents();
     const currentEventIds = new Set(Array.from(eventMap.keys()));
 
