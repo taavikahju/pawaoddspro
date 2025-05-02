@@ -318,9 +318,20 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
       else if (bookmakerCount === 2) eventsWith2Bookmakers++;
       else if (bookmakerCount === 3) eventsWith3Bookmakers++;
       else if (bookmakerCount >= 4) eventsWith4Bookmakers++;
+      
+      // Check if this event has Sportybet odds
+      let hasSportybetOdds = false;
+      for (const bookmakerCode of bookmakerCodes) {
+        if (bookmakerCode === 'sporty' && bookmakerOdds[bookmakerCode]) {
+          hasSportybetOdds = true;
+          break;
+        }
+      }
 
-      // Only process events where at least 2 bookmakers have odds (changed from 3)
-      if ((firstMatch || baseMatch) && bookmakerCount >= 2) {
+      // Only process events where:
+      // 1. At least 2 bookmakers have odds (changed from 3), OR
+      // 2. The event has Sportybet odds (to preserve all Sportybet events)
+      if ((firstMatch || baseMatch) && (bookmakerCount >= 2 || hasSportybetOdds)) {
         // Prioritize using betPawa Ghana data when available
         const dataSource = baseMatch || firstMatch;
 
