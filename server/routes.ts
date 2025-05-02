@@ -399,9 +399,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // This will completely isolate the data from potential reference mutations
       const events = JSON.parse(JSON.stringify(rawEvents));
       
-      // Apply the same filter to ensure consistency
+      // Apply filters:
+      // 1. Require 3+ bookmakers
+      // 2. Exclude "Simulated Reality League" events
       const filteredEvents = events.filter(event => {
         if (!event.oddsData) return false;
+        
+        // Filter out Simulated Reality League
+        if (event.tournament && 
+            typeof event.tournament === 'string' && 
+            event.tournament.includes('Simulated Reality League')) {
+          return false;
+        }
+        
         const bookmakerCount = Object.keys(event.oddsData).length;
         return bookmakerCount >= 3; // Updated to require 3+ bookmakers
       });
