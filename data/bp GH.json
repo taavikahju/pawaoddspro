@@ -477,8 +477,8 @@
     "date": "2025-05-02",
     "time": "17:00",
     "odds": {
-      "home": 2.35,
-      "draw": 3.3,
+      "home": 2.3,
+      "draw": 3.4,
       "away": 2.7
     },
     "raw": {
@@ -487,8 +487,8 @@
       "tournament": "II Liga",
       "event": "LKS Lodz II - KS Hutnik Krakow SSA",
       "market": "1X2 - FT",
-      "home_odds": "2.35",
-      "draw_odds": "3.3",
+      "home_odds": "2.3",
+      "draw_odds": "3.4",
       "away_odds": "2.7",
       "start_time": "2025-05-02 17:00"
     }
@@ -3105,7 +3105,7 @@
     "odds": {
       "home": 2.35,
       "draw": 2.95,
-      "away": 3.15
+      "away": 3.05
     },
     "raw": {
       "eventId": "56743149",
@@ -3115,7 +3115,7 @@
       "market": "1X2 - FT",
       "home_odds": "2.35",
       "draw_odds": "2.95",
-      "away_odds": "3.15",
+      "away_odds": "3.05",
       "start_time": "2025-05-02 18:30"
     }
   },
@@ -3623,9 +3623,9 @@
     "date": "2025-05-02",
     "time": "18:45",
     "odds": {
-      "home": 1.41,
+      "home": 1.42,
       "draw": 5.5,
-      "away": 7.5
+      "away": 7.25
     },
     "raw": {
       "eventId": "50955907",
@@ -3633,9 +3633,9 @@
       "tournament": "Ligue 1",
       "event": "OGC Nice - Stade Reims",
       "market": "1X2 - FT",
-      "home_odds": "1.41",
+      "home_odds": "1.42",
       "draw_odds": "5.5",
-      "away_odds": "7.5",
+      "away_odds": "7.25",
       "start_time": "2025-05-02 18:45"
     }
   },
@@ -8719,9 +8719,9 @@
     "date": "2025-05-03",
     "time": "11:00",
     "odds": {
-      "home": 3.5,
-      "draw": 3.2,
-      "away": 1.99
+      "home": 3.3,
+      "draw": 3.15,
+      "away": 2.07
     },
     "raw": {
       "eventId": "58436651",
@@ -8729,9 +8729,9 @@
       "tournament": "Premier League",
       "event": "FK Atyrau - FC Ordabasy",
       "market": "1X2 - FT",
-      "home_odds": "3.5",
-      "draw_odds": "3.2",
-      "away_odds": "1.99",
+      "home_odds": "3.3",
+      "draw_odds": "3.15",
+      "away_odds": "2.07",
       "start_time": "2025-05-03 11:00"
     }
   },
@@ -10383,9 +10383,9 @@
     "date": "2025-05-03",
     "time": "12:00",
     "odds": {
-      "home": 3.65,
+      "home": 3.75,
       "draw": 3.05,
-      "away": 1.99
+      "away": 1.96
     },
     "raw": {
       "eventId": "58436643",
@@ -10393,9 +10393,9 @@
       "tournament": "Premier League",
       "event": "FC Zhenis - FC Aktobe",
       "market": "1X2 - FT",
-      "home_odds": "3.65",
+      "home_odds": "3.75",
       "draw_odds": "3.05",
-      "away_odds": "1.99",
+      "away_odds": "1.96",
       "start_time": "2025-05-03 12:00"
     }
   },
@@ -11033,9 +11033,9 @@
     "date": "2025-05-03",
     "time": "12:00",
     "odds": {
-      "home": 3.75,
-      "draw": 4.05,
-      "away": 1.7
+      "home": 3.65,
+      "draw": 3.9,
+      "away": 1.74
     },
     "raw": {
       "eventId": "51469567",
@@ -11043,9 +11043,9 @@
       "tournament": "Regionalliga West",
       "event": "SV Eintracht Hohkeppel - SV Rodinghausen",
       "market": "1X2 - FT",
-      "home_odds": "3.75",
-      "draw_odds": "4.05",
-      "away_odds": "1.7",
+      "home_odds": "3.65",
+      "draw_odds": "3.9",
+      "away_odds": "1.74",
       "start_time": "2025-05-03 12:00"
     }
   },
@@ -18954,6 +18954,32 @@
     }
   },
   {
+    "id": "58520823",
+    "eventId": "58520823",
+    "teams": "KFC Komarno - AS Trencin",
+    "league": "Superliga",
+    "sport": "football",
+    "country": "Slovakia",
+    "date": "2025-05-03",
+    "time": "16:00",
+    "odds": {
+      "home": 2.7,
+      "draw": 3.35,
+      "away": 2.35
+    },
+    "raw": {
+      "eventId": "58520823",
+      "country": "Slovakia",
+      "tournament": "Superliga",
+      "event": "KFC Komarno - AS Trencin",
+      "market": "1X2 - FT",
+      "home_odds": "2.7",
+      "draw_odds": "3.35",
+      "away_odds": "2.35",
+      "start_time": "2025-05-03 16:00"
+    }
+  },
+  {
     "id": "50939463",
     "eventId": "50939463",
     "teams": "1.SK Prostejov - Sparta Prague B",
@@ -21615,9 +21641,9 @@
     "date": "2025-05-03",
     "time": "19:00",
     "odds": {
-      "home": 6,
-      "draw": 3.9,
-      "away": 1.47
+      "home": 5.75,
+      "draw": 3.8,
+      "away": 1.5
     },
     "raw": {
       "eventId": "58222795",
@@ -21625,9 +21651,9 @@
       "tournament": "Colombia Professional League Women",
       "event": "Fortaleza FC Women - Alianza FC Women",
       "market": "1X2 - FT",
-      "home_odds": "6.0",
-      "draw_odds": "3.9",
-      "away_odds": "1.47",
+      "home_odds": "5.75",
+      "draw_odds": "3.8",
+      "away_odds": "1.5",
       "start_time": "2025-05-03 19:00"
     }
   },

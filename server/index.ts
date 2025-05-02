@@ -3,9 +3,33 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { fixSportybetData } from "./utils/sportybetFix";
 import { storage } from "./storage";
+import * as fs from 'fs';
+import * as path from 'path';
 
-// Set admin key for development
-process.env.ADMIN_KEY = 'pawaodds123';
+// Load environment variables from .env file if it exists
+try {
+  const envPath = path.join(process.cwd(), '.env');
+  if (fs.existsSync(envPath)) {
+    console.log(`Loading environment variables from ${envPath}`);
+    const envContent = fs.readFileSync(envPath, 'utf8');
+    envContent.split('\n').forEach(line => {
+      if (line.trim() && !line.startsWith('#')) {
+        const [key, value] = line.split('=');
+        if (key && value) {
+          process.env[key.trim()] = value.trim();
+          console.log(`Set environment variable: ${key.trim()} = ${value.trim()}`);
+        }
+      }
+    });
+  }
+} catch (error) {
+  console.error('Error loading .env file:', error);
+}
+
+// Set admin key for development if not already set
+if (!process.env.ADMIN_KEY) {
+  process.env.ADMIN_KEY = 'pawaodds123';
+}
 
 const app = express();
 app.use(express.json());
