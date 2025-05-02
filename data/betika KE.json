@@ -165,9 +165,9 @@
     "date": "2025-05-02",
     "time": "12:30",
     "odds": {
-      "home": 2,
-      "draw": 3.15,
-      "away": 3.8
+      "home": 2.03,
+      "draw": 3.2,
+      "away": 3.65
     },
     "raw": {
       "eventId": "56828241",
@@ -175,9 +175,9 @@
       "tournament": "Persha Liga",
       "event": "FC Podillya Khmelnytskyi - MFC Metalurh Zaporizhya",
       "market": "1X2",
-      "home_odds": "2.00",
-      "draw_odds": "3.15",
-      "away_odds": "3.80",
+      "home_odds": "2.03",
+      "draw_odds": "3.20",
+      "away_odds": "3.65",
       "start_time": "2025-05-02 12:30"
     }
   },
@@ -2427,9 +2427,9 @@
     "date": "2025-05-02",
     "time": "20:00",
     "odds": {
-      "home": 8.4,
+      "home": 8.6,
       "draw": 5.4,
-      "away": 1.26
+      "away": 1.25
     },
     "raw": {
       "eventId": "50854499",
@@ -2437,9 +2437,9 @@
       "tournament": "Regionalliga Ost",
       "event": "FC Mauerwerk - FC Marchfeld Donauauen",
       "market": "1X2",
-      "home_odds": "8.40",
+      "home_odds": "8.60",
       "draw_odds": "5.40",
-      "away_odds": "1.26",
+      "away_odds": "1.25",
       "start_time": "2025-05-02 20:00"
     }
   },
@@ -3155,9 +3155,9 @@
     "date": "2025-05-02",
     "time": "21:00",
     "odds": {
-      "home": 1.32,
-      "draw": 5.2,
-      "away": 7.8
+      "home": 1.3,
+      "draw": 5.4,
+      "away": 8.2
     },
     "raw": {
       "eventId": "52034813",
@@ -3165,9 +3165,9 @@
       "tournament": "Saudi Pro League",
       "event": "Al Qadsiah - Al-Kholood",
       "market": "1X2",
-      "home_odds": "1.32",
-      "draw_odds": "5.20",
-      "away_odds": "7.80",
+      "home_odds": "1.30",
+      "draw_odds": "5.40",
+      "away_odds": "8.20",
       "start_time": "2025-05-02 21:00"
     }
   },
@@ -3441,7 +3441,7 @@
     "date": "2025-05-02",
     "time": "21:00",
     "odds": {
-      "home": 1.59,
+      "home": 1.57,
       "draw": 4.3,
       "away": 4.7
     },
@@ -3451,7 +3451,7 @@
       "tournament": "Eerste Divisie",
       "event": "FC Emmen - VVV Venlo",
       "market": "1X2",
-      "home_odds": "1.59",
+      "home_odds": "1.57",
       "draw_odds": "4.30",
       "away_odds": "4.70",
       "start_time": "2025-05-02 21:00"
@@ -12454,6 +12454,32 @@
     }
   },
   {
+    "id": "60252959",
+    "eventId": "60252959",
+    "teams": "US Avellino - Calcio Padova",
+    "league": "Supercoppa di Lega Pro",
+    "sport": "football",
+    "country": "Italy",
+    "date": "2025-05-03",
+    "time": "20:00",
+    "odds": {
+      "home": 2.23,
+      "draw": 3.05,
+      "away": 3.05
+    },
+    "raw": {
+      "eventId": "60252959",
+      "country": "Italy",
+      "tournament": "Supercoppa di Lega Pro",
+      "event": "US Avellino - Calcio Padova",
+      "market": "1X2",
+      "home_odds": "2.23",
+      "draw_odds": "3.05",
+      "away_odds": "3.05",
+      "start_time": "2025-05-03 20:00"
+    }
+  },
+  {
     "id": "60000955",
     "eventId": "60000955",
     "teams": "Banik Ostrava - Sigma Olomouc",
@@ -19561,9 +19587,9 @@
     "date": "2025-05-04",
     "time": "18:30",
     "odds": {
-      "home": 2.23,
+      "home": 2.25,
       "draw": 3.7,
-      "away": 3.2
+      "away": 3.15
     },
     "raw": {
       "eventId": "50850663",
@@ -19571,9 +19597,9 @@
       "tournament": "Premier League",
       "event": "Chelsea - Liverpool",
       "market": "1X2",
-      "home_odds": "2.23",
+      "home_odds": "2.25",
       "draw_odds": "3.70",
-      "away_odds": "3.20",
+      "away_odds": "3.15",
       "start_time": "2025-05-04 18:30"
     }
   },
