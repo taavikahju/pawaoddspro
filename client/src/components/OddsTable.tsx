@@ -645,15 +645,14 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
         
         <TableBody>
           {filteredEvents.map((event, eventIndex) => (
-            // Using a non-Fragment wrapper to avoid React.Fragment warnings with Replit metadata
-            <tbody key={eventIndex} className="contents">
-              {filteredBookmakers.map((bookmaker, bookmakerIndex) => {
-                const isFirstBookmaker = bookmakerIndex === 0;
-                const isLastBookmaker = bookmakerIndex === filteredBookmakers.length - 1;
-                // Use alternating background colors for events
-                const isEvenEvent = eventIndex % 2 === 0;
-                // If this is the last bookmaker for an event, add a thicker bottom border
-                const bottomBorderClass = isLastBookmaker ? 'border-b-2 border-gray-300 dark:border-gray-600' : 'border-b border-gray-200 dark:border-gray-700';
+            // Map each event
+            filteredBookmakers.map((bookmaker, bookmakerIndex) => {
+              const isFirstBookmaker = bookmakerIndex === 0;
+              const isLastBookmaker = bookmakerIndex === filteredBookmakers.length - 1;
+              // Use alternating background colors for events
+              const isEvenEvent = eventIndex % 2 === 0;
+              // If this is the last bookmaker for an event, add a thicker bottom border
+              const bottomBorderClass = isLastBookmaker ? 'border-b-2 border-gray-300 dark:border-gray-600' : 'border-b border-gray-200 dark:border-gray-700';
                 
                 return (
                   <TableRow 
@@ -928,9 +927,9 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                     )}
                   </TableRow>
                 );
-              })}
-            </tbody>
-          ))}
+              })
+            ))
+          }
         </TableBody>
       </Table>
       
