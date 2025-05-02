@@ -146,11 +146,14 @@ const processTournaments = (tournaments) => {
           }
           
           // Normalize the event ID by removing non-numeric characters (removing "sr:match:" prefix)
+          // Store both the original ID and the normalized version to help with matching
           const normalizedId = event.eventId.replace(/\D/g, '');
+          const originalId = event.eventId;
           
           // Add the processed event to our collection
           processedEvents.push({
             eventId: normalizedId,
+            originalEventId: originalId, // Store the original ID for better matching
             country: country,
             tournament: tournamentName,
             event: `${event.homeTeamName} - ${event.awayTeamName}`,

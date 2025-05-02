@@ -157,7 +157,16 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
           // Enhanced debugging for Sportybet specifically
           if (bookmakerCode === 'sporty') {
             // Track all Sportybet events with their IDs and team names for debugging
-            logger.info(`Sportybet event: ${event.event} | ID: ${event.eventId} → ${normalizedId}`);
+            const originalId = event.originalEventId || event.eventId;
+            logger.info(`Sportybet event: ${event.event} | ID: ${originalId} → ${normalizedId}`);
+            
+            // If there's an original ID format, store it for better matching
+            if (event.originalEventId) {
+              if (!normalizedToOriginal.has(normalizedId)) {
+                normalizedToOriginal.set(normalizedId, new Set());
+              }
+              normalizedToOriginal.get(normalizedId)?.add(event.originalEventId);
+            }
           }
         }
       }
