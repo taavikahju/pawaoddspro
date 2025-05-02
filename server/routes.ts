@@ -650,8 +650,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
             country: event.country || event.raw?.country || '',
             tournament: event.tournament || event.raw?.tournament || '',
             sportId: 1, // Default to football
-            date: event.date || event.raw?.date || new Date().toISOString().split('T')[0],
-            time: event.time || event.raw?.time || '12:00',
+            date: event.date || 
+              (event.start_time ? event.start_time.split(' ')[0] : null) || 
+              event.raw?.date || 
+              new Date().toISOString().split('T')[0],
+            time: event.time || 
+              (event.start_time ? event.start_time.split(' ')[1] : null) || 
+              event.raw?.time || 
+              '12:00',
             oddsData: { sporty: odds },
             bestOdds: odds,
             lastUpdated: new Date()
