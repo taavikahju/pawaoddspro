@@ -1154,42 +1154,81 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
 function normalizeEventName(eventName: string): string {
   if (!eventName) return '';
 
+  // Function to normalize team names comprehensively
+  function normalizeTeamName(team: string): string {
+    // Handle special cases and common variations
+    const specialCases: Record<string, string> = {
+      // Club full names and common variations
+      'manchester united': 'manchester',
+      'manchester utd': 'manchester',
+      'man united': 'manchester',
+      'man utd': 'manchester',
+      'man u': 'manchester',
+      'manu': 'manchester',
+      
+      // Handle Manchester City variations
+      'manchester city': 'manchestercity', // Special case to distinguish from Man United
+      'man city': 'manchestercity',
+      'man c': 'manchestercity',
+      'ogc nice': 'nice',     // Specific case in the example
+      'stade reims': 'reims', // Specific case in the example
+      
+      // Team name aliases
+      'juventus turin': 'juventus',
+      'inter milan': 'internazionale',
+      'rb leipzig': 'leipzig',
+      'psg': 'paris',
+      'wolverhampton wanderers': 'wolverhampton',
+      'wolves': 'wolverhampton',
+      'tottenham hotspur': 'tottenham',
+      'spurs': 'tottenham',
+      'napoli sc': 'napoli',
+      'ac milan': 'milan',
+      'crystal palace': 'crystalpalace',
+      'liver': 'liverpool',
+      'arsenal': 'arsenal',
+      'crystal': 'crystalpalace',
+    };
+    
+    let normalized = team.toLowerCase()
+      // Remove common suffixes
+      .replace(/\s+(united|utd|city|town|county|albion|rovers|wanderers|athletic|hotspur|wednesday|forest|fc|academy|reserve|women|ladies|boys|girls|u\d+|under\d+|fc\.?)\b/g, '')
+      // Remove common location prefixes but preserve them for disambiguation later
+      .replace(/\b(west|east|north|south|central|real|atletico|deportivo|inter|lokomotiv|dynamo)\s+/g, '')
+      // Remove country specifiers
+      .replace(/\s+(ghana|kenya|uganda|tanzania|nigeria|zambia)\b/g, '')
+      // Remove 'fc' (football club)
+      .replace(/\s+fc\b|\bfc\s+|\s+football\s+club|\bfootball\s+club/g, '')
+      // Replace ampersands with 'and'
+      .replace(/&/g, 'and')
+      // Standardize quotes and parentheses
+      .replace(/['"''""()[\]{}]/g, '')
+      // Trim whitespace
+      .trim();
+    
+    // Check for special cases 
+    for (const [pattern, replacement] of Object.entries(specialCases)) {
+      if (normalized === pattern) {
+        return replacement;
+      }
+    }
+    
+    // Final cleanup
+    return normalized
+      .replace(/\./g, '') // Remove periods
+      .replace(/\s+/g, '') // Remove all whitespace
+      .replace(/[^\w]/g, '') // Remove any remaining punctuation
+      .trim();
+  }
+
+  // First standardize the event name format
   let normalized = eventName
     .toLowerCase()
     // Standardize separator to 'vs' for consistent processing
     .replace(/\s+v\.?\s+|\s+-\s+|\s+@\s+/g, ' vs ')
     // Standardize quotes and parentheses
     .replace(/['"''""()[\]{}]/g, '')
-    // Remove 'fc' (football club)
-    .replace(/\s+fc\b|\bfc\s+|\s+football\s+club|\bfootball\s+club/g, '')
-    // Specific frequent misspellings and variations
-    .replace(/juventus turin/g, 'juventus')
-    .replace(/inter milan/g, 'internazionale')
-    .replace(/rb leipzig/g, 'leipzig')
-    .replace(/psg/g, 'paris')
-    .replace(/wolves/g, 'wolverhampton')
-    .replace(/spurs/g, 'tottenham')
-    .replace(/napoli sc/g, 'napoli')
-    .replace(/ac milan/g, 'milan')
-    // Remove common suffixes - expanded list (but only after we standardize separators)
-    .replace(/\s+(united|utd|city|town|county|albion|rovers|wanderers|athletic|hotspur|wednesday|forest|fc|academy|reserve|women|ladies|boys|girls|u\d+|under\d+|fc\.?)\b/g, '')
-    // Remove common location prefixes
-    .replace(/\b(west|east|north|south|central|real|atletico|deportivo|inter|lokomotiv|dynamo)\s+/g, '')
-    // Remove country specifiers
-    .replace(/\s+(ghana|kenya|uganda|tanzania|nigeria|zambia)\b/g, '')
-    // Replacements for specific abbreviations
-    .replace(/\bmanu\b/g, 'manchester') // Manchester United 
-    .replace(/\bman\s+u\b/g, 'manchester') // Manchester United
-    .replace(/\bman\s+utd\b/g, 'manchester') // Manchester United
-    .replace(/\bman\s+city\b/g, 'manchester') // Manchester City
-    .replace(/\bman\s+c\b/g, 'manchester') // Manchester City
-    .replace(/\blfc\b/g, 'liverpool') // Liverpool FC
-    .replace(/\bafc\b/g, 'arsenal') // Arsenal FC
-    .replace(/\bcfc\b/g, 'chelsea') // Chelsea FC
-    .replace(/\bbvb\b/g, 'dortmund') // Borussia Dortmund
-    .replace(/\bfcb\b/g, 'bayern') // Bayern Munich
-    // Replace ampersands with 'and'
-    .replace(/&/g, 'and');
+    .trim();
 
   // Now transform both team names separately if we have a vs separator
   if (normalized.includes(' vs ')) {
@@ -1197,17 +1236,8 @@ function normalizeEventName(eventName: string): string {
     if (parts.length === 2) {
       // Normalize each team name separately
       const [team1, team2] = parts;
-      const normalizedTeam1 = team1
-        .replace(/\./g, '') // Remove periods
-        .replace(/\s+/g, '') // Remove all whitespace
-        .replace(/[^\w]/g, '') // Remove any remaining punctuation
-        .trim();
-
-      const normalizedTeam2 = team2
-        .replace(/\./g, '')
-        .replace(/\s+/g, '')
-        .replace(/[^\w]/g, '')
-        .trim();
+      const normalizedTeam1 = normalizeTeamName(team1);
+      const normalizedTeam2 = normalizeTeamName(team2);
 
       return `${normalizedTeam1} vs ${normalizedTeam2}`;
     }
