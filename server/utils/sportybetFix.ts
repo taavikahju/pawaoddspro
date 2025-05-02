@@ -7,8 +7,11 @@ import { logger } from './logger';
  * This is used for diagnostics and debugging.
  */
 export async function getPremierLeagueData(storage: IStorage): Promise<any> {
+  // Get fresh Sportybet data with forceFresh=true to avoid any cached data
   const rawSportyData = await storage.getBookmakerData('sporty', true);
-  // Create a deep copy to prevent modification of the original data
+  
+  // CRITICAL: Create a deep copy to prevent modification of the original data
+  // This is crucial to prevent events from disappearing between requests
   const sportyData = JSON.parse(JSON.stringify(rawSportyData));
   
   if (!Array.isArray(sportyData)) {
@@ -53,14 +56,15 @@ export async function fixSportybetData(storage: IStorage): Promise<void> {
   logger.critical(`Running automatic Sportybet data fix`);
   
   try {
-    // Get Sportybet data from file with force fresh
+    // Get Sportybet data from file with force fresh to avoid any cached data
     const rawSportyData = await storage.getBookmakerData('sporty', true);
     if (!Array.isArray(rawSportyData) || rawSportyData.length === 0) {
       logger.critical(`No Sportybet data found in file during automatic fix`);
       return;
     }
     
-    // Create a deep copy of the data to prevent modification of the original
+    // CRITICAL: Create a deep copy of the data to prevent modification of the original
+    // This is essential to prevent events from disappearing between requests
     const sportyData = JSON.parse(JSON.stringify(rawSportyData));
     
     logger.critical(`Raw Sportybet data check: ${sportyData.length} events found in file`);
