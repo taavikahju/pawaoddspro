@@ -89,6 +89,14 @@ const processTournaments = (tournaments) => {
   const processedEvents = [];
   let eventCount = 0;
   let skippedCount = 0;
+  
+  // Add specific tracking for England Premier League
+  const eplEvents = {
+    found: 0,
+    withOdds: 0,
+    dates: new Set(),
+    teams: []
+  };
 
   // Track progress (simplified log)
   console.error(`Processing ${tournaments.length} tournaments...`);
@@ -98,6 +106,15 @@ const processTournaments = (tournaments) => {
       // Extract country and tournament name
       const country = tournament.events?.[0]?.sport?.category?.name || 'Unknown';
       const tournamentName = tournament.name || 'Unknown Tournament';
+      
+      // Check if this is EPL
+      const isEPL = (country === 'England' && 
+                     (tournamentName.includes('Premier League') || 
+                      tournamentName.includes('Premier league')));
+      
+      if (isEPL) {
+        console.error(`🏴󠁧󠁢󠁥󠁮󠁧󠁿 Found England Premier League tournament: ${tournamentName}`);
+      }
       
       if (!tournament.events || !Array.isArray(tournament.events)) {
         // Skip logging missing events to reduce verbosity
@@ -117,6 +134,11 @@ const processTournaments = (tournaments) => {
           const market = event.markets?.find(m => m.id === "1");
           if (!market || !market.outcomes || !Array.isArray(market.outcomes)) {
             skippedCount++;
+            
+            // Track EPL events without odds
+            if (isEPL) {
+              console.error(`❌ EPL event without markets: ${event.homeTeamName} vs ${event.awayTeamName} (ID: ${event.eventId})`);
+            }
             continue;
           }
           
@@ -134,6 +156,11 @@ const processTournaments = (tournaments) => {
           // Skip events with missing odds
           if (homeOdds === 0 && drawOdds === 0 && awayOdds === 0) {
             skippedCount++;
+            
+            // Track EPL events without odds
+            if (isEPL) {
+              console.error(`❌ EPL event with zero odds: ${event.homeTeamName} vs ${event.awayTeamName} (ID: ${event.eventId})`);
+            }
             continue;
           }
           
@@ -149,6 +176,20 @@ const processTournaments = (tournaments) => {
           // Store both the original ID and the normalized version to help with matching
           const normalizedId = event.eventId.replace(/\D/g, '');
           const originalId = event.eventId;
+          
+          // Track EPL events
+          if (isEPL) {
+            eplEvents.found++;
+            eplEvents.withOdds++;
+            if (startTime) eplEvents.dates.add(startTime.split(' ')[0]); // Just the date part
+            eplEvents.teams.push({
+              teams: `${event.homeTeamName} - ${event.awayTeamName}`,
+              date: startTime,
+              eventId: originalId, 
+              normalizedId,
+              odds: { home: homeOdds, draw: drawOdds, away: awayOdds }
+            });
+          }
           
           // Add the processed event to our collection
           processedEvents.push({
@@ -178,6 +219,34 @@ const processTournaments = (tournaments) => {
       }
       continue;
     }
+  }
+  
+  // Log EPL specific stats
+  if (eplEvents.found > 0) {
+    console.error(`\n🏴󠁧󠁢󠁥󠁮󠁧󠁿 ENGLAND PREMIER LEAGUE SUMMARY:`);
+    console.error(`- Found ${eplEvents.found} total EPL events`);
+    console.error(`- ${eplEvents.withOdds} events have valid odds`);
+    console.error(`- Dates covered: ${Array.from(eplEvents.dates).sort().join(', ')}`);
+    console.error(`- Teams and dates:`);
+    
+    // Sort by date for easier inspection
+    eplEvents.teams.sort((a, b) => {
+      if (!a.date) return 1;
+      if (!b.date) return -1;
+      return a.date.localeCompare(b.date);
+    });
+    
+    // Print team information grouped by date
+    let currentDate = '';
+    for (const team of eplEvents.teams) {
+      const date = team.date ? team.date.split(' ')[0] : 'Unknown date';
+      if (date !== currentDate) {
+        console.error(`\n  ${date}:`);
+        currentDate = date;
+      }
+      console.error(`  - ${team.teams} (ID: ${team.normalizedId}) Odds: ${team.odds.home}/${team.odds.draw}/${team.odds.away}`);
+    }
+    console.error(''); // Empty line for better readability
   }
   
   console.error(`✅ Successfully processed ${eventCount} events (skipped ${skippedCount})`);

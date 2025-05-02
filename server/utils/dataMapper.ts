@@ -48,6 +48,19 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     // Use maps to track events by their eventId (for exact matching across bookmakers)
     const eventMap = new Map<string, any>();
     const processedEvents = new Set<string>(); // Track which eventIds we've processed
+    
+    // Special tracking for England Premier League events
+    const eplEvents = {
+      byEventId: new Map<string, {
+        teams: string,
+        date: string,
+        time: string,
+        bookmakers: Set<string>,
+        hasSportybet: boolean
+      }>(),
+      total: 0,
+      withSportybet: 0
+    };
     const teamNameToEventIds = new Map<string, Array<{eventId: string, originalEventId?: string, bookmakerCode: string}>>();
 
     // Special handling for Sportybet to track its events for secondary matching
