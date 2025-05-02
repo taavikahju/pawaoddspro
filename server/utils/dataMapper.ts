@@ -32,9 +32,21 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     const startTime = new Date();
     logger.critical(`[${startTime.toISOString()}] Starting event mapping process`);
 
-    // Get all bookmaker data
-    const allBookmakerData = await storage.getAllBookmakersData();
+    // Get all bookmaker data - force fresh load to avoid caching issues
+    logger.critical('Loading fresh bookmaker data from disk...');
+    const allBookmakerData = await storage.getAllBookmakersData(true);
     const bookmakerCodes = Object.keys(allBookmakerData);
+    
+    // Log detailed bookmaker data
+    for (const [code, data] of Object.entries(allBookmakerData)) {
+      const count = Array.isArray(data) ? data.length : 0;
+      logger.critical(`Bookmaker ${code}: loaded ${count} events`);
+      
+      // Special log for Sportybet
+      if (code === 'sporty' && count > 0 && Array.isArray(data)) {
+        logger.critical(`First Sportybet event: ${JSON.stringify(data[0])}`);
+      }
+    }
 
     // Save a copy of the raw bookmaker data for inspection
     try {
