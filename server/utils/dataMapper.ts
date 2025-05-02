@@ -751,47 +751,45 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
 
     // Get all events and delete any that don't meet our criteria anymore
     // This ensures events that previously had 3+ bookmakers but now have fewer are removed
-    finally {
-        const allEvents = await storage.getEvents();
-        const currentEventIds = new Set(Array.from(eventMap.keys()));
+    const allEvents = await storage.getEvents();
+    const currentEventIds = new Set(Array.from(eventMap.keys()));
 
-        let deletedCount = 0;
+    let deletedCount = 0;
 
-        logger.info(`Cleaning up events that no longer meet criteria...`);
+    logger.info(`Cleaning up events that no longer meet criteria...`);
 
-        // Remove events that don't meet criteria anymore
-        for (const event of allEvents) {
-          // If this event is not in our current map and has an eventId, it should be removed
-          if (event.eventId && !currentEventIds.has(event.eventId)) {
-            try {
-              // Skip logs for individual event removal to reduce console noise
-              // console.log(`Event ${event.id} (${event.eventId}: ${event.teams}) no longer meets criteria - removing from database`);
-              // Delete the event from the database
-              await db.delete(events).where(eq(events.id, event.id));
-              deletedCount++;
-            } catch (error) {
-              console.error(`Error deleting event ${event.id}:`, error);
-            }
-          }
+    // Remove events that don't meet criteria anymore
+    for (const event of allEvents) {
+      // If this event is not in our current map and has an eventId, it should be removed
+      if (event.eventId && !currentEventIds.has(event.eventId)) {
+        try {
+          // Skip logs for individual event removal to reduce console noise
+          // console.log(`Event ${event.id} (${event.eventId}: ${event.teams}) no longer meets criteria - removing from database`);
+          // Delete the event from the database
+          await db.delete(events).where(eq(events.id, event.id));
+          deletedCount++;
+        } catch (error) {
+          console.error(`Error deleting event ${event.id}:`, error);
         }
-
-        // Log summary of cleanup with timestamp
-        const endTime = new Date();
-
-        // Create bookmaker counts summary
-        let bookmakerSummary = "";
-        for (const [code, count] of Object.entries(bookmakerEventCounts)) {
-          bookmakerSummary += `${code}: ${count} events, `;
-        }
-
-        // Remove trailing comma and space
-        if (bookmakerSummary.endsWith(", ")) {
-          bookmakerSummary = bookmakerSummary.slice(0, -2);
-        }
-
-        logger.critical(`[${endTime.toISOString()}] Event mapping finished - ${currentEventIds.size} events mapped, ${deletedCount} events removed, final count: ${allEvents.length - deletedCount}`);
-        logger.critical(`[${endTime.toISOString()}] Events per bookmaker: ${bookmakerSummary}`);
+      }
     }
+
+    // Log summary of cleanup with timestamp
+    const endTime = new Date();
+
+    // Create bookmaker counts summary
+    let bookmakerSummary = "";
+    for (const [code, count] of Object.entries(bookmakerEventCounts)) {
+      bookmakerSummary += `${code}: ${count} events, `;
+    }
+
+    // Remove trailing comma and space
+    if (bookmakerSummary.endsWith(", ")) {
+      bookmakerSummary = bookmakerSummary.slice(0, -2);
+    }
+
+    logger.critical(`[${endTime.toISOString()}] Event mapping finished - ${currentEventIds.size} events mapped, ${deletedCount} events removed, final count: ${allEvents.length - deletedCount}`);
+    logger.critical(`[${endTime.toISOString()}] Events per bookmaker: ${bookmakerSummary}`);
 
     // Calculate and store tournament margins
     try {
@@ -894,5 +892,4 @@ function getSportId(sportName: string): number {
   };
 
   return sportMap[sportName.toLowerCase()] || 1; // Default to football
-}
 }
