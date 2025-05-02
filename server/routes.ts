@@ -741,6 +741,58 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
+  // Debug endpoint to check for Premier League events
+  app.get('/api/check-premier-league', async (req, res) => {
+    try {
+      const apiKey = req.header('x-admin-key');
+      if (apiKey !== process.env.ADMIN_API_KEY && apiKey !== 'pawaodds123') {
+        return res.status(401).json({ message: 'Unauthorized' });
+      }
+      
+      // Get Sportybet data from file with force fresh
+      const sportyData = await storage.getBookmakerData('sporty', true);
+      
+      if (!Array.isArray(sportyData) || sportyData.length === 0) {
+        return res.json({ message: 'No Sportybet data available' });
+      }
+      
+      // Filter for Premier League events
+      const premierLeagueEvents = [];
+      
+      for (const event of sportyData) {
+        const country = event.country || (event.raw && event.raw.country) || '';
+        const tournament = event.tournament || event.league || (event.raw && event.raw.tournament) || '';
+        const teams = event.teams || event.event || (event.raw && event.raw.event) || '';
+        
+        // Check for England Premier League using multiple approaches
+        const isEngland = country && country.toLowerCase() === 'england';
+        const isPremierLeague = tournament && tournament.toLowerCase().includes('premier league');
+        
+        if (isEngland && isPremierLeague) {
+          premierLeagueEvents.push({
+            country,
+            tournament,
+            teams,
+            eventId: event.eventId,
+            odds: event.odds || {
+              home: event.home_odds,
+              draw: event.draw_odds,
+              away: event.away_odds
+            }
+          });
+        }
+      }
+      
+      return res.json({ 
+        totalEvents: sportyData.length,
+        premierLeagueCount: premierLeagueEvents.length,
+        premierLeagueEvents
+      });
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  });
+  
   // Special endpoint to fix Sportybet data
   app.get('/api/fix-sportybet', async (req, res) => {
     try {

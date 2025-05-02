@@ -22,10 +22,13 @@ export async function fixSportybetData(storage: IStorage): Promise<void> {
     );
     
     // If we already have most of the Sportybet events, no need to run the fix
-    if (eventsWithSportybet.length >= sportyData.length * 0.9) {
+    // Temporarily disabled for testing our Premier League detection
+    if (false && eventsWithSportybet.length >= sportyData.length * 0.9) {
       logger.critical(`Sportybet data already up to date (${eventsWithSportybet.length} / ${sportyData.length} events)`);
       return;
     }
+    
+    logger.critical(`Forcing Sportybet processing to test Premier League detection...`);
     
     // Create a set of eventIds that already have Sportybet data
     const existingSportyEventIds = new Set(eventsWithSportybet.map(event => event.eventId));
@@ -130,8 +133,14 @@ export async function fixSportybetData(storage: IStorage): Promise<void> {
         });
         
         // Check if it's a Premier League event
-        if (country === 'England' && (tournament === 'Premier League' || league.includes('Premier League'))) {
+        // More thorough check using multiple properties and case-insensitive matching
+        const isEngland = country && country.toLowerCase() === 'england';
+        const isPremierLeague = tournament && tournament.toLowerCase().includes('premier league') ||
+                             league && league.toLowerCase().includes('england premier league');
+        
+        if (isEngland && isPremierLeague) {
           premierLeagueCount++;
+          logger.info(`Found Premier League match: ${teamsText} (ID: ${normalizedId}) with odds ${JSON.stringify(oddsData.sporty)}`);
         }
       }
     }

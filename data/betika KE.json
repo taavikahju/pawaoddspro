@@ -87,9 +87,9 @@
     "date": "2025-05-02",
     "time": "14:35",
     "odds": {
-      "home": 2.15,
-      "draw": 3.35,
-      "away": 3.1
+      "home": 2.1,
+      "draw": 3.4,
+      "away": 3.15
     },
     "raw": {
       "eventId": "57605185",
@@ -97,9 +97,9 @@
       "tournament": "Chinese Super League",
       "event": "Chengdu Rongcheng - Shanghai Shenhua",
       "market": "1X2",
-      "home_odds": "2.15",
-      "draw_odds": "3.35",
-      "away_odds": "3.10",
+      "home_odds": "2.10",
+      "draw_odds": "3.40",
+      "away_odds": "3.15",
       "start_time": "2025-05-02 14:35"
     }
   },
@@ -113,9 +113,9 @@
     "date": "2025-05-02",
     "time": "14:45",
     "odds": {
-      "home": 7.4,
+      "home": 7.8,
       "draw": 6.2,
-      "away": 1.25
+      "away": 1.23
     },
     "raw": {
       "eventId": "49405495",
@@ -123,9 +123,9 @@
       "tournament": "Premier League",
       "event": "Hougang United - Tampines Rovers FC",
       "market": "1X2",
-      "home_odds": "7.40",
+      "home_odds": "7.80",
       "draw_odds": "6.20",
-      "away_odds": "1.25",
+      "away_odds": "1.23",
       "start_time": "2025-05-02 14:45"
     }
   },
@@ -208,32 +208,6 @@
     }
   },
   {
-    "id": "56827509",
-    "eventId": "56827509",
-    "teams": "FC Ucsa Tarasivka - Epitsentr Kamianets-Podilskyi",
-    "league": "Persha Liga",
-    "sport": "football",
-    "country": "Ukraine",
-    "date": "2025-05-02",
-    "time": "15:00",
-    "odds": {
-      "home": 3.3,
-      "draw": 3.5,
-      "away": 2.07
-    },
-    "raw": {
-      "eventId": "56827509",
-      "country": "Ukraine",
-      "tournament": "Persha Liga",
-      "event": "FC Ucsa Tarasivka - Epitsentr Kamianets-Podilskyi",
-      "market": "1X2",
-      "home_odds": "3.30",
-      "draw_odds": "3.50",
-      "away_odds": "2.07",
-      "start_time": "2025-05-02 15:00"
-    }
-  },
-  {
     "id": "52122773",
     "eventId": "52122773",
     "teams": "1461 Trabzon - Kepez Spor Futbol AS",
@@ -243,9 +217,9 @@
     "date": "2025-05-02",
     "time": "15:00",
     "odds": {
-      "home": 1.6,
+      "home": 1.58,
       "draw": 3.9,
-      "away": 4.6
+      "away": 4.7
     },
     "raw": {
       "eventId": "52122773",
@@ -253,9 +227,9 @@
       "tournament": "2. Lig",
       "event": "1461 Trabzon - Kepez Spor Futbol AS",
       "market": "1X2",
-      "home_odds": "1.60",
+      "home_odds": "1.58",
       "draw_odds": "3.90",
-      "away_odds": "4.60",
+      "away_odds": "4.70",
       "start_time": "2025-05-02 15:00"
     }
   },
@@ -2635,9 +2609,9 @@
     "date": "2025-05-02",
     "time": "21:00",
     "odds": {
-      "home": 5,
+      "home": 5.2,
       "draw": 3.65,
-      "away": 1.7
+      "away": 1.69
     },
     "raw": {
       "eventId": "50956903",
@@ -2645,9 +2619,9 @@
       "tournament": "Ligue 2",
       "event": "FC Martigues - Paris FC",
       "market": "1X2",
-      "home_odds": "5.00",
+      "home_odds": "5.20",
       "draw_odds": "3.65",
-      "away_odds": "1.70",
+      "away_odds": "1.69",
       "start_time": "2025-05-02 21:00"
     }
   },
@@ -3285,7 +3259,7 @@
     "date": "2025-05-02",
     "time": "21:45",
     "odds": {
-      "home": 2.44,
+      "home": 2.45,
       "draw": 3,
       "away": 3.35
     },
@@ -3295,7 +3269,7 @@
       "tournament": "Serie A",
       "event": "Torino FC - Venezia FC",
       "market": "1X2",
-      "home_odds": "2.44",
+      "home_odds": "2.45",
       "draw_odds": "3.00",
       "away_odds": "3.35",
       "start_time": "2025-05-02 21:45"
@@ -6500,28 +6474,28 @@
     }
   },
   {
-    "id": "56674303",
-    "eventId": "56674303",
-    "teams": "Sandvikens - Oddevold",
-    "league": "Superettan",
+    "id": "51270251",
+    "eventId": "51270251",
+    "teams": "Braunschweig - Dusseldorf",
+    "league": "2. Bundesliga",
     "sport": "football",
-    "country": "Sweden",
+    "country": "Germany",
     "date": "2025-05-03",
     "time": "14:00",
     "odds": {
-      "home": 1.99,
-      "draw": 3.35,
-      "away": 3.35
+      "home": 2.75,
+      "draw": 3.6,
+      "away": 2.32
     },
     "raw": {
-      "eventId": "56674303",
-      "country": "Sweden",
-      "tournament": "Superettan",
-      "event": "Sandvikens - Oddevold",
+      "eventId": "51270251",
+      "country": "Germany",
+      "tournament": "2. Bundesliga",
+      "event": "Braunschweig - Dusseldorf",
       "market": "1X2",
-      "home_odds": "1.99",
-      "draw_odds": "3.35",
-      "away_odds": "3.35",
+      "home_odds": "2.75",
+      "draw_odds": "3.60",
+      "away_odds": "2.32",
       "start_time": "2025-05-03 14:00"
     }
   },
@@ -12385,9 +12359,9 @@
     "date": "2025-05-03",
     "time": "21:00",
     "odds": {
-      "home": 1.72,
-      "draw": 3.5,
-      "away": 4.7
+      "home": 1.75,
+      "draw": 3.45,
+      "away": 4.6
     },
     "raw": {
       "eventId": "58787785",
@@ -12395,9 +12369,9 @@
       "tournament": "Superliga",
       "event": "CFR 1907 Cluj - FC Universitatea Cluj",
       "market": "1X2",
-      "home_odds": "1.72",
-      "draw_odds": "3.50",
-      "away_odds": "4.70",
+      "home_odds": "1.75",
+      "draw_odds": "3.45",
+      "away_odds": "4.60",
       "start_time": "2025-05-03 21:00"
     }
   },
