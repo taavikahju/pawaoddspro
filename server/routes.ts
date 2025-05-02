@@ -522,6 +522,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const sportIdParam = req.query.sportId as string | undefined;
       const minBookmakers = req.query.minBookmakers ? parseInt(req.query.minBookmakers as string, 10) : 2;
+      const includeSportybet = req.query.includeSportybet === 'true';
       let events;
 
       if (sportIdParam) {
@@ -549,14 +550,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
         logger.critical(`Sportybet odds: ${JSON.stringify(sampleEvent.oddsData?.sporty)}`);
       }
 
-      // Filter events to only include those with at least the minimum number of bookmakers
-      const filteredEvents = events.filter(event => {
-        // Count bookmakers with odds for this event
-        if (!event.oddsData) return false;
+      // Special case: if includeSportybet is true, we need to include all Sportybet events
+      // regardless of bookmaker count to prevent data loss between scrapes
+      let filteredEvents;
+      
+      if (includeSportybet) {
+        // First get all events that have Sportybet odds
+        const eventsWithSporty = events.filter(event => 
+          event.oddsData && typeof event.oddsData === 'object' && 'sporty' in event.oddsData
+        );
         
-        const bookmakerCount = Object.keys(event.oddsData).length;
-        return bookmakerCount >= minBookmakers;
-      });
+        // Then get all events that meet the minimum bookmaker requirement
+        const eventsWithMinBookmakers = events.filter(event => {
+          if (!event.oddsData) return false;
+          
+          const bookmakerCount = Object.keys(event.oddsData).length;
+          return bookmakerCount >= minBookmakers;
+        });
+        
+        // Combine both sets into a single array, removing duplicates by ID
+        const combinedEvents = [...eventsWithSporty];
+        
+        // Add events from eventsWithMinBookmakers that aren't already in combinedEvents
+        const existingIds = new Set(combinedEvents.map(event => event.id));
+        
+        for (const event of eventsWithMinBookmakers) {
+          if (!existingIds.has(event.id)) {
+            combinedEvents.push(event);
+            existingIds.add(event.id);
+          }
+        }
+        
+        filteredEvents = combinedEvents;
+        
+        logger.info(`Including all Sportybet events regardless of bookmaker count (${eventsWithSporty.length} events)`);
+      } else {
+        // Standard filtering: only include events with at least the minimum number of bookmakers
+        filteredEvents = events.filter(event => {
+          if (!event.oddsData) return false;
+          
+          const bookmakerCount = Object.keys(event.oddsData).length;
+          return bookmakerCount >= minBookmakers;
+        });
+      }
 
       // Check after filtering for Sportybet events
       const filteredSportyEvents = filteredEvents.filter(event => 

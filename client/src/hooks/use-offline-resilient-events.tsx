@@ -65,14 +65,14 @@ export function useOfflineResilientEvents() {
     }
   }, []);
   
-  // Main query for events
+  // Main query for events with includeSportybet=true to get all Sportybet events
   const { 
     data: serverEvents = [],
     isLoading,
     error,
     isError,
   } = useQuery<EventData[]>({ 
-    queryKey: ['/api/events'],
+    queryKey: ['/api/events?includeSportybet=true'],
     refetchInterval: 15000, // Refresh every 15 seconds
   });
   
