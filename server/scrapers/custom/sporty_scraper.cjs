@@ -3,7 +3,7 @@ const axios = require('axios');
 
 // Configuration
 const BASE_URL = 'https://www.sportybet.com/api/gh/factsCenter/pcUpcomingEvents';
-const QUERY = 'sportId=sr%3Asport%3A1&marketId=1%2C18%2C10%2C29%2C11%2C26%2C36%2C14%2C60100&pageSize=100&option=1';
+const QUERY = 'sportId=sr%3Asport%3A1&marketId=1%2C18%2C10%2C29%2C11%2C26%2C36%2C14%2C60100&pageSize=100';
 
 // We need to use time-based filtering to get future Premier League matches
 // These dates need to be formatted as Unix timestamps in milliseconds
