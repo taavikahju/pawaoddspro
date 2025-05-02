@@ -70,14 +70,28 @@ export async function fixSportybetData(storage: IStorage): Promise<void> {
     logger.critical(`Raw Sportybet data check: ${sportyData.length} events found in file`);
     
     // Get existing events from the database
-    const allEvents = await storage.getEvents();
+    const rawAllEvents = await storage.getEvents();
+    
+    // CRITICAL: Deep copy events to prevent reference modifications
+    const allEvents = JSON.parse(JSON.stringify(rawAllEvents));
+    
     const eventsWithSportybet = allEvents.filter(event => 
       event.oddsData && typeof event.oddsData === 'object' && 'sporty' in event.oddsData
     );
     
+    // Check for significant discrepancy between Sportybet raw data and database
+    const discrepancyRatio = eventsWithSportybet.length / sportyData.length;
+    
+    if (discrepancyRatio < 0.7) {
+      logger.critical(`ALERT: Significant Sportybet data loss detected! Database has ${eventsWithSportybet.length}/${sportyData.length} events (${(discrepancyRatio * 100).toFixed(1)}%). Using enhanced recovery mode.`);
+    }
+    
     // Create a map of events by eventId and externalId for faster lookups
     const eventsByEventId = new Map();
     const eventsByExternalId = new Map();
+    
+    // Also create a map by normalized team names for aggressive matching
+    const eventsByNormalizedTeams = new Map();
     
     allEvents.forEach(event => {
       if (event.eventId) {
@@ -85,6 +99,12 @@ export async function fixSportybetData(storage: IStorage): Promise<void> {
       }
       if (event.externalId) {
         eventsByExternalId.set(event.externalId, event);
+      }
+      
+      // Add to team name map for aggressive matching
+      if (event.teams) {
+        const normalizedTeams = normalizeEventName(event.teams);
+        eventsByNormalizedTeams.set(normalizedTeams, event);
       }
     });
     
@@ -165,6 +185,29 @@ export async function fixSportybetData(storage: IStorage): Promise<void> {
         // This helps prevent unique constraint errors on external_id
         const teamsText = event.teams || event.event || (event.raw && event.raw.event) || 'Unknown';
         const eventDate = extractDate(event);
+        
+        // Try more aggressive team name matching if we have a significant discrepancy
+        if (discrepancyRatio < 0.7) {
+          // Check for matches by normalized team names
+          const normalizedTeams = normalizeEventName(teamsText);
+          const normalizedMatch = eventsByNormalizedTeams.get(normalizedTeams);
+          
+          if (normalizedMatch) {
+            // Update using normalized match
+            const updatedOddsData = { 
+              ...normalizedMatch.oddsData, 
+              sporty: oddsData['sporty']
+            };
+            
+            eventsToUpdate[normalizedMatch.id] = {
+              oddsData: updatedOddsData,
+              lastUpdated: new Date()
+            };
+            
+            logger.info(`Found match by normalized team name: ${teamsText} (normalized to: ${normalizedTeams})`);
+            continue;
+          }
+        }
         
         // Look for a potential match by team names and date to avoid duplicates
         const potentialMatch = allEvents.find(e => 
@@ -422,4 +465,75 @@ function extractTime(event: any): string {
     // Default time if not available
     return '12:00';
   }
+}
+
+// Helper function to normalize team names
+function normalizeEventName(eventName: string): string {
+  if (!eventName) return '';
+
+  let normalized = eventName
+    .toLowerCase()
+    // Standardize separator to 'vs' for consistent processing
+    .replace(/\s+v\.?\s+|\s+-\s+|\s+@\s+/g, ' vs ')
+    // Standardize quotes and parentheses
+    .replace(/['"''""()[\]{}]/g, '')
+    // Remove 'fc' (football club)
+    .replace(/\s+fc\b|\bfc\s+|\s+football\s+club|\bfootball\s+club/g, '')
+    // Specific frequent misspellings and variations
+    .replace(/juventus turin/g, 'juventus')
+    .replace(/inter milan/g, 'internazionale')
+    .replace(/rb leipzig/g, 'leipzig')
+    .replace(/psg/g, 'paris')
+    .replace(/wolves/g, 'wolverhampton')
+    .replace(/spurs/g, 'tottenham')
+    .replace(/napoli sc/g, 'napoli')
+    .replace(/ac milan/g, 'milan')
+    // Remove common suffixes - expanded list (but only after we standardize separators)
+    .replace(/\s+(united|utd|city|town|county|albion|rovers|wanderers|athletic|hotspur|wednesday|forest|fc|academy|reserve|women|ladies|boys|girls|u\d+|under\d+|fc\.?)\b/g, '')
+    // Remove common location prefixes
+    .replace(/\b(west|east|north|south|central|real|atletico|deportivo|inter|lokomotiv|dynamo)\s+/g, '')
+    // Remove country specifiers
+    .replace(/\s+(ghana|kenya|uganda|tanzania|nigeria|zambia)\b/g, '')
+    // Replacements for specific abbreviations
+    .replace(/\bmanu\b/g, 'manchester') // Manchester United 
+    .replace(/\bman\s+u\b/g, 'manchester') // Manchester United
+    .replace(/\bman\s+utd\b/g, 'manchester') // Manchester United
+    .replace(/\bman\s+city\b/g, 'manchester') // Manchester City
+    .replace(/\bman\s+c\b/g, 'manchester') // Manchester City
+    .replace(/\blfc\b/g, 'liverpool') // Liverpool FC
+    .replace(/\bafc\b/g, 'arsenal') // Arsenal FC
+    .replace(/\bcfc\b/g, 'chelsea') // Chelsea FC
+    .replace(/\bbvb\b/g, 'dortmund') // Borussia Dortmund
+    .replace(/\bfcb\b/g, 'bayern') // Bayern Munich
+    // Replace ampersands with 'and'
+    .replace(/&/g, 'and');
+
+  // Now transform both team names separately if we have a vs separator
+  if (normalized.includes(' vs ')) {
+    const parts = normalized.split(' vs ');
+    if (parts.length === 2) {
+      // Normalize each team name separately
+      const [team1, team2] = parts;
+      const normalizedTeam1 = team1
+        .replace(/\./g, '') // Remove periods
+        .replace(/\s+/g, '') // Remove all whitespace
+        .replace(/[^\w]/g, '') // Remove any remaining punctuation
+        .trim();
+
+      const normalizedTeam2 = team2
+        .replace(/\./g, '')
+        .replace(/\s+/g, '')
+        .replace(/[^\w]/g, '')
+        .trim();
+
+      return `${normalizedTeam1} vs ${normalizedTeam2}`;
+    }
+  }
+
+  // If no 'vs' or format not as expected, just clean up the whole string
+  return normalized
+    .replace(/\./g, '') // Remove periods
+    .replace(/\s+/g, '') // Remove all whitespace
+    .replace(/[^\w]/g, '') // Remove any remaining punctuation
+    .trim();
 }

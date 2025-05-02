@@ -531,9 +531,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const sportIdParam = req.query.sportId as string | undefined;
       const minBookmakers = req.query.minBookmakers ? parseInt(req.query.minBookmakers as string, 10) : 2;
-      // Always include Sportybet events regardless of query parameter to ensure consistency across calls
-      // This prevents data loss by ensuring even events with only Sportybet odds are shown
-      const includeSportybet = true; // Fixed to always include Sportybet events regardless of bookmaker count
       let rawEvents;
 
       if (sportIdParam) {
@@ -550,11 +547,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // This is essential to fix the disappearing events issue
       const events = JSON.parse(JSON.stringify(rawEvents));
 
-      // Try to check if Sportybet data exists directly in the file
+      // ENHANCED APPROACH: Directly load Sportybet events from raw data
+      // Get Sportybet data directly from file
+      let allSportyEvents = [];
       try {
-        const sportyData = await storage.getBookmakerData('sporty', true);
-        const sportyCount = Array.isArray(sportyData) ? sportyData.length : 0;
+        const rawSportyData = await storage.getBookmakerData('sporty', true);
+        const sportyCount = Array.isArray(rawSportyData) ? rawSportyData.length : 0;
         logger.critical(`Raw Sportybet data check: ${sportyCount} events found in file`);
+        
+        if (Array.isArray(rawSportyData)) {
+          allSportyEvents = rawSportyData;
+        }
       } catch (e) {
         logger.critical(`Error checking raw Sportybet data: ${e}`);
       }
@@ -566,50 +569,106 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       logger.critical(`BEFORE FILTERING: Found ${sportyEvents.length} events with Sportybet odds out of ${events.length} total events`);
 
-      // Special case: if includeSportybet is true, we need to include all Sportybet events
-      // regardless of bookmaker count to prevent data loss between scrapes
-      let filteredEvents;
-      
-      if (includeSportybet) {
-        // First get all events that have Sportybet odds
-        const eventsWithSporty = events.filter(event => 
-          event.oddsData && typeof event.oddsData === 'object' && 'sporty' in event.oddsData
-        );
+      // Get all events that meet the minimum bookmaker requirement
+      const eventsWithMinBookmakers = events.filter(event => {
+        if (!event.oddsData) return false;
         
-        // Then get all events that meet the minimum bookmaker requirement
-        const eventsWithMinBookmakers = events.filter(event => {
-          if (!event.oddsData) return false;
-          
-          const bookmakerCount = Object.keys(event.oddsData).length;
-          return bookmakerCount >= minBookmakers;
+        const bookmakerCount = Object.keys(event.oddsData).length;
+        return bookmakerCount >= minBookmakers;
+      });
+      
+      // Get all events with Sportybet odds
+      const eventsWithSporty = events.filter(event => 
+        event.oddsData && typeof event.oddsData === 'object' && 'sporty' in event.oddsData
+      );
+      
+      // Combine both sets into a filtered event list, Sportybet events first
+      const filteredEvents = [...eventsWithSporty];
+      
+      // Add events from eventsWithMinBookmakers that aren't already in filteredEvents
+      const existingIds = new Set(filteredEvents.map(event => event.id));
+      
+      for (const event of eventsWithMinBookmakers) {
+        if (!existingIds.has(event.id)) {
+          filteredEvents.push(event);
+          existingIds.add(event.id);
+        }
+      }
+      
+      // DIRECT INSERTION: If we still have a significant discrepancy, create events directly
+      // This is a last resort approach to ensure maximum Sportybet event retention
+      if (allSportyEvents.length > 0 && eventsWithSporty.length < allSportyEvents.length * 0.8) {
+        logger.critical(`Detected significant Sportybet event loss (${eventsWithSporty.length}/${allSportyEvents.length}), creating direct events...`);
+        
+        const existingEventIdMap = new Map();
+        eventsWithSporty.forEach(event => {
+          const eventId = event.eventId || '';
+          if (eventId) {
+            existingEventIdMap.set(eventId, true);
+          }
         });
         
-        // Combine both sets into a single array, removing duplicates by ID
-        const combinedEvents = [...eventsWithSporty];
+        // Create direct events for any Sportybet events not already in filtered list
+        const directEvents = [];
         
-        // Add events from eventsWithMinBookmakers that aren't already in combinedEvents
-        const existingIds = new Set(combinedEvents.map(event => event.id));
-        
-        for (const event of eventsWithMinBookmakers) {
-          if (!existingIds.has(event.id)) {
-            combinedEvents.push(event);
-            existingIds.add(event.id);
+        for (const event of allSportyEvents) {
+          // Skip if already included
+          const eventId = event.eventId || event.id || '';
+          if (!eventId || existingEventIdMap.has(eventId)) continue;
+          
+          // Create basic event structure
+          const teams = event.teams || event.event || '';
+          if (!teams) continue;
+          
+          // Get odds data
+          let odds = null;
+          if (event.odds) {
+            odds = event.odds;
+          } else if (event.home_odds && event.draw_odds && event.away_odds) {
+            odds = {
+              home: parseFloat(event.home_odds),
+              draw: parseFloat(event.draw_odds),
+              away: parseFloat(event.away_odds)
+            };
+          } else if (event.raw && event.raw.home_odds && event.raw.draw_odds && event.raw.away_odds) {
+            odds = {
+              home: parseFloat(event.raw.home_odds),
+              draw: parseFloat(event.raw.draw_odds),
+              away: parseFloat(event.raw.away_odds)
+            };
+          }
+          
+          if (!odds) continue;
+          
+          // Create a direct event for the response
+          directEvents.push({
+            id: -1 * (directEvents.length + 1), // Temporary negative ID for direct events
+            eventId: eventId,
+            externalId: event.originalId || eventId,
+            teams: teams,
+            league: event.league || '',
+            country: event.country || event.raw?.country || '',
+            tournament: event.tournament || event.raw?.tournament || '',
+            sportId: 1, // Default to football
+            date: event.date || event.raw?.date || new Date().toISOString().split('T')[0],
+            time: event.time || event.raw?.time || '12:00',
+            oddsData: { sporty: odds },
+            bestOdds: odds,
+            lastUpdated: new Date()
+          });
+          
+          if (directEvents.length <= 5) {
+            logger.info(`Created direct event: ${teams} (${eventId})`);
           }
         }
         
-        filteredEvents = combinedEvents;
-        
-        logger.info(`Including all Sportybet events regardless of bookmaker count (${eventsWithSporty.length} events)`);
-      } else {
-        // Standard filtering: only include events with at least the minimum number of bookmakers
-        filteredEvents = events.filter(event => {
-          if (!event.oddsData) return false;
-          
-          const bookmakerCount = Object.keys(event.oddsData).length;
-          return bookmakerCount >= minBookmakers;
-        });
+        // Add direct events to filtered events
+        if (directEvents.length > 0) {
+          logger.critical(`Created ${directEvents.length} direct Sportybet events`);
+          filteredEvents.push(...directEvents);
+        }
       }
-
+      
       // Check after filtering for Sportybet events
       const filteredSportyEvents = filteredEvents.filter(event => 
         event.oddsData && typeof event.oddsData === 'object' && 'sporty' in event.oddsData
