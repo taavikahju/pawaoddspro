@@ -764,7 +764,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         event.oddsData && typeof event.oddsData === 'object' && 'sporty' in event.oddsData
       );
       
-      const sportyData = await storage.getBookmakerData('sporty', true);
+      // Read the raw data without reference to avoid modifying it
+      const rawSportyData = await storage.getBookmakerData('sporty', true);
+      // Create deep copy to prevent accidental modifications
+      const sportyData = rawSportyData ? JSON.parse(JSON.stringify(rawSportyData)) : null;
       
       // Return results
       return res.json({
@@ -813,6 +816,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Use our helper function to get Premier League data from Sportybet
       const { getPremierLeagueData } = await import('./utils/sportybetFix');
+      // Getting Premier League data with deep copy to prevent modifications
       const rawSportyData = await getPremierLeagueData(storage);
       
       res.json({
