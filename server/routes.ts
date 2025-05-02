@@ -826,8 +826,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: 'Unauthorized' });
       }
       
-      // Use our shared fix function
-      logger.critical(`Starting manual Sportybet fix via API endpoint`);
+      // This is a legacy endpoint for backward compatibility
+      // Since we now use the Python Sportybet scraper by default, this fix
+      // is no longer necessary for normal operation, but kept as a safety backup
+      logger.critical(`Starting manual Sportybet fix via API endpoint (legacy operation)`);
       const { fixSportybetData } = await import('./utils/sportybetFix');
       await fixSportybetData(storage);
       
@@ -888,6 +890,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
       
       // Use our helper function to get Premier League data from Sportybet
+      // This is kept for diagnostics but uses the Python scraped data now
       const { getPremierLeagueData } = await import('./utils/sportybetFix');
       // Getting Premier League data with deep copy to prevent modifications
       const rawSportyData = await getPremierLeagueData(storage);

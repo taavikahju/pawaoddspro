@@ -1,7 +1,9 @@
 import { IStorage } from '../storage';
 import { logger } from './logger';
 
-// Helper function to fix Sportybet data automatically after scraping
+// NOTE: This file is maintained as a safety net but is no longer actively used
+// since we've switched to the Python Sportybet scraper which doesn't have the
+// JavaScript memory reference issues. We keep it as a fallback only.
 /**
  * Helper function to get Premier League events data.
  * This is used for diagnostics and debugging.
