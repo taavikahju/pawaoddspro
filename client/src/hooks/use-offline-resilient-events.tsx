@@ -214,19 +214,8 @@ export function useOfflineResilientEvents() {
   // The final merged events array
   const events = mergeEvents();
 
-  // Debug output - only log once on initial load or when event count changes significantly
-  useEffect(() => {
-    if (events.length > 0) {
-      // Only log when event count changes significantly to reduce console spam
-      if (events.length % 100 === 0 || Math.random() < 0.05) {
-        const sportyEventsCount = events.filter(event => 
-          event.oddsData && typeof event.oddsData === 'object' && 'sporty' in event.oddsData
-        ).length;
-        
-        console.log(`Events: ${events.length} total, ${sportyEventsCount} with Sportybet odds`);
-      }
-    }
-  }, [events.length]);
+  // No debug logging to improve performance
+  // const events = mergeEvents();
 
   // Add test method to simulate disconnection
   const testResilience = useCallback(() => {
