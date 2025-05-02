@@ -48,6 +48,7 @@ export function BookmakerProvider({ children }: { children: ReactNode }) {
   const [autoRefresh, setAutoRefresh] = useState(true);
   const [minMarginFilter, setMinMarginFilter] = useState<number>(0); // Default to min value
   const [maxMarginFilter, setMaxMarginFilter] = useState<number>(15); // Default to max value (no filtering)
+  const [isTop5LeaguesActive, setIsTop5LeaguesActive] = useState(false); // Top 5 Leagues filter
 
   // Fetch bookmakers
   const { 
@@ -142,6 +143,10 @@ export function BookmakerProvider({ children }: { children: ReactNode }) {
     setAutoRefresh(prev => !prev);
   };
 
+  const toggleTop5LeaguesFilter = () => {
+    setIsTop5LeaguesActive(prev => !prev);
+  };
+
   const resetMarginFilters = () => {
     setMinMarginFilter(0);
     setMaxMarginFilter(15);
@@ -161,9 +166,11 @@ export function BookmakerProvider({ children }: { children: ReactNode }) {
     maxMarginFilter,
     isLoadingBookmakers,
     isLoadingSports,
+    isTop5LeaguesActive,
     toggleBookmaker,
     toggleSport,
     toggleAutoRefresh,
+    toggleTop5LeaguesFilter,
     setMinMarginFilter,
     setMaxMarginFilter,
     resetMarginFilters,
