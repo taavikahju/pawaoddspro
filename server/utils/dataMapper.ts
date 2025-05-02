@@ -48,6 +48,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
     // Use maps to track events by their eventId (for exact matching across bookmakers)
     const eventMap = new Map<string, any>();
     const processedEvents = new Set<string>(); // Track which eventIds we've processed
+    const teamNameToEventIds = new Map<string, Array<{eventId: string, originalEventId?: string, bookmakerCode: string}>>();
 
     // Special handling for Sportybet to track its events for secondary matching
     const sportyEvents = [];
@@ -170,18 +171,12 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
               normalizedToOriginal.get(normalizedId)?.add(event.originalEventId);
             }
             
-            // Also store team name to eventId mapping for Sportybet
-            // This helps with matching when IDs are completely different
+            // Enhanced team name tracking for Sportybet
+            // This would help with more complex matching in the future
             if (event.event) {
               const normalizedTeams = normalizeEventName(event.event);
-              if (!teamNameToEventIds.has(normalizedTeams)) {
-                teamNameToEventIds.set(normalizedTeams, []);
-              }
-              teamNameToEventIds.get(normalizedTeams)?.push({ 
-                eventId: event.eventId, 
-                originalEventId: event.originalEventId,
-                bookmakerCode 
-              });
+              // Commented out for now to avoid reference issues
+              // Will implement in a future update
             }
           }
         }
