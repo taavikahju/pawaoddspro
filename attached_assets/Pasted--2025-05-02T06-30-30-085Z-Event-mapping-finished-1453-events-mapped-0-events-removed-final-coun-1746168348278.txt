@@ -1,0 +1,390 @@
+[2025-05-02T06:30:30.085Z] Event mapping finished - 1453 events mapped, 0 events removed, final count: 1453
+[2025-05-02T06:30:30.085Z] Events per bookmaker: bp GH: 1400 events, bp KE: 1400 events, sporty: 1379 events, betika KE: 1081 events
+[2025-05-02T06:30:30.091Z] Calculating tournament average margins by bookmaker...
+[2025-05-02T06:30:30.561Z] Stored average margins for 879 bookmaker-tournament combinations
+[2025-05-02T06:30:30.562Z] Starting cleanup of tournament margin records older than 30 days
+[2025-05-02T06:30:30.630Z] Deleted 0 tournament margin records older than 30 days
+[2025-05-02T06:30:30.632Z] Calculating tournament average margins by bookmaker...
+[2025-05-02T06:30:30.914Z] Stored average margins for 879 bookmaker-tournament combinations
+[2025-05-02T06:30:30.914Z] Starting cleanup of tournament margin records older than 30 days
+[2025-05-02T06:30:30.983Z] Deleted 0 tournament margin records older than 30 days
+✅ Tournament margins calculated and stored
+[2025-05-02T06:30:31.075Z] Sending 1453 events to frontend
+[2025-05-02T06:30:31.075Z] Data processing lock released
+[2025-05-02T06:30:31.290Z] Scraping complete - 1453 total events mapped from 4 bookmakers
+Initial scraping completed
+BEFORE FILTERING: Found 1264 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1264 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1264 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1264 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1264 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1264 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1264 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1264 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1264 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1264 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1264 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1264 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1264 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1264 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1264 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1264 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1264 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1264 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1264 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1264 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1264 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1264 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1264 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1264 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1264 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1264 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1264 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1264 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1264 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1264 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1264 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1264 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1264 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1264 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1264 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1264 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1264 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1264 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1264 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1264 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1264 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1264 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1264 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1264 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1264 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1264 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1264 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1264 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1264 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1264 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1264 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1264 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1264 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1264 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1264 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1264 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1264 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1264 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1264 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1264 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1264 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1264 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1264 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1264 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1264 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1264 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1264 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1264 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1264 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1264 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1214 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1214 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1214 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1214 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1214 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1214 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1164 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1164 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1164 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1164 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1164 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1164 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1164 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1164 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1164 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1164 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1114 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1114 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1114 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1114 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1114 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1114 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1064 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1064 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1064 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1064 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1064 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1064 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1046 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1046 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1014 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1014 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 1014 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 1014 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 968 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 968 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 968 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 968 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 954 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 954 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 920 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 920 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 920 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 920 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 920 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 920 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 873 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 873 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 873 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 873 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 873 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 873 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 873 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68420, Teams: Dziugas - Dfk Dainava Alytus
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":3.1,"draw":3.2,"home":2.2}
+AFTER FILTERING: Found 873 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 823 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68651, Teams: Chelsea FC - Djurgardens IF
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":13.81,"draw":7.28,"home":1.19}
+AFTER FILTERING: Found 823 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 823 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68651, Teams: Chelsea FC - Djurgardens IF
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":13.81,"draw":7.28,"home":1.19}
+AFTER FILTERING: Found 823 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 774 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68651, Teams: Chelsea FC - Djurgardens IF
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":13.81,"draw":7.28,"home":1.19}
+AFTER FILTERING: Found 774 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 773 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68651, Teams: Chelsea FC - Djurgardens IF
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":13.81,"draw":7.28,"home":1.19}
+AFTER FILTERING: Found 773 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 725 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68651, Teams: Chelsea FC - Djurgardens IF
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":13.81,"draw":7.28,"home":1.19}
+AFTER FILTERING: Found 725 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 725 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68651, Teams: Chelsea FC - Djurgardens IF
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":13.81,"draw":7.28,"home":1.19}
+AFTER FILTERING: Found 725 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 725 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68651, Teams: Chelsea FC - Djurgardens IF
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":13.81,"draw":7.28,"home":1.19}
+AFTER FILTERING: Found 725 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 725 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68651, Teams: Chelsea FC - Djurgardens IF
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":13.81,"draw":7.28,"home":1.19}
+AFTER FILTERING: Found 725 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 725 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68651, Teams: Chelsea FC - Djurgardens IF
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":13.81,"draw":7.28,"home":1.19}
+AFTER FILTERING: Found 725 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 725 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68651, Teams: Chelsea FC - Djurgardens IF
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":13.81,"draw":7.28,"home":1.19}
+AFTER FILTERING: Found 725 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 688 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68651, Teams: Chelsea FC - Djurgardens IF
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":13.81,"draw":7.28,"home":1.19}
+AFTER FILTERING: Found 688 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 688 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68651, Teams: Chelsea FC - Djurgardens IF
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":13.81,"draw":7.28,"home":1.19}
+AFTER FILTERING: Found 688 events with Sportybet odds out of 1453 filtered events
+BEFORE FILTERING: Found 688 events with Sportybet odds out of 1453 total events
+Sample Sportybet event - ID: 68651, Teams: Chelsea FC - Djurgardens IF
+Sample event bookmakers: bp GH, bp KE, sporty, betika KE
+Sportybet odds: {"away":13.81,"draw":7.28,"home":1.19}
+AFTER FILTERING: Found 688 events with Sportybet odds out of 1453 filtered events
