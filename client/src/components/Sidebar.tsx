@@ -236,8 +236,9 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
                   : "bg-white dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700"
               )}
               onClick={() => {
-                // Find bookmaker IDs for Ghana
-                const ghanaBookmakers = bookmakers
+                // Find bookmaker IDs for Ghana - sort for consistent order
+                const ghanaBookmakers = [...bookmakers]
+                  .sort((a, b) => a.id - b.id)
                   .filter(b => b.code === 'bp GH' || b.code === 'sporty')
                   .map(b => b.code);
                 
@@ -268,8 +269,9 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
                   : "bg-white dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700"
               )}
               onClick={() => {
-                // Find bookmaker IDs for Kenya
-                const kenyaBookmakers = bookmakers
+                // Find bookmaker IDs for Kenya - sort for consistent order
+                const kenyaBookmakers = [...bookmakers]
+                  .sort((a, b) => a.id - b.id)
                   .filter(b => b.code === 'bp KE' || b.code === 'betika KE')
                   .map(b => b.code);
                 
@@ -300,8 +302,8 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
                   : "bg-white dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700"
               )}
               onClick={() => {
-                // Select all bookmakers that aren't already selected
-                bookmakers.forEach(b => {
+                // Select all bookmakers that aren't already selected - sort for consistent order
+                [...bookmakers].sort((a, b) => a.id - b.id).forEach(b => {
                   if (!selectedBookmakers.includes(b.code)) {
                     toggleBookmaker(b.code);
                   }
@@ -320,7 +322,8 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
             Bookmakers
           </p>
           <div className="space-y-1 bg-gray-50 dark:bg-slate-900/50 rounded-md p-2 border border-gray-100 dark:border-slate-700">
-            {bookmakers.map((bookmaker) => (
+            {/* Sort bookmakers by ID for consistent order */}
+            {[...bookmakers].sort((a, b) => a.id - b.id).map((bookmaker) => (
               <div key={bookmaker.id} className="flex items-center py-1">
                 <Checkbox
                   id={`bookmaker-${bookmaker.id}`}

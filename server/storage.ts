@@ -157,7 +157,9 @@ export class MemStorage implements IStorage {
   
   // Bookmaker methods
   async getBookmakers(): Promise<Bookmaker[]> {
-    return Array.from(this.bookmakers.values());
+    // Sort bookmakers by ID for consistent order
+    return Array.from(this.bookmakers.values())
+      .sort((a, b) => a.id - b.id);
   }
   
   async getBookmaker(id: number): Promise<Bookmaker | undefined> {
@@ -479,7 +481,8 @@ export class DatabaseStorage implements IStorage {
 
   // Bookmaker methods
   async getBookmakers(): Promise<Bookmaker[]> {
-    return db.select().from(bookmakers);
+    // Sort bookmakers by ID for consistent order
+    return db.select().from(bookmakers).orderBy(bookmakers.id);
   }
 
   async getBookmaker(id: number): Promise<Bookmaker | undefined> {
