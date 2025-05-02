@@ -8,7 +8,7 @@ import path from "path";
 import fs from "fs";
 import * as customScrapers from "./scrapers/custom/integration";
 import { WebSocketServer, WebSocket } from 'ws';
-import { processAndMapEvents, dataMapperEvents, MAPPER_EVENTS } from "./utils/dataMapper";
+import { processAndMapEvents } from "./utils/dataMapper";
 import { setupAuth } from "./auth";
 import { isAuthenticated, isAdmin } from "./middleware/auth";
 import { simpleAdminAuth } from "./middleware/simpleAdminAuth";
@@ -422,6 +422,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return bookmakerCount >= 3; // Consistent with API endpoint (min 3 bookmakers)
       });
       
+      // Sort events to prioritize ones with Sportybet odds
+      filteredEvents.sort((a, b) => {
+        const aHasSportybet = a.oddsData && typeof a.oddsData === 'object' && 'sporty' in a.oddsData;
+        const bHasSportybet = b.oddsData && typeof b.oddsData === 'object' && 'sporty' in b.oddsData;
+        
+        if (aHasSportybet && !bHasSportybet) return -1; // Prioritize events with Sportybet odds
+        if (!aHasSportybet && bHasSportybet) return 1;
+        return 0;
+      });
+      
       // Track counts for broadcast events
       const eventsByBookmakerCount = {
         '1': 0,
@@ -429,11 +439,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
         '3': 0,
         '4+': 0
       };
+      
+      let sportybetCount = 0;
 
       // Count events by bookmaker count for broadcast
       events.forEach(event => {
         if (!event.oddsData) return;
         const count = Object.keys(event.oddsData).length;
+        
+        // Count Sportybet events specifically
+        if (event.oddsData && typeof event.oddsData === 'object' && 'sporty' in event.oddsData) {
+          sportybetCount++;
+        }
         
         if (count === 1) eventsByBookmakerCount['1']++;
         else if (count === 2) eventsByBookmakerCount['2']++;
@@ -441,9 +458,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         else if (count >= 4) eventsByBookmakerCount['4+']++;
       });
 
-      // Simplified broadcast message
+      // Simplified broadcast message with additional Sportybet count
       const timestamp = new Date().toISOString();
-      logger.debug(`[${timestamp}] Broadcast: ${filteredEvents.length} events ready for broadcast`);
+      logger.critical(`[${timestamp}] Broadcast: ${filteredEvents.length} events ready for broadcast (includes ${sportybetCount} with Sportybet odds)`);
       
       // Create another deep copy of the filtered data before sending
       const safeCopy = JSON.parse(JSON.stringify(filteredEvents));

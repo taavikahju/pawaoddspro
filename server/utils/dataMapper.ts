@@ -881,7 +881,7 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
                 logger.critical(`Found Sportybet events in batch ${i+1}/${updateBatches} - these will be prioritized in frontend updates`);
               }
               
-              // Check if there are any Sportybet events in this batch with 3+ bookmakers to prioritize them
+              // Count Sportybet events with 3+ bookmakers
               const sportyEvents = createOperations.filter(event => 
                 event.oddsData && 
                 typeof event.oddsData === 'object' && 
@@ -890,18 +890,10 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
               );
               
               if (sportyEvents.length > 0) {
-                // Emit an event for Sportybet events so they can be broadcast immediately
-                logger.critical(`Found ${sportyEvents.length} Sportybet events in batch ${i+1}/${updateBatches} - broadcasting early`);
-                
-                dataMapperEvents.emit(MAPPER_EVENTS.SPORTYBET_BATCH_PROCESSED, {
-                  batch: i + 1,
-                  totalBatches: updateBatches,
-                  events: sportyEvents,
-                  timestamp: new Date().toISOString()
-                });
+                logger.critical(`Found ${sportyEvents.length} Sportybet events with 3+ bookmakers in batch ${i+1}/${updateBatches}`);
               }
               
-              // Also emit an event for all events with 3+ bookmakers
+              // Also count all events with 3+ bookmakers
               const eventsWithMinBookmakers = createOperations.filter(event => 
                 event.oddsData && 
                 typeof event.oddsData === 'object' && 
@@ -909,12 +901,14 @@ export async function processAndMapEvents(storage: IStorage): Promise<void> {
               );
               
               if (eventsWithMinBookmakers.length > 0) {
-                dataMapperEvents.emit(MAPPER_EVENTS.BATCH_PROCESSED, {
-                  batch: i + 1, 
-                  totalBatches: updateBatches,
-                  events: eventsWithMinBookmakers,
-                  timestamp: new Date().toISOString()
-                });
+                logger.critical(`Found ${eventsWithMinBookmakers.length} events with 3+ bookmakers in batch ${i+1}/${updateBatches}`);
+              }
+              
+              // Special handling for batch with Sportybet events
+              if (sportyEvents.length > 0) {
+                // This is to ensure Sportybet events are prioritized when processing
+                // No special broadcasting needed - the frontend will get them in the final broadcast
+                logger.critical(`Processing high-priority Sportybet events in batch ${i+1}/${updateBatches}`);
               }
           } catch (insertError) {
             logger.error(`Error with bulk insert operation: ${insertError.message}`);
