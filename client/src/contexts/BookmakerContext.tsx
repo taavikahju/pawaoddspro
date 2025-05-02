@@ -27,9 +27,11 @@ interface BookmakerContextType {
   maxMarginFilter: number;
   isLoadingBookmakers: boolean;
   isLoadingSports: boolean;
+  isTop5LeaguesActive: boolean;
   toggleBookmaker: (code: string) => void;
   toggleSport: (code: string) => void;
   toggleAutoRefresh: () => void;
+  toggleTop5LeaguesFilter: () => void;
   setMinMarginFilter: (value: number) => void;
   setMaxMarginFilter: (value: number) => void;
   resetMarginFilters: () => void;
