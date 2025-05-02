@@ -38,11 +38,28 @@ HEADERS = {
     "Accept": "application/json"
 }
 
-def log(message):
-    """Log messages with timestamp"""
-    timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%fZ')
-    # Write logs to stderr instead of stdout to keep stdout clean for JSON output
-    print(f"[{timestamp}] {message}", file=sys.stderr, flush=True)
+def log(message, level="info"):
+    """Log messages with timestamp
+    
+    Levels:
+    - critical: Always log
+    - error: Always log errors
+    - warning: Log warnings only in verbose mode
+    - info: Only log in verbose mode
+    - debug: Only log in debug mode
+    """
+    # Check if we should log this message based on environment variables
+    VERBOSE_MODE = os.environ.get('SPORTY_VERBOSE_LOGGING', '').lower() == 'true'
+    DEBUG_MODE = os.environ.get('SPORTY_DEBUG_LOGGING', '').lower() == 'true'
+    
+    # Only log critical messages and errors by default
+    if level == "critical" or level == "error" or \
+       (level == "warning" and VERBOSE_MODE) or \
+       (level == "info" and VERBOSE_MODE) or \
+       (level == "debug" and DEBUG_MODE):
+        timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+        # Write logs to stderr instead of stdout to keep stdout clean for JSON output
+        print(f"[{timestamp}] {message}", file=sys.stderr, flush=True)
 
 def fetch_page(page=1):
     """Fetch a single page from Sportybet API"""
