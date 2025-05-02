@@ -157,10 +157,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const filteredEvents = events.filter(event => {
         if (!event.oddsData) return false;
         const bookmakerCount = Object.keys(event.oddsData).length;
-        return bookmakerCount >= 2;
+        return bookmakerCount >= 3; // Updated to require 3+ bookmakers
       });
       
-      logger.debug(`WebSocket: Filtered ${events.length} events down to ${filteredEvents.length} with at least 2 bookmakers`);
+      logger.debug(`WebSocket: Filtered ${events.length} events down to ${filteredEvents.length} with at least 3 bookmakers`);
       
       ws.send(JSON.stringify({
         type: 'events',
@@ -183,7 +183,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           const filteredEvents = events.filter(event => {
             if (!event.oddsData) return false;
             const bookmakerCount = Object.keys(event.oddsData).length;
-            return bookmakerCount >= 2;
+            return bookmakerCount >= 3; // Updated to require 3+ bookmakers
           });
 
           // Track counts for different bookmaker counts for WebSocket too
@@ -212,7 +212,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           logger.debug(`  - Events with 3 bookmakers: ${eventsByBookmakerCount['3']}`);
           logger.debug(`  - Events with 4+ bookmakers: ${eventsByBookmakerCount['4+']}`);
           
-          logger.debug(`WebSocket getEvents: Filtered ${events.length} events down to ${filteredEvents.length} with at least 2 bookmakers`);
+          logger.debug(`WebSocket getEvents: Filtered ${events.length} events down to ${filteredEvents.length} with at least 3 bookmakers`);
           
           ws.send(JSON.stringify({
             type: 'events',
@@ -403,7 +403,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const filteredEvents = events.filter(event => {
         if (!event.oddsData) return false;
         const bookmakerCount = Object.keys(event.oddsData).length;
-        return bookmakerCount >= 2;
+        return bookmakerCount >= 3; // Updated to require 3+ bookmakers
       });
       
       // Track counts for broadcast events
