@@ -639,26 +639,52 @@ export class DatabaseStorage implements IStorage {
     }
   }
 
-  async getBookmakerData(bookmakerCode: string): Promise<any> {
+  async getBookmakerData(bookmakerCode: string, forceFresh: boolean = false): Promise<any> {
     try {
       const filePath = path.join(this.dataDir, `${bookmakerCode}.json`);
-      if (!fs.existsSync(filePath)) return [];
+      if (!fs.existsSync(filePath)) {
+        console.error(`Bookmaker data file for ${bookmakerCode} does not exist`);
+        return [];
+      }
+      
+      // Read file stats to log details about the data
+      const stats = await stat(filePath);
+      console.error(`Reading ${bookmakerCode} data (size: ${Math.round(stats.size / 1024)} KB, modified: ${stats.mtime.toISOString()}, forceFresh: ${forceFresh})`);
       
       const data = await readFile(filePath, 'utf8');
-      return JSON.parse(data);
+      const parsedData = JSON.parse(data);
+      
+      // Log data length for debugging
+      if (Array.isArray(parsedData)) {
+        console.error(`Successfully loaded ${parsedData.length} ${bookmakerCode} events`);
+      }
+      
+      return parsedData;
     } catch (error) {
       console.error(`Error reading ${bookmakerCode} data:`, error);
       return [];
     }
   }
 
-  async getAllBookmakersData(): Promise<Record<string, any>> {
+  async getAllBookmakersData(forceFresh: boolean = false): Promise<Record<string, any>> {
     const result: Record<string, any> = {};
     const bookmakerList = await this.getBookmakers();
     
+    // Add additional logging
+    console.error(`Getting data for ${bookmakerList.length} bookmakers (forceFresh: ${forceFresh})`);
+    
     for (const bookmaker of bookmakerList) {
-      result[bookmaker.code] = await this.getBookmakerData(bookmaker.code);
+      console.error(`Loading data for bookmaker: ${bookmaker.code}`);
+      result[bookmaker.code] = await this.getBookmakerData(bookmaker.code, forceFresh);
     }
+    
+    // Log results
+    const dataStats = Object.entries(result).map(([code, data]) => {
+      const count = Array.isArray(data) ? data.length : 0;
+      return `${code}: ${count} events`;
+    }).join(', ');
+    
+    console.error(`Loaded bookmaker data: ${dataStats}`);
     
     return result;
   }
