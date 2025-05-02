@@ -4897,9 +4897,9 @@
     "date": "2025-05-03",
     "time": "11:00",
     "odds": {
-      "home": 1.85,
-      "draw": 3.8,
-      "away": 3.35
+      "home": 1.93,
+      "draw": 3.75,
+      "away": 3.15
     },
     "raw": {
       "eventId": "58184999",
@@ -4907,9 +4907,9 @@
       "tournament": "Cambodian Premier League",
       "event": "Angkor Tiger FC - Boeung Ket Angkor FC",
       "market": "1X2 - FT",
-      "home_odds": "1.85",
-      "draw_odds": "3.8",
-      "away_odds": "3.35",
+      "home_odds": "1.93",
+      "draw_odds": "3.75",
+      "away_odds": "3.15",
       "start_time": "2025-05-03 11:00"
     }
   },
@@ -10981,9 +10981,9 @@
     "date": "2025-05-03",
     "time": "14:00",
     "odds": {
-      "home": 4.4,
+      "home": 4.3,
       "draw": 4,
-      "away": 1.65
+      "away": 1.67
     },
     "raw": {
       "eventId": "51099881",
@@ -10991,9 +10991,9 @@
       "tournament": "League Two",
       "event": "Carlisle United - Salford City",
       "market": "1X2 - FT",
-      "home_odds": "4.4",
+      "home_odds": "4.3",
       "draw_odds": "4.0",
-      "away_odds": "1.65",
+      "away_odds": "1.67",
       "start_time": "2025-05-03 14:00"
     }
   },
@@ -11527,9 +11527,9 @@
     "date": "2025-05-03",
     "time": "14:00",
     "odds": {
-      "home": 12,
-      "draw": 6,
-      "away": 1.17
+      "home": 13,
+      "draw": 6.25,
+      "away": 1.16
     },
     "raw": {
       "eventId": "58379963",
@@ -11537,9 +11537,35 @@
       "tournament": "Kakkonen, Group A",
       "event": "Puistolan Urheilijat - FC Honka",
       "market": "1X2 - FT",
-      "home_odds": "12.0",
-      "draw_odds": "6.0",
-      "away_odds": "1.17",
+      "home_odds": "13.0",
+      "draw_odds": "6.25",
+      "away_odds": "1.16",
+      "start_time": "2025-05-03 14:00"
+    }
+  },
+  {
+    "id": "58379967",
+    "eventId": "58379967",
+    "teams": "Grankulla IFK - JPS",
+    "league": "Kakkonen, Group A",
+    "sport": "football",
+    "country": "Finland",
+    "date": "2025-05-03",
+    "time": "14:00",
+    "odds": {
+      "home": 1.11,
+      "draw": 8.25,
+      "away": 12
+    },
+    "raw": {
+      "eventId": "58379967",
+      "country": "Finland",
+      "tournament": "Kakkonen, Group A",
+      "event": "Grankulla IFK - JPS",
+      "market": "1X2 - FT",
+      "home_odds": "1.11",
+      "draw_odds": "8.25",
+      "away_odds": "12.0",
       "start_time": "2025-05-03 14:00"
     }
   },
@@ -11996,8 +12022,8 @@
     "time": "14:00",
     "odds": {
       "home": 3.3,
-      "draw": 4.1,
-      "away": 1.8
+      "draw": 4.3,
+      "away": 1.77
     },
     "raw": {
       "eventId": "58378603",
@@ -12006,8 +12032,8 @@
       "event": "Musan Salama - TPV Tampere",
       "market": "1X2 - FT",
       "home_odds": "3.3",
-      "draw_odds": "4.1",
-      "away_odds": "1.8",
+      "draw_odds": "4.3",
+      "away_odds": "1.77",
       "start_time": "2025-05-03 14:00"
     }
   },
@@ -12125,9 +12151,9 @@
     "date": "2025-05-03",
     "time": "14:00",
     "odds": {
-      "home": 2.35,
-      "draw": 3.8,
-      "away": 2.4
+      "home": 2.4,
+      "draw": 3.85,
+      "away": 2.35
     },
     "raw": {
       "eventId": "58378601",
@@ -12135,9 +12161,9 @@
       "tournament": "Kakkonen, Group B",
       "event": "Atlantis FC/Akatemia - HPS",
       "market": "1X2 - FT",
-      "home_odds": "2.35",
-      "draw_odds": "3.8",
-      "away_odds": "2.4",
+      "home_odds": "2.4",
+      "draw_odds": "3.85",
+      "away_odds": "2.35",
       "start_time": "2025-05-03 14:00"
     }
   },
@@ -13659,9 +13685,9 @@
     "date": "2025-05-03",
     "time": "15:00",
     "odds": {
-      "home": 2.05,
-      "draw": 3.55,
-      "away": 3.05
+      "home": 2.02,
+      "draw": 3.5,
+      "away": 3.1
     },
     "raw": {
       "eventId": "55724325",
@@ -13669,9 +13695,9 @@
       "tournament": "NB I, Women",
       "event": "Szent Mihaly SE - Viktoria FC Szombathely",
       "market": "1X2 - FT",
-      "home_odds": "2.05",
-      "draw_odds": "3.55",
-      "away_odds": "3.05",
+      "home_odds": "2.02",
+      "draw_odds": "3.5",
+      "away_odds": "3.1",
       "start_time": "2025-05-03 15:00"
     }
   },
@@ -18313,9 +18339,9 @@
     "date": "2025-05-03",
     "time": "21:00",
     "odds": {
-      "home": 1.59,
-      "draw": 3.55,
-      "away": 5.25
+      "home": 1.63,
+      "draw": 3.45,
+      "away": 5
     },
     "raw": {
       "eventId": "60240965",
@@ -18323,9 +18349,9 @@
       "tournament": "Liga Nacional. Clausura",
       "event": "CSD Coban Imperial - CD Malacateco",
       "market": "1X2 - FT",
-      "home_odds": "1.59",
-      "draw_odds": "3.55",
-      "away_odds": "5.25",
+      "home_odds": "1.63",
+      "draw_odds": "3.45",
+      "away_odds": "5.0",
       "start_time": "2025-05-03 21:00"
     }
   },
@@ -24163,9 +24189,9 @@
     "date": "2025-05-04",
     "time": "13:00",
     "odds": {
-      "home": 2.09,
+      "home": 2.07,
       "draw": 3.75,
-      "away": 3.25
+      "away": 3.3
     },
     "raw": {
       "eventId": "50850673",
@@ -24173,9 +24199,9 @@
       "tournament": "Premier League",
       "event": "West Ham United - Tottenham Hotspur",
       "market": "1X2 - FT",
-      "home_odds": "2.09",
+      "home_odds": "2.07",
       "draw_odds": "3.75",
-      "away_odds": "3.25",
+      "away_odds": "3.3",
       "start_time": "2025-05-04 13:00"
     }
   },
@@ -25918,32 +25944,6 @@
       "home_odds": "3.9",
       "draw_odds": "3.7",
       "away_odds": "1.73",
-      "start_time": "2025-05-04 15:00"
-    }
-  },
-  {
-    "id": "50743967",
-    "eventId": "50743967",
-    "teams": "LKS Lodz - ZKS Stal Rzeszow",
-    "league": "I Liga",
-    "sport": "football",
-    "country": "Poland",
-    "date": "2025-05-04",
-    "time": "15:00",
-    "odds": {
-      "home": 1.94,
-      "draw": 3.4,
-      "away": 3.4
-    },
-    "raw": {
-      "eventId": "50743967",
-      "country": "Poland",
-      "tournament": "I Liga",
-      "event": "LKS Lodz - ZKS Stal Rzeszow",
-      "market": "1X2 - FT",
-      "home_odds": "1.94",
-      "draw_odds": "3.4",
-      "away_odds": "3.4",
       "start_time": "2025-05-04 15:00"
     }
   },
@@ -33861,9 +33861,9 @@
     "date": "2025-05-09",
     "time": "17:30",
     "odds": {
-      "home": 2.11,
+      "home": 2.09,
       "draw": 3.1,
-      "away": 3.5
+      "away": 3.6
     },
     "raw": {
       "eventId": "51628775",
@@ -33871,9 +33871,9 @@
       "tournament": "National",
       "event": "FC Rouen - Paris 13 Atletico",
       "market": "1X2 - FT",
-      "home_odds": "2.11",
+      "home_odds": "2.09",
       "draw_odds": "3.1",
-      "away_odds": "3.5",
+      "away_odds": "3.6",
       "start_time": "2025-05-09 17:30"
     }
   },
