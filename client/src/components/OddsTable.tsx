@@ -14,8 +14,65 @@ import MarginHistoryPopup from './MarginHistoryPopup';
 import OddsHistoryPopup from './OddsHistoryPopup';
 import CountryFlag from './CountryFlag';
 
+export interface Event {
+  id: number;
+  teams: string;
+  date: string;
+  time: string;
+  sportId: number;
+  country?: string | null;
+  tournament?: string | null;
+  oddsData: Record<string, any>;
+  [key: string]: any; // Allow for additional properties
+}
+
+// Helper function to check if event has already started
+export function hasEventStarted(event: Event): boolean {
+  if (!event.date || !event.time) return false;
+  
+  try {
+    // Parse date - format is "03 May 2025"
+    const dateParts = event.date.split(' ');
+    if (dateParts.length !== 3) return false;
+    
+    const day = parseInt(dateParts[0], 10);
+    const monthStr = dateParts[1];
+    const year = parseInt(dateParts[2], 10);
+    
+    // Convert month name to number (0-based)
+    const months: Record<string, number> = {
+      'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5,
+      'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11
+    };
+    
+    const month = months[monthStr];
+    if (month === undefined) return false;
+    
+    // Parse time - format is "14:30"
+    const timeParts = event.time.split(':');
+    if (timeParts.length !== 2) return false;
+    
+    const hour = parseInt(timeParts[0], 10);
+    const minute = parseInt(timeParts[1], 10);
+    
+    // Create event date in UTC
+    const eventDate = new Date(Date.UTC(year, month, day, hour, minute, 0));
+    
+    // Compare with current UTC time
+    const now = new Date();
+    
+    // Debug log
+    console.log(`Event: ${event.teams}, Event time: ${eventDate.toISOString()}, Now: ${now.toISOString()}, Started: ${eventDate <= now}`);
+    
+    return eventDate <= now;
+  } catch (e) {
+    console.error("Error parsing event date:", e);
+    return false;
+  }
+}
+
 interface OddsTableProps {
-  events: any[];
+  events: Event[];
   isLoading: boolean;
   className?: string;
 }

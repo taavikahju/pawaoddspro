@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRealWebSocket } from './use-real-websocket';
+import { hasEventStarted, Event } from '@/components/OddsTable';
 
 // Define a type for the event structure
 interface EventData {
@@ -332,40 +333,7 @@ export function useOfflineResilientEvents() {
           }
           
           // Second condition: Hide events that have already started
-          try {
-            if (!event.date || !event.time) {
-              return true; // Keep events without date/time info for now
-            }
-            
-            // Create a date string in format: "YYYY-MM-DD HH:MM:SS"
-            // First get the date parts (in format: "DD May YYYY")
-            const dateParts = event.date.split(' ');
-            if (dateParts.length !== 3) return true; // Keep if date format is unknown
-            
-            // Get the time (in format: "HH:MM")
-            const timeParts = event.time.split(':');
-            if (timeParts.length !== 2) return true; // Keep if time format is unknown
-            
-            // Combine date and time into a UTC datetime string
-            const now = new Date();
-            const eventTimeString = `${event.date} ${event.time}`;
-            
-            // Simple string comparison for dates with same format (assuming both are in UTC)
-            // Get current date in same format as event date for comparison
-            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-            const currentDay = now.getUTCDate().toString().padStart(2, '0');
-            const currentMonth = months[now.getUTCMonth()];
-            const currentYear = now.getUTCFullYear();
-            const currentHour = now.getUTCHours().toString().padStart(2, '0');
-            const currentMinute = now.getUTCMinutes().toString().padStart(2, '0');
-            
-            const currentTimeString = `${currentDay} ${currentMonth} ${currentYear} ${currentHour}:${currentMinute}`;
-            
-            // Compare the datetime strings to filter out past events
-            return eventTimeString > currentTimeString;
-          } catch (e) {
-            return true; // Keep events if there's an error in date parsing
-          }
+          return !hasEventStarted(event);
         });
         
         // Remove redundant code
@@ -389,40 +357,7 @@ export function useOfflineResilientEvents() {
         }
         
         // Second condition: Hide events that have already started
-        try {
-          if (!event.date || !event.time) {
-            return true; // Keep events without date/time info for now
-          }
-          
-          // Create a date string in format: "YYYY-MM-DD HH:MM:SS"
-          // First get the date parts (in format: "DD May YYYY")
-          const dateParts = event.date.split(' ');
-          if (dateParts.length !== 3) return true; // Keep if date format is unknown
-          
-          // Get the time (in format: "HH:MM")
-          const timeParts = event.time.split(':');
-          if (timeParts.length !== 2) return true; // Keep if time format is unknown
-          
-          // Combine date and time into a UTC datetime string
-          const now = new Date();
-          const eventTimeString = `${event.date} ${event.time}`;
-          
-          // Simple string comparison for dates with same format (assuming both are in UTC)
-          // Get current date in same format as event date for comparison
-          const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-          const currentDay = now.getUTCDate().toString().padStart(2, '0');
-          const currentMonth = months[now.getUTCMonth()];
-          const currentYear = now.getUTCFullYear();
-          const currentHour = now.getUTCHours().toString().padStart(2, '0');
-          const currentMinute = now.getUTCMinutes().toString().padStart(2, '0');
-          
-          const currentTimeString = `${currentDay} ${currentMonth} ${currentYear} ${currentHour}:${currentMinute}`;
-          
-          // Compare the datetime strings to filter out past events
-          return eventTimeString > currentTimeString;
-        } catch (e) {
-          return true; // Keep events if there's an error in date parsing
-        }
+        return !hasEventStarted(event);
       });
     }
 
@@ -442,40 +377,7 @@ export function useOfflineResilientEvents() {
       }
       
       // Second condition: Hide events that have already started
-      try {
-        if (!event.date || !event.time) {
-          return true; // Keep events without date/time info for now
-        }
-        
-        // Create a date string in format: "YYYY-MM-DD HH:MM:SS"
-        // First get the date parts (in format: "DD May YYYY")
-        const dateParts = event.date.split(' ');
-        if (dateParts.length !== 3) return true; // Keep if date format is unknown
-        
-        // Get the time (in format: "HH:MM")
-        const timeParts = event.time.split(':');
-        if (timeParts.length !== 2) return true; // Keep if time format is unknown
-        
-        // Combine date and time into a UTC datetime string
-        const now = new Date();
-        const eventTimeString = `${event.date} ${event.time}`;
-        
-        // Simple string comparison for dates with same format (assuming both are in UTC)
-        // Get current date in same format as event date for comparison
-        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        const currentDay = now.getUTCDate().toString().padStart(2, '0');
-        const currentMonth = months[now.getUTCMonth()];
-        const currentYear = now.getUTCFullYear();
-        const currentHour = now.getUTCHours().toString().padStart(2, '0');
-        const currentMinute = now.getUTCMinutes().toString().padStart(2, '0');
-        
-        const currentTimeString = `${currentDay} ${currentMonth} ${currentYear} ${currentHour}:${currentMinute}`;
-        
-        // Compare the datetime strings to filter out past events
-        return eventTimeString > currentTimeString;
-      } catch (e) {
-        return true; // Keep events if there's an error in date parsing
-      }
+      return !hasEventStarted(event);
     });
   }, [serverEvents, localCacheEvents]);
 
