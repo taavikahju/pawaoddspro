@@ -109,8 +109,45 @@ export default function Dashboard() {
   const filteredEvents = useMemo(() => {
     if (!Array.isArray(events)) return [];
     
+    // Filter out past events by checking date and time
+    const now = new Date();
+    const dateString = now.toISOString().split('T')[0]; // YYYY-MM-DD format
+    const todayFormatted = `${dateString.split('-')[2]} ${dateString.split('-')[1]} ${dateString.split('-')[0]}`; // DD MM YYYY
+
+    // Filter for upcoming events
+    const upcomingEvents = events.filter((event: any) => {
+      // First check if the event has a date
+      if (!event.date) return false;
+      
+      // Compare dates - format is "DD MMM YYYY"
+      const eventDate = event.date;
+      
+      // If event date is in the future, include it
+      if (eventDate > todayFormatted) return true;
+      
+      // If event date is today, check the time
+      if (eventDate === todayFormatted && event.time) {
+        const eventTimeParts = event.time.split(':');
+        if (eventTimeParts.length === 2) {
+          const eventHour = parseInt(eventTimeParts[0], 10);
+          const eventMinute = parseInt(eventTimeParts[1], 10);
+          
+          const currentHour = now.getUTCHours();
+          const currentMinute = now.getUTCMinutes();
+          
+          // If event time is in the future, include it
+          if (eventHour > currentHour || (eventHour === currentHour && eventMinute > currentMinute)) {
+            return true;
+          }
+        }
+      }
+      
+      // Otherwise, it's a past event
+      return false;
+    });
+    
     // First filter the events based on criteria
-    const filtered = events.filter((event: any) => {
+    const filtered = upcomingEvents.filter((event: any) => {
       // Filter by sport
       const sportMatches = selectedSports.some((selectedSport) => {
         // Map sport codes to IDs
