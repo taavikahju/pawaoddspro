@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect, useRef, useCallback } from 'react';
 import {
   Table,
   TableBody,
@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table";
 import { useBookmakerContext } from '@/contexts/BookmakerContext';
 import { cn } from '@/lib/utils';
-import { ArrowDownIcon, ArrowUpIcon, Clock, Globe, Trophy } from 'lucide-react';
+import { ArrowDownIcon, ArrowUpIcon, Clock, Globe, Trophy, Loader2 } from 'lucide-react';
 import MarginHistoryPopup from './MarginHistoryPopup';
 import OddsHistoryPopup from './OddsHistoryPopup';
 import CountryFlag from './CountryFlag';
@@ -92,6 +92,11 @@ interface OddsTableProps {
 
 export default function OddsTable({ events, isLoading, className }: OddsTableProps) {
   const { bookmakers, selectedBookmakers, isTop5LeaguesActive } = useBookmakerContext();
+  
+  // For pagination
+  const [displayCount, setDisplayCount] = useState<number>(50);
+  const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
+  const loaderRef = useRef<HTMLDivElement>(null);
   
   // State for margin history popup
   const [selectedEvent, setSelectedEvent] = useState<{
@@ -347,6 +352,42 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
     }
     return events;
   }, [events, isTop5LeaguesActive]);
+  
+  // Get the paginated events
+  const paginatedEvents = useMemo(() => {
+    return filteredEvents.slice(0, displayCount);
+  }, [filteredEvents, displayCount]);
+  
+  // Handle intersection with the loader element
+  const handleObserver = useCallback((entries: IntersectionObserverEntry[]) => {
+    const [entry] = entries;
+    if (entry.isIntersecting && !isLoadingMore && paginatedEvents.length < filteredEvents.length) {
+      setIsLoadingMore(true);
+      setTimeout(() => {
+        setDisplayCount(prevCount => Math.min(prevCount + 50, filteredEvents.length));
+        setIsLoadingMore(false);
+      }, 300); // Small delay to prevent rapid loading
+    }
+  }, [filteredEvents.length, isLoadingMore, paginatedEvents.length]);
+  
+  // Set up the intersection observer
+  useEffect(() => {
+    const observer = new IntersectionObserver(handleObserver, {
+      root: null,
+      rootMargin: "20px",
+      threshold: 0.1
+    });
+    
+    if (loaderRef.current) {
+      observer.observe(loaderRef.current);
+    }
+    
+    return () => {
+      if (loaderRef.current) {
+        observer.unobserve(loaderRef.current);
+      }
+    };
+  }, [handleObserver]);
 
   // Get country code for flag display
   const getCountryCode = (countryName: string): string => {
