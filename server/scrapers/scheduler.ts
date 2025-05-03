@@ -386,21 +386,34 @@ export async function runAllScrapers(storage: IStorage): Promise<void> {
           return bookmakerCount >= 2;
         });
         
+        // Count events with Sportybet odds
+        const eventWithSportybet = filteredEvents.filter(event => {
+          const oddsData = event.oddsData as Record<string, any>;
+          return oddsData && oddsData.sporty;
+        }).length;
+        
         // Create simplified summary for frontend update
         const frontendUpdateSummary = {
           totalEvents: filteredEvents.length,
+          sportybetEvents: eventWithSportybet,
           timestamp: new Date().toISOString()
         };
         
         // Log simplified statistics for the update with timestamp
         const updateTime = new Date();
-        logger.critical(`[${updateTime.toISOString()}] Sending ${filteredEvents.length} events to frontend`);
+        logger.critical(`[${updateTime.toISOString()}] Sending ${filteredEvents.length} events to frontend (includes ${eventWithSportybet} with Sportybet odds)`);
         
         // Emit the all processing completed event with statistics
         scraperEvents.emit(SCRAPER_EVENTS.ALL_PROCESSING_COMPLETED, {
           timestamp: new Date().toISOString(),
           message: 'All scraping and processing completed, frontend can be updated',
           stats: frontendUpdateSummary
+        });
+        
+        // Also emit a specific Sportybet update event to trigger client-side cache invalidation
+        scraperEvents.emit('SPORTYBET_UPDATED', {
+          timestamp: new Date().toISOString(),
+          count: eventWithSportybet
         });
       } catch (processingError) {
         console.error('❌ Error processing events:', processingError);

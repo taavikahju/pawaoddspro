@@ -121,11 +121,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
       data: data.stats
     });
     
+    // Broadcast specific update for events with updated information
+    broadcast({
+      type: 'events_updated',
+      count: data.stats.totalEvents,
+      timestamp: new Date().toISOString()
+    });
+    
     // Broadcast scrape completed message to signal data is ready for consumption
     broadcast({
       type: 'scrapeCompleted',
       timestamp: new Date().toISOString(),
       message: 'All scraping and data processing complete'
+    });
+  });
+  
+  // Special event listener for Sportybet updates
+  // This allows the frontend to know when to invalidate Sportybet-specific caches
+  scraperEvents.on('SPORTYBET_UPDATED', (data) => {
+    logger.info(`Broadcasting Sportybet update with ${data.count} events`);
+    
+    // Send a specific Sportybet update broadcast to invalidate client caches
+    broadcast({
+      type: 'sportybet_updated',
+      count: data.count,
+      timestamp: data.timestamp || new Date().toISOString()
     });
   });
 
