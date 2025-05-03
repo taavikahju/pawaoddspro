@@ -759,11 +759,60 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: 'Invalid event ID' });
       }
 
-      const event = await storage.getEvent(id);
-      if (!event) {
+      // Get the raw event from storage
+      const rawEvent = await storage.getEvent(id);
+      if (!rawEvent) {
         return res.status(404).json({ message: 'Event not found' });
       }
-
+      
+      // Deep clone to avoid reference issues
+      const event = JSON.parse(JSON.stringify(rawEvent));
+      
+      // Log details about the event's Sportybet odds
+      if (event.oddsData && typeof event.oddsData === 'object' && 'sporty' in event.oddsData) {
+        logger.info(`Event ${id} has Sportybet odds: ${JSON.stringify(event.oddsData.sporty)}`);
+      } else {
+        logger.info(`Event ${id} does not have Sportybet odds`);
+        
+        // Try to get Sportybet data from the raw bookmaker data
+        try {
+          const sportyData = await storage.getBookmakerData('sporty', true);
+          if (Array.isArray(sportyData) && sportyData.length > 0) {
+            // Try to find the event by teams or fixture
+            const matchingSportyEvent = sportyData.find(se => {
+              const eventTeams = event.teams || '';
+              const eventName = se.event || '';
+              
+              // Try different normalization techniques
+              const normalizedEventTeams = eventTeams.toLowerCase().replace(/\s+/g, '');
+              const normalizedSportyEvent = eventName.toLowerCase().replace(/\s+/g, '');
+              
+              return normalizedEventTeams === normalizedSportyEvent;
+            });
+            
+            if (matchingSportyEvent) {
+              logger.info(`Found matching Sportybet event for ${event.teams} in raw data`);
+              
+              // Make sure we have an oddsData object
+              if (!event.oddsData) {
+                event.oddsData = {};
+              }
+              
+              // Add Sportybet odds from raw data
+              event.oddsData.sporty = {
+                home: parseFloat(matchingSportyEvent.home_odds || 0),
+                draw: parseFloat(matchingSportyEvent.draw_odds || 0),
+                away: parseFloat(matchingSportyEvent.away_odds || 0)
+              };
+              
+              logger.info(`Added Sportybet odds to event ${id} from raw data: ${JSON.stringify(event.oddsData.sporty)}`);
+            }
+          }
+        } catch (sportyError) {
+          logger.error(`Failed to get Sportybet data for event ${id}: ${sportyError}`);
+        }
+      }
+      
       res.json(event);
     } catch (error) {
       logger.error(`Error fetching event: ${error}`);

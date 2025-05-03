@@ -52,20 +52,22 @@ export default function OddsHistoryPopup({
   const oddsTypeDisplay = oddsType === 'home' ? 'Home' : oddsType === 'draw' ? 'Draw' : 'Away';
   
   // Fetch the current event to get real-time odds
-  const { data: currentEvent } = useQuery({
+  const { data: currentEvent, isLoading: isLoadingEvent, error: eventError } = useQuery({
     queryKey: ['/api/events', eventId],
     queryFn: async () => {
       try {
+        console.log(`Fetching current event data for ID: ${eventId}`);
         const response = await axios.get(`/api/events/${eventId}`);
-        console.log("Current event data:", response.data);
+        console.log("Current event data response:", response.data);
         return response.data;
       } catch (error) {
         console.error("Error fetching current event:", error);
-        return null;
+        throw error;
       }
     },
-    enabled: isOpen,
-    staleTime: 60000
+    enabled: isOpen && !!eventId, // Only fetch when dialog is open and eventId exists
+    retry: 1, // Retry once if fail
+    staleTime: 30000
   });
   
   // Fetch odds history for this event - optimized for lightweight loading
@@ -208,21 +210,33 @@ export default function OddsHistoryPopup({
           )}
         </div>
         
+        {/* Display errors if they occur */}
+        {eventError && (
+          <div className="mt-2">
+            <p className="text-xs text-red-500">
+              Unable to load current event data. History is still available.
+            </p>
+          </div>
+        )}
+        
         {/* Add a comparison between current and historical odds */}
-        {currentEvent && data && data.length > 0 && (
+        {data && data.length > 0 && (
           <div className="mt-4">
             <h3 className="text-sm font-semibold mb-2">Current vs. Historical Odds Comparison</h3>
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse text-xs">
-                <thead>
-                  <tr className="bg-gray-100 dark:bg-gray-800">
-                    <th className="border px-2 py-1 text-left">Bookmaker</th>
-                    <th className="border px-2 py-1 text-center">Current Odds</th>
-                    <th className="border px-2 py-1 text-center">Latest History</th>
-                    <th className="border px-2 py-1 text-center">Difference</th>
-                  </tr>
-                </thead>
-                <tbody>
+            {isLoadingEvent ? (
+              <Skeleton className="h-32 w-full" />
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full border-collapse text-xs">
+                  <thead>
+                    <tr className="bg-gray-100 dark:bg-gray-800">
+                      <th className="border px-2 py-1 text-left">Bookmaker</th>
+                      <th className="border px-2 py-1 text-center">Current Odds</th>
+                      <th className="border px-2 py-1 text-center">Latest History</th>
+                      <th className="border px-2 py-1 text-center">Difference</th>
+                    </tr>
+                  </thead>
+                  <tbody>
                   {bookmakers.map(bookmakerCode => {
                     // Get the latest historical entry for this bookmaker
                     const latestHistoryEntry = [...data]
@@ -230,7 +244,27 @@ export default function OddsHistoryPopup({
                       .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0];
                     
                     // Get the current odds from the current event
-                    const currentOdds = currentEvent?.oddsData?.[bookmakerCode]?.[oddsType] || null;
+                    // Special handling for Sportybet to ensure we get the most recent odds
+                    let currentOdds = null;
+                    if (bookmakerCode === 'sporty') {
+                      console.log(`Getting Sportybet odds for ${eventName}`, {
+                        event: currentEvent,
+                        oddsData: currentEvent?.oddsData?.sporty,
+                        oddsType
+                      });
+                      
+                      // Make sure we extract the correct odds from Sportybet data
+                      if (currentEvent?.oddsData?.sporty) {
+                        currentOdds = oddsType === 'home' 
+                          ? currentEvent.oddsData.sporty.home
+                          : oddsType === 'draw'
+                            ? currentEvent.oddsData.sporty.draw
+                            : currentEvent.oddsData.sporty.away;
+                      }
+                    } else {
+                      // Regular path for other bookmakers
+                      currentOdds = currentEvent?.oddsData?.[bookmakerCode]?.[oddsType] || null;
+                    }
                     
                     // Get the historical odds based on the selected type
                     const historyOdds = latestHistoryEntry 
@@ -274,10 +308,11 @@ export default function OddsHistoryPopup({
                   })}
                 </tbody>
               </table>
+              <p className="text-xs text-gray-500 mt-1">
+                Note: Differences may appear if odds were cached from previous scraper runs.
+              </p>
             </div>
-            <p className="text-xs text-gray-500 mt-1">
-              Note: Differences may appear if odds were cached from previous scraper runs.
-            </p>
+            )}
           </div>
         )}
         
