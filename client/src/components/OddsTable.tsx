@@ -780,8 +780,8 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                           <button 
                             className="hover:underline focus:outline-none"
                             onClick={() => setOddsHistoryPopup({
-                              eventId: event.eventId,
-                              eventName: event.fixture,
+                              eventId: event.eventId || event.id?.toString() || '',
+                              eventName: event.fixture || event.teams || '',
                               oddsType: 'home',
                               isOpen: true
                             })}
@@ -807,8 +807,8 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                           <button 
                             className="hover:underline focus:outline-none"
                             onClick={() => setOddsHistoryPopup({
-                              eventId: event.eventId,
-                              eventName: event.fixture,
+                              eventId: event.eventId || event.id?.toString() || '',
+                              eventName: event.fixture || event.teams || '',
                               oddsType: 'draw',
                               isOpen: true
                             })}
@@ -834,8 +834,8 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                           <button 
                             className="hover:underline focus:outline-none"
                             onClick={() => setOddsHistoryPopup({
-                              eventId: event.eventId,
-                              eventName: event.fixture,
+                              eventId: event.eventId || event.id?.toString() || '',
+                              eventName: event.fixture || event.teams || '',
                               oddsType: 'away',
                               isOpen: true
                             })}
@@ -870,24 +870,26 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                           } else {
                             marginColorClass = 'text-red-600';
                           }
+                        
+                          // Only make it a button if we have a valid eventId
+                          const eventId = event.eventId || event.id?.toString() || '';
+                          if (eventId) {
+                            return (
+                              <button 
+                                onClick={() => setSelectedEvent({
+                                  eventId: eventId,
+                                  eventName: event.teams || event.fixture || '',
+                                  isOpen: true
+                                })}
+                                className={`hover:underline text-sm font-medium ${marginColorClass}`}
+                              >
+                                {marginPercentage}%
+                              </button>
+                            );
+                          }
                         }
                         
-                        // Add clickable functionality if margin is available
-                        if (marginPercentage !== '-' && event.eventId) {
-                          return (
-                            <button 
-                              onClick={() => setSelectedEvent({
-                                eventId: event.eventId,
-                                eventName: event.teams,
-                                isOpen: true
-                              })}
-                              className={`hover:underline text-sm font-medium ${marginColorClass}`}
-                            >
-                              {marginPercentage}%
-                            </button>
-                          );
-                        }
-                        
+                        // Just display the text if it's not clickable
                         return <span className={`text-sm font-medium ${marginColorClass}`}>{marginPercentage}%</span>;
                       })()}
                     </TableCell>
@@ -946,6 +948,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
         eventName={selectedEvent.eventName}
         isOpen={selectedEvent.isOpen}
         onClose={() => setSelectedEvent(prev => ({ ...prev, isOpen: false }))}
+        bookmakers={selectedBookmakers}
       />
       
       {/* Render the OddsHistoryPopup */}
@@ -955,6 +958,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
         oddsType={oddsHistoryPopup.oddsType}
         isOpen={oddsHistoryPopup.isOpen}
         onClose={() => setOddsHistoryPopup(prev => ({ ...prev, isOpen: false }))}
+        bookmakers={selectedBookmakers}
       />
     </div>
   );
