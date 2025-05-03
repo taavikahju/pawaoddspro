@@ -316,8 +316,8 @@ export function useOfflineResilientEvents() {
           }
         });
         
-        // Filter events based on bookmaker count (minimum 3 bookmakers) AND start time
-        const filteredEvents = mergedEvents.filter(event => {
+        // IMPORTANT: Show all events temporarily to debug date parsing
+        return mergedEvents.filter(event => {
           // Skip events without oddsData
           if (!event.oddsData || typeof event.oddsData !== 'object') {
             return false;
@@ -326,75 +326,16 @@ export function useOfflineResilientEvents() {
           // Count bookmakers with odds data
           const bookmakerCount = Object.keys(event.oddsData).length;
           
-          // First condition: Only include events with at least 3 bookmakers
-          if (bookmakerCount < 3) {
-            return false;
-          }
-          
-          // Second condition: Hide events that have already started
-          // Try to parse event date and time
-          try {
-            if (!event.date || !event.time) {
-              return false; // Skip events with missing date or time
-            }
-            
-            // Parse the event date (format is like "03 May 2025")
-            const eventDateParts = event.date.split(' ');
-            if (eventDateParts.length !== 3) {
-              return false; // Skip events with invalid date format
-            }
-            
-            const day = parseInt(eventDateParts[0], 10);
-            const month = eventDateParts[1];
-            const year = parseInt(eventDateParts[2], 10);
-            
-            // Convert month name to month number (0-11)
-            const monthMap: Record<string, number> = {
-              'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5,
-              'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11
-            };
-            
-            if (!(month in monthMap)) {
-              return false; // Skip events with invalid month
-            }
-            
-            // Parse event time (format is like "09:00")
-            const eventTimeParts = event.time.split(':');
-            if (eventTimeParts.length !== 2) {
-              return false; // Skip events with invalid time format
-            }
-            
-            const eventHour = parseInt(eventTimeParts[0], 10);
-            const eventMinute = parseInt(eventTimeParts[1], 10);
-            
-            // Create Date object for the event start time (in UTC)
-            const eventDate = new Date(Date.UTC(
-              year,
-              monthMap[month],
-              day,
-              eventHour,
-              eventMinute,
-              0 // seconds
-            ));
-            
-            // Get current time in UTC
-            const now = new Date();
-            
-            // Only include events that have not started yet
-            // Compare timestamps in milliseconds
-            return eventDate.getTime() > now.getTime();
-          } catch (e) {
-            // If there's any error parsing the date/time, skip the event
-            return false;
-          }
+          // Only include events with at least 3 bookmakers
+          return bookmakerCount >= 3;
         });
         
-        return filteredEvents;
+        // Remove redundant code
         
         // Removed redundant code
       }
       
-      // Filter events based on bookmaker count (minimum 3 bookmakers) AND start time
+      // IMPORTANT: Show all events temporarily to debug date parsing
       return serverEvents.filter(event => {
         // Skip events without oddsData
         if (!event.oddsData || typeof event.oddsData !== 'object') {
@@ -404,71 +345,12 @@ export function useOfflineResilientEvents() {
         // Count bookmakers with odds data
         const bookmakerCount = Object.keys(event.oddsData).length;
         
-        // First condition: Only include events with at least 3 bookmakers
-        if (bookmakerCount < 3) {
-          return false;
-        }
-        
-        // Second condition: Hide events that have already started
-        // Try to parse event date and time
-        try {
-          if (!event.date || !event.time) {
-            return false; // Skip events with missing date or time
-          }
-          
-          // Parse the event date (format is like "03 May 2025")
-          const eventDateParts = event.date.split(' ');
-          if (eventDateParts.length !== 3) {
-            return false; // Skip events with invalid date format
-          }
-          
-          const day = parseInt(eventDateParts[0], 10);
-          const month = eventDateParts[1];
-          const year = parseInt(eventDateParts[2], 10);
-          
-          // Convert month name to month number (0-11)
-          const monthMap: Record<string, number> = {
-            'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5,
-            'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11
-          };
-          
-          if (!(month in monthMap)) {
-            return false; // Skip events with invalid month
-          }
-          
-          // Parse event time (format is like "09:00")
-          const eventTimeParts = event.time.split(':');
-          if (eventTimeParts.length !== 2) {
-            return false; // Skip events with invalid time format
-          }
-          
-          const eventHour = parseInt(eventTimeParts[0], 10);
-          const eventMinute = parseInt(eventTimeParts[1], 10);
-          
-          // Create Date object for the event start time (in UTC)
-          const eventDate = new Date(Date.UTC(
-            year,
-            monthMap[month],
-            day,
-            eventHour,
-            eventMinute,
-            0 // seconds
-          ));
-          
-          // Get current time in UTC
-          const now = new Date();
-          
-          // Only include events that have not started yet
-          // Compare timestamps in milliseconds
-          return eventDate.getTime() > now.getTime();
-        } catch (e) {
-          // If there's any error parsing the date/time, skip the event
-          return false;
-        }
+        // Only include events with at least 3 bookmakers
+        return bookmakerCount >= 3;
       });
     }
 
-    // Filter cached events based on bookmaker count (minimum 3 bookmakers) AND start time
+    // IMPORTANT: Show all cache events temporarily to debug date parsing
     return localCacheEvents.filter(event => {
       // Skip events without oddsData
       if (!event.oddsData || typeof event.oddsData !== 'object') {
@@ -478,67 +360,8 @@ export function useOfflineResilientEvents() {
       // Count bookmakers with odds data
       const bookmakerCount = Object.keys(event.oddsData).length;
       
-      // First condition: Only include events with at least 3 bookmakers
-      if (bookmakerCount < 3) {
-        return false;
-      }
-      
-      // Second condition: Hide events that have already started
-      // Try to parse event date and time
-      try {
-        if (!event.date || !event.time) {
-          return false; // Skip events with missing date or time
-        }
-        
-        // Parse the event date (format is like "03 May 2025")
-        const eventDateParts = event.date.split(' ');
-        if (eventDateParts.length !== 3) {
-          return false; // Skip events with invalid date format
-        }
-        
-        const day = parseInt(eventDateParts[0], 10);
-        const month = eventDateParts[1];
-        const year = parseInt(eventDateParts[2], 10);
-        
-        // Convert month name to month number (0-11)
-        const monthMap: Record<string, number> = {
-          'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5,
-          'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11
-        };
-        
-        if (!(month in monthMap)) {
-          return false; // Skip events with invalid month
-        }
-        
-        // Parse event time (format is like "09:00")
-        const eventTimeParts = event.time.split(':');
-        if (eventTimeParts.length !== 2) {
-          return false; // Skip events with invalid time format
-        }
-        
-        const eventHour = parseInt(eventTimeParts[0], 10);
-        const eventMinute = parseInt(eventTimeParts[1], 10);
-        
-        // Create Date object for the event start time (in UTC)
-        const eventDate = new Date(Date.UTC(
-          year,
-          monthMap[month],
-          day,
-          eventHour,
-          eventMinute,
-          0 // seconds
-        ));
-        
-        // Get current time in UTC
-        const now = new Date();
-        
-        // Only include events that have not started yet
-        // Compare timestamps in milliseconds
-        return eventDate.getTime() > now.getTime();
-      } catch (e) {
-        // If there's any error parsing the date/time, skip the event
-        return false;
-      }
+      // Only include events with at least 3 bookmakers
+      return bookmakerCount >= 3;
     });
   }, [serverEvents, localCacheEvents]);
 
