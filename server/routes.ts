@@ -106,6 +106,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   scraperEvents.on(SCRAPER_EVENTS.ALL_PROCESSING_COMPLETED, (data) => {
     logger.info('Broadcasting complete data update to all connected clients');
     
+    // Update the global variable for the health check endpoint
+    (global as any).lastScraperRunTime = new Date().toISOString();
+    
     // Broadcast a notification about the update
     broadcast({
       type: 'notification',
@@ -499,12 +502,56 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
   
-  scraperEvents.on(SCRAPER_EVENTS.BOOKMAKER_COMPLETED, (data) => {
+  scraperEvents.on(SCRAPER_EVENTS.BOOKMAKER_COMPLETED, async (data) => {
     broadcast({
       type: 'scraperEvent',
       event: SCRAPER_EVENTS.BOOKMAKER_COMPLETED,
       data
     });
+    
+    // Also send a scraperFinished event that will trigger immediate frontend refresh
+    broadcast({
+      type: 'scraperFinished',
+      data: {
+        bookmaker: data.bookmaker,
+        timestamp: new Date().toISOString(),
+        eventCount: data.eventCount
+      }
+    });
+    
+    // Get the latest events and send them to the frontend
+    try {
+      const events = await storage.getEvents();
+      
+      // Apply the same filter logic as in API endpoint
+      const filteredEvents = events.filter(event => {
+        if (!event.oddsData) return false;
+        
+        // Filter out Simulated Reality League
+        if (event.tournament && 
+            typeof event.tournament === 'string' && 
+            event.tournament.includes('Simulated Reality League')) {
+          return false;
+        }
+        
+        // Filter out events with "Unknown" as team name
+        if (event.teams === "Unknown") {
+          return false;
+        }
+        
+        const bookmakerCount = Object.keys(event.oddsData).length;
+        return bookmakerCount >= 3; // Require at least 3 bookmakers
+      });
+      
+      broadcast({
+        type: 'events',
+        data: filteredEvents
+      });
+      
+      logger.info(`Sent updated events (${filteredEvents.length}) after ${data.bookmaker.name} scraper completed`);
+    } catch (error) {
+      logger.error(`Error sending events after bookmaker completion: ${error}`);
+    }
   });
   
   scraperEvents.on(SCRAPER_EVENTS.BOOKMAKER_FAILED, (data) => {
