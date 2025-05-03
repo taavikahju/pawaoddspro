@@ -701,12 +701,12 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
             Top 5 Leagues Filter: 
           </span>
           <span className="text-gray-700 dark:text-gray-300 ml-1">
-            Showing {filteredEvents.length} events from England Premier League, Spain La Liga, Germany Bundesliga, Italy Serie A, and France Ligue 1
+            Showing {paginatedEvents.length} of {filteredEvents.length} events from England Premier League, Spain La Liga, Germany Bundesliga, Italy Serie A, and France Ligue 1
           </span>
         </div>
       )}
       <Table className="w-full border-collapse">
-        <TableHeader className="bg-gray-100 dark:bg-slate-700/50">
+        <TableHeader className="bg-gray-100 dark:bg-slate-700/50 sticky top-0 z-10">
           <TableRow className="border-b border-gray-200 dark:border-gray-700">
             <TableHead className="w-24 px-2 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               <div className="flex items-center">
@@ -756,7 +756,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
         </TableHeader>
         
         <TableBody>
-          {filteredEvents.map((event, eventIndex) => (
+          {paginatedEvents.map((event, eventIndex) => (
             // Map each event
             filteredBookmakers.map((bookmaker, bookmakerIndex) => {
               const isFirstBookmaker = bookmakerIndex === 0;
@@ -1044,6 +1044,20 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
           }
         </TableBody>
       </Table>
+      
+      {/* Loading indicator */}
+      {paginatedEvents.length < filteredEvents.length && (
+        <div 
+          ref={loaderRef}
+          className="py-4 flex justify-center items-center border-t border-gray-200 dark:border-gray-700"
+        >
+          {isLoadingMore ? (
+            <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-primary"></div>
+          ) : (
+            <span className="text-sm text-gray-500 dark:text-gray-400">Scroll for more events</span>
+          )}
+        </div>
+      )}
       
       {/* Render the MarginHistoryPopup */}
       <MarginHistoryPopup
