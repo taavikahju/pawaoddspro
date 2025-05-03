@@ -2,12 +2,26 @@ import { storage } from './storage';
 import { runAllScrapers } from './scrapers/scheduler';
 import { setTimeout } from 'timers/promises';
 
+// Add global variable declarations
+declare global {
+  namespace NodeJS {
+    interface Global {
+      lastScraperRunTime: string;
+      standaloneScraperStartTime: string;
+    }
+  }
+}
+
 /**
  * This is a standalone script that runs scrapers on a schedule
  * for Replit deployment without requiring cron or PM2
  */
 async function main() {
-  console.log(`[${new Date().toISOString()}] Starting standalone scraper service...`);
+  const startTime = new Date().toISOString();
+  console.log(`[${startTime}] Starting standalone scraper service...`);
+  
+  // Set global variables for the health check endpoint
+  (global as any).standaloneScraperStartTime = startTime;
   
   // Track consecutive failures for backoff strategy
   let consecutiveFailures = 0;
@@ -67,12 +81,17 @@ async function runScraperCycle() {
   try {
     // Run all scrapers
     await runAllScrapers(storage);
-    console.log(`[${new Date().toISOString()}] Scraper cycle completed successfully`);
+    
+    // Record the successful completion time
+    const timestamp = new Date().toISOString();
+    console.log(`[${timestamp}] Scraper cycle completed successfully`);
+    
+    // Update global variable for health check endpoint
+    (global as any).lastScraperRunTime = timestamp;
     
     // Save the last successful run timestamp to a file
     try {
       const fs = require('fs');
-      const timestamp = new Date().toISOString();
       fs.writeFileSync('last_successful_scrape.txt', timestamp);
       console.log(`[${new Date().toISOString()}] Saved successful run timestamp: ${timestamp}`);
     } catch (fileError) {

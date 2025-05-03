@@ -1745,6 +1745,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: 'Internal server error' });
     }
   });
+  
+  // Health check endpoint for UptimeRobot to keep the app awake
+  app.get('/ping', (req, res) => {
+    // Get the current time
+    const currentTime = new Date().toISOString();
+    
+    // Get info about the last scraper run from our global variables
+    const lastScraperRunTime = global.lastScraperRunTime || 'No record';
+    
+    // Return a simple health check response
+    res.status(200).json({
+      status: 'ok',
+      time: currentTime,
+      lastScraperRun: lastScraperRunTime,
+      message: 'PawaOdds server is running'
+    });
+  });
 
   return httpServer;
 }
