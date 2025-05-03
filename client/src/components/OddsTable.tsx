@@ -127,18 +127,39 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
   // Function to check if an event is not outdated
   const isEventUpcoming = (event: any): boolean => {
     try {
-      // Get the event date in the format YYYY-MM-DD
+      // Get the event date and time
       const eventDate = event.date;
-      if (!eventDate) return true; // If no date, include by default
+      const eventTime = event.time;
       
-      // Calculate today's date in the same format
+      if (!eventDate) {
+        console.log('No date for event:', event.teams);
+        return true; // If no date, include by default
+      }
+      
+      // Calculate today's date in the same format YYYY-MM-DD
       const today = new Date();
       const todayFormatted = today.toISOString().split('T')[0]; // YYYY-MM-DD
       
-      // Only include events that are today or in the future
-      return eventDate >= todayFormatted;
+      // For today's events, we need to check the time as well
+      if (eventDate === todayFormatted && eventTime) {
+        // Get current time in HH:MM format
+        const currentHour = today.getHours().toString().padStart(2, '0');
+        const currentMinute = today.getMinutes().toString().padStart(2, '0');
+        const currentTime = `${currentHour}:${currentMinute}`;
+        
+        // Compare event time to current time
+        if (eventTime < currentTime) {
+          console.log(`Filtering out past event today: ${event.teams} at ${eventTime}, current time: ${currentTime}`);
+          return false;
+        }
+      } else if (eventDate < todayFormatted) {
+        console.log(`Filtering out past event from ${eventDate}: ${event.teams}`);
+        return false;
+      }
+      
+      return true;
     } catch (error) {
-      console.error('Error checking event date:', error);
+      console.error('Error checking event date:', error, event);
       return true; // Include by default on error
     }
   };

@@ -659,9 +659,9 @@
     "date": "2025-05-03",
     "time": "09:00",
     "odds": {
-      "home": 1.88,
-      "draw": 4,
-      "away": 3.15
+      "home": 1.83,
+      "draw": 4.05,
+      "away": 3.25
     },
     "raw": {
       "eventId": "59745744",
@@ -669,9 +669,9 @@
       "tournament": "NSW League One",
       "event": "Bull FC Academy - Rydalmere Lions FC",
       "market": "1X2 - FT",
-      "home_odds": "1.88",
-      "draw_odds": "4.0",
-      "away_odds": "3.15",
+      "home_odds": "1.83",
+      "draw_odds": "4.05",
+      "away_odds": "3.25",
       "start_time": "2025-05-03 09:00"
     }
   },
@@ -3207,9 +3207,9 @@
     "date": "2025-05-03",
     "time": "11:30",
     "odds": {
-      "home": 2.9,
+      "home": 2.85,
       "draw": 3.55,
-      "away": 2.3
+      "away": 2.35
     },
     "raw": {
       "eventId": "51096925",
@@ -3217,9 +3217,9 @@
       "tournament": "Championship",
       "event": "Portsmouth FC - Hull City",
       "market": "1X2 - FT",
-      "home_odds": "2.9",
+      "home_odds": "2.85",
       "draw_odds": "3.55",
-      "away_odds": "2.3",
+      "away_odds": "2.35",
       "start_time": "2025-05-03 11:30"
     }
   },
@@ -4585,9 +4585,9 @@
     "date": "2025-05-03",
     "time": "12:00",
     "odds": {
-      "home": 2.05,
+      "home": 2,
       "draw": 3.6,
-      "away": 3
+      "away": 3.1
     },
     "raw": {
       "eventId": "51470207",
@@ -4595,9 +4595,9 @@
       "tournament": "Regionalliga Southwest",
       "event": "Bahlinger SC - Eintracht Frankfurt II",
       "market": "1X2 - FT",
-      "home_odds": "2.05",
+      "home_odds": "2.0",
       "draw_odds": "3.6",
-      "away_odds": "3.0",
+      "away_odds": "3.1",
       "start_time": "2025-05-03 12:00"
     }
   },
@@ -4767,8 +4767,8 @@
     "date": "2025-05-03",
     "time": "12:00",
     "odds": {
-      "home": 44,
-      "draw": 15.5,
+      "home": 39,
+      "draw": 14.5,
       "away": 0
     },
     "raw": {
@@ -4777,8 +4777,8 @@
       "tournament": "Netherlands Eredivisie Women",
       "event": "PEC Zwolle Women - FC Twente Women",
       "market": "1X2 - FT",
-      "home_odds": "44.0",
-      "draw_odds": "15.5",
+      "home_odds": "39.0",
+      "draw_odds": "14.5",
       "away_odds": "0.0",
       "start_time": "2025-05-03 12:00"
     }
@@ -5027,9 +5027,9 @@
     "date": "2025-05-03",
     "time": "12:00",
     "odds": {
-      "home": 1.53,
+      "home": 1.54,
       "draw": 4.25,
-      "away": 4.65
+      "away": 4.55
     },
     "raw": {
       "eventId": "51470197",
@@ -5037,9 +5037,9 @@
       "tournament": "Regionalliga Southwest",
       "event": "TSV Steinbach Haiger - 1. Goppinger SV",
       "market": "1X2 - FT",
-      "home_odds": "1.53",
+      "home_odds": "1.54",
       "draw_odds": "4.25",
-      "away_odds": "4.65",
+      "away_odds": "4.55",
       "start_time": "2025-05-03 12:00"
     }
   },
@@ -8970,32 +8970,6 @@
     }
   },
   {
-    "id": "51094155",
-    "eventId": "51094155",
-    "teams": "Huddersfield Town - Leyton Orient London",
-    "league": "League One",
-    "sport": "football",
-    "country": "England",
-    "date": "2025-05-03",
-    "time": "14:00",
-    "odds": {
-      "home": 3.85,
-      "draw": 3.75,
-      "away": 1.8
-    },
-    "raw": {
-      "eventId": "51094155",
-      "country": "England",
-      "tournament": "League One",
-      "event": "Huddersfield Town - Leyton Orient London",
-      "market": "1X2 - FT",
-      "home_odds": "3.85",
-      "draw_odds": "3.75",
-      "away_odds": "1.8",
-      "start_time": "2025-05-03 14:00"
-    }
-  },
-  {
     "id": "59477017",
     "eventId": "59477017",
     "teams": "KVC Westerlo - KAA Gent",
@@ -9018,6 +8992,32 @@
       "home_odds": "1.77",
       "draw_odds": "4.25",
       "away_odds": "3.3",
+      "start_time": "2025-05-03 14:00"
+    }
+  },
+  {
+    "id": "51094155",
+    "eventId": "51094155",
+    "teams": "Huddersfield Town - Leyton Orient London",
+    "league": "League One",
+    "sport": "football",
+    "country": "England",
+    "date": "2025-05-03",
+    "time": "14:00",
+    "odds": {
+      "home": 3.85,
+      "draw": 3.75,
+      "away": 1.8
+    },
+    "raw": {
+      "eventId": "51094155",
+      "country": "England",
+      "tournament": "League One",
+      "event": "Huddersfield Town - Leyton Orient London",
+      "market": "1X2 - FT",
+      "home_odds": "3.85",
+      "draw_odds": "3.75",
+      "away_odds": "1.8",
       "start_time": "2025-05-03 14:00"
     }
   },
@@ -13087,9 +13087,9 @@
     "date": "2025-05-03",
     "time": "16:00",
     "odds": {
-      "home": 1.16,
-      "draw": 8,
-      "away": 13
+      "home": 1.17,
+      "draw": 7.75,
+      "away": 12
     },
     "raw": {
       "eventId": "51472401",
@@ -13097,9 +13097,9 @@
       "tournament": "Super Lig",
       "event": "Galatasaray Istanbul - Sivasspor",
       "market": "1X2 - FT",
-      "home_odds": "1.16",
-      "draw_odds": "8.0",
-      "away_odds": "13.0",
+      "home_odds": "1.17",
+      "draw_odds": "7.75",
+      "away_odds": "12.0",
       "start_time": "2025-05-03 16:00"
     }
   },
@@ -14622,8 +14622,8 @@
     "time": "17:30",
     "odds": {
       "home": 6.5,
-      "draw": 3.95,
-      "away": 1.44
+      "draw": 4,
+      "away": 1.43
     },
     "raw": {
       "eventId": "60194105",
@@ -14632,8 +14632,8 @@
       "event": "Newroz SC - AL Shorta SC",
       "market": "1X2 - FT",
       "home_odds": "6.5",
-      "draw_odds": "3.95",
-      "away_odds": "1.44",
+      "draw_odds": "4.0",
+      "away_odds": "1.43",
       "start_time": "2025-05-03 17:30"
     }
   },
