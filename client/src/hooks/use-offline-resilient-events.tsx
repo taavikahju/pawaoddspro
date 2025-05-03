@@ -213,7 +213,8 @@ export function useOfflineResilientEvents() {
   const mergeEvents = useCallback(() => {
     // If we have server data, use that as the base
     if (Array.isArray(serverEvents) && serverEvents.length > 0) {
-      // ALWAYS merge with cached data if we have it
+      // PRIORITY CHANGE: Only use cached Sportybet data if the server doesn't have it
+      // This ensures we always display fresh data when available
       if (localCacheEvents.length > 0) {
         // Create a shallow copy of the server events
         const mergedEvents = [...serverEvents];
@@ -224,7 +225,8 @@ export function useOfflineResilientEvents() {
           eventMap.set(event.id, event);
         });
         
-        // For each cached event that has Sportybet data, add the Sportybet data to merged events
+        // For each cached event that has Sportybet data, add it ONLY if server data is missing
+        let usedCachedCount = 0;
         localCacheEvents.forEach(cachedEvent => {
           if (
             cachedEvent.oddsData && 
@@ -234,15 +236,24 @@ export function useOfflineResilientEvents() {
           ) {
             const serverEvent = eventMap.get(cachedEvent.id);
             if (serverEvent) {
-              // Ensure oddsData exists
-              if (!serverEvent.oddsData) {
-                serverEvent.oddsData = {};
+              // Only use cached data if server doesn't have Sportybet data
+              if (!serverEvent.oddsData || !serverEvent.oddsData.sporty) {
+                // Ensure oddsData exists
+                if (!serverEvent.oddsData) {
+                  serverEvent.oddsData = {};
+                }
+                // Copy Sportybet odds from cache without deep clone (faster)
+                serverEvent.oddsData.sporty = cachedEvent.oddsData.sporty;
+                usedCachedCount++;
               }
-              // Copy Sportybet odds from cache without deep clone (faster)
-              serverEvent.oddsData.sporty = cachedEvent.oddsData.sporty;
             }
           }
         });
+        
+        // Log only if we used cached data (for troubleshooting)
+        if (usedCachedCount > 0) {
+          console.log(`[${new Date().toISOString()}] Used cached Sportybet odds for ${usedCachedCount} events where server data was missing`);
+        }
         
         return mergedEvents;
       }

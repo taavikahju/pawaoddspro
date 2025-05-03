@@ -43,22 +43,19 @@ export function useRealWebSocket() {
             const message = JSON.parse(event.data);
             setLastMessage(message);
             
-            // Only handle complete scrape notifications
-            if (message.type === 'scrapeCompleted') {
-              // Rate limit updates to avoid multiple refreshes in short period
-              const now = Date.now();
-              const timeSinceLastScrape = now - lastScrapeCompleteTime.current;
+            // Handle both complete scrape notifications and individual scraper completion
+            if (message.type === 'scrapeCompleted' || message.type === 'scraperFinished') {
+              // Removed rate limiting to ensure immediate updates
+              // Always refresh immediately on any scraper completion
+              lastScrapeCompleteTime.current = Date.now();
               
-              // Only update if at least 30 seconds have passed since last update
-              // This prevents duplicate refreshes
-              if (timeSinceLastScrape > 30000) {
-                lastScrapeCompleteTime.current = now;
-                
-                // Invalidate event queries to trigger a refresh with complete data
-                queryClient.invalidateQueries({ queryKey: ['/api/events'] });
-                queryClient.invalidateQueries({ queryKey: ['/api/events?includeSportybet=true'] });
-                queryClient.invalidateQueries({ queryKey: ['/api/stats'] });
-              }
+              // Invalidate event queries to trigger a refresh with latest data
+              queryClient.invalidateQueries({ queryKey: ['/api/events'] });
+              queryClient.invalidateQueries({ queryKey: ['/api/events?includeSportybet=true'] });
+              queryClient.invalidateQueries({ queryKey: ['/api/stats'] });
+              
+              // Log for troubleshooting (can remove later)
+              console.log(`[${new Date().toISOString()}] Refreshing data after ${message.type} event`);
             }
             
             // Still track stats updates
