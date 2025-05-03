@@ -232,9 +232,9 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
               variant={activeFilter === 'top5' ? 'default' : 'outline'} 
               size="sm" 
               className={cn(
-                "py-1 px-2 h-auto text-xs font-medium justify-start",
+                "py-1 px-2 h-auto text-xs font-medium justify-start relative",
                 activeFilter === 'top5' 
-                  ? "bg-primary text-white hover:bg-primary/90" 
+                  ? "bg-green-600 text-white hover:bg-green-700 ring-2 ring-green-400 ring-offset-1 dark:ring-offset-slate-900 shadow-md" 
                   : "bg-white dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700"
               )}
               onClick={() => {
@@ -246,10 +246,10 @@ export default function Sidebar({ isOpen, isHovering, onClose }: SidebarProps) {
               }}
             >
               <div className="flex items-center">
-                <Trophy className="h-3.5 w-3.5 mr-1.5" />
+                <Trophy className={cn("h-3.5 w-3.5 mr-1.5", activeFilter === 'top5' ? "text-yellow-300" : "")} />
                 <span className="mr-1">Top 5 Leagues</span>
                 {activeFilter === 'top5' && (
-                  <span className="inline-flex items-center justify-center w-4 h-4 ml-1 bg-white bg-opacity-30 text-white text-xs rounded-full">
+                  <span className="inline-flex items-center justify-center w-4 h-4 ml-1 bg-white text-green-600 text-xs rounded-full font-bold">
                     ✓
                   </span>
                 )}

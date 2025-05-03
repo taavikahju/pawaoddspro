@@ -696,13 +696,16 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
   return (
     <div className={cn("overflow-x-auto bg-white dark:bg-slate-800 rounded-b-lg shadow", className)}>
       {isTop5LeaguesActive && (
-        <div className="p-2 bg-blue-50 dark:bg-blue-900/20 text-sm border-b border-gray-200 dark:border-gray-700">
-          <span className="font-medium text-blue-700 dark:text-blue-400">
-            Top 5 Leagues Filter: 
-          </span>
-          <span className="text-gray-700 dark:text-gray-300 ml-1">
-            Showing {paginatedEvents.length} of {filteredEvents.length} events from England Premier League, Spain La Liga, Germany Bundesliga, Italy Serie A, and France Ligue 1
-          </span>
+        <div className="p-2.5 bg-green-50 dark:bg-green-900/30 text-sm border-b-2 border-green-200 dark:border-green-800 flex items-center">
+          <Trophy className="w-4 h-4 text-yellow-500 dark:text-yellow-400 mr-2" />
+          <div>
+            <span className="font-semibold text-green-700 dark:text-green-400">
+              Top 5 Leagues Filter Active
+            </span>
+            <span className="text-gray-700 dark:text-gray-300 ml-1">
+              - Showing {paginatedEvents.length} of {filteredEvents.length} events from England Premier League, Spain La Liga, Germany Bundesliga, Italy Serie A, and France Ligue 1
+            </span>
+          </div>
         </div>
       )}
       <Table className="w-full border-collapse">
@@ -803,24 +806,38 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                           className="px-2 py-1 whitespace-nowrap border-r border-gray-200 dark:border-gray-700" 
                           rowSpan={filteredBookmakers.length}
                         >
-                          <span className="text-sm text-gray-600 dark:text-gray-300">
-                            {(() => {
-                              // First check if we have tournament data directly
-                              if (event.tournament) {
-                                return event.tournament;
-                              }
-                              
+                          {(() => {
+                            // First check if we have tournament data directly
+                            let tournamentName: string;
+                            if (event.tournament) {
+                              tournamentName = event.tournament;
+                            } else if (event.league?.includes(' ')) {
                               // Fallback to legacy format where league contains both country and tournament
-                              if (event.league?.includes(' ')) {
-                                const parts = event.league.split(' ');
-                                // Return everything except the first part (country)
-                                return parts.slice(1).join(' ');
-                              }
-                              
+                              const parts = event.league.split(' ');
+                              // Return everything except the first part (country)
+                              tournamentName = parts.slice(1).join(' ');
+                            } else {
                               // Otherwise, return the league as is (might be just the tournament name)
-                              return event.league || 'Unknown';
-                            })()}
-                          </span>
+                              tournamentName = event.league || 'Unknown';
+                            }
+                            
+                            // Check if this is a Top 5 League tournament
+                            const isTop5League = isTop5LeaguesActive && isEventInTop5Leagues(event);
+                            
+                            return (
+                              <span 
+                                className={cn(
+                                  "text-sm",
+                                  isTop5League 
+                                    ? "font-semibold text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 px-1.5 py-0.5 rounded" 
+                                    : "text-gray-600 dark:text-gray-300"
+                                )}
+                              >
+                                {isTop5League && <Trophy className="w-3 h-3 inline-block mr-1 text-yellow-500" />}
+                                {tournamentName}
+                              </span>
+                            );
+                          })()}
                         </TableCell>
                         
                         <TableCell 
