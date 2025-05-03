@@ -36,9 +36,7 @@ interface BookmakerContextType {
   setMaxMarginFilter: (value: number) => void;
   resetMarginFilters: () => void;
   refreshData: () => Promise<void>;
-  purgeCache: () => Promise<void>;
   isRefreshing: boolean;
-  isPurging: boolean;
 }
 
 const BookmakerContext = createContext<BookmakerContextType | undefined>(undefined);
@@ -120,29 +118,6 @@ export function BookmakerProvider({ children }: { children: ReactNode }) {
       console.error("Error refreshing data:", error);
     }
   });
-  
-  // Complete cache purge mutation
-  const { mutateAsync: purgeCacheMutation, isPending: isPurging } = useMutation({
-    mutationFn: async () => {
-      // No actual API call needed - this is a client-side operation
-      return Promise.resolve(true);
-    },
-    onSuccess: () => {
-      // Completely reset the query client cache
-      queryClient.clear();
-      
-      toast({
-        title: "Cache purged",
-        description: "All data will be reloaded from the server",
-        duration: 3000,
-      });
-      
-      // Force window reload after a short delay to ensure clean state
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
-    }
-  });
 
   const toggleBookmaker = (code: string) => {
     setSelectedBookmakers(prev => {
@@ -180,10 +155,6 @@ export function BookmakerProvider({ children }: { children: ReactNode }) {
   const refreshData = async () => {
     await refreshMutation();
   };
-  
-  const purgeCache = async () => {
-    await purgeCacheMutation();
-  };
 
   const value: BookmakerContextType = {
     bookmakers: bookmakers as Bookmaker[],
@@ -204,9 +175,7 @@ export function BookmakerProvider({ children }: { children: ReactNode }) {
     setMaxMarginFilter,
     resetMarginFilters,
     refreshData,
-    purgeCache,
-    isRefreshing,
-    isPurging
+    isRefreshing
   };
 
   return (

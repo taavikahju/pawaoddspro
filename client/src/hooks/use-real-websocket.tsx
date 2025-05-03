@@ -58,14 +58,6 @@ export function useRealWebSocket() {
                 queryClient.invalidateQueries({ queryKey: ['/api/events'] });
                 queryClient.invalidateQueries({ queryKey: ['/api/events?includeSportybet=true'] });
                 queryClient.invalidateQueries({ queryKey: ['/api/stats'] });
-                
-                // IMPORTANT: Clear any cached Sportybet odds data
-                // This will invalidate ALL Sportybet odds queries
-                queryClient.invalidateQueries({ 
-                  predicate: (query) => {
-                    return query.queryKey[0] === 'latestSportybetOdds';
-                  }
-                });
               }
             }
             

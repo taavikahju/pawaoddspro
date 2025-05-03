@@ -23,8 +23,6 @@ interface OddsHistoryPopupProps {
   eventName: string;
   bookmakers: string[];
   oddsType: 'home' | 'draw' | 'away';
-  // Force refresh to get latest history
-  forceRefresh?: boolean;
 }
 
 type OddsHistoryEntry = {
@@ -51,43 +49,16 @@ export default function OddsHistoryPopup({
   // Get the display name for the odds type
   const oddsTypeDisplay = oddsType === 'home' ? 'Home' : oddsType === 'draw' ? 'Draw' : 'Away';
   
-  // Fetch the current event to get real-time odds
-  const { data: currentEvent, isLoading: isLoadingEvent, error: eventError } = useQuery({
-    queryKey: ['/api/events', eventId],
-    queryFn: async () => {
-      try {
-        console.log(`Fetching current event data for ID: ${eventId}`);
-        const response = await axios.get(`/api/events/${eventId}`);
-        console.log("Current event data response:", response.data);
-        return response.data;
-      } catch (error) {
-        console.error("Error fetching current event:", error);
-        throw error;
-      }
-    },
-    enabled: isOpen && !!eventId, // Only fetch when dialog is open and eventId exists
-    retry: 1, // Retry once if fail
-    staleTime: 30000
-  });
-  
   // Fetch odds history for this event - optimized for lightweight loading
   const { data, isLoading, error } = useQuery({
     queryKey: ['/api/events', eventId, 'history', oddsType],
     queryFn: async () => {
-      console.log(`Fetching odds history for event ID: ${eventId}, type: ${oddsType}`);
-      
       // Only get last 10 entries to improve performance
-      try {
-        const response = await axios.get(`/api/events/${eventId}/history?limit=10`);
-        console.log("Odds history response:", response.data);
-        return response.data as OddsHistoryEntry[];
-      } catch (error) {
-        console.error("Error fetching odds history:", error);
-        throw error;
-      }
+      const response = await axios.get(`/api/events/${eventId}/history?limit=10`);
+      return response.data as OddsHistoryEntry[];
     },
     enabled: isOpen, // Only fetch when dialog is open
-    staleTime: 30000 // Cache for 30 seconds to get more frequent updates
+    staleTime: 60000 // Cache for 1 minute
   });
   
   // Pre-process data for chart
@@ -209,112 +180,6 @@ export default function OddsHistoryPopup({
             </ResponsiveContainer>
           )}
         </div>
-        
-        {/* Display errors if they occur */}
-        {eventError && (
-          <div className="mt-2">
-            <p className="text-xs text-red-500">
-              Unable to load current event data. History is still available.
-            </p>
-          </div>
-        )}
-        
-        {/* Add a comparison between current and historical odds */}
-        {data && data.length > 0 && (
-          <div className="mt-4">
-            <h3 className="text-sm font-semibold mb-2">Current vs. Historical Odds Comparison</h3>
-            {isLoadingEvent ? (
-              <Skeleton className="h-32 w-full" />
-            ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full border-collapse text-xs">
-                  <thead>
-                    <tr className="bg-gray-100 dark:bg-gray-800">
-                      <th className="border px-2 py-1 text-left">Bookmaker</th>
-                      <th className="border px-2 py-1 text-center">Current Odds</th>
-                      <th className="border px-2 py-1 text-center">Latest History</th>
-                      <th className="border px-2 py-1 text-center">Difference</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  {bookmakers.map(bookmakerCode => {
-                    // Get the latest historical entry for this bookmaker
-                    const latestHistoryEntry = [...data]
-                      .filter(entry => entry.bookmakerCode === bookmakerCode)
-                      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0];
-                    
-                    // Get the current odds from the current event
-                    // Special handling for Sportybet to ensure we get the most recent odds
-                    let currentOdds = null;
-                    if (bookmakerCode === 'sporty') {
-                      console.log(`Getting Sportybet odds for ${eventName}`, {
-                        event: currentEvent,
-                        oddsData: currentEvent?.oddsData?.sporty,
-                        oddsType
-                      });
-                      
-                      // Make sure we extract the correct odds from Sportybet data
-                      if (currentEvent?.oddsData?.sporty) {
-                        currentOdds = oddsType === 'home' 
-                          ? currentEvent.oddsData.sporty.home
-                          : oddsType === 'draw'
-                            ? currentEvent.oddsData.sporty.draw
-                            : currentEvent.oddsData.sporty.away;
-                      }
-                    } else {
-                      // Regular path for other bookmakers
-                      currentOdds = currentEvent?.oddsData?.[bookmakerCode]?.[oddsType] || null;
-                    }
-                    
-                    // Get the historical odds based on the selected type
-                    const historyOdds = latestHistoryEntry 
-                      ? (oddsType === 'home' 
-                          ? latestHistoryEntry.homeOdds 
-                          : oddsType === 'draw' 
-                            ? latestHistoryEntry.drawOdds 
-                            : latestHistoryEntry.awayOdds)
-                      : null;
-                    
-                    // Calculate difference
-                    const difference = currentOdds && historyOdds 
-                      ? (parseFloat(currentOdds.toString()) - parseFloat(historyOdds.toString())).toFixed(2)
-                      : null;
-                    
-                    // Determine color based on difference
-                    const diffColor = difference 
-                      ? (parseFloat(difference) > 0 
-                          ? 'text-green-600 dark:text-green-400' 
-                          : parseFloat(difference) < 0 
-                            ? 'text-red-600 dark:text-red-400'
-                            : 'text-gray-600 dark:text-gray-400')
-                      : 'text-gray-600 dark:text-gray-400';
-                    
-                    return (
-                      <tr key={bookmakerCode} className="border-b">
-                        <td className="border px-2 py-1 font-medium">{bookmakerCode}</td>
-                        <td className="border px-2 py-1 text-center">
-                          {currentOdds !== null ? currentOdds : '-'}
-                        </td>
-                        <td className="border px-2 py-1 text-center">
-                          {historyOdds !== null ? historyOdds : '-'}
-                        </td>
-                        <td className={`border px-2 py-1 text-center ${diffColor}`}>
-                          {difference !== null 
-                            ? (parseFloat(difference) > 0 ? `+${difference}` : difference) 
-                            : '-'}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-              <p className="text-xs text-gray-500 mt-1">
-                Note: Differences may appear if odds were cached from previous scraper runs.
-              </p>
-            </div>
-            )}
-          </div>
-        )}
         
         <DialogFooter className="pt-1">
           <DialogClose asChild>

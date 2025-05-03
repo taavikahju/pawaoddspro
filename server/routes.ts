@@ -121,31 +121,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       data: data.stats
     });
     
-    // Broadcast specific update for events with updated information
-    broadcast({
-      type: 'events_updated',
-      count: data.stats.totalEvents,
-      timestamp: new Date().toISOString()
-    });
-    
     // Broadcast scrape completed message to signal data is ready for consumption
     broadcast({
       type: 'scrapeCompleted',
       timestamp: new Date().toISOString(),
       message: 'All scraping and data processing complete'
-    });
-  });
-  
-  // Special event listener for Sportybet updates
-  // This allows the frontend to know when to invalidate Sportybet-specific caches
-  scraperEvents.on('SPORTYBET_UPDATED', (data) => {
-    logger.info(`Broadcasting Sportybet update with ${data.count} events`);
-    
-    // Send a specific Sportybet update broadcast to invalidate client caches
-    broadcast({
-      type: 'sportybet_updated',
-      count: data.count,
-      timestamp: data.timestamp || new Date().toISOString()
     });
   });
 
@@ -779,60 +759,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: 'Invalid event ID' });
       }
 
-      // Get the raw event from storage
-      const rawEvent = await storage.getEvent(id);
-      if (!rawEvent) {
+      const event = await storage.getEvent(id);
+      if (!event) {
         return res.status(404).json({ message: 'Event not found' });
       }
-      
-      // Deep clone to avoid reference issues
-      const event = JSON.parse(JSON.stringify(rawEvent));
-      
-      // Log details about the event's Sportybet odds
-      if (event.oddsData && typeof event.oddsData === 'object' && 'sporty' in event.oddsData) {
-        logger.info(`Event ${id} has Sportybet odds: ${JSON.stringify(event.oddsData.sporty)}`);
-      } else {
-        logger.info(`Event ${id} does not have Sportybet odds`);
-        
-        // Try to get Sportybet data from the raw bookmaker data
-        try {
-          const sportyData = await storage.getBookmakerData('sporty', true);
-          if (Array.isArray(sportyData) && sportyData.length > 0) {
-            // Try to find the event by teams or fixture
-            const matchingSportyEvent = sportyData.find(se => {
-              const eventTeams = event.teams || '';
-              const eventName = se.event || '';
-              
-              // Try different normalization techniques
-              const normalizedEventTeams = eventTeams.toLowerCase().replace(/\s+/g, '');
-              const normalizedSportyEvent = eventName.toLowerCase().replace(/\s+/g, '');
-              
-              return normalizedEventTeams === normalizedSportyEvent;
-            });
-            
-            if (matchingSportyEvent) {
-              logger.info(`Found matching Sportybet event for ${event.teams} in raw data`);
-              
-              // Make sure we have an oddsData object
-              if (!event.oddsData) {
-                event.oddsData = {};
-              }
-              
-              // Add Sportybet odds from raw data
-              event.oddsData.sporty = {
-                home: parseFloat(matchingSportyEvent.home_odds || 0),
-                draw: parseFloat(matchingSportyEvent.draw_odds || 0),
-                away: parseFloat(matchingSportyEvent.away_odds || 0)
-              };
-              
-              logger.info(`Added Sportybet odds to event ${id} from raw data: ${JSON.stringify(event.oddsData.sporty)}`);
-            }
-          }
-        } catch (sportyError) {
-          logger.error(`Failed to get Sportybet data for event ${id}: ${sportyError}`);
-        }
-      }
-      
+
       res.json(event);
     } catch (error) {
       logger.error(`Error fetching event: ${error}`);
@@ -845,8 +776,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { eventId } = req.params;
       const { bookmaker } = req.query;
-      
-      logger.info(`Fetching odds history for event ${eventId}`);
       
       // Import the utility functions
       const { getOddsHistory } = await import('./utils/oddsHistory');
@@ -863,8 +792,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Sort by timestamp descending (newest first)
       filteredHistory.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
       
-      logger.info(`Found ${filteredHistory.length} history entries for event ${eventId}`);
-      
       res.json(filteredHistory);
     } catch (error) {
       logger.error(`Error fetching odds history: ${error}`);
@@ -876,8 +803,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/events/margins/:eventId', async (req, res) => {
     try {
       const { eventId } = req.params;
-      
-      logger.info(`Fetching margin history for event ${eventId}`);
       
       // Import the utility functions
       const { getOddsHistory } = await import('./utils/oddsHistory');
@@ -905,8 +830,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Sort by timestamp descending (newest first)
       marginHistory.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
-      
-      logger.info(`Found ${marginHistory.length} margin history entries for event ${eventId}`);
       
       res.json(marginHistory);
     } catch (error) {
