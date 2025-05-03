@@ -780,14 +780,25 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                           <button 
                             className="hover:underline focus:outline-none"
                             onClick={() => {
+                              // Get event ID with fallback options
+                              const eventId = event.eventId || event.id?.toString() || event.externalId || '';
+                              // Get event name with fallback options
+                              const eventName = event.teams || event.fixture || `Event ${eventId}`;
+                              
                               console.log('Opening home odds history for event:', {
-                                eventId: event.eventId || event.id?.toString() || '',
-                                eventName: event.fixture || event.teams || '',
+                                eventId,
+                                eventName,
                                 event: event
                               });
+                              
+                              if (!eventId) {
+                                console.error('No event ID available for odds history popup');
+                                return;
+                              }
+                              
                               setOddsHistoryPopup({
-                                eventId: event.eventId || event.id?.toString() || '',
-                                eventName: event.fixture || event.teams || '',
+                                eventId,
+                                eventName,
                                 oddsType: 'home',
                                 isOpen: true
                               });
@@ -813,12 +824,30 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                         {event.oddsData?.[bookmaker.code]?.draw ? (
                           <button 
                             className="hover:underline focus:outline-none"
-                            onClick={() => setOddsHistoryPopup({
-                              eventId: event.eventId || event.id?.toString() || '',
-                              eventName: event.fixture || event.teams || '',
-                              oddsType: 'draw',
-                              isOpen: true
-                            })}
+                            onClick={() => {
+                              // Get event ID with fallback options
+                              const eventId = event.eventId || event.id?.toString() || event.externalId || '';
+                              // Get event name with fallback options
+                              const eventName = event.teams || event.fixture || `Event ${eventId}`;
+                              
+                              console.log('Opening draw odds history for event:', {
+                                eventId,
+                                eventName,
+                                event: event
+                              });
+                              
+                              if (!eventId) {
+                                console.error('No event ID available for odds history popup');
+                                return;
+                              }
+                              
+                              setOddsHistoryPopup({
+                                eventId,
+                                eventName,
+                                oddsType: 'draw',
+                                isOpen: true
+                              });
+                            }}
                           >
                             {(event.oddsData[bookmaker.code]?.draw || 0).toFixed(2)}
                           </button>
@@ -840,12 +869,30 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                         {event.oddsData?.[bookmaker.code]?.away ? (
                           <button 
                             className="hover:underline focus:outline-none"
-                            onClick={() => setOddsHistoryPopup({
-                              eventId: event.eventId || event.id?.toString() || '',
-                              eventName: event.fixture || event.teams || '',
-                              oddsType: 'away',
-                              isOpen: true
-                            })}
+                            onClick={() => {
+                              // Get event ID with fallback options
+                              const eventId = event.eventId || event.id?.toString() || event.externalId || '';
+                              // Get event name with fallback options
+                              const eventName = event.teams || event.fixture || `Event ${eventId}`;
+                              
+                              console.log('Opening away odds history for event:', {
+                                eventId,
+                                eventName,
+                                event: event
+                              });
+                              
+                              if (!eventId) {
+                                console.error('No event ID available for odds history popup');
+                                return;
+                              }
+                              
+                              setOddsHistoryPopup({
+                                eventId,
+                                eventName,
+                                oddsType: 'away',
+                                isOpen: true
+                              });
+                            }}
                           >
                             {(event.oddsData[bookmaker.code]?.away || 0).toFixed(2)}
                           </button>
@@ -879,19 +926,28 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                           }
                         
                           // Only make it a button if we have a valid eventId
-                          const eventId = event.eventId || event.id?.toString() || '';
+                          const eventId = event.eventId || event.id?.toString() || event.externalId || '';
+                          // Get event name with fallback options
+                          const eventName = event.teams || event.fixture || `Event ${eventId}`;
+                          
                           if (eventId) {
                             return (
                               <button 
                                 onClick={() => {
                                   console.log('Opening margin history for event:', {
                                     eventId: eventId,
-                                    eventName: event.teams || event.fixture || '',
+                                    eventName: eventName,
                                     event: event
                                   });
+                                  
+                                  if (!eventId) {
+                                    console.error('No event ID available for margin history popup');
+                                    return;
+                                  }
+                                  
                                   setSelectedEvent({
                                     eventId: eventId,
-                                    eventName: event.teams || event.fixture || '',
+                                    eventName: eventName,
                                     isOpen: true
                                   });
                                 }}
