@@ -316,7 +316,7 @@ export function useOfflineResilientEvents() {
           }
         });
         
-        // IMPORTANT: Show all events temporarily to debug date parsing
+        // Filter events based on bookmaker count and start time
         return mergedEvents.filter(event => {
           // Skip events without oddsData
           if (!event.oddsData || typeof event.oddsData !== 'object') {
@@ -326,8 +326,46 @@ export function useOfflineResilientEvents() {
           // Count bookmakers with odds data
           const bookmakerCount = Object.keys(event.oddsData).length;
           
-          // Only include events with at least 3 bookmakers
-          return bookmakerCount >= 3;
+          // First condition: Only include events with at least 3 bookmakers
+          if (bookmakerCount < 3) {
+            return false;
+          }
+          
+          // Second condition: Hide events that have already started
+          try {
+            if (!event.date || !event.time) {
+              return true; // Keep events without date/time info for now
+            }
+            
+            // Create a date string in format: "YYYY-MM-DD HH:MM:SS"
+            // First get the date parts (in format: "DD May YYYY")
+            const dateParts = event.date.split(' ');
+            if (dateParts.length !== 3) return true; // Keep if date format is unknown
+            
+            // Get the time (in format: "HH:MM")
+            const timeParts = event.time.split(':');
+            if (timeParts.length !== 2) return true; // Keep if time format is unknown
+            
+            // Combine date and time into a UTC datetime string
+            const now = new Date();
+            const eventTimeString = `${event.date} ${event.time}`;
+            
+            // Simple string comparison for dates with same format (assuming both are in UTC)
+            // Get current date in same format as event date for comparison
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const currentDay = now.getUTCDate().toString().padStart(2, '0');
+            const currentMonth = months[now.getUTCMonth()];
+            const currentYear = now.getUTCFullYear();
+            const currentHour = now.getUTCHours().toString().padStart(2, '0');
+            const currentMinute = now.getUTCMinutes().toString().padStart(2, '0');
+            
+            const currentTimeString = `${currentDay} ${currentMonth} ${currentYear} ${currentHour}:${currentMinute}`;
+            
+            // Compare the datetime strings to filter out past events
+            return eventTimeString > currentTimeString;
+          } catch (e) {
+            return true; // Keep events if there's an error in date parsing
+          }
         });
         
         // Remove redundant code
@@ -335,7 +373,7 @@ export function useOfflineResilientEvents() {
         // Removed redundant code
       }
       
-      // IMPORTANT: Show all events temporarily to debug date parsing
+      // Filter events based on bookmaker count and start time
       return serverEvents.filter(event => {
         // Skip events without oddsData
         if (!event.oddsData || typeof event.oddsData !== 'object') {
@@ -345,12 +383,50 @@ export function useOfflineResilientEvents() {
         // Count bookmakers with odds data
         const bookmakerCount = Object.keys(event.oddsData).length;
         
-        // Only include events with at least 3 bookmakers
-        return bookmakerCount >= 3;
+        // First condition: Only include events with at least 3 bookmakers
+        if (bookmakerCount < 3) {
+          return false;
+        }
+        
+        // Second condition: Hide events that have already started
+        try {
+          if (!event.date || !event.time) {
+            return true; // Keep events without date/time info for now
+          }
+          
+          // Create a date string in format: "YYYY-MM-DD HH:MM:SS"
+          // First get the date parts (in format: "DD May YYYY")
+          const dateParts = event.date.split(' ');
+          if (dateParts.length !== 3) return true; // Keep if date format is unknown
+          
+          // Get the time (in format: "HH:MM")
+          const timeParts = event.time.split(':');
+          if (timeParts.length !== 2) return true; // Keep if time format is unknown
+          
+          // Combine date and time into a UTC datetime string
+          const now = new Date();
+          const eventTimeString = `${event.date} ${event.time}`;
+          
+          // Simple string comparison for dates with same format (assuming both are in UTC)
+          // Get current date in same format as event date for comparison
+          const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+          const currentDay = now.getUTCDate().toString().padStart(2, '0');
+          const currentMonth = months[now.getUTCMonth()];
+          const currentYear = now.getUTCFullYear();
+          const currentHour = now.getUTCHours().toString().padStart(2, '0');
+          const currentMinute = now.getUTCMinutes().toString().padStart(2, '0');
+          
+          const currentTimeString = `${currentDay} ${currentMonth} ${currentYear} ${currentHour}:${currentMinute}`;
+          
+          // Compare the datetime strings to filter out past events
+          return eventTimeString > currentTimeString;
+        } catch (e) {
+          return true; // Keep events if there's an error in date parsing
+        }
       });
     }
 
-    // IMPORTANT: Show all cache events temporarily to debug date parsing
+    // Filter events based on bookmaker count and start time
     return localCacheEvents.filter(event => {
       // Skip events without oddsData
       if (!event.oddsData || typeof event.oddsData !== 'object') {
@@ -360,8 +436,46 @@ export function useOfflineResilientEvents() {
       // Count bookmakers with odds data
       const bookmakerCount = Object.keys(event.oddsData).length;
       
-      // Only include events with at least 3 bookmakers
-      return bookmakerCount >= 3;
+      // First condition: Only include events with at least 3 bookmakers
+      if (bookmakerCount < 3) {
+        return false;
+      }
+      
+      // Second condition: Hide events that have already started
+      try {
+        if (!event.date || !event.time) {
+          return true; // Keep events without date/time info for now
+        }
+        
+        // Create a date string in format: "YYYY-MM-DD HH:MM:SS"
+        // First get the date parts (in format: "DD May YYYY")
+        const dateParts = event.date.split(' ');
+        if (dateParts.length !== 3) return true; // Keep if date format is unknown
+        
+        // Get the time (in format: "HH:MM")
+        const timeParts = event.time.split(':');
+        if (timeParts.length !== 2) return true; // Keep if time format is unknown
+        
+        // Combine date and time into a UTC datetime string
+        const now = new Date();
+        const eventTimeString = `${event.date} ${event.time}`;
+        
+        // Simple string comparison for dates with same format (assuming both are in UTC)
+        // Get current date in same format as event date for comparison
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const currentDay = now.getUTCDate().toString().padStart(2, '0');
+        const currentMonth = months[now.getUTCMonth()];
+        const currentYear = now.getUTCFullYear();
+        const currentHour = now.getUTCHours().toString().padStart(2, '0');
+        const currentMinute = now.getUTCMinutes().toString().padStart(2, '0');
+        
+        const currentTimeString = `${currentDay} ${currentMonth} ${currentYear} ${currentHour}:${currentMinute}`;
+        
+        // Compare the datetime strings to filter out past events
+        return eventTimeString > currentTimeString;
+      } catch (e) {
+        return true; // Keep events if there's an error in date parsing
+      }
     });
   }, [serverEvents, localCacheEvents]);
 
