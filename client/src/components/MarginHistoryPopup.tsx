@@ -48,8 +48,16 @@ export default function MarginHistoryPopup({
   const { data, isLoading, error } = useQuery({
     queryKey: [`/api/events/margins/${eventId}`],
     queryFn: async () => {
-      const response = await axios.get(`/api/events/margins/${eventId}`);
-      return response.data as MarginHistoryEntry[];
+      console.log(`Fetching margin history for event ID: ${eventId}`);
+      
+      try {
+        const response = await axios.get(`/api/events/margins/${eventId}`);
+        console.log("Margin history response:", response.data);
+        return response.data as MarginHistoryEntry[];
+      } catch (error) {
+        console.error("Error fetching margin history:", error);
+        throw error;
+      }
     },
     enabled: isOpen && !!eventId,
     staleTime: 60000 // Cache for 1 minute

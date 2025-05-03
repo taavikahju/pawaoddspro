@@ -53,9 +53,17 @@ export default function OddsHistoryPopup({
   const { data, isLoading, error } = useQuery({
     queryKey: ['/api/events', eventId, 'history', oddsType],
     queryFn: async () => {
+      console.log(`Fetching odds history for event ID: ${eventId}, type: ${oddsType}`);
+      
       // Only get last 10 entries to improve performance
-      const response = await axios.get(`/api/events/${eventId}/history?limit=10`);
-      return response.data as OddsHistoryEntry[];
+      try {
+        const response = await axios.get(`/api/events/${eventId}/history?limit=10`);
+        console.log("Odds history response:", response.data);
+        return response.data as OddsHistoryEntry[];
+      } catch (error) {
+        console.error("Error fetching odds history:", error);
+        throw error;
+      }
     },
     enabled: isOpen, // Only fetch when dialog is open
     staleTime: 60000 // Cache for 1 minute

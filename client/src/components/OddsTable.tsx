@@ -779,12 +779,19 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                         {event.oddsData?.[bookmaker.code]?.home ? (
                           <button 
                             className="hover:underline focus:outline-none"
-                            onClick={() => setOddsHistoryPopup({
-                              eventId: event.eventId || event.id?.toString() || '',
-                              eventName: event.fixture || event.teams || '',
-                              oddsType: 'home',
-                              isOpen: true
-                            })}
+                            onClick={() => {
+                              console.log('Opening home odds history for event:', {
+                                eventId: event.eventId || event.id?.toString() || '',
+                                eventName: event.fixture || event.teams || '',
+                                event: event
+                              });
+                              setOddsHistoryPopup({
+                                eventId: event.eventId || event.id?.toString() || '',
+                                eventName: event.fixture || event.teams || '',
+                                oddsType: 'home',
+                                isOpen: true
+                              });
+                            }}
                           >
                             {(event.oddsData[bookmaker.code]?.home || 0).toFixed(2)}
                           </button>
@@ -876,11 +883,18 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                           if (eventId) {
                             return (
                               <button 
-                                onClick={() => setSelectedEvent({
-                                  eventId: eventId,
-                                  eventName: event.teams || event.fixture || '',
-                                  isOpen: true
-                                })}
+                                onClick={() => {
+                                  console.log('Opening margin history for event:', {
+                                    eventId: eventId,
+                                    eventName: event.teams || event.fixture || '',
+                                    event: event
+                                  });
+                                  setSelectedEvent({
+                                    eventId: eventId,
+                                    eventName: event.teams || event.fixture || '',
+                                    isOpen: true
+                                  });
+                                }}
                                 className={`hover:underline text-sm font-medium ${marginColorClass}`}
                               >
                                 {marginPercentage}%
