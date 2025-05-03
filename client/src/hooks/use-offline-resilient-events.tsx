@@ -316,20 +316,53 @@ export function useOfflineResilientEvents() {
           }
         });
         
-        // Show all events for now - we'll fix the filter logic later
-        // Keep all events - don't filter by date/time
-        // This ensures we don't accidentally filter out all events
-        return mergedEvents;
+        // Filter events based on bookmaker count (minimum 3 bookmakers)
+        const filteredEvents = mergedEvents.filter(event => {
+          // Skip events without oddsData
+          if (!event.oddsData || typeof event.oddsData !== 'object') {
+            return false;
+          }
+
+          // Count bookmakers with odds data
+          const bookmakerCount = Object.keys(event.oddsData).length;
+          
+          // Only include events with at least 3 bookmakers
+          return bookmakerCount >= 3;
+        });
+        
+        return filteredEvents;
         
         // Removed redundant code
       }
       
-      // Show all events until we debug the date filtering
-      return serverEvents;
+      // Filter events based on bookmaker count (minimum 3 bookmakers)
+      return serverEvents.filter(event => {
+        // Skip events without oddsData
+        if (!event.oddsData || typeof event.oddsData !== 'object') {
+          return false;
+        }
+
+        // Count bookmakers with odds data
+        const bookmakerCount = Object.keys(event.oddsData).length;
+        
+        // Only include events with at least 3 bookmakers
+        return bookmakerCount >= 3;
+      });
     }
 
-    // Show all cached events until we debug the date filtering
-    return localCacheEvents;
+    // Filter cached events based on bookmaker count (minimum 3 bookmakers)
+    return localCacheEvents.filter(event => {
+      // Skip events without oddsData
+      if (!event.oddsData || typeof event.oddsData !== 'object') {
+        return false;
+      }
+
+      // Count bookmakers with odds data
+      const bookmakerCount = Object.keys(event.oddsData).length;
+      
+      // Only include events with at least 3 bookmakers
+      return bookmakerCount >= 3;
+    });
   }, [serverEvents, localCacheEvents]);
 
   // The final merged events array
