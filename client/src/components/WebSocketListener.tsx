@@ -35,41 +35,38 @@ export default function WebSocketListener() {
       
       // Handle individual scraper completion notifications
       if (lastMessage.type === 'scraperFinished') {
-        const { bookmaker, eventCount } = lastMessage.data;
+        const { bookmaker } = lastMessage.data;
         
-        // Invalidate queries to trigger refetch
+        // Silently invalidate queries to trigger refetch without notification
         queryClient.invalidateQueries({ queryKey: ['/api/events'] });
         queryClient.invalidateQueries({ queryKey: ['/api/events?includeSportybet=true'] });
         
-        toast({
-          title: `${bookmaker.name} updated`,
-          description: `Refreshed with ${eventCount} events`,
-          variant: 'default'
-        });
+        // Only show error toasts, not info ones (disabled as requested)
+        // console.log(`${bookmaker.name} scraper finished`);
       }
       
       // Handle events data update
       if (lastMessage.type === 'events' || lastMessage.type === 'scrapeCompleted') {
-        // Invalidate queries to trigger refetch
+        // Silently invalidate queries to trigger refetch
         queryClient.invalidateQueries({ queryKey: ['/api/events'] });
         queryClient.invalidateQueries({ queryKey: ['/api/events?includeSportybet=true'] });
         
-        toast({
-          title: 'Data updated',
-          description: 'Latest odds data loaded',
-          variant: 'default'
-        });
+        // Disabled toast notifications as requested
+        // console.log('Data update received');
       }
       
-      // Handle notification messages from the server
+      // Handle notification messages from the server - only show errors
       if (lastMessage.type === 'notification') {
         const { message, status } = lastMessage.data;
         
-        toast({
-          title: status === 'error' ? 'Error' : 'Update',
-          description: message,
-          variant: status === 'error' ? 'destructive' : 'default'
-        });
+        // Only show error notifications, not informational ones
+        if (status === 'error') {
+          toast({
+            title: 'Error',
+            description: message,
+            variant: 'destructive'
+          });
+        }
       }
     }
   }, [lastMessage, toast, queryClient]);

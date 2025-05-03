@@ -366,15 +366,8 @@ export function useOfflineResilientEvents() {
           return false;
         });
         
-        // Log how many events we kept based on the upcoming filter
-        if (upcomingEvents.length < mergedEvents.length) {
-          console.log(`[${new Date().toISOString()}] Filtered out ${mergedEvents.length - upcomingEvents.length} past events, showing ${upcomingEvents.length} upcoming events`);
-        }
-        
-        // Log only if we used cached data (for troubleshooting)
-        if (usedCachedCount > 0) {
-          console.log(`[${new Date().toISOString()}] Used cached Sportybet odds for ${usedCachedCount} events where server data was missing`);
-        }
+        // No logging to avoid console clutter
+        // Disabled all console.log statements as requested
         
         return upcomingEvents;
       }

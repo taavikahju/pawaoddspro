@@ -54,8 +54,8 @@ export function useRealWebSocket() {
               queryClient.invalidateQueries({ queryKey: ['/api/events?includeSportybet=true'] });
               queryClient.invalidateQueries({ queryKey: ['/api/stats'] });
               
-              // Log for troubleshooting (can remove later)
-              console.log(`[${new Date().toISOString()}] Refreshing data after ${message.type} event`);
+              // Disabled logging as requested
+              // console.log(`Refreshing data after ${message.type} event`);
             }
             
             // Still track stats updates
