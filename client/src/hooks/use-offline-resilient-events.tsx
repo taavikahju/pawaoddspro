@@ -316,54 +316,60 @@ export function useOfflineResilientEvents() {
           }
         });
         
-        // Filter out past events
+        // Filter out past events with a strict time check
         const now = new Date();
-        const today = now.toISOString().split('T')[0]; // YYYY-MM-DD format
-        const currentHour = now.getUTCHours();
-        const currentMinute = now.getUTCMinutes();
+        const currentTime = now.getTime(); // Current time in milliseconds
+        
+        // Add a 5-minute buffer to account for events that just started
+        const bufferMs = 5 * 60 * 1000; // 5 minutes in milliseconds
+        const cutoffTime = currentTime - bufferMs;
         
         // Filter to only show upcoming events
         const upcomingEvents = mergedEvents.filter(event => {
-          if (!event.date) return false;
+          if (!event.date || !event.time) return false;
           
-          // Parse the event date (format is like "03 May 2025")
-          const eventDateParts = event.date.split(' ');
-          if (eventDateParts.length !== 3) return true; // Keep if date format is unknown
-          
-          const day = eventDateParts[0];
-          const month = eventDateParts[1];
-          const year = eventDateParts[2];
-          
-          // Convert month name to number
-          const monthMap: Record<string, string> = {
-            'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04', 'May': '05', 'Jun': '06',
-            'Jul': '07', 'Aug': '08', 'Sep': '09', 'Oct': '10', 'Nov': '11', 'Dec': '12'
-          };
-          
-          const monthNum = monthMap[month];
-          if (!monthNum) return true; // Keep if month format is unknown
-          
-          // Format as YYYY-MM-DD for comparison
-          const eventDateISO = `${year}-${monthNum}-${day.padStart(2, '0')}`;
-          
-          // If event date is in the future, include it
-          if (eventDateISO > today) return true;
-          
-          // If event date is today, check the time
-          if (eventDateISO === today && event.time) {
+          try {
+            // Parse the event date (format is like "03 May 2025")
+            const eventDateParts = event.date.split(' ');
+            if (eventDateParts.length !== 3) return false; // Exclude if date format is unknown
+            
+            const day = parseInt(eventDateParts[0], 10);
+            const month = eventDateParts[1];
+            const year = parseInt(eventDateParts[2], 10);
+            
+            // Convert month name to month number (0-11)
+            const monthMap: Record<string, number> = {
+              'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5,
+              'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11
+            };
+            
+            if (!(month in monthMap)) return false; // Exclude if month is unknown
+            
+            // Parse event time (format is like "09:00")
             const eventTimeParts = event.time.split(':');
-            if (eventTimeParts.length === 2) {
-              const eventHour = parseInt(eventTimeParts[0], 10);
-              const eventMinute = parseInt(eventTimeParts[1], 10);
-              
-              // Include if event time is in the future
-              return (eventHour > currentHour || 
-                (eventHour === currentHour && eventMinute > currentMinute));
-            }
+            if (eventTimeParts.length !== 2) return false;
+            
+            const eventHour = parseInt(eventTimeParts[0], 10);
+            const eventMinute = parseInt(eventTimeParts[1], 10);
+            
+            // Create Date object for the event start time (in UTC)
+            const eventDate = new Date(Date.UTC(
+              year,
+              monthMap[month],
+              day,
+              eventHour,
+              eventMinute,
+              0 // seconds
+            ));
+            
+            const eventTime = eventDate.getTime();
+            
+            // Only include events that haven't started yet (or started very recently)
+            return eventTime > cutoffTime;
+          } catch (e) {
+            // If there's any error parsing the date/time, exclude the event
+            return false;
           }
-          
-          // Otherwise exclude (past event)
-          return false;
         });
         
         // No logging to avoid console clutter
@@ -374,101 +380,113 @@ export function useOfflineResilientEvents() {
       
       // If no cache, filter server data for upcoming events only
       const now = new Date();
-      const today = now.toISOString().split('T')[0]; // YYYY-MM-DD format
-      const currentHour = now.getUTCHours();
-      const currentMinute = now.getUTCMinutes();
+      const currentTime = now.getTime(); // Current time in milliseconds
+      
+      // Add a 5-minute buffer to account for events that just started
+      const bufferMs = 5 * 60 * 1000; // 5 minutes in milliseconds
+      const cutoffTime = currentTime - bufferMs;
       
       return serverEvents.filter(event => {
-        if (!event.date) return false;
+        if (!event.date || !event.time) return false;
         
-        // Parse the event date (format is like "03 May 2025")
-        const eventDateParts = event.date.split(' ');
-        if (eventDateParts.length !== 3) return true; // Keep if date format is unknown
-        
-        const day = eventDateParts[0];
-        const month = eventDateParts[1];
-        const year = eventDateParts[2];
-        
-        // Convert month name to number
-        const monthMap: Record<string, string> = {
-          'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04', 'May': '05', 'Jun': '06',
-          'Jul': '07', 'Aug': '08', 'Sep': '09', 'Oct': '10', 'Nov': '11', 'Dec': '12'
-        };
-        
-        const monthNum = monthMap[month];
-        if (!monthNum) return true; // Keep if month format is unknown
-        
-        // Format as YYYY-MM-DD for comparison
-        const eventDateISO = `${year}-${monthNum}-${day.padStart(2, '0')}`;
-        
-        // If event date is in the future, include it
-        if (eventDateISO > today) return true;
-        
-        // If event date is today, check the time
-        if (eventDateISO === today && event.time) {
+        try {
+          // Parse the event date (format is like "03 May 2025")
+          const eventDateParts = event.date.split(' ');
+          if (eventDateParts.length !== 3) return false; // Exclude if date format is unknown
+          
+          const day = parseInt(eventDateParts[0], 10);
+          const month = eventDateParts[1];
+          const year = parseInt(eventDateParts[2], 10);
+          
+          // Convert month name to month number (0-11)
+          const monthMap: Record<string, number> = {
+            'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5,
+            'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11
+          };
+          
+          if (!(month in monthMap)) return false; // Exclude if month is unknown
+          
+          // Parse event time (format is like "09:00")
           const eventTimeParts = event.time.split(':');
-          if (eventTimeParts.length === 2) {
-            const eventHour = parseInt(eventTimeParts[0], 10);
-            const eventMinute = parseInt(eventTimeParts[1], 10);
-            
-            // Include if event time is in the future
-            return (eventHour > currentHour || 
-              (eventHour === currentHour && eventMinute > currentMinute));
-          }
-        }
-        
-        // Otherwise exclude (past event)
-        return false;
-      });
-    }
-
-    // If no server data, filter cached events for upcoming only
-    const now = new Date();
-    const today = now.toISOString().split('T')[0]; // YYYY-MM-DD format
-    const currentHour = now.getUTCHours();
-    const currentMinute = now.getUTCMinutes();
-    
-    return localCacheEvents.filter(event => {
-      if (!event.date) return false;
-      
-      // Parse the event date (format is like "03 May 2025")
-      const eventDateParts = event.date.split(' ');
-      if (eventDateParts.length !== 3) return true; // Keep if date format is unknown
-      
-      const day = eventDateParts[0];
-      const month = eventDateParts[1];
-      const year = eventDateParts[2];
-      
-      // Convert month name to number
-      const monthMap: Record<string, string> = {
-        'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04', 'May': '05', 'Jun': '06',
-        'Jul': '07', 'Aug': '08', 'Sep': '09', 'Oct': '10', 'Nov': '11', 'Dec': '12'
-      };
-      
-      const monthNum = monthMap[month];
-      if (!monthNum) return true; // Keep if month format is unknown
-      
-      // Format as YYYY-MM-DD for comparison
-      const eventDateISO = `${year}-${monthNum}-${day.padStart(2, '0')}`;
-      
-      // If event date is in the future, include it
-      if (eventDateISO > today) return true;
-      
-      // If event date is today, check the time
-      if (eventDateISO === today && event.time) {
-        const eventTimeParts = event.time.split(':');
-        if (eventTimeParts.length === 2) {
+          if (eventTimeParts.length !== 2) return false;
+          
           const eventHour = parseInt(eventTimeParts[0], 10);
           const eventMinute = parseInt(eventTimeParts[1], 10);
           
-          // Include if event time is in the future
-          return (eventHour > currentHour || 
-            (eventHour === currentHour && eventMinute > currentMinute));
+          // Create Date object for the event start time (in UTC)
+          const eventDate = new Date(Date.UTC(
+            year,
+            monthMap[month],
+            day,
+            eventHour,
+            eventMinute,
+            0 // seconds
+          ));
+          
+          const eventTime = eventDate.getTime();
+          
+          // Only include events that haven't started yet (or started very recently)
+          return eventTime > cutoffTime;
+        } catch (e) {
+          // If there's any error parsing the date/time, exclude the event
+          return false;
         }
-      }
+      });
+    }
+
+    // If no server data, filter cached events for upcoming only using the same logic
+    const now = new Date();
+    const currentTime = now.getTime(); // Current time in milliseconds
       
-      // Otherwise exclude (past event)
-      return false;
+    // Add a 5-minute buffer to account for events that just started
+    const bufferMs = 5 * 60 * 1000; // 5 minutes in milliseconds
+    const cutoffTime = currentTime - bufferMs;
+    
+    return localCacheEvents.filter(event => {
+      if (!event.date || !event.time) return false;
+      
+      try {
+        // Parse the event date (format is like "03 May 2025")
+        const eventDateParts = event.date.split(' ');
+        if (eventDateParts.length !== 3) return false; // Exclude if date format is unknown
+        
+        const day = parseInt(eventDateParts[0], 10);
+        const month = eventDateParts[1];
+        const year = parseInt(eventDateParts[2], 10);
+        
+        // Convert month name to month number (0-11)
+        const monthMap: Record<string, number> = {
+          'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5,
+          'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11
+        };
+        
+        if (!(month in monthMap)) return false; // Exclude if month is unknown
+        
+        // Parse event time (format is like "09:00")
+        const eventTimeParts = event.time.split(':');
+        if (eventTimeParts.length !== 2) return false;
+        
+        const eventHour = parseInt(eventTimeParts[0], 10);
+        const eventMinute = parseInt(eventTimeParts[1], 10);
+        
+        // Create Date object for the event start time (in UTC)
+        const eventDate = new Date(Date.UTC(
+          year,
+          monthMap[month],
+          day,
+          eventHour,
+          eventMinute,
+          0 // seconds
+        ));
+        
+        const eventTime = eventDate.getTime();
+        
+        // Only include events that haven't started yet (or started very recently)
+        return eventTime > cutoffTime;
+      } catch (e) {
+        // If there's any error parsing the date/time, exclude the event
+        return false;
+      }
     });
   }, [serverEvents, localCacheEvents]);
 
