@@ -23,6 +23,8 @@ interface OddsHistoryPopupProps {
   eventName: string;
   bookmakers: string[];
   oddsType: 'home' | 'draw' | 'away';
+  // Force refresh to get latest history
+  forceRefresh?: boolean;
 }
 
 type OddsHistoryEntry = {
@@ -49,6 +51,23 @@ export default function OddsHistoryPopup({
   // Get the display name for the odds type
   const oddsTypeDisplay = oddsType === 'home' ? 'Home' : oddsType === 'draw' ? 'Draw' : 'Away';
   
+  // Fetch the current event to get real-time odds
+  const { data: currentEvent } = useQuery({
+    queryKey: ['/api/events', eventId],
+    queryFn: async () => {
+      try {
+        const response = await axios.get(`/api/events/${eventId}`);
+        console.log("Current event data:", response.data);
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching current event:", error);
+        return null;
+      }
+    },
+    enabled: isOpen,
+    staleTime: 60000
+  });
+  
   // Fetch odds history for this event - optimized for lightweight loading
   const { data, isLoading, error } = useQuery({
     queryKey: ['/api/events', eventId, 'history', oddsType],
@@ -66,7 +85,7 @@ export default function OddsHistoryPopup({
       }
     },
     enabled: isOpen, // Only fetch when dialog is open
-    staleTime: 60000 // Cache for 1 minute
+    staleTime: 30000 // Cache for 30 seconds to get more frequent updates
   });
   
   // Pre-process data for chart
@@ -188,6 +207,79 @@ export default function OddsHistoryPopup({
             </ResponsiveContainer>
           )}
         </div>
+        
+        {/* Add a comparison between current and historical odds */}
+        {currentEvent && data && data.length > 0 && (
+          <div className="mt-4">
+            <h3 className="text-sm font-semibold mb-2">Current vs. Historical Odds Comparison</h3>
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse text-xs">
+                <thead>
+                  <tr className="bg-gray-100 dark:bg-gray-800">
+                    <th className="border px-2 py-1 text-left">Bookmaker</th>
+                    <th className="border px-2 py-1 text-center">Current Odds</th>
+                    <th className="border px-2 py-1 text-center">Latest History</th>
+                    <th className="border px-2 py-1 text-center">Difference</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {bookmakers.map(bookmakerCode => {
+                    // Get the latest historical entry for this bookmaker
+                    const latestHistoryEntry = [...data]
+                      .filter(entry => entry.bookmakerCode === bookmakerCode)
+                      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0];
+                    
+                    // Get the current odds from the current event
+                    const currentOdds = currentEvent?.oddsData?.[bookmakerCode]?.[oddsType] || null;
+                    
+                    // Get the historical odds based on the selected type
+                    const historyOdds = latestHistoryEntry 
+                      ? (oddsType === 'home' 
+                          ? latestHistoryEntry.homeOdds 
+                          : oddsType === 'draw' 
+                            ? latestHistoryEntry.drawOdds 
+                            : latestHistoryEntry.awayOdds)
+                      : null;
+                    
+                    // Calculate difference
+                    const difference = currentOdds && historyOdds 
+                      ? (parseFloat(currentOdds.toString()) - parseFloat(historyOdds.toString())).toFixed(2)
+                      : null;
+                    
+                    // Determine color based on difference
+                    const diffColor = difference 
+                      ? (parseFloat(difference) > 0 
+                          ? 'text-green-600 dark:text-green-400' 
+                          : parseFloat(difference) < 0 
+                            ? 'text-red-600 dark:text-red-400'
+                            : 'text-gray-600 dark:text-gray-400')
+                      : 'text-gray-600 dark:text-gray-400';
+                    
+                    return (
+                      <tr key={bookmakerCode} className="border-b">
+                        <td className="border px-2 py-1 font-medium">{bookmakerCode}</td>
+                        <td className="border px-2 py-1 text-center">
+                          {currentOdds !== null ? currentOdds : '-'}
+                        </td>
+                        <td className="border px-2 py-1 text-center">
+                          {historyOdds !== null ? historyOdds : '-'}
+                        </td>
+                        <td className={`border px-2 py-1 text-center ${diffColor}`}>
+                          {difference !== null 
+                            ? (parseFloat(difference) > 0 ? `+${difference}` : difference) 
+                            : '-'}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            <p className="text-xs text-gray-500 mt-1">
+              Note: Differences may appear if odds were cached from previous scraper runs.
+            </p>
+          </div>
+        )}
         
         <DialogFooter className="pt-1">
           <DialogClose asChild>
