@@ -1,6 +1,7 @@
 import { useRealWebSocket } from "@/hooks/use-real-websocket";
 import { useToast } from "@/hooks/use-toast";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 /**
  * This component maintains a WebSocket connection to the server to receive real-time updates
@@ -10,6 +11,8 @@ import { useEffect } from "react";
 export default function WebSocketListener() {
   const { isConnected, lastMessage } = useRealWebSocket();
   const { toast } = useToast();
+  const queryClient = useQueryClient();
+  const lastUpdateTimestamp = useRef<number>(Date.now());
   
   // Display connection status changes - only show toast without console logging
   useEffect(() => {
@@ -27,13 +30,33 @@ export default function WebSocketListener() {
   // Handle incoming messages, especially scraper completion events
   useEffect(() => {
     if (lastMessage) {
+      // Update timestamp for any message
+      lastUpdateTimestamp.current = Date.now();
+      
       // Handle individual scraper completion notifications
       if (lastMessage.type === 'scraperFinished') {
         const { bookmaker, eventCount } = lastMessage.data;
         
+        // Invalidate queries to trigger refetch
+        queryClient.invalidateQueries({ queryKey: ['/api/events'] });
+        queryClient.invalidateQueries({ queryKey: ['/api/events?includeSportybet=true'] });
+        
         toast({
           title: `${bookmaker.name} updated`,
           description: `Refreshed with ${eventCount} events`,
+          variant: 'default'
+        });
+      }
+      
+      // Handle events data update
+      if (lastMessage.type === 'events' || lastMessage.type === 'scrapeCompleted') {
+        // Invalidate queries to trigger refetch
+        queryClient.invalidateQueries({ queryKey: ['/api/events'] });
+        queryClient.invalidateQueries({ queryKey: ['/api/events?includeSportybet=true'] });
+        
+        toast({
+          title: 'Data updated',
+          description: 'Latest odds data loaded',
           variant: 'default'
         });
       }
@@ -49,7 +72,7 @@ export default function WebSocketListener() {
         });
       }
     }
-  }, [lastMessage, toast]);
+  }, [lastMessage, toast, queryClient]);
   
   // The component doesn't render anything
   return null;

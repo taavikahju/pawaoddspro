@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRealWebSocket } from './use-real-websocket';
 
 // Define a type for the event structure
@@ -198,6 +198,9 @@ export function useOfflineResilientEvents() {
     }
   }, [isError, handleError]);
   
+  // Access the query client for refetching data
+  const queryClient = useQueryClient();
+  
   // Listen for WebSocket events to trigger immediate updates
   useEffect(() => {
     if (lastMessage) {
@@ -210,11 +213,9 @@ export function useOfflineResilientEvents() {
         // Update timestamp
         lastUpdateTimestamp.current = Date.now();
         
-        // Refresh data - this will trigger the React Query refetch
-        const { refetchEvents } = window.queryClient?.getQueriesData(['/api/events']) || {};
-        if (typeof refetchEvents === 'function') {
-          refetchEvents();
-        }
+        // Invalidate the queries to trigger refetch
+        queryClient.invalidateQueries({ queryKey: ['/api/events'] });
+        queryClient.invalidateQueries({ queryKey: ['/api/events?includeSportybet=true'] });
         
         // If message contains events data, process it
         if (lastMessage.type === 'events' && Array.isArray(lastMessage.data)) {
@@ -256,7 +257,7 @@ export function useOfflineResilientEvents() {
         }
       }
     }
-  }, [lastMessage]);
+  }, [lastMessage, queryClient]);
 
   // Load initial cache from localStorage on component mount - optimized for performance
   useEffect(() => {
