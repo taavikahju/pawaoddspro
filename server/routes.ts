@@ -777,6 +777,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { eventId } = req.params;
       const { bookmaker } = req.query;
       
+      logger.info(`Fetching odds history for event ${eventId}`);
+      
       // Import the utility functions
       const { getOddsHistory } = await import('./utils/oddsHistory');
       
@@ -792,6 +794,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Sort by timestamp descending (newest first)
       filteredHistory.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
       
+      logger.info(`Found ${filteredHistory.length} history entries for event ${eventId}`);
+      
       res.json(filteredHistory);
     } catch (error) {
       logger.error(`Error fetching odds history: ${error}`);
@@ -803,6 +807,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/events/margins/:eventId', async (req, res) => {
     try {
       const { eventId } = req.params;
+      
+      logger.info(`Fetching margin history for event ${eventId}`);
       
       // Import the utility functions
       const { getOddsHistory } = await import('./utils/oddsHistory');
@@ -830,6 +836,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Sort by timestamp descending (newest first)
       marginHistory.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+      
+      logger.info(`Found ${marginHistory.length} margin history entries for event ${eventId}`);
       
       res.json(marginHistory);
     } catch (error) {
