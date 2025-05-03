@@ -41,24 +41,37 @@ export function hasEventStarted(event: Event): boolean {
       now.getUTCMinutes()
     );
     
-    // Parse date - format is "03 May 2025"
-    const dateParts = event.date.split(' ');
-    if (dateParts.length !== 3) return false;
+    let year, month, day;
     
-    const day = parseInt(dateParts[0], 10);
-    const monthStr = dateParts[1];
-    const year = parseInt(dateParts[2], 10);
+    // Try to detect the date format
+    if (event.date.includes('-')) {
+      // Format: "2025-05-03"
+      const dateParts = event.date.split('-');
+      if (dateParts.length !== 3) return false;
+      
+      year = parseInt(dateParts[0], 10);
+      month = parseInt(dateParts[1], 10) - 1; // JavaScript months are 0-based
+      day = parseInt(dateParts[2], 10);
+    } else {
+      // Format: "03 May 2025"
+      const dateParts = event.date.split(' ');
+      if (dateParts.length !== 3) return false;
+      
+      day = parseInt(dateParts[0], 10);
+      const monthStr = dateParts[1];
+      year = parseInt(dateParts[2], 10);
+      
+      // Convert month name to number (0-based)
+      const months: Record<string, number> = {
+        'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5,
+        'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11
+      };
+      
+      month = months[monthStr];
+      if (month === undefined) return false;
+    }
     
-    // Convert month name to number (0-based)
-    const months: Record<string, number> = {
-      'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5,
-      'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11
-    };
-    
-    const month = months[monthStr];
-    if (month === undefined) return false;
-    
-    // Parse time - format is "14:30"
+    // Parse time - format is "14:30" or "09:00"
     const timeParts = event.time.split(':');
     if (timeParts.length !== 2) return false;
     
@@ -68,10 +81,24 @@ export function hasEventStarted(event: Event): boolean {
     // Create event time in UTC milliseconds
     const eventUTC = Date.UTC(year, month, day, hour, minute);
     
+    // Debug the event we're investigating
+    if (event.teams === "AC Nagano Parceiro - SC Sagamihara") {
+      console.log("Event details:", {
+        teams: event.teams,
+        date: event.date,
+        time: event.time,
+        parsedDate: `${year}-${month+1}-${day}`,
+        parsedTime: `${hour}:${minute}`,
+        eventUTC: new Date(eventUTC).toISOString(),
+        currentUTC: new Date(currentUTC).toISOString(),
+        hasStarted: eventUTC <= currentUTC
+      });
+    }
+    
     // Simple comparison of millisecond timestamps
     return eventUTC <= currentUTC;
   } catch (e) {
-    console.error("Error parsing event date:", e);
+    console.error("Error parsing event date for", event.teams, ":", e);
     return false;
   }
 }
