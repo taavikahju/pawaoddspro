@@ -13,8 +13,6 @@ import { ArrowDownIcon, ArrowUpIcon, Clock, Globe, Trophy, Loader2 } from 'lucid
 import MarginHistoryPopup from './MarginHistoryPopup';
 import OddsHistoryPopup from './OddsHistoryPopup';
 import CountryFlag from './CountryFlag';
-import { useLatestSportybetOdds } from '@/hooks/use-latest-sportybet-odds';
-import SportybetOdds from './SportybetOdds';
 
 interface OddsTableProps {
   events: any[];
@@ -127,10 +125,21 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
     
     // Then apply Top 5 Leagues filter if active
     if (isTop5LeaguesActive) {
-      return upcomingEvents.filter(isEventInTop5Leagues);
+      // Add some debug logging
+      console.log('Top 5 Leagues filter active');
+      console.log('Sample event formats:', upcomingEvents.slice(0, 3).map(e => ({
+        country: e.country,
+        tournament: e.tournament,
+        league: e.league,
+        teams: e.teams
+      })));
+      
+      const top5Events = upcomingEvents.filter(isEventInTop5Leagues);
+      console.log(`Found ${top5Events.length} events in Top 5 Leagues out of ${upcomingEvents.length} upcoming events`);
+      return top5Events;
     }
     return upcomingEvents;
-  }, [events, isTop5LeaguesActive]);
+  }, [events, isTop5LeaguesActive, isEventInTop5Leagues]);
   
   // Pagination state
   const [visibleItemsCount, setVisibleItemsCount] = useState(100);
