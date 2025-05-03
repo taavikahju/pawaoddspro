@@ -31,6 +31,16 @@ export function hasEventStarted(event: Event): boolean {
   if (!event.date || !event.time) return false;
   
   try {
+    // Get current time in UTC
+    const now = new Date();
+    const currentUTC = Date.UTC(
+      now.getUTCFullYear(),
+      now.getUTCMonth(),
+      now.getUTCDate(),
+      now.getUTCHours(),
+      now.getUTCMinutes()
+    );
+    
     // Parse date - format is "03 May 2025"
     const dateParts = event.date.split(' ');
     if (dateParts.length !== 3) return false;
@@ -55,16 +65,11 @@ export function hasEventStarted(event: Event): boolean {
     const hour = parseInt(timeParts[0], 10);
     const minute = parseInt(timeParts[1], 10);
     
-    // Create event date in UTC
-    const eventDate = new Date(Date.UTC(year, month, day, hour, minute, 0));
+    // Create event time in UTC milliseconds
+    const eventUTC = Date.UTC(year, month, day, hour, minute);
     
-    // Compare with current UTC time
-    const now = new Date();
-    
-    // Debug log
-    console.log(`Event: ${event.teams}, Event time: ${eventDate.toISOString()}, Now: ${now.toISOString()}, Started: ${eventDate <= now}`);
-    
-    return eventDate <= now;
+    // Simple comparison of millisecond timestamps
+    return eventUTC <= currentUTC;
   } catch (e) {
     console.error("Error parsing event date:", e);
     return false;
