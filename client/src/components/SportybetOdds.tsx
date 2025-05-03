@@ -1,19 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useLatestSportybetOdds } from '@/hooks/use-latest-sportybet-odds';
 import { cn } from '@/lib/utils';
 import { Loader2 } from 'lucide-react';
-
-// Declare global cache
-declare global {
-  interface Window {
-    __LATEST_SPORTYBET_ODDS_CACHE?: Record<string, {
-      home: number;
-      draw: number;
-      away: number;
-      timestamp: string;
-    }>;
-  }
-}
 
 interface SportybetOddsProps {
   event: any;
@@ -26,30 +14,14 @@ export default function SportybetOdds({ event, oddsType, highlightType, onClick 
   // Get event ID with fallback options
   const eventId = event.eventId || event.id?.toString() || event.externalId || '';
   
-  // Fetch the latest odds for this event
+  // Fetch the latest odds for this event from history
   const { latestOdds, isLoading } = useLatestSportybetOdds(eventId);
   
-  // Get the current odds from the event data or default to 0
+  // Get the current odds from the event data as fallback
   const currentOdds = event.oddsData?.['sporty']?.[oddsType] || 0;
   
-  // Check if we have cached odds for this event
-  const cachedOdds = window.__LATEST_SPORTYBET_ODDS_CACHE?.[eventId]?.[oddsType];
-  
-  // Get the correct odds to display (latest from history if available, otherwise cached, otherwise current)
-  const displayOdds = latestOdds ? latestOdds[oddsType] : (cachedOdds || currentOdds);
-  
-  // Update the global cache when we receive latest odds
-  useEffect(() => {
-    if (latestOdds && eventId) {
-      // Initialize the cache if it doesn't exist
-      if (!window.__LATEST_SPORTYBET_ODDS_CACHE) {
-        window.__LATEST_SPORTYBET_ODDS_CACHE = {};
-      }
-      
-      // Update the cache with the latest odds
-      window.__LATEST_SPORTYBET_ODDS_CACHE[eventId] = latestOdds;
-    }
-  }, [latestOdds, eventId]);
+  // Get the correct odds to display (latest from history if available, otherwise current)
+  const displayOdds = latestOdds ? latestOdds[oddsType] : currentOdds;
   
   // Determine the appropriate highlight class based on the highlight type
   const highlightClass = 
