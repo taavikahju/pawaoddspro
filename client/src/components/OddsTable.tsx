@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect, useRef, useCallback } from 'react';
 import {
   Table,
   TableBody,
@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table";
 import { useBookmakerContext } from '@/contexts/BookmakerContext';
 import { cn } from '@/lib/utils';
-import { ArrowDownIcon, ArrowUpIcon, Clock, Globe, Trophy } from 'lucide-react';
+import { ArrowDownIcon, ArrowUpIcon, Clock, Globe, Trophy, Loader2 } from 'lucide-react';
 import MarginHistoryPopup from './MarginHistoryPopup';
 import OddsHistoryPopup from './OddsHistoryPopup';
 import CountryFlag from './CountryFlag';
@@ -38,10 +38,117 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
     isOpen: boolean;
   }>({ eventId: '', eventName: '', oddsType: 'home', isOpen: false });
   
+  // Function to check if an event belongs to one of the Top 5 Leagues
+  const isEventInTop5Leagues = (event: any): boolean => {
+    // Specifically looking for:
+    // 1. England Premier League
+    // 2. France Ligue 1
+    // 3. Germany Bundesliga (men's only, not Bundesliga 2)
+    // 4. Italy Serie A (men's only, not women's)
+    // 5. Spain La Liga (top division only, not La Liga 2)
+    
+    if (!event.country && !event.tournament) {
+      // Try to extract from legacy league format
+      if (event.league) {
+        const leagueInfo = event.league.toLowerCase();
+        
+        // Exclude women's leagues and lower divisions
+        if (leagueInfo.includes('women') || 
+            leagueInfo.includes('2') || 
+            leagueInfo.includes('b') || 
+            leagueInfo.includes('segunda')) {
+          return false;
+        }
+        
+        return (
+          (leagueInfo.includes('england') && leagueInfo.includes('premier league')) ||
+          (leagueInfo.includes('spain') && (leagueInfo.includes('laliga') || leagueInfo.includes('la liga'))) ||
+          (leagueInfo.includes('germany') && leagueInfo.includes('bundesliga')) ||
+          (leagueInfo.includes('italy') && leagueInfo.includes('serie a')) ||
+          (leagueInfo.includes('france') && leagueInfo.includes('ligue 1'))
+        );
+      }
+      return false;
+    }
+
+    // If we have structured country and tournament data
+    const country = (event.country || '').toLowerCase();
+    const tournament = (event.tournament || '').toLowerCase();
+    
+    // Exclude women's leagues and lower divisions
+    if (tournament.includes('women') || 
+        tournament.includes('2') || 
+        tournament.includes('b') || 
+        tournament.includes('segunda')) {
+      return false;
+    }
+    
+    return (
+      (country === 'england' && tournament.includes('premier league')) ||
+      (country === 'spain' && (tournament.includes('laliga') || tournament.includes('la liga'))) ||
+      (country === 'germany' && tournament.includes('bundesliga')) ||
+      (country === 'italy' && tournament.includes('serie a')) ||
+      (country === 'france' && tournament.includes('ligue 1'))
+    );
+  };
+  
   // Sort bookmakers by ID for consistent order, then filter to selected ones
-  const filteredBookmakers = [...bookmakers]
-    .sort((a, b) => a.id - b.id)
-    .filter(b => selectedBookmakers.includes(b.code));
+  const filteredBookmakers = useMemo(() => {
+    return [...bookmakers]
+      .sort((a, b) => a.id - b.id)
+      .filter(b => selectedBookmakers.includes(b.code));
+  }, [bookmakers, selectedBookmakers]);
+  
+  // Filter events for Top 5 Leagues if that filter is active
+  const filteredEvents = useMemo(() => {
+    if (isTop5LeaguesActive) {
+      return events.filter(isEventInTop5Leagues);
+    }
+    return events;
+  }, [events, isTop5LeaguesActive]);
+  
+  // Pagination state
+  const [visibleItemsCount, setVisibleItemsCount] = useState(100);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const loaderRef = useRef<HTMLDivElement>(null);
+  
+  // Function to handle loading more items when scrolling
+  const loadMoreItems = useCallback(() => {
+    setIsLoadingMore(true);
+    
+    // Use setTimeout to prevent UI blocking
+    setTimeout(() => {
+      setVisibleItemsCount(prevCount => {
+        // Add another 100 items or whatever is left
+        const newCount = Math.min(prevCount + 100, filteredEvents.length);
+        setIsLoadingMore(false);
+        return newCount;
+      });
+    }, 100);
+  }, [filteredEvents.length]);
+  
+  // Intersection observer to detect when user scrolls to the end
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (entry.isIntersecting && !isLoadingMore && visibleItemsCount < filteredEvents.length) {
+          loadMoreItems();
+        }
+      },
+      { threshold: 0.1 }
+    );
+    
+    if (loaderRef.current) {
+      observer.observe(loaderRef.current);
+    }
+    
+    return () => {
+      if (loaderRef.current) {
+        observer.unobserve(loaderRef.current);
+      }
+    };
+  }, [loadMoreItems, isLoadingMore, visibleItemsCount, filteredEvents.length]);
   
   // Always show the comparison column if betPawa is selected along with either Sportybet or Betika KE
   const hasBetPawaGH = selectedBookmakers.includes('bp GH');
@@ -58,8 +165,6 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
   // Show the comparison column only if we have a specific Ghana or Kenya filter active
   // Specifically dont show for "All Bookmakers" filter
   const isComparisonAvailable = (isGhanaFilterActive || isKenyaFilterActive) && !(selectedBookmakers.length >= 4);
-  
-  // No logging bookmaker selection details for performance
   
   // Helper function to determine if odds should be highlighted
   const getOddsHighlightType = (event: any, market: string, bookmakerCode: string): 'highest' | 'lowest' | 'none' => {
@@ -147,7 +252,6 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
     
     // Get the appropriate competitor code based on the active filter
     const competitorCode = isGhanaFilterActive ? 'sporty' : isKenyaFilterActive ? 'betika KE' : null;
-    // No logging selected codes for performance
     
     if (!betPawaCode || !competitorCode) return { comparison: null, isBetter: null, favorite: null };
     
@@ -216,68 +320,6 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
     return { comparison, isBetter, favorite };
   };
   
-  // Function to check if an event belongs to one of the Top 5 Leagues
-  const isEventInTop5Leagues = (event: any): boolean => {
-    // Specifically looking for:
-    // 1. England Premier League
-    // 2. France Ligue 1
-    // 3. Germany Bundesliga (men's only, not Bundesliga 2)
-    // 4. Italy Serie A (men's only, not women's)
-    // 5. Spain La Liga (top division only, not La Liga 2)
-    
-    if (!event.country && !event.tournament) {
-      // Try to extract from legacy league format
-      if (event.league) {
-        const leagueInfo = event.league.toLowerCase();
-        
-        // Exclude women's leagues and lower divisions
-        if (leagueInfo.includes('women') || 
-            leagueInfo.includes('2') || 
-            leagueInfo.includes('b') || 
-            leagueInfo.includes('segunda')) {
-          return false;
-        }
-        
-        return (
-          (leagueInfo.includes('england') && leagueInfo.includes('premier league')) ||
-          (leagueInfo.includes('spain') && (leagueInfo.includes('laliga') || leagueInfo.includes('la liga'))) ||
-          (leagueInfo.includes('germany') && leagueInfo.includes('bundesliga')) ||
-          (leagueInfo.includes('italy') && leagueInfo.includes('serie a')) ||
-          (leagueInfo.includes('france') && leagueInfo.includes('ligue 1'))
-        );
-      }
-      return false;
-    }
-
-    // If we have structured country and tournament data
-    const country = (event.country || '').toLowerCase();
-    const tournament = (event.tournament || '').toLowerCase();
-    
-    // Exclude women's leagues and lower divisions
-    if (tournament.includes('women') || 
-        tournament.includes('2') || 
-        tournament.includes('b') || 
-        tournament.includes('segunda')) {
-      return false;
-    }
-    
-    return (
-      (country === 'england' && tournament.includes('premier league')) ||
-      (country === 'spain' && (tournament.includes('laliga') || tournament.includes('la liga'))) ||
-      (country === 'germany' && tournament.includes('bundesliga')) ||
-      (country === 'italy' && tournament.includes('serie a')) ||
-      (country === 'france' && tournament.includes('ligue 1'))
-    );
-  };
-
-  // Filter events for Top 5 Leagues if that filter is active
-  const filteredEvents = useMemo(() => {
-    if (isTop5LeaguesActive) {
-      return events.filter(isEventInTop5Leagues);
-    }
-    return events;
-  }, [events, isTop5LeaguesActive]);
-
   // Get country code for flag display
   const getCountryCode = (countryName: string): string => {
     // Standardize country name (remove any special characters and convert to lowercase)
@@ -330,11 +372,8 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
       'gambia': 'GM',
       'ghana': 'GH',
       'guinea': 'GN',
-      'guinea bissau': 'GW',
+      'guinea-bissau': 'GW',
       'ivory coast': 'CI',
-      'ivorycoast': 'CI',
-      'cote divoire': 'CI',
-      'cotedivoire': 'CI',
       'kenya': 'KE',
       'lesotho': 'LS',
       'liberia': 'LR',
@@ -349,14 +388,15 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
       'namibia': 'NA',
       'niger': 'NE',
       'nigeria': 'NG',
+      'reunion': 'RE',
       'rwanda': 'RW',
+      'saint helena': 'SH',
       'sao tome and principe': 'ST',
       'senegal': 'SN',
       'seychelles': 'SC',
       'sierra leone': 'SL',
       'somalia': 'SO',
       'south africa': 'ZA',
-      'southafrica': 'ZA',
       'south sudan': 'SS',
       'sudan': 'SD',
       'swaziland': 'SZ',
@@ -367,34 +407,87 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
       'zambia': 'ZM',
       'zimbabwe': 'ZW',
       
+      // Asian countries
+      'afghanistan': 'AF',
+      'armenia': 'AM',
+      'azerbaijan': 'AZ',
+      'bahrain': 'BH',
+      'bangladesh': 'BD',
+      'bhutan': 'BT',
+      'brunei': 'BN',
+      'cambodia': 'KH',
+      'china': 'CN',
+      'cyprus': 'CY',
+      'east timor': 'TL',
+      'georgia': 'GE',
+      'hong kong': 'HK',
+      'india': 'IN',
+      'indonesia': 'ID',
+      'iran': 'IR',
+      'iraq': 'IQ',
+      'israel': 'IL',
+      'japan': 'JP',
+      'jordan': 'JO',
+      'kazakhstan': 'KZ',
+      'kuwait': 'KW',
+      'kyrgyzstan': 'KG',
+      'laos': 'LA',
+      'lebanon': 'LB',
+      'macau': 'MO',
+      'malaysia': 'MY',
+      'maldives': 'MV',
+      'mongolia': 'MN',
+      'myanmar': 'MM',
+      'nepal': 'NP',
+      'north korea': 'KP',
+      'oman': 'OM',
+      'pakistan': 'PK',
+      'palestine': 'PS',
+      'philippines': 'PH',
+      'qatar': 'QA',
+      'saudi arabia': 'SA',
+      'singapore': 'SG',
+      'south korea': 'KR',
+      'sri lanka': 'LK',
+      'syria': 'SY',
+      'taiwan': 'TW',
+      'tajikistan': 'TJ',
+      'thailand': 'TH',
+      'turkey': 'TR',
+      'turkiye': 'TR',
+      'turkmenistan': 'TM',
+      'united arab emirates': 'AE',
+      'uae': 'AE',
+      'uzbekistan': 'UZ',
+      'vietnam': 'VN',
+      'yemen': 'YE',
+      
       // European countries
       'albania': 'AL',
       'andorra': 'AD',
-      'armenia': 'AM',
       'austria': 'AT',
-      'azerbaijan': 'AZ',
       'belarus': 'BY',
       'belgium': 'BE',
       'bosnia': 'BA',
       'bosnia and herzegovina': 'BA',
       'bulgaria': 'BG',
       'croatia': 'HR',
-      'cyprus': 'CY',
       'czech republic': 'CZ',
-      'czechrepublic': 'CZ',
+      'czech': 'CZ',
+      'czechia': 'CZ',
       'denmark': 'DK',
       'estonia': 'EE',
+      'faroe islands': 'FO',
       'finland': 'FI',
       'france': 'FR',
-      'georgia': 'GE',
       'germany': 'DE',
+      'gibraltar': 'GI',
       'greece': 'GR',
       'hungary': 'HU',
       'iceland': 'IS',
       'ireland': 'IE',
       'italy': 'IT',
-      'kazakhstan': 'KZ',
-      'kosovo': 'XK',
+      'kosovo': 'XK', // Custom code for Kosovo
       'latvia': 'LV',
       'liechtenstein': 'LI',
       'lithuania': 'LT',
@@ -418,35 +511,28 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
       'spain': 'ES',
       'sweden': 'SE',
       'switzerland': 'CH',
-      'turkey': 'TR',
-      'ukraine': 'UA',
-      'united kingdom': 'GB',
       'uk': 'GB',
       'england': 'GB-ENG',
       'scotland': 'GB-SCT',
       'wales': 'GB-WLS',
       'northern ireland': 'GB-NIR',
+      'ukraine': 'UA',
       'vatican city': 'VA',
       
-      // Americas
-      'argentina': 'AR',
+      // North American countries
+      'antigua and barbuda': 'AG',
+      'aruba': 'AW',
       'bahamas': 'BS',
       'barbados': 'BB',
       'belize': 'BZ',
-      'bolivia': 'BO',
-      'brazil': 'BR',
+      'bermuda': 'BM',
       'canada': 'CA',
-      'chile': 'CL',
-      'colombia': 'CO',
       'costa rica': 'CR',
-      'costarica': 'CR',
       'cuba': 'CU',
       'dominica': 'DM',
       'dominican republic': 'DO',
-      'dominicanrepublic': 'DO',
-      'ecuador': 'EC',
       'el salvador': 'SV',
-      'elsalvador': 'SV',
+      'greenland': 'GL',
       'grenada': 'GD',
       'guatemala': 'GT',
       'guyana': 'GY',
@@ -456,154 +542,89 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
       'mexico': 'MX',
       'nicaragua': 'NI',
       'panama': 'PA',
-      'paraguay': 'PY',
-      'peru': 'PE',
       'saint kitts and nevis': 'KN',
       'saint lucia': 'LC',
-      'saint vincent': 'VC',
+      'saint vincent and the grenadines': 'VC',
       'suriname': 'SR',
       'trinidad and tobago': 'TT',
-      'united states': 'US',
-      'unitedstates': 'US',
       'usa': 'US',
-      'uruguay': 'UY',
-      'venezuela': 'VE',
+      'us': 'US',
+      'united states': 'US',
       
-      // Asian countries
-      'afghanistan': 'AF',
-      'bahrain': 'BH',
-      'bangladesh': 'BD',
-      'bhutan': 'BT',
-      'brunei': 'BN',
-      'cambodia': 'KH',
-      'china': 'CN',
-      'india': 'IN',
-      'indonesia': 'ID',
-      'iran': 'IR',
-      'iraq': 'IQ',
-      'israel': 'IL',
-      'japan': 'JP',
-      'jordan': 'JO',
-      'kuwait': 'KW',
-      'kyrgyzstan': 'KG',
-      'laos': 'LA',
-      'lebanon': 'LB',
-      'malaysia': 'MY',
-      'maldives': 'MV',
-      'mongolia': 'MN',
-      'myanmar': 'MM',
-      'nepal': 'NP',
-      'north korea': 'KP',
-      'northkorea': 'KP',
-      'oman': 'OM',
-      'pakistan': 'PK',
-      'palestine': 'PS',
-      'philippines': 'PH',
-      'qatar': 'QA',
-      'saudi arabia': 'SA',
-      'saudiarabia': 'SA',
-      'singapore': 'SG',
-      'south korea': 'KR',
-      'southkorea': 'KR',
-      'sri lanka': 'LK',
-      'srilanka': 'LK',
-      'syria': 'SY',
-      'taiwan': 'TW',
-      'tajikistan': 'TJ',
-      'thailand': 'TH',
-      'timor leste': 'TL',
-      'timorleste': 'TL',
-      'east timor': 'TL',
-      'easttimor': 'TL',
-      'turkmenistan': 'TM',
-      'united arab emirates': 'AE',
-      'unitedarabemirates': 'AE',
-      'uae': 'AE',
-      'uzbekistan': 'UZ',
-      'vietnam': 'VN',
-      'yemen': 'YE',
-      
-      // Oceania
+      // Oceanian countries
       'australia': 'AU',
       'fiji': 'FJ',
       'kiribati': 'KI',
       'marshall islands': 'MH',
-      'marshallislands': 'MH',
       'micronesia': 'FM',
       'nauru': 'NR',
       'new zealand': 'NZ',
-      'newzealand': 'NZ',
       'palau': 'PW',
       'papua new guinea': 'PG',
-      'papuanewguinea': 'PG',
       'samoa': 'WS',
       'solomon islands': 'SB',
-      'solomonislands': 'SB',
       'tonga': 'TO',
       'tuvalu': 'TV',
-      'vanuatu': 'VU'
+      'vanuatu': 'VU',
+      
+      // South American countries
+      'argentina': 'AR',
+      'bolivia': 'BO',
+      'brazil': 'BR',
+      'chile': 'CL',
+      'colombia': 'CO',
+      'ecuador': 'EC',
+      'paraguay': 'PY',
+      'peru': 'PE',
+      'uruguay': 'UY',
+      'venezuela': 'VE'
     };
     
-    // Try to find the country code - try multiple variations
-    const code = countryCodeMap[normalizedName] || 
-                countryCodeMap[normalizedName.replace(/\s/g, '')] || // Try without spaces
-                'XX'; // XX for unknown
-    
-    // Log country code mapping issues to help with troubleshooting
-    if (code === 'XX' && countryName && countryName !== 'Unknown') {
-      // Silently handle missing country codes
-    }
-    
-    return code;
+    // Look up the country code
+    return countryCodeMap[normalizedName] || 'UNKNOWN';
   };
   
   if (isLoading) {
     return (
-      <div className="h-48 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
+      <div className="flex flex-col items-center justify-center min-h-[400px]">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900 dark:border-gray-100 mb-2"></div>
+        <p className="text-gray-800 dark:text-gray-300">Loading matches...</p>
       </div>
     );
   }
   
-  if (events.length === 0 || filteredEvents.length === 0) {
+  if (filteredEvents.length === 0) {
     return (
-      <div className="h-32 flex items-center justify-center bg-white dark:bg-slate-800 rounded-lg shadow-sm">
-        <p className="text-gray-500 dark:text-gray-400">
-          {events.length === 0 ? "No events found" : 
-           isTop5LeaguesActive ? "No Top 5 Leagues events found" : "No events found"}
+      <div className="flex flex-col items-center justify-center min-h-[300px]">
+        <div className="text-gray-500 dark:text-gray-400 mb-2">
+          <Trophy className="w-12 h-12 mx-auto mb-2" />
+          <p className="text-center">No matches found</p>
+        </div>
+        <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
+          Try a different filter or check back later
         </p>
       </div>
     );
   }
-
+  
   return (
-    <div className={cn("overflow-x-auto bg-white dark:bg-slate-800 rounded-b-lg shadow", className)}>
-      {isTop5LeaguesActive && (
-        <div className="p-2 bg-blue-50 dark:bg-blue-900/20 text-sm border-b border-gray-200 dark:border-gray-700">
-          <span className="font-medium text-blue-700 dark:text-blue-400">
-            Top 5 Leagues Filter: 
-          </span>
-          <span className="text-gray-700 dark:text-gray-300 ml-1">
-            Showing {filteredEvents.length} events from England Premier League, Spain La Liga, Germany Bundesliga, Italy Serie A, and France Ligue 1
-          </span>
-        </div>
-      )}
-      <Table className="w-full border-collapse">
-        <TableHeader className="bg-gray-100 dark:bg-slate-700/50">
-          <TableRow className="border-b border-gray-200 dark:border-gray-700">
+    <div className={cn("overflow-auto", className)}>
+      <Table className="border border-gray-200 dark:border-gray-700">
+        <TableHeader className="bg-gray-50 dark:bg-slate-800 sticky top-0 z-10">
+          <TableRow>
             <TableHead className="w-24 px-2 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               <div className="flex items-center">
                 <Globe className="w-3 h-3 mr-1" />
                 Country
               </div>
             </TableHead>
-            <TableHead className="w-28 px-2 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+            <TableHead className="w-36 px-2 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               <div className="flex items-center">
                 <Trophy className="w-3 h-3 mr-1" />
                 Tournament
               </div>
             </TableHead>
-            <TableHead className="w-24 px-2 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+            <TableHead className="w-20 px-2 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
               <div className="flex items-center">
                 <Clock className="w-3 h-3 mr-1" />
                 Start
@@ -628,18 +649,20 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
               Away
             </TableHead>
             <TableHead className="w-20 px-2 py-2 text-center text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
-              Margin
+              Margin %
             </TableHead>
+            {/* Only show comparison column if we have the right bookmaker combination */}
             {isComparisonAvailable && (
               <TableHead className="w-20 px-2 py-2 text-center text-sm font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
-                Fav. Odds Δ%
+                Fav Diff %
               </TableHead>
             )}
           </TableRow>
         </TableHeader>
         
         <TableBody>
-          {filteredEvents.map((event, eventIndex) => (
+          {/* Only render the visible portion of events */}
+          {filteredEvents.slice(0, visibleItemsCount).map((event, eventIndex) => (
             // Map each event
             filteredBookmakers.map((bookmaker, bookmakerIndex) => {
               const isFirstBookmaker = bookmakerIndex === 0;
@@ -858,63 +881,35 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                                 eventName: event.teams,
                                 isOpen: true
                               })}
-                              className={`text-sm font-medium px-2 py-1 rounded bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 ${marginColorClass} cursor-pointer transition-colors duration-150 ease-in-out`}
+                              className={`hover:underline text-sm font-medium ${marginColorClass}`}
                             >
                               {marginPercentage}%
                             </button>
                           );
                         }
                         
-                        return (
-                          <span className="text-sm font-medium px-1 py-0.5 rounded bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300">
-                            {marginPercentage !== '-' ? `${marginPercentage}%` : '-'}
-                          </span>
-                        );
+                        return <span className={`text-sm font-medium ${marginColorClass}`}>{marginPercentage}%</span>;
                       })()}
                     </TableCell>
                     
                     {isComparisonAvailable && (
-                      <TableCell 
-                        className="px-2 py-1 whitespace-nowrap text-center" 
-                        rowSpan={filteredBookmakers.length}
-                        style={{ display: isFirstBookmaker ? 'table-cell' : 'none' }}
-                      >
+                      <TableCell className="px-2 py-1 whitespace-nowrap text-center">
                         {(() => {
-                          // Calculation happens in first row only
-                          const { comparison, isBetter, favorite } = calculateFavoriteComparison(event);
+                          const { comparison, isBetter } = calculateFavoriteComparison(event);
                           
-                          if (comparison === null) {
-                            return (
-                              <span className="text-sm font-medium px-1 py-0.5 rounded bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300">
-                                -
-                              </span>
-                            );
-                          }
+                          if (comparison === null) return <span className="text-sm">-</span>;
                           
-                          // Format the comparison percentage with sign and 2 decimal places
-                          const formattedComparison = comparison.toFixed(2);
-                          const displayValue = `${formattedComparison}%`;
+                          let comparisonText = comparison.toFixed(2);
+                          let colorClass = isBetter
+                            ? 'text-green-600 dark:text-green-400'
+                            : 'text-red-600 dark:text-red-400';
                           
-                          // Check if the comparison is effectively zero (accounting for floating point rounding)
-                          const isEffectivelyZero = Math.abs(comparison) < 0.005;
-                          
-                          if (isEffectivelyZero) {
-                            return (
-                              <span className="text-sm font-medium px-1 py-0.5 rounded bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300 flex items-center justify-center">
-                                {displayValue}
-                              </span>
-                            );
-                          }
-                          
-                          // No icon, just color coding
                           return (
-                            <span className={cn(
-                              "text-sm font-medium px-1 py-0.5 rounded flex items-center justify-center",
-                              isBetter
-                                ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300" 
-                                : "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300"
-                            )}>
-                              {displayValue}
+                            <span className={`text-sm font-medium ${colorClass}`}>
+                              {isBetter ? '+' : ''}{comparisonText}%
+                              {isBetter 
+                                ? <ArrowUpIcon className="inline-block w-3 h-3 ml-0.5" /> 
+                                : <ArrowDownIcon className="inline-block w-3 h-3 ml-0.5" />}
                             </span>
                           );
                         })()}
@@ -922,29 +917,44 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                     )}
                   </TableRow>
                 );
-              })
+              }
             ))
-          }
+          )}
         </TableBody>
       </Table>
       
+      {/* Loading indicator for infinite scroll */}
+      {visibleItemsCount < filteredEvents.length && (
+        <div 
+          ref={loaderRef}
+          className="flex justify-center items-center py-4"
+        >
+          {isLoadingMore ? (
+            <div className="flex items-center">
+              <Loader2 className="h-6 w-6 animate-spin text-gray-500 mr-2" />
+              <span className="text-sm text-gray-500">Loading more events...</span>
+            </div>
+          ) : (
+            <div className="h-8 w-full" />
+          )}
+        </div>
+      )}
+      
       {/* Render the MarginHistoryPopup */}
       <MarginHistoryPopup
-        isOpen={selectedEvent.isOpen}
-        onClose={() => setSelectedEvent(prev => ({ ...prev, isOpen: false }))}
         eventId={selectedEvent.eventId}
         eventName={selectedEvent.eventName}
-        bookmakers={selectedBookmakers}
+        isOpen={selectedEvent.isOpen}
+        onClose={() => setSelectedEvent(prev => ({ ...prev, isOpen: false }))}
       />
       
       {/* Render the OddsHistoryPopup */}
       <OddsHistoryPopup
-        isOpen={oddsHistoryPopup.isOpen}
-        onClose={() => setOddsHistoryPopup(prev => ({ ...prev, isOpen: false }))}
         eventId={oddsHistoryPopup.eventId}
         eventName={oddsHistoryPopup.eventName}
-        bookmakers={selectedBookmakers}
         oddsType={oddsHistoryPopup.oddsType}
+        isOpen={oddsHistoryPopup.isOpen}
+        onClose={() => setOddsHistoryPopup(prev => ({ ...prev, isOpen: false }))}
       />
     </div>
   );
