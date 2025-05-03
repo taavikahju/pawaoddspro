@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table";
 import { useBookmakerContext } from '@/contexts/BookmakerContext';
 import { cn } from '@/lib/utils';
-import { ArrowDownIcon, ArrowUpIcon, Clock, Globe, Trophy, Loader2 } from 'lucide-react';
+import { ArrowDownIcon, ArrowUpIcon, Clock, Globe, Trophy, Loader2, X } from 'lucide-react';
 import MarginHistoryPopup from './MarginHistoryPopup';
 import OddsHistoryPopup from './OddsHistoryPopup';
 import CountryFlag from './CountryFlag';
