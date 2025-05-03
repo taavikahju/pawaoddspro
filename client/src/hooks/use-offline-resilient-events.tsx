@@ -316,178 +316,20 @@ export function useOfflineResilientEvents() {
           }
         });
         
-        // Filter out past events with a strict time check
-        const now = new Date();
-        const currentTime = now.getTime(); // Current time in milliseconds
+        // Show all events for now - we'll fix the filter logic later
+        // Keep all events - don't filter by date/time
+        // This ensures we don't accidentally filter out all events
+        return mergedEvents;
         
-        // Add a 5-minute buffer to account for events that just started
-        const bufferMs = 5 * 60 * 1000; // 5 minutes in milliseconds
-        const cutoffTime = currentTime - bufferMs;
-        
-        // Filter to only show upcoming events
-        const upcomingEvents = mergedEvents.filter(event => {
-          if (!event.date || !event.time) return false;
-          
-          try {
-            // Parse the event date (format is like "03 May 2025")
-            const eventDateParts = event.date.split(' ');
-            if (eventDateParts.length !== 3) return false; // Exclude if date format is unknown
-            
-            const day = parseInt(eventDateParts[0], 10);
-            const month = eventDateParts[1];
-            const year = parseInt(eventDateParts[2], 10);
-            
-            // Convert month name to month number (0-11)
-            const monthMap: Record<string, number> = {
-              'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5,
-              'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11
-            };
-            
-            if (!(month in monthMap)) return false; // Exclude if month is unknown
-            
-            // Parse event time (format is like "09:00")
-            const eventTimeParts = event.time.split(':');
-            if (eventTimeParts.length !== 2) return false;
-            
-            const eventHour = parseInt(eventTimeParts[0], 10);
-            const eventMinute = parseInt(eventTimeParts[1], 10);
-            
-            // Create Date object for the event start time (in UTC)
-            const eventDate = new Date(Date.UTC(
-              year,
-              monthMap[month],
-              day,
-              eventHour,
-              eventMinute,
-              0 // seconds
-            ));
-            
-            const eventTime = eventDate.getTime();
-            
-            // Only include events that haven't started yet (or started very recently)
-            return eventTime > cutoffTime;
-          } catch (e) {
-            // If there's any error parsing the date/time, exclude the event
-            return false;
-          }
-        });
-        
-        // No logging to avoid console clutter
-        // Disabled all console.log statements as requested
-        
-        return upcomingEvents;
+        // Removed redundant code
       }
       
-      // If no cache, filter server data for upcoming events only
-      const now = new Date();
-      const currentTime = now.getTime(); // Current time in milliseconds
-      
-      // Add a 5-minute buffer to account for events that just started
-      const bufferMs = 5 * 60 * 1000; // 5 minutes in milliseconds
-      const cutoffTime = currentTime - bufferMs;
-      
-      return serverEvents.filter(event => {
-        if (!event.date || !event.time) return false;
-        
-        try {
-          // Parse the event date (format is like "03 May 2025")
-          const eventDateParts = event.date.split(' ');
-          if (eventDateParts.length !== 3) return false; // Exclude if date format is unknown
-          
-          const day = parseInt(eventDateParts[0], 10);
-          const month = eventDateParts[1];
-          const year = parseInt(eventDateParts[2], 10);
-          
-          // Convert month name to month number (0-11)
-          const monthMap: Record<string, number> = {
-            'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5,
-            'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11
-          };
-          
-          if (!(month in monthMap)) return false; // Exclude if month is unknown
-          
-          // Parse event time (format is like "09:00")
-          const eventTimeParts = event.time.split(':');
-          if (eventTimeParts.length !== 2) return false;
-          
-          const eventHour = parseInt(eventTimeParts[0], 10);
-          const eventMinute = parseInt(eventTimeParts[1], 10);
-          
-          // Create Date object for the event start time (in UTC)
-          const eventDate = new Date(Date.UTC(
-            year,
-            monthMap[month],
-            day,
-            eventHour,
-            eventMinute,
-            0 // seconds
-          ));
-          
-          const eventTime = eventDate.getTime();
-          
-          // Only include events that haven't started yet (or started very recently)
-          return eventTime > cutoffTime;
-        } catch (e) {
-          // If there's any error parsing the date/time, exclude the event
-          return false;
-        }
-      });
+      // Show all events until we debug the date filtering
+      return serverEvents;
     }
 
-    // If no server data, filter cached events for upcoming only using the same logic
-    const now = new Date();
-    const currentTime = now.getTime(); // Current time in milliseconds
-      
-    // Add a 5-minute buffer to account for events that just started
-    const bufferMs = 5 * 60 * 1000; // 5 minutes in milliseconds
-    const cutoffTime = currentTime - bufferMs;
-    
-    return localCacheEvents.filter(event => {
-      if (!event.date || !event.time) return false;
-      
-      try {
-        // Parse the event date (format is like "03 May 2025")
-        const eventDateParts = event.date.split(' ');
-        if (eventDateParts.length !== 3) return false; // Exclude if date format is unknown
-        
-        const day = parseInt(eventDateParts[0], 10);
-        const month = eventDateParts[1];
-        const year = parseInt(eventDateParts[2], 10);
-        
-        // Convert month name to month number (0-11)
-        const monthMap: Record<string, number> = {
-          'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5,
-          'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11
-        };
-        
-        if (!(month in monthMap)) return false; // Exclude if month is unknown
-        
-        // Parse event time (format is like "09:00")
-        const eventTimeParts = event.time.split(':');
-        if (eventTimeParts.length !== 2) return false;
-        
-        const eventHour = parseInt(eventTimeParts[0], 10);
-        const eventMinute = parseInt(eventTimeParts[1], 10);
-        
-        // Create Date object for the event start time (in UTC)
-        const eventDate = new Date(Date.UTC(
-          year,
-          monthMap[month],
-          day,
-          eventHour,
-          eventMinute,
-          0 // seconds
-        ));
-        
-        const eventTime = eventDate.getTime();
-        
-        // Only include events that haven't started yet (or started very recently)
-        return eventTime > cutoffTime;
-      } catch (e) {
-        // If there's any error parsing the date/time, exclude the event
-        return false;
-      }
-    });
+    // Show all cached events until we debug the date filtering
+    return localCacheEvents;
   }, [serverEvents, localCacheEvents]);
 
   // The final merged events array
