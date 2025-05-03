@@ -1,5 +1,6 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useRealWebSocket } from './use-real-websocket';
 
 // Define a type for the event structure
 interface EventData {
@@ -22,6 +23,10 @@ interface EventData {
 export function useOfflineResilientEvents() {
   const LOCAL_STORAGE_KEY = 'pawaodds_events_cache';
   const [localCacheEvents, setLocalCacheEvents] = useState<EventData[]>([]);
+  const lastUpdateTimestamp = useRef<number>(Date.now());
+  
+  // Get WebSocket updates
+  const { lastMessage } = useRealWebSocket();
   
   // Handler for successful API response
   const handleSuccess = useCallback((data: any) => {
@@ -192,6 +197,66 @@ export function useOfflineResilientEvents() {
       handleError();
     }
   }, [isError, handleError]);
+  
+  // Listen for WebSocket events to trigger immediate updates
+  useEffect(() => {
+    if (lastMessage) {
+      // When a scraper finishes, refresh data immediately
+      if (
+        lastMessage.type === 'scraperFinished' || 
+        lastMessage.type === 'events' || 
+        lastMessage.type === 'scrapeCompleted'
+      ) {
+        // Update timestamp
+        lastUpdateTimestamp.current = Date.now();
+        
+        // Refresh data - this will trigger the React Query refetch
+        const { refetchEvents } = window.queryClient?.getQueriesData(['/api/events']) || {};
+        if (typeof refetchEvents === 'function') {
+          refetchEvents();
+        }
+        
+        // If message contains events data, process it
+        if (lastMessage.type === 'events' && Array.isArray(lastMessage.data)) {
+          // Process in the next event loop
+          setTimeout(() => {
+            try {
+              const eventData = lastMessage.data;
+              
+              // Check if this data has Sportybet odds
+              const sportyEventsCount = eventData.filter((event: EventData) => 
+                event.oddsData && 
+                typeof event.oddsData === 'object' && 
+                'sporty' in event.oddsData
+              ).length;
+              
+              if (sportyEventsCount > 0) {
+                // If it has Sportybet data, update our cache
+                const filteredSportyEvents = eventData.filter((event: EventData) => 
+                  event.oddsData && 
+                  typeof event.oddsData === 'object' && 
+                  'sporty' in event.oddsData
+                );
+                
+                // Store minimal data
+                const minimalSportyCache = filteredSportyEvents.map((event: EventData) => ({
+                  id: event.id,
+                  oddsData: {
+                    sporty: event.oddsData.sporty
+                  }
+                }));
+                
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(minimalSportyCache));
+                setLocalCacheEvents(eventData);
+              }
+            } catch (error) {
+              // Silent error handling
+            }
+          }, 0);
+        }
+      }
+    }
+  }, [lastMessage]);
 
   // Load initial cache from localStorage on component mount - optimized for performance
   useEffect(() => {
@@ -323,6 +388,7 @@ export function useOfflineResilientEvents() {
     isLoading,
     error,
     isError,
-    testResilience
+    testResilience,
+    lastUpdateTime: lastUpdateTimestamp.current
   };
 }

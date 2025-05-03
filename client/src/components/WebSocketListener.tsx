@@ -24,6 +24,33 @@ export default function WebSocketListener() {
     // No log for disconnection either
   }, [isConnected, toast]);
   
+  // Handle incoming messages, especially scraper completion events
+  useEffect(() => {
+    if (lastMessage) {
+      // Handle individual scraper completion notifications
+      if (lastMessage.type === 'scraperFinished') {
+        const { bookmaker, eventCount } = lastMessage.data;
+        
+        toast({
+          title: `${bookmaker.name} updated`,
+          description: `Refreshed with ${eventCount} events`,
+          variant: 'default'
+        });
+      }
+      
+      // Handle notification messages from the server
+      if (lastMessage.type === 'notification') {
+        const { message, status } = lastMessage.data;
+        
+        toast({
+          title: status === 'error' ? 'Error' : 'Update',
+          description: message,
+          variant: status === 'error' ? 'destructive' : 'default'
+        });
+      }
+    }
+  }, [lastMessage, toast]);
+  
   // The component doesn't render anything
   return null;
 }
