@@ -138,6 +138,7 @@ const TournamentMargins: React.FC = () => {
       'South Korea': 'KR',
       'Republic of Korea': 'KR',
       'China': 'CN',
+      'Hong Kong': 'HK',
       'India': 'IN',
       'Thailand': 'TH',
       'Vietnam': 'VN',
@@ -160,7 +161,6 @@ const TournamentMargins: React.FC = () => {
       'Bahrain': 'BH',
       'Bangladesh': 'BD',
       'Kuwait': 'KW',
-      'Hong Kong': 'HK',
       'Bosnia & Herzegovina': 'BA',
       'Bosnia and Herzegovina': 'BA',
       

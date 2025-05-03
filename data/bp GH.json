@@ -451,9 +451,9 @@
     "date": "2025-05-03",
     "time": "11:00",
     "odds": {
-      "home": 1.75,
-      "draw": 3.45,
-      "away": 4.2
+      "home": 1.76,
+      "draw": 3.5,
+      "away": 4.05
     },
     "raw": {
       "eventId": "51828727",
@@ -461,9 +461,9 @@
       "tournament": "Campionato Primavera 1",
       "event": "Cagliari Calcio U20 - Bologna FC U20",
       "market": "1X2 - FT",
-      "home_odds": "1.75",
-      "draw_odds": "3.45",
-      "away_odds": "4.2",
+      "home_odds": "1.76",
+      "draw_odds": "3.5",
+      "away_odds": "4.05",
       "start_time": "2025-05-03 11:00"
     }
   },
@@ -8017,8 +8017,8 @@
     "date": "2025-05-03",
     "time": "14:00",
     "odds": {
-      "home": 1.1,
-      "draw": 8.25,
+      "home": 1.12,
+      "draw": 7.5,
       "away": 13
     },
     "raw": {
@@ -8027,8 +8027,8 @@
       "tournament": "Kakkonen, Group A",
       "event": "Grankulla IFK - JPS",
       "market": "1X2 - FT",
-      "home_odds": "1.1",
-      "draw_odds": "8.25",
+      "home_odds": "1.12",
+      "draw_odds": "7.5",
       "away_odds": "13.0",
       "start_time": "2025-05-03 14:00"
     }
@@ -12298,32 +12298,6 @@
     }
   },
   {
-    "id": "60190903",
-    "eventId": "60190903",
-    "teams": "Al-Wehdat - Al-Ramtha",
-    "league": "Jordan Pro League",
-    "sport": "football",
-    "country": "Jordan",
-    "date": "2025-05-03",
-    "time": "16:00",
-    "odds": {
-      "home": 1.28,
-      "draw": 4.6,
-      "away": 9.5
-    },
-    "raw": {
-      "eventId": "60190903",
-      "country": "Jordan",
-      "tournament": "Jordan Pro League",
-      "event": "Al-Wehdat - Al-Ramtha",
-      "market": "1X2 - FT",
-      "home_odds": "1.28",
-      "draw_odds": "4.6",
-      "away_odds": "9.5",
-      "start_time": "2025-05-03 16:00"
-    }
-  },
-  {
     "id": "51829981",
     "eventId": "51829981",
     "teams": "CD Arenteiro - Zamora CF",
@@ -12346,6 +12320,32 @@
       "home_odds": "2.2",
       "draw_odds": "3.0",
       "away_odds": "3.15",
+      "start_time": "2025-05-03 16:00"
+    }
+  },
+  {
+    "id": "60190903",
+    "eventId": "60190903",
+    "teams": "Al-Wehdat - Al-Ramtha",
+    "league": "Jordan Pro League",
+    "sport": "football",
+    "country": "Jordan",
+    "date": "2025-05-03",
+    "time": "16:00",
+    "odds": {
+      "home": 1.28,
+      "draw": 4.6,
+      "away": 9.5
+    },
+    "raw": {
+      "eventId": "60190903",
+      "country": "Jordan",
+      "tournament": "Jordan Pro League",
+      "event": "Al-Wehdat - Al-Ramtha",
+      "market": "1X2 - FT",
+      "home_odds": "1.28",
+      "draw_odds": "4.6",
+      "away_odds": "9.5",
       "start_time": "2025-05-03 16:00"
     }
   },
@@ -15869,9 +15869,9 @@
     "date": "2025-05-03",
     "time": "21:30",
     "odds": {
-      "home": 4.55,
-      "draw": 3.4,
-      "away": 1.7
+      "home": 4.75,
+      "draw": 3.45,
+      "away": 1.66
     },
     "raw": {
       "eventId": "57223069",
@@ -15879,9 +15879,9 @@
       "tournament": "Primera Division, Clausura",
       "event": "Once Deportivo de Ahuachapan - Alianza FC San Salvador",
       "market": "1X2 - FT",
-      "home_odds": "4.55",
-      "draw_odds": "3.4",
-      "away_odds": "1.7",
+      "home_odds": "4.75",
+      "draw_odds": "3.45",
+      "away_odds": "1.66",
       "start_time": "2025-05-03 21:30"
     }
   },
@@ -17377,9 +17377,9 @@
     "date": "2025-05-04",
     "time": "02:00",
     "odds": {
-      "home": 1.77,
+      "home": 1.79,
       "draw": 3.45,
-      "away": 4.05
+      "away": 3.95
     },
     "raw": {
       "eventId": "57055339",
@@ -17387,9 +17387,9 @@
       "tournament": "Primera Division, Clausura",
       "event": "CS Herediano - Puntarenas FC",
       "market": "1X2 - FT",
-      "home_odds": "1.77",
+      "home_odds": "1.79",
       "draw_odds": "3.45",
-      "away_odds": "4.05",
+      "away_odds": "3.95",
       "start_time": "2025-05-04 02:00"
     }
   },
@@ -30741,9 +30741,9 @@
     "date": "2025-05-05",
     "time": "19:00",
     "odds": {
-      "home": 2.4,
+      "home": 2.35,
       "draw": 3.5,
-      "away": 3.15
+      "away": 3.2
     },
     "raw": {
       "eventId": "50850665",
@@ -30751,9 +30751,9 @@
       "tournament": "Premier League",
       "event": "Crystal Palace - Nottingham Forest",
       "market": "1X2 - FT",
-      "home_odds": "2.4",
+      "home_odds": "2.35",
       "draw_odds": "3.5",
-      "away_odds": "3.15",
+      "away_odds": "3.2",
       "start_time": "2025-05-05 19:00"
     }
   },
@@ -31382,6 +31382,32 @@
     }
   },
   {
+    "id": "57130697",
+    "eventId": "57130697",
+    "teams": "Jeonbuk FC - Daejeon Citizen FC",
+    "league": "K-League 1",
+    "sport": "football",
+    "country": "Republic of Korea",
+    "date": "2025-05-06",
+    "time": "05:00",
+    "odds": {
+      "home": 2.1,
+      "draw": 3.55,
+      "away": 3.3
+    },
+    "raw": {
+      "eventId": "57130697",
+      "country": "Republic of Korea",
+      "tournament": "K-League 1",
+      "event": "Jeonbuk FC - Daejeon Citizen FC",
+      "market": "1X2 - FT",
+      "home_odds": "2.1",
+      "draw_odds": "3.55",
+      "away_odds": "3.3",
+      "start_time": "2025-05-06 05:00"
+    }
+  },
+  {
     "id": "57584811",
     "eventId": "57584811",
     "teams": "Ehime FC - Iwaki FC",
@@ -31587,6 +31613,84 @@
       "draw_odds": "2.85",
       "away_odds": "3.3",
       "start_time": "2025-05-06 07:00"
+    }
+  },
+  {
+    "id": "57130699",
+    "eventId": "57130699",
+    "teams": "Jeju SK FC - Gangwon FC",
+    "league": "K-League 1",
+    "sport": "football",
+    "country": "Republic of Korea",
+    "date": "2025-05-06",
+    "time": "07:30",
+    "odds": {
+      "home": 2.35,
+      "draw": 3.45,
+      "away": 2.9
+    },
+    "raw": {
+      "eventId": "57130699",
+      "country": "Republic of Korea",
+      "tournament": "K-League 1",
+      "event": "Jeju SK FC - Gangwon FC",
+      "market": "1X2 - FT",
+      "home_odds": "2.35",
+      "draw_odds": "3.45",
+      "away_odds": "2.9",
+      "start_time": "2025-05-06 07:30"
+    }
+  },
+  {
+    "id": "57130703",
+    "eventId": "57130703",
+    "teams": "Suwon FC - Daegu FC",
+    "league": "K-League 1",
+    "sport": "football",
+    "country": "Republic of Korea",
+    "date": "2025-05-06",
+    "time": "10:00",
+    "odds": {
+      "home": 2.35,
+      "draw": 3.6,
+      "away": 2.8
+    },
+    "raw": {
+      "eventId": "57130703",
+      "country": "Republic of Korea",
+      "tournament": "K-League 1",
+      "event": "Suwon FC - Daegu FC",
+      "market": "1X2 - FT",
+      "home_odds": "2.35",
+      "draw_odds": "3.6",
+      "away_odds": "2.8",
+      "start_time": "2025-05-06 10:00"
+    }
+  },
+  {
+    "id": "57130701",
+    "eventId": "57130701",
+    "teams": "FC Anyang - FC Seoul",
+    "league": "K-League 1",
+    "sport": "football",
+    "country": "Republic of Korea",
+    "date": "2025-05-06",
+    "time": "10:00",
+    "odds": {
+      "home": 4.4,
+      "draw": 3.7,
+      "away": 1.77
+    },
+    "raw": {
+      "eventId": "57130701",
+      "country": "Republic of Korea",
+      "tournament": "K-League 1",
+      "event": "FC Anyang - FC Seoul",
+      "market": "1X2 - FT",
+      "home_odds": "4.4",
+      "draw_odds": "3.7",
+      "away_odds": "1.77",
+      "start_time": "2025-05-06 10:00"
     }
   },
   {
@@ -36721,9 +36825,9 @@
     "date": "2025-05-20",
     "time": "22:00",
     "odds": {
-      "home": 1.39,
-      "draw": 4.15,
-      "away": 7
+      "home": 1.37,
+      "draw": 4.25,
+      "away": 7.25
     },
     "raw": {
       "eventId": "59752752",
@@ -36731,9 +36835,9 @@
       "tournament": "Copa do Brasil",
       "event": "CR Vasco da Gama RJ - Operario Ferroviario EC PR",
       "market": "1X2 - FT",
-      "home_odds": "1.39",
-      "draw_odds": "4.15",
-      "away_odds": "7.0",
+      "home_odds": "1.37",
+      "draw_odds": "4.25",
+      "away_odds": "7.25",
       "start_time": "2025-05-20 22:00"
     }
   },
