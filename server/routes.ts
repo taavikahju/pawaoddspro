@@ -1752,7 +1752,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     const currentTime = new Date().toISOString();
     
     // Get info about the last scraper run from our global variables
-    const lastScraperRunTime = global.lastScraperRunTime || 'No record';
+    const lastScraperRunTime = (global as any).lastScraperRunTime || 'No record';
+    
+    // Log the request with user agent to help identify UptimeRobot requests
+    console.log(`[${currentTime}] Health check ping received - User-Agent: ${req.headers['user-agent'] || 'Unknown'}`);
     
     // Return a simple health check response
     res.status(200).json({
