@@ -13,6 +13,7 @@ import { ArrowDownIcon, ArrowUpIcon, Clock, Globe, Trophy, Loader2 } from 'lucid
 import MarginHistoryPopup from './MarginHistoryPopup';
 import OddsHistoryPopup from './OddsHistoryPopup';
 import CountryFlag from './CountryFlag';
+import { useLatestSportybetOdds } from '@/hooks/use-latest-sportybet-odds';
 
 interface OddsTableProps {
   events: any[];
@@ -99,12 +100,35 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
       .filter(b => selectedBookmakers.includes(b.code));
   }, [bookmakers, selectedBookmakers]);
   
-  // Filter events for Top 5 Leagues if that filter is active
-  const filteredEvents = useMemo(() => {
-    if (isTop5LeaguesActive) {
-      return events.filter(isEventInTop5Leagues);
+  // Function to check if an event is not outdated
+  const isEventUpcoming = (event: any): boolean => {
+    try {
+      // Get the event date in the format YYYY-MM-DD
+      const eventDate = event.date;
+      if (!eventDate) return true; // If no date, include by default
+      
+      // Calculate today's date in the same format
+      const today = new Date();
+      const todayFormatted = today.toISOString().split('T')[0]; // YYYY-MM-DD
+      
+      // Only include events that are today or in the future
+      return eventDate >= todayFormatted;
+    } catch (error) {
+      console.error('Error checking event date:', error);
+      return true; // Include by default on error
     }
-    return events;
+  };
+  
+  // Filter events for Top 5 Leagues if that filter is active and remove outdated events
+  const filteredEvents = useMemo(() => {
+    // First filter out outdated events (matches from yesterday, etc.)
+    const upcomingEvents = events.filter(isEventUpcoming);
+    
+    // Then apply Top 5 Leagues filter if active
+    if (isTop5LeaguesActive) {
+      return upcomingEvents.filter(isEventInTop5Leagues);
+    }
+    return upcomingEvents;
   }, [events, isTop5LeaguesActive]);
   
   // Pagination state
