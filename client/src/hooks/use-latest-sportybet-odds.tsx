@@ -65,13 +65,15 @@ export function useLatestSportybetOdds(eventId: string) {
     }
   }, [eventId]);
   
-  // Use React Query to cache the results
+  // Use React Query to fetch the results with minimal caching 
   const { data, isLoading, error } = useQuery({
     queryKey: ['latestSportybetOdds', eventId],
     queryFn: fetchLatestOdds,
     enabled: !!eventId, // Only run if we have an event ID
-    staleTime: 60000, // Cache for 1 minute
-    refetchOnWindowFocus: false
+    staleTime: 1000, // Cache for just 1 second to ensure fresh data
+    gcTime: 5000, // Only keep in cache for 5 seconds (renamed from cacheTime in v5)
+    refetchOnWindowFocus: true, // Refetch when window gains focus
+    refetchOnMount: true // Always refetch when component mounts
   });
   
   return {

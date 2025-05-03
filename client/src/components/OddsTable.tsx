@@ -47,9 +47,15 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
     // 4. Italy Serie A (men's only, not women's)
     // 5. Spain La Liga (top division only, not La Liga 2)
     
-    if (!event.country && !event.tournament) {
+    // Debug what data structure we're getting
+    const hasCountry = !!event.country;
+    const hasTournament = !!event.tournament;
+    const hasLeague = !!event.league;
+    
+    // If no structured tournament data, try legacy format
+    if (!hasCountry && !hasTournament) {
       // Try to extract from legacy league format
-      if (event.league) {
+      if (hasLeague) {
         const leagueInfo = event.league.toLowerCase();
         
         // Exclude women's leagues and lower divisions
@@ -60,13 +66,21 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
           return false;
         }
         
-        return (
+        // Check for top leagues in legacy format
+        const isTop5 = (
           (leagueInfo.includes('england') && leagueInfo.includes('premier league')) ||
           (leagueInfo.includes('spain') && (leagueInfo.includes('laliga') || leagueInfo.includes('la liga'))) ||
           (leagueInfo.includes('germany') && leagueInfo.includes('bundesliga')) ||
           (leagueInfo.includes('italy') && leagueInfo.includes('serie a')) ||
           (leagueInfo.includes('france') && leagueInfo.includes('ligue 1'))
         );
+        
+        // Debug matches
+        if (isTop5) {
+          console.log("Found Top 5 league event with legacy format:", event.league);
+        }
+        
+        return isTop5;
       }
       return false;
     }
@@ -74,6 +88,9 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
     // If we have structured country and tournament data
     const country = (event.country || '').toLowerCase();
     const tournament = (event.tournament || '').toLowerCase();
+    
+    // Debug filtering
+    // console.log(`Checking: ${country} - ${tournament}`);
     
     // Exclude women's leagues and lower divisions
     if (tournament.includes('women') || 
@@ -83,13 +100,21 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
       return false;
     }
     
-    return (
+    // Check if this is a top 5 league
+    const isTop5 = (
       (country === 'england' && tournament.includes('premier league')) ||
       (country === 'spain' && (tournament.includes('laliga') || tournament.includes('la liga'))) ||
       (country === 'germany' && tournament.includes('bundesliga')) ||
       (country === 'italy' && tournament.includes('serie a')) ||
       (country === 'france' && tournament.includes('ligue 1'))
     );
+    
+    // Log matches for debugging
+    if (isTop5) {
+      console.log(`Found Top 5 league match: ${country} - ${tournament}`);
+    }
+    
+    return isTop5;
   };
   
   // Sort bookmakers by ID for consistent order, then filter to selected ones
