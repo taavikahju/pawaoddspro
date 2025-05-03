@@ -21,7 +21,7 @@ interface OddsTableProps {
 }
 
 export default function OddsTable({ events, isLoading, className }: OddsTableProps) {
-  const { bookmakers, selectedBookmakers, isTop5LeaguesActive } = useBookmakerContext();
+  const { bookmakers, selectedBookmakers, isTop5LeaguesActive, toggleTop5LeaguesFilter } = useBookmakerContext();
   
   // State for margin history popup
   const [selectedEvent, setSelectedEvent] = useState<{
@@ -668,6 +668,25 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
   
   return (
     <div className={cn("overflow-auto", className)}>
+      {/* Notification banner for Top 5 Leagues filter */}
+      {isTop5LeaguesActive && (
+        <div className="bg-blue-50 border border-blue-200 text-blue-700 dark:bg-blue-900/30 dark:border-blue-800 dark:text-blue-300 px-3 py-2 mb-2 rounded-md flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <Trophy className="h-4 w-4" />
+            <span className="text-sm font-medium">Top 5 Leagues filter active</span>
+            <span className="bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-200 text-xs font-medium px-2 py-0.5 rounded-full">
+              {filteredEvents.length} events
+            </span>
+          </div>
+          <button 
+            onClick={() => toggleTop5LeaguesFilter()}
+            className="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 focus:outline-none"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+      )}
+      
       <Table className="border border-gray-200 dark:border-gray-700">
         <TableHeader className="bg-gray-50 dark:bg-slate-800 sticky top-0 z-10">
           <TableRow>
