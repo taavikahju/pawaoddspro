@@ -7,6 +7,7 @@ import { setupVite, serveStatic, log } from "./vite";
 import { storage } from "./storage";
 import * as fs from 'fs';
 import * as path from 'path';
+import { startKeepalive } from './keepalive';
 
 // Load environment variables from .env file if it exists
 try {
@@ -107,5 +108,14 @@ app.use((req, res, next) => {
     reusePort: true,
   }, () => {
     log(`serving on port ${port}`);
+    
+    // Start internal keepalive service
+    startKeepalive();
+    
+    // Log details about keepalive mechanisms
+    log('Server keepalive mechanisms:');
+    log('1. Internal self-pinging every 5 minutes');
+    log('2. /ping endpoint for UptimeRobot');
+    log('3. Replit "Always On" setting for persistent hosting');
   });
 })();
