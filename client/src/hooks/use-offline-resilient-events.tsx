@@ -316,20 +316,167 @@ export function useOfflineResilientEvents() {
           }
         });
         
+        // Filter out past events
+        const now = new Date();
+        const today = now.toISOString().split('T')[0]; // YYYY-MM-DD format
+        const currentHour = now.getUTCHours();
+        const currentMinute = now.getUTCMinutes();
+        
+        // Filter to only show upcoming events
+        const upcomingEvents = mergedEvents.filter(event => {
+          if (!event.date) return false;
+          
+          // Parse the event date (format is like "03 May 2025")
+          const eventDateParts = event.date.split(' ');
+          if (eventDateParts.length !== 3) return true; // Keep if date format is unknown
+          
+          const day = eventDateParts[0];
+          const month = eventDateParts[1];
+          const year = eventDateParts[2];
+          
+          // Convert month name to number
+          const monthMap: Record<string, string> = {
+            'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04', 'May': '05', 'Jun': '06',
+            'Jul': '07', 'Aug': '08', 'Sep': '09', 'Oct': '10', 'Nov': '11', 'Dec': '12'
+          };
+          
+          const monthNum = monthMap[month];
+          if (!monthNum) return true; // Keep if month format is unknown
+          
+          // Format as YYYY-MM-DD for comparison
+          const eventDateISO = `${year}-${monthNum}-${day.padStart(2, '0')}`;
+          
+          // If event date is in the future, include it
+          if (eventDateISO > today) return true;
+          
+          // If event date is today, check the time
+          if (eventDateISO === today && event.time) {
+            const eventTimeParts = event.time.split(':');
+            if (eventTimeParts.length === 2) {
+              const eventHour = parseInt(eventTimeParts[0], 10);
+              const eventMinute = parseInt(eventTimeParts[1], 10);
+              
+              // Include if event time is in the future
+              return (eventHour > currentHour || 
+                (eventHour === currentHour && eventMinute > currentMinute));
+            }
+          }
+          
+          // Otherwise exclude (past event)
+          return false;
+        });
+        
+        // Log how many events we kept based on the upcoming filter
+        if (upcomingEvents.length < mergedEvents.length) {
+          console.log(`[${new Date().toISOString()}] Filtered out ${mergedEvents.length - upcomingEvents.length} past events, showing ${upcomingEvents.length} upcoming events`);
+        }
+        
         // Log only if we used cached data (for troubleshooting)
         if (usedCachedCount > 0) {
           console.log(`[${new Date().toISOString()}] Used cached Sportybet odds for ${usedCachedCount} events where server data was missing`);
         }
         
-        return mergedEvents;
+        return upcomingEvents;
       }
       
-      // If no cache, use server data directly
-      return serverEvents;
+      // If no cache, filter server data for upcoming events only
+      const now = new Date();
+      const today = now.toISOString().split('T')[0]; // YYYY-MM-DD format
+      const currentHour = now.getUTCHours();
+      const currentMinute = now.getUTCMinutes();
+      
+      return serverEvents.filter(event => {
+        if (!event.date) return false;
+        
+        // Parse the event date (format is like "03 May 2025")
+        const eventDateParts = event.date.split(' ');
+        if (eventDateParts.length !== 3) return true; // Keep if date format is unknown
+        
+        const day = eventDateParts[0];
+        const month = eventDateParts[1];
+        const year = eventDateParts[2];
+        
+        // Convert month name to number
+        const monthMap: Record<string, string> = {
+          'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04', 'May': '05', 'Jun': '06',
+          'Jul': '07', 'Aug': '08', 'Sep': '09', 'Oct': '10', 'Nov': '11', 'Dec': '12'
+        };
+        
+        const monthNum = monthMap[month];
+        if (!monthNum) return true; // Keep if month format is unknown
+        
+        // Format as YYYY-MM-DD for comparison
+        const eventDateISO = `${year}-${monthNum}-${day.padStart(2, '0')}`;
+        
+        // If event date is in the future, include it
+        if (eventDateISO > today) return true;
+        
+        // If event date is today, check the time
+        if (eventDateISO === today && event.time) {
+          const eventTimeParts = event.time.split(':');
+          if (eventTimeParts.length === 2) {
+            const eventHour = parseInt(eventTimeParts[0], 10);
+            const eventMinute = parseInt(eventTimeParts[1], 10);
+            
+            // Include if event time is in the future
+            return (eventHour > currentHour || 
+              (eventHour === currentHour && eventMinute > currentMinute));
+          }
+        }
+        
+        // Otherwise exclude (past event)
+        return false;
+      });
     }
 
-    // If no server data, use cached events
-    return localCacheEvents;
+    // If no server data, filter cached events for upcoming only
+    const now = new Date();
+    const today = now.toISOString().split('T')[0]; // YYYY-MM-DD format
+    const currentHour = now.getUTCHours();
+    const currentMinute = now.getUTCMinutes();
+    
+    return localCacheEvents.filter(event => {
+      if (!event.date) return false;
+      
+      // Parse the event date (format is like "03 May 2025")
+      const eventDateParts = event.date.split(' ');
+      if (eventDateParts.length !== 3) return true; // Keep if date format is unknown
+      
+      const day = eventDateParts[0];
+      const month = eventDateParts[1];
+      const year = eventDateParts[2];
+      
+      // Convert month name to number
+      const monthMap: Record<string, string> = {
+        'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04', 'May': '05', 'Jun': '06',
+        'Jul': '07', 'Aug': '08', 'Sep': '09', 'Oct': '10', 'Nov': '11', 'Dec': '12'
+      };
+      
+      const monthNum = monthMap[month];
+      if (!monthNum) return true; // Keep if month format is unknown
+      
+      // Format as YYYY-MM-DD for comparison
+      const eventDateISO = `${year}-${monthNum}-${day.padStart(2, '0')}`;
+      
+      // If event date is in the future, include it
+      if (eventDateISO > today) return true;
+      
+      // If event date is today, check the time
+      if (eventDateISO === today && event.time) {
+        const eventTimeParts = event.time.split(':');
+        if (eventTimeParts.length === 2) {
+          const eventHour = parseInt(eventTimeParts[0], 10);
+          const eventMinute = parseInt(eventTimeParts[1], 10);
+          
+          // Include if event time is in the future
+          return (eventHour > currentHour || 
+            (eventHour === currentHour && eventMinute > currentMinute));
+        }
+      }
+      
+      // Otherwise exclude (past event)
+      return false;
+    });
   }, [serverEvents, localCacheEvents]);
 
   // The final merged events array
