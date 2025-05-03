@@ -25,7 +25,16 @@ export default function Dashboard() {
   const [countryFilter, setCountryFilter] = useState('all');
   const [tournamentFilter, setTournamentFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const { selectedSports, minMarginFilter, maxMarginFilter, selectedBookmakers } = useBookmakerContext();
+  const { 
+    selectedSports, 
+    minMarginFilter, 
+    maxMarginFilter, 
+    selectedBookmakers,
+    refreshData,
+    purgeCache,
+    isRefreshing,
+    isPurging
+  } = useBookmakerContext();
   
   // Available countries and tournaments (will be populated from data)
   const [availableCountries, setAvailableCountries] = useState<string[]>([]);
@@ -621,6 +630,30 @@ export default function Dashboard() {
                 </button>
               )}
             </div>
+            
+            {/* Refresh Data Button */}
+            <Button 
+              variant="outline" 
+              className="h-8 flex items-center px-2 text-xs" 
+              onClick={refreshData}
+              size="sm"
+              disabled={isRefreshing}
+            >
+              <RefreshCw className={`h-3 w-3 mr-1 ${isRefreshing ? 'animate-spin' : ''}`} /> 
+              {isRefreshing ? 'Refreshing...' : 'Refresh'}
+            </Button>
+            
+            {/* Purge Cache Button */}
+            <Button 
+              variant="outline" 
+              className="h-8 flex items-center px-2 text-xs" 
+              onClick={purgeCache}
+              size="sm"
+              disabled={isPurging}
+            >
+              <Database className={`h-3 w-3 mr-1 ${isPurging ? 'animate-pulse' : ''}`} /> 
+              {isPurging ? 'Purging...' : 'Purge Cache'}
+            </Button>
             
             {/* Clear Filters Button */}
             <Button 
