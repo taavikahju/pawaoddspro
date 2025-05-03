@@ -16,7 +16,9 @@ import {
   X,
   GlobeIcon,
   Clock,
-  Search
+  Search,
+  RefreshCw,
+  Database
 } from 'lucide-react';
 
 export default function Dashboard() {
