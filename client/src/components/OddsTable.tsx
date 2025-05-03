@@ -14,6 +14,7 @@ import MarginHistoryPopup from './MarginHistoryPopup';
 import OddsHistoryPopup from './OddsHistoryPopup';
 import CountryFlag from './CountryFlag';
 import { useLatestSportybetOdds } from '@/hooks/use-latest-sportybet-odds';
+import SportybetOdds from './SportybetOdds';
 
 interface OddsTableProps {
   events: any[];
@@ -790,145 +791,236 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
                     </TableCell>
                     
                     <TableCell className="px-2 py-1 whitespace-nowrap text-center border-r border-gray-200 dark:border-gray-700">
-                      <span 
-                        className={cn(
-                          "text-sm font-medium px-1 py-0.5 rounded",
-                          getOddsHighlightType(event, 'home', bookmaker.code) === 'highest' 
-                            ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300" 
-                            : getOddsHighlightType(event, 'home', bookmaker.code) === 'lowest'
-                              ? "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300"
-                              : "bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300"
-                        )}
-                      >
-                        {event.oddsData?.[bookmaker.code]?.home ? (
-                          <button 
-                            className="hover:underline focus:outline-none"
-                            onClick={() => {
-                              // Get event ID with fallback options
-                              const eventId = event.eventId || event.id?.toString() || event.externalId || '';
-                              // Get event name with fallback options
-                              const eventName = event.teams || event.fixture || `Event ${eventId}`;
-                              
-                              console.log('Opening home odds history for event:', {
-                                eventId,
-                                eventName,
-                                event: event
-                              });
-                              
-                              if (!eventId) {
-                                console.error('No event ID available for odds history popup');
-                                return;
-                              }
-                              
-                              setOddsHistoryPopup({
-                                eventId,
-                                eventName,
-                                oddsType: 'home',
-                                isOpen: true
-                              });
-                            }}
-                          >
-                            {(event.oddsData[bookmaker.code]?.home || 0).toFixed(2)}
-                          </button>
-                        ) : '-'}
-                      </span>
+                      {bookmaker.code === 'sporty' ? (
+                        // Use SportybetOdds component for Sportybet to get latest odds from history
+                        <SportybetOdds 
+                          event={event}
+                          oddsType="home"
+                          highlightType={getOddsHighlightType(event, 'home', bookmaker.code)}
+                          onClick={() => {
+                            // Get event ID with fallback options
+                            const eventId = event.eventId || event.id?.toString() || event.externalId || '';
+                            // Get event name with fallback options
+                            const eventName = event.teams || event.fixture || `Event ${eventId}`;
+                            
+                            if (!eventId) {
+                              console.error('No event ID available for odds history popup');
+                              return;
+                            }
+                            
+                            setOddsHistoryPopup({
+                              eventId,
+                              eventName,
+                              oddsType: 'home',
+                              isOpen: true
+                            });
+                          }}
+                        />
+                      ) : (
+                        // Use standard display for other bookmakers
+                        <span 
+                          className={cn(
+                            "text-sm font-medium px-1 py-0.5 rounded",
+                            getOddsHighlightType(event, 'home', bookmaker.code) === 'highest' 
+                              ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300" 
+                              : getOddsHighlightType(event, 'home', bookmaker.code) === 'lowest'
+                                ? "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300"
+                                : "bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300"
+                          )}
+                        >
+                          {event.oddsData?.[bookmaker.code]?.home ? (
+                            <button 
+                              className="hover:underline focus:outline-none"
+                              onClick={() => {
+                                // Get event ID with fallback options
+                                const eventId = event.eventId || event.id?.toString() || event.externalId || '';
+                                // Get event name with fallback options
+                                const eventName = event.teams || event.fixture || `Event ${eventId}`;
+                                
+                                if (!eventId) {
+                                  console.error('No event ID available for odds history popup');
+                                  return;
+                                }
+                                
+                                setOddsHistoryPopup({
+                                  eventId,
+                                  eventName,
+                                  oddsType: 'home',
+                                  isOpen: true
+                                });
+                              }}
+                            >
+                              {(event.oddsData[bookmaker.code]?.home || 0).toFixed(2)}
+                            </button>
+                          ) : '-'}
+                        </span>
+                      )}
                     </TableCell>
                     
                     <TableCell className="px-2 py-1 whitespace-nowrap text-center border-r border-gray-200 dark:border-gray-700">
-                      <span 
-                        className={cn(
-                          "text-sm font-medium px-1 py-0.5 rounded",
-                          getOddsHighlightType(event, 'draw', bookmaker.code) === 'highest' 
-                            ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300" 
-                            : getOddsHighlightType(event, 'draw', bookmaker.code) === 'lowest'
-                              ? "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300"
-                              : "bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300"
-                        )}
-                      >
-                        {event.oddsData?.[bookmaker.code]?.draw ? (
-                          <button 
-                            className="hover:underline focus:outline-none"
-                            onClick={() => {
-                              // Get event ID with fallback options
-                              const eventId = event.eventId || event.id?.toString() || event.externalId || '';
-                              // Get event name with fallback options
-                              const eventName = event.teams || event.fixture || `Event ${eventId}`;
-                              
-                              console.log('Opening draw odds history for event:', {
-                                eventId,
-                                eventName,
-                                event: event
-                              });
-                              
-                              if (!eventId) {
-                                console.error('No event ID available for odds history popup');
-                                return;
-                              }
-                              
-                              setOddsHistoryPopup({
-                                eventId,
-                                eventName,
-                                oddsType: 'draw',
-                                isOpen: true
-                              });
-                            }}
-                          >
-                            {(event.oddsData[bookmaker.code]?.draw || 0).toFixed(2)}
-                          </button>
-                        ) : '-'}
-                      </span>
+                      {bookmaker.code === 'sporty' ? (
+                        // Use SportybetOdds component for Sportybet to get latest odds from history
+                        <SportybetOdds 
+                          event={event}
+                          oddsType="draw"
+                          highlightType={getOddsHighlightType(event, 'draw', bookmaker.code)}
+                          onClick={() => {
+                            // Get event ID with fallback options
+                            const eventId = event.eventId || event.id?.toString() || event.externalId || '';
+                            // Get event name with fallback options
+                            const eventName = event.teams || event.fixture || `Event ${eventId}`;
+                            
+                            if (!eventId) {
+                              console.error('No event ID available for odds history popup');
+                              return;
+                            }
+                            
+                            setOddsHistoryPopup({
+                              eventId,
+                              eventName,
+                              oddsType: 'draw',
+                              isOpen: true
+                            });
+                          }}
+                        />
+                      ) : (
+                        // Use standard display for other bookmakers
+                        <span 
+                          className={cn(
+                            "text-sm font-medium px-1 py-0.5 rounded",
+                            getOddsHighlightType(event, 'draw', bookmaker.code) === 'highest' 
+                              ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300" 
+                              : getOddsHighlightType(event, 'draw', bookmaker.code) === 'lowest'
+                                ? "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300"
+                                : "bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300"
+                          )}
+                        >
+                          {event.oddsData?.[bookmaker.code]?.draw ? (
+                            <button 
+                              className="hover:underline focus:outline-none"
+                              onClick={() => {
+                                // Get event ID with fallback options
+                                const eventId = event.eventId || event.id?.toString() || event.externalId || '';
+                                // Get event name with fallback options
+                                const eventName = event.teams || event.fixture || `Event ${eventId}`;
+                                
+                                if (!eventId) {
+                                  console.error('No event ID available for odds history popup');
+                                  return;
+                                }
+                                
+                                setOddsHistoryPopup({
+                                  eventId,
+                                  eventName,
+                                  oddsType: 'draw',
+                                  isOpen: true
+                                });
+                              }}
+                            >
+                              {(event.oddsData[bookmaker.code]?.draw || 0).toFixed(2)}
+                            </button>
+                          ) : '-'}
+                        </span>
+                      )}
                     </TableCell>
                     
                     <TableCell className="px-2 py-1 whitespace-nowrap text-center border-r border-gray-200 dark:border-gray-700">
-                      <span 
-                        className={cn(
-                          "text-sm font-medium px-1 py-0.5 rounded",
-                          getOddsHighlightType(event, 'away', bookmaker.code) === 'highest' 
-                            ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300" 
-                            : getOddsHighlightType(event, 'away', bookmaker.code) === 'lowest'
-                              ? "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300"
-                              : "bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300"
-                        )}
-                      >
-                        {event.oddsData?.[bookmaker.code]?.away ? (
-                          <button 
-                            className="hover:underline focus:outline-none"
-                            onClick={() => {
-                              // Get event ID with fallback options
-                              const eventId = event.eventId || event.id?.toString() || event.externalId || '';
-                              // Get event name with fallback options
-                              const eventName = event.teams || event.fixture || `Event ${eventId}`;
-                              
-                              console.log('Opening away odds history for event:', {
-                                eventId,
-                                eventName,
-                                event: event
-                              });
-                              
-                              if (!eventId) {
-                                console.error('No event ID available for odds history popup');
-                                return;
-                              }
-                              
-                              setOddsHistoryPopup({
-                                eventId,
-                                eventName,
-                                oddsType: 'away',
-                                isOpen: true
-                              });
-                            }}
-                          >
-                            {(event.oddsData[bookmaker.code]?.away || 0).toFixed(2)}
-                          </button>
-                        ) : '-'}
-                      </span>
+                      {bookmaker.code === 'sporty' ? (
+                        // Use SportybetOdds component for Sportybet to get latest odds from history
+                        <SportybetOdds 
+                          event={event}
+                          oddsType="away"
+                          highlightType={getOddsHighlightType(event, 'away', bookmaker.code)}
+                          onClick={() => {
+                            // Get event ID with fallback options
+                            const eventId = event.eventId || event.id?.toString() || event.externalId || '';
+                            // Get event name with fallback options
+                            const eventName = event.teams || event.fixture || `Event ${eventId}`;
+                            
+                            if (!eventId) {
+                              console.error('No event ID available for odds history popup');
+                              return;
+                            }
+                            
+                            setOddsHistoryPopup({
+                              eventId,
+                              eventName,
+                              oddsType: 'away',
+                              isOpen: true
+                            });
+                          }}
+                        />
+                      ) : (
+                        // Use standard display for other bookmakers
+                        <span 
+                          className={cn(
+                            "text-sm font-medium px-1 py-0.5 rounded",
+                            getOddsHighlightType(event, 'away', bookmaker.code) === 'highest' 
+                              ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300" 
+                              : getOddsHighlightType(event, 'away', bookmaker.code) === 'lowest'
+                                ? "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300"
+                                : "bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-300"
+                          )}
+                        >
+                          {event.oddsData?.[bookmaker.code]?.away ? (
+                            <button 
+                              className="hover:underline focus:outline-none"
+                              onClick={() => {
+                                // Get event ID with fallback options
+                                const eventId = event.eventId || event.id?.toString() || event.externalId || '';
+                                // Get event name with fallback options
+                                const eventName = event.teams || event.fixture || `Event ${eventId}`;
+                                
+                                if (!eventId) {
+                                  console.error('No event ID available for odds history popup');
+                                  return;
+                                }
+                                
+                                setOddsHistoryPopup({
+                                  eventId,
+                                  eventName,
+                                  oddsType: 'away',
+                                  isOpen: true
+                                });
+                              }}
+                            >
+                              {(event.oddsData[bookmaker.code]?.away || 0).toFixed(2)}
+                            </button>
+                          ) : '-'}
+                        </span>
+                      )}
                     </TableCell>
                     
                     <TableCell className="px-2 py-1 whitespace-nowrap text-center border-r border-gray-200 dark:border-gray-700">
                       {(() => {
-                        const homeOdds = event.oddsData?.[bookmaker.code]?.home;
-                        const drawOdds = event.oddsData?.[bookmaker.code]?.draw;
-                        const awayOdds = event.oddsData?.[bookmaker.code]?.away;
+                        let homeOdds, drawOdds, awayOdds;
+                        
+                        // If this is Sportybet, try to get the latest odds from history
+                        if (bookmaker.code === 'sporty') {
+                          // Get event ID
+                          const eventId = event.eventId || event.id?.toString() || event.externalId || '';
+                          
+                          // Check if we already have the event data in cache
+                          const cachedData = window.__LATEST_SPORTYBET_ODDS_CACHE?.[eventId];
+                          
+                          if (cachedData) {
+                            // Use cached data if available
+                            homeOdds = cachedData.home;
+                            drawOdds = cachedData.draw;
+                            awayOdds = cachedData.away;
+                          } else {
+                            // Fallback to event data if no cache
+                            homeOdds = event.oddsData?.[bookmaker.code]?.home;
+                            drawOdds = event.oddsData?.[bookmaker.code]?.draw;
+                            awayOdds = event.oddsData?.[bookmaker.code]?.away;
+                          }
+                        } else {
+                          // Use regular event data for other bookmakers
+                          homeOdds = event.oddsData?.[bookmaker.code]?.home;
+                          drawOdds = event.oddsData?.[bookmaker.code]?.draw;
+                          awayOdds = event.oddsData?.[bookmaker.code]?.away;
+                        }
+                        
                         const margin = calculateMargin(homeOdds, drawOdds, awayOdds);
                         
                         const marginPercentage = margin ? ((margin - 1) * 100).toFixed(2) : '-';
