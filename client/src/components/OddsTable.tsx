@@ -372,6 +372,9 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
     if (normalizedName.includes('south korea') || normalizedName.includes('republic of korea')) return 'KR';
     if (normalizedName.includes('czechia')) return 'CZ';
     if (normalizedName.includes('faroe')) return 'FO';
+    if (normalizedName.includes('russian federation')) return 'RU';
+    if (normalizedName.includes('hong kong')) return 'HK';
+    if (normalizedName.includes('gibraltar')) return 'GI';
     
     // Map to standard ISO country codes
     const countryCodeMap: Record<string, string> = {
@@ -481,6 +484,8 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
       'portugal': 'PT',
       'romania': 'RO',
       'russia': 'RU',
+      'russian federation': 'RU',
+      'gibraltar': 'GI',
       'san marino': 'SM',
       'serbia': 'RS',
       'slovakia': 'SK',
@@ -547,6 +552,7 @@ export default function OddsTable({ events, isLoading, className }: OddsTablePro
       'brunei': 'BN',
       'cambodia': 'KH',
       'china': 'CN',
+      'hong kong': 'HK',
       'india': 'IN',
       'indonesia': 'ID',
       'iran': 'IR',
