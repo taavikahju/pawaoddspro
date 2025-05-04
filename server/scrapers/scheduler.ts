@@ -55,8 +55,8 @@ export const SCRAPER_EVENTS = {
   ALL_SCRAPERS_COMPLETED: 'scraper:all:completed'
 };
 
-// Schedule to run every 15 minutes
-const SCRAPE_SCHEDULE = '*/15 * * * *';
+// Schedule to run every 5 minutes
+const SCRAPE_SCHEDULE = '*/5 * * * *';
 
 // Schedule to run history cleanup once a day at midnight
 // Also clean up events older than 5 days
@@ -128,7 +128,7 @@ export function setupScrapers(storage: IStorage): void {
     }
   });
   
-  logger.info('Scrapers will run every 15 minutes');
+  logger.info('Scrapers will run every 5 minutes');
   
   // Schedule daily cleanup job to remove old history data
   if (cleanupJob) {
