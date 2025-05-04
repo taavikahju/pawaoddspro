@@ -14,18 +14,11 @@ export default function WebSocketListener() {
   const queryClient = useQueryClient();
   const lastUpdateTimestamp = useRef<number>(Date.now());
   
-  // Display connection status changes - only show toast without console logging
+  // Display connection status changes - removed toast notification as requested
   useEffect(() => {
-    if (isConnected) {
-      // Silent connection - no logging
-      toast({
-        title: 'Connected',
-        description: 'Real-time data connection established',
-        variant: 'default'
-      });
-    }
-    // No log for disconnection either
-  }, [isConnected, toast]);
+    // Connection is now completely silent - no toast and no logging
+    // This effect is kept in case we need to add any connectivity-related logic in the future
+  }, [isConnected]);
   
   // Handle incoming messages, especially scraper completion events
   useEffect(() => {
