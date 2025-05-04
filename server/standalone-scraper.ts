@@ -39,8 +39,8 @@ async function main() {
   // Continue running on a schedule
   while (true) {
     try {
-      // Calculate time until next run (5 minutes)
-      const INTERVAL_MINUTES = 5;
+      // Calculate time until next run (10 minutes)
+      const INTERVAL_MINUTES = 10;
       
       // Apply exponential backoff if we've had failures (max 30 minutes)
       const backoffFactor = Math.min(Math.pow(2, consecutiveFailures - 1), 2);

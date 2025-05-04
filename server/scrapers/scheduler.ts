@@ -55,8 +55,8 @@ export const SCRAPER_EVENTS = {
   ALL_SCRAPERS_COMPLETED: 'scraper:all:completed'
 };
 
-// Schedule to run every 5 minutes
-const SCRAPE_SCHEDULE = '*/5 * * * *';
+// Schedule to run every 10 minutes
+const SCRAPE_SCHEDULE = '*/10 * * * *';
 
 // Schedule to run history cleanup once a day at midnight
 // Also clean up events older than 5 days
@@ -98,7 +98,7 @@ export function setupScrapers(storage: IStorage): void {
       isScraperRunning = false; // Make sure to release lock in case of error
     });
   
-  // Schedule regular scraper runs for every 5 minutes after startup
+  // Schedule regular scraper runs for every 10 minutes after startup
   scheduledJob = cron.schedule(SCRAPE_SCHEDULE, async () => {
     try {
       // Skip this run if either scraper or data processing from a previous run is still in progress
@@ -128,7 +128,7 @@ export function setupScrapers(storage: IStorage): void {
     }
   });
   
-  logger.info('Scrapers will run every 5 minutes');
+  logger.info('Scrapers will run every 10 minutes');
   
   // Schedule daily cleanup job to remove old history data
   if (cleanupJob) {

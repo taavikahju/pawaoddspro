@@ -1,6 +1,6 @@
 # Replit Deployment Guide
 
-This guide explains how to ensure that scrapers run consistently every 5 minutes on Replit's hosting platform.
+This guide explains how to ensure that scrapers run consistently every 10 minutes on Replit's hosting platform.
 
 ## Step 1: Enable "Always On"
 
@@ -138,4 +138,4 @@ node dist/server/standalone-scraper.js &
 tail -f logs/standalone-scraper.log
 ```
 
-By using the standalone-scraper implementation with the built-in 5-minute interval and resilience features, your scrapers will continue to run even if Replit occasionally restarts your project.
+By using the standalone-scraper implementation with the built-in 10-minute interval and resilience features, your scrapers will continue to run even if Replit occasionally restarts your project.
